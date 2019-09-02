@@ -1,0 +1,94 @@
+package com.pipai.dragontiles.utils
+
+import com.badlogic.gdx.math.Intersector
+import com.badlogic.gdx.math.Rectangle
+import com.badlogic.gdx.math.Vector2
+import com.pipai.dragontiles.utils.CollisionBounds.CollisionBoundingBox
+
+sealed class CollisionBounds {
+    data class CollisionBoundingBox(var xOffset: Float, var yOffset: Float, var width: Float, var height: Float) : CollisionBounds() {
+        constructor(width: Float, height: Float, centered: Boolean) : this(
+                if (centered) -width / 2f else 0f,
+                if (centered) -height / 2f else 0f,
+                width,
+                height)
+    }
+}
+
+object CollisionUtils {
+
+    fun distance(x1: Float, y1: Float, x2: Float, y2: Float): Float {
+        val dx = x1 - x2
+        val dy = y1 - y2
+        return Math.sqrt((dx * dx).toDouble() + (dy * dy).toDouble()).toFloat()
+    }
+
+    fun overlaps(x1: Float, y1: Float, bounds1: CollisionBounds,
+                 x2: Float, y2: Float, bounds2: CollisionBounds): Boolean {
+
+        return when (bounds1) {
+            is CollisionBoundingBox -> when (bounds2) {
+                is CollisionBoundingBox -> {
+                    Intersector.overlaps(Rectangle(x1 + bounds1.xOffset, y1 + bounds1.yOffset, bounds1.width, bounds1.height),
+                            Rectangle(x2 + bounds2.xOffset, y2 + bounds2.yOffset, bounds2.width, bounds2.height))
+                }
+            }
+        }
+    }
+
+    fun withinBounds(x: Float, y: Float, collisionX: Float, collisionY: Float, bounds: CollisionBounds): Boolean {
+        when (bounds) {
+            is CollisionBoundingBox -> {
+                return x >= collisionX + bounds.xOffset
+                        && x <= collisionX + bounds.xOffset + bounds.width
+                        && y >= collisionY + bounds.yOffset
+                        && y <= collisionY + bounds.yOffset + bounds.height
+            }
+        }
+    }
+
+    fun minimumTranslationVector(x1: Float, y1: Float, bounds1: CollisionBounds,
+                                 x2: Float, y2: Float, bounds2: CollisionBounds): Vector2 = when (bounds1) {
+
+        is CollisionBoundingBox -> when (bounds2) {
+            is CollisionBoundingBox -> {
+                minimumTranslationVector(Rectangle(x1 + bounds1.xOffset, y1 + bounds1.yOffset, bounds1.width, bounds1.height),
+                        Rectangle(x2 + bounds2.xOffset, y2 + bounds2.yOffset, bounds2.width, bounds2.height))
+            }
+        }
+    }
+
+    fun minimumTranslationVector(rect1: Rectangle, rect2: Rectangle): Vector2 {
+        val mtv = Vector2(0f, 0f)
+
+        if (!Intersector.overlaps(rect1, rect2)) {
+            return mtv
+        }
+
+        val left = rect1.x + rect1.width - rect2.x
+        val right = rect2.x + rect2.width - rect1.x
+
+        if (left < right) {
+            mtv.x = -left
+        } else {
+            mtv.x = right
+        }
+
+        val down = rect1.y + rect1.height - rect2.y
+        val up = rect2.y + rect2.height - rect1.y
+
+        if (down < up) {
+            mtv.y = -down
+        } else {
+            mtv.y = up
+        }
+
+        if (Math.abs(mtv.x) <= Math.abs(mtv.y)) {
+            mtv.y = 0f
+        } else {
+            mtv.x = 0f
+        }
+
+        return mtv
+    }
+}
