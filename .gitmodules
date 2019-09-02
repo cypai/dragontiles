@@ -1,0 +1,3 @@
+[submodule "core/assets/binassets"]
+	path = core/assets/binassets
+	url = git@github.com:cypai/dragontiles-binassets.git
