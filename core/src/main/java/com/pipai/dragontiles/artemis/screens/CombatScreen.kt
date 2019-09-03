@@ -10,10 +10,17 @@ import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.utils.viewport.ScreenViewport
 import com.pipai.dragontiles.DragonTilesGame
+import com.pipai.dragontiles.artemis.systems.PathInterpolationSystem
+import com.pipai.dragontiles.artemis.systems.XyInterpolationSystem
+import com.pipai.dragontiles.artemis.systems.combat.CombatAnimationSystem
+import com.pipai.dragontiles.artemis.systems.combat.CombatControllerSystem
+import com.pipai.dragontiles.artemis.systems.input.ExitInputProcessor
 import com.pipai.dragontiles.artemis.systems.input.InputProcessingSystem
+import com.pipai.dragontiles.artemis.systems.rendering.CombatRenderingSystem
+import com.pipai.dragontiles.combat.Combat
 import net.mostlyoriginal.api.event.common.EventSystem
 
-class MainMenuScreen(game: DragonTilesGame) : Screen {
+class CombatScreen(game: DragonTilesGame, combat: Combat) : Screen {
 
     private val stage = Stage(ScreenViewport(), game.spriteBatch)
 
@@ -27,17 +34,31 @@ class MainMenuScreen(game: DragonTilesGame) : Screen {
                         GroupManager(),
                         EventSystem(),
 
+                        PathInterpolationSystem(),
+                        XyInterpolationSystem(),
+
+                        CombatControllerSystem(combat),
+                        CombatAnimationSystem(),
+
                         InputProcessingSystem())
+                .with(-1,
+                        CombatRenderingSystem(game))
                 .build()
 
         world = World(config)
 
+        val controllerSystem = world.getSystem(CombatControllerSystem::class.java)
+        controllerSystem.controller.initCombat()
+
         val inputProcessor = world.getSystem(InputProcessingSystem::class.java)
         inputProcessor.addAlwaysOnProcessor(stage)
+        inputProcessor.addAlwaysOnProcessor(ExitInputProcessor())
         inputProcessor.activateInput()
 
         StandardScreenInit(world)
                 .initialize()
+
+        controllerSystem.controller.runTurn()
     }
 
     override fun render(delta: Float) {

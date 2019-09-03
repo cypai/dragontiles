@@ -1,5 +1,6 @@
 package com.pipai.dragontiles.combat
 
+import com.artemis.World
 import com.pipai.dragontiles.data.LifeType
 import com.pipai.dragontiles.data.StarType
 import com.pipai.dragontiles.data.Suit
@@ -21,9 +22,9 @@ data class Combat(val rng: Random,
     val openPile: MutableList<Tile> = mutableListOf()
 }
 
-class CombatController(private val combat: Combat) {
+class CombatController(private val combat: Combat, world: World) {
 
-    private val api: CombatApi = CombatApi(combat)
+    private val api: CombatApi = CombatApi(combat, world)
 
     fun initCombat() {
         combat.enemies.forEach {

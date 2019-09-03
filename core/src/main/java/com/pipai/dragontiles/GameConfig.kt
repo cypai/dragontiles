@@ -1,7 +1,6 @@
 package com.pipai.dragontiles
 
 import com.badlogic.gdx.files.FileHandle
-import com.pipai.dragontiles.utils.getLogger
 import com.pipai.dragontiles.utils.valueOfOrDefault
 import java.util.*
 
@@ -31,8 +30,6 @@ enum class ScreenResolution(val width: Int, val height: Int, val description: St
 private val DEFAULT_RESOLUTION = ScreenResolution.RES_1024_768
 
 class GameConfig(val configFile: FileHandle) {
-
-    private val logger = getLogger()
 
     var resolution: ScreenResolution
 

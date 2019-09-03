@@ -1,10 +1,16 @@
 package com.pipai.dragontiles.combat
 
+import com.artemis.World
+import com.pipai.dragontiles.artemis.systems.animation.DrawTileAnimation
+import com.pipai.dragontiles.artemis.systems.combat.CombatAnimationSystem
 import com.pipai.dragontiles.data.Element
 import com.pipai.dragontiles.data.Tile
 import com.pipai.dragontiles.enemies.Enemy
 
-class CombatApi(private val combat: Combat) {
+class CombatApi(private val combat: Combat,
+                private val world: World) {
+
+    private val animationSystem = world.getSystem(CombatAnimationSystem::class.java)
 
     fun draw() {
         val tile = combat.drawPile.removeAt(0)
@@ -12,6 +18,7 @@ class CombatApi(private val combat: Combat) {
             combat.discardPile.add(tile)
         } else {
             combat.hand.add(tile)
+            animationSystem.queueAnimation(DrawTileAnimation(world, tile))
         }
     }
 

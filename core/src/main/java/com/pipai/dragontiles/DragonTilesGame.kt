@@ -3,6 +3,7 @@ package com.pipai.dragontiles
 import com.badlogic.gdx.Game
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Screen
+import com.badlogic.gdx.assets.AssetManager
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.Pixmap
 import com.badlogic.gdx.graphics.Pixmap.Format
@@ -21,10 +22,16 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable
 import com.badlogic.gdx.scenes.scene2d.utils.MultiDrawable
 import com.badlogic.gdx.scenes.scene2d.utils.OffsetDrawable
 import com.kotcrab.vis.ui.VisUI
-import com.pipai.dragontiles.artemis.screens.MainMenuScreen
+import com.pipai.dragontiles.artemis.screens.CombatScreen
+import com.pipai.dragontiles.combat.Combat
+import com.pipai.dragontiles.data.TileSkin
+import com.pipai.dragontiles.enemies.FlameTurtle
+import com.pipai.dragontiles.hero.Hero
+import com.pipai.dragontiles.spells.Invoke
 import com.pipai.dragontiles.utils.getLogger
 import org.apache.commons.lang3.builder.ToStringBuilder
 import org.apache.commons.lang3.builder.ToStringStyle
+import java.util.*
 
 class DragonTilesGame(val gameConfig: GameConfig) : Game() {
 
@@ -45,12 +52,23 @@ class DragonTilesGame(val gameConfig: GameConfig) : Game() {
     lateinit var skin: Skin
         private set
 
+    lateinit var assets: AssetManager
+        private set
+
+    lateinit var tileSkin: TileSkin
+        private set
+
     override fun create() {
         logger.info("Starting Dragon Tiles with the following config settings:")
         logger.info(gameConfig.resolution.toDebugString())
 
         spriteBatch = SpriteBatch(1000)
         shapeRenderer = ShapeRenderer()
+
+        assets = AssetManager()
+        assets.load("assets/binassets/graphics/tiles/tiles.png", Texture::class.java)
+        assets.finishLoading()
+        tileSkin = TileSkin(assets.get("assets/binassets/graphics/tiles/tiles.png", Texture::class.java))
 
         val fontGenerator = FreeTypeFontGenerator(Gdx.files.internal("assets/binassets/graphics/fonts/SourceSansPro-Regular.ttf"))
         val fontParameter = FreeTypeFontParameter()
@@ -65,7 +83,10 @@ class DragonTilesGame(val gameConfig: GameConfig) : Game() {
 
         initSkin()
 
-        setScreen(MainMenuScreen(this))
+        setScreen(CombatScreen(this,
+                Combat(Random(),
+                        Hero("Elementalist", 80, 80, 15, mutableListOf(Invoke())),
+                        mutableListOf(FlameTurtle()))))
     }
 
     private fun initSkin() {
@@ -168,6 +189,7 @@ class DragonTilesGame(val gameConfig: GameConfig) : Game() {
         spriteBatch.dispose()
         shapeRenderer.dispose()
         font.dispose()
+        screen.dispose()
     }
 
     override fun setScreen(screen: Screen) {
