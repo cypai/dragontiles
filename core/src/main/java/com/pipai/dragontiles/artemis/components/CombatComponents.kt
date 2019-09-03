@@ -6,3 +6,7 @@ import com.pipai.dragontiles.data.Tile
 class TileComponent : Component() {
     lateinit var tile: Tile
 }
+
+class HandLocationComponent : Component() {
+    var location: Int = 0
+}

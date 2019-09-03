@@ -27,6 +27,7 @@ class CombatController(private val combat: Combat, world: World) {
     private val api: CombatApi = CombatApi(combat, world)
 
     fun initCombat() {
+        Tile.nextId = 0
         combat.enemies.forEach {
             it.preInit()
             it.init()
@@ -72,6 +73,7 @@ class CombatController(private val combat: Combat, world: World) {
         if (combat.hero.handSize > combat.hand.size) {
             api.draw(combat.hero.handSize - combat.hand.size)
         }
+        api.sortHand()
     }
 
 }

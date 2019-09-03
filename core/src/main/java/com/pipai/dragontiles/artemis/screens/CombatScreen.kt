@@ -14,6 +14,7 @@ import com.pipai.dragontiles.artemis.systems.PathInterpolationSystem
 import com.pipai.dragontiles.artemis.systems.XyInterpolationSystem
 import com.pipai.dragontiles.artemis.systems.combat.CombatAnimationSystem
 import com.pipai.dragontiles.artemis.systems.combat.CombatControllerSystem
+import com.pipai.dragontiles.artemis.systems.combat.TileIdSystem
 import com.pipai.dragontiles.artemis.systems.input.ExitInputProcessor
 import com.pipai.dragontiles.artemis.systems.input.InputProcessingSystem
 import com.pipai.dragontiles.artemis.systems.rendering.CombatRenderingSystem
@@ -38,6 +39,7 @@ class CombatScreen(game: DragonTilesGame, combat: Combat) : Screen {
                         XyInterpolationSystem(),
 
                         CombatControllerSystem(combat),
+                        TileIdSystem(),
                         CombatAnimationSystem(),
 
                         InputProcessingSystem())

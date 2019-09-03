@@ -1,6 +1,7 @@
 package com.pipai.dragontiles.combat
 
 import com.artemis.World
+import com.pipai.dragontiles.artemis.systems.animation.AdjustHandAnimation
 import com.pipai.dragontiles.artemis.systems.animation.BatchAnimation
 import com.pipai.dragontiles.artemis.systems.animation.DrawTileAnimation
 import com.pipai.dragontiles.artemis.systems.combat.CombatAnimationSystem
@@ -26,6 +27,11 @@ class CombatApi(private val combat: Combat,
             }
         }
         animationSystem.queueAnimation(batchAnimation)
+    }
+
+    fun sortHand() {
+        combat.hand.sortWith(compareBy({ it.suit.order }, { it.order() }))
+        animationSystem.queueAnimation(AdjustHandAnimation(world, combat.hand))
     }
 
     fun findTargets(): List<Enemy> {
