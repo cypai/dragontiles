@@ -69,8 +69,8 @@ class CombatController(private val combat: Combat, world: World) {
         combat.enemies.forEach {
             it.runTurn(api)
         }
-        while (combat.hand.size < combat.hero.handSize) {
-            api.draw()
+        if (combat.hero.handSize > combat.hand.size) {
+            api.draw(combat.hero.handSize - combat.hand.size)
         }
     }
 

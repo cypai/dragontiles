@@ -1,6 +1,7 @@
 package com.pipai.dragontiles.combat
 
 import com.artemis.World
+import com.pipai.dragontiles.artemis.systems.animation.BatchAnimation
 import com.pipai.dragontiles.artemis.systems.animation.DrawTileAnimation
 import com.pipai.dragontiles.artemis.systems.combat.CombatAnimationSystem
 import com.pipai.dragontiles.data.Element
@@ -12,14 +13,19 @@ class CombatApi(private val combat: Combat,
 
     private val animationSystem = world.getSystem(CombatAnimationSystem::class.java)
 
-    fun draw() {
-        val tile = combat.drawPile.removeAt(0)
-        if (combat.hand.size >= combat.hero.handSize) {
-            combat.discardPile.add(tile)
-        } else {
-            combat.hand.add(tile)
-            animationSystem.queueAnimation(DrawTileAnimation(world, tile))
+    fun draw(amount: Int) {
+        val batchAnimation = BatchAnimation()
+
+        repeat(amount) {
+            val tile = combat.drawPile.removeAt(0)
+            if (combat.hand.size >= combat.hero.handSize) {
+                combat.discardPile.add(tile)
+            } else {
+                combat.hand.add(tile)
+                batchAnimation.addToBatch(DrawTileAnimation(world, tile, combat.hand.size))
+            }
         }
+        animationSystem.queueAnimation(batchAnimation)
     }
 
     fun findTargets(): List<Enemy> {
