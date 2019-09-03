@@ -13,6 +13,7 @@ class Invoke : Spell {
 class InvokeImpl : SpellInstance(Invoke(), false, 2) {
 
     override fun onCast(components: List<Tile>, api: CombatApi) {
-        api.attack(elemental(components), 2)
+        val target = api.findTargets().first()
+        api.attack(target, elemental(components), 2)
     }
 }
