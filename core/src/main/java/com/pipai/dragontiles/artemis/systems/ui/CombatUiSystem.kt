@@ -65,6 +65,7 @@ class CombatUiSystem(private val game: DragonTilesGame,
 
     private fun addSpellCard(number: Int) {
         val spellCard = SpellCard(null, number, game.skin, tileSkin)
+        spellCard.addClickCallback(this::spellCardClickCallback)
         spellRow.add(spellCard)
                 .minWidth(spellCard.width)
                 .minHeight(spellCard.height)
@@ -123,6 +124,13 @@ class CombatUiSystem(private val game: DragonTilesGame,
             stateMachine.changeState(CombatUiState.SPELL_SELECTED)
         }
         return spell != null
+    }
+
+    private fun spellCardClickCallback(spellCard: SpellCard) {
+        if (stateMachine.currentState == CombatUiState.ROOT) {
+            selectedSpellNumber = spellCard.number
+            stateMachine.changeState(CombatUiState.SPELL_SELECTED)
+        }
     }
 
     override fun keyUp(keycode: Int) = false

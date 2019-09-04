@@ -1,14 +1,17 @@
 package com.pipai.dragontiles.gui
 
+import com.badlogic.gdx.scenes.scene2d.InputEvent
+import com.badlogic.gdx.scenes.scene2d.Touchable
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.scenes.scene2d.ui.Table
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.badlogic.gdx.utils.Align
 import com.pipai.dragontiles.data.TileSkin
 import com.pipai.dragontiles.spells.Spell
 
 class SpellCard(private var spell: Spell?,
-                private var number: Int?,
+                val number: Int?,
                 skin: Skin,
                 private val tileSkin: TileSkin) : Table(skin) {
 
@@ -16,6 +19,10 @@ class SpellCard(private var spell: Spell?,
     private val nameLabel = Label("", skin, "small")
     private val numberLabel = Label("", skin, "small")
     private val descriptionLabel = Label("", skin, "small")
+
+    private val clickCallbacks: MutableList<(SpellCard) -> Unit> = mutableListOf()
+
+    private var enabled = true
 
     init {
         background = skin.getDrawable("frameDrawable")
@@ -42,6 +49,19 @@ class SpellCard(private var spell: Spell?,
         row()
         add()
                 .height(64f)
+
+        touchable = Touchable.enabled
+        addListener(object : ClickListener() {
+            override fun clicked(event: InputEvent?, x: Float, y: Float) {
+                if (enabled) {
+                    clickCallbacks.forEach { it.invoke(this@SpellCard) }
+                }
+            }
+        })
+    }
+
+    fun addClickCallback(callback: (SpellCard) -> Unit) {
+        clickCallbacks.add(callback)
     }
 
     fun getSpell() = spell
@@ -52,10 +72,12 @@ class SpellCard(private var spell: Spell?,
     }
 
     fun disable() {
+        enabled = false
         background = skin.getDrawable("frameDrawableDark")
     }
 
     fun enable() {
+        enabled = true
         background = skin.getDrawable("frameDrawable")
     }
 
