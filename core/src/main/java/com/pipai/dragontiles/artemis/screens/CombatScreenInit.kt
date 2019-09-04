@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.Sprite
 import com.pipai.dragontiles.DragonTilesGame
 import com.pipai.dragontiles.artemis.Tags
+import com.pipai.dragontiles.artemis.components.EnemyComponent
 import com.pipai.dragontiles.artemis.components.OrthographicCameraComponent
 import com.pipai.dragontiles.artemis.components.SpriteComponent
 import com.pipai.dragontiles.artemis.components.XYComponent
@@ -21,6 +22,7 @@ class CombatScreenInit(private val game: DragonTilesGame, private val world: Wor
     private lateinit var mCamera: ComponentMapper<OrthographicCameraComponent>
     private lateinit var mXy: ComponentMapper<XYComponent>
     private lateinit var mSprite: ComponentMapper<SpriteComponent>
+    private lateinit var mEnemy: ComponentMapper<EnemyComponent>
 
     private lateinit var sTags: TagManager
 
@@ -36,6 +38,8 @@ class CombatScreenInit(private val game: DragonTilesGame, private val world: Wor
         mCamera.create(cameraId)
         sTags.register(Tags.CAMERA.toString(), cameraId)
 
+        sController.controller.initCombat()
+
         sController.combat.hero.spells.forEachIndexed { index, spell ->
             sUi.setSpell(index + 1, spell)
         }
@@ -47,9 +51,11 @@ class CombatScreenInit(private val game: DragonTilesGame, private val world: Wor
 
             val cSprite = mSprite.create(entityId)
             cSprite.sprite = Sprite(game.assets.get(enemyAssetPath(it.assetName), Texture::class.java))
+
+            val cEnemy = mEnemy.create(entityId)
+            cEnemy.setByEnemy(it)
         }
 
-        sController.controller.initCombat()
         sController.controller.runTurn()
     }
 
