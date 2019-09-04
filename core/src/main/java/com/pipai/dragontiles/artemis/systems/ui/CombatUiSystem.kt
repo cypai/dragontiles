@@ -28,7 +28,7 @@ class CombatUiSystem(private val game: DragonTilesGame,
     private val hpLabel = Label("80/80", skin)
     private val spells: MutableMap<Int, SpellCard> = mutableMapOf()
 
-    private var selectedSpell: Spell? = null
+    private var selectedSpellNumber: Int? = null
 
     private val stateMachine = DefaultStateMachine<CombatUiSystem, CombatUiState>(this, CombatUiState.ROOT)
 
@@ -84,6 +84,17 @@ class CombatUiSystem(private val game: DragonTilesGame,
     }
 
     override fun keyDown(keycode: Int): Boolean {
+        if (keycode == Keys.ESCAPE) {
+            when (stateMachine.currentState) {
+                CombatUiState.SPELL_SELECTED -> {
+                    stateMachine.changeState(CombatUiState.ROOT)
+                    return true
+                }
+                else -> {
+                }
+            }
+        }
+
         return when (stateMachine.currentState) {
             CombatUiState.ROOT -> {
                 selectSpell(keycode)
@@ -93,13 +104,22 @@ class CombatUiSystem(private val game: DragonTilesGame,
     }
 
     private fun selectSpell(keycode: Int): Boolean {
-        val spellCard = when (keycode) {
-            Keys.NUM_1 -> spells[1]
+        val spellNumber = when (keycode) {
+            Keys.NUM_1 -> 1
+            Keys.NUM_2 -> 2
+            Keys.NUM_3 -> 3
+            Keys.NUM_4 -> 4
+            Keys.NUM_5 -> 5
+            Keys.NUM_6 -> 6
+            Keys.NUM_7 -> 7
+            Keys.NUM_8 -> 8
+            Keys.NUM_9 -> 9
             else -> null
         }
+        val spellCard = spellNumber?.let { spells[spellNumber] }
         val spell = spellCard?.getSpell()
         if (spell != null) {
-            selectedSpell = spell
+            selectedSpellNumber = spellNumber
             stateMachine.changeState(CombatUiState.SPELL_SELECTED)
         }
         return spell != null
@@ -131,7 +151,17 @@ class CombatUiSystem(private val game: DragonTilesGame,
                 }
             }
         },
-        SPELL_SELECTED(),
+        SPELL_SELECTED() {
+            override fun enter(uiSystem: CombatUiSystem) {
+                uiSystem.spells.forEach { index, spellCard ->
+                    if (index == uiSystem.selectedSpellNumber) {
+                        spellCard.enable()
+                    } else {
+                        spellCard.disable()
+                    }
+                }
+            }
+        },
         COMPONENTS_SELECTED(),
         DISABLED() {
             override fun enter(uiSystem: CombatUiSystem) {

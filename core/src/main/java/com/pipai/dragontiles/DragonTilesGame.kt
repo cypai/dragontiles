@@ -87,7 +87,7 @@ class DragonTilesGame(val gameConfig: GameConfig) : Game() {
 
         setScreen(CombatScreen(this,
                 Combat(Random(),
-                        Hero("Elementalist", 80, 80, 15, mutableListOf(Invoke())),
+                        Hero("Elementalist", 80, 80, 15, mutableListOf(Invoke(), Invoke())),
                         mutableListOf(FlameTurtle()))))
     }
 
