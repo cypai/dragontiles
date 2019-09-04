@@ -19,7 +19,7 @@ data class Combat(val rng: Random,
     val hand: MutableList<Tile> = mutableListOf()
     val drawPile: MutableList<Tile> = mutableListOf()
     val discardPile: MutableList<Tile> = mutableListOf()
-    val openPile: MutableList<Tile> = mutableListOf()
+    val openPool: MutableList<Tile> = mutableListOf()
 }
 
 class CombatController(private val combat: Combat, world: World) {
@@ -59,9 +59,8 @@ class CombatController(private val combat: Combat, world: World) {
     }
 
     private fun initOpenPile() {
-        repeat(9) {
-            combat.openPile.add(combat.drawPile.removeAt(0))
-        }
+        api.drawToOpenPool(9)
+        api.sortOpenPool()
     }
 
     fun runTurn() {

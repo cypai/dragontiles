@@ -1,9 +1,7 @@
 package com.pipai.dragontiles.combat
 
 import com.artemis.World
-import com.pipai.dragontiles.artemis.systems.animation.AdjustHandAnimation
-import com.pipai.dragontiles.artemis.systems.animation.BatchAnimation
-import com.pipai.dragontiles.artemis.systems.animation.DrawTileAnimation
+import com.pipai.dragontiles.artemis.systems.animation.*
 import com.pipai.dragontiles.artemis.systems.combat.CombatAnimationSystem
 import com.pipai.dragontiles.data.Element
 import com.pipai.dragontiles.data.Tile
@@ -32,6 +30,22 @@ class CombatApi(private val combat: Combat,
     fun sortHand() {
         combat.hand.sortWith(compareBy({ it.suit.order }, { it.order() }))
         animationSystem.queueAnimation(AdjustHandAnimation(world, combat.hand))
+    }
+
+    fun drawToOpenPool(amount: Int) {
+        val batchAnimation = BatchAnimation()
+
+        repeat(amount) {
+            val tile = combat.drawPile.removeAt(0)
+            combat.openPool.add(tile)
+            batchAnimation.addToBatch(DrawToOpenPoolAnimation(world, tile, combat.openPool.size))
+        }
+        animationSystem.queueAnimation(batchAnimation)
+    }
+
+    fun sortOpenPool() {
+        combat.openPool.sortWith(compareBy({ it.suit.order }, { it.order() }))
+        animationSystem.queueAnimation(AdjustOpenPoolAnimation(world, combat.openPool))
     }
 
     fun findTargets(): List<Enemy> {

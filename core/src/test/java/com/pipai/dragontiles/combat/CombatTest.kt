@@ -20,11 +20,11 @@ class CombatTest : GdxMockedTest() {
         controller.initCombat()
 
         // Full tile set amount is 136
-        Assert.assertEquals(9, combat.openPile.size)
+        Assert.assertEquals(9, combat.openPool.size)
         Assert.assertEquals(127, combat.drawPile.size)
 
         controller.runTurn()
-        Assert.assertEquals(9, combat.openPile.size)
+        Assert.assertEquals(9, combat.openPool.size)
         Assert.assertEquals(15, combat.hand.size)
         Assert.assertEquals(112, combat.drawPile.size)
     }
