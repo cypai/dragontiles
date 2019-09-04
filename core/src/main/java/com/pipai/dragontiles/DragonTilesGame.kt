@@ -28,6 +28,7 @@ import com.pipai.dragontiles.data.TileSkin
 import com.pipai.dragontiles.enemies.FlameTurtle
 import com.pipai.dragontiles.hero.Hero
 import com.pipai.dragontiles.spells.Invoke
+import com.pipai.dragontiles.utils.enemyAssetPath
 import com.pipai.dragontiles.utils.getLogger
 import org.apache.commons.lang3.builder.ToStringBuilder
 import org.apache.commons.lang3.builder.ToStringStyle
@@ -67,6 +68,7 @@ class DragonTilesGame(val gameConfig: GameConfig) : Game() {
 
         assets = AssetManager()
         assets.load("assets/binassets/graphics/tiles/tiles.png", Texture::class.java)
+        assets.load(enemyAssetPath(FlameTurtle().assetName), Texture::class.java)
         assets.finishLoading()
         tileSkin = TileSkin(assets.get("assets/binassets/graphics/tiles/tiles.png", Texture::class.java))
 

@@ -3,6 +3,7 @@ package com.pipai.dragontiles.artemis.components
 import com.artemis.Component
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.OrthographicCamera
+import com.badlogic.gdx.graphics.g2d.Sprite
 import com.badlogic.gdx.math.Interpolation
 import com.badlogic.gdx.math.Vector2
 import com.pipai.dragontiles.utils.MathUtils
@@ -96,4 +97,8 @@ class OrthographicCameraComponent : Component() {
 class CameraFollowComponent : Component() {
     var xOffset = 0f
     var yOffset = 0f
+}
+
+class SpriteComponent : Component() {
+    lateinit var sprite: Sprite
 }

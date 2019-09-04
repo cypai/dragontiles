@@ -52,23 +52,13 @@ class CombatScreen(game: DragonTilesGame, combat: Combat) : Screen {
 
         world = World(config)
 
-        val controllerSystem = world.getSystem(CombatControllerSystem::class.java)
-        controllerSystem.controller.initCombat()
-
         val inputProcessor = world.getSystem(InputProcessingSystem::class.java)
         inputProcessor.addAlwaysOnProcessor(stage)
         inputProcessor.addAlwaysOnProcessor(ExitInputProcessor())
         inputProcessor.activateInput()
 
-        val ui = world.getSystem(CombatUiSystem::class.java)
-        combat.hero.spells.forEachIndexed { index, spell ->
-            ui.setSpell(index + 1, spell)
-        }
-
-        StandardScreenInit(world)
+        CombatScreenInit(game, world)
                 .initialize()
-
-        controllerSystem.controller.runTurn()
     }
 
     override fun render(delta: Float) {

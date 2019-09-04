@@ -5,6 +5,7 @@ import com.pipai.dragontiles.combat.CombatApi
 class FlameTurtle : Enemy() {
 
     override val name: String = "Flame Turtle"
+    override val assetName: String = "flame_turtle.png"
 
     override val hpMax: Int = 30
 

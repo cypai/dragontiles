@@ -5,6 +5,7 @@ import com.pipai.dragontiles.combat.CombatApi
 abstract class Enemy {
 
     abstract val name: String
+    abstract val assetName: String
 
     abstract val hpMax: Int
     var hp: Int = 0
