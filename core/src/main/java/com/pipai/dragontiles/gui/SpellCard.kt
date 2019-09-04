@@ -44,9 +44,19 @@ class SpellCard(private var spell: Spell?,
                 .height(64f)
     }
 
+    fun getSpell() = spell
+
     fun setSpell(spell: Spell?) {
         this.spell = spell
         update()
+    }
+
+    fun disable() {
+        background = skin.getDrawable("frameDrawableDark")
+    }
+
+    fun enable() {
+        background = skin.getDrawable("frameDrawable")
     }
 
     private fun update() {

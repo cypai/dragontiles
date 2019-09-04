@@ -1,5 +1,10 @@
 package com.pipai.dragontiles.artemis.systems.ui
 
+import com.badlogic.gdx.Input.Keys
+import com.badlogic.gdx.InputProcessor
+import com.badlogic.gdx.ai.fsm.DefaultStateMachine
+import com.badlogic.gdx.ai.fsm.State
+import com.badlogic.gdx.ai.msg.Telegram
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Table
@@ -9,7 +14,7 @@ import com.pipai.dragontiles.gui.SpellCard
 import com.pipai.dragontiles.spells.Spell
 
 class CombatUiSystem(private val game: DragonTilesGame,
-                     private val stage: Stage) : NoProcessingSystem() {
+                     private val stage: Stage) : NoProcessingSystem(), InputProcessor {
 
     private val config = game.gameConfig
     private val skin = game.skin
@@ -22,6 +27,10 @@ class CombatUiSystem(private val game: DragonTilesGame,
 
     private val hpLabel = Label("80/80", skin)
     private val spells: MutableMap<Int, SpellCard> = mutableMapOf()
+
+    private var selectedSpell: Spell? = null
+
+    private val stateMachine = DefaultStateMachine<CombatUiSystem, CombatUiState>(this, CombatUiState.ROOT)
 
     init {
         rootTable.setFillParent(true)
@@ -64,6 +73,86 @@ class CombatUiSystem(private val game: DragonTilesGame,
 
     fun setSpell(number: Int, spell: Spell) {
         spells[number]?.setSpell(spell)
+    }
+
+    fun disable() {
+        stateMachine.changeState(CombatUiState.DISABLED)
+    }
+
+    fun enable() {
+        stateMachine.changeState(CombatUiState.ROOT)
+    }
+
+    override fun keyDown(keycode: Int): Boolean {
+        return when (stateMachine.currentState) {
+            CombatUiState.ROOT -> {
+                selectSpell(keycode)
+            }
+            else -> false
+        }
+    }
+
+    private fun selectSpell(keycode: Int): Boolean {
+        val spellCard = when (keycode) {
+            Keys.NUM_1 -> spells[1]
+            else -> null
+        }
+        val spell = spellCard?.getSpell()
+        if (spell != null) {
+            selectedSpell = spell
+            stateMachine.changeState(CombatUiState.SPELL_SELECTED)
+        }
+        return spell != null
+    }
+
+    override fun keyUp(keycode: Int) = false
+
+    override fun keyTyped(character: Char) = false
+
+    override fun touchDown(screenX: Int, screenY: Int, pointer: Int, button: Int) = false
+
+    override fun touchUp(screenX: Int, screenY: Int, pointer: Int, button: Int) = false
+
+    override fun touchDragged(screenX: Int, screenY: Int, pointer: Int) = false
+
+    override fun mouseMoved(screenX: Int, screenY: Int) = false
+
+    override fun scrolled(amount: Int) = false
+
+    enum class CombatUiState : State<CombatUiSystem> {
+        ROOT() {
+            override fun enter(uiSystem: CombatUiSystem) {
+                uiSystem.spells.forEach { _, spellCard ->
+                    if (spellCard.getSpell() == null) {
+                        spellCard.disable()
+                    } else {
+                        spellCard.enable()
+                    }
+                }
+            }
+        },
+        SPELL_SELECTED(),
+        COMPONENTS_SELECTED(),
+        DISABLED() {
+            override fun enter(uiSystem: CombatUiSystem) {
+                uiSystem.spells.forEach { _, spellCard ->
+                    spellCard.disable()
+                }
+            }
+        };
+
+        override fun enter(uiSystem: CombatUiSystem) {
+        }
+
+        override fun exit(uiSystem: CombatUiSystem) {
+        }
+
+        override fun onMessage(uiSystem: CombatUiSystem, telegram: Telegram): Boolean {
+            return false
+        }
+
+        override fun update(uiSystem: CombatUiSystem) {
+        }
     }
 
 }

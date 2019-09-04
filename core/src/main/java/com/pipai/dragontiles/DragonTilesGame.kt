@@ -108,6 +108,13 @@ class DragonTilesGame(val gameConfig: GameConfig) : Game() {
         mainMenuBgTexture.setWrap(Texture.TextureWrap.Repeat, Texture.TextureWrap.Repeat)
         skin.add("mainMenuBg", mainMenuBgTexture)
 
+        val pixmap = Pixmap(1, 1, Format.RGBA8888)
+        pixmap.setColor(Color.WHITE)
+        pixmap.fill()
+        skin.add("white", Texture(pixmap))
+
+        val disabledDrawable = skin.newDrawable("white", Color(0.1f, 0.1f, 0.1f, 0.5f))
+
         val frameTexture = Texture(Gdx.files.local("assets/binassets/graphics/textures/frame.png"))
         val framePatch = NinePatch(frameTexture, 5, 5, 5, 5)
         skin.add("frameTexture", frameTexture)
@@ -116,6 +123,11 @@ class DragonTilesGame(val gameConfig: GameConfig) : Game() {
                 OffsetDrawable(skin.getTiledDrawable("bg"), 1f, 3f, -4f, -4f),
                 skin.getDrawable("frame")))
         skin.add("frameDrawable", frameDrawable, Drawable::class.java)
+        val frameDrawableDark = MultiDrawable(arrayOf(
+                OffsetDrawable(skin.getTiledDrawable("bg"), 1f, 3f, -4f, -4f),
+                OffsetDrawable(disabledDrawable, 1f, 3f, -4f, -4f),
+                skin.getDrawable("frame")))
+        skin.add("frameDrawableDark", frameDrawableDark, Drawable::class.java)
 
         val flatFrameTexture = Texture(Gdx.files.local("assets/binassets/graphics/textures/flatframe.png"))
         val flatFramePatch = NinePatch(flatFrameTexture, 5, 5, 5, 5)
@@ -128,11 +140,6 @@ class DragonTilesGame(val gameConfig: GameConfig) : Game() {
 
         val transparencyBgTexture = Texture(Gdx.files.local("assets/binassets/graphics/textures/transparencyBg.png"))
         skin.add("transparencyBg", transparencyBgTexture)
-
-        val pixmap = Pixmap(1, 1, Format.RGBA8888)
-        pixmap.setColor(Color.WHITE)
-        pixmap.fill()
-        skin.add("white", Texture(pixmap));
 
         val whiteDrawable = skin.newDrawable("white", Color.WHITE)
         val grayDrawable = skin.newDrawable("white", Color.LIGHT_GRAY)
