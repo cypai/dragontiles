@@ -6,6 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.pipai.dragontiles.DragonTilesGame
 import com.pipai.dragontiles.artemis.systems.NoProcessingSystem
 import com.pipai.dragontiles.gui.SpellCard
+import com.pipai.dragontiles.spells.Spell
 
 class CombatUiSystem(private val game: DragonTilesGame,
                      private val stage: Stage) : NoProcessingSystem() {
@@ -59,6 +60,10 @@ class CombatUiSystem(private val game: DragonTilesGame,
                 .minWidth(spellCard.width)
                 .minHeight(spellCard.height)
         spells[number] = spellCard
+    }
+
+    fun setSpell(number: Int, spell: Spell) {
+        spells[number]?.setSpell(spell)
     }
 
 }

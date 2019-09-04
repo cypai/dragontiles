@@ -60,6 +60,11 @@ class CombatScreen(game: DragonTilesGame, combat: Combat) : Screen {
         inputProcessor.addAlwaysOnProcessor(ExitInputProcessor())
         inputProcessor.activateInput()
 
+        val ui = world.getSystem(CombatUiSystem::class.java)
+        combat.hero.spells.forEachIndexed { index, spell ->
+            ui.setSpell(index + 1, spell)
+        }
+
         StandardScreenInit(world)
                 .initialize()
 
