@@ -5,25 +5,25 @@ import com.pipai.dragontiles.utils.valueOfOrDefault
 import java.util.*
 
 enum class ScreenResolution(val width: Int, val height: Int, val description: String?,
-                            val tileSize: Int, val tileOffset: Int) {
+                            val handSideBuffer: Float, val handMaxSize: Float) {
     // 4:3 Resolutions
-    RES_1024_768(1024, 768, null, 32, 10),
-    RES_1280_960(1280, 960, null, 32, 10),
+    RES_1024_768(1024, 768, null, 64f, 512f),
+    RES_1280_960(1280, 960, null, 64f, 512f),
 
     // 16:10 Resolutions
-    RES_1280_800(1280, 800, null, 32, 10),
-    RES_1680_1050(1680, 1050, null, 32, 10),
+    RES_1280_800(1280, 800, null, 64f, 512f),
+    RES_1680_1050(1680, 1050, null, 64f, 512f),
 
     // ~16:9 Resolutions
-    RES_1366_768(1366, 768, "HD", 32, 10),
+    RES_1366_768(1366, 768, "HD", 64f, 512f),
 
     // 16:9 Resolutions
-    RES_1280_720(1280, 720, "720p", 32, 10),
-    RES_1600_900(1600, 900, "900p", 32, 10),
-    RES_1920_1080(1920, 1080, "1080p", 32, 10);
+    RES_1280_720(1280, 720, "720p", 64f, 512f),
+    RES_1600_900(1600, 900, "900p", 64f, 512f),
+    RES_1920_1080(1920, 1080, "1080p", 64f, 512f);
 
     fun toDebugString(): String {
-        return "ScreenResolution[${width}x${height}, $description]"
+        return "ScreenResolution[${width}x$height, $description]"
     }
 }
 

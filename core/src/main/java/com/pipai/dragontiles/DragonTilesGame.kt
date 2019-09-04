@@ -72,10 +72,10 @@ class DragonTilesGame(val gameConfig: GameConfig) : Game() {
 
         val fontGenerator = FreeTypeFontGenerator(Gdx.files.internal("assets/binassets/graphics/fonts/SourceSansPro-Regular.ttf"))
         val fontParameter = FreeTypeFontParameter()
-        fontParameter.size = 28
+        fontParameter.size = 20
         font = fontGenerator.generateFont(fontParameter)
 
-        fontParameter.size = 20
+        fontParameter.size = 16
         smallFont = fontGenerator.generateFont(fontParameter)
         fontGenerator.dispose()
 

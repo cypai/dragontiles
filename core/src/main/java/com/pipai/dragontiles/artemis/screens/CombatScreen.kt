@@ -18,6 +18,7 @@ import com.pipai.dragontiles.artemis.systems.combat.TileIdSystem
 import com.pipai.dragontiles.artemis.systems.input.ExitInputProcessor
 import com.pipai.dragontiles.artemis.systems.input.InputProcessingSystem
 import com.pipai.dragontiles.artemis.systems.rendering.CombatRenderingSystem
+import com.pipai.dragontiles.artemis.systems.ui.CombatUiSystem
 import com.pipai.dragontiles.combat.Combat
 import net.mostlyoriginal.api.event.common.EventSystem
 
@@ -44,6 +45,8 @@ class CombatScreen(game: DragonTilesGame, combat: Combat) : Screen {
 
                         InputProcessingSystem())
                 .with(-1,
+                        CombatUiSystem(game, stage))
+                .with(-2,
                         CombatRenderingSystem(game))
                 .build()
 
@@ -64,7 +67,7 @@ class CombatScreen(game: DragonTilesGame, combat: Combat) : Screen {
     }
 
     override fun render(delta: Float) {
-        Gdx.gl.glClearColor(0f, 0f, 0f, 1f)
+        Gdx.gl.glClearColor(0f, 0.5f, 0f, 1f)
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA)
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
         world.setDelta(delta)
