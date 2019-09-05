@@ -6,6 +6,7 @@ import com.pipai.dragontiles.data.Tile
 class Invoke : Spell {
     override val name: String = "Invoke"
     override val description: String = "Cast 2 @Elemental."
+    override val requirement: ComponentRequirement = Single()
 
     override fun createInstance(): SpellInstance = InvokeImpl()
 }
