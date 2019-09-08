@@ -7,7 +7,7 @@ import com.badlogic.gdx.math.Vector2
 import com.pipai.dragontiles.artemis.components.*
 import com.pipai.dragontiles.data.Tile
 
-class DrawTileAnimation(private val world: World, private val tile: Tile, private val handLocation: Int) : Animation() {
+class DrawTileAnimation(world: World, private val tile: Tile, private val handLocation: Int) : Animation(world) {
 
     private lateinit var mXy: ComponentMapper<XYComponent>
     private lateinit var mPath: ComponentMapper<PathInterpolationComponent>
@@ -32,7 +32,7 @@ class DrawTileAnimation(private val world: World, private val tile: Tile, privat
         cPath.interpolation = Interpolation.pow3Out
         cPath.maxT = 30
         cPath.onEnd = EndStrategy.REMOVE
-        cPath.onEndpoint = { observer.notify(this) }
+        cPath.onEndpoint = { endAnimation() }
     }
 
 }

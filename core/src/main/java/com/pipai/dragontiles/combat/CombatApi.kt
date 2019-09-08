@@ -13,7 +13,7 @@ class CombatApi(private val combat: Combat,
     private val animationSystem = world.getSystem(CombatAnimationSystem::class.java)
 
     fun draw(amount: Int) {
-        val batchAnimation = BatchAnimation()
+        val batchAnimation = BatchAnimation(world)
 
         repeat(amount) {
             val tile = combat.drawPile.removeAt(0)
@@ -33,7 +33,7 @@ class CombatApi(private val combat: Combat,
     }
 
     fun drawToOpenPool(amount: Int) {
-        val batchAnimation = BatchAnimation()
+        val batchAnimation = BatchAnimation(world)
 
         repeat(amount) {
             val tile = combat.drawPile.removeAt(0)
@@ -48,16 +48,19 @@ class CombatApi(private val combat: Combat,
         animationSystem.queueAnimation(AdjustOpenPoolAnimation(world, combat.openPool))
     }
 
-    fun findTargets(): List<Enemy> {
-        return combat.enemies
-    }
-
     fun attack(target: Enemy, element: Element, amount: Int) {
         target.hp -= amount
+        animationSystem.queueAnimation(DamageAnimation(world, target, amount))
     }
 
     fun consume(components: List<Tile>) {
+        combat.hand.removeAll(components)
         combat.discardPile.addAll(components)
+        val batchAnimation = BatchAnimation(world)
+        components.map { ConsumeTileAnimation(world, it) }
+                .forEach { batchAnimation.addToBatch(it) }
+        animationSystem.queueAnimation(batchAnimation)
+        sortHand()
     }
 
 }

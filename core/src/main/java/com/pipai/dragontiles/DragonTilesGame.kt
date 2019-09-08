@@ -104,16 +104,13 @@ class DragonTilesGame(val gameConfig: GameConfig) : Game() {
         bgTexture.setWrap(Texture.TextureWrap.Repeat, Texture.TextureWrap.Repeat)
         skin.add("bg", bgTexture)
 
-        val mainMenuBgTexture = Texture(Gdx.files.local("assets/binassets/graphics/textures/mainmenu.jpg"))
-        mainMenuBgTexture.setWrap(Texture.TextureWrap.Repeat, Texture.TextureWrap.Repeat)
-        skin.add("mainMenuBg", mainMenuBgTexture)
-
         val pixmap = Pixmap(1, 1, Format.RGBA8888)
         pixmap.setColor(Color.WHITE)
         pixmap.fill()
         skin.add("white", Texture(pixmap))
 
         val disabledDrawable = skin.newDrawable("white", Color(0.1f, 0.1f, 0.1f, 0.5f))
+        skin.add("disabled", disabledDrawable, Drawable::class.java)
 
         val frameTexture = Texture(Gdx.files.local("assets/binassets/graphics/textures/frame.png"))
         val framePatch = NinePatch(frameTexture, 5, 5, 5, 5)
@@ -147,6 +144,7 @@ class DragonTilesGame(val gameConfig: GameConfig) : Game() {
 
         skin.add("default", LabelStyle(font, Color.BLACK))
         skin.add("small", LabelStyle(smallFont, Color.BLACK))
+        skin.add("white", LabelStyle(font, Color.WHITE))
         val devLabelStyle = LabelStyle(font, Color.BLACK)
         devLabelStyle.background = whiteDrawable
         skin.add("dev", devLabelStyle)

@@ -10,7 +10,7 @@ import com.pipai.dragontiles.artemis.components.TileComponent
 import com.pipai.dragontiles.artemis.components.XYComponent
 import com.pipai.dragontiles.data.Tile
 
-class DrawToOpenPoolAnimation(private val world: World, private val tile: Tile, private val poolLocation: Int) : Animation() {
+class DrawToOpenPoolAnimation(world: World, private val tile: Tile, private val poolLocation: Int) : Animation(world) {
 
     private lateinit var mXy: ComponentMapper<XYComponent>
     private lateinit var mPath: ComponentMapper<PathInterpolationComponent>
@@ -32,7 +32,7 @@ class DrawToOpenPoolAnimation(private val world: World, private val tile: Tile, 
         cPath.interpolation = Interpolation.pow3Out
         cPath.maxT = 30
         cPath.onEnd = EndStrategy.REMOVE
-        cPath.onEndpoint = { observer.notify(this) }
+        cPath.onEndpoint = { endAnimation() }
     }
 
 }

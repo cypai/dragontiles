@@ -1,10 +1,28 @@
 package com.pipai.dragontiles.artemis.systems.animation
 
-abstract class Animation {
+import com.artemis.World
+import com.pipai.dragontiles.artemis.components.EndStrategy
+import com.pipai.dragontiles.artemis.components.TimerComponent
 
-    lateinit var observer: AnimationObserver
+abstract class Animation(protected val world: World) {
+
+    private lateinit var observer: AnimationObserver
+
+    fun init(observer: AnimationObserver) {
+        this.observer = observer
+    }
 
     abstract fun startAnimation()
+
+    fun endAnimation() {
+        val id = world.create()
+        val cTimer = world.getMapper(TimerComponent::class.java).create(id)
+        cTimer.maxT = 1
+        cTimer.onEnd = EndStrategy.DESTROY
+        cTimer.onEndCallback = {
+            observer.notify(this)
+        }
+    }
 
 }
 

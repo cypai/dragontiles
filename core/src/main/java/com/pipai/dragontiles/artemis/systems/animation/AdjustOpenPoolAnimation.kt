@@ -10,7 +10,7 @@ import com.pipai.dragontiles.artemis.components.XYComponent
 import com.pipai.dragontiles.artemis.systems.combat.TileIdSystem
 import com.pipai.dragontiles.data.Tile
 
-class AdjustOpenPoolAnimation(world: World, private val openPool: List<Tile>) : Animation() {
+class AdjustOpenPoolAnimation(world: World, private val openPool: List<Tile>) : Animation(world) {
 
     private lateinit var mXy: ComponentMapper<XYComponent>
     private lateinit var mPath: ComponentMapper<PathInterpolationComponent>
@@ -30,7 +30,7 @@ class AdjustOpenPoolAnimation(world: World, private val openPool: List<Tile>) : 
             cPath.interpolation = Interpolation.pow3Out
             cPath.maxT = 30
             cPath.onEnd = EndStrategy.REMOVE
-            cPath.onEndpoint = { observer.notify(this) }
+            cPath.onEndpoint = { endAnimation() }
         }
     }
 

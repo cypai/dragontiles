@@ -15,14 +15,14 @@ class CombatAnimationSystem : BaseSystem(), AnimationObserver {
 
     override fun processSystem() {
         if (!animating && animationQueue.isNotEmpty()) {
-            animationQueue.first().startAnimation()
             animating = true
             sUi.disable()
+            animationQueue.first().startAnimation()
         }
     }
 
     fun queueAnimation(animation: Animation) {
-        animation.observer = this
+        animation.init(this)
         animationQueue.add(animation)
     }
 

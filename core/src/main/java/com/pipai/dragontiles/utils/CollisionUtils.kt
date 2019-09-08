@@ -1,8 +1,10 @@
 package com.pipai.dragontiles.utils
 
+import com.badlogic.gdx.graphics.g2d.Sprite
 import com.badlogic.gdx.math.Intersector
 import com.badlogic.gdx.math.Rectangle
 import com.badlogic.gdx.math.Vector2
+import com.pipai.dragontiles.artemis.components.SpriteComponent
 import com.pipai.dragontiles.utils.CollisionBounds.CollisionBoundingBox
 
 sealed class CollisionBounds {

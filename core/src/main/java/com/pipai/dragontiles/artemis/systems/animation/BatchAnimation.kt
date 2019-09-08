@@ -1,6 +1,8 @@
 package com.pipai.dragontiles.artemis.systems.animation
 
-class BatchAnimation : Animation(), AnimationObserver {
+import com.artemis.World
+
+class BatchAnimation(world: World) : Animation(world), AnimationObserver {
 
     private val animations: MutableList<Animation> = mutableListOf()
 
@@ -11,14 +13,14 @@ class BatchAnimation : Animation(), AnimationObserver {
     }
 
     fun addToBatch(animation: Animation) {
-        animation.observer = this
+        animation.init(this)
         animations.add(animation)
     }
 
     override fun notify(animation: Animation) {
         animations.remove(animation)
         if (animations.isEmpty()) {
-            observer.notify(this)
+            endAnimation()
         }
     }
 

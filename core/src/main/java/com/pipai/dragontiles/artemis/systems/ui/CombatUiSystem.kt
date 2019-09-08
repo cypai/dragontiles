@@ -5,13 +5,23 @@ import com.badlogic.gdx.InputProcessor
 import com.badlogic.gdx.ai.fsm.DefaultStateMachine
 import com.badlogic.gdx.ai.fsm.State
 import com.badlogic.gdx.ai.msg.Telegram
+import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.pipai.dragontiles.DragonTilesGame
+import com.pipai.dragontiles.artemis.components.EnemyComponent
+import com.pipai.dragontiles.artemis.components.SpriteComponent
+import com.pipai.dragontiles.artemis.components.XYComponent
 import com.pipai.dragontiles.artemis.systems.NoProcessingSystem
+import com.pipai.dragontiles.artemis.systems.combat.CombatControllerSystem
+import com.pipai.dragontiles.data.Tile
 import com.pipai.dragontiles.gui.SpellCard
-import com.pipai.dragontiles.spells.Spell
+import com.pipai.dragontiles.gui.SpellComponentList
+import com.pipai.dragontiles.spells.SpellInstance
+import com.pipai.dragontiles.spells.TargetType
+import com.pipai.dragontiles.utils.*
+import kotlin.math.min
 
 class CombatUiSystem(private val game: DragonTilesGame,
                      private val stage: Stage) : NoProcessingSystem(), InputProcessor {
@@ -27,10 +37,17 @@ class CombatUiSystem(private val game: DragonTilesGame,
 
     private val hpLabel = Label("80/80", skin)
     private val spells: MutableMap<Int, SpellCard> = mutableMapOf()
+    private val spellComponentList = SpellComponentList(skin, tileSkin)
 
     private var selectedSpellNumber: Int? = null
 
     private val stateMachine = DefaultStateMachine<CombatUiSystem, CombatUiState>(this, CombatUiState.ROOT)
+
+    private val mEnemy by mapper<EnemyComponent>()
+    private val mXy by mapper<XYComponent>()
+    private val mSprite by mapper<SpriteComponent>()
+
+    private val sCombat by system<CombatControllerSystem>()
 
     init {
         rootTable.setFillParent(true)
@@ -61,6 +78,8 @@ class CombatUiSystem(private val game: DragonTilesGame,
         }
         mainTable.add(spellRow)
         mainTable.row()
+
+        spellComponentList.addClickCallback { selectComponents(it) }
     }
 
     private fun addSpellCard(number: Int) {
@@ -72,8 +91,8 @@ class CombatUiSystem(private val game: DragonTilesGame,
         spells[number] = spellCard
     }
 
-    fun setSpell(number: Int, spell: Spell) {
-        spells[number]?.setSpell(spell)
+    fun setSpell(number: Int, spellInstance: SpellInstance) {
+        spells[number]?.setSpellInstance(spellInstance)
     }
 
     fun disable() {
@@ -118,7 +137,7 @@ class CombatUiSystem(private val game: DragonTilesGame,
             else -> null
         }
         val spellCard = spellNumber?.let { spells[spellNumber] }
-        val spell = spellCard?.getSpell()
+        val spell = spellCard?.getSpellInstance()
         if (spell != null) {
             selectedSpellNumber = spellNumber
             stateMachine.changeState(CombatUiState.SPELL_SELECTED)
@@ -133,11 +152,52 @@ class CombatUiSystem(private val game: DragonTilesGame,
         }
     }
 
+    private fun displaySpellComponents(spellCard: SpellCard) {
+        val spellInstance = spellCard.getSpellInstance()!!
+        spellComponentList.setOptions(spellInstance.spell.requirement.find(sCombat.combat.hand))
+        val position = spellCard.localToStageCoordinates(Vector2(0f, 0f))
+        spellComponentList.x = position.x
+        spellComponentList.y = MathUtils.clamp(position.y - spellComponentList.prefHeight,
+                48f, position.y)
+        spellComponentList.height = min(spellComponentList.prefHeight, position.y - 48f + spellCard.height)
+
+        stage.addActor(spellComponentList)
+        stage.keyboardFocus = spellComponentList
+        stage.scrollFocus = spellComponentList
+    }
+
+    private fun selectComponents(components: List<Tile>) {
+        when (getSelectedSpell().spell.targetType) {
+            TargetType.SINGLE -> {
+                getSelectedSpell().fill(components)
+                stateMachine.changeState(CombatUiState.COMPONENTS_SELECTED)
+            }
+            TargetType.AOE -> {
+            }
+        }
+    }
+
+    private fun getSelectedSpell() = spells[selectedSpellNumber!!]!!.getSpellInstance()!!
+
     override fun keyUp(keycode: Int) = false
 
     override fun keyTyped(character: Char) = false
 
-    override fun touchDown(screenX: Int, screenY: Int, pointer: Int, button: Int) = false
+    override fun touchDown(screenX: Int, screenY: Int, pointer: Int, button: Int): Boolean {
+        return when (stateMachine.currentState) {
+            CombatUiState.COMPONENTS_SELECTED -> {
+                world.fetch(allOf(EnemyComponent::class, XYComponent::class, SpriteComponent::class)).forEach {
+                    val cSprite = mSprite.get(it)
+                    if (cSprite.sprite.boundingRectangle.contains(screenX.toFloat(), config.resolution.height - screenY.toFloat())) {
+                        getSelectedSpell().cast(listOf(mEnemy.get(it).enemy), sCombat.controller.api)
+                        return true
+                    }
+                }
+                return false
+            }
+            else -> false
+        }
+    }
 
     override fun touchUp(screenX: Int, screenY: Int, pointer: Int, button: Int) = false
 
@@ -151,7 +211,7 @@ class CombatUiSystem(private val game: DragonTilesGame,
         ROOT() {
             override fun enter(uiSystem: CombatUiSystem) {
                 uiSystem.spells.forEach { _, spellCard ->
-                    if (spellCard.getSpell() == null) {
+                    if (spellCard.getSpellInstance() == null) {
                         spellCard.disable()
                     } else {
                         spellCard.enable()
@@ -164,10 +224,15 @@ class CombatUiSystem(private val game: DragonTilesGame,
                 uiSystem.spells.forEach { index, spellCard ->
                     if (index == uiSystem.selectedSpellNumber) {
                         spellCard.enable()
+                        uiSystem.displaySpellComponents(spellCard)
                     } else {
                         spellCard.disable()
                     }
                 }
+            }
+
+            override fun exit(uiSystem: CombatUiSystem) {
+                uiSystem.spellComponentList.remove()
             }
         },
         COMPONENTS_SELECTED(),

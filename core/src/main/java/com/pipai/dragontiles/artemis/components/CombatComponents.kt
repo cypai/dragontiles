@@ -40,10 +40,12 @@ class EnemyComponent : Component() {
     var name = ""
     var hp = 0
     var hpMax = 0
+    lateinit var enemy: Enemy
 
     fun setByEnemy(enemy: Enemy) {
         name = enemy.name
         hp = enemy.hp
         hpMax = enemy.hpMax
+        this.enemy = enemy
     }
 }

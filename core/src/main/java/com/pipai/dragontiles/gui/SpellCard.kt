@@ -8,9 +8,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.badlogic.gdx.utils.Align
 import com.pipai.dragontiles.data.TileSkin
-import com.pipai.dragontiles.spells.Spell
+import com.pipai.dragontiles.spells.SpellInstance
 
-class SpellCard(private var spell: Spell?,
+class SpellCard(private var spellInstance: SpellInstance?,
                 val number: Int?,
                 skin: Skin,
                 private val tileSkin: TileSkin) : Table(skin) {
@@ -64,10 +64,10 @@ class SpellCard(private var spell: Spell?,
         clickCallbacks.add(callback)
     }
 
-    fun getSpell() = spell
+    fun getSpellInstance() = spellInstance
 
-    fun setSpell(spell: Spell?) {
-        this.spell = spell
+    fun setSpellInstance(spellInstance: SpellInstance?) {
+        this.spellInstance = spellInstance
         update()
     }
 
@@ -82,9 +82,9 @@ class SpellCard(private var spell: Spell?,
     }
 
     private fun update() {
-        nameLabel.setText(spell?.name ?: "")
+        nameLabel.setText(spellInstance?.spell?.name ?: "")
         numberLabel.setText(number?.toString() ?: "")
-        descriptionLabel.setText(spell?.description ?: "")
+        descriptionLabel.setText(spellInstance?.spell?.description ?: "")
     }
 
 }
