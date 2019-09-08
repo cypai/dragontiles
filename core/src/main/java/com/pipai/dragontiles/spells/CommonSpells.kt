@@ -8,10 +8,10 @@ class Invoke(upgraded: Boolean) : Spell(upgraded) {
     override val requirement: ComponentRequirement = Single()
     override val targetType: TargetType = TargetType.SINGLE
 
-    override fun createInstance(): SpellInstance = InvokeImpl(this, upgraded)
+    override fun createInstance(): SpellInstance = InvokeImpl(this)
 }
 
-class InvokeImpl(spell: Spell, upgraded: Boolean) : SpellInstance(spell, upgraded, 1) {
+class InvokeImpl(spell: Spell) : SpellInstance(spell, if (spell.upgraded) 2 else 1) {
 
     override fun onCast(targets: List<Enemy>, api: CombatApi) {
         api.attack(targets.first(), elemental(components()), 2)

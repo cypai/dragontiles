@@ -21,7 +21,6 @@ enum class TargetType {
 
 abstract class SpellInstance(
         val spell: Spell,
-        var upgraded: Boolean,
         var repeatableMax: Int) {
 
     private val logger = getLogger()

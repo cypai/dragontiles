@@ -45,4 +45,33 @@ class CombatTest : GdxMockedTest() {
         Assert.assertEquals(14, combat.hand.size)
         Assert.assertEquals(28, flameTurtle.hp)
     }
+
+    @Test
+    fun testInvokePlus() {
+        val flameTurtle = FlameTurtle()
+        val combat = Combat(Random(),
+                Hero("Elementalist", 80, 80, 15, mutableListOf(Invoke(true))),
+                mutableListOf(flameTurtle))
+
+        val controller = CombatController(combat, mockCombatWorld(combat))
+        controller.initCombat()
+        controller.runTurn()
+
+        val invoke = controller.api.spellInstances.first()
+        invoke.fill(listOf(controller.api.combat.hand.first()))
+        Assert.assertTrue(invoke.available())
+        Assert.assertEquals(0, invoke.repeated)
+        invoke.cast(listOf(flameTurtle), controller.api)
+        Assert.assertTrue(invoke.available())
+        Assert.assertEquals(14, combat.hand.size)
+        Assert.assertEquals(28, flameTurtle.hp)
+        Assert.assertEquals(1, invoke.repeated)
+
+        invoke.fill(listOf(controller.api.combat.hand.first()))
+        invoke.cast(listOf(flameTurtle), controller.api)
+        Assert.assertFalse(invoke.available())
+        Assert.assertEquals(13, combat.hand.size)
+        Assert.assertEquals(26, flameTurtle.hp)
+        Assert.assertEquals(2, invoke.repeated)
+    }
 }

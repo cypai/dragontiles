@@ -93,7 +93,7 @@ class SpellCard(private val game: DragonTilesGame,
         } else {
             val spellStrings = game.spellStrings.all(spell.id)
             nameLabel.setText(spellStrings.name)
-            descriptionLabel.setText(if (spellInstance!!.upgraded) spellStrings.upgradeDescription else spellStrings.description)
+            descriptionLabel.setText(if (spellInstance!!.spell.upgraded) spellStrings.upgradeDescription else spellStrings.description)
         }
     }
 
