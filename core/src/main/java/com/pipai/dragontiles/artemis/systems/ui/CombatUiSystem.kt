@@ -83,7 +83,7 @@ class CombatUiSystem(private val game: DragonTilesGame,
     }
 
     private fun addSpellCard(number: Int) {
-        val spellCard = SpellCard(null, number, game.skin, tileSkin)
+        val spellCard = SpellCard(game, null, number, game.skin, tileSkin)
         spellCard.addClickCallback(this::spellCardClickCallback)
         spellRow.add(spellCard)
                 .minWidth(spellCard.width)

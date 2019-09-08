@@ -24,6 +24,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.OffsetDrawable
 import com.kotcrab.vis.ui.VisUI
 import com.pipai.dragontiles.artemis.screens.CombatScreen
 import com.pipai.dragontiles.combat.Combat
+import com.pipai.dragontiles.data.SpellStrings
 import com.pipai.dragontiles.data.TileSkin
 import com.pipai.dragontiles.enemies.FlameTurtle
 import com.pipai.dragontiles.hero.Hero
@@ -59,6 +60,9 @@ class DragonTilesGame(val gameConfig: GameConfig) : Game() {
     lateinit var tileSkin: TileSkin
         private set
 
+    lateinit var spellStrings: SpellStrings
+        private set
+
     override fun create() {
         logger.info("Starting Dragon Tiles with the following config settings:")
         logger.info(gameConfig.resolution.toDebugString())
@@ -81,13 +85,16 @@ class DragonTilesGame(val gameConfig: GameConfig) : Game() {
         smallFont = fontGenerator.generateFont(fontParameter)
         fontGenerator.dispose()
 
+        spellStrings = SpellStrings()
+        spellStrings.load(Gdx.files.internal("assets/data/spells.yml").readString())
+
         ToStringBuilder.setDefaultStyle(ToStringStyle.SHORT_PREFIX_STYLE)
 
         initSkin()
 
         setScreen(CombatScreen(this,
                 Combat(Random(),
-                        Hero("Elementalist", 80, 80, 15, mutableListOf(Invoke(), Invoke())),
+                        Hero("Elementalist", 80, 80, 15, mutableListOf(Invoke(true), Invoke(false))),
                         mutableListOf(FlameTurtle()))))
     }
 

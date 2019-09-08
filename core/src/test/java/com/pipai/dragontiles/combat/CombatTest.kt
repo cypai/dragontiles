@@ -14,7 +14,7 @@ class CombatTest : GdxMockedTest() {
     fun testCombat() {
         val flameTurtle = FlameTurtle()
         val combat = Combat(Random(),
-                Hero("Elementalist", 80, 80, 15, mutableListOf(Invoke())),
+                Hero("Elementalist", 80, 80, 15, mutableListOf(Invoke(false))),
                 mutableListOf(flameTurtle))
 
         val controller = CombatController(combat, mockCombatWorld(combat))

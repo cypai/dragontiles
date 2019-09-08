@@ -7,13 +7,12 @@ import com.pipai.dragontiles.enemies.Enemy
 import com.pipai.dragontiles.utils.getLogger
 import org.apache.commons.lang3.builder.ToStringBuilder
 
-interface Spell {
-    val name: String
-    val description: String
-    val requirement: ComponentRequirement
-    val targetType: TargetType
+abstract class Spell(var upgraded: Boolean) {
+    abstract val id: String
+    abstract val requirement: ComponentRequirement
+    abstract val targetType: TargetType
 
-    fun createInstance(): SpellInstance
+    abstract fun createInstance(): SpellInstance
 }
 
 enum class TargetType {
@@ -22,6 +21,7 @@ enum class TargetType {
 
 abstract class SpellInstance(
         val spell: Spell,
+        var upgraded: Boolean,
         var repeatableMax: Int) {
 
     private val logger = getLogger()

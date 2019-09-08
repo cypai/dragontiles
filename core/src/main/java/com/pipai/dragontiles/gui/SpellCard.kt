@@ -7,10 +7,12 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.badlogic.gdx.utils.Align
+import com.pipai.dragontiles.DragonTilesGame
 import com.pipai.dragontiles.data.TileSkin
 import com.pipai.dragontiles.spells.SpellInstance
 
-class SpellCard(private var spellInstance: SpellInstance?,
+class SpellCard(private val game: DragonTilesGame,
+                private var spellInstance: SpellInstance?,
                 val number: Int?,
                 skin: Skin,
                 private val tileSkin: TileSkin) : Table(skin) {
@@ -82,9 +84,17 @@ class SpellCard(private var spellInstance: SpellInstance?,
     }
 
     private fun update() {
-        nameLabel.setText(spellInstance?.spell?.name ?: "")
         numberLabel.setText(number?.toString() ?: "")
-        descriptionLabel.setText(spellInstance?.spell?.description ?: "")
+
+        val spell = spellInstance?.spell
+        if (spell == null) {
+            nameLabel.setText("")
+            descriptionLabel.setText("")
+        } else {
+            val spellStrings = game.spellStrings.all(spell.id)
+            nameLabel.setText(spellStrings.name)
+            descriptionLabel.setText(if (spellInstance!!.upgraded) spellStrings.upgradeDescription else spellStrings.description)
+        }
     }
 
 }
