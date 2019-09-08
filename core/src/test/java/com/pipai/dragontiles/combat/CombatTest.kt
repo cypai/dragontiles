@@ -11,10 +11,11 @@ import java.util.*
 
 class CombatTest : GdxMockedTest() {
     @Test
-    fun testCombatInit() {
+    fun testCombat() {
+        val flameTurtle = FlameTurtle()
         val combat = Combat(Random(),
                 Hero("Elementalist", 80, 80, 15, mutableListOf(Invoke())),
-                mutableListOf(FlameTurtle()))
+                mutableListOf(flameTurtle))
 
         val controller = CombatController(combat, mockCombatWorld(combat))
         controller.initCombat()
@@ -27,5 +28,21 @@ class CombatTest : GdxMockedTest() {
         Assert.assertEquals(9, combat.openPool.size)
         Assert.assertEquals(15, combat.hand.size)
         Assert.assertEquals(112, combat.drawPile.size)
+
+        val invoke = controller.api.spellInstances.first()
+        Assert.assertTrue(invoke.available())
+        Assert.assertFalse(invoke.ready())
+        invoke.cast(listOf(flameTurtle), controller.api)
+        Assert.assertEquals(15, combat.hand.size)
+        Assert.assertEquals(30, flameTurtle.hp)
+
+        invoke.fill(listOf(controller.api.combat.hand.first()))
+        Assert.assertTrue(invoke.available())
+        Assert.assertTrue(invoke.ready())
+        invoke.cast(listOf(flameTurtle), controller.api)
+        Assert.assertFalse(invoke.available())
+        Assert.assertFalse(invoke.ready())
+        Assert.assertEquals(14, combat.hand.size)
+        Assert.assertEquals(28, flameTurtle.hp)
     }
 }

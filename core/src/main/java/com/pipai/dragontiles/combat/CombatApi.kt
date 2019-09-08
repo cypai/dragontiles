@@ -6,8 +6,10 @@ import com.pipai.dragontiles.artemis.systems.combat.CombatAnimationSystem
 import com.pipai.dragontiles.data.Element
 import com.pipai.dragontiles.data.Tile
 import com.pipai.dragontiles.enemies.Enemy
+import com.pipai.dragontiles.spells.SpellInstance
 
-class CombatApi(private val combat: Combat,
+class CombatApi(val combat: Combat,
+                val spellInstances: List<SpellInstance>,
                 private val world: World) {
 
     private val animationSystem = world.getSystem(CombatAnimationSystem::class.java)

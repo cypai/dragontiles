@@ -24,7 +24,7 @@ data class Combat(val rng: Random,
 
 class CombatController(private val combat: Combat, world: World) {
 
-    val api: CombatApi = CombatApi(combat, world)
+    val api: CombatApi = CombatApi(combat, combat.hero.spells.map { it.createInstance() }.toList(), world)
 
     fun initCombat() {
         Tile.nextId = 0

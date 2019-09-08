@@ -9,14 +9,12 @@ class Invoke : Spell {
     override val requirement: ComponentRequirement = Single()
     override val targetType: TargetType = TargetType.SINGLE
 
-    override fun createInstance(): SpellInstance = InvokeImpl()
+    override fun createInstance(): SpellInstance = InvokeImpl(this)
 }
 
-class InvokeImpl : SpellInstance(Invoke(), false, 2) {
+class InvokeImpl(spell: Spell) : SpellInstance(spell, 1) {
 
-    override fun cast(targets: List<Enemy>, api: CombatApi) {
-        val components = components()
-        api.attack(targets.first(), elemental(components), 2)
-        api.consume(components)
+    override fun onCast(targets: List<Enemy>, api: CombatApi) {
+        api.attack(targets.first(), elemental(components()), 2)
     }
 }
