@@ -1,5 +1,5 @@
 base:invoke:
   en:
     name: Invoke
-    description: Cast 2 @Elemental.
-    upgradeDescription: Cast 2 @Elemental. @Repeatable !r.
+    description: Cast !d @Elemental.
+    upgradeDescription: Cast !d @Elemental. @Repeatable !r.

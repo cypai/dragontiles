@@ -22,6 +22,8 @@ class SpellCard(private val game: DragonTilesGame,
     private val numberLabel = Label("", skin, "small")
     private val descriptionLabel = Label("", skin, "small")
 
+    private val regex = "!\\w+".toRegex()
+
     private val clickCallbacks: MutableList<(SpellCard) -> Unit> = mutableListOf()
 
     private var enabled = true
@@ -83,7 +85,7 @@ class SpellCard(private val game: DragonTilesGame,
         background = skin.getDrawable("frameDrawable")
     }
 
-    private fun update() {
+    fun update() {
         numberLabel.setText(number?.toString() ?: "")
 
         val spell = spellInstance?.spell
@@ -92,8 +94,12 @@ class SpellCard(private val game: DragonTilesGame,
             descriptionLabel.setText("")
         } else {
             val spellStrings = game.spellStrings.all(spell.id)
-            nameLabel.setText(spellStrings.name)
-            descriptionLabel.setText(if (spellInstance!!.spell.upgraded) spellStrings.upgradeDescription else spellStrings.description)
+            nameLabel.setText(spellStrings.name + if (spell.upgraded) "+" else "")
+            val description = if (spellInstance!!.spell.upgraded) spellStrings.upgradeDescription else spellStrings.description
+            val adjustedDescription = description.replace(regex) {
+                spellInstance!!.dynamicValue(it.value).toString()
+            }
+            descriptionLabel.setText(adjustedDescription)
         }
     }
 

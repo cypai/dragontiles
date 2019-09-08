@@ -25,10 +25,21 @@ abstract class SpellInstance(
 
     private val logger = getLogger()
 
+    abstract val baseDamage: Int
     var repeated = 0
     var exhausted = false
 
     val componentSlots: List<ComponentSlot> = generateSlots(spell.requirement.slotAmount)
+
+    val data: MutableMap<String, Int> = mutableMapOf()
+
+    fun dynamicValue(key: String): Int {
+        return when (key) {
+            "!r" -> repeatableMax - repeated
+            "!d" -> baseDamage
+            else -> data[key] ?: 0
+        }
+    }
 
     fun available() = !exhausted && repeated < repeatableMax
 

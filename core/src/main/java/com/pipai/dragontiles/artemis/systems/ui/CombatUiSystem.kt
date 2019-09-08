@@ -211,6 +211,7 @@ class CombatUiSystem(private val game: DragonTilesGame,
         ROOT() {
             override fun enter(uiSystem: CombatUiSystem) {
                 uiSystem.spells.forEach { _, spellCard ->
+                    spellCard.update()
                     val spellInstance = spellCard.getSpellInstance()
                     if (spellInstance == null || !spellInstance.available()) {
                         spellCard.disable()
@@ -240,6 +241,7 @@ class CombatUiSystem(private val game: DragonTilesGame,
         DISABLED() {
             override fun enter(uiSystem: CombatUiSystem) {
                 uiSystem.spells.forEach { _, spellCard ->
+                    spellCard.update()
                     spellCard.disable()
                 }
             }

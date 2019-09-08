@@ -13,7 +13,9 @@ class Invoke(upgraded: Boolean) : Spell(upgraded) {
 
 class InvokeImpl(spell: Spell) : SpellInstance(spell, if (spell.upgraded) 2 else 1) {
 
+    override val baseDamage = 2
+
     override fun onCast(targets: List<Enemy>, api: CombatApi) {
-        api.attack(targets.first(), elemental(components()), 2)
+        api.attack(targets.first(), elemental(components()), baseDamage)
     }
 }
