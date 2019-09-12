@@ -69,6 +69,7 @@ class DragonTilesGame(val gameConfig: GameConfig) : Game() {
 
         spriteBatch = SpriteBatch(1000)
         shapeRenderer = ShapeRenderer()
+        shapeRenderer.setAutoShapeType(true)
 
         assets = AssetManager()
         assets.load("assets/binassets/graphics/tiles/tiles.png", Texture::class.java)

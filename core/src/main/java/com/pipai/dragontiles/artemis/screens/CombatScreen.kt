@@ -20,6 +20,7 @@ import com.pipai.dragontiles.artemis.systems.input.ExitInputProcessor
 import com.pipai.dragontiles.artemis.systems.input.InputProcessingSystem
 import com.pipai.dragontiles.artemis.systems.rendering.CombatRenderingSystem
 import com.pipai.dragontiles.artemis.systems.ui.CombatUiSystem
+import com.pipai.dragontiles.artemis.systems.ui.MouseFollowLineSystem
 import com.pipai.dragontiles.combat.Combat
 import net.mostlyoriginal.api.event.common.EventSystem
 
@@ -44,6 +45,7 @@ class CombatScreen(game: DragonTilesGame, combat: Combat) : Screen {
                         CombatControllerSystem(combat),
                         TileIdSystem(),
                         CombatAnimationSystem(),
+                        MouseFollowLineSystem(game.gameConfig),
 
                         InputProcessingSystem())
                 .with(-1,
@@ -55,6 +57,7 @@ class CombatScreen(game: DragonTilesGame, combat: Combat) : Screen {
         world = World(config)
 
         val inputProcessor = world.getSystem(InputProcessingSystem::class.java)
+        inputProcessor.addAlwaysOnProcessor(world.getSystem(MouseFollowLineSystem::class.java))
         inputProcessor.addAlwaysOnProcessor(world.getSystem(CombatUiSystem::class.java))
         inputProcessor.addAlwaysOnProcessor(stage)
         inputProcessor.addAlwaysOnProcessor(ExitInputProcessor())

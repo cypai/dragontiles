@@ -10,9 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.pipai.dragontiles.DragonTilesGame
-import com.pipai.dragontiles.artemis.components.EnemyComponent
-import com.pipai.dragontiles.artemis.components.SpriteComponent
-import com.pipai.dragontiles.artemis.components.XYComponent
+import com.pipai.dragontiles.artemis.components.*
 import com.pipai.dragontiles.artemis.systems.NoProcessingSystem
 import com.pipai.dragontiles.artemis.systems.combat.CombatControllerSystem
 import com.pipai.dragontiles.data.Tile
@@ -40,11 +38,13 @@ class CombatUiSystem(private val game: DragonTilesGame,
     private val spellComponentList = SpellComponentList(skin, tileSkin)
 
     private var selectedSpellNumber: Int? = null
+    private var mouseFollowEntityId: Int? = null
 
     private val stateMachine = DefaultStateMachine<CombatUiSystem, CombatUiState>(this, CombatUiState.ROOT)
 
     private val mEnemy by mapper<EnemyComponent>()
-    private val mXy by mapper<XYComponent>()
+    private val mLine by mapper<LineComponent>()
+    private val mMouseFollow by mapper<MouseFollowComponent>()
     private val mSprite by mapper<SpriteComponent>()
 
     private val sCombat by system<CombatControllerSystem>()
@@ -237,7 +237,22 @@ class CombatUiSystem(private val game: DragonTilesGame,
                 uiSystem.spellComponentList.remove()
             }
         },
-        COMPONENTS_SELECTED(),
+        COMPONENTS_SELECTED() {
+            override fun enter(uiSystem: CombatUiSystem) {
+                val id = uiSystem.world.create()
+                uiSystem.mouseFollowEntityId = id
+                val cLine = uiSystem.mLine.create(id)
+                val spellCard = uiSystem.spells[uiSystem.selectedSpellNumber!!]!!
+                cLine.start = spellCard.localToStageCoordinates(Vector2(spellCard.width / 2, spellCard.height / 2))
+                cLine.end = Vector2()
+                uiSystem.mMouseFollow.create(id)
+            }
+
+            override fun exit(uiSystem: CombatUiSystem) {
+                uiSystem.world.delete(uiSystem.mouseFollowEntityId!!)
+                uiSystem.mouseFollowEntityId = null
+            }
+        },
         DISABLED() {
             override fun enter(uiSystem: CombatUiSystem) {
                 uiSystem.spells.forEach { _, spellCard ->

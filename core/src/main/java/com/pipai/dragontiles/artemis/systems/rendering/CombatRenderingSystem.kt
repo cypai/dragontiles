@@ -3,10 +3,7 @@ package com.pipai.dragontiles.artemis.systems.rendering
 import com.artemis.BaseSystem
 import com.badlogic.gdx.graphics.Color
 import com.pipai.dragontiles.DragonTilesGame
-import com.pipai.dragontiles.artemis.components.EnemyComponent
-import com.pipai.dragontiles.artemis.components.SpriteComponent
-import com.pipai.dragontiles.artemis.components.TileComponent
-import com.pipai.dragontiles.artemis.components.XYComponent
+import com.pipai.dragontiles.artemis.components.*
 import com.pipai.dragontiles.utils.allOf
 import com.pipai.dragontiles.utils.fetch
 import com.pipai.dragontiles.utils.mapper
@@ -17,6 +14,7 @@ class CombatRenderingSystem(private val game: DragonTilesGame) : BaseSystem() {
     private val mTile by mapper<TileComponent>()
     private val mSprite by mapper<SpriteComponent>()
     private val mEnemy by mapper<EnemyComponent>()
+    private val mLine by mapper<LineComponent>()
 
     override fun processSystem() {
         game.spriteBatch.color = Color.WHITE
@@ -35,7 +33,6 @@ class CombatRenderingSystem(private val game: DragonTilesGame) : BaseSystem() {
                     sprite.y = cXy.y
                     sprite.draw(game.spriteBatch)
                 }
-
         world.fetch(allOf(XYComponent::class, SpriteComponent::class, EnemyComponent::class))
                 .forEach {
                     val cEnemy = mEnemy.get(it)
@@ -43,6 +40,14 @@ class CombatRenderingSystem(private val game: DragonTilesGame) : BaseSystem() {
                     game.smallFont.draw(game.spriteBatch, "${cEnemy.name}   ${cEnemy.hp}/${cEnemy.hpMax}", cXy.x, cXy.y - 4f)
                 }
         game.spriteBatch.end()
+
+        game.shapeRenderer.begin()
+        world.fetch(allOf(LineComponent::class))
+                .forEach {
+                    val cLine = mLine.get(it)
+                    game.shapeRenderer.line(cLine.start.x, cLine.start.y, cLine.end.x, cLine.end.y, cLine.color, cLine.color)
+                }
+        game.shapeRenderer.end()
     }
 
 }
