@@ -43,7 +43,7 @@ class CombatScreen(game: DragonTilesGame, combat: Combat) : Screen {
                         XyInterpolationSystem(),
                         TimerSystem(),
 
-                        CombatControllerSystem(combat),
+                        CombatControllerSystem(game, combat),
                         TileIdSystem(),
                         CombatAnimationSystem(),
                         MouseFollowLineSystem(game.gameConfig),

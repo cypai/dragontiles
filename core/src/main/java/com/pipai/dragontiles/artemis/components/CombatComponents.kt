@@ -3,6 +3,8 @@ package com.pipai.dragontiles.artemis.components
 import com.artemis.Component
 import com.badlogic.gdx.Input.Keys
 import com.badlogic.gdx.graphics.Color
+import com.pipai.dragontiles.data.CountdownAttack
+import com.pipai.dragontiles.data.Element
 import com.pipai.dragontiles.data.Tile
 import com.pipai.dragontiles.enemies.Enemy
 
@@ -52,12 +54,34 @@ class EnemyComponent : Component() {
 }
 
 class AttackCircleComponent : Component() {
+    var id = 0
     var baseDamage = 0
     var multiplier = 1
     var turnsLeft = 0
-    var description = ""
+    var maxTurns = 0
+    lateinit var element: Element
+    lateinit var name: String
+    lateinit var description: String
 
     lateinit var color: Color
     var t = 0f
     var up = true
+
+    fun setByCountdown(countdownAttack: CountdownAttack) {
+        id = countdownAttack.id
+        baseDamage = countdownAttack.baseDamage
+        multiplier = countdownAttack.multiplier
+        turnsLeft = countdownAttack.turnsLeft
+        maxTurns = countdownAttack.turnsLeft
+        element = countdownAttack.element
+        name = countdownAttack.name
+        description = countdownAttack.description
+
+        color = when (element) {
+            Element.FIRE -> Color.RED
+            Element.ICE -> Color.CYAN
+            Element.LIGHTNING -> Color.YELLOW
+            else -> Color.WHITE
+        }
+    }
 }

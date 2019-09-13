@@ -1,8 +1,10 @@
 package com.pipai.dragontiles.combat
 
 import com.artemis.World
+import com.pipai.dragontiles.DragonTilesGame
 import com.pipai.dragontiles.artemis.systems.animation.*
 import com.pipai.dragontiles.artemis.systems.combat.CombatAnimationSystem
+import com.pipai.dragontiles.data.CountdownAttack
 import com.pipai.dragontiles.data.Element
 import com.pipai.dragontiles.data.Tile
 import com.pipai.dragontiles.enemies.Enemy
@@ -10,9 +12,17 @@ import com.pipai.dragontiles.spells.SpellInstance
 
 class CombatApi(val combat: Combat,
                 val spellInstances: List<SpellInstance>,
-                private val world: World) {
+                private val world: World,
+                private val game: DragonTilesGame) {
 
     private val animationSystem = world.getSystem(CombatAnimationSystem::class.java)
+
+    private var nextId = 0
+
+    fun nextId(): Int {
+        nextId += 1
+        return nextId
+    }
 
     fun draw(amount: Int) {
         val batchAnimation = BatchAnimation(world)
@@ -63,6 +73,22 @@ class CombatApi(val combat: Combat,
                 .forEach { batchAnimation.addToBatch(it) }
         animationSystem.queueAnimation(batchAnimation)
         sortHand()
+    }
+
+    fun enemyAttack(enemy: Enemy, countdownAttack: CountdownAttack) {
+        combat.incomingAttacks.add(countdownAttack)
+        animationSystem.queueAnimation(CreateAttackCircleAnimation(world, game, enemy, countdownAttack))
+    }
+
+    fun updateCountdownAttack(countdownAttack: CountdownAttack) {
+        countdownAttack.turnsLeft -= 1
+        if (countdownAttack.turnsLeft == 0) {
+            combat.incomingAttacks.remove(countdownAttack)
+            animationSystem.queueAnimation(ResolveAttackCircleAnimation(world, countdownAttack))
+            combat.hero.hp -= countdownAttack.baseDamage * countdownAttack.multiplier
+        } else {
+            animationSystem.queueAnimation(UpdateAttackCircleAnimation(world, countdownAttack))
+        }
     }
 
 }

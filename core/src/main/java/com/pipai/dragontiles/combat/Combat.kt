@@ -1,10 +1,8 @@
 package com.pipai.dragontiles.combat
 
 import com.artemis.World
-import com.pipai.dragontiles.data.LifeType
-import com.pipai.dragontiles.data.StarType
-import com.pipai.dragontiles.data.Suit
-import com.pipai.dragontiles.data.Tile
+import com.pipai.dragontiles.DragonTilesGame
+import com.pipai.dragontiles.data.*
 import com.pipai.dragontiles.enemies.Enemy
 import com.pipai.dragontiles.hero.Hero
 import java.util.*
@@ -20,11 +18,14 @@ data class Combat(val rng: Random,
     val drawPile: MutableList<Tile> = mutableListOf()
     val discardPile: MutableList<Tile> = mutableListOf()
     val openPool: MutableList<Tile> = mutableListOf()
+
+    val incomingAttacks: MutableList<CountdownAttack> = mutableListOf()
+
 }
 
-class CombatController(private val combat: Combat, world: World) {
+class CombatController(private val combat: Combat, world: World, game: DragonTilesGame) {
 
-    val api: CombatApi = CombatApi(combat, combat.hero.spells.map { it.createInstance() }.toList(), world)
+    val api: CombatApi = CombatApi(combat, combat.hero.spells.map { it.createInstance() }.toList(), world, game)
 
     fun initCombat() {
         Tile.nextId = 0
@@ -73,6 +74,12 @@ class CombatController(private val combat: Combat, world: World) {
             api.draw(combat.hero.handSize - combat.hand.size)
         }
         api.sortHand()
+    }
+
+    fun endTurn() {
+        combat.incomingAttacks.toList().forEach {
+            api.updateCountdownAttack(it)
+        }
     }
 
 }

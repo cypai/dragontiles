@@ -104,13 +104,26 @@ class CombatUiSystem(private val game: DragonTilesGame,
     }
 
     override fun keyDown(keycode: Int): Boolean {
-        if (keycode == Keys.ESCAPE) {
-            when (stateMachine.currentState) {
-                CombatUiState.SPELL_SELECTED -> {
-                    stateMachine.changeState(CombatUiState.ROOT)
-                    return true
+        when (keycode) {
+            Keys.ESCAPE -> {
+                when (stateMachine.currentState) {
+                    CombatUiState.SPELL_SELECTED -> {
+                        stateMachine.changeState(CombatUiState.ROOT)
+                        return true
+                    }
+                    else -> {
+                    }
                 }
-                else -> {
+            }
+            Keys.BACKSPACE -> {
+                when (stateMachine.currentState) {
+                    CombatUiState.ROOT -> {
+                        stateMachine.changeState(CombatUiState.DISABLED)
+                        sCombat.controller.endTurn()
+                        return true
+                    }
+                    else -> {
+                    }
                 }
             }
         }
