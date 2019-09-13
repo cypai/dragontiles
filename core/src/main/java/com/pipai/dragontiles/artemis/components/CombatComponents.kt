@@ -2,6 +2,7 @@ package com.pipai.dragontiles.artemis.components
 
 import com.artemis.Component
 import com.badlogic.gdx.Input.Keys
+import com.badlogic.gdx.graphics.Color
 import com.pipai.dragontiles.data.Tile
 import com.pipai.dragontiles.enemies.Enemy
 
@@ -48,4 +49,15 @@ class EnemyComponent : Component() {
         hpMax = enemy.hpMax
         this.enemy = enemy
     }
+}
+
+class AttackCircleComponent : Component() {
+    var baseDamage = 0
+    var multiplier = 1
+    var turnsLeft = 0
+    var description = ""
+
+    lateinit var color: Color
+    var t = 0f
+    var up = true
 }

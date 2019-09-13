@@ -108,6 +108,9 @@ class DragonTilesGame(val gameConfig: GameConfig) : Game() {
             skin.add(it.nameWithoutExtension(), Texture(it))
         }
 
+        val circle = Texture(Gdx.files.local("assets/binassets/graphics/textures/circle.png"))
+        skin.add("circle", circle)
+
         val bgTexture = Texture(Gdx.files.local("assets/binassets/graphics/textures/paper.jpg"))
         bgTexture.setWrap(Texture.TextureWrap.Repeat, Texture.TextureWrap.Repeat)
         skin.add("bg", bgTexture)
