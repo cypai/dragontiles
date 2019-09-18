@@ -53,7 +53,7 @@ class CombatScreen(game: DragonTilesGame, combat: Combat) : Screen {
 
                         InputProcessingSystem())
                 .with(-1,
-                        CombatUiSystem(game, stage))
+                        CombatUiSystem(game, combat, stage))
                 .with(-2,
                         CombatRenderingSystem(game))
                 .build()

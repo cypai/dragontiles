@@ -85,7 +85,9 @@ class CombatApi(val combat: Combat,
         if (countdownAttack.turnsLeft == 0) {
             combat.incomingAttacks.remove(countdownAttack)
             animationSystem.queueAnimation(ResolveAttackCircleAnimation(world, countdownAttack))
-            combat.hero.hp -= countdownAttack.baseDamage * countdownAttack.multiplier
+            val damage = countdownAttack.baseDamage * countdownAttack.multiplier
+            combat.hero.hp -= damage
+            animationSystem.queueAnimation(PlayerDamageAnimation(world, damage, combat.hero.hp, combat.hero.hpMax))
         } else {
             animationSystem.queueAnimation(UpdateAttackCircleAnimation(world, countdownAttack))
         }

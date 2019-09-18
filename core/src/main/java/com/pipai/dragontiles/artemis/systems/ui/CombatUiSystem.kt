@@ -14,6 +14,7 @@ import com.pipai.dragontiles.DragonTilesGame
 import com.pipai.dragontiles.artemis.components.*
 import com.pipai.dragontiles.artemis.systems.NoProcessingSystem
 import com.pipai.dragontiles.artemis.systems.combat.CombatControllerSystem
+import com.pipai.dragontiles.combat.Combat
 import com.pipai.dragontiles.data.Tile
 import com.pipai.dragontiles.gui.SpellCard
 import com.pipai.dragontiles.gui.SpellComponentList
@@ -23,6 +24,7 @@ import com.pipai.dragontiles.utils.*
 import kotlin.math.min
 
 class CombatUiSystem(private val game: DragonTilesGame,
+                     combat: Combat,
                      private val stage: Stage) : NoProcessingSystem(), InputProcessor {
 
     private val config = game.gameConfig
@@ -34,7 +36,7 @@ class CombatUiSystem(private val game: DragonTilesGame,
     private val topRow = Table()
     private val spellRow = Table()
 
-    private val hpLabel = Label("80/80", skin)
+    private val hpLabel = Label("${combat.hero.hp}/${combat.hero.hpMax}", skin)
     private val spells: MutableMap<Int, SpellCard> = mutableMapOf()
     private val spellComponentList = SpellComponentList(skin, tileSkin)
 
@@ -81,6 +83,10 @@ class CombatUiSystem(private val game: DragonTilesGame,
         mainTable.row()
 
         spellComponentList.addClickCallback { selectComponents(it) }
+    }
+
+    fun setHp(hp: Int, hpMax: Int) {
+        hpLabel.setText("$hp/$hpMax")
     }
 
     private fun addSpellCard(number: Int) {
