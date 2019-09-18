@@ -118,6 +118,10 @@ class CombatUiSystem(private val game: DragonTilesGame,
                         stateMachine.changeState(CombatUiState.ROOT)
                         return true
                     }
+                    CombatUiState.COMPONENTS_SELECTED -> {
+                        stateMachine.changeState(CombatUiState.SPELL_SELECTED)
+                        return true
+                    }
                     else -> {
                     }
                 }
