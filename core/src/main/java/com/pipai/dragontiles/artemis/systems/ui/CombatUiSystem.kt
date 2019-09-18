@@ -114,12 +114,12 @@ class CombatUiSystem(private val game: DragonTilesGame,
         when (keycode) {
             Keys.ESCAPE -> {
                 when (stateMachine.currentState) {
-                    CombatUiState.SPELL_SELECTED -> {
+                    CombatUiState.COMPONENT_SELECTION -> {
                         stateMachine.changeState(CombatUiState.ROOT)
                         return true
                     }
-                    CombatUiState.COMPONENTS_SELECTED -> {
-                        stateMachine.changeState(CombatUiState.SPELL_SELECTED)
+                    CombatUiState.TARGET_SELECTION -> {
+                        stateMachine.changeState(CombatUiState.COMPONENT_SELECTION)
                         return true
                     }
                     else -> {
@@ -164,7 +164,7 @@ class CombatUiSystem(private val game: DragonTilesGame,
         val spell = spellCard?.getSpellInstance()
         if (spell != null) {
             selectedSpellNumber = spellNumber
-            stateMachine.changeState(CombatUiState.SPELL_SELECTED)
+            stateMachine.changeState(CombatUiState.COMPONENT_SELECTION)
         }
         return spell != null
     }
@@ -172,7 +172,7 @@ class CombatUiSystem(private val game: DragonTilesGame,
     private fun spellCardClickCallback(spellCard: SpellCard) {
         if (stateMachine.currentState == CombatUiState.ROOT) {
             selectedSpellNumber = spellCard.number
-            stateMachine.changeState(CombatUiState.SPELL_SELECTED)
+            stateMachine.changeState(CombatUiState.COMPONENT_SELECTION)
         }
     }
 
@@ -194,7 +194,7 @@ class CombatUiSystem(private val game: DragonTilesGame,
         when (getSelectedSpell().spell.targetType) {
             TargetType.SINGLE -> {
                 getSelectedSpell().fill(components)
-                stateMachine.changeState(CombatUiState.COMPONENTS_SELECTED)
+                stateMachine.changeState(CombatUiState.TARGET_SELECTION)
             }
             TargetType.AOE -> {
             }
@@ -209,7 +209,7 @@ class CombatUiSystem(private val game: DragonTilesGame,
 
     override fun touchDown(screenX: Int, screenY: Int, pointer: Int, button: Int): Boolean {
         return when (stateMachine.currentState) {
-            CombatUiState.COMPONENTS_SELECTED -> {
+            CombatUiState.TARGET_SELECTION -> {
                 world.fetch(allOf(EnemyComponent::class, XYComponent::class, SpriteComponent::class)).forEach {
                     val cSprite = mSprite.get(it)
                     if (cSprite.sprite.boundingRectangle.contains(screenX.toFloat(), config.resolution.height - screenY.toFloat())) {
@@ -245,7 +245,7 @@ class CombatUiSystem(private val game: DragonTilesGame,
                 }
             }
         },
-        SPELL_SELECTED() {
+        COMPONENT_SELECTION() {
             override fun enter(uiSystem: CombatUiSystem) {
                 uiSystem.spells.forEach { index, spellCard ->
                     if (index == uiSystem.selectedSpellNumber) {
@@ -261,7 +261,7 @@ class CombatUiSystem(private val game: DragonTilesGame,
                 uiSystem.spellComponentList.remove()
             }
         },
-        COMPONENTS_SELECTED() {
+        TARGET_SELECTION() {
             override fun enter(uiSystem: CombatUiSystem) {
                 val id = uiSystem.world.create()
                 uiSystem.mouseFollowEntityId = id
