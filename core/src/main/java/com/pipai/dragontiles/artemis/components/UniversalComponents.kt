@@ -96,9 +96,8 @@ class OrthographicCameraComponent : Component() {
 
 }
 
-class CameraFollowComponent : Component() {
-    var xOffset = 0f
-    var yOffset = 0f
+class MutualDestroyComponent : Component() {
+    val ids: MutableList<Int> = mutableListOf()
 }
 
 class SpriteComponent : Component() {

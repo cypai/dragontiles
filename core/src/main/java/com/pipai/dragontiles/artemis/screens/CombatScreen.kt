@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.utils.viewport.ScreenViewport
 import com.pipai.dragontiles.DragonTilesGame
+import com.pipai.dragontiles.artemis.systems.MutualDestroySystem
 import com.pipai.dragontiles.artemis.systems.PathInterpolationSystem
 import com.pipai.dragontiles.artemis.systems.TimerSystem
 import com.pipai.dragontiles.artemis.systems.XyInterpolationSystem
@@ -42,6 +43,7 @@ class CombatScreen(game: DragonTilesGame, combat: Combat) : Screen {
                         PathInterpolationSystem(),
                         XyInterpolationSystem(),
                         TimerSystem(),
+                        MutualDestroySystem(),
 
                         CombatControllerSystem(game, combat),
                         TileIdSystem(),

@@ -4,10 +4,7 @@ import com.artemis.ComponentMapper
 import com.artemis.World
 import com.badlogic.gdx.graphics.Color
 import com.pipai.dragontiles.DragonTilesGame
-import com.pipai.dragontiles.artemis.components.AttackCircleComponent
-import com.pipai.dragontiles.artemis.components.EnemyComponent
-import com.pipai.dragontiles.artemis.components.RadialSpriteComponent
-import com.pipai.dragontiles.artemis.components.XYComponent
+import com.pipai.dragontiles.artemis.components.*
 import com.pipai.dragontiles.data.CountdownAttack
 import com.pipai.dragontiles.enemies.Enemy
 import com.pipai.dragontiles.misc.RadialSprite
@@ -23,13 +20,14 @@ class CreateAttackCircleAnimation(world: World,
     private lateinit var mXy: ComponentMapper<XYComponent>
     private lateinit var mRadial: ComponentMapper<RadialSpriteComponent>
     private lateinit var mAttackCircle: ComponentMapper<AttackCircleComponent>
+    private lateinit var mMutualDestroy: ComponentMapper<MutualDestroyComponent>
 
     init {
         world.inject(this)
     }
 
     override fun startAnimation() {
-        var enemyId: Int = 0
+        var enemyId = 0
         world.fetch(allOf(EnemyComponent::class)).forEach {
             val cEnemy = mEnemy.get(it)
             if (cEnemy.enemy == enemy) {
@@ -54,6 +52,8 @@ class CreateAttackCircleAnimation(world: World,
         cBgRadial.sprite = RadialSprite(game.skin.getRegion("circle"))
         cBgRadial.sprite.setAngle(0f)
         cBgRadial.sprite.setColor(Color(1f, 1f, 1f, 0.2f))
+
+        mMutualDestroy.create(id).ids.add(bgId)
 
         endAnimation()
     }
