@@ -5,6 +5,7 @@ import com.artemis.World
 import com.badlogic.gdx.graphics.Color
 import com.pipai.dragontiles.DragonTilesGame
 import com.pipai.dragontiles.artemis.components.*
+import com.pipai.dragontiles.artemis.systems.combat.AttackCircleSystem
 import com.pipai.dragontiles.data.CountdownAttack
 import com.pipai.dragontiles.enemies.Enemy
 import com.pipai.dragontiles.misc.RadialSprite
@@ -21,6 +22,8 @@ class CreateAttackCircleAnimation(world: World,
     private lateinit var mRadial: ComponentMapper<RadialSpriteComponent>
     private lateinit var mAttackCircle: ComponentMapper<AttackCircleComponent>
     private lateinit var mMutualDestroy: ComponentMapper<MutualDestroyComponent>
+
+    private lateinit var sAttackCircle: AttackCircleSystem
 
     init {
         world.inject(this)
@@ -39,7 +42,9 @@ class CreateAttackCircleAnimation(world: World,
         val id = world.create()
         val cAttackCircle = mAttackCircle.create(id)
         cAttackCircle.setByCountdown(attack)
-        mXy.create(id).setXy(cEnemyXy.x, cEnemyXy.y - 100f)
+        sAttackCircle.handleNewAttackCircle(id)
+        val index = sAttackCircle.getCircleIndex(attack.enemyId, attack.id)
+        mXy.create(id).setXy(cEnemyXy.x + 64f * index, cEnemyXy.y - 100f)
         val angularIncrement = 360f / cAttackCircle.maxTurns
         val cRadial = mRadial.create(id)
         cRadial.sprite = RadialSprite(game.skin.getRegion("circle"))
@@ -47,7 +52,7 @@ class CreateAttackCircleAnimation(world: World,
         cRadial.sprite.setColor(cAttackCircle.color)
 
         val bgId = world.create()
-        mXy.create(bgId).setXy(cEnemyXy.x, cEnemyXy.y - 100f)
+        mXy.create(bgId).setXy(cEnemyXy.x + 64f * index, cEnemyXy.y - 100f)
         val cBgRadial = mRadial.create(bgId)
         cBgRadial.sprite = RadialSprite(game.skin.getRegion("circle"))
         cBgRadial.sprite.setAngle(0f)

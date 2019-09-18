@@ -13,7 +13,7 @@ class FlameTurtle : Enemy() {
 
     override fun runTurn(api: CombatApi) {
         api.enemyAttack(this,
-                CountdownAttack(api.nextId(), 8, 1, Element.FIRE, 2, "", ""))
+                CountdownAttack(api.nextId(), this.id, 8, 1, Element.FIRE, 2, "", ""))
     }
 
 }

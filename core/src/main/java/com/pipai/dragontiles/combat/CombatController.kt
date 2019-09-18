@@ -14,7 +14,7 @@ class CombatController(private val combat: Combat, world: World, game: DragonTil
     fun initCombat() {
         Tile.nextId = 0
         combat.enemies.forEach {
-            it.preInit()
+            it.preInit(api.nextId())
             it.init()
         }
         initDrawPile()
@@ -64,6 +64,7 @@ class CombatController(private val combat: Combat, world: World, game: DragonTil
         combat.incomingAttacks.toList().forEach {
             api.updateCountdownAttack(it)
         }
+        runTurn()
     }
 
 }

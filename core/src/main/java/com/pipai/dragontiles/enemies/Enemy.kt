@@ -9,9 +9,11 @@ abstract class Enemy {
 
     abstract val hpMax: Int
     var hp: Int = 0
+    var id: Int = 0
 
-    fun preInit() {
+    fun preInit(id: Int) {
         hp = hpMax
+        this.id = id
     }
 
     open fun init() {

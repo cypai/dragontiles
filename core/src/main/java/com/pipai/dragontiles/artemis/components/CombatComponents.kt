@@ -55,6 +55,7 @@ class EnemyComponent : Component() {
 
 class AttackCircleComponent : Component() {
     var id = 0
+    var enemyId = 0
     var baseDamage = 0
     var multiplier = 1
     var turnsLeft = 0
@@ -69,6 +70,7 @@ class AttackCircleComponent : Component() {
 
     fun setByCountdown(countdownAttack: CountdownAttack) {
         id = countdownAttack.id
+        enemyId = countdownAttack.enemyId
         baseDamage = countdownAttack.baseDamage
         multiplier = countdownAttack.multiplier
         turnsLeft = countdownAttack.turnsLeft
