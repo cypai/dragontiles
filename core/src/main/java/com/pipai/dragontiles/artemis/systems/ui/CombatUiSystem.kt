@@ -5,6 +5,7 @@ import com.badlogic.gdx.InputProcessor
 import com.badlogic.gdx.ai.fsm.DefaultStateMachine
 import com.badlogic.gdx.ai.fsm.State
 import com.badlogic.gdx.ai.msg.Telegram
+import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.ui.Label
@@ -255,6 +256,7 @@ class CombatUiSystem(private val game: DragonTilesGame,
                 val id = uiSystem.world.create()
                 uiSystem.mouseFollowEntityId = id
                 val cLine = uiSystem.mLine.create(id)
+                cLine.color = Color.GRAY
                 val spellCard = uiSystem.spells[uiSystem.selectedSpellNumber!!]!!
                 cLine.start = spellCard.localToStageCoordinates(Vector2(spellCard.width / 2, spellCard.height / 2))
                 cLine.end = Vector2()

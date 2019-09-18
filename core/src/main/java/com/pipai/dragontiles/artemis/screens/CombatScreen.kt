@@ -75,10 +75,10 @@ class CombatScreen(game: DragonTilesGame, combat: Combat) : Screen {
         Gdx.gl.glClearColor(0f, 0f, 0f, 1f)
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA)
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
-        world.setDelta(delta)
-        world.process()
         stage.act()
         stage.draw()
+        world.setDelta(delta)
+        world.process()
     }
 
     override fun resize(width: Int, height: Int) {
