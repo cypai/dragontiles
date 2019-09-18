@@ -60,7 +60,7 @@ class CreateAttackCircleAnimation(world: World,
 
         mMutualDestroy.create(id).ids.add(bgId)
 
-        endAnimation()
+        endAnimation(30)
     }
 
 }

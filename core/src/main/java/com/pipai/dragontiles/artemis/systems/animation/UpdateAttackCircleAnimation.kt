@@ -28,7 +28,7 @@ class UpdateAttackCircleAnimation(world: World,
         val cRadial = mRadial.get(id)
         cRadial.sprite.setAngle(angularIncrement * cAttackCircle.turnsLeft)
 
-        endAnimation()
+        endAnimation(30)
     }
 
 }

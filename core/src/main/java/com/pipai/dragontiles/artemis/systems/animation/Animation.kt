@@ -15,9 +15,13 @@ abstract class Animation(protected val world: World) {
     abstract fun startAnimation()
 
     fun endAnimation() {
+        endAnimation(1)
+    }
+
+    fun endAnimation(delay: Int) {
         val id = world.create()
         val cTimer = world.getMapper(TimerComponent::class.java).create(id)
-        cTimer.maxT = 1
+        cTimer.maxT = if (delay >= 1) delay else 1
         cTimer.onEnd = EndStrategy.DESTROY
         cTimer.onEndCallback = {
             observer.notify(this)

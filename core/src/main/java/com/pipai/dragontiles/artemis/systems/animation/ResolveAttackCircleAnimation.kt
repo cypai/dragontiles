@@ -22,7 +22,7 @@ class ResolveAttackCircleAnimation(world: World,
 
         world.delete(id)
 
-        endAnimation()
+        endAnimation(30)
     }
 
 }
