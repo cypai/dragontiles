@@ -17,18 +17,21 @@ class CombatRenderingSystem(private val game: DragonTilesGame) : BaseSystem() {
     private val mTile by mapper<TileComponent>()
     private val mSprite by mapper<SpriteComponent>()
     private val mRadial by mapper<RadialSpriteComponent>()
+    private val mAttackCircle by mapper<AttackCircleComponent>()
     private val mEnemy by mapper<EnemyComponent>()
     private val mLine by mapper<LineComponent>()
 
+    private val batch = game.spriteBatch
+
     override fun processSystem() {
-        game.spriteBatch.color = Color.WHITE
-        game.spriteBatch.setBlendFunction(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA)
-        game.spriteBatch.begin()
+        batch.color = Color.WHITE
+        batch.setBlendFunction(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA)
+        batch.begin()
         world.fetch(allOf(XYComponent::class, TileComponent::class))
                 .forEach {
                     val region = game.tileSkin.regionFor(mTile.get(it)!!.tile)
                     val cXy = mXy.get(it)
-                    game.spriteBatch.draw(region, cXy.x, cXy.y)
+                    batch.draw(region, cXy.x, cXy.y)
                 }
         world.fetch(allOf(XYComponent::class, SpriteComponent::class))
                 .forEach {
@@ -36,25 +39,31 @@ class CombatRenderingSystem(private val game: DragonTilesGame) : BaseSystem() {
                     val cXy = mXy.get(it)
                     sprite.x = cXy.x
                     sprite.y = cXy.y
-                    sprite.draw(game.spriteBatch)
+                    sprite.draw(batch)
                 }
         world.fetch(allOf(XYComponent::class, SpriteComponent::class, EnemyComponent::class))
                 .forEach {
                     val cEnemy = mEnemy.get(it)
                     val cXy = mXy.get(it)
-                    game.smallFont.draw(game.spriteBatch, "${cEnemy.name}   ${cEnemy.hp}/${cEnemy.hpMax}", cXy.x, cXy.y - 4f)
+                    game.smallFont.draw(batch, "${cEnemy.name}   ${cEnemy.hp}/${cEnemy.hpMax}", cXy.x, cXy.y - 4f)
                 }
-        game.spriteBatch.end()
-        game.spriteBatch.setBlendFunction(GL20.GL_SRC_ALPHA, GL20.GL_ONE)
-        game.spriteBatch.begin()
+        world.fetch(allOf(XYComponent::class, AttackCircleComponent::class))
+                .forEach {
+                    val cXy = mXy.get(it)
+                    val cAttackCircle = mAttackCircle.get(it)
+                    game.font.draw(batch, cAttackCircle.baseDamage.toString(), cXy.x + 26f, cXy.y + 36f)
+                }
+        batch.end()
+        batch.setBlendFunction(GL20.GL_SRC_ALPHA, GL20.GL_ONE)
+        batch.begin()
         world.fetch(allOf(XYComponent::class, RadialSpriteComponent::class))
                 .forEach {
                     val cXy = mXy.get(it)
                     val cRadial = mRadial.get(it)
-                    cRadial.sprite.draw(game.spriteBatch, cXy.x, cXy.y, cRadial.sprite.getAngle())
+                    cRadial.sprite.draw(batch, cXy.x, cXy.y, cRadial.sprite.getAngle())
                 }
-        game.spriteBatch.end()
-        game.spriteBatch.setBlendFunction(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA)
+        batch.end()
+        batch.setBlendFunction(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA)
 
         game.shapeRenderer.begin()
         world.fetch(allOf(LineComponent::class))
