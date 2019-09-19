@@ -75,6 +75,14 @@ class CombatApi(val combat: Combat,
         sortHand()
     }
 
+    fun dealDamageToHero(damage: Int) {
+        combat.hero.hp -= damage
+        animationSystem.queueAnimation(PlayerDamageAnimation(world, damage, combat.hero.hp, combat.hero.hpMax))
+        if (combat.hero.hp <= 0) {
+            animationSystem.queueAnimation(GameOverAnimation(world))
+        }
+    }
+
     fun enemyAttack(enemy: Enemy, countdownAttack: CountdownAttack) {
         combat.incomingAttacks.add(countdownAttack)
         animationSystem.queueAnimation(CreateAttackCircleAnimation(world, game, enemy, countdownAttack))
@@ -86,8 +94,7 @@ class CombatApi(val combat: Combat,
             combat.incomingAttacks.remove(countdownAttack)
             animationSystem.queueAnimation(ResolveAttackCircleAnimation(world, countdownAttack))
             val damage = countdownAttack.baseDamage * countdownAttack.multiplier
-            combat.hero.hp -= damage
-            animationSystem.queueAnimation(PlayerDamageAnimation(world, damage, combat.hero.hp, combat.hero.hpMax))
+            dealDamageToHero(damage)
         } else {
             animationSystem.queueAnimation(UpdateAttackCircleAnimation(world, countdownAttack))
         }
