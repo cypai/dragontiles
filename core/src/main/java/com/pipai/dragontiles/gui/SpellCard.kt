@@ -19,6 +19,7 @@ class SpellCard(private val game: DragonTilesGame,
 
     private val topRow = Table()
     private val nameLabel = Label("", skin, "small")
+    private val reqLabel = Label("", skin, "small")
     private val numberLabel = Label("", skin, "small")
     private val descriptionLabel = Label("", skin, "small")
 
@@ -43,8 +44,12 @@ class SpellCard(private val game: DragonTilesGame,
                 .right()
         add(topRow)
                 .width(160f)
-                .height(24f)
                 .pad(8f)
+        row()
+        add(reqLabel)
+                .left()
+                .padLeft(8f)
+                .padBottom(8f)
         row()
         add(descriptionLabel)
                 .width(160f)
@@ -91,10 +96,12 @@ class SpellCard(private val game: DragonTilesGame,
         val spell = spellInstance?.spell
         if (spell == null) {
             nameLabel.setText("")
+            reqLabel.setText("")
             descriptionLabel.setText("")
         } else {
             val spellStrings = game.spellStrings.all(spell.id)
             nameLabel.setText(spellStrings.name + if (spell.upgraded) "+" else "")
+            reqLabel.setText(spell.requirement.reqString)
             val description = if (spellInstance!!.spell.upgraded) spellStrings.upgradeDescription else spellStrings.description
             val adjustedDescription = description.replace(regex) {
                 spellInstance!!.dynamicValue(it.value).toString()

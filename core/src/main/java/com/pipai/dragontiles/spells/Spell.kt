@@ -87,6 +87,10 @@ data class ComponentSlot(var tile: Tile?)
 interface ComponentRequirement {
     val slotAmount: Int
 
+    val reqString: String
+
+    val description: String
+
     fun find(hand: List<Tile>): List<List<Tile>>
 
     fun satisfied(slots: List<ComponentSlot>): Boolean
@@ -100,10 +104,28 @@ private fun generateSlots(amount: Int): List<ComponentSlot> {
     return slots
 }
 
-class Single(private val allowedSuits: List<Suit>) : ComponentRequirement {
-    constructor() : this(listOf(Suit.FIRE, Suit.ICE, Suit.LIGHTNING, Suit.LIFE, Suit.STAR))
+private fun suitReqString(allowedSuits: Set<Suit>): String {
+    return when (allowedSuits){
+        setOf(Suit.FIRE, Suit.ICE, Suit.LIGHTNING, Suit.LIFE, Suit.STAR) -> "@Any"
+        setOf(Suit.FIRE, Suit.ICE, Suit.LIGHTNING) -> "@Elemental"
+        setOf(Suit.LIFE, Suit.STAR) -> "@Arcane"
+        setOf(Suit.FIRE) -> "@Fire"
+        setOf(Suit.ICE) -> "@Ice"
+        setOf(Suit.LIGHTNING) -> "@Lightning"
+        setOf(Suit.LIFE) -> "@Life"
+        setOf(Suit.STAR) -> "@Star"
+        else -> ""
+    }
+}
+
+class Single(private val allowedSuits: Set<Suit>) : ComponentRequirement {
+    constructor() : this(setOf(Suit.FIRE, Suit.ICE, Suit.LIGHTNING, Suit.LIFE, Suit.STAR))
 
     override val slotAmount = 1
+
+    override val reqString = "1${suitReqString(allowedSuits)}"
+
+    override val description = "A single tile"
 
     override fun find(hand: List<Tile>): List<List<Tile>> {
         return hand
