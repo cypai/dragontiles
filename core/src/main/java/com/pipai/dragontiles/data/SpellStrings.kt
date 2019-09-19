@@ -15,7 +15,7 @@ class SpellStrings {
                 langMap[Language.valueOf(lang.toUpperCase())] = SpellString(
                         data["name"]!!,
                         data["description"]!!,
-                        data["upgradeDescription"]!!)
+                        data["upgradeDescription"] ?: data["description"]!!)
             }
             strings[id] = langMap
         }

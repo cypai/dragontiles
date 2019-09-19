@@ -4,7 +4,7 @@ import com.pipai.dragontiles.combat.CombatApi
 import com.pipai.dragontiles.enemies.Enemy
 
 class Invoke(upgraded: Boolean) : Spell(upgraded) {
-    override val id: String = "base:invoke"
+    override val id: String = "base:Invoke"
     override val requirement: ComponentRequirement = Single()
     override val targetType: TargetType = TargetType.SINGLE
 

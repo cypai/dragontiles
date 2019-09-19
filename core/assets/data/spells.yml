@@ -1,5 +1,73 @@
-base:invoke:
+base:Invoke:
   en:
     name: Invoke
-    description: Cast !d @Elemental.
-    upgradeDescription: Cast !d @Elemental. @Repeatable !r.
+    description: Cast !d @Elemented.
+    upgradeDescription: Cast !d @Elemented. @Repeatable !r.
+
+base:Strike:
+  en:
+    name: Strike
+    description: Cast !d @Elemented.
+    upgradeDescription: Cast !d @Elemented. @Repeatable !r.
+
+base:QuickInvoke:
+  en:
+    name: Quick Invoke
+    description: Cast !d @Elemented. @Repeatable !r.
+
+base:Mulligan:
+  en:
+    name: Mulligan
+    description: Draw 1 tile.
+    upgradeDescription: Draw 1 tile. @Repeatable !r.
+
+base:Spark:
+  en:
+    name: Spark
+    description: \@Component must be a 1. Cast !d @Elemented. @Repeatable.
+
+base:Reserve:
+  en:
+    name: Reserve
+    description: \@OpenDiscard the @Component. @Repeatable !r.
+
+base:Ground:
+  en:
+    name: Ground
+    description: \@Repeatable !r.
+
+base:Bump:
+  en:
+    name: Bump
+    description: Transform the @Component into its @Successor.
+    upgradeDescription: Transform the @Component into its @Successor. @Repeatable !r.
+
+base:Nudge:
+  en:
+    name: Nudge
+    description: Transform the @Component into its @Predecessor.
+    upgradeDescription: Transform the @Component into its @Predecessor. @Repeatable !r.
+
+base:RampStrike:
+  en:
+    name: Ramp Strike
+    description: Cast !d @Elemented. Increases damage by 1 per spell cast this turn.
+    upgradeDescription: Cast !d @Elemented. Increases damage by 2 per spell cast this turn.
+
+base:Singularity:
+  en:
+    name: Singularity
+    description: Split an @ElementalTile into at most 3 1s.
+    upgradeDescription: Split an @ElementalTile into 1s.
+
+base:Break:
+  en:
+    name: Break
+    description: Inflict 3 @Elemented @Break.
+    upgradeDescription: Inflict 4 @Elemented @Break.
+
+base:Concentrate:
+  en:
+    name: Concentrate
+    description: Gain 2 @Power.
+    upgradeDescription: Gain 3 @Power.

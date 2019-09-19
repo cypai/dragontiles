@@ -24,6 +24,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.OffsetDrawable
 import com.kotcrab.vis.ui.VisUI
 import com.pipai.dragontiles.artemis.screens.CombatScreen
 import com.pipai.dragontiles.combat.Combat
+import com.pipai.dragontiles.data.Keywords
 import com.pipai.dragontiles.data.SpellStrings
 import com.pipai.dragontiles.data.TileSkin
 import com.pipai.dragontiles.enemies.FlameTurtle
@@ -51,6 +52,9 @@ class DragonTilesGame(val gameConfig: GameConfig) : Game() {
     lateinit var smallFont: BitmapFont
         private set
 
+    lateinit var tinyFont: BitmapFont
+        private set
+
     lateinit var skin: Skin
         private set
 
@@ -62,6 +66,8 @@ class DragonTilesGame(val gameConfig: GameConfig) : Game() {
 
     lateinit var spellStrings: SpellStrings
         private set
+
+    val keywords: Keywords = Keywords()
 
     override fun create() {
         logger.info("Starting Dragon Tiles with the following config settings:")
@@ -84,6 +90,9 @@ class DragonTilesGame(val gameConfig: GameConfig) : Game() {
 
         fontParameter.size = 16
         smallFont = fontGenerator.generateFont(fontParameter)
+
+        fontParameter.size = 12
+        tinyFont = fontGenerator.generateFont(fontParameter)
         fontGenerator.dispose()
 
         spellStrings = SpellStrings()
@@ -155,6 +164,7 @@ class DragonTilesGame(val gameConfig: GameConfig) : Game() {
 
         skin.add("default", LabelStyle(font, Color.BLACK))
         skin.add("small", LabelStyle(smallFont, Color.BLACK))
+        skin.add("tiny", LabelStyle(tinyFont, Color.BLACK))
         skin.add("white", LabelStyle(font, Color.WHITE))
         val devLabelStyle = LabelStyle(font, Color.BLACK)
         devLabelStyle.background = whiteDrawable
