@@ -64,6 +64,9 @@ class CombatController(private val combat: Combat, world: World, game: DragonTil
         combat.incomingAttacks.toList().forEach {
             api.updateCountdownAttack(it)
         }
+        api.spellInstances.forEach {
+            it.turnReset(api)
+        }
         runTurn()
     }
 
