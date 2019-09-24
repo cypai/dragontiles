@@ -29,7 +29,7 @@ class CombatRenderingSystem(private val game: DragonTilesGame) : BaseSystem() {
         batch.begin()
         world.fetch(allOf(XYComponent::class, TileComponent::class))
                 .forEach {
-                    val region = game.tileSkin.regionFor(mTile.get(it)!!.tile)
+                    val region = game.tileSkin.regionFor(mTile.get(it)!!.tile.tile)
                     val cXy = mXy.get(it)
                     batch.draw(region, cXy.x, cXy.y)
                 }

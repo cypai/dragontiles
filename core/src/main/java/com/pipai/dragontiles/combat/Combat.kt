@@ -2,6 +2,7 @@ package com.pipai.dragontiles.combat
 
 import com.pipai.dragontiles.data.CountdownAttack
 import com.pipai.dragontiles.data.Tile
+import com.pipai.dragontiles.data.TileInstance
 import com.pipai.dragontiles.enemies.Enemy
 import com.pipai.dragontiles.hero.Hero
 import java.util.*
@@ -13,10 +14,10 @@ data class Combat(val rng: Random,
     var turnNumber = 0
     var spellsCasted = 0
 
-    val hand: MutableList<Tile> = mutableListOf()
-    val drawPile: MutableList<Tile> = mutableListOf()
-    val discardPile: MutableList<Tile> = mutableListOf()
-    val openPool: MutableList<Tile> = mutableListOf()
+    val hand: MutableList<TileInstance> = mutableListOf()
+    val drawPile: MutableList<TileInstance> = mutableListOf()
+    val discardPile: MutableList<TileInstance> = mutableListOf()
+    val openPool: MutableList<TileInstance> = mutableListOf()
 
     val incomingAttacks: MutableList<CountdownAttack> = mutableListOf()
 

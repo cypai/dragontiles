@@ -4,7 +4,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent
 import com.badlogic.gdx.scenes.scene2d.Touchable
 import com.badlogic.gdx.scenes.scene2d.ui.*
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
-import com.pipai.dragontiles.data.Tile
+import com.pipai.dragontiles.data.TileInstance
 import com.pipai.dragontiles.data.TileSkin
 
 class SpellComponentList(private val skin: Skin,
@@ -12,9 +12,9 @@ class SpellComponentList(private val skin: Skin,
 
     private val table = actor as Table
 
-    private val rows: MutableMap<Int, List<Tile>> = mutableMapOf()
+    private val rows: MutableMap<Int, List<TileInstance>> = mutableMapOf()
 
-    private val clickCallbacks: MutableList<(List<Tile>) -> Unit> = mutableListOf()
+    private val clickCallbacks: MutableList<(List<TileInstance>) -> Unit> = mutableListOf()
 
     init {
         table.background = skin.getDrawable("disabled")
@@ -29,7 +29,7 @@ class SpellComponentList(private val skin: Skin,
         })
     }
 
-    fun setOptions(options: List<List<Tile>>) {
+    fun setOptions(options: List<List<TileInstance>>) {
         rows.clear()
         table.clearChildren()
         table.left()
@@ -39,7 +39,7 @@ class SpellComponentList(private val skin: Skin,
             table.add(label)
             val hGroup = HorizontalGroup()
             option.forEach { tile ->
-                hGroup.addActor(Image(tileSkin.regionFor(tile)))
+                hGroup.addActor(Image(tileSkin.regionFor(tile.tile)))
             }
             table.add(hGroup)
                     .height(hGroup.prefHeight)
@@ -50,7 +50,7 @@ class SpellComponentList(private val skin: Skin,
         updateVisualScroll()
     }
 
-    fun addClickCallback(callback: (List<Tile>) -> Unit) {
+    fun addClickCallback(callback: (List<TileInstance>) -> Unit) {
         clickCallbacks.add(callback)
     }
 

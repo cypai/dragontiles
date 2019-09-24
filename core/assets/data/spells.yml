@@ -15,6 +15,11 @@ base:QuickInvoke:
     name: Quick Invoke
     description: Cast !d @Elemented. @Repeatable !r.
 
+base:MultiInvoke:
+  en:
+    name: Multi Invoke
+    description: Cast !d @Elemented @X times.
+
 base:Mulligan:
   en:
     name: Mulligan

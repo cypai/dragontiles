@@ -15,7 +15,7 @@ import com.pipai.dragontiles.artemis.components.*
 import com.pipai.dragontiles.artemis.systems.NoProcessingSystem
 import com.pipai.dragontiles.artemis.systems.combat.CombatControllerSystem
 import com.pipai.dragontiles.combat.Combat
-import com.pipai.dragontiles.data.Tile
+import com.pipai.dragontiles.data.TileInstance
 import com.pipai.dragontiles.gui.SpellCard
 import com.pipai.dragontiles.gui.SpellComponentList
 import com.pipai.dragontiles.spells.SpellInstance
@@ -190,7 +190,7 @@ class CombatUiSystem(private val game: DragonTilesGame,
         stage.scrollFocus = spellComponentList
     }
 
-    private fun selectComponents(components: List<Tile>) {
+    private fun selectComponents(components: List<TileInstance>) {
         when (getSelectedSpell().spell.targetType) {
             TargetType.SINGLE -> {
                 getSelectedSpell().fill(components)

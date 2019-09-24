@@ -2,7 +2,7 @@ package com.pipai.dragontiles.spells
 
 import com.pipai.dragontiles.combat.CombatApi
 import com.pipai.dragontiles.data.Suit
-import com.pipai.dragontiles.data.Tile
+import com.pipai.dragontiles.data.TileInstance
 import com.pipai.dragontiles.enemies.Enemy
 import com.pipai.dragontiles.utils.getLogger
 import org.apache.commons.lang3.builder.ToStringBuilder
@@ -69,7 +69,7 @@ abstract class SpellInstance(
     open fun onTurnStart(api: CombatApi) {
     }
 
-    fun fill(components: List<Tile>) {
+    fun fill(components: List<TileInstance>) {
         componentSlots.zip(components) { slot, tile ->
             slot.tile = tile
         }
@@ -82,7 +82,7 @@ abstract class SpellInstance(
     }
 }
 
-data class ComponentSlot(var tile: Tile?)
+data class ComponentSlot(var tile: TileInstance?)
 
 interface ComponentRequirement {
     val slotAmount: Int
@@ -91,7 +91,7 @@ interface ComponentRequirement {
 
     val description: String
 
-    fun find(hand: List<Tile>): List<List<Tile>>
+    fun find(hand: List<TileInstance>): List<List<TileInstance>>
 
     fun satisfied(slots: List<ComponentSlot>): Boolean
 }
@@ -105,7 +105,7 @@ private fun generateSlots(amount: Int): List<ComponentSlot> {
 }
 
 private fun suitReqString(allowedSuits: Set<Suit>): String {
-    return when (allowedSuits){
+    return when (allowedSuits) {
         setOf(Suit.FIRE, Suit.ICE, Suit.LIGHTNING, Suit.LIFE, Suit.STAR) -> "@Any"
         setOf(Suit.FIRE, Suit.ICE, Suit.LIGHTNING) -> "@Elemental"
         setOf(Suit.LIFE, Suit.STAR) -> "@Arcane"
@@ -123,18 +123,18 @@ class Single(private val allowedSuits: Set<Suit>) : ComponentRequirement {
 
     override val slotAmount = 1
 
-    override val reqString = "1${suitReqString(allowedSuits)}"
+    override val reqString = "1 ${suitReqString(allowedSuits)}"
 
     override val description = "A single tile"
 
-    override fun find(hand: List<Tile>): List<List<Tile>> {
+    override fun find(hand: List<TileInstance>): List<List<TileInstance>> {
         return hand
-                .filter { it.suit in allowedSuits }
+                .filter { it.tile.suit in allowedSuits }
                 .map { listOf(it) }
     }
 
     override fun satisfied(slots: List<ComponentSlot>): Boolean {
         return slots.size == 1
-                && slots.firstOrNull()?.tile?.let { allowedSuits.contains(it.suit) } ?: false
+                && slots.firstOrNull()?.tile?.let { allowedSuits.contains(it.tile.suit) } ?: false
     }
 }

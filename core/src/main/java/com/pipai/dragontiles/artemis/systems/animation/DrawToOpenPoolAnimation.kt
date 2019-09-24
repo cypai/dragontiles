@@ -8,9 +8,9 @@ import com.pipai.dragontiles.artemis.components.EndStrategy
 import com.pipai.dragontiles.artemis.components.PathInterpolationComponent
 import com.pipai.dragontiles.artemis.components.TileComponent
 import com.pipai.dragontiles.artemis.components.XYComponent
-import com.pipai.dragontiles.data.Tile
+import com.pipai.dragontiles.data.TileInstance
 
-class DrawToOpenPoolAnimation(world: World, private val tile: Tile, private val poolLocation: Int) : Animation(world) {
+class DrawToOpenPoolAnimation(world: World, private val tile: TileInstance, private val poolLocation: Int) : Animation(world) {
 
     private lateinit var mXy: ComponentMapper<XYComponent>
     private lateinit var mPath: ComponentMapper<PathInterpolationComponent>

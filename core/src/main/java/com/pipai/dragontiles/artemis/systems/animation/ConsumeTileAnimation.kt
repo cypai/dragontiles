@@ -2,9 +2,9 @@ package com.pipai.dragontiles.artemis.systems.animation
 
 import com.artemis.World
 import com.pipai.dragontiles.artemis.systems.combat.TileIdSystem
-import com.pipai.dragontiles.data.Tile
+import com.pipai.dragontiles.data.TileInstance
 
-class ConsumeTileAnimation(world: World, private val tile: Tile) : Animation(world) {
+class ConsumeTileAnimation(world: World, private val tile: TileInstance) : Animation(world) {
 
     private lateinit var sTile: TileIdSystem
 

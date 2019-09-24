@@ -5,11 +5,11 @@ import com.badlogic.gdx.Input.Keys
 import com.badlogic.gdx.graphics.Color
 import com.pipai.dragontiles.data.CountdownAttack
 import com.pipai.dragontiles.data.Element
-import com.pipai.dragontiles.data.Tile
+import com.pipai.dragontiles.data.TileInstance
 import com.pipai.dragontiles.enemies.Enemy
 
 class TileComponent : Component() {
-    lateinit var tile: Tile
+    lateinit var tile: TileInstance
 }
 
 class HandLocationComponent : Component() {

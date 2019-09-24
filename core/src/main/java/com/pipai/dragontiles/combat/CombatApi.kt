@@ -6,7 +6,7 @@ import com.pipai.dragontiles.artemis.systems.animation.*
 import com.pipai.dragontiles.artemis.systems.combat.CombatAnimationSystem
 import com.pipai.dragontiles.data.CountdownAttack
 import com.pipai.dragontiles.data.Element
-import com.pipai.dragontiles.data.Tile
+import com.pipai.dragontiles.data.TileInstance
 import com.pipai.dragontiles.enemies.Enemy
 import com.pipai.dragontiles.spells.SpellInstance
 
@@ -40,7 +40,7 @@ class CombatApi(val combat: Combat,
     }
 
     fun sortHand() {
-        combat.hand.sortWith(compareBy({ it.suit.order }, { it.order() }))
+        combat.hand.sortWith(compareBy({ it.tile.suit.order }, { it.tile.order() }))
         animationSystem.queueAnimation(AdjustHandAnimation(world, combat.hand))
     }
 
@@ -56,7 +56,7 @@ class CombatApi(val combat: Combat,
     }
 
     fun sortOpenPool() {
-        combat.openPool.sortWith(compareBy({ it.suit.order }, { it.order() }))
+        combat.openPool.sortWith(compareBy({ it.tile.suit.order }, { it.tile.order() }))
         animationSystem.queueAnimation(AdjustOpenPoolAnimation(world, combat.openPool))
     }
 
@@ -65,7 +65,7 @@ class CombatApi(val combat: Combat,
         animationSystem.queueAnimation(DamageAnimation(world, target, amount))
     }
 
-    fun consume(components: List<Tile>) {
+    fun consume(components: List<TileInstance>) {
         combat.hand.removeAll(components)
         combat.discardPile.addAll(components)
         val batchAnimation = BatchAnimation(world)

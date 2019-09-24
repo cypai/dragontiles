@@ -8,9 +8,9 @@ import com.pipai.dragontiles.artemis.components.EndStrategy
 import com.pipai.dragontiles.artemis.components.PathInterpolationComponent
 import com.pipai.dragontiles.artemis.components.XYComponent
 import com.pipai.dragontiles.artemis.systems.combat.TileIdSystem
-import com.pipai.dragontiles.data.Tile
+import com.pipai.dragontiles.data.TileInstance
 
-class AdjustHandAnimation(world: World, private val hand: List<Tile>) : Animation(world) {
+class AdjustHandAnimation(world: World, private val hand: List<TileInstance>) : Animation(world) {
 
     private lateinit var mXy: ComponentMapper<XYComponent>
     private lateinit var mPath: ComponentMapper<PathInterpolationComponent>
