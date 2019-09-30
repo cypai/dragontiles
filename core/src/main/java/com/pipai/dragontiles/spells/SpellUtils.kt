@@ -12,3 +12,7 @@ fun elemental(components: List<TileInstance>): Element {
         else -> Element.NONE
     }
 }
+
+val anySet = setOf(Suit.FIRE, Suit.ICE, Suit.LIGHTNING, Suit.LIFE, Suit.STAR)
+val elementalSet = setOf(Suit.FIRE, Suit.ICE, Suit.LIGHTNING)
+val arcaneSet = setOf(Suit.LIFE, Suit.STAR)

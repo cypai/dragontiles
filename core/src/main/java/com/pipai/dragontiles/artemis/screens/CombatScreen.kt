@@ -30,7 +30,7 @@ class CombatScreen(game: DragonTilesGame, combat: Combat) : Screen {
 
     private val stage = Stage(ScreenViewport(), game.spriteBatch)
 
-    private val world: World
+    val world: World
 
     init {
         val config = WorldConfigurationBuilder()

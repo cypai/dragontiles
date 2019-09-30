@@ -61,8 +61,18 @@ class CombatApi(val combat: Combat,
     }
 
     fun attack(target: Enemy, element: Element, amount: Int) {
-        target.hp -= amount
-        animationSystem.queueAnimation(DamageAnimation(world, target, amount))
+        var damage = amount + (combat.heroStatus[Status.POWER] ?: 0)
+        val broken = when (element) {
+            Element.FIRE -> combat.enemyStatus[target.id]!![Status.FIRE_BREAK] != null
+            Element.ICE -> combat.enemyStatus[target.id]!![Status.ICE_BREAK] != null
+            Element.LIGHTNING -> combat.enemyStatus[target.id]!![Status.LIGHTNING_BREAK] != null
+            else -> false
+        }
+        if (broken) {
+            damage *= 2
+        }
+        target.hp -= damage
+        animationSystem.queueAnimation(DamageAnimation(world, target, damage))
     }
 
     fun consume(components: List<TileInstance>) {
@@ -98,6 +108,22 @@ class CombatApi(val combat: Combat,
         } else {
             animationSystem.queueAnimation(UpdateAttackCircleAnimation(world, countdownAttack))
         }
+    }
+
+    fun changeStatus(status: Status, amount: Int) {
+        combat.heroStatus[status] = amount
+    }
+
+    fun changeStatusIncrement(status: Status, increment: Int) {
+        changeStatus(status, (combat.heroStatus[status] ?: 0) + increment)
+    }
+
+    fun changeEnemyStatus(id: Int, status: Status, amount: Int) {
+        combat.enemyStatus[id]!![status] = amount
+    }
+
+    fun changeEnemyStatusIncrement(id: Int, status: Status, increment: Int) {
+        changeEnemyStatus(id, status, (combat.enemyStatus[id]!![status] ?: 0) + increment)
     }
 
 }

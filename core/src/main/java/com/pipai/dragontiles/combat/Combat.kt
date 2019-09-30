@@ -21,4 +21,10 @@ data class Combat(val rng: Random,
 
     val incomingAttacks: MutableList<CountdownAttack> = mutableListOf()
 
+    val heroStatus: MutableMap<Status, Int> = mutableMapOf()
+    val enemyStatus: MutableMap<Int, MutableMap<Status, Int>> = mutableMapOf()
+}
+
+enum class Status {
+    POWER, FIRE_BREAK, ICE_BREAK, LIGHTNING_BREAK
 }

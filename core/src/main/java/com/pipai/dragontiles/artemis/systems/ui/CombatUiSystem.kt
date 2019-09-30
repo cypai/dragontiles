@@ -198,6 +198,8 @@ class CombatUiSystem(private val game: DragonTilesGame,
             }
             TargetType.AOE -> {
             }
+            TargetType.NONE -> {
+            }
         }
     }
 

@@ -12,6 +12,7 @@ class CombatController(private val combat: Combat, world: World, game: DragonTil
         combat.enemies.forEach {
             it.preInit(api.nextId())
             it.init()
+            combat.enemyStatus[it.id] = mutableMapOf()
         }
         initDrawPile()
         initOpenPile()

@@ -2,6 +2,7 @@ package com.pipai.dragontiles.spells
 
 import com.pipai.dragontiles.combat.CombatApi
 import com.pipai.dragontiles.data.Suit
+import com.pipai.dragontiles.data.Tile
 import com.pipai.dragontiles.data.TileInstance
 import com.pipai.dragontiles.enemies.Enemy
 import com.pipai.dragontiles.utils.getLogger
@@ -16,7 +17,7 @@ abstract class Spell(var upgraded: Boolean) {
 }
 
 enum class TargetType {
-    SINGLE, AOE
+    SINGLE, AOE, NONE
 }
 
 abstract class SpellInstance(
@@ -136,5 +137,38 @@ class Single(private val allowedSuits: Set<Suit>) : ComponentRequirement {
     override fun satisfied(slots: List<ComponentSlot>): Boolean {
         return slots.size == 1
                 && slots.firstOrNull()?.tile?.let { allowedSuits.contains(it.tile.suit) } ?: false
+    }
+}
+
+class Identical(override val slotAmount: Int, private val allowedSuits: Set<Suit>) : ComponentRequirement {
+    constructor(slotAmount: Int) : this(slotAmount, setOf(Suit.FIRE, Suit.ICE, Suit.LIGHTNING, Suit.LIFE, Suit.STAR))
+
+    override val reqString = "$slotAmount I ${suitReqString(allowedSuits)}"
+
+    override val description = "A set of $slotAmount identical tiles"
+
+    override fun find(hand: List<TileInstance>): List<List<TileInstance>> {
+        val count: MutableMap<Tile, MutableList<TileInstance>> = mutableMapOf()
+        hand.filter { it.tile.suit in allowedSuits }
+                .forEach {
+                    if (it.tile in count) {
+                        val list = count[it.tile]!!
+                        if (list.size < slotAmount) {
+                            list.add(it)
+                        }
+                    } else {
+                        count[it.tile] = mutableListOf(it)
+                    }
+                }
+        return count.filterValues { it.size >= slotAmount }
+                .values
+                .toList()
+    }
+
+    override fun satisfied(slots: List<ComponentSlot>): Boolean {
+        val first = slots.firstOrNull()?.tile
+        return slots.size == slotAmount
+                && first?.tile?.suit in allowedSuits
+                && slots.all { it.tile != null && it.tile?.tile == first?.tile }
     }
 }
