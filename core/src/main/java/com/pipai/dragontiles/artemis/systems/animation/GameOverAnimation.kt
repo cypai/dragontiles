@@ -1,16 +1,11 @@
 package com.pipai.dragontiles.artemis.systems.animation
 
-import com.artemis.World
 import com.badlogic.gdx.Gdx
 import com.pipai.dragontiles.utils.getLogger
 
-class GameOverAnimation(world: World) : Animation(world) {
+class GameOverAnimation : Animation() {
 
     private val logger = getLogger()
-
-    init {
-        world.inject(this)
-    }
 
     override fun startAnimation() {
         logger.info("You lost! Game Over.")

@@ -1,7 +1,5 @@
 package com.pipai.dragontiles.combat
 
-import com.artemis.World
-import com.pipai.dragontiles.DragonTilesGame
 import com.pipai.dragontiles.artemis.systems.animation.*
 import com.pipai.dragontiles.artemis.systems.combat.CombatAnimationSystem
 import com.pipai.dragontiles.data.CountdownAttack
@@ -12,10 +10,7 @@ import com.pipai.dragontiles.spells.SpellInstance
 
 class CombatApi(val combat: Combat,
                 val spellInstances: List<SpellInstance>,
-                private val world: World,
-                private val game: DragonTilesGame) {
-
-    private val animationSystem = world.getSystem(CombatAnimationSystem::class.java)
+                private val animationSystem: CombatAnimationSystem) {
 
     private var nextId = 0
 
@@ -25,7 +20,7 @@ class CombatApi(val combat: Combat,
     }
 
     fun draw(amount: Int) {
-        val batchAnimation = BatchAnimation(world)
+        val batchAnimation = BatchAnimation()
 
         repeat(amount) {
             val tile = combat.drawPile.removeAt(0)
@@ -33,7 +28,7 @@ class CombatApi(val combat: Combat,
                 combat.discardPile.add(tile)
             } else {
                 combat.hand.add(tile)
-                batchAnimation.addToBatch(DrawTileAnimation(world, tile, combat.hand.size))
+                batchAnimation.addToBatch(DrawTileAnimation(tile, combat.hand.size))
             }
         }
         animationSystem.queueAnimation(batchAnimation)
@@ -41,23 +36,23 @@ class CombatApi(val combat: Combat,
 
     fun sortHand() {
         combat.hand.sortWith(compareBy({ it.tile.suit.order }, { it.tile.order() }))
-        animationSystem.queueAnimation(AdjustHandAnimation(world, combat.hand))
+        animationSystem.queueAnimation(AdjustHandAnimation(combat.hand))
     }
 
     fun drawToOpenPool(amount: Int) {
-        val batchAnimation = BatchAnimation(world)
+        val batchAnimation = BatchAnimation()
 
         repeat(amount) {
             val tile = combat.drawPile.removeAt(0)
             combat.openPool.add(tile)
-            batchAnimation.addToBatch(DrawToOpenPoolAnimation(world, tile, combat.openPool.size))
+            batchAnimation.addToBatch(DrawToOpenPoolAnimation(tile, combat.openPool.size))
         }
         animationSystem.queueAnimation(batchAnimation)
     }
 
     fun sortOpenPool() {
         combat.openPool.sortWith(compareBy({ it.tile.suit.order }, { it.tile.order() }))
-        animationSystem.queueAnimation(AdjustOpenPoolAnimation(world, combat.openPool))
+        animationSystem.queueAnimation(AdjustOpenPoolAnimation(combat.openPool))
     }
 
     fun attack(target: Enemy, element: Element, amount: Int) {
@@ -72,14 +67,14 @@ class CombatApi(val combat: Combat,
             damage *= 2
         }
         target.hp -= damage
-        animationSystem.queueAnimation(DamageAnimation(world, target, damage))
+        animationSystem.queueAnimation(DamageAnimation(target, damage))
     }
 
     fun consume(components: List<TileInstance>) {
         combat.hand.removeAll(components)
         combat.discardPile.addAll(components)
-        val batchAnimation = BatchAnimation(world)
-        components.map { ConsumeTileAnimation(world, it) }
+        val batchAnimation = BatchAnimation()
+        components.map { ConsumeTileAnimation(it) }
                 .forEach { batchAnimation.addToBatch(it) }
         animationSystem.queueAnimation(batchAnimation)
         sortHand()
@@ -87,26 +82,26 @@ class CombatApi(val combat: Combat,
 
     fun dealDamageToHero(damage: Int) {
         combat.hero.hp -= damage
-        animationSystem.queueAnimation(PlayerDamageAnimation(world, damage, combat.hero.hp, combat.hero.hpMax))
+        animationSystem.queueAnimation(PlayerDamageAnimation(damage, combat.hero.hp, combat.hero.hpMax))
         if (combat.hero.hp <= 0) {
-            animationSystem.queueAnimation(GameOverAnimation(world))
+            animationSystem.queueAnimation(GameOverAnimation())
         }
     }
 
     fun enemyAttack(enemy: Enemy, countdownAttack: CountdownAttack) {
         combat.incomingAttacks.add(countdownAttack)
-        animationSystem.queueAnimation(CreateAttackCircleAnimation(world, game, enemy, countdownAttack))
+        animationSystem.queueAnimation(CreateAttackCircleAnimation(enemy, countdownAttack))
     }
 
     fun updateCountdownAttack(countdownAttack: CountdownAttack) {
         countdownAttack.turnsLeft -= 1
         if (countdownAttack.turnsLeft == 0) {
             combat.incomingAttacks.remove(countdownAttack)
-            animationSystem.queueAnimation(ResolveAttackCircleAnimation(world, countdownAttack))
+            animationSystem.queueAnimation(ResolveAttackCircleAnimation(countdownAttack))
             val damage = countdownAttack.baseDamage * countdownAttack.multiplier
             dealDamageToHero(damage)
         } else {
-            animationSystem.queueAnimation(UpdateAttackCircleAnimation(world, countdownAttack))
+            animationSystem.queueAnimation(UpdateAttackCircleAnimation(countdownAttack))
         }
     }
 

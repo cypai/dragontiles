@@ -1,22 +1,17 @@
 package com.pipai.dragontiles.artemis.systems.animation
 
 import com.artemis.ComponentMapper
-import com.artemis.World
 import com.badlogic.gdx.math.Interpolation
 import com.badlogic.gdx.math.Vector2
 import com.pipai.dragontiles.artemis.components.*
 import com.pipai.dragontiles.data.TileInstance
 
-class DrawTileAnimation(world: World, private val tile: TileInstance, private val handLocation: Int) : Animation(world) {
+class DrawTileAnimation(private val tile: TileInstance, private val handLocation: Int) : Animation() {
 
     private lateinit var mXy: ComponentMapper<XYComponent>
     private lateinit var mPath: ComponentMapper<PathInterpolationComponent>
     private lateinit var mTile: ComponentMapper<TileComponent>
     private lateinit var mHand: ComponentMapper<HandLocationComponent>
-
-    init {
-        world.inject(this)
-    }
 
     override fun startAnimation() {
         val entityId = world.create()

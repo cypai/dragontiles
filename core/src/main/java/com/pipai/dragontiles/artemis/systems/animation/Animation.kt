@@ -1,14 +1,22 @@
 package com.pipai.dragontiles.artemis.systems.animation
 
 import com.artemis.World
+import com.pipai.dragontiles.DragonTilesGame
 import com.pipai.dragontiles.artemis.components.EndStrategy
 import com.pipai.dragontiles.artemis.components.TimerComponent
 
-abstract class Animation(protected val world: World) {
-
+abstract class Animation {
+    protected lateinit var world: World
+    protected lateinit var game: DragonTilesGame
     private lateinit var observer: AnimationObserver
 
-    fun init(observer: AnimationObserver) {
+    fun init(world: World, game: DragonTilesGame) {
+        this.world = world
+        world.inject(this)
+        this.game = game
+    }
+
+    fun initObserver(observer: AnimationObserver) {
         this.observer = observer
     }
 

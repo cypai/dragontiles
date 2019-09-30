@@ -1,7 +1,6 @@
 package com.pipai.dragontiles.artemis.systems.animation
 
 import com.artemis.ComponentMapper
-import com.artemis.World
 import com.badlogic.gdx.math.Interpolation
 import com.badlogic.gdx.math.Vector2
 import com.pipai.dragontiles.artemis.components.EndStrategy
@@ -10,16 +9,12 @@ import com.pipai.dragontiles.artemis.components.XYComponent
 import com.pipai.dragontiles.artemis.systems.combat.TileIdSystem
 import com.pipai.dragontiles.data.TileInstance
 
-class AdjustOpenPoolAnimation(world: World, private val openPool: List<TileInstance>) : Animation(world) {
+class AdjustOpenPoolAnimation(private val openPool: List<TileInstance>) : Animation() {
 
     private lateinit var mXy: ComponentMapper<XYComponent>
     private lateinit var mPath: ComponentMapper<PathInterpolationComponent>
 
     private lateinit var sTileId: TileIdSystem
-
-    init {
-        world.inject(this)
-    }
 
     override fun startAnimation() {
         openPool.forEachIndexed { index, tile ->

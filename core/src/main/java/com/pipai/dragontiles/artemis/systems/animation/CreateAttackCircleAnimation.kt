@@ -1,9 +1,7 @@
 package com.pipai.dragontiles.artemis.systems.animation
 
 import com.artemis.ComponentMapper
-import com.artemis.World
 import com.badlogic.gdx.graphics.Color
-import com.pipai.dragontiles.DragonTilesGame
 import com.pipai.dragontiles.artemis.components.*
 import com.pipai.dragontiles.artemis.systems.combat.AttackCircleSystem
 import com.pipai.dragontiles.data.CountdownAttack
@@ -12,10 +10,8 @@ import com.pipai.dragontiles.misc.RadialSprite
 import com.pipai.dragontiles.utils.allOf
 import com.pipai.dragontiles.utils.fetch
 
-class CreateAttackCircleAnimation(world: World,
-                                  private val game: DragonTilesGame,
-                                  private val enemy: Enemy,
-                                  private val attack: CountdownAttack) : Animation(world) {
+class CreateAttackCircleAnimation(private val enemy: Enemy,
+                                  private val attack: CountdownAttack) : Animation() {
 
     private lateinit var mEnemy: ComponentMapper<EnemyComponent>
     private lateinit var mXy: ComponentMapper<XYComponent>
@@ -24,10 +20,6 @@ class CreateAttackCircleAnimation(world: World,
     private lateinit var mMutualDestroy: ComponentMapper<MutualDestroyComponent>
 
     private lateinit var sAttackCircle: AttackCircleSystem
-
-    init {
-        world.inject(this)
-    }
 
     override fun startAnimation() {
         var enemyId = 0

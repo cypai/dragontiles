@@ -45,9 +45,9 @@ class CombatScreen(game: DragonTilesGame, combat: Combat) : Screen {
                         TimerSystem(),
                         MutualDestroySystem(),
 
-                        CombatControllerSystem(game, combat),
+                        CombatControllerSystem(combat),
                         TileIdSystem(),
-                        CombatAnimationSystem(),
+                        CombatAnimationSystem(game),
                         MouseFollowLineSystem(game.gameConfig),
                         AttackCircleSystem(),
 

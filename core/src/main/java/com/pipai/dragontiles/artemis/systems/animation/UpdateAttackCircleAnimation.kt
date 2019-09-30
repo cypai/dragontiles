@@ -1,22 +1,16 @@
 package com.pipai.dragontiles.artemis.systems.animation
 
 import com.artemis.ComponentMapper
-import com.artemis.World
 import com.pipai.dragontiles.artemis.components.AttackCircleComponent
 import com.pipai.dragontiles.artemis.components.RadialSpriteComponent
 import com.pipai.dragontiles.data.CountdownAttack
 import com.pipai.dragontiles.utils.allOf
 import com.pipai.dragontiles.utils.fetch
 
-class UpdateAttackCircleAnimation(world: World,
-                                  private val attack: CountdownAttack) : Animation(world) {
+class UpdateAttackCircleAnimation(private val attack: CountdownAttack) : Animation() {
 
     private lateinit var mRadial: ComponentMapper<RadialSpriteComponent>
     private lateinit var mAttackCircle: ComponentMapper<AttackCircleComponent>
-
-    init {
-        world.inject(this)
-    }
 
     override fun startAnimation() {
         val id = world.fetch(allOf(AttackCircleComponent::class))

@@ -1,19 +1,18 @@
 package com.pipai.dragontiles.artemis.systems.animation
 
-import com.artemis.World
-
-class BatchAnimation(world: World) : Animation(world), AnimationObserver {
+class BatchAnimation : Animation(), AnimationObserver {
 
     private val animations: MutableList<Animation> = mutableListOf()
 
     override fun startAnimation() {
         animations.forEach {
+            it.init(this.world, this.game)
+            it.initObserver(this)
             it.startAnimation()
         }
     }
 
     fun addToBatch(animation: Animation) {
-        animation.init(this)
         animations.add(animation)
     }
 

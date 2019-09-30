@@ -1,12 +1,11 @@
 package com.pipai.dragontiles.combat
 
-import com.artemis.World
-import com.pipai.dragontiles.DragonTilesGame
+import com.pipai.dragontiles.artemis.systems.combat.CombatAnimationSystem
 import com.pipai.dragontiles.data.*
 
-class CombatController(private val combat: Combat, world: World, game: DragonTilesGame) {
+class CombatController(private val combat: Combat, animationSystem: CombatAnimationSystem) {
 
-    val api: CombatApi = CombatApi(combat, combat.hero.spells.map { it.createInstance() }.toList(), world, game)
+    val api: CombatApi = CombatApi(combat, combat.hero.spells.map { it.createInstance() }.toList(), animationSystem)
 
     fun initCombat() {
         combat.enemies.forEach {
