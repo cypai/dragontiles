@@ -12,12 +12,8 @@ import com.pipai.dragontiles.artemis.components.EnemyComponent
 import com.pipai.dragontiles.artemis.components.OrthographicCameraComponent
 import com.pipai.dragontiles.artemis.components.SpriteComponent
 import com.pipai.dragontiles.artemis.components.XYComponent
-import com.pipai.dragontiles.artemis.systems.animation.CreateAttackCircleAnimation
-import com.pipai.dragontiles.artemis.systems.combat.CombatAnimationSystem
 import com.pipai.dragontiles.artemis.systems.combat.CombatControllerSystem
 import com.pipai.dragontiles.artemis.systems.ui.CombatUiSystem
-import com.pipai.dragontiles.data.CountdownAttack
-import com.pipai.dragontiles.data.Element
 import com.pipai.dragontiles.utils.enemyAssetPath
 
 @Wire

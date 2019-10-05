@@ -3,8 +3,8 @@ package com.pipai.dragontiles.combat
 import com.pipai.dragontiles.enemies.FlameTurtle
 import com.pipai.dragontiles.hero.Hero
 import com.pipai.dragontiles.spells.Invoke
-import com.pipai.test.fixtures.mockCombatWorld
 import com.pipai.test.libgdx.GdxMockedTest
+import net.mostlyoriginal.api.event.common.EventSystem
 import org.junit.Assert
 import org.junit.Test
 import java.util.*
@@ -17,7 +17,7 @@ class CombatTest : GdxMockedTest() {
                 Hero("Elementalist", 80, 80, 15, mutableListOf(Invoke(false))),
                 mutableListOf(flameTurtle))
 
-        val controller = CombatController(combat, mockCombatWorld(combat))
+        val controller = CombatController(combat, EventSystem())
         controller.initCombat()
 
         // Full tile set amount is 136
@@ -53,7 +53,7 @@ class CombatTest : GdxMockedTest() {
                 Hero("Elementalist", 80, 80, 15, mutableListOf(Invoke(true))),
                 mutableListOf(flameTurtle))
 
-        val controller = CombatController(combat, mockCombatWorld(combat))
+        val controller = CombatController(combat, EventSystem())
         controller.initCombat()
         controller.runTurn()
 

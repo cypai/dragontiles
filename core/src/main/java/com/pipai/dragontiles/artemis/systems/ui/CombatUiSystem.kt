@@ -85,6 +85,13 @@ class CombatUiSystem(private val game: DragonTilesGame,
         spellComponentList.addClickCallback { selectComponents(it) }
     }
 
+    fun setHpRelative(amount: Int) {
+        val tokens = hpLabel.text.split("/")
+        val hp = tokens[0].toInt()
+        val hpMax = tokens[1].toInt()
+        setHp(hp + amount, hpMax)
+    }
+
     fun setHp(hp: Int, hpMax: Int) {
         hpLabel.setText("$hp/$hpMax")
     }

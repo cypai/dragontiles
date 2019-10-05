@@ -15,7 +15,7 @@ import com.pipai.dragontiles.artemis.systems.PathInterpolationSystem
 import com.pipai.dragontiles.artemis.systems.TimerSystem
 import com.pipai.dragontiles.artemis.systems.XyInterpolationSystem
 import com.pipai.dragontiles.artemis.systems.combat.AttackCircleSystem
-import com.pipai.dragontiles.artemis.systems.combat.CombatAnimationSystem
+import com.pipai.dragontiles.artemis.systems.animation.CombatAnimationSystem
 import com.pipai.dragontiles.artemis.systems.combat.CombatControllerSystem
 import com.pipai.dragontiles.artemis.systems.combat.TileIdSystem
 import com.pipai.dragontiles.artemis.systems.input.ExitInputProcessor
