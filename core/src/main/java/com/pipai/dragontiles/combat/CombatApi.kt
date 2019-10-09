@@ -52,9 +52,12 @@ class CombatApi(val combat: Combat,
         eventSystem.dispatch(OpenPoolAdjustedEvent(combat.openPool))
     }
 
-    fun attack(target: Enemy, element: Element, amount: Int) {
-        eventSystem.dispatch(PlayerAttackEnemyEvent(target, element, amount))
-        var damage = amount + (combat.heroStatus[Status.POWER] ?: 0)
+    fun calculateBaseDamage(amount: Int): Int {
+        return amount + (combat.heroStatus[Status.POWER] ?: 0)
+    }
+
+    fun calculateTargetDamage(target: Enemy, element: Element, amount: Int): Int {
+        var damage = calculateBaseDamage(amount)
         val broken = when (element) {
             Element.FIRE -> combat.enemyStatus[target.id]!![Status.FIRE_BREAK] != null
             Element.ICE -> combat.enemyStatus[target.id]!![Status.ICE_BREAK] != null
@@ -64,6 +67,12 @@ class CombatApi(val combat: Combat,
         if (broken) {
             damage *= 2
         }
+        return damage
+    }
+
+    fun attack(target: Enemy, element: Element, amount: Int) {
+        eventSystem.dispatch(PlayerAttackEnemyEvent(target, element, amount))
+        val damage = calculateTargetDamage(target, element, amount)
         target.hp -= damage
         eventSystem.dispatch(EnemyDamageEvent(target, damage))
     }

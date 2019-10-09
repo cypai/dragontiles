@@ -34,10 +34,16 @@ abstract class SpellInstance(
 
     val data: MutableMap<String, Int> = mutableMapOf()
 
-    fun dynamicValue(key: String): Int {
+    fun dynamicValue(key: String, api: CombatApi, params: CastParams): Int {
         return when (key) {
             "!r" -> repeatableMax - repeated
-            "!d" -> baseDamage
+            "!d" -> {
+                return if (params.targets.isEmpty()) {
+                    api.calculateBaseDamage(baseDamage)
+                } else {
+                    api.calculateTargetDamage(params.targets.first(), elemental(components()), baseDamage)
+                }
+            }
             else -> data[key] ?: 0
         }
     }

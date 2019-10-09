@@ -10,14 +10,16 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.badlogic.gdx.utils.Align
 import com.pipai.dragontiles.DragonTilesGame
-import com.pipai.dragontiles.data.TileSkin
+import com.pipai.dragontiles.combat.CombatApi
+import com.pipai.dragontiles.enemies.Enemy
+import com.pipai.dragontiles.spells.CastParams
 import com.pipai.dragontiles.spells.SpellInstance
 
 class SpellCard(private val game: DragonTilesGame,
                 private var spellInstance: SpellInstance?,
                 val number: Int?,
                 skin: Skin,
-                private val tileSkin: TileSkin) : Table(skin) {
+                private val api: CombatApi) : Table(skin) {
 
     private val topRow = Table()
     private val nameLabel = Label("", skin, "small")
@@ -31,6 +33,7 @@ class SpellCard(private val game: DragonTilesGame,
 
     private val clickCallbacks: MutableList<(SpellCard) -> Unit> = mutableListOf()
 
+    var target: Enemy? = null
     private var enabled = true
 
     init {
@@ -142,7 +145,7 @@ class SpellCard(private val game: DragonTilesGame,
             reqLabel.setText(spell.requirement.reqString)
             val description = if (spellInstance!!.spell.upgraded) spellStrings.upgradeDescription else spellStrings.description
             val adjustedDescription = description.replace(regex) {
-                spellInstance!!.dynamicValue(it.value).toString()
+                spellInstance!!.dynamicValue(it.value, api, CastParams(if (target == null) listOf() else listOf(target!!))).toString()
             }
             descriptionLabel.setText(adjustedDescription)
         }

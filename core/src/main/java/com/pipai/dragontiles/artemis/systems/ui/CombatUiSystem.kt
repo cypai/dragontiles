@@ -53,7 +53,7 @@ class CombatUiSystem(private val game: DragonTilesGame,
 
     private val sCombat by system<CombatControllerSystem>()
 
-    init {
+    override fun initialize() {
         rootTable.setFillParent(true)
         stage.addActor(rootTable)
 
@@ -98,7 +98,7 @@ class CombatUiSystem(private val game: DragonTilesGame,
     }
 
     private fun addSpellCard(number: Int) {
-        val spellCard = SpellCard(game, null, number, game.skin, tileSkin)
+        val spellCard = SpellCard(game, null, number, game.skin, sCombat.controller.api)
         spellCard.addClickCallback(this::spellCardClickCallback)
         spellRow.add(spellCard)
                 .minWidth(spellCard.width)
@@ -214,6 +214,14 @@ class CombatUiSystem(private val game: DragonTilesGame,
         }
     }
 
+    private fun getSelectedSpellCard(): SpellCard? {
+        return if (selectedSpellNumber == null) {
+            null
+        } else {
+            spells[selectedSpellNumber!!]
+        }
+    }
+
     private fun getSelectedSpell() = spells[selectedSpellNumber!!]!!.getSpellInstance()!!
 
     override fun keyUp(keycode: Int) = false
@@ -240,7 +248,26 @@ class CombatUiSystem(private val game: DragonTilesGame,
 
     override fun touchDragged(screenX: Int, screenY: Int, pointer: Int) = false
 
-    override fun mouseMoved(screenX: Int, screenY: Int) = false
+    override fun mouseMoved(screenX: Int, screenY: Int): Boolean {
+        var updateTarget = false
+        when (stateMachine.currentState) {
+            CombatUiState.TARGET_SELECTION -> {
+                world.fetch(allOf(EnemyComponent::class, XYComponent::class, SpriteComponent::class)).forEach {
+                    val cSprite = mSprite.get(it)
+                    if (cSprite.sprite.boundingRectangle.contains(screenX.toFloat(), config.resolution.height - screenY.toFloat())) {
+                        getSelectedSpellCard()?.target = mEnemy.get(it).enemy
+                        updateTarget = true
+                    }
+                }
+                if (!updateTarget) {
+                    getSelectedSpellCard()?.target = null
+                }
+            }
+            else -> {
+            }
+        }
+        return false
+    }
 
     override fun scrolled(amount: Int) = false
 
