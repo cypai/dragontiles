@@ -97,7 +97,7 @@ interface ComponentRequirement {
     fun satisfied(slots: List<ComponentSlot>): Boolean
 }
 
-private fun generateSlots(amount: Int): List<ComponentSlot> {
+fun generateSlots(amount: Int): List<ComponentSlot> {
     val slots = mutableListOf<ComponentSlot>()
     repeat(amount) {
         slots.add(ComponentSlot(null))
