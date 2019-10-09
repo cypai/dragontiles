@@ -2,6 +2,7 @@ package com.pipai.dragontiles.combat
 
 import com.pipai.dragontiles.data.*
 import com.pipai.dragontiles.spells.Identical
+import com.pipai.dragontiles.spells.Sequential
 import com.pipai.dragontiles.spells.Single
 import com.pipai.dragontiles.spells.generateSlots
 import org.junit.Assert
@@ -47,5 +48,30 @@ class ComponentRequirementTest {
             slot.tile = tile
         }
         Assert.assertTrue(identical.satisfied(slots))
+    }
+
+    @Test
+    fun testSequential() {
+        val sequential = Sequential(3)
+        val hand = mutableListOf(
+                TileInstance(Tile.ElementalTile(Suit.FIRE, 1), 0),
+                TileInstance(Tile.ElementalTile(Suit.FIRE, 1), 1),
+                TileInstance(Tile.ElementalTile(Suit.FIRE, 2), 2),
+                TileInstance(Tile.ElementalTile(Suit.FIRE, 3), 3),
+                TileInstance(Tile.ElementalTile(Suit.FIRE, 9), 4),
+                TileInstance(Tile.StarTile(StarType.STAR), 5)
+        )
+        val sets = sequential.find(hand)
+        Assert.assertEquals(1, sets.size)
+        sets.forEach {
+            Assert.assertEquals(3, it.size)
+            Assert.assertTrue(it.first() in hand)
+        }
+        val slots = generateSlots(3)
+        Assert.assertFalse(sequential.satisfied(slots))
+        slots.zip(sets.first()) { slot, tile ->
+            slot.tile = tile
+        }
+        Assert.assertTrue(sequential.satisfied(slots))
     }
 }

@@ -36,3 +36,37 @@ sealed class Tile {
 }
 
 data class TileInstance(val tile: Tile, val id: Int)
+
+fun successor(tile: Tile): Tile {
+    return when (tile) {
+        is Tile.ElementalTile -> Tile.ElementalTile(tile.suit, if (tile.number == 9) 1 else (tile.number + 1))
+        is Tile.StarTile -> when (tile.type) {
+            StarType.EARTH -> Tile.StarTile(StarType.MOON)
+            StarType.MOON -> Tile.StarTile(StarType.SUN)
+            StarType.SUN -> Tile.StarTile(StarType.STAR)
+            StarType.STAR -> Tile.StarTile(StarType.EARTH)
+        }
+        is Tile.LifeTile -> when (tile.type) {
+            LifeType.LIFE -> Tile.LifeTile(LifeType.MIND)
+            LifeType.MIND -> Tile.LifeTile(LifeType.SOUL)
+            LifeType.SOUL -> Tile.LifeTile(LifeType.LIFE)
+        }
+    }
+}
+
+fun predecessor(tile: Tile): Tile {
+    return when (tile) {
+        is Tile.ElementalTile -> Tile.ElementalTile(tile.suit, if (tile.number == 1) 9 else (tile.number - 1))
+        is Tile.StarTile -> when (tile.type) {
+            StarType.EARTH -> Tile.StarTile(StarType.STAR)
+            StarType.MOON -> Tile.StarTile(StarType.EARTH)
+            StarType.SUN -> Tile.StarTile(StarType.MOON)
+            StarType.STAR -> Tile.StarTile(StarType.SUN)
+        }
+        is Tile.LifeTile -> when (tile.type) {
+            LifeType.LIFE -> Tile.LifeTile(LifeType.SOUL)
+            LifeType.MIND -> Tile.LifeTile(LifeType.LIFE)
+            LifeType.SOUL -> Tile.LifeTile(LifeType.MIND)
+        }
+    }
+}

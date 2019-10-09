@@ -120,7 +120,7 @@ private fun suitReqString(allowedSuits: Set<Suit>): String {
 }
 
 class Single(private val allowedSuits: Set<Suit>) : ComponentRequirement {
-    constructor() : this(setOf(Suit.FIRE, Suit.ICE, Suit.LIGHTNING, Suit.LIFE, Suit.STAR))
+    constructor() : this(anySet)
 
     override val slotAmount = 1
 
@@ -141,7 +141,7 @@ class Single(private val allowedSuits: Set<Suit>) : ComponentRequirement {
 }
 
 class Identical(override val slotAmount: Int, private val allowedSuits: Set<Suit>) : ComponentRequirement {
-    constructor(slotAmount: Int) : this(slotAmount, setOf(Suit.FIRE, Suit.ICE, Suit.LIGHTNING, Suit.LIFE, Suit.STAR))
+    constructor(slotAmount: Int) : this(slotAmount, anySet)
 
     override val reqString = "$slotAmount I ${suitReqString(allowedSuits)}"
 
@@ -170,5 +170,40 @@ class Identical(override val slotAmount: Int, private val allowedSuits: Set<Suit
         return slots.size == slotAmount
                 && first?.tile?.suit in allowedSuits
                 && slots.all { it.tile != null && it.tile?.tile == first?.tile }
+    }
+}
+
+class Sequential(override val slotAmount: Int, private val allowedSuits: Set<Suit>) : ComponentRequirement {
+    constructor(slotAmount: Int) : this(slotAmount, elementalSet)
+
+    override val reqString = "$slotAmount S ${suitReqString(allowedSuits)}"
+
+    override val description = "A set of $slotAmount sequential tiles"
+
+    override fun find(hand: List<TileInstance>): List<List<TileInstance>> {
+        val sequences: MutableMap<Tile, MutableList<TileInstance>> = mutableMapOf()
+        hand.filter { it.tile.suit in allowedSuits }
+                .forEach {
+                    val tile = it.tile as Tile.ElementalTile
+                    if (tile !in sequences) {
+                        sequences[tile] = mutableListOf(it)
+                        sequences.values.forEach { s ->
+                            val last = s.last().tile as Tile.ElementalTile
+                            if (s.size < slotAmount && last.suit == tile.suit && last.number == tile.number - 1) {
+                                s.add(it)
+                            }
+                        }
+                    }
+                }
+        return sequences.filterValues { it.size >= slotAmount }
+                .values
+                .toList()
+    }
+
+    override fun satisfied(slots: List<ComponentSlot>): Boolean {
+        return slots.size == slotAmount
+                && slots.all { it.tile != null && it.tile?.tile?.suit in allowedSuits }
+                && slots.windowed(2)
+                .all { (it[0].tile?.tile as Tile.ElementalTile).number == (it[1].tile?.tile as Tile.ElementalTile).number - 1 }
     }
 }
