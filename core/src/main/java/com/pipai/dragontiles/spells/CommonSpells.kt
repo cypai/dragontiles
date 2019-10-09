@@ -22,10 +22,27 @@ class InvokeImpl(spell: Spell) : SpellInstance(spell, if (spell.upgraded) 2 else
     }
 }
 
+class Strike(upgraded: Boolean) : Spell(upgraded) {
+    override val id: String = "base:Strike"
+    override val requirement: ComponentRequirement = Sequential(3, elementalSet)
+    override val targetType: TargetType = TargetType.SINGLE
+
+    override fun createInstance(): SpellInstance = StrikeImpl(this)
+}
+
+class StrikeImpl(spell: Spell) : SpellInstance(spell, 1) {
+
+    override val baseDamage: Int = 7
+
+    override fun onCast(targets: List<Enemy>, api: CombatApi) {
+        api.attack(targets.first(), elemental(components()), baseDamage + if (spell.upgraded) 3 else 0)
+    }
+}
+
 class Break(upgraded: Boolean) : Spell(upgraded) {
     override val id: String = "base:Break"
     override val requirement: ComponentRequirement = Identical(3, elementalSet)
-    override val targetType: TargetType = TargetType.NONE
+    override val targetType: TargetType = TargetType.SINGLE
 
     override fun createInstance(): SpellInstance = ConcentrateImpl(this)
 }
