@@ -46,17 +46,17 @@ abstract class SpellInstance(
 
     fun ready() = available() && spell.requirement.satisfied(componentSlots)
 
-    fun cast(targets: List<Enemy>, api: CombatApi) {
+    fun cast(params: CastParams, api: CombatApi) {
         if (!ready()) {
             logger.error("Attempted to cast without being ready. State: $this")
             return
         }
-        onCast(targets, api)
+        onCast(params, api)
         handleComponents(api)
         repeated++
     }
 
-    protected abstract fun onCast(targets: List<Enemy>, api: CombatApi)
+    protected abstract fun onCast(params: CastParams, api: CombatApi)
 
     open fun handleComponents(api: CombatApi) {
         api.consume(components())
@@ -82,6 +82,8 @@ abstract class SpellInstance(
         return ToStringBuilder.reflectionToString(this)
     }
 }
+
+data class CastParams(val targets: List<Enemy>)
 
 data class ComponentSlot(var tile: TileInstance?)
 

@@ -18,6 +18,7 @@ import com.pipai.dragontiles.combat.Combat
 import com.pipai.dragontiles.data.TileInstance
 import com.pipai.dragontiles.gui.SpellCard
 import com.pipai.dragontiles.gui.SpellComponentList
+import com.pipai.dragontiles.spells.CastParams
 import com.pipai.dragontiles.spells.SpellInstance
 import com.pipai.dragontiles.spells.TargetType
 import com.pipai.dragontiles.utils.*
@@ -198,14 +199,17 @@ class CombatUiSystem(private val game: DragonTilesGame,
     }
 
     private fun selectComponents(components: List<TileInstance>) {
-        when (getSelectedSpell().spell.targetType) {
+        val spellInstance = getSelectedSpell()
+        when (spellInstance.spell.targetType) {
             TargetType.SINGLE -> {
-                getSelectedSpell().fill(components)
+                spellInstance.fill(components)
                 stateMachine.changeState(CombatUiState.TARGET_SELECTION)
             }
             TargetType.AOE -> {
             }
             TargetType.NONE -> {
+                spellInstance.fill(components)
+                spellInstance.cast(CastParams(listOf()), sCombat.controller.api)
             }
         }
     }
@@ -222,7 +226,7 @@ class CombatUiSystem(private val game: DragonTilesGame,
                 world.fetch(allOf(EnemyComponent::class, XYComponent::class, SpriteComponent::class)).forEach {
                     val cSprite = mSprite.get(it)
                     if (cSprite.sprite.boundingRectangle.contains(screenX.toFloat(), config.resolution.height - screenY.toFloat())) {
-                        getSelectedSpell().cast(listOf(mEnemy.get(it).enemy), sCombat.controller.api)
+                        getSelectedSpell().cast(CastParams(listOf(mEnemy.get(it).enemy)), sCombat.controller.api)
                         return true
                     }
                 }

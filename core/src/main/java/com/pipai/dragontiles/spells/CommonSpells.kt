@@ -3,7 +3,6 @@ package com.pipai.dragontiles.spells
 import com.pipai.dragontiles.combat.CombatApi
 import com.pipai.dragontiles.combat.Status
 import com.pipai.dragontiles.data.Element
-import com.pipai.dragontiles.enemies.Enemy
 
 class Invoke(upgraded: Boolean) : Spell(upgraded) {
     override val id: String = "base:Invoke"
@@ -17,8 +16,8 @@ class InvokeImpl(spell: Spell) : SpellInstance(spell, if (spell.upgraded) 2 else
 
     override val baseDamage = 2
 
-    override fun onCast(targets: List<Enemy>, api: CombatApi) {
-        api.attack(targets.first(), elemental(components()), baseDamage)
+    override fun onCast(params: CastParams, api: CombatApi) {
+        api.attack(params.targets.first(), elemental(components()), baseDamage)
     }
 }
 
@@ -34,8 +33,8 @@ class StrikeImpl(spell: Spell) : SpellInstance(spell, 1) {
 
     override val baseDamage: Int = 7
 
-    override fun onCast(targets: List<Enemy>, api: CombatApi) {
-        api.attack(targets.first(), elemental(components()), baseDamage + if (spell.upgraded) 3 else 0)
+    override fun onCast(params: CastParams, api: CombatApi) {
+        api.attack(params.targets.first(), elemental(components()), baseDamage + if (spell.upgraded) 3 else 0)
     }
 }
 
@@ -51,7 +50,7 @@ class BreakImpl(spell: Spell) : SpellInstance(spell, 1) {
 
     override val baseDamage: Int = 0
 
-    override fun onCast(targets: List<Enemy>, api: CombatApi) {
+    override fun onCast(params: CastParams, api: CombatApi) {
         val status = when (elemental(components())) {
             Element.FIRE -> Status.FIRE_BREAK
             Element.ICE -> Status.ICE_BREAK
@@ -74,7 +73,7 @@ class ConcentrateImpl(spell: Spell) : SpellInstance(spell, 1) {
 
     override val baseDamage: Int = 0
 
-    override fun onCast(targets: List<Enemy>, api: CombatApi) {
+    override fun onCast(params: CastParams, api: CombatApi) {
         api.changeStatusIncrement(Status.POWER, if (spell.upgraded) 3 else 2)
     }
 }
