@@ -3,7 +3,7 @@ package com.pipai.dragontiles.combat
 import com.pipai.dragontiles.data.*
 import net.mostlyoriginal.api.event.common.EventSystem
 
-class CombatController(private val combat: Combat, eventSystem: EventSystem) {
+class CombatController(private val combat: Combat, private val eventSystem: EventSystem) {
 
     val api: CombatApi = CombatApi(combat, combat.hero.spells.map { it.createInstance() }.toList(), eventSystem)
 
@@ -15,6 +15,9 @@ class CombatController(private val combat: Combat, eventSystem: EventSystem) {
         }
         initDrawPile()
         initOpenPile()
+        api.spellInstances.forEach {
+            eventSystem.registerEvents(it)
+        }
     }
 
     private fun initDrawPile() {
@@ -46,10 +49,10 @@ class CombatController(private val combat: Combat, eventSystem: EventSystem) {
 
     fun runTurn() {
         combat.turnNumber += 1
-        combat.spellsCasted = 0
         combat.enemies.forEach {
             it.runTurn(api)
         }
+        eventSystem.dispatch(TurnStartEvent(combat.turnNumber))
         if (combat.hero.handSize > combat.hand.size) {
             api.draw(combat.hero.handSize - combat.hand.size)
         }
@@ -57,6 +60,7 @@ class CombatController(private val combat: Combat, eventSystem: EventSystem) {
     }
 
     fun endTurn() {
+        eventSystem.dispatch(TurnEndEvent(combat.turnNumber))
         combat.incomingAttacks.toList().forEach {
             api.updateCountdownAttack(it)
         }

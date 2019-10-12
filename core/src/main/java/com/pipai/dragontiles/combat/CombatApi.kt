@@ -18,6 +18,10 @@ class CombatApi(val combat: Combat,
         return nextId
     }
 
+    fun castSpell(spellInstance: SpellInstance) {
+        eventSystem.dispatch(SpellCastedEvent(spellInstance))
+    }
+
     fun draw(amount: Int) {
         val drawnTiles: MutableList<Pair<TileInstance, Int>> = mutableListOf()
         repeat(amount) {

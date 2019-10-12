@@ -12,7 +12,6 @@ data class Combat(val rng: Random,
                   val enemies: MutableList<Enemy>) {
 
     var turnNumber = 0
-    var spellsCasted = 0
 
     val hand: MutableList<TileInstance> = mutableListOf()
     val drawPile: MutableList<TileInstance> = mutableListOf()

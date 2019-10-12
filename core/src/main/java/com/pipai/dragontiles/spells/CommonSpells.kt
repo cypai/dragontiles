@@ -1,8 +1,11 @@
 package com.pipai.dragontiles.spells
 
 import com.pipai.dragontiles.combat.CombatApi
+import com.pipai.dragontiles.combat.SpellCastedEvent
 import com.pipai.dragontiles.combat.Status
+import com.pipai.dragontiles.combat.TurnStartEvent
 import com.pipai.dragontiles.data.Element
+import net.mostlyoriginal.api.event.common.Subscribe
 
 class Invoke(upgraded: Boolean) : Spell(upgraded) {
     override val id: String = "base:Invoke"
@@ -14,10 +17,10 @@ class Invoke(upgraded: Boolean) : Spell(upgraded) {
 
 class InvokeImpl(spell: Spell) : SpellInstance(spell, if (spell.upgraded) 2 else 1) {
 
-    override val baseDamage = 2
+    override fun baseDamage(): Int = 2
 
     override fun onCast(params: CastParams, api: CombatApi) {
-        api.attack(params.targets.first(), elemental(components()), baseDamage)
+        api.attack(params.targets.first(), elemental(components()), baseDamage())
     }
 }
 
@@ -31,10 +34,39 @@ class Strike(upgraded: Boolean) : Spell(upgraded) {
 
 class StrikeImpl(spell: Spell) : SpellInstance(spell, 1) {
 
-    override val baseDamage: Int = 7
+    override fun baseDamage(): Int = 7
 
     override fun onCast(params: CastParams, api: CombatApi) {
-        api.attack(params.targets.first(), elemental(components()), baseDamage + if (spell.upgraded) 3 else 0)
+        api.attack(params.targets.first(), elemental(components()), baseDamage() + if (spell.upgraded) 3 else 0)
+    }
+}
+
+class RampStrike(upgraded: Boolean) : Spell(upgraded) {
+    override val id: String = "base:RampStrike"
+    override val requirement: ComponentRequirement = Sequential(3, elementalSet)
+    override val targetType: TargetType = TargetType.SINGLE
+
+    override fun createInstance(): SpellInstance = RampStrikeImpl(this)
+}
+
+class RampStrikeImpl(spell: Spell) : SpellInstance(spell, 1) {
+
+    private var spellsCasted = 0
+
+    override fun baseDamage(): Int = 3 + spellsCasted * (if (spell.upgraded) 3 else 2)
+
+    @Subscribe
+    fun onTurnStart(ev: TurnStartEvent) {
+        spellsCasted = 0
+    }
+
+    @Subscribe
+    fun onSpellCast(ev: SpellCastedEvent) {
+        spellsCasted += 1
+    }
+
+    override fun onCast(params: CastParams, api: CombatApi) {
+        api.attack(params.targets.first(), elemental(components()), baseDamage())
     }
 }
 
@@ -48,7 +80,7 @@ class Break(upgraded: Boolean) : Spell(upgraded) {
 
 class BreakImpl(spell: Spell) : SpellInstance(spell, 1) {
 
-    override val baseDamage: Int = 0
+    override fun baseDamage(): Int = 0
 
     override fun onCast(params: CastParams, api: CombatApi) {
         val status = when (elemental(components())) {
@@ -71,7 +103,7 @@ class Concentrate(upgraded: Boolean) : Spell(upgraded) {
 
 class ConcentrateImpl(spell: Spell) : SpellInstance(spell, 1) {
 
-    override val baseDamage: Int = 0
+    override fun baseDamage(): Int = 0
 
     override fun onCast(params: CastParams, api: CombatApi) {
         api.changeStatusIncrement(Status.POWER, if (spell.upgraded) 3 else 2)

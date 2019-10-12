@@ -26,7 +26,6 @@ abstract class SpellInstance(
 
     private val logger = getLogger()
 
-    abstract val baseDamage: Int
     var repeated = 0
     var exhausted = false
 
@@ -34,14 +33,16 @@ abstract class SpellInstance(
 
     val data: MutableMap<String, Int> = mutableMapOf()
 
+    open fun baseDamage(): Int = 0
+
     fun dynamicValue(key: String, api: CombatApi, params: CastParams): Int {
         return when (key) {
             "!r" -> repeatableMax - repeated
             "!d" -> {
                 return if (params.targets.isEmpty()) {
-                    api.calculateBaseDamage(baseDamage)
+                    api.calculateBaseDamage(baseDamage())
                 } else {
-                    api.calculateTargetDamage(params.targets.first(), elemental(components()), baseDamage)
+                    api.calculateTargetDamage(params.targets.first(), elemental(components()), baseDamage())
                 }
             }
             else -> data[key] ?: 0
@@ -57,6 +58,7 @@ abstract class SpellInstance(
             logger.error("Attempted to cast without being ready. State: $this")
             return
         }
+        api.castSpell(this)
         onCast(params, api)
         handleComponents(api)
         repeated++
@@ -70,10 +72,6 @@ abstract class SpellInstance(
 
     fun turnReset(api: CombatApi) {
         repeated = 0
-        onTurnStart(api)
-    }
-
-    open fun onTurnStart(api: CombatApi) {
     }
 
     fun fill(components: List<TileInstance>) {

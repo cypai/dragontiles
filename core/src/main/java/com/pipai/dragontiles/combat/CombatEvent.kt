@@ -4,9 +4,14 @@ import com.pipai.dragontiles.data.CountdownAttack
 import com.pipai.dragontiles.data.Element
 import com.pipai.dragontiles.data.TileInstance
 import com.pipai.dragontiles.enemies.Enemy
+import com.pipai.dragontiles.spells.SpellInstance
 import net.mostlyoriginal.api.event.common.Event
 
 interface CombatEvent : Event
+
+data class TurnStartEvent(val turnNumber: Int) : CombatEvent
+
+data class TurnEndEvent(val turnNumber: Int) : CombatEvent
 
 data class DrawEvent(val tiles: List<Pair<TileInstance, Int>>) : CombatEvent
 
@@ -29,5 +34,7 @@ data class CountdownAttackResolveEvent(val countdownAttack: CountdownAttack) : C
 data class PlayerDamageEvent(val amount: Int) : CombatEvent
 
 data class ComponentConsumeEvent(val components: List<TileInstance>) : CombatEvent
+
+data class SpellCastedEvent(val spellInstance: SpellInstance) : CombatEvent
 
 class GameOverEvent : CombatEvent
