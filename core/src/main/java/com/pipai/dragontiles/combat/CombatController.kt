@@ -47,19 +47,22 @@ class CombatController(private val combat: Combat, private val eventSystem: Even
         api.sortOpenPool()
     }
 
-    fun runTurn() {
+    suspend fun runTurn() {
         combat.turnNumber += 1
         combat.enemies.forEach {
             it.runTurn(api)
         }
-        eventSystem.dispatch(TurnStartEvent(combat.turnNumber))
+        if (combat.turnNumber > 1) {
+            api.queryOpenPoolDraw()
+        }
         if (combat.hero.handSize > combat.hand.size) {
             api.draw(combat.hero.handSize - combat.hand.size)
         }
         api.sortHand()
+        eventSystem.dispatch(TurnStartEvent(combat.turnNumber))
     }
 
-    fun endTurn() {
+    suspend fun endTurn() {
         eventSystem.dispatch(TurnEndEvent(combat.turnNumber))
         combat.incomingAttacks.toList().forEach {
             api.updateCountdownAttack(it)

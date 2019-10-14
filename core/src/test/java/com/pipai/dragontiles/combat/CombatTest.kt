@@ -5,12 +5,13 @@ import com.pipai.dragontiles.hero.Hero
 import com.pipai.dragontiles.spells.CastParams
 import com.pipai.dragontiles.spells.Invoke
 import com.pipai.test.libgdx.GdxMockedTest
+import kotlinx.coroutines.runBlocking
 import net.mostlyoriginal.api.event.common.EventSystem
 import org.junit.Assert
 import org.junit.Test
 import java.util.*
 
-class CombatTest : GdxMockedTest() {
+class CombatTest : CombatBackendTest(QueryHandler()) {
     @Test
     fun testCombat() {
         val flameTurtle = FlameTurtle()
@@ -18,14 +19,15 @@ class CombatTest : GdxMockedTest() {
                 Hero("Elementalist", 80, 80, 15, mutableListOf(Invoke(false))),
                 mutableListOf(flameTurtle))
 
-        val controller = CombatController(combat, EventSystem())
+        val controller = CombatController(combat, sEvent)
         controller.initCombat()
 
         // Full tile set amount is 136
         Assert.assertEquals(9, combat.openPool.size)
         Assert.assertEquals(127, combat.drawPile.size)
 
-        controller.runTurn()
+        runBlocking { controller.runTurn() }
+
         Assert.assertEquals(9, combat.openPool.size)
         Assert.assertEquals(15, combat.hand.size)
         Assert.assertEquals(112, combat.drawPile.size)
@@ -54,9 +56,9 @@ class CombatTest : GdxMockedTest() {
                 Hero("Elementalist", 80, 80, 15, mutableListOf(Invoke(true))),
                 mutableListOf(flameTurtle))
 
-        val controller = CombatController(combat, EventSystem())
+        val controller = CombatController(combat, sEvent)
         controller.initCombat()
-        controller.runTurn()
+        runBlocking { controller.runTurn() }
 
         val invoke = controller.api.spellInstances.first()
         invoke.fill(listOf(controller.api.combat.hand.first()))

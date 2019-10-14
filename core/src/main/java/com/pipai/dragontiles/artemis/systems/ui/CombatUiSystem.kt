@@ -14,7 +14,9 @@ import com.pipai.dragontiles.DragonTilesGame
 import com.pipai.dragontiles.artemis.components.*
 import com.pipai.dragontiles.artemis.systems.NoProcessingSystem
 import com.pipai.dragontiles.artemis.systems.combat.CombatControllerSystem
+import com.pipai.dragontiles.artemis.systems.rendering.FullScreenColorRenderingSystem
 import com.pipai.dragontiles.combat.Combat
+import com.pipai.dragontiles.combat.QueryTilesEvent
 import com.pipai.dragontiles.data.TileInstance
 import com.pipai.dragontiles.gui.SpellCard
 import com.pipai.dragontiles.gui.SpellComponentList
@@ -22,6 +24,9 @@ import com.pipai.dragontiles.spells.CastParams
 import com.pipai.dragontiles.spells.SpellInstance
 import com.pipai.dragontiles.spells.TargetType
 import com.pipai.dragontiles.utils.*
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlin.coroutines.resume
 import kotlin.math.min
 
 class CombatUiSystem(private val game: DragonTilesGame,
@@ -44,6 +49,7 @@ class CombatUiSystem(private val game: DragonTilesGame,
     private var selectedSpellNumber: Int? = null
     private var mouseFollowEntityId: Int? = null
 
+    private var queryTilesEvent: QueryTilesEvent? = null
     private val stateMachine = DefaultStateMachine<CombatUiSystem, CombatUiState>(this, CombatUiState.ROOT)
 
     private val mEnemy by mapper<EnemyComponent>()
@@ -52,6 +58,7 @@ class CombatUiSystem(private val game: DragonTilesGame,
     private val mSprite by mapper<SpriteComponent>()
 
     private val sCombat by system<CombatControllerSystem>()
+    private val sFsTexture by system<FullScreenColorRenderingSystem>()
 
     override fun initialize() {
         rootTable.setFillParent(true)
@@ -118,6 +125,11 @@ class CombatUiSystem(private val game: DragonTilesGame,
         stateMachine.changeState(CombatUiState.ROOT)
     }
 
+    fun queryTiles(event: QueryTilesEvent) {
+        queryTilesEvent = event
+        stateMachine.changeState(CombatUiState.QUERY_TILES)
+    }
+
     override fun keyDown(keycode: Int): Boolean {
         when (keycode) {
             Keys.ESCAPE -> {
@@ -138,8 +150,13 @@ class CombatUiSystem(private val game: DragonTilesGame,
                 when (stateMachine.currentState) {
                     CombatUiState.ROOT -> {
                         stateMachine.changeState(CombatUiState.DISABLED)
-                        sCombat.controller.endTurn()
+                        GlobalScope.launch {
+                            sCombat.controller.endTurn()
+                        }
                         return true
+                    }
+                    CombatUiState.QUERY_TILES -> {
+                        queryTilesEvent!!.continuation.resume(listOf())
                     }
                     else -> {
                     }
@@ -318,9 +335,18 @@ class CombatUiSystem(private val game: DragonTilesGame,
                 uiSystem.mouseFollowEntityId = null
             }
         },
+        QUERY_TILES() {
+            override fun enter(uiSystem: CombatUiSystem) {
+                uiSystem.sFsTexture.fadeIn(10)
+            }
+
+            override fun exit(uiSystem: CombatUiSystem) {
+                uiSystem.sFsTexture.fadeOut(10)
+            }
+        },
         DISABLED() {
             override fun enter(uiSystem: CombatUiSystem) {
-                uiSystem.spells.forEach { _, spellCard ->
+                uiSystem.spells.forEach { (_, spellCard) ->
                     spellCard.update()
                     spellCard.disable()
                 }

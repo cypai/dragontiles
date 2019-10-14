@@ -4,13 +4,17 @@ import com.artemis.BaseSystem
 import com.pipai.dragontiles.DragonTilesGame
 import com.pipai.dragontiles.artemis.systems.ui.CombatUiSystem
 import com.pipai.dragontiles.combat.*
+import com.pipai.dragontiles.utils.getLogger
 import com.pipai.dragontiles.utils.system
 import net.mostlyoriginal.api.event.common.Subscribe
 
 class CombatAnimationSystem(private val game: DragonTilesGame) : BaseSystem(), AnimationObserver {
 
+    private val logger = getLogger()
+
     private var animating = false
     private val animationQueue: MutableList<Animation> = mutableListOf()
+    private var turnRunning = false
 
     private val sUi by system<CombatUiSystem>()
 
@@ -18,7 +22,9 @@ class CombatAnimationSystem(private val game: DragonTilesGame) : BaseSystem(), A
         if (!animating && animationQueue.isNotEmpty()) {
             animating = true
             sUi.disable()
-            animationQueue.first().startAnimation()
+            val animation = animationQueue.first()
+            animation.startAnimation()
+            logger.info("$animation started")
         }
     }
 
@@ -31,9 +37,19 @@ class CombatAnimationSystem(private val game: DragonTilesGame) : BaseSystem(), A
     override fun notify(animation: Animation) {
         animationQueue.remove(animation)
         animating = false
-        if (animationQueue.isEmpty()) {
+        if (animationQueue.isEmpty() && turnRunning) {
             sUi.enable()
         }
+    }
+
+    @Subscribe
+    fun handleTurnStartEvent(ev: TurnStartEvent) {
+        turnRunning = true
+    }
+
+    @Subscribe
+    fun handleTurnEndEvent(ev: TurnEndEvent) {
+        turnRunning = false
     }
 
     @Subscribe
@@ -97,4 +113,10 @@ class CombatAnimationSystem(private val game: DragonTilesGame) : BaseSystem(), A
         }
         queueAnimation(batch)
     }
+
+    @Subscribe
+    fun handleSelectQuery(ev: QueryTilesEvent) {
+        queueAnimation(QueryTilesAnimation(ev))
+    }
+
 }

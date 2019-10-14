@@ -5,11 +5,15 @@ import com.pipai.dragontiles.data.Element
 import com.pipai.dragontiles.data.TileInstance
 import com.pipai.dragontiles.enemies.Enemy
 import com.pipai.dragontiles.spells.SpellInstance
+import com.pipai.dragontiles.utils.getLogger
 import net.mostlyoriginal.api.event.common.EventSystem
+import kotlin.coroutines.suspendCoroutine
 
 class CombatApi(val combat: Combat,
                 val spellInstances: List<SpellInstance>,
                 private val eventSystem: EventSystem) {
+
+    private val logger = getLogger()
 
     private var nextId = 0
 
@@ -34,6 +38,16 @@ class CombatApi(val combat: Combat,
             }
         }
         eventSystem.dispatch(DrawEvent(drawnTiles))
+    }
+
+    fun drawFromOpenPool(tiles: List<TileInstance>) {
+        val drawnTiles: MutableList<Pair<TileInstance, Int>> = mutableListOf()
+        tiles.forEach {
+            combat.openPool.remove(it)
+            combat.hand.add(it)
+            drawnTiles.add(Pair(it, combat.hand.size))
+        }
+        eventSystem.dispatch(DrawFromOpenPoolEvent(drawnTiles))
     }
 
     fun sortHand() {
@@ -127,6 +141,17 @@ class CombatApi(val combat: Combat,
 
     fun changeEnemyStatusIncrement(id: Int, status: Status, increment: Int) {
         changeEnemyStatus(id, status, (combat.enemyStatus[id]!![status] ?: 0) + increment)
+    }
+
+    suspend fun queryTiles(text: String, tiles: List<TileInstance>, minAmount: Int, maxAmount: Int): List<TileInstance> {
+        return suspendCoroutine {
+            eventSystem.dispatch(QueryTilesEvent(text, tiles, minAmount, maxAmount, it))
+        }
+    }
+
+    suspend fun queryOpenPoolDraw() {
+        val tiles = queryTiles("Select tiles to draw from the Open Pool", combat.openPool, 0, Int.MAX_VALUE)
+        drawFromOpenPool(tiles)
     }
 
 }

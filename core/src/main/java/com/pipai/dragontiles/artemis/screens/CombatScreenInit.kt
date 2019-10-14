@@ -15,6 +15,8 @@ import com.pipai.dragontiles.artemis.components.XYComponent
 import com.pipai.dragontiles.artemis.systems.combat.CombatControllerSystem
 import com.pipai.dragontiles.artemis.systems.ui.CombatUiSystem
 import com.pipai.dragontiles.utils.enemyAssetPath
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 @Wire
 class CombatScreenInit(private val game: DragonTilesGame, private val world: World) {
@@ -56,7 +58,9 @@ class CombatScreenInit(private val game: DragonTilesGame, private val world: Wor
             cEnemy.setByEnemy(it)
         }
 
-        sController.controller.runTurn()
+        GlobalScope.launch {
+            sController.controller.runTurn()
+        }
     }
 
 }
