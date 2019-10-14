@@ -56,7 +56,7 @@ class CombatAnimationSystem(private val game: DragonTilesGame) : BaseSystem(), A
     fun handleDrawEvent(ev: DrawEvent) {
         val batch = BatchAnimation()
         ev.tiles.forEach {
-            batch.addToBatch(DrawTileAnimation(it.first, it.second))
+            batch.addToBatch(DrawTileAnimation(it.first, it.second, game.tileSkin))
         }
         queueAnimation(batch)
     }
@@ -70,7 +70,7 @@ class CombatAnimationSystem(private val game: DragonTilesGame) : BaseSystem(), A
     fun handleOpenDrawEvent(ev: DrawToOpenPoolEvent) {
         val batch = BatchAnimation()
         ev.tiles.forEach {
-            batch.addToBatch(DrawToOpenPoolAnimation(it.first, it.second))
+            batch.addToBatch(DrawToOpenPoolAnimation(it.first, it.second, game.tileSkin))
         }
         queueAnimation(batch)
     }

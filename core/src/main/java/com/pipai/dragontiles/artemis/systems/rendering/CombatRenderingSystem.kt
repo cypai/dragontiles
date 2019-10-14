@@ -27,12 +27,6 @@ class CombatRenderingSystem(private val game: DragonTilesGame) : BaseSystem() {
         batch.color = Color.WHITE
         batch.setBlendFunction(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA)
         batch.begin()
-        world.fetch(allOf(XYComponent::class, TileComponent::class))
-                .forEach {
-                    val region = game.tileSkin.regionFor(mTile.get(it)!!.tile.tile)
-                    val cXy = mXy.get(it)
-                    batch.draw(region, cXy.x, cXy.y)
-                }
         world.fetch(allOf(XYComponent::class, SpriteComponent::class))
                 .forEach {
                     val sprite = mSprite.get(it).sprite
