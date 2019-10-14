@@ -2,6 +2,7 @@ package com.pipai.dragontiles.artemis.systems.animation
 
 import com.artemis.BaseSystem
 import com.pipai.dragontiles.DragonTilesGame
+import com.pipai.dragontiles.artemis.systems.combat.CombatControllerSystem
 import com.pipai.dragontiles.artemis.systems.ui.CombatUiSystem
 import com.pipai.dragontiles.combat.*
 import com.pipai.dragontiles.utils.getLogger
@@ -17,6 +18,7 @@ class CombatAnimationSystem(private val game: DragonTilesGame) : BaseSystem(), A
     private var turnRunning = false
 
     private val sUi by system<CombatUiSystem>()
+    private val sCombat by system<CombatControllerSystem>()
 
     override fun processSystem() {
         if (!animating && animationQueue.isNotEmpty()) {
@@ -63,7 +65,10 @@ class CombatAnimationSystem(private val game: DragonTilesGame) : BaseSystem(), A
 
     @Subscribe
     fun handleDrawFromOpenPoolEvent(ev: DrawFromOpenPoolEvent) {
-        queueAnimation(AdjustHandAnimation(ev.tiles))
+        val batch = BatchAnimation()
+        batch.addToBatch(AdjustHandAnimation(ev.tiles))
+        batch.addToBatch(AdjustOpenPoolAnimation(sCombat.combat.openPool))
+        queueAnimation(batch)
     }
 
     @Subscribe

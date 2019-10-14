@@ -20,7 +20,7 @@ class DrawToOpenPoolAnimation(private val tile: TileInstance,
         cPath.endpoints.add(Vector2())
         cPath.endpoints.add(Vector2(64f + 32f * poolLocation, 128f))
         cPath.interpolation = Interpolation.pow3Out
-        cPath.maxT = 20
+        cPath.maxT = 30
         cPath.onEnd = EndStrategy.REMOVE
         cPath.onEndpoint = { endAnimation() }
     }

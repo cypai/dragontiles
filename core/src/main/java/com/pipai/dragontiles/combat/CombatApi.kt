@@ -34,7 +34,7 @@ class CombatApi(val combat: Combat,
                 combat.discardPile.add(tile)
             } else {
                 combat.hand.add(tile)
-                drawnTiles.add(Pair(tile, combat.hand.size))
+                drawnTiles.add(Pair(tile, combat.hand.size - 1))
             }
         }
         eventSystem.dispatch(DrawEvent(drawnTiles))
@@ -45,7 +45,7 @@ class CombatApi(val combat: Combat,
         tiles.forEach {
             combat.openPool.remove(it)
             combat.hand.add(it)
-            drawnTiles.add(Pair(it, combat.hand.size))
+            drawnTiles.add(Pair(it, combat.hand.size - 1))
         }
         eventSystem.dispatch(DrawFromOpenPoolEvent(drawnTiles))
     }
@@ -60,7 +60,7 @@ class CombatApi(val combat: Combat,
         repeat(amount) {
             val tile = combat.drawPile.removeAt(0)
             combat.openPool.add(tile)
-            drawnTiles.add(Pair(tile, combat.openPool.size))
+            drawnTiles.add(Pair(tile, combat.openPool.size - 1))
         }
         eventSystem.dispatch(DrawToOpenPoolEvent(drawnTiles))
     }

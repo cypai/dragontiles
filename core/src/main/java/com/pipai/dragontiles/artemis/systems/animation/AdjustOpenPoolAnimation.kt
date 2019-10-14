@@ -21,7 +21,7 @@ class AdjustOpenPoolAnimation(private val openPool: List<TileInstance>) : Animat
             val entityId = sTileId.getEntityId(tile.id)
             val cPath = mPath.create(entityId)
             cPath.endpoints.add(mXy.get(entityId).toVector2())
-            cPath.endpoints.add(Vector2(64f + 32f * (index + 1), 128f))
+            cPath.endpoints.add(Vector2(64f + 32f * index, 128f))
             cPath.interpolation = Interpolation.pow3Out
             cPath.maxT = 20
             cPath.onEnd = EndStrategy.REMOVE

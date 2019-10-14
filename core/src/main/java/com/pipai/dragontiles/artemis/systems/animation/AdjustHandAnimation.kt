@@ -21,7 +21,7 @@ class AdjustHandAnimation(private val tileLocations: List<Pair<TileInstance, Int
             val entityId = sTileId.getEntityId(tile.id)
             val cPath = mPath.create(entityId)
             cPath.endpoints.add(mXy.get(entityId).toVector2())
-            cPath.endpoints.add(Vector2(64f + 32f * (index + 1), 0f))
+            cPath.endpoints.add(Vector2(64f + 32f * index, 0f))
             cPath.interpolation = Interpolation.pow3Out
             cPath.maxT = 20
             cPath.onEnd = EndStrategy.REMOVE
