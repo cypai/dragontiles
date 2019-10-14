@@ -10,10 +10,7 @@ import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.utils.viewport.ScreenViewport
 import com.pipai.dragontiles.DragonTilesGame
-import com.pipai.dragontiles.artemis.systems.MutualDestroySystem
-import com.pipai.dragontiles.artemis.systems.PathInterpolationSystem
-import com.pipai.dragontiles.artemis.systems.TimerSystem
-import com.pipai.dragontiles.artemis.systems.XyInterpolationSystem
+import com.pipai.dragontiles.artemis.systems.*
 import com.pipai.dragontiles.artemis.systems.combat.AttackCircleSystem
 import com.pipai.dragontiles.artemis.systems.animation.CombatAnimationSystem
 import com.pipai.dragontiles.artemis.systems.combat.CombatControllerSystem
@@ -52,7 +49,8 @@ class CombatScreen(game: DragonTilesGame, combat: Combat) : Screen {
                         MouseFollowLineSystem(game.gameConfig),
                         AttackCircleSystem(),
 
-                        InputProcessingSystem())
+                        InputProcessingSystem(),
+                        ClickableSystem(game.gameConfig))
                 .with(-1,
                         CombatUiSystem(game, combat, stage),
                         FullScreenColorRenderingSystem(game))
@@ -64,6 +62,7 @@ class CombatScreen(game: DragonTilesGame, combat: Combat) : Screen {
 
         val inputProcessor = world.getSystem(InputProcessingSystem::class.java)
         inputProcessor.addAlwaysOnProcessor(world.getSystem(MouseFollowLineSystem::class.java))
+        inputProcessor.addAlwaysOnProcessor(world.getSystem(ClickableSystem::class.java))
         inputProcessor.addAlwaysOnProcessor(world.getSystem(CombatUiSystem::class.java))
         inputProcessor.addAlwaysOnProcessor(stage)
         inputProcessor.addAlwaysOnProcessor(ExitInputProcessor())

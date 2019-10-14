@@ -4,11 +4,11 @@ import com.artemis.Component
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.g2d.Sprite
-import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.math.Interpolation
 import com.badlogic.gdx.math.Vector2
 import com.pipai.dragontiles.misc.RadialSprite
 import com.pipai.dragontiles.utils.MathUtils
+import net.mostlyoriginal.api.event.common.Event
 
 class XYComponent : Component() {
     var x = 0f
@@ -106,4 +106,8 @@ class SpriteComponent : Component() {
 
 class RadialSpriteComponent : Component() {
     lateinit var sprite: RadialSprite
+}
+
+class ClickableComponent : Component() {
+    lateinit var event: Event
 }

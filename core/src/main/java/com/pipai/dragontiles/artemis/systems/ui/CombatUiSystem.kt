@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.pipai.dragontiles.DragonTilesGame
 import com.pipai.dragontiles.artemis.components.*
+import com.pipai.dragontiles.artemis.events.TileClickEvent
 import com.pipai.dragontiles.artemis.systems.NoProcessingSystem
 import com.pipai.dragontiles.artemis.systems.combat.CombatControllerSystem
 import com.pipai.dragontiles.artemis.systems.rendering.FullScreenColorRenderingSystem
@@ -26,6 +27,7 @@ import com.pipai.dragontiles.spells.TargetType
 import com.pipai.dragontiles.utils.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import net.mostlyoriginal.api.event.common.Subscribe
 import kotlin.coroutines.resume
 import kotlin.math.min
 
@@ -128,6 +130,17 @@ class CombatUiSystem(private val game: DragonTilesGame,
     fun queryTiles(event: QueryTilesEvent) {
         queryTilesEvent = event
         stateMachine.changeState(CombatUiState.QUERY_TILES)
+    }
+
+    @Subscribe
+    fun tileClicked(event: TileClickEvent) {
+        when (stateMachine.currentState) {
+            CombatUiState.QUERY_TILES -> {
+                println(event.entityId)
+            }
+            else -> {
+            }
+        }
     }
 
     override fun keyDown(keycode: Int): Boolean {
