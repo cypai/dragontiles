@@ -24,6 +24,8 @@ enum class ScreenResolution(val width: Int, val height: Int, val description: St
     fun toDebugString(): String {
         return "ScreenResolution[${width}x$height, $description]"
     }
+
+    fun combatZoneWidth(): Float = 2 * handSideBuffer + handMaxSize
 }
 
 private val DEFAULT_RESOLUTION = ScreenResolution.RES_1280_720

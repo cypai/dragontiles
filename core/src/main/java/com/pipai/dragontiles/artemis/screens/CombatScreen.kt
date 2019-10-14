@@ -19,6 +19,7 @@ import com.pipai.dragontiles.artemis.systems.input.ExitInputProcessor
 import com.pipai.dragontiles.artemis.systems.input.InputProcessingSystem
 import com.pipai.dragontiles.artemis.systems.rendering.CombatRenderingSystem
 import com.pipai.dragontiles.artemis.systems.rendering.FullScreenColorRenderingSystem
+import com.pipai.dragontiles.artemis.systems.ui.CombatQueryUiSystem
 import com.pipai.dragontiles.artemis.systems.ui.CombatUiSystem
 import com.pipai.dragontiles.artemis.systems.ui.MouseFollowLineSystem
 import com.pipai.dragontiles.combat.Combat
@@ -55,7 +56,8 @@ class CombatScreen(game: DragonTilesGame, combat: Combat) : Screen {
                         CombatUiSystem(game, combat, stage),
                         FullScreenColorRenderingSystem(game))
                 .with(-2,
-                        CombatRenderingSystem(game))
+                        CombatRenderingSystem(game),
+                        CombatQueryUiSystem(game))
                 .build()
 
         world = World(config)
@@ -64,6 +66,8 @@ class CombatScreen(game: DragonTilesGame, combat: Combat) : Screen {
         inputProcessor.addAlwaysOnProcessor(world.getSystem(MouseFollowLineSystem::class.java))
         inputProcessor.addAlwaysOnProcessor(world.getSystem(ClickableSystem::class.java))
         inputProcessor.addAlwaysOnProcessor(world.getSystem(CombatUiSystem::class.java))
+        inputProcessor.addAlwaysOnProcessor(world.getSystem(CombatQueryUiSystem::class.java))
+        inputProcessor.addAlwaysOnProcessor(world.getSystem(CombatQueryUiSystem::class.java).stage)
         inputProcessor.addAlwaysOnProcessor(stage)
         inputProcessor.addAlwaysOnProcessor(ExitInputProcessor())
         inputProcessor.activateInput()

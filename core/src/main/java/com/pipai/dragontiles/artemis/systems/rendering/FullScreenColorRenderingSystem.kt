@@ -14,7 +14,7 @@ class FullScreenColorRenderingSystem(game: DragonTilesGame) : BaseSystem() {
 
     private var texture: Texture = skin.get("white", Texture::class.java)
     private var bgColor: Color = Color(0f, 0f, 0f, 0f)
-    private var targetAlpha = 0.5f
+    private var targetAlpha = 0.7f
 
     private var t = 0f
     private var maxT = 0f

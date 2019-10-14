@@ -9,6 +9,9 @@ class TileSkin(texture: Texture) {
     private val lifeRegions: MutableMap<LifeType, TextureRegion> = mutableMapOf()
     private val starRegions: MutableMap<StarType, TextureRegion> = mutableMapOf()
 
+    val width = 32
+    val height = 48
+
     init {
         for (x in 1..9) {
             elementalRegions[Pair(Suit.FIRE, x)] = TextureRegion(texture, 32 * (x - 1), 0, 32, 48)

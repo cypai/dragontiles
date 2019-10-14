@@ -144,14 +144,22 @@ class CombatApi(val combat: Combat,
     }
 
     suspend fun queryTiles(text: String, tiles: List<TileInstance>, minAmount: Int, maxAmount: Int): List<TileInstance> {
-        return suspendCoroutine {
-            eventSystem.dispatch(QueryTilesEvent(text, tiles, minAmount, maxAmount, it))
+        return if (maxAmount == 0 || maxAmount < minAmount) {
+            listOf()
+        } else {
+            suspendCoroutine {
+                eventSystem.dispatch(QueryTilesEvent(text, tiles, minAmount, maxAmount, it))
+            }
         }
     }
 
     suspend fun queryOpenPoolDraw() {
-        val tiles = queryTiles("Select tiles to draw from the Open Pool", combat.openPool, 0, Int.MAX_VALUE)
-        drawFromOpenPool(tiles)
+        val amount = combat.hero.handSize - combat.hand.size
+        val tiles = queryTiles("Select up to $amount tile(s) to draw from the Open Pool",
+                combat.openPool, 0, amount)
+        if (tiles.isNotEmpty()) {
+            drawFromOpenPool(tiles)
+        }
     }
 
 }

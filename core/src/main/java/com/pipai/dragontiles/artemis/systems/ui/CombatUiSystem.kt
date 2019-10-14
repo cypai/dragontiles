@@ -12,7 +12,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.pipai.dragontiles.DragonTilesGame
 import com.pipai.dragontiles.artemis.components.*
-import com.pipai.dragontiles.artemis.events.TileClickEvent
 import com.pipai.dragontiles.artemis.systems.NoProcessingSystem
 import com.pipai.dragontiles.artemis.systems.combat.CombatControllerSystem
 import com.pipai.dragontiles.artemis.systems.rendering.FullScreenColorRenderingSystem
@@ -27,8 +26,6 @@ import com.pipai.dragontiles.spells.TargetType
 import com.pipai.dragontiles.utils.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import net.mostlyoriginal.api.event.common.Subscribe
-import kotlin.coroutines.resume
 import kotlin.math.min
 
 class CombatUiSystem(private val game: DragonTilesGame,
@@ -66,12 +63,11 @@ class CombatUiSystem(private val game: DragonTilesGame,
         rootTable.setFillParent(true)
         stage.addActor(rootTable)
 
-        val leftSide = 2 * config.resolution.handSideBuffer + config.resolution.handMaxSize
         rootTable.add()
-                .width(leftSide)
+                .width(config.resolution.combatZoneWidth())
                 .height(config.resolution.height.toFloat())
         rootTable.add(mainTable)
-                .width(config.resolution.width - leftSide)
+                .width(config.resolution.width - config.resolution.combatZoneWidth())
                 .height(config.resolution.height.toFloat())
         mainTable.background(game.skin.getDrawable("frameDrawable"))
 
@@ -127,22 +123,6 @@ class CombatUiSystem(private val game: DragonTilesGame,
         stateMachine.changeState(CombatUiState.ROOT)
     }
 
-    fun queryTiles(event: QueryTilesEvent) {
-        queryTilesEvent = event
-        stateMachine.changeState(CombatUiState.QUERY_TILES)
-    }
-
-    @Subscribe
-    fun tileClicked(event: TileClickEvent) {
-        when (stateMachine.currentState) {
-            CombatUiState.QUERY_TILES -> {
-                println(event.entityId)
-            }
-            else -> {
-            }
-        }
-    }
-
     override fun keyDown(keycode: Int): Boolean {
         when (keycode) {
             Keys.ESCAPE -> {
@@ -167,9 +147,6 @@ class CombatUiSystem(private val game: DragonTilesGame,
                             sCombat.controller.endTurn()
                         }
                         return true
-                    }
-                    CombatUiState.QUERY_TILES -> {
-                        queryTilesEvent!!.continuation.resume(listOf())
                     }
                     else -> {
                     }
@@ -346,15 +323,6 @@ class CombatUiSystem(private val game: DragonTilesGame,
             override fun exit(uiSystem: CombatUiSystem) {
                 uiSystem.world.delete(uiSystem.mouseFollowEntityId!!)
                 uiSystem.mouseFollowEntityId = null
-            }
-        },
-        QUERY_TILES() {
-            override fun enter(uiSystem: CombatUiSystem) {
-                uiSystem.sFsTexture.fadeIn(10)
-            }
-
-            override fun exit(uiSystem: CombatUiSystem) {
-                uiSystem.sFsTexture.fadeOut(10)
             }
         },
         DISABLED() {

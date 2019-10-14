@@ -62,8 +62,13 @@ class CombatAnimationSystem(private val game: DragonTilesGame) : BaseSystem(), A
     }
 
     @Subscribe
+    fun handleDrawFromOpenPoolEvent(ev: DrawFromOpenPoolEvent) {
+        queueAnimation(AdjustHandAnimation(ev.tiles))
+    }
+
+    @Subscribe
     fun handleHandAdjustedEvent(ev: HandAdjustedEvent) {
-        queueAnimation(AdjustHandAnimation(ev.hand))
+        queueAnimation(AdjustHandAnimation(ev.hand.mapIndexed { index, tileInstance -> Pair(tileInstance, index) }))
     }
 
     @Subscribe
