@@ -7,7 +7,6 @@ import java.util.*
 enum class ScreenResolution(val width: Int, val height: Int, val description: String?,
                             val handSideBuffer: Float, val handMaxSize: Float) {
     // 4:3 Resolutions
-    RES_1024_768(1024, 768, null, 64f, 512f),
     RES_1280_960(1280, 960, null, 64f, 512f),
 
     // 16:10 Resolutions
@@ -27,7 +26,7 @@ enum class ScreenResolution(val width: Int, val height: Int, val description: St
     }
 }
 
-private val DEFAULT_RESOLUTION = ScreenResolution.RES_1024_768
+private val DEFAULT_RESOLUTION = ScreenResolution.RES_1280_720
 
 class GameConfig(val configFile: FileHandle) {
 
