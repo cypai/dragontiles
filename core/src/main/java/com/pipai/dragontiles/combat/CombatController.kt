@@ -63,11 +63,11 @@ class CombatController(private val combat: Combat, private val eventSystem: Even
             api.draw(combat.hero.handSize - combat.hand.size)
         }
         api.sortHand()
-        eventSystem.dispatch(TurnStartEvent(combat.turnNumber))
+        eventBus.suspendDispatch(TurnStartEvent(combat.turnNumber), api)
     }
 
     suspend fun endTurn() {
-        eventSystem.dispatch(TurnEndEvent(combat.turnNumber))
+        eventBus.suspendDispatch(TurnEndEvent(combat.turnNumber), api)
         combat.incomingAttacks.toList().forEach {
             api.updateCountdownAttack(it)
         }

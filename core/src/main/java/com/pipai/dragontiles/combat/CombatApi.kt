@@ -42,7 +42,6 @@ class CombatApi(val combat: Combat,
         if (drawnTiles.isNotEmpty()) {
             combat.hand.addAll(drawnTiles.map { it.first })
             eventBus.suspendDispatch(DrawEvent(drawnTiles), this)
-            eventBus.suspendDispatch(DrawPostEvent(drawnTiles), this)
         }
         if (drawnDiscardTiles.isNotEmpty()) {
             combat.discardPile.addAll(drawnDiscardTiles)
@@ -54,6 +53,7 @@ class CombatApi(val combat: Combat,
         val previous = tileInstance.tile
         tileInstance.tile = tile
         eventBus.dispatch(TileTransformedEvent(tileInstance, previous))
+        sortHand()
     }
 
     fun drawFromOpenPool(tiles: List<TileInstance>) {
