@@ -139,4 +139,13 @@ class CombatAnimationSystem(private val game: DragonTilesGame) : BaseSystem(), A
         queueAnimation(QueryTileOptionsAnimation(ev))
     }
 
+    @Subscribe
+    fun handleGameOver(ev: GameOverEvent) {
+        queueAnimation(GameOverAnimation())
+    }
+
+    @Subscribe
+    fun handleBattleWin(ev: BattleWinEvent) {
+        queueAnimation(BattleWinAnimation())
+    }
 }
