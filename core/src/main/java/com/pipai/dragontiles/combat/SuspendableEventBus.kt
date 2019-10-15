@@ -9,6 +9,11 @@ import kotlin.reflect.full.declaredFunctions
 class SuspendableEventBus(private val eventSystem: EventSystem) {
 
     private val subscriptions: MutableMap<KClass<*>, MutableList<Pair<Any, KFunction<*>>>> = mutableMapOf()
+    private lateinit var api: CombatApi
+
+    fun init(api: CombatApi) {
+        this.api = api
+    }
 
     fun register(o: Any) {
         o::class.declaredFunctions
@@ -25,12 +30,12 @@ class SuspendableEventBus(private val eventSystem: EventSystem) {
         }
     }
 
-    suspend fun suspendDispatch(ev: CombatEvent, api: CombatApi) {
+    suspend fun dispatch(ev: CombatEvent) {
         subscriptions[ev::class]?.forEach { it.second.callSuspend(it.first, ev, api) }
         eventSystem.dispatch(ev)
     }
 
-    fun dispatch(ev: CombatEvent) {
+    fun syncDispatch(ev: CombatEvent) {
         eventSystem.dispatch(ev)
     }
 }

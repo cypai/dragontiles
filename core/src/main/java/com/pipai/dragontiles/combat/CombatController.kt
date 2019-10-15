@@ -1,6 +1,7 @@
 package com.pipai.dragontiles.combat
 
 import com.pipai.dragontiles.data.*
+import kotlinx.coroutines.runBlocking
 import net.mostlyoriginal.api.event.common.EventSystem
 
 class CombatController(private val combat: Combat, private val eventSystem: EventSystem) {
@@ -9,13 +10,14 @@ class CombatController(private val combat: Combat, private val eventSystem: Even
     val api: CombatApi = CombatApi(combat, combat.hero.spells.map { it.createInstance() }.toList(), eventBus)
 
     fun initCombat() {
+        eventBus.init(api)
         combat.enemies.forEach {
             it.preInit(api.nextId())
             it.init()
             combat.enemyStatus[it.id] = mutableMapOf()
         }
         initDrawPile()
-        initOpenPile()
+        runBlocking { initOpenPile() }
         api.spellInstances.forEach {
             eventSystem.registerEvents(it)
         }
@@ -46,7 +48,7 @@ class CombatController(private val combat: Combat, private val eventSystem: Even
         combat.drawPile.shuffle(combat.rng)
     }
 
-    private fun initOpenPile() {
+    private suspend fun initOpenPile() {
         api.drawToOpenPool(9)
         api.sortOpenPool()
     }
@@ -63,11 +65,11 @@ class CombatController(private val combat: Combat, private val eventSystem: Even
             api.draw(combat.hero.handSize - combat.hand.size)
         }
         api.sortHand()
-        eventBus.suspendDispatch(TurnStartEvent(combat.turnNumber), api)
+        eventBus.dispatch(TurnStartEvent(combat.turnNumber))
     }
 
     suspend fun endTurn() {
-        eventBus.suspendDispatch(TurnEndEvent(combat.turnNumber), api)
+        eventBus.dispatch(TurnEndEvent(combat.turnNumber))
         combat.incomingAttacks.toList().forEach {
             api.updateCountdownAttack(it)
         }

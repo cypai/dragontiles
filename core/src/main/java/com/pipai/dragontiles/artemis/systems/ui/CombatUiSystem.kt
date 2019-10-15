@@ -216,7 +216,9 @@ class CombatUiSystem(private val game: DragonTilesGame,
             }
             TargetType.NONE -> {
                 spellInstance.fill(components)
-                spellInstance.cast(CastParams(listOf()), sCombat.controller.api)
+                GlobalScope.launch {
+                    spellInstance.cast(CastParams(listOf()), sCombat.controller.api)
+                }
             }
         }
     }
@@ -241,7 +243,9 @@ class CombatUiSystem(private val game: DragonTilesGame,
                 world.fetch(allOf(EnemyComponent::class, XYComponent::class, SpriteComponent::class)).forEach {
                     val cSprite = mSprite.get(it)
                     if (cSprite.sprite.boundingRectangle.contains(screenX.toFloat(), config.resolution.height - screenY.toFloat())) {
-                        getSelectedSpell().cast(CastParams(listOf(mEnemy.get(it).enemy)), sCombat.controller.api)
+                        GlobalScope.launch {
+                            getSelectedSpell().cast(CastParams(listOf(mEnemy.get(it).enemy)), sCombat.controller.api)
+                        }
                         return true
                     }
                 }

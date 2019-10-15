@@ -19,6 +19,6 @@ abstract class Enemy {
     open fun init() {
     }
 
-    abstract fun runTurn(api: CombatApi)
+    abstract suspend fun runTurn(api: CombatApi)
 
 }

@@ -11,7 +11,7 @@ class FlameTurtle : Enemy() {
 
     override val hpMax: Int = 30
 
-    override fun runTurn(api: CombatApi) {
+    override suspend fun runTurn(api: CombatApi) {
         api.enemyAttack(this,
                 CountdownAttack(api.nextId(), this.id, 8, 1, Element.FIRE, 2, "", ""))
     }

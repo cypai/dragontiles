@@ -19,7 +19,7 @@ class InvokeImpl(spell: Spell) : SpellInstance(spell, if (spell.upgraded) 2 else
 
     override fun baseDamage(): Int = 2
 
-    override fun onCast(params: CastParams, api: CombatApi) {
+    override suspend fun onCast(params: CastParams, api: CombatApi) {
         api.attack(params.targets.first(), elemental(components()), baseDamage())
     }
 }
@@ -36,7 +36,7 @@ class StrikeImpl(spell: Spell) : SpellInstance(spell, 1) {
 
     override fun baseDamage(): Int = 7
 
-    override fun onCast(params: CastParams, api: CombatApi) {
+    override suspend fun onCast(params: CastParams, api: CombatApi) {
         api.attack(params.targets.first(), elemental(components()), baseDamage() + if (spell.upgraded) 3 else 0)
     }
 }
@@ -65,7 +65,7 @@ class RampStrikeImpl(spell: Spell) : SpellInstance(spell, 1) {
         spellsCasted += 1
     }
 
-    override fun onCast(params: CastParams, api: CombatApi) {
+    override suspend fun onCast(params: CastParams, api: CombatApi) {
         api.attack(params.targets.first(), elemental(components()), baseDamage())
     }
 }
@@ -82,7 +82,7 @@ class BreakImpl(spell: Spell) : SpellInstance(spell, 1) {
 
     override fun baseDamage(): Int = 0
 
-    override fun onCast(params: CastParams, api: CombatApi) {
+    override suspend fun onCast(params: CastParams, api: CombatApi) {
         val status = when (elemental(components())) {
             Element.FIRE -> Status.FIRE_BREAK
             Element.ICE -> Status.ICE_BREAK
@@ -105,7 +105,7 @@ class ConcentrateImpl(spell: Spell) : SpellInstance(spell, 1) {
 
     override fun baseDamage(): Int = 0
 
-    override fun onCast(params: CastParams, api: CombatApi) {
+    override suspend fun onCast(params: CastParams, api: CombatApi) {
         api.changeStatusIncrement(Status.POWER, if (spell.upgraded) 3 else 2)
     }
 }

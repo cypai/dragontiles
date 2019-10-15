@@ -53,7 +53,7 @@ abstract class SpellInstance(
 
     fun ready() = available() && spell.requirement.satisfied(componentSlots)
 
-    fun cast(params: CastParams, api: CombatApi) {
+    suspend fun cast(params: CastParams, api: CombatApi) {
         if (!ready()) {
             logger.error("Attempted to cast without being ready. State: $this")
             return
@@ -64,9 +64,9 @@ abstract class SpellInstance(
         repeated++
     }
 
-    protected abstract fun onCast(params: CastParams, api: CombatApi)
+    protected abstract suspend fun onCast(params: CastParams, api: CombatApi)
 
-    open fun handleComponents(api: CombatApi) {
+    open suspend fun handleComponents(api: CombatApi) {
         api.consume(components())
     }
 

@@ -6,14 +6,11 @@ import com.pipai.dragontiles.data.Tile
 import com.pipai.dragontiles.data.TileInstance
 import com.pipai.dragontiles.enemies.Enemy
 import com.pipai.dragontiles.spells.SpellInstance
-import com.pipai.dragontiles.utils.getLogger
 import kotlin.coroutines.suspendCoroutine
 
 class CombatApi(val combat: Combat,
                 val spellInstances: List<SpellInstance>,
                 private val eventBus: SuspendableEventBus) {
-
-    private val logger = getLogger()
 
     private var nextId = 0
 
@@ -22,7 +19,7 @@ class CombatApi(val combat: Combat,
         return nextId
     }
 
-    fun castSpell(spellInstance: SpellInstance) {
+    suspend fun castSpell(spellInstance: SpellInstance) {
         eventBus.dispatch(SpellCastedEvent(spellInstance))
     }
 
@@ -41,7 +38,7 @@ class CombatApi(val combat: Combat,
         }
         if (drawnTiles.isNotEmpty()) {
             combat.hand.addAll(drawnTiles.map { it.first })
-            eventBus.suspendDispatch(DrawEvent(drawnTiles), this)
+            eventBus.dispatch(DrawEvent(drawnTiles))
         }
         if (drawnDiscardTiles.isNotEmpty()) {
             combat.discardPile.addAll(drawnDiscardTiles)
@@ -49,14 +46,14 @@ class CombatApi(val combat: Combat,
         }
     }
 
-    fun transformTile(tileInstance: TileInstance, tile: Tile) {
+    suspend fun transformTile(tileInstance: TileInstance, tile: Tile) {
         val previous = tileInstance.tile
         tileInstance.tile = tile
         eventBus.dispatch(TileTransformedEvent(tileInstance, previous))
         sortHand()
     }
 
-    fun drawFromOpenPool(tiles: List<TileInstance>) {
+    suspend fun drawFromOpenPool(tiles: List<TileInstance>) {
         val drawnTiles: MutableList<Pair<TileInstance, Int>> = mutableListOf()
         tiles.forEach {
             combat.openPool.remove(it)
@@ -66,12 +63,12 @@ class CombatApi(val combat: Combat,
         eventBus.dispatch(DrawFromOpenPoolEvent(drawnTiles))
     }
 
-    fun sortHand() {
+    suspend fun sortHand() {
         combat.hand.sortWith(compareBy({ it.tile.suit.order }, { it.tile.order() }))
         eventBus.dispatch(HandAdjustedEvent(combat.hand))
     }
 
-    fun drawToOpenPool(amount: Int) {
+    suspend fun drawToOpenPool(amount: Int) {
         val drawnTiles: MutableList<Pair<TileInstance, Int>> = mutableListOf()
         repeat(amount) {
             val tile = combat.drawPile.removeAt(0)
@@ -81,7 +78,7 @@ class CombatApi(val combat: Combat,
         eventBus.dispatch(DrawToOpenPoolEvent(drawnTiles))
     }
 
-    fun sortOpenPool() {
+    suspend fun sortOpenPool() {
         combat.openPool.sortWith(compareBy({ it.tile.suit.order }, { it.tile.order() }))
         eventBus.dispatch(OpenPoolAdjustedEvent(combat.openPool))
     }
@@ -104,21 +101,31 @@ class CombatApi(val combat: Combat,
         return damage
     }
 
-    fun attack(target: Enemy, element: Element, amount: Int) {
+    suspend fun attack(target: Enemy, element: Element, amount: Int) {
         eventBus.dispatch(PlayerAttackEnemyEvent(target, element, amount))
         val damage = calculateTargetDamage(target, element, amount)
-        target.hp -= damage
-        eventBus.dispatch(EnemyDamageEvent(target, damage))
+        dealDamageToEnemy(target, damage)
     }
 
-    fun consume(components: List<TileInstance>) {
+    suspend fun dealDamageToEnemy(enemy: Enemy, damage: Int) {
+        enemy.hp -= damage
+        eventBus.dispatch(EnemyDamageEvent(enemy, damage))
+        if (enemy.hp <= 0) {
+            eventBus.dispatch(EnemyDefeatedEvent(enemy))
+            if (combat.enemies.all { it.hp <= 0 }) {
+                eventBus.dispatch(BattleWinEvent())
+            }
+        }
+    }
+
+    suspend fun consume(components: List<TileInstance>) {
         combat.hand.removeAll(components)
         combat.discardPile.addAll(components)
         eventBus.dispatch(ComponentConsumeEvent(components))
         sortHand()
     }
 
-    fun dealDamageToHero(damage: Int) {
+    suspend fun dealDamageToHero(damage: Int) {
         combat.hero.hp -= damage
         eventBus.dispatch(PlayerDamageEvent(damage))
         if (combat.hero.hp <= 0) {
@@ -126,12 +133,12 @@ class CombatApi(val combat: Combat,
         }
     }
 
-    fun enemyAttack(enemy: Enemy, countdownAttack: CountdownAttack) {
+    suspend fun enemyAttack(enemy: Enemy, countdownAttack: CountdownAttack) {
         combat.incomingAttacks.add(countdownAttack)
         eventBus.dispatch(EnemyCountdownAttackEvent(enemy, countdownAttack))
     }
 
-    fun updateCountdownAttack(countdownAttack: CountdownAttack) {
+    suspend fun updateCountdownAttack(countdownAttack: CountdownAttack) {
         countdownAttack.turnsLeft -= 1
         if (countdownAttack.turnsLeft == 0) {
             combat.incomingAttacks.remove(countdownAttack)
@@ -164,7 +171,7 @@ class CombatApi(val combat: Combat,
             listOf()
         } else {
             suspendCoroutine {
-                eventBus.dispatch(QueryTilesEvent(text, tiles, minAmount, maxAmount, it))
+                eventBus.syncDispatch(QueryTilesEvent(text, tiles, minAmount, maxAmount, it))
             }
         }
     }
@@ -188,7 +195,7 @@ class CombatApi(val combat: Combat,
             listOf()
         } else {
             suspendCoroutine {
-                eventBus.dispatch(QueryTileOptionsEvent(text, displayTile, options, minAmount, maxAmount, it))
+                eventBus.syncDispatch(QueryTileOptionsEvent(text, displayTile, options, minAmount, maxAmount, it))
             }
         }
     }
