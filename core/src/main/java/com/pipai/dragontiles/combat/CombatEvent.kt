@@ -35,7 +35,7 @@ data class PlayerAttackEnemyEvent(val target: Enemy, val element: Element, val a
 
 data class EnemyDamageEvent(val target: Enemy, val amount: Int) : CombatEvent
 
-data class EnemyDefeatedEvent(val target: Enemy) : CombatEvent
+data class EnemyDefeatedEvent(val enemy: Enemy) : CombatEvent
 
 class BattleWinEvent : CombatEvent
 

@@ -92,7 +92,7 @@ class CombatAnimationSystem(private val game: DragonTilesGame) : BaseSystem(), A
 
     @Subscribe
     fun handleEnemyDamageEvent(ev: EnemyDamageEvent) {
-        queueAnimation(DamageAnimation(ev.target, ev.amount))
+        queueAnimation(EnemyDamageAnimation(ev.target, ev.amount))
     }
 
     @Subscribe
@@ -137,6 +137,10 @@ class CombatAnimationSystem(private val game: DragonTilesGame) : BaseSystem(), A
     @Subscribe
     fun handleOptionQuery(ev: QueryTileOptionsEvent) {
         queueAnimation(QueryTileOptionsAnimation(ev))
+    }
+    @Subscribe
+    fun handleEnemyDefeat(ev: EnemyDefeatedEvent) {
+        queueAnimation(EnemyDefeatAnimation(ev.enemy))
     }
 
     @Subscribe
