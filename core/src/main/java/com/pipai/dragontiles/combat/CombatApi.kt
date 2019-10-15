@@ -2,16 +2,16 @@ package com.pipai.dragontiles.combat
 
 import com.pipai.dragontiles.data.CountdownAttack
 import com.pipai.dragontiles.data.Element
+import com.pipai.dragontiles.data.Tile
 import com.pipai.dragontiles.data.TileInstance
 import com.pipai.dragontiles.enemies.Enemy
 import com.pipai.dragontiles.spells.SpellInstance
 import com.pipai.dragontiles.utils.getLogger
-import net.mostlyoriginal.api.event.common.EventSystem
 import kotlin.coroutines.suspendCoroutine
 
 class CombatApi(val combat: Combat,
                 val spellInstances: List<SpellInstance>,
-                private val eventSystem: EventSystem) {
+                private val eventBus: SuspendableEventBus) {
 
     private val logger = getLogger()
 
@@ -23,21 +23,37 @@ class CombatApi(val combat: Combat,
     }
 
     fun castSpell(spellInstance: SpellInstance) {
-        eventSystem.dispatch(SpellCastedEvent(spellInstance))
+        eventBus.dispatch(SpellCastedEvent(spellInstance))
     }
 
-    fun draw(amount: Int) {
+    suspend fun draw(amount: Int) {
         val drawnTiles: MutableList<Pair<TileInstance, Int>> = mutableListOf()
+        val drawnDiscardTiles: MutableList<TileInstance> = mutableListOf()
+        var currentSize = combat.hand.size
         repeat(amount) {
             val tile = combat.drawPile.removeAt(0)
-            if (combat.hand.size >= combat.hero.handSize) {
-                combat.discardPile.add(tile)
+            if (currentSize >= combat.hero.handSize) {
+                drawnDiscardTiles.add(tile)
             } else {
-                combat.hand.add(tile)
-                drawnTiles.add(Pair(tile, combat.hand.size - 1))
+                drawnTiles.add(Pair(tile, currentSize))
+                currentSize += 1
             }
         }
-        eventSystem.dispatch(DrawEvent(drawnTiles))
+        if (drawnTiles.isNotEmpty()) {
+            combat.hand.addAll(drawnTiles.map { it.first })
+            eventBus.suspendDispatch(DrawEvent(drawnTiles), this)
+            eventBus.suspendDispatch(DrawPostEvent(drawnTiles), this)
+        }
+        if (drawnDiscardTiles.isNotEmpty()) {
+            combat.discardPile.addAll(drawnDiscardTiles)
+            eventBus.dispatch(DrawDiscardedEvent(drawnDiscardTiles))
+        }
+    }
+
+    fun transformTile(tileInstance: TileInstance, tile: Tile) {
+        val previous = tileInstance.tile
+        tileInstance.tile = tile
+        eventBus.dispatch(TileTransformedEvent(tileInstance, previous))
     }
 
     fun drawFromOpenPool(tiles: List<TileInstance>) {
@@ -47,12 +63,12 @@ class CombatApi(val combat: Combat,
             combat.hand.add(it)
             drawnTiles.add(Pair(it, combat.hand.size - 1))
         }
-        eventSystem.dispatch(DrawFromOpenPoolEvent(drawnTiles))
+        eventBus.dispatch(DrawFromOpenPoolEvent(drawnTiles))
     }
 
     fun sortHand() {
         combat.hand.sortWith(compareBy({ it.tile.suit.order }, { it.tile.order() }))
-        eventSystem.dispatch(HandAdjustedEvent(combat.hand))
+        eventBus.dispatch(HandAdjustedEvent(combat.hand))
     }
 
     fun drawToOpenPool(amount: Int) {
@@ -62,12 +78,12 @@ class CombatApi(val combat: Combat,
             combat.openPool.add(tile)
             drawnTiles.add(Pair(tile, combat.openPool.size - 1))
         }
-        eventSystem.dispatch(DrawToOpenPoolEvent(drawnTiles))
+        eventBus.dispatch(DrawToOpenPoolEvent(drawnTiles))
     }
 
     fun sortOpenPool() {
         combat.openPool.sortWith(compareBy({ it.tile.suit.order }, { it.tile.order() }))
-        eventSystem.dispatch(OpenPoolAdjustedEvent(combat.openPool))
+        eventBus.dispatch(OpenPoolAdjustedEvent(combat.openPool))
     }
 
     fun calculateBaseDamage(amount: Int): Int {
@@ -89,41 +105,41 @@ class CombatApi(val combat: Combat,
     }
 
     fun attack(target: Enemy, element: Element, amount: Int) {
-        eventSystem.dispatch(PlayerAttackEnemyEvent(target, element, amount))
+        eventBus.dispatch(PlayerAttackEnemyEvent(target, element, amount))
         val damage = calculateTargetDamage(target, element, amount)
         target.hp -= damage
-        eventSystem.dispatch(EnemyDamageEvent(target, damage))
+        eventBus.dispatch(EnemyDamageEvent(target, damage))
     }
 
     fun consume(components: List<TileInstance>) {
         combat.hand.removeAll(components)
         combat.discardPile.addAll(components)
-        eventSystem.dispatch(ComponentConsumeEvent(components))
+        eventBus.dispatch(ComponentConsumeEvent(components))
         sortHand()
     }
 
     fun dealDamageToHero(damage: Int) {
         combat.hero.hp -= damage
-        eventSystem.dispatch(PlayerDamageEvent(damage))
+        eventBus.dispatch(PlayerDamageEvent(damage))
         if (combat.hero.hp <= 0) {
-            eventSystem.dispatch(GameOverEvent())
+            eventBus.dispatch(GameOverEvent())
         }
     }
 
     fun enemyAttack(enemy: Enemy, countdownAttack: CountdownAttack) {
         combat.incomingAttacks.add(countdownAttack)
-        eventSystem.dispatch(EnemyCountdownAttackEvent(enemy, countdownAttack))
+        eventBus.dispatch(EnemyCountdownAttackEvent(enemy, countdownAttack))
     }
 
     fun updateCountdownAttack(countdownAttack: CountdownAttack) {
         countdownAttack.turnsLeft -= 1
         if (countdownAttack.turnsLeft == 0) {
             combat.incomingAttacks.remove(countdownAttack)
-            eventSystem.dispatch(CountdownAttackResolveEvent(countdownAttack))
+            eventBus.dispatch(CountdownAttackResolveEvent(countdownAttack))
             val damage = countdownAttack.baseDamage * countdownAttack.multiplier
             dealDamageToHero(damage)
         } else {
-            eventSystem.dispatch(CountdownAttackTickEvent(countdownAttack))
+            eventBus.dispatch(CountdownAttackTickEvent(countdownAttack))
         }
     }
 
@@ -148,7 +164,7 @@ class CombatApi(val combat: Combat,
             listOf()
         } else {
             suspendCoroutine {
-                eventSystem.dispatch(QueryTilesEvent(text, tiles, minAmount, maxAmount, it))
+                eventBus.dispatch(QueryTilesEvent(text, tiles, minAmount, maxAmount, it))
             }
         }
     }

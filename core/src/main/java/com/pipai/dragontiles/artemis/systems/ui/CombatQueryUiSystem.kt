@@ -133,6 +133,8 @@ class CombatQueryUiSystem(private val game: DragonTilesGame) : BaseSystem(), Inp
         }
     }
 
+
+
     private fun confirm() {
         if (stateMachine.currentState != CombatQueryUiState.DISABLED) {
             queryTilesEvent!!.continuation.resume(selectedTiles.map { mTile.get(it).tile })

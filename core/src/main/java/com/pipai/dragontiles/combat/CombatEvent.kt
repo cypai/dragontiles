@@ -19,6 +19,12 @@ data class TurnEndEvent(val turnNumber: Int) : CombatEvent
 
 data class DrawEvent(val tiles: List<Pair<TileInstance, Int>>) : CombatEvent
 
+data class DrawPostEvent(val tiles: List<Pair<TileInstance, Int>>) : CombatEvent
+
+data class DrawDiscardedEvent(val tiles: List<TileInstance>) : CombatEvent
+
+data class TileTransformedEvent(val tile: TileInstance, val previous: Tile) : CombatEvent
+
 data class DrawFromOpenPoolEvent(val tiles: List<Pair<TileInstance, Int>>) : CombatEvent
 
 data class HandAdjustedEvent(val hand: List<TileInstance>) : CombatEvent

@@ -35,7 +35,7 @@ sealed class Tile {
     }
 }
 
-data class TileInstance(val tile: Tile, val id: Int)
+data class TileInstance(var tile: Tile, val id: Int)
 
 fun successor(tile: Tile): Tile {
     return when (tile) {

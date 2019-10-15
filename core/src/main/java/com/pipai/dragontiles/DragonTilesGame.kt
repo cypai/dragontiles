@@ -29,6 +29,7 @@ import com.pipai.dragontiles.data.SpellStrings
 import com.pipai.dragontiles.data.TileSkin
 import com.pipai.dragontiles.enemies.FlameTurtle
 import com.pipai.dragontiles.hero.Hero
+import com.pipai.dragontiles.relics.Transmuter
 import com.pipai.dragontiles.spells.Break
 import com.pipai.dragontiles.spells.Concentrate
 import com.pipai.dragontiles.spells.Invoke
@@ -107,11 +108,15 @@ class DragonTilesGame(val gameConfig: GameConfig) : Game() {
 
         setScreen(CombatScreen(this,
                 Combat(Random(),
-                        Hero("Elementalist", 80, 80, 15, mutableListOf(
-                                Invoke(false),
-                                Strike(false),
-                                Break(false),
-                                Concentrate(false))),
+                        Hero("Elementalist", 80, 80, 15,
+                                mutableListOf(
+                                        Invoke(false),
+                                        Strike(false),
+                                        Break(false),
+                                        Concentrate(false)),
+                                mutableListOf(
+                                        Transmuter())
+                        ),
                         mutableListOf(FlameTurtle()))))
     }
 
