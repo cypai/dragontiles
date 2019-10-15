@@ -178,4 +178,23 @@ class CombatApi(val combat: Combat,
         }
     }
 
+    suspend fun queryTileOptions(text: String,
+                                 displayTile: TileInstance?,
+                                 options: List<Tile>,
+                                 minAmount: Int,
+                                 maxAmount: Int): List<Tile> {
+
+        return if (maxAmount == 0 || maxAmount < minAmount) {
+            listOf()
+        } else {
+            suspendCoroutine {
+                eventBus.dispatch(QueryTileOptionsEvent(text, displayTile, options, minAmount, maxAmount, it))
+            }
+        }
+    }
+
+    suspend fun queryTransform(tile: TileInstance, options: List<Tile>): Tile {
+        return queryTileOptions("Transform this tile", tile, options, 1, 1).first()
+    }
+
 }

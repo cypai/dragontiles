@@ -6,6 +6,7 @@ import com.badlogic.gdx.InputProcessor
 import com.badlogic.gdx.ai.fsm.DefaultStateMachine
 import com.badlogic.gdx.ai.fsm.State
 import com.badlogic.gdx.ai.msg.Telegram
+import com.badlogic.gdx.graphics.g2d.Sprite
 import com.badlogic.gdx.math.Interpolation
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.scenes.scene2d.InputEvent
@@ -15,13 +16,13 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.pipai.dragontiles.DragonTilesGame
-import com.pipai.dragontiles.artemis.components.EndStrategy
-import com.pipai.dragontiles.artemis.components.PathInterpolationComponent
-import com.pipai.dragontiles.artemis.components.TileComponent
-import com.pipai.dragontiles.artemis.components.XYComponent
+import com.pipai.dragontiles.artemis.components.*
 import com.pipai.dragontiles.artemis.events.TileClickEvent
+import com.pipai.dragontiles.artemis.systems.combat.TileIdSystem
 import com.pipai.dragontiles.artemis.systems.rendering.FullScreenColorRenderingSystem
+import com.pipai.dragontiles.combat.QueryTileOptionsEvent
 import com.pipai.dragontiles.combat.QueryTilesEvent
+import com.pipai.dragontiles.data.Tile
 import com.pipai.dragontiles.utils.mapper
 import com.pipai.dragontiles.utils.system
 import net.mostlyoriginal.api.event.common.Subscribe
@@ -32,16 +33,21 @@ class CombatQueryUiSystem(private val game: DragonTilesGame) : BaseSystem(), Inp
     private val mPath by mapper<PathInterpolationComponent>()
     private val mXy by mapper<XYComponent>()
     private val mTile by mapper<TileComponent>()
+    private val mSprite by mapper<SpriteComponent>()
+    private val mClick by mapper<ClickableComponent>()
 
     private val sFsTexture by system<FullScreenColorRenderingSystem>()
+    private val sTileId by system<TileIdSystem>()
 
     private val tilePrevXy: MutableMap<Int, Vector2> = mutableMapOf()
     private val selectedTiles: MutableList<Int> = mutableListOf()
+    private val tileOptions: MutableMap<Int, Tile> = mutableMapOf()
 
     private val spacing = 16f
 
     private val stateMachine = DefaultStateMachine<CombatQueryUiSystem, CombatQueryUiState>(this, CombatQueryUiState.DISABLED)
     private var queryTilesEvent: QueryTilesEvent? = null
+    private var queryTileOptionsEvent: QueryTileOptionsEvent? = null
 
     val stage = Stage()
     private val table = Table()
@@ -56,7 +62,7 @@ class CombatQueryUiSystem(private val game: DragonTilesGame) : BaseSystem(), Inp
                 .center()
         table.row()
         table.add()
-                .height(game.gameConfig.resolution.height / 2f)
+                .height(game.gameConfig.resolution.height * 2f / 3f)
         table.row()
         table.add(confirmBtn)
                 .pad(8f)
@@ -80,16 +86,17 @@ class CombatQueryUiSystem(private val game: DragonTilesGame) : BaseSystem(), Inp
         cPath.endpoints.add(cXy.toVector2())
         cPath.endpoints.add(position)
         cPath.interpolation = Interpolation.exp10Out
+        cPath.t = 0
         cPath.maxT = 15
         cPath.onEnd = EndStrategy.REMOVE
     }
 
-    private fun selectedPosition(index: Int): Vector2 {
+    private fun selectedPosition(index: Int, total: Int): Vector2 {
         val width = game.gameConfig.resolution.width
-        val totalSpacing = spacing * (selectedTiles.size - 1)
-        val totalWidth = totalSpacing + game.tileSkin.width * selectedTiles.size
+        val totalSpacing = spacing * (total - 1)
+        val totalWidth = totalSpacing + game.tileSkin.width * total
         val firstX = (width - totalWidth) / 2f
-        return Vector2(firstX + index * (spacing + game.tileSkin.width), game.gameConfig.resolution.height / 2f)
+        return Vector2(firstX + index * (spacing + game.tileSkin.width), game.gameConfig.resolution.height / 3f)
     }
 
     fun moveTileToSelected(entityId: Int) {
@@ -106,7 +113,7 @@ class CombatQueryUiSystem(private val game: DragonTilesGame) : BaseSystem(), Inp
 
     private fun reposition() {
         selectedTiles.forEachIndexed { index, tileEntityId ->
-            moveTile(tileEntityId, selectedPosition(index))
+            moveTile(tileEntityId, selectedPosition(index, selectedTiles.size))
         }
     }
 
@@ -114,6 +121,29 @@ class CombatQueryUiSystem(private val game: DragonTilesGame) : BaseSystem(), Inp
         queryTilesEvent = event
         label.setText(event.text)
         stateMachine.changeState(CombatQueryUiState.QUERY_TILES)
+    }
+
+    fun moveTileToDisplay(entityId: Int) {
+        moveTile(entityId, Vector2(game.gameConfig.resolution.width / 2f, game.gameConfig.resolution.height * 2f / 3f))
+    }
+
+    fun queryTileOptions(event: QueryTileOptionsEvent) {
+        queryTileOptionsEvent = event
+        label.setText(event.text)
+        event.displayTile?.let {
+            moveTileToDisplay(sTileId.getEntityId(it.id))
+        }
+        event.options.forEachIndexed { index, tile ->
+            val entityId = world.create()
+            tileOptions[entityId] = tile
+            val cSprite = mSprite.create(entityId)
+            cSprite.sprite = Sprite(game.tileSkin.regionFor(tile))
+            val cXy = mXy.create(entityId)
+            cXy.setXy(selectedPosition(index, event.options.size))
+            val cClick = mClick.create(entityId)
+            cClick.event = TileClickEvent(entityId)
+        }
+        stateMachine.changeState(CombatQueryUiState.QUERY_OPTIONS)
     }
 
     @Subscribe
@@ -128,12 +158,18 @@ class CombatQueryUiSystem(private val game: DragonTilesGame) : BaseSystem(), Inp
                     }
                 }
             }
+            CombatQueryUiState.QUERY_OPTIONS -> {
+                if (event.entityId in tileOptions) {
+                    if (queryTileOptionsEvent!!.minAmount == 1 && queryTileOptionsEvent!!.maxAmount == 1) {
+                        queryTileOptionsEvent!!.continuation.resume(listOf(tileOptions[event.entityId]!!))
+                        stateMachine.changeState(CombatQueryUiState.DISABLED)
+                    }
+                }
+            }
             else -> {
             }
         }
     }
-
-
 
     private fun confirm() {
         if (stateMachine.currentState != CombatQueryUiState.DISABLED) {
@@ -174,6 +210,18 @@ class CombatQueryUiSystem(private val game: DragonTilesGame) : BaseSystem(), Inp
 
             override fun exit(uiSystem: CombatQueryUiSystem) {
                 uiSystem.sFsTexture.fadeOut(10)
+            }
+        },
+        QUERY_OPTIONS {
+            override fun enter(uiSystem: CombatQueryUiSystem) {
+                uiSystem.sFsTexture.fadeIn(10)
+                uiSystem.stage.addActor(uiSystem.table)
+            }
+
+            override fun exit(uiSystem: CombatQueryUiSystem) {
+                uiSystem.sFsTexture.fadeOut(10)
+                uiSystem.tileOptions.forEach { uiSystem.world.delete(it.key) }
+                uiSystem.tileOptions.clear()
             }
         },
         DISABLED {

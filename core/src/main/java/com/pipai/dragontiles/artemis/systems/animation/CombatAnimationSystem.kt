@@ -125,8 +125,18 @@ class CombatAnimationSystem(private val game: DragonTilesGame) : BaseSystem(), A
     }
 
     @Subscribe
+    fun handleTransformation(ev: TileTransformedEvent) {
+        queueAnimation(TileTransformAnimation(ev.tile, game.tileSkin))
+    }
+
+    @Subscribe
     fun handleSelectQuery(ev: QueryTilesEvent) {
         queueAnimation(QueryTilesAnimation(ev))
+    }
+
+    @Subscribe
+    fun handleOptionQuery(ev: QueryTileOptionsEvent) {
+        queueAnimation(QueryTileOptionsAnimation(ev))
     }
 
 }

@@ -56,3 +56,10 @@ data class QueryTilesEvent(val text: String,
                            val minAmount: Int,
                            val maxAmount: Int,
                            val continuation: Continuation<List<TileInstance>>) : CombatEvent
+
+data class QueryTileOptionsEvent(val text: String,
+                                 val displayTile: TileInstance?,
+                                 val options: List<Tile>,
+                                 val minAmount: Int,
+                                 val maxAmount: Int,
+                                 val continuation: Continuation<List<Tile>>) : CombatEvent
