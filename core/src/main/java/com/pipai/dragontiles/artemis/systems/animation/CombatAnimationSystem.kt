@@ -11,8 +11,6 @@ import net.mostlyoriginal.api.event.common.Subscribe
 
 class CombatAnimationSystem(private val game: DragonTilesGame) : BaseSystem(), AnimationObserver {
 
-    private val logger = getLogger()
-
     private var animating = false
     private val animationQueue: MutableList<Animation> = mutableListOf()
     private var turnRunning = false
@@ -26,7 +24,6 @@ class CombatAnimationSystem(private val game: DragonTilesGame) : BaseSystem(), A
             sUi.disable()
             val animation = animationQueue.first()
             animation.startAnimation()
-            logger.info("$animation started")
         }
     }
 

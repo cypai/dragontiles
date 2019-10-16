@@ -1,5 +1,6 @@
 package com.pipai.dragontiles.combat
 
+import com.pipai.dragontiles.utils.getLogger
 import net.mostlyoriginal.api.event.common.EventSystem
 import kotlin.reflect.KClass
 import kotlin.reflect.KFunction
@@ -7,6 +8,7 @@ import kotlin.reflect.full.callSuspend
 import kotlin.reflect.full.declaredFunctions
 
 class SuspendableEventBus(private val eventSystem: EventSystem) {
+    private val logger = getLogger()
 
     private val subscriptions: MutableMap<KClass<*>, MutableList<Pair<Any, KFunction<*>>>> = mutableMapOf()
     private lateinit var api: CombatApi
@@ -31,6 +33,7 @@ class SuspendableEventBus(private val eventSystem: EventSystem) {
     }
 
     suspend fun dispatch(ev: CombatEvent) {
+        logger.info("Dispatch $ev")
         subscriptions[ev::class]?.forEach { it.second.callSuspend(it.first, ev, api) }
         eventSystem.dispatch(ev)
     }

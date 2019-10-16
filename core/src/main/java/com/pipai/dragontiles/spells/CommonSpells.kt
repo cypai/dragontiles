@@ -89,7 +89,7 @@ class Break(upgraded: Boolean) : Spell(upgraded) {
             Element.LIGHTNING -> Status.LIGHTNING_BREAK
             else -> throw IllegalStateException("Attempted to cast Break with ${components()}")
         }
-        api.changeStatusIncrement(status, if (upgraded) 4 else 3)
+        api.changeEnemyStatusIncrement(params.targets.first().id, status, if (upgraded) 4 else 3)
     }
 }
 
