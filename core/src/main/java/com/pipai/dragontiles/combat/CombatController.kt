@@ -17,7 +17,7 @@ class CombatController(private val runData: RunData,
         combat.enemies.forEach {
             it.preInit(api.nextId())
             it.init()
-            combat.enemyStatus[it.id] = mutableMapOf()
+            combat.enemyStatus[it.id] = StatusData()
         }
         initDrawPile()
         runBlocking { initOpenPile() }
@@ -74,9 +74,6 @@ class CombatController(private val runData: RunData,
 
     suspend fun endTurn() {
         eventBus.dispatch(TurnEndEvent(combat.turnNumber))
-        combat.incomingAttacks.toList().forEach {
-            api.updateCountdownAttack(it)
-        }
         api.spells.forEach {
             it.turnReset()
         }

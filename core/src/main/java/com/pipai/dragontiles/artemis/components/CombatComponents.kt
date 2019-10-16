@@ -3,7 +3,7 @@ package com.pipai.dragontiles.artemis.components
 import com.artemis.Component
 import com.badlogic.gdx.Input.Keys
 import com.badlogic.gdx.graphics.Color
-import com.pipai.dragontiles.data.CountdownAttack
+import com.pipai.dragontiles.combat.CountdownAttack
 import com.pipai.dragontiles.data.Element
 import com.pipai.dragontiles.data.TileInstance
 import com.pipai.dragontiles.enemies.Enemy
@@ -56,13 +56,17 @@ class EnemyComponent : Component() {
 class AttackCircleComponent : Component() {
     var id = 0
     var enemyId = 0
-    var baseDamage = 0
-    var multiplier = 1
+    var displayedSpellPower = 0
+    var damagingAttack = true
+    var attackPower = 0
+    var effectPower = 0
+    var counteredAttackPower = 0
+    var counteredEffectPower = 0
     var turnsLeft = 0
     var maxTurns = 0
     lateinit var element: Element
     lateinit var name: String
-    lateinit var description: String
+    var description: String? = null
 
     lateinit var color: Color
     var t = 0f
@@ -70,9 +74,16 @@ class AttackCircleComponent : Component() {
 
     fun setByCountdown(countdownAttack: CountdownAttack) {
         id = countdownAttack.id
-        enemyId = countdownAttack.enemyId
-        baseDamage = countdownAttack.baseDamage
-        multiplier = countdownAttack.multiplier
+        displayedSpellPower = if (countdownAttack.isDamaging()) {
+            countdownAttack.calcAttackPower()
+        } else {
+            countdownAttack.calcEffectPower()
+        }
+        damagingAttack = countdownAttack.isDamaging()
+        attackPower = countdownAttack.attackPower
+        effectPower = countdownAttack.effectPower
+        counteredAttackPower = countdownAttack.counteredAttackPower
+        counteredEffectPower = countdownAttack.counteredEffectPower
         turnsLeft = countdownAttack.turnsLeft
         maxTurns = countdownAttack.turnsLeft
         element = countdownAttack.element

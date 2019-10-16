@@ -1,6 +1,5 @@
 package com.pipai.dragontiles.combat
 
-import com.pipai.dragontiles.data.CountdownAttack
 import com.pipai.dragontiles.data.Element
 import com.pipai.dragontiles.data.Tile
 import com.pipai.dragontiles.data.TileInstance

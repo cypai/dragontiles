@@ -1,6 +1,5 @@
 package com.pipai.dragontiles.combat
 
-import com.pipai.dragontiles.data.CountdownAttack
 import com.pipai.dragontiles.data.Element
 import com.pipai.dragontiles.data.Tile
 import com.pipai.dragontiles.data.TileInstance
@@ -85,22 +84,26 @@ class CombatApi(val runData: RunData,
         eventBus.dispatch(OpenPoolAdjustedEvent(combat.openPool))
     }
 
-    fun calculateBaseDamage(amount: Int): Int {
-        return amount + (combat.heroStatus[Status.POWER] ?: 0)
+    fun calculateBaseDamage(attackerStatus: StatusData, amount: Int): Int {
+        return amount + attackerStatus[Status.POWER]
     }
 
-    fun calculateTargetDamage(target: Enemy, element: Element, amount: Int): Int {
-        var damage = calculateBaseDamage(amount)
+    fun calculateActualDamage(attackerStatus: StatusData, targetStatus: StatusData, element: Element, amount: Int): Int {
+        var damage = calculateBaseDamage(attackerStatus, amount)
         val broken = when (element) {
-            Element.FIRE -> combat.enemyStatus[target.id]!![Status.FIRE_BREAK] != null
-            Element.ICE -> combat.enemyStatus[target.id]!![Status.ICE_BREAK] != null
-            Element.LIGHTNING -> combat.enemyStatus[target.id]!![Status.LIGHTNING_BREAK] != null
+            Element.FIRE -> targetStatus.has(Status.FIRE_BREAK)
+            Element.ICE -> targetStatus.has(Status.ICE_BREAK)
+            Element.LIGHTNING -> targetStatus.has(Status.LIGHTNING_BREAK)
             else -> false
         }
         if (broken) {
             damage *= 2
         }
         return damage
+    }
+
+    fun calculateTargetDamage(target: Enemy, element: Element, amount: Int): Int {
+        return calculateActualDamage(combat.heroStatus, combat.enemyStatus[target.id]!!, element, amount)
     }
 
     suspend fun attack(target: Enemy, element: Element, amount: Int) {
@@ -136,18 +139,25 @@ class CombatApi(val runData: RunData,
         }
     }
 
-    suspend fun enemyAttack(enemy: Enemy, countdownAttack: CountdownAttack) {
-        combat.incomingAttacks.add(countdownAttack)
+    fun fetchAttack(enemyId: Int): CountdownAttack? {
+        return combat.enemyAttacks[enemyId]
+    }
+
+    suspend fun enemyCreateAttack(enemy: Enemy, countdownAttack: CountdownAttack) {
+        combat.enemyAttacks[enemy.id] = countdownAttack
         eventBus.dispatch(EnemyCountdownAttackEvent(enemy, countdownAttack))
     }
 
-    suspend fun updateCountdownAttack(countdownAttack: CountdownAttack) {
+    suspend fun countdownAttackTick(enemyId: Int) {
+        val countdownAttack = combat.enemyAttacks[enemyId]!!
         countdownAttack.turnsLeft -= 1
         if (countdownAttack.turnsLeft == 0) {
-            combat.incomingAttacks.remove(countdownAttack)
+            combat.enemyAttacks.remove(enemyId)
             eventBus.dispatch(CountdownAttackResolveEvent(countdownAttack))
-            val damage = countdownAttack.baseDamage * countdownAttack.multiplier
+            val baseDamage = countdownAttack.attackPower - countdownAttack.counteredAttackPower
+            val damage = calculateActualDamage(combat.enemyStatus[enemyId]!!, combat.heroStatus, countdownAttack.element, baseDamage)
             dealDamageToHero(damage)
+            countdownAttack.activateEffects(this)
         } else {
             eventBus.dispatch(CountdownAttackTickEvent(countdownAttack))
         }
@@ -158,7 +168,7 @@ class CombatApi(val runData: RunData,
     }
 
     fun changeStatusIncrement(status: Status, increment: Int) {
-        changeStatus(status, (combat.heroStatus[status] ?: 0) + increment)
+        combat.heroStatus.increment(status, increment)
     }
 
     fun changeEnemyStatus(id: Int, status: Status, amount: Int) {
@@ -166,7 +176,7 @@ class CombatApi(val runData: RunData,
     }
 
     fun changeEnemyStatusIncrement(id: Int, status: Status, increment: Int) {
-        changeEnemyStatus(id, status, (combat.enemyStatus[id]!![status] ?: 0) + increment)
+        combat.enemyStatus[id]!!.increment(status, increment)
     }
 
     suspend fun queryTiles(text: String, tiles: List<TileInstance>, minAmount: Int, maxAmount: Int): List<TileInstance> {

@@ -4,7 +4,7 @@ import com.artemis.ComponentMapper
 import com.badlogic.gdx.graphics.Color
 import com.pipai.dragontiles.artemis.components.*
 import com.pipai.dragontiles.artemis.systems.combat.AttackCircleSystem
-import com.pipai.dragontiles.data.CountdownAttack
+import com.pipai.dragontiles.combat.CountdownAttack
 import com.pipai.dragontiles.enemies.Enemy
 import com.pipai.dragontiles.misc.RadialSprite
 import com.pipai.dragontiles.utils.allOf
@@ -33,9 +33,10 @@ class CreateAttackCircleAnimation(private val enemy: Enemy,
 
         val id = world.create()
         val cAttackCircle = mAttackCircle.create(id)
+        cAttackCircle.enemyId = enemy.id
         cAttackCircle.setByCountdown(attack)
         sAttackCircle.handleNewAttackCircle(id)
-        val index = sAttackCircle.getCircleIndex(attack.enemyId, attack.id)
+        val index = sAttackCircle.getCircleIndex(enemy.id, attack.id)
         mXy.create(id).setXy(cEnemyXy.x + 64f * index, cEnemyXy.y - 100f)
         val angularIncrement = 360f / cAttackCircle.maxTurns
         val cRadial = mRadial.create(id)

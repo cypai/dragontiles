@@ -31,7 +31,7 @@ abstract class Spell(var upgraded: Boolean) {
             "!r" -> repeatableMax - repeated
             "!d" -> {
                 return if (params.targets.isEmpty()) {
-                    api.calculateBaseDamage(baseDamage())
+                    api.calculateBaseDamage(api.combat.heroStatus, baseDamage())
                 } else {
                     api.calculateTargetDamage(params.targets.first(), elemental(components()), baseDamage())
                 }

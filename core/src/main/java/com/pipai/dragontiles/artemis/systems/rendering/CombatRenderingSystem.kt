@@ -1,10 +1,8 @@
 package com.pipai.dragontiles.artemis.systems.rendering
 
 import com.artemis.BaseSystem
-import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.GL20
-import com.badlogic.gdx.graphics.GL30
 import com.pipai.dragontiles.DragonTilesGame
 import com.pipai.dragontiles.artemis.components.*
 import com.pipai.dragontiles.utils.allOf
@@ -45,7 +43,12 @@ class CombatRenderingSystem(private val game: DragonTilesGame) : BaseSystem() {
                 .forEach {
                     val cXy = mXy.get(it)
                     val cAttackCircle = mAttackCircle.get(it)
-                    game.font.draw(batch, cAttackCircle.baseDamage.toString(), cXy.x + 26f, cXy.y + 36f)
+                    val text = if (cAttackCircle.damagingAttack) {
+                        cAttackCircle.displayedSpellPower.toString()
+                    } else {
+                        "(${cAttackCircle.displayedSpellPower})"
+                    }
+                    game.font.draw(batch, text, cXy.x + 26f, cXy.y + 36f)
                 }
         batch.end()
         batch.setBlendFunction(GL20.GL_SRC_ALPHA, GL20.GL_ONE)

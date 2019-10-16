@@ -3,7 +3,7 @@ package com.pipai.dragontiles.artemis.systems.animation
 import com.artemis.ComponentMapper
 import com.pipai.dragontiles.artemis.components.AttackCircleComponent
 import com.pipai.dragontiles.artemis.components.RadialSpriteComponent
-import com.pipai.dragontiles.data.CountdownAttack
+import com.pipai.dragontiles.combat.CountdownAttack
 import com.pipai.dragontiles.utils.allOf
 import com.pipai.dragontiles.utils.fetch
 
