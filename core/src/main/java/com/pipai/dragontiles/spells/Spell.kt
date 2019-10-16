@@ -20,7 +20,7 @@ abstract class Spell(var upgraded: Boolean) {
     var repeated = 0
     var exhausted = false
 
-    val data: MutableMap<String, Int> = mutableMapOf()
+    private val data: MutableMap<String, Int> = mutableMapOf()
 
     protected abstract fun newClone(upgraded: Boolean): Spell
 
@@ -61,8 +61,14 @@ abstract class Spell(var upgraded: Boolean) {
         api.consume(components())
     }
 
-    fun turnReset(api: CombatApi) {
+    fun turnReset() {
         repeated = 0
+    }
+
+    fun combatReset() {
+        exhausted = false
+        repeated = 0
+        data.clear()
     }
 
     fun fill(components: List<TileInstance>) {

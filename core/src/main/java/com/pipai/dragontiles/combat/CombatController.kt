@@ -22,6 +22,7 @@ class CombatController(private val runData: RunData,
         initDrawPile()
         runBlocking { initOpenPile() }
         api.spells.forEach {
+            it.combatReset()
             eventBus.register(it)
         }
         runData.hero.relics.forEach {
@@ -77,7 +78,7 @@ class CombatController(private val runData: RunData,
             api.updateCountdownAttack(it)
         }
         api.spells.forEach {
-            it.turnReset(api)
+            it.turnReset()
         }
         runTurn()
     }
