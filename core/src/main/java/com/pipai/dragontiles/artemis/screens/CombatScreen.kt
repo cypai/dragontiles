@@ -58,7 +58,7 @@ class CombatScreen(game: DragonTilesGame, runData: RunData, combat: Combat) : Sc
                         FullScreenColorRenderingSystem(game))
                 .with(-2,
                         CombatRenderingSystem(game),
-                        CombatQueryUiSystem(game))
+                        CombatQueryUiSystem(game, runData))
                 .build()
 
         world = World(config)

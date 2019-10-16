@@ -115,6 +115,7 @@ class CombatApi(val runData: RunData,
         if (enemy.hp <= 0) {
             eventBus.dispatch(EnemyDefeatedEvent(enemy))
             if (combat.enemies.all { it.hp <= 0 }) {
+                combat.heroStatus.clear()
                 eventBus.dispatch(BattleWinEvent())
             }
         }

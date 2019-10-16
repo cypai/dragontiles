@@ -18,17 +18,24 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.pipai.dragontiles.DragonTilesGame
 import com.pipai.dragontiles.artemis.components.*
 import com.pipai.dragontiles.artemis.events.TileClickEvent
+import com.pipai.dragontiles.artemis.screens.CombatScreen
+import com.pipai.dragontiles.artemis.systems.combat.CombatControllerSystem
 import com.pipai.dragontiles.artemis.systems.combat.TileIdSystem
 import com.pipai.dragontiles.artemis.systems.rendering.FullScreenColorRenderingSystem
+import com.pipai.dragontiles.combat.Combat
 import com.pipai.dragontiles.combat.QueryTileOptionsEvent
 import com.pipai.dragontiles.combat.QueryTilesEvent
 import com.pipai.dragontiles.data.Tile
+import com.pipai.dragontiles.dungeon.RunData
+import com.pipai.dragontiles.enemies.FlameTurtle
+import com.pipai.dragontiles.gui.SpellCard
+import com.pipai.dragontiles.spells.*
 import com.pipai.dragontiles.utils.mapper
 import com.pipai.dragontiles.utils.system
 import net.mostlyoriginal.api.event.common.Subscribe
 import kotlin.coroutines.resume
 
-class CombatQueryUiSystem(private val game: DragonTilesGame) : BaseSystem(), InputProcessor {
+class CombatQueryUiSystem(private val game: DragonTilesGame, private val runData: RunData) : BaseSystem(), InputProcessor {
 
     private val mPath by mapper<PathInterpolationComponent>()
     private val mXy by mapper<XYComponent>()
@@ -38,6 +45,7 @@ class CombatQueryUiSystem(private val game: DragonTilesGame) : BaseSystem(), Inp
 
     private val sFsTexture by system<FullScreenColorRenderingSystem>()
     private val sTileId by system<TileIdSystem>()
+    private val sCombat by system<CombatControllerSystem>()
 
     private val tilePrevXy: MutableMap<Int, Vector2> = mutableMapOf()
     private val selectedTiles: MutableList<Int> = mutableListOf()
@@ -178,6 +186,47 @@ class CombatQueryUiSystem(private val game: DragonTilesGame) : BaseSystem(), Inp
         }
     }
 
+    fun generateRewards() {
+        stateMachine.changeState(CombatQueryUiState.REWARDS)
+        val spells = listOf(
+                Strike(rngUpgrade()),
+                RampStrike(rngUpgrade()),
+                Break(rngUpgrade()),
+                Concentrate(rngUpgrade())
+        )
+        val rewards = spells.shuffled().subList(0, 3)
+        generateRewardsTable(rewards)
+    }
+
+    private fun rngUpgrade() = runData.rng.nextInt(100) < 20
+
+    private fun generateRewardsTable(spells: List<Spell>) {
+        val rewardsTable = Table()
+        spells.forEach { spell ->
+            val spellCard = SpellCard(game, spell, null, game.skin, sCombat.controller.api)
+            spellCard.addClickCallback {
+                runData.hero.spells.add(spell)
+                game.screen = CombatScreen(game, runData, Combat(mutableListOf(FlameTurtle())))
+            }
+            rewardsTable.add(spellCard)
+        }
+        label.setText("Rewards! Choose a spell.")
+
+        table.clearChildren()
+        table.setFillParent(true)
+        table.add(label)
+                .top()
+                .padTop(64f)
+                .center()
+        table.row()
+        table.add(rewardsTable)
+                .height(game.gameConfig.resolution.height * 2f / 3f)
+                .width(game.gameConfig.resolution.width * 3f / 4f)
+        table.row()
+
+        stage.addActor(table)
+    }
+
     override fun keyDown(keycode: Int): Boolean {
         when (keycode) {
             Input.Keys.ENTER -> {
@@ -222,6 +271,12 @@ class CombatQueryUiSystem(private val game: DragonTilesGame) : BaseSystem(), Inp
                 uiSystem.sFsTexture.fadeOut(10)
                 uiSystem.tileOptions.forEach { uiSystem.world.delete(it.key) }
                 uiSystem.tileOptions.clear()
+            }
+        },
+        REWARDS {
+            override fun enter(uiSystem: CombatQueryUiSystem) {
+                uiSystem.sFsTexture.fadeIn(10)
+                uiSystem.stage.addActor(uiSystem.table)
             }
         },
         DISABLED {
