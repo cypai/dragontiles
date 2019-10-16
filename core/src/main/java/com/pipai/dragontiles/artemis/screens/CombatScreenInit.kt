@@ -42,8 +42,8 @@ class CombatScreenInit(private val game: DragonTilesGame, private val world: Wor
 
         sController.controller.initCombat()
 
-        sController.controller.api.spellInstances.forEachIndexed { index, spellInstance ->
-            sUi.setSpell(index + 1, spellInstance)
+        sController.controller.api.spells.forEachIndexed { index, spell ->
+            sUi.setSpell(index + 1, spell)
         }
 
         sController.combat.enemies.forEach {

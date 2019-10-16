@@ -7,7 +7,7 @@ import net.mostlyoriginal.api.event.common.EventSystem
 class CombatController(private val combat: Combat, private val eventSystem: EventSystem) {
 
     private val eventBus = SuspendableEventBus(eventSystem)
-    val api: CombatApi = CombatApi(combat, combat.hero.spells.map { it.createInstance() }.toList(), eventBus)
+    val api: CombatApi = CombatApi(combat, combat.hero.spells.toList(), eventBus)
 
     fun initCombat() {
         eventBus.init(api)
@@ -18,8 +18,8 @@ class CombatController(private val combat: Combat, private val eventSystem: Even
         }
         initDrawPile()
         runBlocking { initOpenPile() }
-        api.spellInstances.forEach {
-            eventSystem.registerEvents(it)
+        api.spells.forEach {
+            eventBus.register(it)
         }
         combat.hero.relics.forEach {
             eventBus.register(it)
@@ -73,7 +73,7 @@ class CombatController(private val combat: Combat, private val eventSystem: Even
         combat.incomingAttacks.toList().forEach {
             api.updateCountdownAttack(it)
         }
-        api.spellInstances.forEach {
+        api.spells.forEach {
             it.turnReset(api)
         }
         runTurn()

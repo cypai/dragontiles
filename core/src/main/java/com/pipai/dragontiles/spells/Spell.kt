@@ -9,29 +9,20 @@ import com.pipai.dragontiles.utils.getLogger
 import org.apache.commons.lang3.builder.ToStringBuilder
 
 abstract class Spell(var upgraded: Boolean) {
+    private val logger = getLogger()
+
     abstract val id: String
     abstract val requirement: ComponentRequirement
     abstract val targetType: TargetType
 
-    abstract fun createInstance(): SpellInstance
-}
-
-enum class TargetType {
-    SINGLE, AOE, NONE
-}
-
-abstract class SpellInstance(
-        val spell: Spell,
-        var repeatableMax: Int) {
-
-    private val logger = getLogger()
+    abstract var repeatableMax: Int
 
     var repeated = 0
     var exhausted = false
 
-    val componentSlots: List<ComponentSlot> = generateSlots(spell.requirement.slotAmount)
-
     val data: MutableMap<String, Int> = mutableMapOf()
+
+    protected abstract fun newClone(upgraded: Boolean): Spell
 
     open fun baseDamage(): Int = 0
 
@@ -51,7 +42,7 @@ abstract class SpellInstance(
 
     fun available() = !exhausted && repeated < repeatableMax
 
-    fun ready() = available() && spell.requirement.satisfied(componentSlots)
+    fun ready() = available() && requirement.satisfied(requirement.componentSlots)
 
     suspend fun cast(params: CastParams, api: CombatApi) {
         if (!ready()) {
@@ -75,32 +66,33 @@ abstract class SpellInstance(
     }
 
     fun fill(components: List<TileInstance>) {
-        componentSlots.zip(components) { slot, tile ->
+        requirement.componentSlots.zip(components) { slot, tile ->
             slot.tile = tile
         }
     }
 
-    fun components() = componentSlots.filter { it.tile != null }.map { it.tile!! }.toList()
+    fun components() = requirement.componentSlots.filter { it.tile != null }.map { it.tile!! }.toList()
 
     override fun toString(): String {
         return ToStringBuilder.reflectionToString(this)
     }
 }
 
+enum class TargetType {
+    SINGLE, AOE, NONE
+}
+
 data class CastParams(val targets: List<Enemy>)
 
 data class ComponentSlot(var tile: TileInstance?)
 
-interface ComponentRequirement {
-    val slotAmount: Int
+abstract class ComponentRequirement(val slotAmount: Int) {
+    abstract val reqString: String
+    abstract val description: String
+    val componentSlots: List<ComponentSlot> = generateSlots(slotAmount)
 
-    val reqString: String
-
-    val description: String
-
-    fun find(hand: List<TileInstance>): List<List<TileInstance>>
-
-    fun satisfied(slots: List<ComponentSlot>): Boolean
+    abstract fun find(hand: List<TileInstance>): List<List<TileInstance>>
+    abstract fun satisfied(slots: List<ComponentSlot>): Boolean
 }
 
 fun generateSlots(amount: Int): List<ComponentSlot> {
@@ -125,10 +117,8 @@ private fun suitReqString(allowedSuits: Set<Suit>): String {
     }
 }
 
-class Single(private val allowedSuits: Set<Suit>) : ComponentRequirement {
+class Single(private val allowedSuits: Set<Suit>) : ComponentRequirement(1) {
     constructor() : this(anySet)
-
-    override val slotAmount = 1
 
     override val reqString = "1 ${suitReqString(allowedSuits)}"
 
@@ -146,7 +136,7 @@ class Single(private val allowedSuits: Set<Suit>) : ComponentRequirement {
     }
 }
 
-class Identical(override val slotAmount: Int, private val allowedSuits: Set<Suit>) : ComponentRequirement {
+class Identical(slotAmount: Int, private val allowedSuits: Set<Suit>) : ComponentRequirement(slotAmount) {
     constructor(slotAmount: Int) : this(slotAmount, anySet)
 
     override val reqString = "$slotAmount I ${suitReqString(allowedSuits)}"
@@ -179,7 +169,7 @@ class Identical(override val slotAmount: Int, private val allowedSuits: Set<Suit
     }
 }
 
-class Sequential(override val slotAmount: Int, private val allowedSuits: Set<Suit>) : ComponentRequirement {
+class Sequential(slotAmount: Int, private val allowedSuits: Set<Suit>) : ComponentRequirement(slotAmount) {
     constructor(slotAmount: Int) : this(slotAmount, elementalSet)
 
     override val reqString = "$slotAmount S ${suitReqString(allowedSuits)}"

@@ -5,11 +5,11 @@ import com.pipai.dragontiles.data.Element
 import com.pipai.dragontiles.data.Tile
 import com.pipai.dragontiles.data.TileInstance
 import com.pipai.dragontiles.enemies.Enemy
-import com.pipai.dragontiles.spells.SpellInstance
+import com.pipai.dragontiles.spells.Spell
 import kotlin.coroutines.suspendCoroutine
 
 class CombatApi(val combat: Combat,
-                val spellInstances: List<SpellInstance>,
+                val spells: List<Spell>,
                 private val eventBus: SuspendableEventBus) {
 
     private var nextId = 0
@@ -19,8 +19,8 @@ class CombatApi(val combat: Combat,
         return nextId
     }
 
-    suspend fun castSpell(spellInstance: SpellInstance) {
-        eventBus.dispatch(SpellCastedEvent(spellInstance))
+    suspend fun castSpell(spell: Spell) {
+        eventBus.dispatch(SpellCastedEvent(spell))
     }
 
     suspend fun draw(amount: Int) {

@@ -5,13 +5,11 @@ import com.pipai.dragontiles.data.Element
 import com.pipai.dragontiles.data.Tile
 import com.pipai.dragontiles.data.TileInstance
 import com.pipai.dragontiles.enemies.Enemy
-import com.pipai.dragontiles.spells.SpellInstance
+import com.pipai.dragontiles.spells.Spell
 import net.mostlyoriginal.api.event.common.Event
 import kotlin.coroutines.Continuation
 
 interface CombatEvent : Event
-
-class BattleStartEvent : CombatEvent
 
 data class TurnStartEvent(val turnNumber: Int) : CombatEvent
 
@@ -49,7 +47,7 @@ data class PlayerDamageEvent(val amount: Int) : CombatEvent
 
 data class ComponentConsumeEvent(val components: List<TileInstance>) : CombatEvent
 
-data class SpellCastedEvent(val spellInstance: SpellInstance) : CombatEvent
+data class SpellCastedEvent(val spell: Spell) : CombatEvent
 
 class GameOverEvent : CombatEvent
 

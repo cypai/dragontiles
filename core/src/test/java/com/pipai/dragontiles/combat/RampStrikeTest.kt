@@ -17,24 +17,26 @@ class RampStrikeTest : CombatBackendTest(QueryHandler()) {
     fun testRampStrike() {
         val flameTurtle = FlameTurtle()
         val combat = Combat(Random(),
-                Hero("Elementalist", 80, 80, 15, mutableListOf(Invoke(false), RampStrike(false))),
+                Hero("Elementalist", 80, 80, 15,
+                        mutableListOf(Invoke(false), RampStrike(false)),
+                        mutableListOf()),
                 mutableListOf(flameTurtle))
 
         val controller = CombatController(combat, sEvent)
         controller.initCombat()
         runBlocking { controller.runTurn() }
 
-        val invoke = controller.api.spellInstances[0]
-        val rampStrike = controller.api.spellInstances[1]
+        val invoke = controller.api.spells[0]
+        val rampStrike = controller.api.spells[1]
         Assert.assertEquals(3, rampStrike.baseDamage())
-        invoke.fill(invoke.spell.requirement.find(combat.hand).first())
-        invoke.cast(CastParams(listOf(flameTurtle)), controller.api)
+        invoke.fill(invoke.requirement.find(combat.hand).first())
+        runBlocking { invoke.cast(CastParams(listOf(flameTurtle)), controller.api) }
         Assert.assertEquals(5, rampStrike.baseDamage())
 
         runBlocking { controller.endTurn() }
         Assert.assertEquals(3, rampStrike.baseDamage())
-        invoke.fill(invoke.spell.requirement.find(combat.hand).first())
-        invoke.cast(CastParams(listOf(flameTurtle)), controller.api)
+        invoke.fill(invoke.requirement.find(combat.hand).first())
+        runBlocking { invoke.cast(CastParams(listOf(flameTurtle)), controller.api) }
         Assert.assertEquals(5, rampStrike.baseDamage())
     }
 }

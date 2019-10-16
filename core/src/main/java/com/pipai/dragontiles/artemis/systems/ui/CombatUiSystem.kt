@@ -14,14 +14,12 @@ import com.pipai.dragontiles.DragonTilesGame
 import com.pipai.dragontiles.artemis.components.*
 import com.pipai.dragontiles.artemis.systems.NoProcessingSystem
 import com.pipai.dragontiles.artemis.systems.combat.CombatControllerSystem
-import com.pipai.dragontiles.artemis.systems.rendering.FullScreenColorRenderingSystem
 import com.pipai.dragontiles.combat.Combat
-import com.pipai.dragontiles.combat.QueryTilesEvent
 import com.pipai.dragontiles.data.TileInstance
 import com.pipai.dragontiles.gui.SpellCard
 import com.pipai.dragontiles.gui.SpellComponentList
 import com.pipai.dragontiles.spells.CastParams
-import com.pipai.dragontiles.spells.SpellInstance
+import com.pipai.dragontiles.spells.Spell
 import com.pipai.dragontiles.spells.TargetType
 import com.pipai.dragontiles.utils.*
 import kotlinx.coroutines.GlobalScope
@@ -48,7 +46,6 @@ class CombatUiSystem(private val game: DragonTilesGame,
     private var selectedSpellNumber: Int? = null
     private var mouseFollowEntityId: Int? = null
 
-    private var queryTilesEvent: QueryTilesEvent? = null
     private val stateMachine = DefaultStateMachine<CombatUiSystem, CombatUiState>(this, CombatUiState.ROOT)
 
     private val mEnemy by mapper<EnemyComponent>()
@@ -57,7 +54,6 @@ class CombatUiSystem(private val game: DragonTilesGame,
     private val mSprite by mapper<SpriteComponent>()
 
     private val sCombat by system<CombatControllerSystem>()
-    private val sFsTexture by system<FullScreenColorRenderingSystem>()
 
     override fun initialize() {
         rootTable.setFillParent(true)
@@ -111,8 +107,8 @@ class CombatUiSystem(private val game: DragonTilesGame,
         spells[number] = spellCard
     }
 
-    fun setSpell(number: Int, spellInstance: SpellInstance) {
-        spells[number]?.setSpellInstance(spellInstance)
+    fun setSpell(number: Int, spell: Spell) {
+        spells[number]?.setSpell(spell)
     }
 
     fun disable() {
@@ -176,7 +172,7 @@ class CombatUiSystem(private val game: DragonTilesGame,
             else -> null
         }
         val spellCard = spellNumber?.let { spells[spellNumber] }
-        val spell = spellCard?.getSpellInstance()
+        val spell = spellCard?.getSpell()
         if (spell != null) {
             selectedSpellNumber = spellNumber
             stateMachine.changeState(CombatUiState.COMPONENT_SELECTION)
@@ -192,8 +188,8 @@ class CombatUiSystem(private val game: DragonTilesGame,
     }
 
     private fun displaySpellComponents(spellCard: SpellCard) {
-        val spellInstance = spellCard.getSpellInstance()!!
-        spellComponentList.setOptions(spellInstance.spell.requirement.find(sCombat.combat.hand))
+        val spell = spellCard.getSpell()!!
+        spellComponentList.setOptions(spell.requirement.find(sCombat.combat.hand))
         val position = spellCard.localToStageCoordinates(Vector2(0f, 0f))
         spellComponentList.x = position.x
         spellComponentList.y = MathUtils.clamp(position.y - spellComponentList.prefHeight,
@@ -206,18 +202,18 @@ class CombatUiSystem(private val game: DragonTilesGame,
     }
 
     private fun selectComponents(components: List<TileInstance>) {
-        val spellInstance = getSelectedSpell()
-        when (spellInstance.spell.targetType) {
+        val spell = getSelectedSpell()
+        when (spell.targetType) {
             TargetType.SINGLE -> {
-                spellInstance.fill(components)
+                spell.fill(components)
                 stateMachine.changeState(CombatUiState.TARGET_SELECTION)
             }
             TargetType.AOE -> {
             }
             TargetType.NONE -> {
-                spellInstance.fill(components)
+                spell.fill(components)
                 GlobalScope.launch {
-                    spellInstance.cast(CastParams(listOf()), sCombat.controller.api)
+                    spell.cast(CastParams(listOf()), sCombat.controller.api)
                 }
             }
         }
@@ -231,7 +227,7 @@ class CombatUiSystem(private val game: DragonTilesGame,
         }
     }
 
-    private fun getSelectedSpell() = spells[selectedSpellNumber!!]!!.getSpellInstance()!!
+    private fun getSelectedSpell() = spells[selectedSpellNumber!!]!!.getSpell()!!
 
     override fun keyUp(keycode: Int) = false
 
@@ -287,8 +283,8 @@ class CombatUiSystem(private val game: DragonTilesGame,
             override fun enter(uiSystem: CombatUiSystem) {
                 uiSystem.spells.forEach { _, spellCard ->
                     spellCard.update()
-                    val spellInstance = spellCard.getSpellInstance()
-                    if (spellInstance == null || !spellInstance.available()) {
+                    val spell = spellCard.getSpell()
+                    if (spell == null || !spell.available()) {
                         spellCard.disable()
                     } else {
                         spellCard.enable()

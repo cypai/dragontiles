@@ -13,10 +13,10 @@ import com.pipai.dragontiles.DragonTilesGame
 import com.pipai.dragontiles.combat.CombatApi
 import com.pipai.dragontiles.enemies.Enemy
 import com.pipai.dragontiles.spells.CastParams
-import com.pipai.dragontiles.spells.SpellInstance
+import com.pipai.dragontiles.spells.Spell
 
 class SpellCard(private val game: DragonTilesGame,
-                private var spellInstance: SpellInstance?,
+                private var spell: Spell?,
                 val number: Int?,
                 skin: Skin,
                 private val api: CombatApi) : Table(skin) {
@@ -114,10 +114,10 @@ class SpellCard(private val game: DragonTilesGame,
         clickCallbacks.add(callback)
     }
 
-    fun getSpellInstance() = spellInstance
+    fun getSpell() = spell
 
-    fun setSpellInstance(spellInstance: SpellInstance?) {
-        this.spellInstance = spellInstance
+    fun setSpell(spell: Spell?) {
+        this.spell = spell
         update()
     }
 
@@ -134,18 +134,18 @@ class SpellCard(private val game: DragonTilesGame,
     fun update() {
         numberLabel.setText(number?.toString() ?: "")
 
-        val spell = spellInstance?.spell
-        if (spell == null) {
+        val theSpell = spell
+        if (theSpell == null) {
             nameLabel.setText("")
             reqLabel.setText("")
             descriptionLabel.setText("")
         } else {
-            val spellStrings = game.spellStrings.all(spell.id)
-            nameLabel.setText(spellStrings.name + if (spell.upgraded) "+" else "")
-            reqLabel.setText(spell.requirement.reqString)
-            val description = if (spellInstance!!.spell.upgraded) spellStrings.upgradeDescription else spellStrings.description
+            val spellStrings = game.spellStrings.all(theSpell.id)
+            nameLabel.setText(spellStrings.name + if (theSpell.upgraded) "+" else "")
+            reqLabel.setText(theSpell.requirement.reqString)
+            val description = if (theSpell.upgraded) spellStrings.upgradeDescription else spellStrings.description
             val adjustedDescription = description.replace(regex) {
-                spellInstance!!.dynamicValue(it.value, api, CastParams(if (target == null) listOf() else listOf(target!!))).toString()
+                theSpell.dynamicValue(it.value, api, CastParams(if (target == null) listOf() else listOf(target!!))).toString()
             }
             descriptionLabel.setText(adjustedDescription)
         }
