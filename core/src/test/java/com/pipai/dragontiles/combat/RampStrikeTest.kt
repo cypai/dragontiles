@@ -1,28 +1,21 @@
 package com.pipai.dragontiles.combat
 
 import com.pipai.dragontiles.enemies.FlameTurtle
-import com.pipai.dragontiles.hero.Hero
 import com.pipai.dragontiles.spells.CastParams
 import com.pipai.dragontiles.spells.Invoke
 import com.pipai.dragontiles.spells.RampStrike
 import kotlinx.coroutines.runBlocking
-import net.mostlyoriginal.api.event.common.EventSystem
 import org.junit.Assert
 import org.junit.Test
-import java.lang.IllegalStateException
-import java.util.*
 
 class RampStrikeTest : CombatBackendTest(QueryHandler()) {
     @Test
     fun testRampStrike() {
         val flameTurtle = FlameTurtle()
-        val combat = Combat(Random(),
-                Hero("Elementalist", 80, 80, 15,
-                        mutableListOf(Invoke(false), RampStrike(false)),
-                        mutableListOf()),
-                mutableListOf(flameTurtle))
+        val runData = runDataFixture(mutableListOf(Invoke(false), RampStrike(false)), mutableListOf())
+        val combat = Combat(mutableListOf(flameTurtle))
 
-        val controller = CombatController(combat, sEvent)
+        val controller = CombatController(runData, combat, sEvent)
         controller.initCombat()
         runBlocking { controller.runTurn() }
 

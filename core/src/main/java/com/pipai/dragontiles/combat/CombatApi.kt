@@ -4,11 +4,13 @@ import com.pipai.dragontiles.data.CountdownAttack
 import com.pipai.dragontiles.data.Element
 import com.pipai.dragontiles.data.Tile
 import com.pipai.dragontiles.data.TileInstance
+import com.pipai.dragontiles.dungeon.RunData
 import com.pipai.dragontiles.enemies.Enemy
 import com.pipai.dragontiles.spells.Spell
 import kotlin.coroutines.suspendCoroutine
 
-class CombatApi(val combat: Combat,
+class CombatApi(val runData: RunData,
+                val combat: Combat,
                 val spells: List<Spell>,
                 private val eventBus: SuspendableEventBus) {
 
@@ -29,7 +31,7 @@ class CombatApi(val combat: Combat,
         var currentSize = combat.hand.size
         repeat(amount) {
             val tile = combat.drawPile.removeAt(0)
-            if (currentSize >= combat.hero.handSize) {
+            if (currentSize >= runData.hero.handSize) {
                 drawnDiscardTiles.add(tile)
             } else {
                 drawnTiles.add(Pair(tile, currentSize))
@@ -126,9 +128,9 @@ class CombatApi(val combat: Combat,
     }
 
     suspend fun dealDamageToHero(damage: Int) {
-        combat.hero.hp -= damage
+        runData.hero.hp -= damage
         eventBus.dispatch(PlayerDamageEvent(damage))
-        if (combat.hero.hp <= 0) {
+        if (runData.hero.hp <= 0) {
             eventBus.dispatch(GameOverEvent())
         }
     }
@@ -177,7 +179,7 @@ class CombatApi(val combat: Combat,
     }
 
     suspend fun queryOpenPoolDraw() {
-        val amount = combat.hero.handSize - combat.hand.size
+        val amount = runData.hero.handSize - combat.hand.size
         val tiles = queryTiles("Select up to $amount tile(s) to draw from the Open Pool",
                 combat.openPool, 0, amount)
         if (tiles.isNotEmpty()) {

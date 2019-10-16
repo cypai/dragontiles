@@ -27,6 +27,7 @@ import com.pipai.dragontiles.combat.Combat
 import com.pipai.dragontiles.data.Keywords
 import com.pipai.dragontiles.data.SpellStrings
 import com.pipai.dragontiles.data.TileSkin
+import com.pipai.dragontiles.dungeon.RunData
 import com.pipai.dragontiles.enemies.FlameTurtle
 import com.pipai.dragontiles.hero.Hero
 import com.pipai.dragontiles.relics.Transmuter
@@ -107,7 +108,8 @@ class DragonTilesGame(val gameConfig: GameConfig) : Game() {
         initSkin()
 
         setScreen(CombatScreen(this,
-                Combat(Random(),
+                RunData(
+                        Random(),
                         Hero("Elementalist", 80, 80, 15,
                                 mutableListOf(
                                         Invoke(false),
@@ -116,8 +118,8 @@ class DragonTilesGame(val gameConfig: GameConfig) : Game() {
                                         Concentrate(false)),
                                 mutableListOf(
                                         Transmuter())
-                        ),
-                        mutableListOf(FlameTurtle()))))
+                        )),
+                Combat(mutableListOf(FlameTurtle()))))
     }
 
     private fun initSkin() {

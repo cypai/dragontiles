@@ -16,6 +16,7 @@ import com.pipai.dragontiles.artemis.systems.NoProcessingSystem
 import com.pipai.dragontiles.artemis.systems.combat.CombatControllerSystem
 import com.pipai.dragontiles.combat.Combat
 import com.pipai.dragontiles.data.TileInstance
+import com.pipai.dragontiles.dungeon.RunData
 import com.pipai.dragontiles.gui.SpellCard
 import com.pipai.dragontiles.gui.SpellComponentList
 import com.pipai.dragontiles.spells.CastParams
@@ -27,7 +28,7 @@ import kotlinx.coroutines.launch
 import kotlin.math.min
 
 class CombatUiSystem(private val game: DragonTilesGame,
-                     combat: Combat,
+                     runData: RunData,
                      private val stage: Stage) : NoProcessingSystem(), InputProcessor {
 
     private val config = game.gameConfig
@@ -39,7 +40,7 @@ class CombatUiSystem(private val game: DragonTilesGame,
     private val topRow = Table()
     private val spellRow = Table()
 
-    private val hpLabel = Label("${combat.hero.hp}/${combat.hero.hpMax}", skin)
+    private val hpLabel = Label("${runData.hero.hp}/${runData.hero.hpMax}", skin)
     private val spells: MutableMap<Int, SpellCard> = mutableMapOf()
     private val spellComponentList = SpellComponentList(skin, tileSkin)
 

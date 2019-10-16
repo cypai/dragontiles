@@ -23,9 +23,10 @@ import com.pipai.dragontiles.artemis.systems.ui.CombatQueryUiSystem
 import com.pipai.dragontiles.artemis.systems.ui.CombatUiSystem
 import com.pipai.dragontiles.artemis.systems.ui.MouseFollowLineSystem
 import com.pipai.dragontiles.combat.Combat
+import com.pipai.dragontiles.dungeon.RunData
 import net.mostlyoriginal.api.event.common.EventSystem
 
-class CombatScreen(game: DragonTilesGame, combat: Combat) : Screen {
+class CombatScreen(game: DragonTilesGame, runData: RunData, combat: Combat) : Screen {
 
     private val stage = Stage(ScreenViewport(), game.spriteBatch)
 
@@ -44,7 +45,7 @@ class CombatScreen(game: DragonTilesGame, combat: Combat) : Screen {
                         TimerSystem(),
                         MutualDestroySystem(),
 
-                        CombatControllerSystem(combat),
+                        CombatControllerSystem(runData, combat),
                         TileIdSystem(),
                         CombatAnimationSystem(game),
                         MouseFollowLineSystem(game.gameConfig),
@@ -53,7 +54,7 @@ class CombatScreen(game: DragonTilesGame, combat: Combat) : Screen {
                         InputProcessingSystem(),
                         ClickableSystem(game.gameConfig))
                 .with(-1,
-                        CombatUiSystem(game, combat, stage),
+                        CombatUiSystem(game, runData, stage),
                         FullScreenColorRenderingSystem(game))
                 .with(-2,
                         CombatRenderingSystem(game),

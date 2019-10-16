@@ -13,11 +13,10 @@ class CombatTest : CombatBackendTest(QueryHandler()) {
     @Test
     fun testCombat() {
         val flameTurtle = FlameTurtle()
-        val combat = Combat(Random(),
-                Hero("Elementalist", 80, 80, 15, mutableListOf(Invoke(false)), mutableListOf()),
-                mutableListOf(flameTurtle))
+        val runData = runDataFixture(mutableListOf(Invoke(false)), mutableListOf())
+        val combat = Combat(mutableListOf(flameTurtle))
 
-        val controller = CombatController(combat, sEvent)
+        val controller = CombatController(runData, combat, sEvent)
         controller.initCombat()
 
         // Full tile set amount is 136
@@ -50,11 +49,10 @@ class CombatTest : CombatBackendTest(QueryHandler()) {
     @Test
     fun testInvokePlus() {
         val flameTurtle = FlameTurtle()
-        val combat = Combat(Random(),
-                Hero("Elementalist", 80, 80, 15, mutableListOf(Invoke(true)), mutableListOf()),
-                mutableListOf(flameTurtle))
+        val runData = runDataFixture(mutableListOf(Invoke(true)), mutableListOf())
+        val combat = Combat(mutableListOf(flameTurtle))
 
-        val controller = CombatController(combat, sEvent)
+        val controller = CombatController(runData, combat, sEvent)
         controller.initCombat()
         runBlocking { controller.runTurn() }
 

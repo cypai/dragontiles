@@ -1,13 +1,16 @@
 package com.pipai.dragontiles.combat
 
 import com.pipai.dragontiles.data.*
+import com.pipai.dragontiles.dungeon.RunData
 import kotlinx.coroutines.runBlocking
 import net.mostlyoriginal.api.event.common.EventSystem
 
-class CombatController(private val combat: Combat, private val eventSystem: EventSystem) {
+class CombatController(private val runData: RunData,
+                       private val combat: Combat,
+                       eventSystem: EventSystem) {
 
     private val eventBus = SuspendableEventBus(eventSystem)
-    val api: CombatApi = CombatApi(combat, combat.hero.spells.toList(), eventBus)
+    val api: CombatApi = CombatApi(runData, combat, runData.hero.spells.toList(), eventBus)
 
     fun initCombat() {
         eventBus.init(api)
@@ -21,7 +24,7 @@ class CombatController(private val combat: Combat, private val eventSystem: Even
         api.spells.forEach {
             eventBus.register(it)
         }
-        combat.hero.relics.forEach {
+        runData.hero.relics.forEach {
             eventBus.register(it)
         }
     }
@@ -45,7 +48,7 @@ class CombatController(private val combat: Combat, private val eventSystem: Even
             combat.drawPile.add(TileInstance(Tile.LifeTile(LifeType.MIND), api.nextId()))
             combat.drawPile.add(TileInstance(Tile.LifeTile(LifeType.SOUL), api.nextId()))
         }
-        combat.drawPile.shuffle(combat.rng)
+        combat.drawPile.shuffle(runData.rng)
     }
 
     private suspend fun initOpenPile() {
@@ -61,8 +64,8 @@ class CombatController(private val combat: Combat, private val eventSystem: Even
         if (combat.turnNumber > 1) {
             api.queryOpenPoolDraw()
         }
-        if (combat.hero.handSize > combat.hand.size) {
-            api.draw(combat.hero.handSize - combat.hand.size)
+        if (runData.hero.handSize > combat.hand.size) {
+            api.draw(runData.hero.handSize - combat.hand.size)
         }
         api.sortHand()
         eventBus.dispatch(TurnStartEvent(combat.turnNumber))
