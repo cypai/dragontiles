@@ -1,6 +1,6 @@
 package com.pipai.dragontiles.combat
 
-import com.badlogic.gdx.math.MathUtils
+import com.badlogic.gdx.math.MathUtils.ceil
 import com.pipai.dragontiles.data.Element
 import com.pipai.dragontiles.data.Tile
 import com.pipai.dragontiles.data.TileInstance
@@ -98,7 +98,7 @@ class CombatApi(val runData: RunData,
             else -> false
         }
         if (broken) {
-            damage *= 2
+            damage = ceil(1.5f * damage.toFloat()).toInt()
         }
         return damage.coerceAtLeast(0)
     }
