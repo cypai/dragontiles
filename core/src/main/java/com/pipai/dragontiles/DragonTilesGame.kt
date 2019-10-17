@@ -114,8 +114,7 @@ class DragonTilesGame(val gameConfig: GameConfig) : Game() {
                                 mutableListOf(
                                         Invoke(false),
                                         Strike(false),
-                                        Break(false),
-                                        Concentrate(false)),
+                                        Break(false)),
                                 mutableListOf(
                                         Transmuter())
                         )),
