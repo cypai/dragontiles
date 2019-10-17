@@ -1,3 +1,38 @@
+base:enemies:standard:Ember:
+  en:
+    name: Ember
+    description: No special effects.
+
+base:enemies:standard:Frost:
+  en:
+    name: Frost
+    description: No special effects.
+
+base:enemies:standard:Spark:
+  en:
+    name: Spark
+    description: No special effects.
+
+base:enemies:standard:FlameStrike:
+  en:
+    name: Flame Strike
+    description: No special effects.
+
+base:enemies:standard:IceStrike:
+  en:
+    name: Ice Strike
+    description: No special effects.
+
+base:enemies:standard:LightningStrike:
+  en:
+    name: Lightning Strike
+    description: No special effects.
+
+base:enemies:standard:ManaStrike:
+  en:
+    name: Mana Strike
+    description: No special effects.
+
 base:enemies:FlameTurtle:
   en:
     name: Flame Turtle
@@ -17,3 +52,13 @@ base:enemies:FlameTurtle:ShellProjection:
   en:
     name: Shell Projection
     description: "@AttackPower scales with @Defense."
+
+base:enemies:Slime:
+  en:
+    name: Slime
+    description: A standard slime. A bit more dangerous than appears at first sight.
+
+base:enemies:Slime:Acid:
+  en:
+    name: Acid
+    description: Inflicts 3 @IceBreak.

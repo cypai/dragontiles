@@ -14,7 +14,7 @@ class FlameTurtle : Enemy() {
 
     override val hpMax: Int = 30
 
-    var attacks = 0
+    private var attacks = 0
 
     override suspend fun runTurn(api: CombatApi) {
         val attack = api.fetchAttack(id)

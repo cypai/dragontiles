@@ -17,7 +17,7 @@ abstract class Enemy : Targetable {
         this.id = id
     }
 
-    open fun init() {
+    open fun init(api: CombatApi) {
     }
 
     abstract suspend fun runTurn(api: CombatApi)

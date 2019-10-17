@@ -23,11 +23,12 @@ import com.badlogic.gdx.scenes.scene2d.utils.MultiDrawable
 import com.badlogic.gdx.scenes.scene2d.utils.OffsetDrawable
 import com.kotcrab.vis.ui.VisUI
 import com.pipai.dragontiles.artemis.screens.CombatScreen
-import com.pipai.dragontiles.combat.Combat
 import com.pipai.dragontiles.data.GameStrings
 import com.pipai.dragontiles.data.TileSkin
+import com.pipai.dragontiles.dungeon.PlainsDungeon
 import com.pipai.dragontiles.dungeon.RunData
 import com.pipai.dragontiles.enemies.FlameTurtle
+import com.pipai.dragontiles.enemies.Slime
 import com.pipai.dragontiles.hero.Hero
 import com.pipai.dragontiles.relics.Transmuter
 import com.pipai.dragontiles.spells.Break
@@ -81,6 +82,7 @@ class DragonTilesGame(val gameConfig: GameConfig) : Game() {
         assets = AssetManager()
         assets.load("assets/binassets/graphics/tiles/tiles.png", Texture::class.java)
         assets.load(enemyAssetPath(FlameTurtle().assetName), Texture::class.java)
+        assets.load(enemyAssetPath(Slime().assetName), Texture::class.java)
         assets.finishLoading()
         tileSkin = TileSkin(assets.get("assets/binassets/graphics/tiles/tiles.png", Texture::class.java))
 
@@ -107,18 +109,18 @@ class DragonTilesGame(val gameConfig: GameConfig) : Game() {
 
         initSkin()
 
-        setScreen(CombatScreen(this,
-                RunData(
-                        Random(),
-                        Hero("Elementalist", 80, 80, 15,
-                                mutableListOf(
-                                        Invoke(false),
-                                        Strike(false),
-                                        Break(false)),
-                                mutableListOf(
-                                        Transmuter())
-                        )),
-                Combat(mutableListOf(FlameTurtle()))))
+        val runData = RunData(
+                Random(),
+                Hero("Elementalist", 80, 80, 15,
+                        mutableListOf(
+                                Invoke(false),
+                                Strike(false),
+                                Break(false)),
+                        mutableListOf(
+                                Transmuter())
+                ),
+                PlainsDungeon())
+        setScreen(CombatScreen(this, runData, runData.dungeon.easyEncounter(runData)))
     }
 
     private fun initSkin() {

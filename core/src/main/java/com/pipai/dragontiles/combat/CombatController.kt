@@ -16,7 +16,7 @@ class CombatController(private val runData: RunData,
         eventBus.init(api)
         combat.enemies.forEach {
             it.preInit(api.nextId())
-            it.init()
+            it.init(api)
             combat.enemyStatus[it.id] = StatusData()
         }
         initDrawPile()

@@ -12,10 +12,11 @@ import com.pipai.dragontiles.artemis.components.*
 import com.pipai.dragontiles.artemis.events.EnemyClickEvent
 import com.pipai.dragontiles.artemis.systems.combat.CombatControllerSystem
 import com.pipai.dragontiles.artemis.systems.ui.CombatUiSystem
+import com.pipai.dragontiles.dungeon.Encounter
 import com.pipai.dragontiles.utils.enemyAssetPath
 
 @Wire
-class CombatScreenInit(private val game: DragonTilesGame, private val world: World) {
+class CombatScreenInit(private val game: DragonTilesGame, private val world: World, private val encounter: Encounter) {
 
     private lateinit var mCamera: ComponentMapper<OrthographicCameraComponent>
     private lateinit var mXy: ComponentMapper<XYComponent>
@@ -43,16 +44,16 @@ class CombatScreenInit(private val game: DragonTilesGame, private val world: Wor
             sUi.setSpell(index + 1, spell)
         }
 
-        sController.combat.enemies.forEach {
+        encounter.enemies.forEach { (enemy, position) ->
             val entityId = world.create()
             val cXy = mXy.create(entityId)
-            cXy.setXy(92f, 320f)
+            cXy.setXy(position)
 
             val cSprite = mSprite.create(entityId)
-            cSprite.sprite = Sprite(game.assets.get(enemyAssetPath(it.assetName), Texture::class.java))
+            cSprite.sprite = Sprite(game.assets.get(enemyAssetPath(enemy.assetName), Texture::class.java))
 
             val cEnemy = mEnemy.create(entityId)
-            cEnemy.setByEnemy(it)
+            cEnemy.setByEnemy(enemy)
 
             mClickable.create(entityId).event = EnemyClickEvent(entityId)
         }

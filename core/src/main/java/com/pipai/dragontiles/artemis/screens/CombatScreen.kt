@@ -21,16 +21,18 @@ import com.pipai.dragontiles.artemis.systems.rendering.CombatRenderingSystem
 import com.pipai.dragontiles.artemis.systems.rendering.FullScreenColorRenderingSystem
 import com.pipai.dragontiles.artemis.systems.ui.*
 import com.pipai.dragontiles.combat.Combat
+import com.pipai.dragontiles.dungeon.Encounter
 import com.pipai.dragontiles.dungeon.RunData
 import net.mostlyoriginal.api.event.common.EventSystem
 
-class CombatScreen(game: DragonTilesGame, runData: RunData, combat: Combat) : Screen {
+class CombatScreen(game: DragonTilesGame, runData: RunData, encounter: Encounter) : Screen {
 
     private val stage = Stage(ScreenViewport(), game.spriteBatch)
 
     val world: World
 
     init {
+        val combat = Combat(encounter.enemies.map { it.first })
         val config = WorldConfigurationBuilder()
                 .with(
                         // Managers
@@ -76,7 +78,7 @@ class CombatScreen(game: DragonTilesGame, runData: RunData, combat: Combat) : Sc
         inputProcessor.addAlwaysOnProcessor(ExitInputProcessor())
         inputProcessor.activateInput()
 
-        CombatScreenInit(game, world)
+        CombatScreenInit(game, world, encounter)
                 .initialize()
     }
 

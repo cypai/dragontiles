@@ -3,7 +3,7 @@ package com.pipai.dragontiles.combat
 import com.pipai.dragontiles.data.TileInstance
 import com.pipai.dragontiles.enemies.Enemy
 
-data class Combat(val enemies: MutableList<Enemy>) {
+data class Combat(val enemies: List<Enemy>) {
 
     var turnNumber = 0
 

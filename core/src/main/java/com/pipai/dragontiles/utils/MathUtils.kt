@@ -38,10 +38,17 @@ object MathUtils {
 
 fun <T> Collection<T>.choose(rng: Random): T {
     val n = rng.nextInt(this.size)
-    return this.elementAt(n)
+    return elementAt(n)
 }
 
 fun <T> Array<T>.choose(rng: Random): T {
     val n = rng.nextInt(this.size)
     return this[n]
+}
+
+fun <T> MutableCollection<T>.removeRandom(rng: Random): T {
+    val n = rng.nextInt(this.size)
+    val elem = elementAt(n)
+    remove(elem)
+    return elem
 }

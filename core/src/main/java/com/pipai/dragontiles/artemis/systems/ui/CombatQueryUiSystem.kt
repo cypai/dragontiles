@@ -207,7 +207,7 @@ class CombatQueryUiSystem(private val game: DragonTilesGame, private val runData
             val spellCard = SpellCard(game, spell, null, game.skin, sCombat.controller.api, sToolTip)
             spellCard.addClickCallback {
                 runData.hero.spells.add(spell)
-                game.screen = CombatScreen(game, runData, Combat(mutableListOf(FlameTurtle())))
+                game.screen = CombatScreen(game, runData, runData.dungeon.easyEncounter(runData))
             }
             rewardsTable.add(spellCard)
         }
