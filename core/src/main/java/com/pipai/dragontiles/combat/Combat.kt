@@ -20,6 +20,7 @@ data class Combat(val enemies: MutableList<Enemy>) {
 
 enum class Status(val decreasing: Boolean, val positive: Boolean) {
     POWER(false, false),
+    DEFENSE(false, false),
     FIRE_BREAK(true, true),
     ICE_BREAK(true, true),
     LIGHTNING_BREAK(true, true)

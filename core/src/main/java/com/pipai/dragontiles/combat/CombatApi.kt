@@ -1,5 +1,6 @@
 package com.pipai.dragontiles.combat
 
+import com.badlogic.gdx.math.MathUtils
 import com.pipai.dragontiles.data.Element
 import com.pipai.dragontiles.data.Tile
 import com.pipai.dragontiles.data.TileInstance
@@ -85,7 +86,7 @@ class CombatApi(val runData: RunData,
     }
 
     fun calculateBaseDamage(attackerStatus: StatusData, amount: Int): Int {
-        return amount + attackerStatus[Status.POWER]
+        return (amount + attackerStatus[Status.POWER]).coerceAtLeast(0)
     }
 
     fun calculateActualDamage(attackerStatus: StatusData, targetStatus: StatusData, element: Element, amount: Int): Int {
@@ -99,7 +100,7 @@ class CombatApi(val runData: RunData,
         if (broken) {
             damage *= 2
         }
-        return damage
+        return damage.coerceAtLeast(0)
     }
 
     fun calculateTargetDamage(target: Enemy, element: Element, amount: Int): Int {
@@ -178,6 +179,8 @@ class CombatApi(val runData: RunData,
     fun changeEnemyStatusIncrement(id: Int, status: Status, increment: Int) {
         combat.enemyStatus[id]!!.increment(status, increment)
     }
+
+    fun fetchEnemyStatus(id: Int, status: Status) = combat.enemyStatus[id]!![status]
 
     suspend fun queryTiles(text: String, tiles: List<TileInstance>, minAmount: Int, maxAmount: Int): List<TileInstance> {
         return if (maxAmount == 0 || maxAmount < minAmount) {

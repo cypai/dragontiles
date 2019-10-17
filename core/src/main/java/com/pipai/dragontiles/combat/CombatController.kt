@@ -74,6 +74,9 @@ class CombatController(private val runData: RunData,
 
     suspend fun endTurn() {
         eventBus.dispatch(TurnEndEvent(combat.turnNumber))
+        combat.enemyAttacks.forEach {
+            api.countdownAttackTick(it.key)
+        }
         api.spells.forEach {
             it.turnReset()
         }

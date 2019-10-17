@@ -25,7 +25,15 @@ class Keywords {
         keywords["@Break"] = KeywordData("Break",
                 "Takes twice the damage when attacked with the broken element.")
         keywords["@Power"] = KeywordData("Power",
-                "Attacks deal 1 more damage per point of power.")
+                "Attacks deal 1 more damage per point of Power.")
+        keywords["@Defense"] = KeywordData("Defense",
+                "Damage taken via attacks decreased by 1 per point of Defense.")
+        keywords["@AttackPower"] = KeywordData("Attack Power",
+                "The base damage of the spell. Can be decreased by attacking the spell.")
+        keywords["@EffectPower"] = KeywordData("Effect Power",
+                "Can be decreased by attacking the spell when Attack Power is 0.")
+        keywords["@Disrupt"] = KeywordData("Disrupt",
+                "When a spell's Attack Power and Effect Power is 0, the spell is Disrupted and is destroyed.")
     }
 
     fun checkKeywords(str: String): List<KeywordData> {

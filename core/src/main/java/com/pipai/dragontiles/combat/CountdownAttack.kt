@@ -1,12 +1,14 @@
 package com.pipai.dragontiles.combat
 
 import com.pipai.dragontiles.data.Element
+import com.pipai.dragontiles.data.Suit
 import com.pipai.dragontiles.enemies.Enemy
 
 abstract class CountdownAttack(val id: Int) {
-    abstract val attackPower: Int
-    abstract val effectPower: Int
+    abstract var attackPower: Int
+    abstract var effectPower: Int
     abstract val element: Element
+    abstract val discardSuit: Suit
     abstract var turnsLeft: Int
     abstract val name: String
     abstract val description: String?
@@ -23,23 +25,37 @@ abstract class CountdownAttack(val id: Int) {
 }
 
 class StandardCountdownAttack(id: Int,
-                              override val attackPower: Int,
+                              override var attackPower: Int,
                               override val element: Element,
+                              override val discardSuit: Suit,
                               override val name: String,
+                              override val description: String?,
                               override var turnsLeft: Int) : CountdownAttack(id) {
-    override val effectPower: Int = 0
-    override val description: String? = null
+    constructor(id: Int,
+                attackPower: Int,
+                element: Element,
+                discardSuit: Suit,
+                name: String,
+                turnsLeft: Int)
+    : this(id, attackPower, element, discardSuit, name, null, turnsLeft)
+
+    override var effectPower: Int = 0
 }
 
 class BuffCountdownAttack(id: Int,
-                          override val attackPower: Int,
-                          override val effectPower: Int,
+                          override var attackPower: Int,
+                          override var effectPower: Int,
                           val statusAmount: List<Pair<Status, Int>>,
                           val targets: List<Enemy>,
                           override val element: Element,
+                          override val discardSuit: Suit,
                           override val name: String,
                           override val description: String?,
                           override var turnsLeft: Int) : CountdownAttack(id) {
+    constructor(id: Int, effectPower: Int, status: Status, amount: Int,
+                target: Enemy, element: Element, discardSuit: Suit,
+                name: String, description: String?, turnsLeft: Int)
+            : this(id, 0, effectPower, listOf(Pair(status, amount)), listOf(target), element, discardSuit, name, description, turnsLeft)
 
     override suspend fun activateEffects(api: CombatApi) {
         statusAmount.forEach { (status, amount) ->
@@ -53,10 +69,11 @@ class BuffCountdownAttack(id: Int,
 }
 
 class DebuffCountdownAttack(id: Int,
-                            override val attackPower: Int,
-                            override val effectPower: Int,
+                            override var attackPower: Int,
+                            override var effectPower: Int,
                             val statusAmount: List<Pair<Status, Int>>,
                             override val element: Element,
+                            override val discardSuit: Suit,
                             override val name: String,
                             override val description: String?,
                             override var turnsLeft: Int) : CountdownAttack(id) {

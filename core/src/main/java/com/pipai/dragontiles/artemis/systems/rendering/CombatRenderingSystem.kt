@@ -12,7 +12,6 @@ import com.pipai.dragontiles.utils.mapper
 class CombatRenderingSystem(private val game: DragonTilesGame) : BaseSystem() {
 
     private val mXy by mapper<XYComponent>()
-    private val mTile by mapper<TileComponent>()
     private val mSprite by mapper<SpriteComponent>()
     private val mRadial by mapper<RadialSpriteComponent>()
     private val mAttackCircle by mapper<AttackCircleComponent>()
