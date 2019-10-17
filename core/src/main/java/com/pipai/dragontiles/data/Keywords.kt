@@ -23,7 +23,7 @@ class Keywords {
         keywords["@NonElementalTile"] = KeywordData("Non-Elemental Tile",
                 "Star or Life tile.")
         keywords["@Break"] = KeywordData("Break",
-                "Takes twice the damage when attacked with the broken element.")
+                "Takes 50% more damage when attacked with the broken element.")
         keywords["@Power"] = KeywordData("Power",
                 "Attacks deal 1 more damage per point of Power.")
         keywords["@Defense"] = KeywordData("Defense",
