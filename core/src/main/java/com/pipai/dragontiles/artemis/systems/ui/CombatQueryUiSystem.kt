@@ -46,6 +46,7 @@ class CombatQueryUiSystem(private val game: DragonTilesGame, private val runData
     private val sFsTexture by system<FullScreenColorRenderingSystem>()
     private val sTileId by system<TileIdSystem>()
     private val sCombat by system<CombatControllerSystem>()
+    private val sToolTip by system<TooltipSystem>()
 
     private val tilePrevXy: MutableMap<Int, Vector2> = mutableMapOf()
     private val selectedTiles: MutableList<Int> = mutableListOf()
@@ -203,7 +204,7 @@ class CombatQueryUiSystem(private val game: DragonTilesGame, private val runData
     private fun generateRewardsTable(spells: List<Spell>) {
         val rewardsTable = Table()
         spells.forEach { spell ->
-            val spellCard = SpellCard(game, spell, null, game.skin, sCombat.controller.api)
+            val spellCard = SpellCard(game, spell, null, game.skin, sCombat.controller.api, sToolTip)
             spellCard.addClickCallback {
                 runData.hero.spells.add(spell)
                 game.screen = CombatScreen(game, runData, Combat(mutableListOf(FlameTurtle())))

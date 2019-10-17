@@ -58,6 +58,17 @@ class Keywords {
         return list
     }
 
+    fun findKeywords(str: String) : List<String> {
+        return regex.findAll(str)
+                .map { it.value }
+                .filter { it in keywords }
+                .toList()
+    }
+
+    fun getData(keyword: String): KeywordData? {
+        return keywords[keyword]
+    }
+
 }
 
 data class KeywordData(val text: String, val description: String)

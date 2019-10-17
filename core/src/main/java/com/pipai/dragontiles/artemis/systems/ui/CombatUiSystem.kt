@@ -55,6 +55,7 @@ class CombatUiSystem(private val game: DragonTilesGame,
     private val mSprite by mapper<SpriteComponent>()
 
     private val sCombat by system<CombatControllerSystem>()
+    private val sTooltip by system<TooltipSystem>()
 
     override fun initialize() {
         rootTable.setFillParent(true)
@@ -100,7 +101,7 @@ class CombatUiSystem(private val game: DragonTilesGame,
     }
 
     private fun addSpellCard(number: Int) {
-        val spellCard = SpellCard(game, null, number, game.skin, sCombat.controller.api)
+        val spellCard = SpellCard(game, null, number, game.skin, sCombat.controller.api, sTooltip)
         spellCard.addClickCallback(this::spellCardClickCallback)
         spellRow.add(spellCard)
                 .minWidth(spellCard.width)

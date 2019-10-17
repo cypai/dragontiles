@@ -1,6 +1,5 @@
 package com.pipai.dragontiles.gui
 
-import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.InputEvent
 import com.badlogic.gdx.scenes.scene2d.Touchable
@@ -10,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.badlogic.gdx.utils.Align
 import com.pipai.dragontiles.DragonTilesGame
+import com.pipai.dragontiles.artemis.systems.ui.TooltipSystem
 import com.pipai.dragontiles.combat.CombatApi
 import com.pipai.dragontiles.enemies.Enemy
 import com.pipai.dragontiles.spells.CastParams
@@ -19,15 +19,14 @@ class SpellCard(private val game: DragonTilesGame,
                 private var spell: Spell?,
                 val number: Int?,
                 skin: Skin,
-                private val api: CombatApi) : Table(skin) {
+                private val api: CombatApi,
+                private val sToolTip: TooltipSystem) : Table(skin) {
 
     private val topRow = Table()
     private val nameLabel = Label("", skin, "small")
     private val reqLabel = Label("", skin, "small")
     private val numberLabel = Label("", skin, "small")
     private val descriptionLabel = Label("", skin, "small")
-
-    private val tooltipTable = Table()
 
     private val regex = "!\\w+".toRegex()
 
@@ -75,37 +74,15 @@ class SpellCard(private val game: DragonTilesGame,
             }
 
             override fun enter(event: InputEvent?, x: Float, y: Float, pointer: Int, fromActor: Actor?) {
-                if (tooltipTable.stage == null) {
-                    val description = descriptionLabel.text.toString()
-                    val keywords = game.keywords.checkKeywords(description)
-                    if (keywords.isEmpty()) {
-                        return
-                    }
-                    tooltipTable.clearChildren()
-                    tooltipTable.background = skin.getDrawable("frameDrawable")
-                    keywords.forEach {
-                        val label = Label("${it.text}: ${it.description}", skin, "tiny")
-                        label.setAlignment(Align.topLeft)
-                        label.setWrap(true)
-                        tooltipTable.add(label)
-                                .width(160f)
-                                .pad(8f)
-                                .left()
-                        tooltipTable.row()
-                    }
-                    tooltipTable.validate()
-                    tooltipTable.left().top()
-                    tooltipTable.width = tooltipTable.prefWidth
-                    tooltipTable.height = tooltipTable.prefHeight
-                    val xy = localToStageCoordinates(Vector2())
-                    tooltipTable.x = xy.x - tooltipTable.width
-                    tooltipTable.y = xy.y
-                    stage.addActor(tooltipTable)
+                if (spell != null) {
+                    sToolTip.addText("Spell Components", spell!!.requirement.description)
+                    sToolTip.addKeywordsInString(game.spellStrings.description(spell!!.id))
+                    sToolTip.showTooltip(stage)
                 }
             }
 
             override fun exit(event: InputEvent?, x: Float, y: Float, pointer: Int, toActor: Actor?) {
-                tooltipTable.remove()
+                sToolTip.hideTooltip()
             }
         })
     }

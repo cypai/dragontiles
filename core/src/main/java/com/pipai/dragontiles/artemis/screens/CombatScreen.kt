@@ -22,6 +22,7 @@ import com.pipai.dragontiles.artemis.systems.rendering.FullScreenColorRenderingS
 import com.pipai.dragontiles.artemis.systems.ui.CombatQueryUiSystem
 import com.pipai.dragontiles.artemis.systems.ui.CombatUiSystem
 import com.pipai.dragontiles.artemis.systems.ui.MouseFollowLineSystem
+import com.pipai.dragontiles.artemis.systems.ui.TooltipSystem
 import com.pipai.dragontiles.combat.Combat
 import com.pipai.dragontiles.dungeon.RunData
 import net.mostlyoriginal.api.event.common.EventSystem
@@ -58,7 +59,8 @@ class CombatScreen(game: DragonTilesGame, runData: RunData, combat: Combat) : Sc
                         FullScreenColorRenderingSystem(game))
                 .with(-2,
                         CombatRenderingSystem(game),
-                        CombatQueryUiSystem(game, runData))
+                        CombatQueryUiSystem(game, runData),
+                        TooltipSystem(game, stage))
                 .build()
 
         world = World(config)
@@ -69,6 +71,7 @@ class CombatScreen(game: DragonTilesGame, runData: RunData, combat: Combat) : Sc
         inputProcessor.addAlwaysOnProcessor(world.getSystem(CombatUiSystem::class.java))
         inputProcessor.addAlwaysOnProcessor(world.getSystem(CombatQueryUiSystem::class.java))
         inputProcessor.addAlwaysOnProcessor(world.getSystem(CombatQueryUiSystem::class.java).stage)
+        inputProcessor.addAlwaysOnProcessor(world.getSystem(TooltipSystem::class.java))
         inputProcessor.addAlwaysOnProcessor(stage)
         inputProcessor.addAlwaysOnProcessor(ExitInputProcessor())
         inputProcessor.activateInput()
