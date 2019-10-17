@@ -261,6 +261,9 @@ class RadialSprite(textureRegion: TextureRegion) : Drawable {
         this.dirty = true
     }
 
+    fun width() = width
+    fun height() = height
+
     companion object {
         private val TOPRIGHT1 = 0
         private val BOTTOMRIGHT1 = 5

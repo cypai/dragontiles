@@ -111,3 +111,9 @@ class RadialSpriteComponent : Component() {
 class ClickableComponent : Component() {
     lateinit var event: Event
 }
+
+class HoverableComponent : Component() {
+    var hovering: Boolean = false
+    lateinit var enterEvent: Event
+    lateinit var exitEvent: Event
+}

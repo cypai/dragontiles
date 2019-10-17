@@ -22,12 +22,14 @@ class TooltipSystem(game: DragonTilesGame, var stage: Stage) : NoProcessingSyste
     private var mouseX: Float = 0f
     private var mouseY: Float = 0f
 
-    fun addText(header: String, text: String) {
+    fun addText(header: String, text: String, recurse: Boolean) {
         if (header !in headerSet) {
             headerSet.add(header)
-            textPairs.add(Pair(header, text))
-            keywords.findKeywords(text)
-                    .forEach { addKeyword(it) }
+            textPairs.add(Pair(header, text.replace("@", "")))
+            if (recurse) {
+                keywords.findKeywords(text)
+                        .forEach { addKeyword(it) }
+            }
         }
     }
 
@@ -35,7 +37,7 @@ class TooltipSystem(game: DragonTilesGame, var stage: Stage) : NoProcessingSyste
         if (keyword !in headerSet) {
             val data = keywords.getData(keyword)
             if (data != null) {
-                textPairs.add(Pair(data.text, data.description))
+                textPairs.add(Pair(data.text, data.description.replace("@", "")))
                 headerSet.add(keyword)
                 keywords.findKeywords(data.description)
                         .forEach { addKeyword(it) }

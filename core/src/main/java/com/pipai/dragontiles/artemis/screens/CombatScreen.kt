@@ -19,10 +19,7 @@ import com.pipai.dragontiles.artemis.systems.input.ExitInputProcessor
 import com.pipai.dragontiles.artemis.systems.input.InputProcessingSystem
 import com.pipai.dragontiles.artemis.systems.rendering.CombatRenderingSystem
 import com.pipai.dragontiles.artemis.systems.rendering.FullScreenColorRenderingSystem
-import com.pipai.dragontiles.artemis.systems.ui.CombatQueryUiSystem
-import com.pipai.dragontiles.artemis.systems.ui.CombatUiSystem
-import com.pipai.dragontiles.artemis.systems.ui.MouseFollowLineSystem
-import com.pipai.dragontiles.artemis.systems.ui.TooltipSystem
+import com.pipai.dragontiles.artemis.systems.ui.*
 import com.pipai.dragontiles.combat.Combat
 import com.pipai.dragontiles.dungeon.RunData
 import net.mostlyoriginal.api.event.common.EventSystem
@@ -51,8 +48,10 @@ class CombatScreen(game: DragonTilesGame, runData: RunData, combat: Combat) : Sc
                         CombatAnimationSystem(game),
                         MouseFollowLineSystem(game.gameConfig),
                         AttackCircleSystem(),
+                        AttackCircleHoverSystem(),
 
                         InputProcessingSystem(),
+                        HoverableSystem(game.gameConfig),
                         ClickableSystem(game.gameConfig))
                 .with(-1,
                         CombatUiSystem(game, runData, stage),
@@ -68,6 +67,7 @@ class CombatScreen(game: DragonTilesGame, runData: RunData, combat: Combat) : Sc
         val inputProcessor = world.getSystem(InputProcessingSystem::class.java)
         inputProcessor.addAlwaysOnProcessor(world.getSystem(MouseFollowLineSystem::class.java))
         inputProcessor.addAlwaysOnProcessor(world.getSystem(ClickableSystem::class.java))
+        inputProcessor.addAlwaysOnProcessor(world.getSystem(HoverableSystem::class.java))
         inputProcessor.addAlwaysOnProcessor(world.getSystem(CombatUiSystem::class.java))
         inputProcessor.addAlwaysOnProcessor(world.getSystem(CombatQueryUiSystem::class.java))
         inputProcessor.addAlwaysOnProcessor(world.getSystem(CombatQueryUiSystem::class.java).stage)

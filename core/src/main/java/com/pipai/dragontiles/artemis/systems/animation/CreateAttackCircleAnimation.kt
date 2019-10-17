@@ -3,6 +3,8 @@ package com.pipai.dragontiles.artemis.systems.animation
 import com.artemis.ComponentMapper
 import com.badlogic.gdx.graphics.Color
 import com.pipai.dragontiles.artemis.components.*
+import com.pipai.dragontiles.artemis.events.AttackCircleHoverEnterEvent
+import com.pipai.dragontiles.artemis.events.AttackCircleHoverExitEvent
 import com.pipai.dragontiles.artemis.systems.combat.AttackCircleSystem
 import com.pipai.dragontiles.combat.CountdownAttack
 import com.pipai.dragontiles.enemies.Enemy
@@ -17,6 +19,7 @@ class CreateAttackCircleAnimation(private val enemy: Enemy,
     private lateinit var mXy: ComponentMapper<XYComponent>
     private lateinit var mRadial: ComponentMapper<RadialSpriteComponent>
     private lateinit var mAttackCircle: ComponentMapper<AttackCircleComponent>
+    private lateinit var mHoverable: ComponentMapper<HoverableComponent>
     private lateinit var mMutualDestroy: ComponentMapper<MutualDestroyComponent>
 
     private lateinit var sAttackCircle: AttackCircleSystem
@@ -52,6 +55,10 @@ class CreateAttackCircleAnimation(private val enemy: Enemy,
         cBgRadial.sprite.setColor(Color(1f, 1f, 1f, 0.2f))
 
         mMutualDestroy.create(id).ids.add(bgId)
+
+        val cHover = mHoverable.create(id)
+        cHover.enterEvent = AttackCircleHoverEnterEvent(cAttackCircle)
+        cHover.exitEvent = AttackCircleHoverExitEvent()
 
         endAnimation(30)
     }

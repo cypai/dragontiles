@@ -29,9 +29,9 @@ class Keywords {
         keywords["@Defense"] = KeywordData("Defense",
                 "Damage taken via attacks decreased by 1 per point of Defense.")
         keywords["@AttackPower"] = KeywordData("Attack Power",
-                "The base damage of the spell. Can be decreased by attacking the spell.")
+                "The base damage of the spell. Can be decreased by attacking the spell. Written in Current Power without parenthesis.")
         keywords["@EffectPower"] = KeywordData("Effect Power",
-                "Can be decreased by attacking the spell when Attack Power is 0.")
+                "Can be decreased by attacking the spell when Attack Power is 0. Written in Current Power in parenthesis.")
         keywords["@Disrupt"] = KeywordData("Disrupt",
                 "When a spell's Attack Power and Effect Power is 0, the spell is Disrupted and is destroyed.")
     }
