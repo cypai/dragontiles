@@ -67,7 +67,7 @@ class CombatApi(val runData: RunData,
 
     suspend fun sortHand() {
         combat.hand.sortWith(compareBy({ it.tile.suit.order }, { it.tile.order() }))
-        eventBus.dispatch(HandAdjustedEvent(combat.hand))
+        eventBus.dispatch(HandAdjustedEvent(combat.hand.toList()))
     }
 
     suspend fun drawToOpenPool(amount: Int) {
@@ -82,7 +82,7 @@ class CombatApi(val runData: RunData,
 
     suspend fun sortOpenPool() {
         combat.openPool.sortWith(compareBy({ it.tile.suit.order }, { it.tile.order() }))
-        eventBus.dispatch(OpenPoolAdjustedEvent(combat.openPool))
+        eventBus.dispatch(OpenPoolAdjustedEvent(combat.openPool.toList()))
     }
 
     fun calculateBaseDamage(attackerStatus: StatusData, amount: Int): Int {
@@ -147,6 +147,7 @@ class CombatApi(val runData: RunData,
     suspend fun enemyCreateAttack(enemy: Enemy, countdownAttack: CountdownAttack) {
         combat.enemyAttacks[enemy.id] = countdownAttack
         eventBus.dispatch(EnemyCountdownAttackEvent(enemy, countdownAttack))
+        enemyDiscard(enemy.id, countdownAttack.discardTile(runData.rng))
     }
 
     suspend fun countdownAttackTick(enemyId: Int) {
@@ -161,7 +162,14 @@ class CombatApi(val runData: RunData,
             countdownAttack.activateEffects(this)
         } else {
             eventBus.dispatch(CountdownAttackTickEvent(countdownAttack))
+            enemyDiscard(enemyId, countdownAttack.discardTile(runData.rng))
         }
+    }
+
+    suspend fun enemyDiscard(enemyId: Int, tile: Tile) {
+        val tileInstance = TileInstance(tile, nextId())
+        combat.openPool.add(tileInstance)
+        eventBus.dispatch(EnemyDiscardEvent(enemyId, tileInstance, combat.openPool.size - 1))
     }
 
     fun changeStatus(status: Status, amount: Int) {

@@ -5,7 +5,6 @@ import com.pipai.dragontiles.DragonTilesGame
 import com.pipai.dragontiles.artemis.systems.combat.CombatControllerSystem
 import com.pipai.dragontiles.artemis.systems.ui.CombatUiSystem
 import com.pipai.dragontiles.combat.*
-import com.pipai.dragontiles.utils.getLogger
 import com.pipai.dragontiles.utils.system
 import net.mostlyoriginal.api.event.common.Subscribe
 
@@ -83,6 +82,11 @@ class CombatAnimationSystem(private val game: DragonTilesGame) : BaseSystem(), A
     }
 
     @Subscribe
+    fun handleEnemyDiscardEvent(ev: EnemyDiscardEvent) {
+        queueAnimation(EnemyDiscardAnimation(ev.enemyId, ev.tile, ev.location, game.tileSkin))
+    }
+
+    @Subscribe
     fun handleOpenPoolAdjustedEvent(ev: OpenPoolAdjustedEvent) {
         queueAnimation(AdjustOpenPoolAnimation(ev.openPool))
     }
@@ -135,6 +139,7 @@ class CombatAnimationSystem(private val game: DragonTilesGame) : BaseSystem(), A
     fun handleOptionQuery(ev: QueryTileOptionsEvent) {
         queueAnimation(QueryTileOptionsAnimation(ev))
     }
+
     @Subscribe
     fun handleEnemyDefeat(ev: EnemyDefeatedEvent) {
         queueAnimation(EnemyDefeatAnimation(ev.enemy))

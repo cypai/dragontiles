@@ -22,6 +22,8 @@ data class TileTransformedEvent(val tile: TileInstance, val previous: Tile) : Co
 
 data class DrawFromOpenPoolEvent(val tiles: List<Pair<TileInstance, Int>>) : CombatEvent
 
+data class EnemyDiscardEvent(val enemyId: Int, val tile: TileInstance, val location: Int) : CombatEvent
+
 data class HandAdjustedEvent(val hand: List<TileInstance>) : CombatEvent
 
 data class DrawToOpenPoolEvent(val tiles: List<Pair<TileInstance, Int>>) : CombatEvent

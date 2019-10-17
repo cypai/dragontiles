@@ -1,5 +1,7 @@
 package com.pipai.dragontiles.utils
 
+import java.util.*
+
 fun Float.clamp(min: Float, max: Float): Float = Math.max(min, Math.min(this, max))
 fun Double.clamp(min: Double, max: Double): Double = Math.max(min, Math.min(this, max))
 fun Int.clamp(min: Int, max: Int): Int = Math.max(min, Math.min(this, max))
@@ -32,4 +34,14 @@ object MathUtils {
     fun <T> randomSelect(list: List<T>): T {
         return list[RNG.nextInt(list.size)]
     }
+}
+
+fun <T> Collection<T>.choose(rng: Random): T {
+    val n = rng.nextInt(this.size)
+    return this.elementAt(n)
+}
+
+fun <T> Array<T>.choose(rng: Random): T {
+    val n = rng.nextInt(this.size)
+    return this[n]
 }
