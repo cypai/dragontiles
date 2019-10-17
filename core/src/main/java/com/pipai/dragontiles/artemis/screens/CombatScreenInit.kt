@@ -57,10 +57,6 @@ class CombatScreenInit(private val game: DragonTilesGame, private val world: Wor
             val cEnemy = mEnemy.create(entityId)
             cEnemy.setByEnemy(it)
         }
-
-        GlobalScope.launch {
-            sController.controller.runTurn()
-        }
     }
 
 }
