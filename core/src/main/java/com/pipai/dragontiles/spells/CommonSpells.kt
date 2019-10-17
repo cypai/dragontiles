@@ -13,7 +13,8 @@ class Invoke(upgraded: Boolean) : Spell(upgraded) {
     override fun baseDamage(): Int = 2
 
     override suspend fun onCast(params: CastParams, api: CombatApi) {
-        api.attack(params.targets.first(), elemental(components()), baseDamage())
+        val target = api.getTargetable(params.targets.first())
+        api.attack(target, elemental(components()), baseDamage())
     }
 
     override fun newClone(upgraded: Boolean): Invoke {
@@ -35,7 +36,8 @@ class Strike(upgraded: Boolean) : Spell(upgraded) {
     }
 
     override suspend fun onCast(params: CastParams, api: CombatApi) {
-        api.attack(params.targets.first(), elemental(components()), baseDamage() + if (upgraded) 3 else 0)
+        val target = api.getTargetable(params.targets.first())
+        api.attack(target, elemental(components()), baseDamage() + if (upgraded) 3 else 0)
     }
 }
 
@@ -65,14 +67,15 @@ class RampStrike(upgraded: Boolean) : Spell(upgraded) {
     }
 
     override suspend fun onCast(params: CastParams, api: CombatApi) {
-        api.attack(params.targets.first(), elemental(components()), baseDamage())
+        val target = api.getTargetable(params.targets.first())
+        api.attack(target, elemental(components()), baseDamage())
     }
 }
 
 class Break(upgraded: Boolean) : Spell(upgraded) {
     override val id: String = "base:Break"
     override val requirement: ComponentRequirement = Identical(3, elementalSet)
-    override val targetType: TargetType = TargetType.SINGLE
+    override val targetType: TargetType = TargetType.SINGLE_ENEMY
 
     override var repeatableMax: Int = 1
 
@@ -89,7 +92,7 @@ class Break(upgraded: Boolean) : Spell(upgraded) {
             Element.LIGHTNING -> Status.LIGHTNING_BREAK
             else -> throw IllegalStateException("Attempted to cast Break with ${components()}")
         }
-        api.changeEnemyStatusIncrement(params.targets.first().id, status, if (upgraded) 4 else 3)
+        api.changeEnemyStatusIncrement(params.targets.first(), status, if (upgraded) 4 else 3)
     }
 }
 

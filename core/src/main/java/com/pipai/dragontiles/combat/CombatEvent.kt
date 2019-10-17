@@ -32,6 +32,8 @@ data class OpenPoolAdjustedEvent(val openPool: List<TileInstance>) : CombatEvent
 
 data class PlayerAttackEnemyEvent(val target: Enemy, val element: Element, val amount: Int) : CombatEvent
 
+data class PlayerAttackCountdownAttackEvent(val target: CountdownAttack, val element: Element, val amount: Int) : CombatEvent
+
 data class EnemyDamageEvent(val target: Enemy, val amount: Int) : CombatEvent
 
 data class EnemyDefeatedEvent(val enemy: Enemy) : CombatEvent
@@ -43,6 +45,10 @@ data class EnemyCountdownAttackEvent(val enemy: Enemy, val countdownAttack: Coun
 data class CountdownAttackTickEvent(val countdownAttack: CountdownAttack) : CombatEvent
 
 data class CountdownAttackResolveEvent(val countdownAttack: CountdownAttack) : CombatEvent
+
+data class CountdownAttackDamageEvent(val countdownAttack: CountdownAttack, val attackPowerDamage: Int, val effectPowerDamage: Int) : CombatEvent
+
+data class CountdownAttackDisruptedEvent(val countdownAttack: CountdownAttack, val attackPowerDamage: Int, val effectPowerDamage: Int) : CombatEvent
 
 data class PlayerDamageEvent(val amount: Int) : CombatEvent
 

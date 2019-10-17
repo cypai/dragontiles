@@ -21,6 +21,20 @@ class CombatApi(val runData: RunData,
         return nextId
     }
 
+    fun getTargetable(id: Int): Targetable {
+        val target: Targetable? = combat.enemies.find { it.id == id }
+                ?: combat.enemyAttacks.values.find { it.id == id }
+        return target!!
+    }
+
+    fun getEnemy(id: Int): Enemy {
+        return combat.enemies.first { it.id == id }
+    }
+
+    fun getCountdownAttack(id: Int): CountdownAttack {
+        return combat.enemyAttacks.values.first { it.id == id }
+    }
+
     suspend fun castSpell(spell: Spell) {
         eventBus.dispatch(SpellCastedEvent(spell))
     }
@@ -98,19 +112,35 @@ class CombatApi(val runData: RunData,
             else -> false
         }
         if (broken) {
-            damage = ceil(1.5f * damage.toFloat()).toInt()
+            damage = ceil(1.5f * damage.toFloat())
         }
         return damage.coerceAtLeast(0)
     }
 
-    fun calculateTargetDamage(target: Enemy, element: Element, amount: Int): Int {
+    fun calculateTargetEnemyDamage(target: Enemy, element: Element, amount: Int): Int {
         return calculateActualDamage(combat.heroStatus, combat.enemyStatus[target.id]!!, element, amount)
     }
 
-    suspend fun attack(target: Enemy, element: Element, amount: Int) {
-        eventBus.dispatch(PlayerAttackEnemyEvent(target, element, amount))
+    fun calculateTargetDamage(target: Targetable, element: Element, amount: Int): Int {
+        return when (target) {
+            is Enemy -> calculateTargetEnemyDamage(target, element, amount)
+            is CountdownAttack -> calculateActualDamage(combat.heroStatus, StatusData(), element, amount)
+            else -> throw IllegalStateException("Received unknown target $target")
+        }
+    }
+
+    suspend fun attack(target: Targetable, element: Element, amount: Int) {
         val damage = calculateTargetDamage(target, element, amount)
-        dealDamageToEnemy(target, damage)
+        when (target) {
+            is Enemy -> {
+                eventBus.dispatch(PlayerAttackEnemyEvent(target, element, amount))
+                dealDamageToEnemy(target, damage)
+            }
+            is CountdownAttack -> {
+                eventBus.dispatch(PlayerAttackCountdownAttackEvent(target, element, amount))
+                dealDamageToCountdownAttack(target, damage)
+            }
+        }
     }
 
     suspend fun dealDamageToEnemy(enemy: Enemy, damage: Int) {
@@ -122,6 +152,23 @@ class CombatApi(val runData: RunData,
                 combat.heroStatus.clear()
                 eventBus.dispatch(BattleWinEvent())
             }
+        }
+    }
+
+    suspend fun dealDamageToCountdownAttack(ca: CountdownAttack, damage: Int) {
+        ca.counteredAttackPower += damage
+        if (ca.counteredAttackPower >= ca.attackPower) {
+            val residual = ca.counteredAttackPower - ca.attackPower
+            ca.counteredAttackPower = ca.attackPower
+            ca.counteredEffectPower += residual
+            if (ca.counteredEffectPower > ca.effectPower) {
+                combat.enemyAttacks.remove(combat.enemyAttacks.entries.find { it.value == ca }!!.key)
+                eventBus.dispatch(CountdownAttackDisruptedEvent(ca, damage - residual, residual))
+            } else {
+                eventBus.dispatch(CountdownAttackDamageEvent(ca, damage - residual, residual))
+            }
+        } else {
+            eventBus.dispatch(CountdownAttackDamageEvent(ca, damage, 0))
         }
     }
 

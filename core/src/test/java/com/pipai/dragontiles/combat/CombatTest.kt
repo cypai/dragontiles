@@ -25,21 +25,21 @@ class CombatTest : CombatBackendTest(QueryHandler()) {
 
         runBlocking { controller.runTurn() }
 
-        Assert.assertEquals(9, combat.openPool.size)
+        Assert.assertEquals(10, combat.openPool.size)
         Assert.assertEquals(15, combat.hand.size)
         Assert.assertEquals(112, combat.drawPile.size)
 
         val invoke = controller.api.spells.first()
         Assert.assertTrue(invoke.available())
         Assert.assertFalse(invoke.ready())
-        runBlocking { invoke.cast(CastParams(listOf(flameTurtle)), controller.api) }
+        runBlocking { invoke.cast(CastParams(listOf(flameTurtle.id)), controller.api) }
         Assert.assertEquals(15, combat.hand.size)
         Assert.assertEquals(30, flameTurtle.hp)
 
         invoke.fill(listOf(controller.api.combat.hand.first()))
         Assert.assertTrue(invoke.available())
         Assert.assertTrue(invoke.ready())
-        runBlocking { invoke.cast(CastParams(listOf(flameTurtle)), controller.api) }
+        runBlocking { invoke.cast(CastParams(listOf(flameTurtle.id)), controller.api) }
         Assert.assertFalse(invoke.available())
         Assert.assertFalse(invoke.ready())
         Assert.assertEquals(14, combat.hand.size)
@@ -60,14 +60,14 @@ class CombatTest : CombatBackendTest(QueryHandler()) {
         invoke.fill(listOf(controller.api.combat.hand.first()))
         Assert.assertTrue(invoke.available())
         Assert.assertEquals(0, invoke.repeated)
-        runBlocking { invoke.cast(CastParams(listOf(flameTurtle)), controller.api) }
+        runBlocking { invoke.cast(CastParams(listOf(flameTurtle.id)), controller.api) }
         Assert.assertTrue(invoke.available())
         Assert.assertEquals(14, combat.hand.size)
         Assert.assertEquals(28, flameTurtle.hp)
         Assert.assertEquals(1, invoke.repeated)
 
         invoke.fill(listOf(controller.api.combat.hand.first()))
-        runBlocking { invoke.cast(CastParams(listOf(flameTurtle)), controller.api) }
+        runBlocking { invoke.cast(CastParams(listOf(flameTurtle.id)), controller.api) }
         Assert.assertFalse(invoke.available())
         Assert.assertEquals(13, combat.hand.size)
         Assert.assertEquals(26, flameTurtle.hp)

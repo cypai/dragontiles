@@ -12,9 +12,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.pipai.dragontiles.DragonTilesGame
 import com.pipai.dragontiles.artemis.components.*
+import com.pipai.dragontiles.artemis.events.AttackCircleClickEvent
+import com.pipai.dragontiles.artemis.events.EnemyClickEvent
 import com.pipai.dragontiles.artemis.systems.NoProcessingSystem
 import com.pipai.dragontiles.artemis.systems.combat.CombatControllerSystem
-import com.pipai.dragontiles.combat.Combat
 import com.pipai.dragontiles.data.TileInstance
 import com.pipai.dragontiles.dungeon.RunData
 import com.pipai.dragontiles.gui.SpellCard
@@ -25,6 +26,7 @@ import com.pipai.dragontiles.spells.TargetType
 import com.pipai.dragontiles.utils.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import net.mostlyoriginal.api.event.common.Subscribe
 import kotlin.math.min
 
 class CombatUiSystem(private val game: DragonTilesGame,
@@ -50,6 +52,7 @@ class CombatUiSystem(private val game: DragonTilesGame,
     private val stateMachine = DefaultStateMachine<CombatUiSystem, CombatUiState>(this, CombatUiState.ROOT)
 
     private val mEnemy by mapper<EnemyComponent>()
+    private val mAttackCircle by mapper<AttackCircleComponent>()
     private val mLine by mapper<LineComponent>()
     private val mMouseFollow by mapper<MouseFollowComponent>()
     private val mSprite by mapper<SpriteComponent>()
@@ -210,6 +213,14 @@ class CombatUiSystem(private val game: DragonTilesGame,
                 spell.fill(components)
                 stateMachine.changeState(CombatUiState.TARGET_SELECTION)
             }
+            TargetType.SINGLE_ENEMY -> {
+                spell.fill(components)
+                stateMachine.changeState(CombatUiState.TARGET_SELECTION)
+            }
+            TargetType.SINGLE_CA -> {
+                spell.fill(components)
+                stateMachine.changeState(CombatUiState.TARGET_SELECTION)
+            }
             TargetType.AOE -> {
             }
             TargetType.NONE -> {
@@ -231,27 +242,37 @@ class CombatUiSystem(private val game: DragonTilesGame,
 
     private fun getSelectedSpell() = spells[selectedSpellNumber!!]!!.getSpell()!!
 
+    @Subscribe
+    fun handleEnemyClick(ev: EnemyClickEvent) {
+        val spell = getSelectedSpell()
+        if (stateMachine.currentState == CombatUiState.TARGET_SELECTION
+                && spell.targetType == TargetType.SINGLE_ENEMY
+                || spell.targetType == TargetType.SINGLE) {
+
+            GlobalScope.launch {
+                getSelectedSpell().cast(CastParams(listOf(mEnemy.get(ev.entityId).enemy.id)), sCombat.controller.api)
+            }
+        }
+    }
+
+    @Subscribe
+    fun handleAttackCircleClick(ev: AttackCircleClickEvent) {
+        val spell = getSelectedSpell()
+        if (stateMachine.currentState == CombatUiState.TARGET_SELECTION
+                && spell.targetType == TargetType.SINGLE_CA
+                || spell.targetType == TargetType.SINGLE) {
+
+            GlobalScope.launch {
+                getSelectedSpell().cast(CastParams(listOf(mAttackCircle.get(ev.entityId).id)), sCombat.controller.api)
+            }
+        }
+    }
+
     override fun keyUp(keycode: Int) = false
 
     override fun keyTyped(character: Char) = false
 
-    override fun touchDown(screenX: Int, screenY: Int, pointer: Int, button: Int): Boolean {
-        return when (stateMachine.currentState) {
-            CombatUiState.TARGET_SELECTION -> {
-                world.fetch(allOf(EnemyComponent::class, XYComponent::class, SpriteComponent::class)).forEach {
-                    val cSprite = mSprite.get(it)
-                    if (cSprite.sprite.boundingRectangle.contains(screenX.toFloat(), config.resolution.height - screenY.toFloat())) {
-                        GlobalScope.launch {
-                            getSelectedSpell().cast(CastParams(listOf(mEnemy.get(it).enemy)), sCombat.controller.api)
-                        }
-                        return true
-                    }
-                }
-                return false
-            }
-            else -> false
-        }
-    }
+    override fun touchDown(screenX: Int, screenY: Int, pointer: Int, button: Int) = false
 
     override fun touchUp(screenX: Int, screenY: Int, pointer: Int, button: Int) = false
 

@@ -5,7 +5,7 @@ import com.pipai.dragontiles.enemies.Enemy
 import com.pipai.dragontiles.utils.choose
 import java.util.*
 
-abstract class CountdownAttack(val id: Int) {
+abstract class CountdownAttack(val id: Int) : Targetable {
     abstract var attackPower: Int
     abstract var effectPower: Int
     abstract val element: Element

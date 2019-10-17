@@ -1,8 +1,9 @@
 package com.pipai.dragontiles.enemies
 
 import com.pipai.dragontiles.combat.CombatApi
+import com.pipai.dragontiles.combat.Targetable
 
-abstract class Enemy {
+abstract class Enemy : Targetable {
 
     abstract val name: String
     abstract val assetName: String

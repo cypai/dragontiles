@@ -1,8 +1,6 @@
 package com.pipai.dragontiles.combat
 
 import com.pipai.dragontiles.data.Element
-import com.pipai.dragontiles.data.Suit
-import com.pipai.dragontiles.data.Tile
 import com.pipai.dragontiles.enemies.FlameTurtle
 import com.pipai.dragontiles.spells.Invoke
 import kotlinx.coroutines.runBlocking
@@ -20,10 +18,10 @@ class BreakTest : CombatBackendTest(QueryHandler()) {
         controller.initCombat()
         runBlocking { controller.runTurn() }
 
-        Assert.assertEquals(1, controller.api.calculateTargetDamage(flameTurtle, Element.FIRE, 1))
+        Assert.assertEquals(1, controller.api.calculateTargetEnemyDamage(flameTurtle, Element.FIRE, 1))
 
         controller.api.changeEnemyStatusIncrement(flameTurtle.id, Status.FIRE_BREAK, 1)
 
-        Assert.assertEquals(2, controller.api.calculateTargetDamage(flameTurtle, Element.FIRE, 1))
+        Assert.assertEquals(2, controller.api.calculateTargetEnemyDamage(flameTurtle, Element.FIRE, 1))
     }
 }

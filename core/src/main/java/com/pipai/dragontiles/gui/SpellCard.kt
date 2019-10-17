@@ -122,7 +122,7 @@ class SpellCard(private val game: DragonTilesGame,
             reqLabel.setText(theSpell.requirement.reqString)
             val description = if (theSpell.upgraded) spellStrings.upgradeDescription else spellStrings.description
             val adjustedDescription = description.replace(regex) {
-                theSpell.dynamicValue(it.value, api, CastParams(if (target == null) listOf() else listOf(target!!))).toString()
+                theSpell.dynamicValue(it.value, api, CastParams(if (target == null) listOf() else listOf(target!!.id))).toString()
             }
             descriptionLabel.setText(adjustedDescription)
         }

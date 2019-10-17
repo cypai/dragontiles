@@ -4,7 +4,6 @@ import com.pipai.dragontiles.combat.CombatApi
 import com.pipai.dragontiles.data.Suit
 import com.pipai.dragontiles.data.Tile
 import com.pipai.dragontiles.data.TileInstance
-import com.pipai.dragontiles.enemies.Enemy
 import com.pipai.dragontiles.utils.getLogger
 import org.apache.commons.lang3.builder.ToStringBuilder
 
@@ -33,7 +32,8 @@ abstract class Spell(var upgraded: Boolean) {
                 return if (params.targets.isEmpty()) {
                     api.calculateBaseDamage(api.combat.heroStatus, baseDamage())
                 } else {
-                    api.calculateTargetDamage(params.targets.first(), elemental(components()), baseDamage())
+                    val target = api.getTargetable(params.targets.first())
+                    api.calculateTargetDamage(target, elemental(components()), baseDamage())
                 }
             }
             else -> data[key] ?: 0
@@ -85,10 +85,10 @@ abstract class Spell(var upgraded: Boolean) {
 }
 
 enum class TargetType {
-    SINGLE, AOE, NONE
+    SINGLE, SINGLE_ENEMY, SINGLE_CA, AOE, NONE
 }
 
-data class CastParams(val targets: List<Enemy>)
+data class CastParams(val targets: List<Int>)
 
 data class ComponentSlot(var tile: TileInstance?)
 

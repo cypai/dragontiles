@@ -117,6 +117,16 @@ class CombatAnimationSystem(private val game: DragonTilesGame) : BaseSystem(), A
     }
 
     @Subscribe
+    fun handleCountdownDamageEvent(ev: CountdownAttackDamageEvent) {
+        queueAnimation(AttackCircleDamageAnimation(ev.countdownAttack))
+    }
+
+    @Subscribe
+    fun handleCountdownDisruptEvent(ev: CountdownAttackDisruptedEvent) {
+        queueAnimation(AttackCircleDisruptAnimation(ev.countdownAttack))
+    }
+
+    @Subscribe
     fun handleComponentConsumeEvent(ev: ComponentConsumeEvent) {
         val batch = BatchAnimation()
         ev.components.forEach {
