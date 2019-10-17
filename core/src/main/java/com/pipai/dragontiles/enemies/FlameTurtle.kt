@@ -24,12 +24,12 @@ class FlameTurtle : Enemy() {
                     api.enemyCreateAttack(this, BuffCountdownAttack(
                             api.nextId(), 0, 8,
                             listOf(
-                                    Pair(Status.DEFENSE, 2),
-                                    Pair(Status.POWER, 2)),
+                                    Pair(Status.DEFENSE, 1),
+                                    Pair(Status.POWER, 1)),
                             listOf(this),
                             Element.NONE, Suit.LIFE,
                             "Steady",
-                            "Increases @Defense and @Power by 2.",
+                            "Increases @Defense and @Power by 1.",
                             1))
                 }
                 1 -> {

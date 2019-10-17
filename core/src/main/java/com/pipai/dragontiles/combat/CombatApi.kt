@@ -104,7 +104,7 @@ class CombatApi(val runData: RunData,
     }
 
     fun calculateActualDamage(attackerStatus: StatusData, targetStatus: StatusData, element: Element, amount: Int): Int {
-        var damage = calculateBaseDamage(attackerStatus, amount)
+        var damage = calculateBaseDamage(attackerStatus, amount) - targetStatus[Status.DEFENSE]
         val broken = when (element) {
             Element.FIRE -> targetStatus.has(Status.FIRE_BREAK)
             Element.ICE -> targetStatus.has(Status.ICE_BREAK)
@@ -193,6 +193,7 @@ class CombatApi(val runData: RunData,
 
     suspend fun enemyCreateAttack(enemy: Enemy, countdownAttack: CountdownAttack) {
         combat.enemyAttacks[enemy.id] = countdownAttack
+        countdownAttack.attackPower += fetchEnemyStatus(enemy.id, Status.POWER)
         eventBus.dispatch(EnemyCountdownAttackEvent(enemy, countdownAttack))
         enemyDiscard(enemy.id, countdownAttack.discardTile(runData.rng))
     }
