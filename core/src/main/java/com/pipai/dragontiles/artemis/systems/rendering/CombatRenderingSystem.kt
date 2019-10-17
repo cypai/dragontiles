@@ -36,7 +36,9 @@ class CombatRenderingSystem(private val game: DragonTilesGame) : BaseSystem() {
                 .forEach {
                     val cEnemy = mEnemy.get(it)
                     val cXy = mXy.get(it)
-                    game.smallFont.draw(batch, "${cEnemy.name}   ${cEnemy.hp}/${cEnemy.hpMax}", cXy.x, cXy.y - 4f)
+                    game.smallFont.draw(batch,
+                            "${game.gameStrings.nameDescLocalization(cEnemy.strId).name}   ${cEnemy.hp}/${cEnemy.hpMax}",
+                            cXy.x, cXy.y - 4f)
                 }
         world.fetch(allOf(XYComponent::class, AttackCircleComponent::class))
                 .forEach {

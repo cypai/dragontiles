@@ -4,7 +4,7 @@ import com.pipai.dragontiles.combat.*
 import com.pipai.dragontiles.data.Element
 
 class Invoke(upgraded: Boolean) : Spell(upgraded) {
-    override val id: String = "base:Invoke"
+    override val id: String = "base:spells:Invoke"
     override val requirement: ComponentRequirement = Single()
     override val targetType: TargetType = TargetType.SINGLE
 
@@ -23,7 +23,7 @@ class Invoke(upgraded: Boolean) : Spell(upgraded) {
 }
 
 class Strike(upgraded: Boolean) : Spell(upgraded) {
-    override val id: String = "base:Strike"
+    override val id: String = "base:spells:Strike"
     override val requirement: ComponentRequirement = Sequential(3, elementalSet)
     override val targetType: TargetType = TargetType.SINGLE
 
@@ -42,7 +42,7 @@ class Strike(upgraded: Boolean) : Spell(upgraded) {
 }
 
 class RampStrike(upgraded: Boolean) : Spell(upgraded) {
-    override val id: String = "base:RampStrike"
+    override val id: String = "base:spells:RampStrike"
     override val requirement: ComponentRequirement = Sequential(3, elementalSet)
     override val targetType: TargetType = TargetType.SINGLE
 
@@ -73,7 +73,7 @@ class RampStrike(upgraded: Boolean) : Spell(upgraded) {
 }
 
 class Break(upgraded: Boolean) : Spell(upgraded) {
-    override val id: String = "base:Break"
+    override val id: String = "base:spells:Break"
     override val requirement: ComponentRequirement = Identical(3, elementalSet)
     override val targetType: TargetType = TargetType.SINGLE_ENEMY
 
@@ -97,7 +97,7 @@ class Break(upgraded: Boolean) : Spell(upgraded) {
 }
 
 class Concentrate(upgraded: Boolean) : Spell(upgraded) {
-    override val id: String = "base:Concentrate"
+    override val id: String = "base:spells:Concentrate"
     override val requirement: ComponentRequirement = Identical(2, arcaneSet)
     override val targetType: TargetType = TargetType.NONE
 

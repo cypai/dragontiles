@@ -5,7 +5,7 @@ import com.pipai.dragontiles.combat.Targetable
 
 abstract class Enemy : Targetable {
 
-    abstract val name: String
+    abstract val strId: String
     abstract val assetName: String
 
     abstract val hpMax: Int

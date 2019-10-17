@@ -76,7 +76,7 @@ class SpellCard(private val game: DragonTilesGame,
             override fun enter(event: InputEvent?, x: Float, y: Float, pointer: Int, fromActor: Actor?) {
                 if (spell != null) {
                     sToolTip.addText("Spell Components", spell!!.requirement.description, true)
-                    sToolTip.addKeywordsInString(game.spellStrings.description(spell!!.id))
+                    sToolTip.addKeywordsInString(game.gameStrings.spellLocalization(spell!!.id).description)
                     sToolTip.showTooltip(stage)
                 }
             }
@@ -117,13 +117,13 @@ class SpellCard(private val game: DragonTilesGame,
             reqLabel.setText("")
             descriptionLabel.setText("")
         } else {
-            val spellStrings = game.spellStrings.all(theSpell.id)
-            nameLabel.setText(spellStrings.name + if (theSpell.upgraded) "+" else "")
+            val spellLocalization = game.gameStrings.spellLocalization(theSpell.id)
+            nameLabel.setText(spellLocalization.name + if (theSpell.upgraded) "+" else "")
             reqLabel.setText(theSpell.requirement.reqString)
-            val description = if (theSpell.upgraded) spellStrings.upgradeDescription else spellStrings.description
+            val description = if (theSpell.upgraded) spellLocalization.upgradeDescription else spellLocalization.description
             val adjustedDescription = description.replace(regex) {
                 theSpell.dynamicValue(it.value, api, CastParams(if (target == null) listOf() else listOf(target!!.id))).toString()
-            }
+            }.replace("@", "")
             descriptionLabel.setText(adjustedDescription)
         }
     }

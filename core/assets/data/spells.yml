@@ -1,77 +1,82 @@
-base:Invoke:
+base:spells:Invoke:
   en:
     name: Invoke
     description: Cast !d @Elemented.
     upgradeDescription: Cast !d @Elemented. @Repeatable !r.
 
-base:Strike:
+base:spells:Strike:
   en:
     name: Strike
     description: Cast !d @Elemented.
     upgradeDescription: Cast !d @Elemented. @Repeatable !r.
 
-base:QuickInvoke:
+base:spells:QuickInvoke:
   en:
     name: Quick Invoke
     description: Cast !d @Elemented. @Repeatable !r.
+    upgradeDescription: Cast !d @Elemented. @Repeatable !r.
 
-base:MultiInvoke:
+base:spells:MultiInvoke:
   en:
     name: Multi Invoke
     description: Cast !d @Elemented @X times.
+    upgradeDescription: Cast !d @Elemented @X times.
 
-base:Mulligan:
+base:spells:Mulligan:
   en:
     name: Mulligan
     description: Draw 1 tile.
     upgradeDescription: Draw 1 tile. @Repeatable !r.
 
-base:Spark:
+base:spells:Spark:
   en:
     name: Spark
-    description: \@Component must be a 1. Cast !d @Elemented. @Repeatable.
+    description: "@Component must be a 1. Cast !d @Elemented. @Repeatable."
+    upgradeDescription: "@Component must be a 1. Cast !d @Elemented. @Repeatable."
 
-base:Reserve:
+base:spells:Reserve:
   en:
     name: Reserve
-    description: \@OpenDiscard the @Component. @Repeatable !r.
+    description: "@OpenDiscard the @Component. @Repeatable !r."
+    upgradeDescription: "@OpenDiscard the @Component. @Repeatable !r."
 
-base:Ground:
+base:spells:Ground:
   en:
     name: Ground
-    description: \@Repeatable !r.
+    description: "@Repeatable !r."
+    upgradeDescription: "@Repeatable !r."
 
-base:Bump:
+base:spells:Bump:
   en:
     name: Bump
     description: Transform the @Component into its @Successor.
     upgradeDescription: Transform the @Component into its @Successor. @Repeatable !r.
 
-base:Nudge:
+base:spells:Nudge:
   en:
     name: Nudge
     description: Transform the @Component into its @Predecessor.
     upgradeDescription: Transform the @Component into its @Predecessor. @Repeatable !r.
 
-base:RampStrike:
+base:spells:RampStrike:
   en:
     name: Ramp Strike
-    description: Cast !d @Elemented. Increases damage by 1 per spell cast this turn.
-    upgradeDescription: Cast !d @Elemented. Increases damage by 2 per spell cast this turn.
+    description: Cast !d @Elemented. Increases damage by 1 per spells cast this turn.
+    upgradeDescription: Cast !d @Elemented. Increases damage by 2 per spells cast this turn.
 
-base:Singularity:
+base:spells:Singularity:
   en:
     name: Singularity
     description: Split an @ElementalTile into at most 3 1s.
     upgradeDescription: Split an @ElementalTile into 1s.
 
-base:Break:
+base:spells:Break:
   en:
     name: Break
     description: Inflict 3 @Elemented @Break.
     upgradeDescription: Inflict 4 @Elemented @Break.
 
-base:Concentrate:
+base:spells:Concentrate:
   en:
     name: Concentrate
     description: Gain 2 @Power.

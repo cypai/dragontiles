@@ -1,0 +1,19 @@
+base:enemies:FlameTurtle:
+  en:
+    name: Flame Turtle
+    description: A turtle. Fairly defensive.
+
+base:enemies:FlameTurtle:Steady:
+  en:
+    name: Steady
+    description: Increases @Defense and @Power by 1.
+
+base:enemies:FlameTurtle:Ember:
+  en:
+    name: Ember
+    description: No special effects.
+
+base:enemies:FlameTurtle:ShellProjection:
+  en:
+    name: Shell Projection
+    description: "@AttackPower scales with @Defense."

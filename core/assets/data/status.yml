@@ -1,0 +1,29 @@
+base:status:Power:
+  en:
+    name: Power
+    description: Spell Attack Power increased by 1 per point of Power.
+
+base:status:Defense:
+  en:
+    name: Defense
+    description: Damage taken via attacks decreased by 1 per point of Defense.
+
+base:status:FireBreak:
+  en:
+    name: Fire Break
+    description: Takes 50% more damage when attacked with Fire.
+
+base:status:IceBreak:
+  en:
+    name: Ice Break
+    description: Takes 50% more damage when attacked with Ice.
+
+base:status:LightningBreak:
+  en:
+    name: Lightning Break
+    description: Takes 50% more damage when attacked with Lightning.
+
+base:status:NonElementalBreak:
+  en:
+    name: Non-Elemental Break
+    description: Takes 50% more damage when attacked with no element.

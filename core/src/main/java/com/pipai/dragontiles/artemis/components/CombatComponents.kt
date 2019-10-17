@@ -40,13 +40,13 @@ class HandLocationComponent : Component() {
 }
 
 class EnemyComponent : Component() {
-    var name = ""
+    var strId = ""
     var hp = 0
     var hpMax = 0
     lateinit var enemy: Enemy
 
     fun setByEnemy(enemy: Enemy) {
-        name = enemy.name
+        strId = enemy.strId
         hp = enemy.hp
         hpMax = enemy.hpMax
         this.enemy = enemy
@@ -65,8 +65,7 @@ class AttackCircleComponent : Component() {
     var turnsLeft = 0
     var maxTurns = 0
     lateinit var element: Element
-    lateinit var name: String
-    var description: String? = null
+    lateinit var strId: String
 
     lateinit var color: Color
     var t = 0f
@@ -87,8 +86,7 @@ class AttackCircleComponent : Component() {
         turnsLeft = countdownAttack.turnsLeft
         maxTurns = countdownAttack.turnsLeft
         element = countdownAttack.element
-        name = countdownAttack.name
-        description = countdownAttack.description
+        strId = countdownAttack.strId
 
         color = when (element) {
             Element.FIRE -> Color.RED

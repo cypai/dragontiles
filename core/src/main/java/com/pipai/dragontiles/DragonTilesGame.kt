@@ -24,15 +24,13 @@ import com.badlogic.gdx.scenes.scene2d.utils.OffsetDrawable
 import com.kotcrab.vis.ui.VisUI
 import com.pipai.dragontiles.artemis.screens.CombatScreen
 import com.pipai.dragontiles.combat.Combat
-import com.pipai.dragontiles.data.Keywords
-import com.pipai.dragontiles.data.SpellStrings
+import com.pipai.dragontiles.data.GameStrings
 import com.pipai.dragontiles.data.TileSkin
 import com.pipai.dragontiles.dungeon.RunData
 import com.pipai.dragontiles.enemies.FlameTurtle
 import com.pipai.dragontiles.hero.Hero
 import com.pipai.dragontiles.relics.Transmuter
 import com.pipai.dragontiles.spells.Break
-import com.pipai.dragontiles.spells.Concentrate
 import com.pipai.dragontiles.spells.Invoke
 import com.pipai.dragontiles.spells.Strike
 import com.pipai.dragontiles.utils.enemyAssetPath
@@ -69,10 +67,8 @@ class DragonTilesGame(val gameConfig: GameConfig) : Game() {
     lateinit var tileSkin: TileSkin
         private set
 
-    lateinit var spellStrings: SpellStrings
+    lateinit var gameStrings: GameStrings
         private set
-
-    val keywords: Keywords = Keywords()
 
     override fun create() {
         logger.info("Starting Dragon Tiles with the following config settings:")
@@ -100,8 +96,12 @@ class DragonTilesGame(val gameConfig: GameConfig) : Game() {
         tinyFont = fontGenerator.generateFont(fontParameter)
         fontGenerator.dispose()
 
-        spellStrings = SpellStrings()
-        spellStrings.load(Gdx.files.internal("assets/data/spells.yml").readString())
+        gameStrings = GameStrings()
+        gameStrings.load(Gdx.files.internal("assets/data/keywords.yml").readString())
+        gameStrings.load(Gdx.files.internal("assets/data/status.yml").readString())
+        gameStrings.load(Gdx.files.internal("assets/data/spells.yml").readString())
+        gameStrings.load(Gdx.files.internal("assets/data/relics.yml").readString())
+        gameStrings.load(Gdx.files.internal("assets/data/enemies.yml").readString())
 
         ToStringBuilder.setDefaultStyle(ToStringStyle.SHORT_PREFIX_STYLE)
 

@@ -48,7 +48,7 @@ class CombatScreen(game: DragonTilesGame, runData: RunData, combat: Combat) : Sc
                         CombatAnimationSystem(game),
                         MouseFollowLineSystem(game.gameConfig),
                         AttackCircleSystem(),
-                        AttackCircleHoverSystem(),
+                        AttackCircleHoverSystem(game.gameStrings),
 
                         InputProcessingSystem(),
                         HoverableSystem(game.gameConfig),

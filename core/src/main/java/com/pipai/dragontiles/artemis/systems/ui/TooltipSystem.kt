@@ -11,7 +11,7 @@ import com.pipai.dragontiles.artemis.systems.NoProcessingSystem
 class TooltipSystem(game: DragonTilesGame, var stage: Stage) : NoProcessingSystem(), InputProcessor {
 
     private val config = game.gameConfig
-    private val keywords = game.keywords
+    private val gameStrings = game.gameStrings
     private val skin = game.skin
 
     private val table = Table()
@@ -27,7 +27,7 @@ class TooltipSystem(game: DragonTilesGame, var stage: Stage) : NoProcessingSyste
             headerSet.add(header)
             textPairs.add(Pair(header, text.replace("@", "")))
             if (recurse) {
-                keywords.findKeywords(text)
+                gameStrings.findKeywords(text)
                         .forEach { addKeyword(it) }
             }
         }
@@ -35,18 +35,18 @@ class TooltipSystem(game: DragonTilesGame, var stage: Stage) : NoProcessingSyste
 
     fun addKeyword(keyword: String) {
         if (keyword !in headerSet) {
-            val data = keywords.getData(keyword)
+            val data = gameStrings.keyword(keyword)
             if (data != null) {
-                textPairs.add(Pair(data.text, data.description.replace("@", "")))
+                textPairs.add(Pair(data.name, data.description.replace("@", "")))
                 headerSet.add(keyword)
-                keywords.findKeywords(data.description)
+                gameStrings.findKeywords(data.description)
                         .forEach { addKeyword(it) }
             }
         }
     }
 
     fun addKeywordsInString(str: String) {
-        keywords.findKeywords(str)
+        gameStrings.findKeywords(str)
                 .forEach { addKeyword(it) }
     }
 

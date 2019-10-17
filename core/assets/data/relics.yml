@@ -1,34 +1,34 @@
-base:Transmuter:
+base:relics:Transmuter:
   en:
     name: Transmuter
     description: Transform the number of the first Elemental Tile you draw per turn.
 
-base:LeatherArmor:
+base:relics:LeatherArmor:
   en:
     name: Leather Armor
     description: +1 Defense
 
-base:Buckler:
+base:relics:Buckler:
   en:
     name: Buckler
     description: If you would take 5 or less damage, take 1 damage only instead.
 
-base:PowerAmp:
+base:relics:PowerAmp:
   en:
     name: Power Amp
     description: +1 Power
 
-base:Flamberge:
+base:relics:Flamberge:
   en:
     name: Flamberge
     description: Fire spells +3 Power
 
-base:SnowGlobe:
+base:relics:SnowGlobe:
   en:
     name: Snow Globe
     description: Ice spells +3 Power
 
-base:TeslaCoil:
+base:relics:TeslaCoil:
   en:
     name: Tesla Coil
     description: Lightning spells +3 Power

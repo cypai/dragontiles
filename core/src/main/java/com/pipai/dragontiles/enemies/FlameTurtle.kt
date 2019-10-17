@@ -9,7 +9,7 @@ import com.pipai.dragontiles.data.Suit
 
 class FlameTurtle : Enemy() {
 
-    override val name: String = "Flame Turtle"
+    override val strId: String = "base:enemies:FlameTurtle"
     override val assetName: String = "flame_turtle.png"
 
     override val hpMax: Int = 30
@@ -28,20 +28,18 @@ class FlameTurtle : Enemy() {
                                     Pair(Status.POWER, 1)),
                             listOf(this),
                             Element.NONE, Suit.LIFE,
-                            "Steady",
-                            "Increases @Defense and @Power by 1.",
+                            "base:enemies:FlameTurtle:Steady",
                             1))
                 }
                 1 -> {
                     api.enemyCreateAttack(this, StandardCountdownAttack(
                             api.nextId(), 8, Element.FIRE, Suit.FIRE,
-                            "Ember", 2))
+                            "base:enemies:FlameTurtle:Ember", 2))
                 }
                 2 -> {
                     api.enemyCreateAttack(this, StandardCountdownAttack(
                             api.nextId(), 4 + api.fetchEnemyStatus(id, Status.DEFENSE), Element.FIRE, Suit.FIRE,
-                            "Shell Projection",
-                            "Spell Power scales with @Defense.",
+                            "base:enemies:FlameTurtle:ShellProjection",
                             1))
                 }
             }

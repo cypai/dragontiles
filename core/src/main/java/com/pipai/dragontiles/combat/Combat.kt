@@ -18,12 +18,13 @@ data class Combat(val enemies: MutableList<Enemy>) {
     val enemyStatus: MutableMap<Int, StatusData> = mutableMapOf()
 }
 
-enum class Status(val decreasing: Boolean, val positive: Boolean) {
-    POWER(false, false),
-    DEFENSE(false, false),
-    FIRE_BREAK(true, true),
-    ICE_BREAK(true, true),
-    LIGHTNING_BREAK(true, true)
+enum class Status(val strId: String, val decreasing: Boolean, val positive: Boolean) {
+    POWER("base:status:Power", false, false),
+    DEFENSE("base:status:Defense", false, false),
+    FIRE_BREAK("base:status:FireBreak", true, true),
+    ICE_BREAK("base:status:IceBreak", true, true),
+    LIGHTNING_BREAK("base:status:LightningBreak", true, true),
+    NONELEMENTAL_BREAK("base:status:NonElementalBreak", true, true)
 }
 
 data class StatusData(val data: MutableMap<Status, Int> = mutableMapOf()) {

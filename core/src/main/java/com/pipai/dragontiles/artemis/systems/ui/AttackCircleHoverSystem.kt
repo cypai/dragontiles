@@ -5,10 +5,11 @@ import com.pipai.dragontiles.artemis.components.AttackCircleComponent
 import com.pipai.dragontiles.artemis.events.AttackCircleHoverEnterEvent
 import com.pipai.dragontiles.artemis.events.AttackCircleHoverExitEvent
 import com.pipai.dragontiles.artemis.systems.NoProcessingSystem
+import com.pipai.dragontiles.data.GameStrings
 import com.pipai.dragontiles.utils.system
 import net.mostlyoriginal.api.event.common.Subscribe
 
-class AttackCircleHoverSystem : NoProcessingSystem() {
+class AttackCircleHoverSystem(private val gameStrings: GameStrings) : NoProcessingSystem() {
 
     private lateinit var stage: Stage
 
@@ -22,13 +23,12 @@ class AttackCircleHoverSystem : NoProcessingSystem() {
     @Subscribe
     fun handleEnter(ev: AttackCircleHoverEnterEvent) {
         val ac = ev.cAttackCircle
-        sTooltip.addText("Spell: ${ac.name}", ac.description ?: "No special effects.", false)
+        val l = gameStrings.nameDescLocalization(ac.strId)
+        sTooltip.addText("Spell: ${l.name}", l.description, false)
         sTooltip.addText("Current Power", spellPowerText(ac), false)
         sTooltip.addKeyword("@AttackPower")
         sTooltip.addKeyword("@EffectPower")
-        if (ac.description != null) {
-            sTooltip.addKeywordsInString(ac.description!!)
-        }
+        sTooltip.addKeywordsInString(l.description)
         sTooltip.showTooltip(stage)
     }
 

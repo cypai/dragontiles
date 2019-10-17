@@ -10,8 +10,7 @@ abstract class CountdownAttack(val id: Int) : Targetable {
     abstract var effectPower: Int
     abstract val element: Element
     abstract var turnsLeft: Int
-    abstract val name: String
-    abstract val description: String?
+    abstract val strId: String
 
     var counteredAttackPower: Int = 0
     var counteredEffectPower: Int = 0
@@ -40,16 +39,8 @@ class StandardCountdownAttack(id: Int,
                               override var attackPower: Int,
                               override val element: Element,
                               val discardSuit: Suit,
-                              override val name: String,
-                              override val description: String?,
+                              override val strId: String,
                               override var turnsLeft: Int) : CountdownAttack(id) {
-    constructor(id: Int,
-                attackPower: Int,
-                element: Element,
-                discardSuit: Suit,
-                name: String,
-                turnsLeft: Int)
-            : this(id, attackPower, element, discardSuit, name, null, turnsLeft)
 
     override var effectPower: Int = 0
 
@@ -63,13 +54,12 @@ class BuffCountdownAttack(id: Int,
                           val targets: List<Enemy>,
                           override val element: Element,
                           val discardSuit: Suit,
-                          override val name: String,
-                          override val description: String?,
+                          override val strId: String,
                           override var turnsLeft: Int) : CountdownAttack(id) {
     constructor(id: Int, effectPower: Int, status: Status, amount: Int,
                 target: Enemy, element: Element, discardSuit: Suit,
-                name: String, description: String?, turnsLeft: Int)
-            : this(id, 0, effectPower, listOf(Pair(status, amount)), listOf(target), element, discardSuit, name, description, turnsLeft)
+                strId: String, turnsLeft: Int)
+            : this(id, 0, effectPower, listOf(Pair(status, amount)), listOf(target), element, discardSuit, strId, turnsLeft)
 
     override fun discardTile(rng: Random): Tile = standardDiscard(rng, discardSuit)
 
@@ -90,8 +80,7 @@ class DebuffCountdownAttack(id: Int,
                             val statusAmount: List<Pair<Status, Int>>,
                             override val element: Element,
                             val discardSuit: Suit,
-                            override val name: String,
-                            override val description: String?,
+                            override val strId: String,
                             override var turnsLeft: Int) : CountdownAttack(id) {
 
     override fun discardTile(rng: Random): Tile = standardDiscard(rng, discardSuit)
