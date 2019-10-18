@@ -59,9 +59,9 @@ class CombatController(private val runData: RunData,
 
     suspend fun runTurn() {
         combat.turnNumber += 1
-        combat.enemies.forEach {
-            it.runTurn(api)
-        }
+        combat.enemies
+                .filter { it.hp > 0 }
+                .forEach { it.runTurn(api) }
         if (combat.turnNumber > 1) {
             api.queryOpenPoolDraw()
         }

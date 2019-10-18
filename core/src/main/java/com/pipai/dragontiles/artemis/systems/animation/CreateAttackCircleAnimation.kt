@@ -27,13 +27,8 @@ class CreateAttackCircleAnimation(private val enemy: Enemy,
     private lateinit var sAttackCircle: AttackCircleSystem
 
     override fun startAnimation() {
-        var enemyId = 0
-        world.fetch(allOf(EnemyComponent::class)).forEach {
-            val cEnemy = mEnemy.get(it)
-            if (cEnemy.enemy == enemy) {
-                enemyId = it
-            }
-        }
+        val enemyId = world.fetch(allOf(EnemyComponent::class))
+                .first { mEnemy.get(it).enemy.id == enemy.id }
         val cEnemyXy = mXy.get(enemyId)
 
         val id = world.create()
