@@ -48,7 +48,7 @@ data class CountdownAttackResolveEvent(val countdownAttack: CountdownAttack) : C
 
 data class CountdownAttackDamageEvent(val countdownAttack: CountdownAttack, val attackPowerDamage: Int, val effectPowerDamage: Int) : CombatEvent
 
-data class CountdownAttackDisruptedEvent(val countdownAttack: CountdownAttack, val attackPowerDamage: Int, val effectPowerDamage: Int) : CombatEvent
+data class CountdownAttackDisruptedEvent(val countdownAttack: CountdownAttack) : CombatEvent
 
 data class PlayerDamageEvent(val amount: Int) : CombatEvent
 

@@ -148,6 +148,7 @@ class CombatApi(val runData: RunData,
         eventBus.dispatch(EnemyDamageEvent(enemy, damage))
         if (enemy.hp <= 0) {
             eventBus.dispatch(EnemyDefeatedEvent(enemy))
+            disruptEnemyCountdownAttack(enemy.id)
             if (combat.enemies.all { it.hp <= 0 }) {
                 combat.heroStatus.clear()
                 eventBus.dispatch(BattleWinEvent())
@@ -161,14 +162,23 @@ class CombatApi(val runData: RunData,
             val residual = ca.counteredAttackPower - ca.attackPower
             ca.counteredAttackPower = ca.attackPower
             ca.counteredEffectPower += residual
-            if (ca.counteredEffectPower > ca.effectPower) {
-                combat.enemyAttacks.remove(combat.enemyAttacks.entries.find { it.value == ca }!!.key)
-                eventBus.dispatch(CountdownAttackDisruptedEvent(ca, damage - residual, residual))
-            } else {
-                eventBus.dispatch(CountdownAttackDamageEvent(ca, damage - residual, residual))
+            eventBus.dispatch(CountdownAttackDamageEvent(ca, damage - residual, residual))
+            if (ca.counteredEffectPower >= ca.effectPower) {
+                disruptCountdownAttack(ca)
             }
         } else {
             eventBus.dispatch(CountdownAttackDamageEvent(ca, damage, 0))
+        }
+    }
+
+    suspend fun disruptCountdownAttack(ca: CountdownAttack) {
+        disruptEnemyCountdownAttack(combat.enemyAttacks.entries.find { it.value == ca }!!.key)
+    }
+
+    suspend fun disruptEnemyCountdownAttack(enemyId: Int) {
+        val ca = combat.enemyAttacks.remove(enemyId)
+        ca?.let {
+            eventBus.dispatch(CountdownAttackDisruptedEvent(ca))
         }
     }
 
