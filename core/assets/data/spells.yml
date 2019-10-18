@@ -4,6 +4,12 @@ base:spells:Invoke:
     description: Cast !d @Elemented.
     upgradeDescription: Cast !d @Elemented. @Repeatable !r.
 
+base:spells:Blast:
+  en:
+    name: Blast
+    description: Cast !d @Elemented. @AOE.
+    upgradeDescription: Cast !d @Elemented. @AOE.
+
 base:spells:Strike:
   en:
     name: Strike

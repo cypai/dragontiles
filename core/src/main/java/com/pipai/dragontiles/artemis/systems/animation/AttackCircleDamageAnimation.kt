@@ -17,7 +17,7 @@ class AttackCircleDamageAnimation(private val attack: CountdownAttack) : Animati
         val cAttackCircle = mAttackCircle.get(id)
         cAttackCircle.setByCountdown(attack)
 
-        endAnimation(30)
+        endAnimation()
     }
 
 }

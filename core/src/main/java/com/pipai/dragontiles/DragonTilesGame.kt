@@ -31,6 +31,7 @@ import com.pipai.dragontiles.enemies.FlameTurtle
 import com.pipai.dragontiles.enemies.Slime
 import com.pipai.dragontiles.hero.Hero
 import com.pipai.dragontiles.relics.Transmuter
+import com.pipai.dragontiles.spells.Blast
 import com.pipai.dragontiles.spells.Break
 import com.pipai.dragontiles.spells.Invoke
 import com.pipai.dragontiles.spells.Strike
@@ -115,7 +116,8 @@ class DragonTilesGame(val gameConfig: GameConfig) : Game() {
                         mutableListOf(
                                 Invoke(false),
                                 Strike(false),
-                                Break(false)),
+                                Break(false),
+                                Blast(false)),
                         mutableListOf(
                                 Transmuter())
                 ),

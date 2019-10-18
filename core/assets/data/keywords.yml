@@ -4,6 +4,12 @@ base:keywords:Elemented:
     name: Elemented
     description: The element of the @Components determines the damage element. Star or Life tiles use the Non-Elemental element.
 
+base:keywords:AOE:
+  en:
+    key: "@AOE"
+    name: AOE
+    description: Targets all enemies or spells.
+
 base:keywords:Components:
   en:
     key: "@Components"
