@@ -111,7 +111,7 @@ class DragonTilesGame(val gameConfig: GameConfig) : Game() {
 
         val runData = RunData(
                 Random(),
-                Hero("Elementalist", 80, 80, 15,
+                Hero("Elementalist", 80, 80, 17,
                         mutableListOf(
                                 Invoke(false),
                                 Strike(false),
