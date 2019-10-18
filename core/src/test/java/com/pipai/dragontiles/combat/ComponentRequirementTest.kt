@@ -26,6 +26,10 @@ class ComponentRequirementTest {
         Assert.assertFalse(single.satisfied(slots))
         slots.first().tile = sets.first().first()
         Assert.assertTrue(single.satisfied(slots))
+
+        val givenSets = single.findGiven(hand, listOf(hand.first()))
+        Assert.assertEquals(2, givenSets.size)
+        Assert.assertFalse(givenSets.flatten().contains(hand.first()))
     }
 
     @Test
@@ -48,6 +52,27 @@ class ComponentRequirementTest {
             slot.tile = tile
         }
         Assert.assertTrue(identical.satisfied(slots))
+
+        var givenSets = identical.findGiven(hand, listOf(hand.first()))
+        Assert.assertTrue(givenSets.isEmpty())
+
+        givenSets = identical.findGiven(hand, hand)
+        Assert.assertTrue(givenSets.isEmpty())
+
+        givenSets = identical.findGiven(hand, listOf(hand[1]))
+        Assert.assertEquals(1, givenSets.size)
+
+        givenSets = identical.findGiven(hand, listOf(hand[2]))
+        Assert.assertEquals(1, givenSets.size)
+
+        givenSets = identical.findGiven(hand, listOf(hand[3]))
+        Assert.assertEquals(1, givenSets.size)
+
+        givenSets = identical.findGiven(hand, listOf(hand[1], hand[2]))
+        Assert.assertEquals(1, givenSets.size)
+
+        givenSets = identical.findGiven(hand, listOf(hand[1], hand[2], hand[3]))
+        Assert.assertEquals(1, givenSets.size)
     }
 
     @Test
@@ -62,7 +87,7 @@ class ComponentRequirementTest {
                 TileInstance(Tile.StarTile(StarType.STAR), 5)
         )
         val sets = sequential.find(hand)
-        Assert.assertEquals(1, sets.size)
+        Assert.assertEquals(2, sets.size)
         sets.forEach {
             Assert.assertEquals(3, it.size)
             Assert.assertTrue(it.first() in hand)
@@ -73,5 +98,35 @@ class ComponentRequirementTest {
             slot.tile = tile
         }
         Assert.assertTrue(sequential.satisfied(slots))
+
+        var givenSets = sequential.findGiven(hand, listOf(hand.last()))
+        Assert.assertTrue(givenSets.isEmpty())
+
+        givenSets = sequential.findGiven(hand, listOf(hand[0]))
+        Assert.assertEquals(1, givenSets.size)
+
+        givenSets = sequential.findGiven(hand, listOf(hand[1]))
+        Assert.assertEquals(1, givenSets.size)
+
+        givenSets = sequential.findGiven(hand, listOf(hand[2]))
+        Assert.assertEquals(2, givenSets.size)
+
+        givenSets = sequential.findGiven(hand, listOf(hand[3]))
+        Assert.assertEquals(2, givenSets.size)
+
+        givenSets = sequential.findGiven(hand, listOf(hand[4]))
+        Assert.assertTrue(givenSets.isEmpty())
+
+        givenSets = sequential.findGiven(hand, listOf(hand[0], hand[2]))
+        Assert.assertEquals(1, givenSets.size)
+
+        givenSets = sequential.findGiven(hand, listOf(hand[1], hand[2]))
+        Assert.assertEquals(1, givenSets.size)
+
+        givenSets = sequential.findGiven(hand, listOf(hand[0], hand[2], hand[3]))
+        Assert.assertEquals(1, givenSets.size)
+
+        givenSets = sequential.findGiven(hand, listOf(hand[1], hand[2], hand[3]))
+        Assert.assertEquals(1, givenSets.size)
     }
 }

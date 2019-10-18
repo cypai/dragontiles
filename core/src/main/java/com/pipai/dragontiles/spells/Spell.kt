@@ -5,6 +5,8 @@ import com.pipai.dragontiles.data.Suit
 import com.pipai.dragontiles.data.Tile
 import com.pipai.dragontiles.data.TileInstance
 import com.pipai.dragontiles.utils.getLogger
+import com.pipai.dragontiles.utils.withAll
+import com.pipai.dragontiles.utils.withoutAll
 import org.apache.commons.lang3.builder.ToStringBuilder
 
 abstract class Spell(var upgraded: Boolean) {
@@ -98,6 +100,7 @@ abstract class ComponentRequirement(val slotAmount: Int) {
     val componentSlots: List<ComponentSlot> = generateSlots(slotAmount)
 
     abstract fun find(hand: List<TileInstance>): List<List<TileInstance>>
+    abstract fun findGiven(hand: List<TileInstance>, given: List<TileInstance>): List<List<TileInstance>>
     abstract fun satisfied(slots: List<ComponentSlot>): Boolean
 }
 
@@ -136,6 +139,14 @@ class Single(private val allowedSuits: Set<Suit>) : ComponentRequirement(1) {
                 .map { listOf(it) }
     }
 
+    override fun findGiven(hand: List<TileInstance>, given: List<TileInstance>): List<List<TileInstance>> {
+        return when (given.size) {
+            0 -> find(hand)
+            1 -> hand.withoutAll(given).map { listOf(it) }
+            else -> listOf()
+        }
+    }
+
     override fun satisfied(slots: List<ComponentSlot>): Boolean {
         return slots.size == 1
                 && slots.firstOrNull()?.tile?.let { allowedSuits.contains(it.tile.suit) } ?: false
@@ -167,6 +178,33 @@ class Identical(slotAmount: Int, private val allowedSuits: Set<Suit>) : Componen
                 .toList()
     }
 
+    override fun findGiven(hand: List<TileInstance>, given: List<TileInstance>): List<List<TileInstance>> {
+        if (given.size > slotAmount) {
+            return listOf()
+        }
+        return when (given.size) {
+            0 -> find(hand)
+            1 -> find(hand.filter { it.tile == given.first().tile })
+            slotAmount -> {
+                if (given.all { it.tile == given.first().tile }) {
+                    listOf(given)
+                } else {
+                    listOf()
+                }
+            }
+            else -> {
+                val first = given.first()
+                if (given.all { it.tile == first.tile }) {
+                    Identical(slotAmount - given.size, allowedSuits)
+                            .find(hand.withoutAll(given).filter { it.tile == first.tile })
+                            .map { it.withAll(given) }
+                } else {
+                    listOf()
+                }
+            }
+        }
+    }
+
     override fun satisfied(slots: List<ComponentSlot>): Boolean {
         val first = slots.firstOrNull()?.tile
         return slots.size == slotAmount
@@ -183,17 +221,18 @@ class Sequential(slotAmount: Int, private val allowedSuits: Set<Suit>) : Compone
     override val description = "A set of $slotAmount sequential tiles"
 
     override fun find(hand: List<TileInstance>): List<List<TileInstance>> {
-        val sequences: MutableMap<Tile, MutableList<TileInstance>> = mutableMapOf()
+        val sequences: MutableMap<TileInstance, MutableList<TileInstance>> = hand
+                .filter { it.tile.suit in allowedSuits }
+                .associateWith { mutableListOf(it) }
+                .toMutableMap()
+
         hand.filter { it.tile.suit in allowedSuits }
                 .forEach {
                     val tile = it.tile as Tile.ElementalTile
-                    if (tile !in sequences) {
-                        sequences[tile] = mutableListOf(it)
-                        sequences.values.forEach { s ->
-                            val last = s.last().tile as Tile.ElementalTile
-                            if (s.size < slotAmount && last.suit == tile.suit && last.number == tile.number - 1) {
-                                s.add(it)
-                            }
+                    sequences.values.forEach { s ->
+                        val last = s.last().tile as Tile.ElementalTile
+                        if (s.size < slotAmount && last.suit == tile.suit && last.number == tile.number - 1) {
+                            s.add(it)
                         }
                     }
                 }
@@ -202,10 +241,46 @@ class Sequential(slotAmount: Int, private val allowedSuits: Set<Suit>) : Compone
                 .toList()
     }
 
+    override fun findGiven(hand: List<TileInstance>, given: List<TileInstance>): List<List<TileInstance>> {
+        if (given.size > slotAmount) {
+            return listOf()
+        }
+        return when (given.size) {
+            0 -> find(hand)
+            else -> {
+                val first = given.first().tile
+                if (first !is Tile.ElementalTile
+                        || !given.all { it.tile.suit in allowedSuits && it.tile.suit == first.suit }
+                        || !sequential(given.map { it.tile as Tile.ElementalTile })) {
+                    return listOf()
+                }
+                if (given.size == slotAmount) {
+                    return listOf(given)
+                }
+                return find(hand.filter { handTile ->
+                    val tile = handTile.tile
+                    val givenTiles = given.map { it.tile as Tile.ElementalTile }
+                    val minimum = givenTiles.minBy { it.number }!!.number - slotAmount
+                    val maximum = givenTiles.maxBy { it.number }!!.number + slotAmount
+                    tile is Tile.ElementalTile
+                            && tile.suit == first.suit
+                            && tile.number >= minimum
+                            && tile.number <= maximum
+                            && (handTile in given || tile.number !in givenTiles.map { it.number })
+                }.also { println(it) })
+                        .also { println("Returned $it") }
+            }
+        }
+    }
+
     override fun satisfied(slots: List<ComponentSlot>): Boolean {
         return slots.size == slotAmount
                 && slots.all { it.tile != null && it.tile?.tile?.suit in allowedSuits }
-                && slots.windowed(2)
-                .all { (it[0].tile?.tile as Tile.ElementalTile).number == (it[1].tile?.tile as Tile.ElementalTile).number - 1 }
+                && sequential(slots.map { it.tile!!.tile as Tile.ElementalTile })
+    }
+
+    private fun sequential(tiles: List<Tile.ElementalTile>): Boolean {
+        return tiles.windowed(2)
+                .all { it[0].number == it[1].number - 1 }
     }
 }
