@@ -24,6 +24,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.OffsetDrawable
 import com.kotcrab.vis.ui.VisUI
 import com.pipai.dragontiles.artemis.screens.CombatScreen
 import com.pipai.dragontiles.data.GameStrings
+import com.pipai.dragontiles.data.HeroSpells
 import com.pipai.dragontiles.data.TileSkin
 import com.pipai.dragontiles.dungeon.PlainsDungeon
 import com.pipai.dragontiles.dungeon.RunData
@@ -69,6 +70,8 @@ class DragonTilesGame(val gameConfig: GameConfig) : Game() {
     lateinit var gameStrings: GameStrings
         private set
 
+    val heroSpells = HeroSpells()
+
     override fun create() {
         logger.info("Starting Dragon Tiles with the following config settings:")
         logger.info(gameConfig.resolution.toDebugString())
@@ -113,9 +116,7 @@ class DragonTilesGame(val gameConfig: GameConfig) : Game() {
                         mutableListOf(
                                 Invoke(false),
                                 Strike(false),
-                                Break(false),
-                                Blast(false),
-                                Explosion(false)),
+                                Break(false)),
                         mutableListOf(
                                 Transmuter())
                 ),

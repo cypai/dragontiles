@@ -27,7 +27,7 @@ import com.pipai.dragontiles.combat.QueryTilesEvent
 import com.pipai.dragontiles.data.Tile
 import com.pipai.dragontiles.dungeon.RunData
 import com.pipai.dragontiles.gui.SpellCard
-import com.pipai.dragontiles.spells.*
+import com.pipai.dragontiles.spells.Spell
 import com.pipai.dragontiles.utils.mapper
 import com.pipai.dragontiles.utils.system
 import net.mostlyoriginal.api.event.common.Subscribe
@@ -187,17 +187,8 @@ class CombatQueryUiSystem(private val game: DragonTilesGame, private val runData
 
     fun generateRewards() {
         stateMachine.changeState(CombatQueryUiState.REWARDS)
-        val spells = listOf(
-                Strike(rngUpgrade()),
-                RampStrike(rngUpgrade()),
-                Break(rngUpgrade()),
-                Concentrate(rngUpgrade())
-        )
-        val rewards = spells.shuffled().subList(0, 3)
-        generateRewardsTable(rewards)
+        generateRewardsTable(game.heroSpells.generateRewards(runData, 3))
     }
-
-    private fun rngUpgrade() = runData.rng.nextInt(100) < 20
 
     private fun generateRewardsTable(spells: List<Spell>) {
         val rewardsTable = Table()
@@ -211,7 +202,7 @@ class CombatQueryUiSystem(private val game: DragonTilesGame, private val runData
                     runData.dungeon.currentFloor <= 9 -> runData.dungeon.standardEncounter(runData)
                     else -> runData.dungeon.bossEncounter(runData)
                 }
-                game.screen = CombatScreen(game, runData, runData.dungeon.easyEncounter(runData))
+                game.screen = CombatScreen(game, runData, encounter)
             }
             rewardsTable.add(spellCard)
         }
