@@ -40,9 +40,7 @@ class CreateAttackCircleAnimation(private val enemy: Enemy,
         val cAttackCircle = mAttackCircle.create(id)
         cAttackCircle.enemyId = enemy.id
         cAttackCircle.setByCountdown(attack)
-        sAttackCircle.handleNewAttackCircle(id)
-        val index = sAttackCircle.getCircleIndex(enemy.id, attack.id)
-        mXy.create(id).setXy(cEnemyXy.x + 64f * index, cEnemyXy.y - 100f)
+        mXy.create(id).setXy(cEnemyXy.x + 64f, cEnemyXy.y - 100f)
         val angularIncrement = 360f / cAttackCircle.maxTurns
         val cRadial = mRadial.create(id)
         cRadial.sprite = RadialSprite(game.skin.getRegion("circle"))
@@ -50,7 +48,7 @@ class CreateAttackCircleAnimation(private val enemy: Enemy,
         cRadial.sprite.setColor(cAttackCircle.color)
 
         val bgId = world.create()
-        mXy.create(bgId).setXy(cEnemyXy.x + 64f * index, cEnemyXy.y - 100f)
+        mXy.create(bgId).setXy(cEnemyXy.x + 64f, cEnemyXy.y - 100f)
         val cBgRadial = mRadial.create(bgId)
         cBgRadial.sprite = RadialSprite(game.skin.getRegion("circle"))
         cBgRadial.sprite.setAngle(0f)

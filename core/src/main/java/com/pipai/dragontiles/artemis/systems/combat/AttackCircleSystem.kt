@@ -17,52 +17,6 @@ class AttackCircleSystem : IteratingSystem(allOf()) {
 
     private val baseIncrement = 1f / 60f
 
-    private val circleIndexMap: MutableMap<Int, MutableList<Int?>> = mutableMapOf()
-
-    override fun initialize() {
-        world.aspectSubscriptionManager.get(allOf(AttackCircleComponent::class))
-                .addSubscriptionListener(object : EntitySubscription.SubscriptionListener {
-                    override fun inserted(entities: IntBag?) {
-                    }
-
-                    override fun removed(entities: IntBag?) {
-                        entities?.forEach {
-                            val cAttackCircle = mAttackCircle.get(it)
-                            circleIndexMap[cAttackCircle.enemyId]!!.replaceAll { circleId ->
-                                if (circleId == cAttackCircle.id) {
-                                    null
-                                } else {
-                                    circleId
-                                }
-                            }
-                        }
-                    }
-                })
-    }
-
-    fun handleNewAttackCircle(id: Int) {
-        val cAttackCircle = mAttackCircle.get(id)
-        addToCircleIndex(cAttackCircle.enemyId, cAttackCircle.id)
-    }
-
-    private fun addToCircleIndex(enemyId: Int, circleId: Int) {
-        if (!circleIndexMap.containsKey(enemyId)) {
-            circleIndexMap[enemyId] = mutableListOf()
-        }
-        val indexes = circleIndexMap[enemyId]!!
-        val firstIndex = indexes.indexOfFirst { it == null }
-        if (firstIndex == -1) {
-            indexes.add(circleId)
-        } else {
-            indexes.removeAt(firstIndex)
-            indexes.add(firstIndex, circleId)
-        }
-    }
-
-    fun getCircleIndex(enemyId: Int, circleId: Int): Int {
-        return circleIndexMap[enemyId]!!.indexOf(circleId)
-    }
-
     override fun process(entityId: Int) {
         val cAttackCircle = mAttackCircle.get(entityId)
         val increment = when (cAttackCircle.turnsLeft) {
