@@ -1,32 +1,38 @@
 base:spells:Invoke:
   en:
     name: Invoke
-    description: Cast !d @Elemented.
-    upgradeDescription: Cast !d @Elemented. @Repeatable !r.
+    description: Deal !d @Elemented damage.
+    upgradeDescription: Deal !d @Elemented damage. @Repeatable !r.
 
 base:spells:Blast:
   en:
     name: Blast
-    description: Cast !d @Elemented. @AOE.
-    upgradeDescription: Cast !d @Elemented. @AOE.
+    description: Deal !d @Elemented @AOE damage.
+    upgradeDescription: Deal !d @Elemented @AOE damage.
+
+base:spells:Explosion:
+  en:
+    name: Explosion
+    description: Deal !d[2x@Numeric] @Elemented @AOE damage. @Exhaust.
+    upgradeDescription: Deal !d[3x@Numeric] @Elemented @AOE damage. @Exhaust.
 
 base:spells:Strike:
   en:
     name: Strike
-    description: Cast !d @Elemented.
-    upgradeDescription: Cast !d @Elemented. @Repeatable !r.
+    description: Deal !d @Elemented damage.
+    upgradeDescription: Deal !d @Elemented damage. @Repeatable !r.
 
 base:spells:QuickInvoke:
   en:
     name: Quick Invoke
-    description: Cast !d @Elemented. @Repeatable !r.
-    upgradeDescription: Cast !d @Elemented. @Repeatable !r.
+    description: Deal !d @Elemented damage. @Repeatable !r.
+    upgradeDescription: Deal !d @Elemented damage. @Repeatable !r.
 
 base:spells:MultiInvoke:
   en:
     name: Multi Invoke
-    description: Cast !d @Elemented @X times.
-    upgradeDescription: Cast !d @Elemented @X times.
+    description: Deal !d @Elemented damage @X times.
+    upgradeDescription: Deal !d @Elemented damage @X times.
 
 base:spells:Mulligan:
   en:
@@ -37,8 +43,8 @@ base:spells:Mulligan:
 base:spells:Spark:
   en:
     name: Spark
-    description: "@Component must be a 1. Cast !d @Elemented. @Repeatable."
-    upgradeDescription: "@Component must be a 1. Cast !d @Elemented. @Repeatable."
+    description: "@Component must be a 1. Deal !d @Elemented damage. @Repeatable."
+    upgradeDescription: "@Component must be a 1. Deal !d @Elemented damage. @Repeatable."
 
 base:spells:Reserve:
   en:
@@ -67,8 +73,8 @@ base:spells:Nudge:
 base:spells:RampStrike:
   en:
     name: Ramp Strike
-    description: Cast !d @Elemented. Increases damage by 1 per spells cast this turn.
-    upgradeDescription: Cast !d @Elemented. Increases damage by 2 per spells cast this turn.
+    description: Deal !d @Elemented damage. Increases damage by 1 per spells cast this turn.
+    upgradeDescription: Deal !d @Elemented damage. Increases damage by 2 per spells cast this turn.
 
 base:spells:Singularity:
   en:

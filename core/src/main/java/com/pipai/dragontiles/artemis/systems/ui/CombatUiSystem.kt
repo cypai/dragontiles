@@ -12,8 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.pipai.dragontiles.DragonTilesGame
 import com.pipai.dragontiles.artemis.components.*
-import com.pipai.dragontiles.artemis.events.AttackCircleClickEvent
-import com.pipai.dragontiles.artemis.events.EnemyClickEvent
+import com.pipai.dragontiles.artemis.events.*
 import com.pipai.dragontiles.artemis.systems.NoProcessingSystem
 import com.pipai.dragontiles.artemis.systems.combat.CombatControllerSystem
 import com.pipai.dragontiles.data.TileInstance
@@ -245,6 +244,38 @@ class CombatUiSystem(private val game: DragonTilesGame,
     private fun getSelectedSpell() = spells[selectedSpellNumber!!]!!.getSpell()!!
 
     @Subscribe
+    fun handleEnemyHoverEnter(ev: EnemyHoverEnterEvent) {
+        getSelectedSpellCard()?.let {
+            it.target = ev.cEnemy.enemy
+            it.update()
+        }
+    }
+
+    @Subscribe
+    fun handleEnemyHoverExit(ev: EnemyHoverExitEvent) {
+        getSelectedSpellCard()?.let {
+            it.target = null
+            it.update()
+        }
+    }
+
+    @Subscribe
+    fun handleAttackCircleHoverEnter(ev: AttackCircleHoverEnterEvent) {
+        getSelectedSpellCard()?.let {
+            it.target = sCombat.controller.api.getCountdownAttack(ev.cAttackCircle.id)
+            it.update()
+        }
+    }
+
+    @Subscribe
+    fun handleAttackCircleHoverExit(ev: AttackCircleHoverExitEvent) {
+        getSelectedSpellCard()?.let {
+            it.target = null
+            it.update()
+        }
+    }
+
+    @Subscribe
     fun handleEnemyClick(ev: EnemyClickEvent) {
         val spell = getSelectedSpell()
         if (stateMachine.currentState == CombatUiState.TARGET_SELECTION) {
@@ -326,6 +357,7 @@ class CombatUiSystem(private val game: DragonTilesGame,
         ROOT() {
             override fun enter(uiSystem: CombatUiSystem) {
                 uiSystem.spells.forEach { _, spellCard ->
+                    spellCard.target = null
                     spellCard.update()
                     val spell = spellCard.getSpell()
                     if (spell == null || !spell.available()) {
@@ -354,6 +386,7 @@ class CombatUiSystem(private val game: DragonTilesGame,
         },
         TARGET_SELECTION() {
             override fun enter(uiSystem: CombatUiSystem) {
+                uiSystem.getSelectedSpellCard()?.update()
                 val id = uiSystem.world.create()
                 uiSystem.mouseFollowEntityId = id
                 val cLine = uiSystem.mLine.create(id)

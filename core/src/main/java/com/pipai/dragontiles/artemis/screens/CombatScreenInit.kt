@@ -10,6 +10,8 @@ import com.pipai.dragontiles.DragonTilesGame
 import com.pipai.dragontiles.artemis.Tags
 import com.pipai.dragontiles.artemis.components.*
 import com.pipai.dragontiles.artemis.events.EnemyClickEvent
+import com.pipai.dragontiles.artemis.events.EnemyHoverEnterEvent
+import com.pipai.dragontiles.artemis.events.EnemyHoverExitEvent
 import com.pipai.dragontiles.artemis.systems.combat.CombatControllerSystem
 import com.pipai.dragontiles.artemis.systems.ui.CombatUiSystem
 import com.pipai.dragontiles.dungeon.Encounter
@@ -22,6 +24,7 @@ class CombatScreenInit(private val game: DragonTilesGame, private val world: Wor
     private lateinit var mXy: ComponentMapper<XYComponent>
     private lateinit var mSprite: ComponentMapper<SpriteComponent>
     private lateinit var mEnemy: ComponentMapper<EnemyComponent>
+    private lateinit var mHoverable: ComponentMapper<HoverableComponent>
     private lateinit var mClickable: ComponentMapper<ClickableComponent>
 
     private lateinit var sTags: TagManager
@@ -54,6 +57,10 @@ class CombatScreenInit(private val game: DragonTilesGame, private val world: Wor
 
             val cEnemy = mEnemy.create(entityId)
             cEnemy.setByEnemy(enemy)
+
+            val cHover = mHoverable.create(entityId)
+            cHover.enterEvent = EnemyHoverEnterEvent(cEnemy)
+            cHover.exitEvent = EnemyHoverExitEvent()
 
             mClickable.create(entityId).event = EnemyClickEvent(entityId)
         }

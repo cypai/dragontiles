@@ -1,3 +1,5 @@
 package com.pipai.dragontiles.combat
 
-interface Targetable
+interface Targetable {
+    var id: Int
+}

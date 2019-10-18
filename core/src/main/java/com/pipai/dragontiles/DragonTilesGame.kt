@@ -31,10 +31,7 @@ import com.pipai.dragontiles.enemies.FlameTurtle
 import com.pipai.dragontiles.enemies.Slime
 import com.pipai.dragontiles.hero.Hero
 import com.pipai.dragontiles.relics.Transmuter
-import com.pipai.dragontiles.spells.Blast
-import com.pipai.dragontiles.spells.Break
-import com.pipai.dragontiles.spells.Invoke
-import com.pipai.dragontiles.spells.Strike
+import com.pipai.dragontiles.spells.*
 import com.pipai.dragontiles.utils.enemyAssetPath
 import com.pipai.dragontiles.utils.getLogger
 import org.apache.commons.lang3.builder.ToStringBuilder
@@ -117,7 +114,8 @@ class DragonTilesGame(val gameConfig: GameConfig) : Game() {
                                 Invoke(false),
                                 Strike(false),
                                 Break(false),
-                                Blast(false)),
+                                Blast(false),
+                                Explosion(false)),
                         mutableListOf(
                                 Transmuter())
                 ),

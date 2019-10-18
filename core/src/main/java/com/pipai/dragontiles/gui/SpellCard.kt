@@ -11,7 +11,7 @@ import com.badlogic.gdx.utils.Align
 import com.pipai.dragontiles.DragonTilesGame
 import com.pipai.dragontiles.artemis.systems.ui.TooltipSystem
 import com.pipai.dragontiles.combat.CombatApi
-import com.pipai.dragontiles.enemies.Enemy
+import com.pipai.dragontiles.combat.Targetable
 import com.pipai.dragontiles.spells.CastParams
 import com.pipai.dragontiles.spells.Spell
 
@@ -28,11 +28,11 @@ class SpellCard(private val game: DragonTilesGame,
     private val numberLabel = Label("", skin, "small")
     private val descriptionLabel = Label("", skin, "small")
 
-    private val regex = "!\\w+".toRegex()
+    private val regex = "(!\\w+)(\\[.+])?".toRegex()
 
     private val clickCallbacks: MutableList<(SpellCard) -> Unit> = mutableListOf()
 
-    var target: Enemy? = null
+    var target: Targetable? = null
     private var enabled = true
 
     init {
@@ -122,10 +122,14 @@ class SpellCard(private val game: DragonTilesGame,
             reqLabel.setText(theSpell.requirement.reqString)
             val description = if (theSpell.upgraded) spellLocalization.upgradeDescription else spellLocalization.description
             val adjustedDescription = description.replace(regex) {
-                theSpell.dynamicValue(it.value, api, CastParams(if (target == null) listOf() else listOf(target!!.id))).toString()
-            }.replace("@", "")
+                if (target == null && it.groupValues[2].isNotEmpty()) {
+                    it.groupValues[2]
+                } else {
+                    val castParams = CastParams(if (target == null) listOf() else listOf(target!!.id))
+                    theSpell.dynamicValue(it.groupValues[1], api, castParams).toString()
+                }
+            }.replace("[@\\[\\]]".toRegex(), "")
             descriptionLabel.setText(adjustedDescription)
         }
     }
-
 }
