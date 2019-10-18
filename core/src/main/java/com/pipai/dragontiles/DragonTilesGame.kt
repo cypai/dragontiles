@@ -120,6 +120,7 @@ class DragonTilesGame(val gameConfig: GameConfig) : Game() {
                                 Transmuter())
                 ),
                 PlainsDungeon())
+        runData.dungeon.currentFloor = 1
         setScreen(CombatScreen(this, runData, runData.dungeon.easyEncounter(runData)))
     }
 

@@ -22,12 +22,10 @@ import com.pipai.dragontiles.artemis.screens.CombatScreen
 import com.pipai.dragontiles.artemis.systems.combat.CombatControllerSystem
 import com.pipai.dragontiles.artemis.systems.combat.TileIdSystem
 import com.pipai.dragontiles.artemis.systems.rendering.FullScreenColorRenderingSystem
-import com.pipai.dragontiles.combat.Combat
 import com.pipai.dragontiles.combat.QueryTileOptionsEvent
 import com.pipai.dragontiles.combat.QueryTilesEvent
 import com.pipai.dragontiles.data.Tile
 import com.pipai.dragontiles.dungeon.RunData
-import com.pipai.dragontiles.enemies.FlameTurtle
 import com.pipai.dragontiles.gui.SpellCard
 import com.pipai.dragontiles.spells.*
 import com.pipai.dragontiles.utils.mapper
@@ -207,6 +205,12 @@ class CombatQueryUiSystem(private val game: DragonTilesGame, private val runData
             val spellCard = SpellCard(game, spell, null, game.skin, sCombat.controller.api, sToolTip)
             spellCard.addClickCallback {
                 runData.hero.spells.add(spell)
+                runData.dungeon.currentFloor += 1
+                val encounter = when {
+                    runData.dungeon.currentFloor <= 3 -> runData.dungeon.easyEncounter(runData)
+                    runData.dungeon.currentFloor <= 9 -> runData.dungeon.standardEncounter(runData)
+                    else -> runData.dungeon.bossEncounter(runData)
+                }
                 game.screen = CombatScreen(game, runData, runData.dungeon.easyEncounter(runData))
             }
             rewardsTable.add(spellCard)

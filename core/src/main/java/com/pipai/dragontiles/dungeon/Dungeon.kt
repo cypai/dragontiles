@@ -6,25 +6,26 @@ import com.pipai.dragontiles.enemies.Slime
 import com.pipai.dragontiles.utils.choose
 
 abstract class Dungeon {
+    var currentFloor: Int = 1
 
-    abstract val easyEncounters: List<Encounter>
-    abstract val standardEncounters: List<Encounter>
-    abstract val eliteEncounters: List<Encounter>
-    abstract val bossEncounters: List<Encounter>
+    abstract val easyEncounters: MutableList<Encounter>
+    abstract val standardEncounters: MutableList<Encounter>
+    abstract val eliteEncounters: MutableList<Encounter>
+    abstract val bossEncounters: MutableList<Encounter>
 
-    fun easyEncounter(runData: RunData): Encounter {
+    open fun easyEncounter(runData: RunData): Encounter {
         return easyEncounters.choose(runData.rng)
     }
 
-    fun standardEncounter(runData: RunData): Encounter {
+    open fun standardEncounter(runData: RunData): Encounter {
         return standardEncounters.choose(runData.rng)
     }
 
-    fun eliteEncounter(runData: RunData): Encounter {
+    open fun eliteEncounter(runData: RunData): Encounter {
         return eliteEncounters.choose(runData.rng)
     }
 
-    fun bossEncounter(runData: RunData): Encounter {
+    open fun bossEncounter(runData: RunData): Encounter {
         return bossEncounters.choose(runData.rng)
     }
 }
@@ -33,11 +34,20 @@ class PlainsDungeon : Dungeon() {
     override val easyEncounters: MutableList<Encounter> = mutableListOf(
             Encounter(listOf(Pair(FlameTurtle(), Vector2(92f, 420f)))),
             Encounter(listOf(
-                    Pair(Slime(), Vector2(92f, 420f)),
+                    Pair(Slime(), Vector2(90f, 420f)),
                     Pair(Slime(), Vector2(270f, 420f))
             ))
     )
-    override val standardEncounters: List<Encounter> = listOf()
-    override val eliteEncounters: List<Encounter> = listOf()
-    override val bossEncounters: List<Encounter> = listOf()
+    override val standardEncounters: MutableList<Encounter> = mutableListOf(
+            Encounter(listOf(
+                    Pair(FlameTurtle(), Vector2(16f, 420f)),
+                    Pair(Slime(), Vector2(450f, 420f)))),
+            Encounter(listOf(
+                    Pair(Slime(), Vector2(90f, 420f)),
+                    Pair(Slime(), Vector2(270f, 420f)),
+                    Pair(Slime(), Vector2(450f, 420f))
+            ))
+    )
+    override val eliteEncounters: MutableList<Encounter> = mutableListOf()
+    override val bossEncounters: MutableList<Encounter> = mutableListOf()
 }
