@@ -109,7 +109,7 @@ class CombatApi(val runData: RunData,
             Element.FIRE -> targetStatus.has(Status.FIRE_BREAK)
             Element.ICE -> targetStatus.has(Status.ICE_BREAK)
             Element.LIGHTNING -> targetStatus.has(Status.LIGHTNING_BREAK)
-            else -> false
+            Element.NONE -> targetStatus.has(Status.NONELEMENTAL_BREAK)
         }
         if (broken) {
             damage = ceil(1.5f * damage.toFloat())

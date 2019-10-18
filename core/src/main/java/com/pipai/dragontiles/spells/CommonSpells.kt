@@ -74,7 +74,7 @@ class RampStrike(upgraded: Boolean) : Spell(upgraded) {
 
 class Break(upgraded: Boolean) : Spell(upgraded) {
     override val id: String = "base:spells:Break"
-    override val requirement: ComponentRequirement = Identical(3, elementalSet)
+    override val requirement: ComponentRequirement = Identical(3)
     override val targetType: TargetType = TargetType.SINGLE_ENEMY
 
     override var repeatableMax: Int = 1
@@ -90,7 +90,7 @@ class Break(upgraded: Boolean) : Spell(upgraded) {
             Element.FIRE -> Status.FIRE_BREAK
             Element.ICE -> Status.ICE_BREAK
             Element.LIGHTNING -> Status.LIGHTNING_BREAK
-            else -> throw IllegalStateException("Attempted to cast Break with ${components()}")
+            Element.NONE -> Status.NONELEMENTAL_BREAK
         }
         api.changeEnemyStatusIncrement(params.targets.first(), status, if (upgraded) 4 else 3)
     }
