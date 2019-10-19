@@ -95,7 +95,7 @@ class DragonTilesGame(val gameConfig: GameConfig) : Game() {
         fontParameter.size = 16
         smallFont = fontGenerator.generateFont(fontParameter)
 
-        fontParameter.size = 12
+        fontParameter.size = 13
         tinyFont = fontGenerator.generateFont(fontParameter)
         fontGenerator.dispose()
 
@@ -130,9 +130,8 @@ class DragonTilesGame(val gameConfig: GameConfig) : Game() {
 
         skin = Skin()
 
-        Gdx.files.local("assets/binassets/graphics/bgs").list().forEach {
-            skin.add(it.nameWithoutExtension(), Texture(it))
-        }
+        val card = Texture(Gdx.files.local("assets/binassets/graphics/textures/card.png"))
+        skin.add("card", card)
 
         val circle = Texture(Gdx.files.local("assets/binassets/graphics/textures/circle.png"))
         skin.add("circle", circle)

@@ -43,10 +43,6 @@ class CombatScreenInit(private val game: DragonTilesGame, private val world: Wor
 
         sController.controller.initCombat()
 
-        sController.controller.api.spells.forEachIndexed { index, spell ->
-            sUi.setSpell(index + 1, spell)
-        }
-
         encounter.enemies.forEach { (enemy, position) ->
             val entityId = world.create()
             val cXy = mXy.create(entityId)

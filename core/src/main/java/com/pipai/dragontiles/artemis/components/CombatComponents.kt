@@ -16,12 +16,9 @@ class HandLocationComponent : Component() {
     var location = 0
     var keyShortcut = Keys.Q
     var keyShift = false
-    var x = 0f
-    var y = 0f
 
     fun setByLocation(location: Int) {
         this.location = location
-        x = 64f + 32f * location
         keyShortcut = when (location % 10) {
             1 -> Keys.Q
             2 -> Keys.W

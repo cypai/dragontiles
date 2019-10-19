@@ -32,20 +32,16 @@ abstract class Dungeon {
 
 class PlainsDungeon : Dungeon() {
     override val easyEncounters: MutableList<Encounter> = mutableListOf(
-            Encounter(listOf(Pair(FlameTurtle(), Vector2(92f, 420f)))),
+            Encounter(listOf(Pair(FlameTurtle(), Vector2(750f, 420f)))),
             Encounter(listOf(
-                    Pair(Slime(), Vector2(90f, 420f)),
-                    Pair(Slime(), Vector2(270f, 420f))
+                    Pair(Slime(), Vector2(740f, 420f)),
+                    Pair(Slime(), Vector2(910f, 420f))
             ))
     )
     override val standardEncounters: MutableList<Encounter> = mutableListOf(
             Encounter(listOf(
-                    Pair(FlameTurtle(), Vector2(16f, 420f)),
-                    Pair(Slime(), Vector2(450f, 420f)))),
-            Encounter(listOf(
-                    Pair(Slime(), Vector2(90f, 420f)),
-                    Pair(Slime(), Vector2(270f, 420f)),
-                    Pair(Slime(), Vector2(450f, 420f))
+                    Pair(FlameTurtle(), Vector2(650f, 420f)),
+                    Pair(Slime(), Vector2(1000f, 420f))
             ))
     )
     override val eliteEncounters: MutableList<Encounter> = mutableListOf()

@@ -1,5 +1,19 @@
 package com.pipai.dragontiles.utils
 
+import com.badlogic.gdx.math.Vector2
+
+fun Vector2.withX(x: Float) : Vector2 {
+    val v = this.cpy()
+    v.x = x
+    return v
+}
+
+fun Vector2.withY(y: Float) : Vector2 {
+    val v = this.cpy()
+    v.y = y
+    return v
+}
+
 fun <T> List<T>.with(element: T) : List<T>{
     val copy = this.toMutableList()
     copy.add(element)

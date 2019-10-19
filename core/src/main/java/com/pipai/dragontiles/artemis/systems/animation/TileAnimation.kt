@@ -8,9 +8,9 @@ import com.pipai.dragontiles.artemis.components.TileComponent
 import com.pipai.dragontiles.artemis.components.XYComponent
 import com.pipai.dragontiles.artemis.events.TileClickEvent
 import com.pipai.dragontiles.data.TileInstance
-import com.pipai.dragontiles.data.TileSkin
+import com.pipai.dragontiles.gui.CombatUiLayout
 
-abstract class TileCreationAnimation(private val tileSkin: TileSkin) : Animation() {
+abstract class TileAnimation(protected val layout: CombatUiLayout) : Animation() {
 
     private lateinit var mXy: ComponentMapper<XYComponent>
     private lateinit var mTile: ComponentMapper<TileComponent>
@@ -24,12 +24,11 @@ abstract class TileCreationAnimation(private val tileSkin: TileSkin) : Animation
         val cTile = mTile.create(entityId)
         cTile.tile = tile
         val cSprite = mSprite.create(entityId)
-        cSprite.sprite = Sprite(tileSkin.regionFor(tile.tile))
+        cSprite.sprite = Sprite(layout.tileSkin.regionFor(tile.tile))
         val cXy = mXy.create(entityId)
         cXy.setXy(x, y)
         val cClickable = mClickable.create(entityId)
         cClickable.event = TileClickEvent(entityId)
         return entityId
     }
-
 }

@@ -22,11 +22,13 @@ class SpellCard(private val game: DragonTilesGame,
                 private val api: CombatApi,
                 private val sToolTip: TooltipSystem) : Table(skin) {
 
-    private val topRow = Table()
     private val nameLabel = Label("", skin, "small")
     private val reqLabel = Label("", skin, "small")
-    private val numberLabel = Label("", skin, "small")
-    private val descriptionLabel = Label("", skin, "small")
+    private val numberLabel = Label("", skin, "tiny")
+    private val descriptionLabel = Label("", skin, "tiny")
+
+    val cardWidth = 140f
+    val cardHeight = 196f
 
     private val regex = "(!\\w+)(\\[.+])?".toRegex()
 
@@ -43,27 +45,25 @@ class SpellCard(private val game: DragonTilesGame,
         descriptionLabel.setWrap(true)
         update()
 
-        topRow.add(nameLabel)
-                .expand()
-                .left()
-        topRow.add(numberLabel)
-                .right()
-        add(topRow)
-                .width(160f)
-                .pad(8f)
+        add(nameLabel)
+                .prefWidth(cardWidth)
+                .prefHeight(20f)
+                .padTop(8f)
+                .padLeft(8f)
         row()
         add(reqLabel)
                 .left()
+                .prefWidth(cardWidth)
+                .prefHeight(20f)
                 .padLeft(8f)
                 .padBottom(8f)
         row()
         add(descriptionLabel)
-                .width(160f)
-                .height(96f)
+                .prefWidth(cardWidth)
+                .prefHeight(cardHeight)
+                .padLeft(8f)
                 .top()
         row()
-        add()
-                .height(64f)
 
         touchable = Touchable.enabled
         addListener(object : ClickListener() {

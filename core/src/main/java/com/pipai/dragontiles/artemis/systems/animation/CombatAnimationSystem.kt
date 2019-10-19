@@ -54,7 +54,7 @@ class CombatAnimationSystem(private val game: DragonTilesGame) : BaseSystem(), A
     fun handleDrawEvent(ev: DrawEvent) {
         val batch = BatchAnimation()
         ev.tiles.forEach {
-            batch.addToBatch(DrawTileAnimation(it.first, it.second, game.tileSkin))
+            batch.addToBatch(DrawTileAnimation(it.first, it.second, sUi.layout))
         }
         queueAnimation(batch)
     }
@@ -62,33 +62,33 @@ class CombatAnimationSystem(private val game: DragonTilesGame) : BaseSystem(), A
     @Subscribe
     fun handleDrawFromOpenPoolEvent(ev: DrawFromOpenPoolEvent) {
         val batch = BatchAnimation()
-        batch.addToBatch(AdjustHandAnimation(ev.tiles))
-        batch.addToBatch(AdjustOpenPoolAnimation(sCombat.combat.openPool))
+        batch.addToBatch(AdjustHandAnimation(ev.tiles, sUi.layout))
+        batch.addToBatch(AdjustOpenPoolAnimation(sCombat.combat.openPool, sUi.layout))
         queueAnimation(batch)
     }
 
     @Subscribe
     fun handleHandAdjustedEvent(ev: HandAdjustedEvent) {
-        queueAnimation(AdjustHandAnimation(ev.hand.mapIndexed { index, tileInstance -> Pair(tileInstance, index) }))
+        queueAnimation(AdjustHandAnimation(ev.hand.mapIndexed { index, tileInstance -> Pair(tileInstance, index) }, sUi.layout))
     }
 
     @Subscribe
     fun handleOpenDrawEvent(ev: DrawToOpenPoolEvent) {
         val batch = BatchAnimation()
         ev.tiles.forEach {
-            batch.addToBatch(DrawToOpenPoolAnimation(it.first, it.second, game.tileSkin))
+            batch.addToBatch(DrawToOpenPoolAnimation(it.first, it.second, sUi.layout))
         }
         queueAnimation(batch)
     }
 
     @Subscribe
     fun handleEnemyDiscardEvent(ev: EnemyDiscardEvent) {
-        queueAnimation(EnemyDiscardAnimation(ev.enemyId, ev.tile, ev.location, game.tileSkin))
+        queueAnimation(EnemyDiscardAnimation(ev.enemyId, ev.tile, ev.location, sUi.layout))
     }
 
     @Subscribe
     fun handleOpenPoolAdjustedEvent(ev: OpenPoolAdjustedEvent) {
-        queueAnimation(AdjustOpenPoolAnimation(ev.openPool))
+        queueAnimation(AdjustOpenPoolAnimation(ev.openPool, sUi.layout))
     }
 
     @Subscribe

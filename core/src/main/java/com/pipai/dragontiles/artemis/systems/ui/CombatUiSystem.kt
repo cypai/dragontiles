@@ -1,11 +1,14 @@
 package com.pipai.dragontiles.artemis.systems.ui
 
+import com.artemis.BaseSystem
 import com.badlogic.gdx.Input.Keys
 import com.badlogic.gdx.InputProcessor
 import com.badlogic.gdx.ai.fsm.DefaultStateMachine
 import com.badlogic.gdx.ai.fsm.State
 import com.badlogic.gdx.ai.msg.Telegram
 import com.badlogic.gdx.graphics.Color
+import com.badlogic.gdx.math.Interpolation
+import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.ui.Label
@@ -13,43 +16,49 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.pipai.dragontiles.DragonTilesGame
 import com.pipai.dragontiles.artemis.components.*
 import com.pipai.dragontiles.artemis.events.*
-import com.pipai.dragontiles.artemis.systems.NoProcessingSystem
 import com.pipai.dragontiles.artemis.systems.combat.CombatControllerSystem
 import com.pipai.dragontiles.data.TileInstance
 import com.pipai.dragontiles.dungeon.RunData
+import com.pipai.dragontiles.gui.CombatUiLayout
 import com.pipai.dragontiles.gui.SpellCard
 import com.pipai.dragontiles.gui.SpellComponentList
 import com.pipai.dragontiles.spells.CastParams
 import com.pipai.dragontiles.spells.Spell
 import com.pipai.dragontiles.spells.TargetType
-import com.pipai.dragontiles.utils.*
+import com.pipai.dragontiles.utils.allOf
+import com.pipai.dragontiles.utils.fetch
+import com.pipai.dragontiles.utils.mapper
+import com.pipai.dragontiles.utils.system
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import net.mostlyoriginal.api.event.common.Subscribe
 import kotlin.math.min
 
 class CombatUiSystem(private val game: DragonTilesGame,
-                     runData: RunData,
-                     private val stage: Stage) : NoProcessingSystem(), InputProcessor {
+                     private val runData: RunData,
+                     private val stage: Stage) : BaseSystem(), InputProcessor {
 
     private val config = game.gameConfig
     private val skin = game.skin
     private val tileSkin = game.tileSkin
 
     private val rootTable = Table()
-    private val mainTable = Table()
     private val topRow = Table()
-    private val spellRow = Table()
 
     private val hpLabel = Label("${runData.hero.hp}/${runData.hero.hpMax}", skin)
     private val spells: MutableMap<Int, SpellCard> = mutableMapOf()
+    private val spellEntityIds: MutableMap<Int, Int> = mutableMapOf()
     private val spellComponentList = SpellComponentList(skin, tileSkin)
+
+    val layout = CombatUiLayout(config, tileSkin, runData.hero.handSize)
 
     private var selectedSpellNumber: Int? = null
     private var mouseFollowEntityId: Int? = null
 
     private val stateMachine = DefaultStateMachine<CombatUiSystem, CombatUiState>(this, CombatUiState.ROOT)
 
+    private val mXy by mapper<XYComponent>()
+    private val mPath by mapper<PathInterpolationComponent>()
     private val mEnemy by mapper<EnemyComponent>()
     private val mAttackCircle by mapper<AttackCircleComponent>()
     private val mLine by mapper<LineComponent>()
@@ -61,34 +70,42 @@ class CombatUiSystem(private val game: DragonTilesGame,
 
     override fun initialize() {
         rootTable.setFillParent(true)
+
+        topRow.background = skin.getDrawable("frameDrawable")
+        topRow.add(Label("Elementalist", skin))
+                .width(260f)
+                .pad(8f)
+                .padLeft(16f)
+                .left()
+                .top()
+        topRow.add(hpLabel)
+                .width(120f)
+        topRow.add()
+                .expand()
+
+        rootTable.add(topRow)
+                .width(config.resolution.width.toFloat())
+                .top()
+                .left()
+        rootTable.row()
+        rootTable.add()
+                .expand()
+
+        runData.hero.spells.forEachIndexed { index, spell ->
+            addSpellCard(index, spell)
+        }
         stage.addActor(rootTable)
 
-        rootTable.add()
-                .width(config.resolution.combatZoneWidth())
-                .height(config.resolution.height.toFloat())
-        rootTable.add(mainTable)
-                .width(config.resolution.width - config.resolution.combatZoneWidth())
-                .height(config.resolution.height.toFloat())
-        mainTable.background(game.skin.getDrawable("frameDrawable"))
-
-        topRow.add(Label("Elementalist", skin))
-                .width(160f)
-        topRow.add(hpLabel)
-        mainTable.add(topRow)
-                .left()
-                .padBottom(16f)
-        mainTable.row()
-
-        for (i in 1..9) {
-            addSpellCard(i)
-            if (i % 3 == 0) {
-                spellRow.row()
-            }
-        }
-        mainTable.add(spellRow)
-        mainTable.row()
-
         spellComponentList.addClickCallback { selectComponents(it) }
+    }
+
+    override fun processSystem() {
+        spellEntityIds.forEach { (number, id) ->
+            val cXy = mXy.get(id)
+            val spellCard = spells[number]!!
+            spellCard.x = cXy.x
+            spellCard.y = cXy.y
+        }
     }
 
     fun setHpRelative(amount: Int) {
@@ -102,17 +119,20 @@ class CombatUiSystem(private val game: DragonTilesGame,
         hpLabel.setText("$hp/$hpMax")
     }
 
-    private fun addSpellCard(number: Int) {
-        val spellCard = SpellCard(game, null, number, game.skin, sCombat.controller.api, sTooltip)
+    private fun addSpellCard(number: Int, spell: Spell) {
+        val spellCard = SpellCard(game, spell, number, game.skin, sCombat.controller.api, sTooltip)
         spellCard.addClickCallback(this::spellCardClickCallback)
-        spellRow.add(spellCard)
-                .minWidth(spellCard.width)
-                .minHeight(spellCard.height)
+        spellCard.width = layout.cardWidth
+        spellCard.height = layout.cardHeight
+        spellCard.x = layout.cardWidth * number
+        spellCard.y = -spellCard.cardHeight / 2f
+        stage.addActor(spellCard)
         spells[number] = spellCard
-    }
 
-    fun setSpell(number: Int, spell: Spell) {
-        spells[number]?.setSpell(spell)
+        val id = world.create()
+        spellEntityIds[number] = id
+        val cXy = mXy.create(id)
+        cXy.setXy(spellCard.x, spellCard.y)
     }
 
     fun disable() {
@@ -191,14 +211,26 @@ class CombatUiSystem(private val game: DragonTilesGame,
         }
     }
 
+    private fun moveSpellToLocation(number: Int, location: Vector2) {
+        val id = spellEntityIds[number]!!
+        val cXy = mXy.get(id)
+        val cPath = mPath.create(id)
+        cPath.clear()
+        cPath.endpoints.add(cXy.toVector2())
+        cPath.endpoints.add(location)
+        cPath.t = 0
+        cPath.maxT = 15
+        cPath.interpolation = Interpolation.exp10Out
+        cPath.onEnd = EndStrategy.REMOVE
+    }
+
     private fun displaySpellComponents(spellCard: SpellCard) {
         val spell = spellCard.getSpell()!!
         spellComponentList.setOptions(spell.requirement.find(sCombat.combat.hand))
-        val position = spellCard.localToStageCoordinates(Vector2(0f, 0f))
+        spellComponentList.height = min(spellComponentList.prefHeight, spellCard.height)
+        val position = layout.optionListTlPosition
         spellComponentList.x = position.x
-        spellComponentList.y = MathUtils.clamp(position.y - spellComponentList.prefHeight,
-                48f, position.y)
-        spellComponentList.height = min(spellComponentList.prefHeight, position.y - 48f + spellCard.height)
+        spellComponentList.y = position.y - spellComponentList.height
 
         stage.addActor(spellComponentList)
         stage.keyboardFocus = spellComponentList
@@ -356,7 +388,8 @@ class CombatUiSystem(private val game: DragonTilesGame,
     enum class CombatUiState : State<CombatUiSystem> {
         ROOT() {
             override fun enter(uiSystem: CombatUiSystem) {
-                uiSystem.spells.forEach { _, spellCard ->
+                uiSystem.spells.forEach { (number, spellCard) ->
+                    uiSystem.moveSpellToLocation(number, uiSystem.layout.spellStartPosition(number))
                     spellCard.target = null
                     spellCard.update()
                     val spell = spellCard.getSpell()
@@ -370,8 +403,9 @@ class CombatUiSystem(private val game: DragonTilesGame,
         },
         COMPONENT_SELECTION() {
             override fun enter(uiSystem: CombatUiSystem) {
-                uiSystem.spells.forEach { index, spellCard ->
-                    if (index == uiSystem.selectedSpellNumber) {
+                uiSystem.spells.forEach { (number, spellCard) ->
+                    if (number == uiSystem.selectedSpellNumber) {
+                        uiSystem.moveSpellToLocation(number, uiSystem.layout.spellCastPosition)
                         spellCard.enable()
                         uiSystem.displaySpellComponents(spellCard)
                     } else {

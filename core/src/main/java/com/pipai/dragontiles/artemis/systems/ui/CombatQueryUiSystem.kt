@@ -103,7 +103,7 @@ class CombatQueryUiSystem(private val game: DragonTilesGame, private val runData
         val totalSpacing = spacing * (total - 1)
         val totalWidth = totalSpacing + game.tileSkin.width * total
         val firstX = (width - totalWidth) / 2f
-        return Vector2(firstX + index * (spacing + game.tileSkin.width), game.gameConfig.resolution.height / 3f)
+        return Vector2(firstX + index * (spacing + game.tileSkin.width), game.gameConfig.resolution.height / 2f)
     }
 
     fun moveTileToSelected(entityId: Int) {
