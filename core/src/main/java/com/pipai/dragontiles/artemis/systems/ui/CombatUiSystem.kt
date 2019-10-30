@@ -8,7 +8,6 @@ import com.badlogic.gdx.ai.fsm.State
 import com.badlogic.gdx.ai.msg.Telegram
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.math.Interpolation
-import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.ui.Label
@@ -64,6 +63,7 @@ class CombatUiSystem(private val game: DragonTilesGame,
     private val mLine by mapper<LineComponent>()
     private val mMouseFollow by mapper<MouseFollowComponent>()
     private val mSprite by mapper<SpriteComponent>()
+    private val mTargetHighlight by mapper<TargetHighlightComponent>()
 
     private val sCombat by system<CombatControllerSystem>()
     private val sTooltip by system<TooltipSystem>()
@@ -275,6 +275,35 @@ class CombatUiSystem(private val game: DragonTilesGame,
 
     private fun getSelectedSpell() = spells[selectedSpellNumber!!]!!.getSpell()!!
 
+    private fun highlightTargets() {
+        val spellCard = getSelectedSpellCard()!!
+        val spell = spellCard.getSpell()!!
+        when (spell.targetType) {
+            TargetType.SINGLE -> {
+                highlightEnemies()
+            }
+            else -> {
+            }
+        }
+    }
+
+    private fun removeHighlights() {
+        world.fetch(allOf(TargetHighlightComponent::class)).forEach {
+            mTargetHighlight.remove(it)
+        }
+    }
+
+    private fun highlightEnemies() {
+        world.fetch(allOf(EnemyComponent::class, SpriteComponent::class)).forEach {
+            val cSprite = mSprite.get(it)
+            val cTargetHighlight = mTargetHighlight.create(it)
+            cTargetHighlight.width = cSprite.sprite.width
+            cTargetHighlight.height = cSprite.sprite.height
+            cTargetHighlight.padding = 8f
+            cTargetHighlight.alpha = 0.5f
+        }
+    }
+
     @Subscribe
     fun handleEnemyHoverEnter(ev: EnemyHoverEnterEvent) {
         getSelectedSpellCard()?.let {
@@ -429,11 +458,13 @@ class CombatUiSystem(private val game: DragonTilesGame,
                 cLine.start = spellCard.localToStageCoordinates(Vector2(spellCard.width / 2, spellCard.height / 2))
                 cLine.end = Vector2()
                 uiSystem.mMouseFollow.create(id)
+                uiSystem.highlightTargets()
             }
 
             override fun exit(uiSystem: CombatUiSystem) {
                 uiSystem.world.delete(uiSystem.mouseFollowEntityId!!)
                 uiSystem.mouseFollowEntityId = null
+                uiSystem.removeHighlights()
             }
         },
         DISABLED() {

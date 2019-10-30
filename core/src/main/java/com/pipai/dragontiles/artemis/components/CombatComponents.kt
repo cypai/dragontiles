@@ -93,3 +93,10 @@ class AttackCircleComponent : Component() {
         }
     }
 }
+
+class TargetHighlightComponent : Component() {
+    var width = 0f
+    var height = 0f
+    var padding = 0f
+    var alpha = 0f
+}

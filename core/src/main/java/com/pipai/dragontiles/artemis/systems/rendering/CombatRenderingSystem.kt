@@ -17,6 +17,7 @@ class CombatRenderingSystem(private val game: DragonTilesGame) : BaseSystem() {
     private val mAttackCircle by mapper<AttackCircleComponent>()
     private val mEnemy by mapper<EnemyComponent>()
     private val mLine by mapper<LineComponent>()
+    private val mTargetHighlight by mapper<TargetHighlightComponent>()
 
     private val batch = game.spriteBatch
 
@@ -39,6 +40,15 @@ class CombatRenderingSystem(private val game: DragonTilesGame) : BaseSystem() {
                     game.smallFont.draw(batch,
                             "${game.gameStrings.nameDescLocalization(cEnemy.strId).name}   ${cEnemy.hp}/${cEnemy.hpMax}",
                             cXy.x, cXy.y - 4f)
+                    val cTh = mTargetHighlight.getSafe(it, null)
+                    if (cTh != null) {
+                        val highlight = game.skin.newDrawable("targetOutlineWhite", 1f, 1f, 1f, cTh.alpha)
+                        highlight.draw(batch,
+                                cXy.x - cTh.padding,
+                                cXy.y - cTh.padding,
+                                cTh.width + cTh.padding * 2,
+                                cTh.height + cTh.padding * 2)
+                    }
                 }
         world.fetch(allOf(XYComponent::class, AttackCircleComponent::class))
                 .forEach {
