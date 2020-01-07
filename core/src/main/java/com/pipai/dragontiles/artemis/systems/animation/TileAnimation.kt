@@ -28,7 +28,7 @@ abstract class TileAnimation(protected val layout: CombatUiLayout) : Animation()
         val cXy = mXy.create(entityId)
         cXy.setXy(x, y)
         val cClickable = mClickable.create(entityId)
-        cClickable.event = TileClickEvent(entityId)
+        cClickable.eventGenerator = { TileClickEvent(entityId, it) }
         return entityId
     }
 }

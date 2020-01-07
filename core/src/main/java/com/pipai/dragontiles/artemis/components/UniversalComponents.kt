@@ -109,7 +109,7 @@ class RadialSpriteComponent : Component() {
 }
 
 class ClickableComponent : Component() {
-    lateinit var event: Event
+    lateinit var eventGenerator: (Int) -> Event
 }
 
 class HoverableComponent : Component() {

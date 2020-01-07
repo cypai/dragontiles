@@ -58,7 +58,7 @@ class CombatScreenInit(private val game: DragonTilesGame, private val world: Wor
             cHover.enterEvent = EnemyHoverEnterEvent(cEnemy)
             cHover.exitEvent = EnemyHoverExitEvent()
 
-            mClickable.create(entityId).event = EnemyClickEvent(entityId)
+            mClickable.create(entityId).eventGenerator = { EnemyClickEvent(entityId, it) }
         }
     }
 

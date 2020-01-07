@@ -1,6 +1,7 @@
 package com.pipai.dragontiles.artemis.systems.ui
 
 import com.artemis.BaseSystem
+import com.badlogic.gdx.Input
 import com.badlogic.gdx.Input.Keys
 import com.badlogic.gdx.InputProcessor
 import com.badlogic.gdx.ai.fsm.DefaultStateMachine
@@ -143,21 +144,24 @@ class CombatUiSystem(private val game: DragonTilesGame,
         stateMachine.changeState(CombatUiState.ROOT)
     }
 
+    fun setStateBack(): Boolean {
+        return when (stateMachine.currentState) {
+            CombatUiState.COMPONENT_SELECTION -> {
+                stateMachine.changeState(CombatUiState.ROOT)
+                true
+            }
+            CombatUiState.TARGET_SELECTION -> {
+                stateMachine.changeState(CombatUiState.COMPONENT_SELECTION)
+                true
+            }
+            else -> false
+        }
+    }
+
     override fun keyDown(keycode: Int): Boolean {
         when (keycode) {
             Keys.ESCAPE -> {
-                when (stateMachine.currentState) {
-                    CombatUiState.COMPONENT_SELECTION -> {
-                        stateMachine.changeState(CombatUiState.ROOT)
-                        return true
-                    }
-                    CombatUiState.TARGET_SELECTION -> {
-                        stateMachine.changeState(CombatUiState.COMPONENT_SELECTION)
-                        return true
-                    }
-                    else -> {
-                    }
-                }
+                return setStateBack()
             }
             Keys.BACKSPACE -> {
                 when (stateMachine.currentState) {
@@ -338,23 +342,25 @@ class CombatUiSystem(private val game: DragonTilesGame,
 
     @Subscribe
     fun handleEnemyClick(ev: EnemyClickEvent) {
-        val spell = getSelectedSpell()
-        if (stateMachine.currentState == CombatUiState.TARGET_SELECTION) {
+        if (ev.button == Input.Buttons.LEFT) {
+            val spell = getSelectedSpell()
+            if (stateMachine.currentState == CombatUiState.TARGET_SELECTION) {
 
-            if (spell.targetType == TargetType.SINGLE_ENEMY
-                    || spell.targetType == TargetType.SINGLE) {
+                if (spell.targetType == TargetType.SINGLE_ENEMY
+                        || spell.targetType == TargetType.SINGLE) {
 
-                GlobalScope.launch {
-                    spell.cast(CastParams(listOf(mEnemy.get(ev.entityId).enemy.id)), sCombat.controller.api)
-                }
-            } else if (spell.targetType == TargetType.AOE) {
-                GlobalScope.launch {
-                    spell.cast(
-                            CastParams(sCombat.combat.enemies
-                                    .filter { it.hp > 0 }
-                                    .map { it.id }
-                                    .toList()),
-                            sCombat.controller.api)
+                    GlobalScope.launch {
+                        spell.cast(CastParams(listOf(mEnemy.get(ev.entityId).enemy.id)), sCombat.controller.api)
+                    }
+                } else if (spell.targetType == TargetType.AOE) {
+                    GlobalScope.launch {
+                        spell.cast(
+                                CastParams(sCombat.combat.enemies
+                                        .filter { it.hp > 0 }
+                                        .map { it.id }
+                                        .toList()),
+                                sCombat.controller.api)
+                    }
                 }
             }
         }
@@ -362,20 +368,22 @@ class CombatUiSystem(private val game: DragonTilesGame,
 
     @Subscribe
     fun handleAttackCircleClick(ev: AttackCircleClickEvent) {
-        val spell = getSelectedSpell()
-        if (stateMachine.currentState == CombatUiState.TARGET_SELECTION) {
+        if (ev.button == Input.Buttons.LEFT) {
+            val spell = getSelectedSpell()
+            if (stateMachine.currentState == CombatUiState.TARGET_SELECTION) {
 
-            if (spell.targetType == TargetType.SINGLE_ENEMY
-                    || spell.targetType == TargetType.SINGLE) {
+                if (spell.targetType == TargetType.SINGLE_ENEMY
+                        || spell.targetType == TargetType.SINGLE) {
 
-                GlobalScope.launch {
-                    spell.cast(CastParams(listOf(mAttackCircle.get(ev.entityId).id)), sCombat.controller.api)
-                }
-            } else if (spell.targetType == TargetType.AOE) {
-                GlobalScope.launch {
-                    spell.cast(
-                            CastParams(sCombat.combat.enemyAttacks.values.map { it.id }.toList()),
-                            sCombat.controller.api)
+                    GlobalScope.launch {
+                        spell.cast(CastParams(listOf(mAttackCircle.get(ev.entityId).id)), sCombat.controller.api)
+                    }
+                } else if (spell.targetType == TargetType.AOE) {
+                    GlobalScope.launch {
+                        spell.cast(
+                                CastParams(sCombat.combat.enemyAttacks.values.map { it.id }.toList()),
+                                sCombat.controller.api)
+                    }
                 }
             }
         }
@@ -385,7 +393,14 @@ class CombatUiSystem(private val game: DragonTilesGame,
 
     override fun keyTyped(character: Char) = false
 
-    override fun touchDown(screenX: Int, screenY: Int, pointer: Int, button: Int) = false
+    override fun touchDown(screenX: Int, screenY: Int, pointer: Int, button: Int): Boolean {
+        return when (button) {
+            Input.Buttons.RIGHT -> {
+                setStateBack()
+            }
+            else -> false
+        }
+    }
 
     override fun touchUp(screenX: Int, screenY: Int, pointer: Int, button: Int) = false
 

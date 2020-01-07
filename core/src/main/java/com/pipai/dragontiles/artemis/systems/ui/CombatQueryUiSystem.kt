@@ -148,7 +148,7 @@ class CombatQueryUiSystem(private val game: DragonTilesGame, private val runData
             val cXy = mXy.create(entityId)
             cXy.setXy(selectedPosition(index, event.options.size))
             val cClick = mClick.create(entityId)
-            cClick.event = TileClickEvent(entityId)
+            cClick.eventGenerator = { TileClickEvent(entityId, it) }
         }
         stateMachine.changeState(CombatQueryUiState.QUERY_OPTIONS)
     }

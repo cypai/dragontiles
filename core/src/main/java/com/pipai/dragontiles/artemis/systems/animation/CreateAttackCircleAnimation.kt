@@ -52,7 +52,7 @@ class CreateAttackCircleAnimation(private val enemy: Enemy,
         mMutualDestroy.create(id).ids.add(bgId)
 
         val cClick = mClickable.create(id)
-        cClick.event = AttackCircleClickEvent(id)
+        cClick.eventGenerator = { AttackCircleClickEvent(id, it) }
         val cHover = mHoverable.create(id)
         cHover.enterEvent = AttackCircleHoverEnterEvent(cAttackCircle)
         cHover.exitEvent = AttackCircleHoverExitEvent()
