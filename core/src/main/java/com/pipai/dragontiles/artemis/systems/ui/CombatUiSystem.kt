@@ -184,15 +184,15 @@ class CombatUiSystem(private val game: DragonTilesGame,
 
     private fun selectSpell(keycode: Int): Boolean {
         val spellNumber = when (keycode) {
-            Keys.NUM_1 -> 1
-            Keys.NUM_2 -> 2
-            Keys.NUM_3 -> 3
-            Keys.NUM_4 -> 4
-            Keys.NUM_5 -> 5
-            Keys.NUM_6 -> 6
-            Keys.NUM_7 -> 7
-            Keys.NUM_8 -> 8
-            Keys.NUM_9 -> 9
+            Keys.NUM_1 -> 0
+            Keys.NUM_2 -> 1
+            Keys.NUM_3 -> 2
+            Keys.NUM_4 -> 3
+            Keys.NUM_5 -> 4
+            Keys.NUM_6 -> 5
+            Keys.NUM_7 -> 6
+            Keys.NUM_8 -> 7
+            Keys.NUM_9 -> 8
             else -> null
         }
         val spellCard = spellNumber?.let { spells[spellNumber] }
