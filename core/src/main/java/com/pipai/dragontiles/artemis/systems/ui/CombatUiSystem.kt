@@ -22,6 +22,7 @@ import com.pipai.dragontiles.dungeon.RunData
 import com.pipai.dragontiles.gui.CombatUiLayout
 import com.pipai.dragontiles.gui.SpellCard
 import com.pipai.dragontiles.gui.SpellComponentList
+import com.pipai.dragontiles.gui.StatusInfoTable
 import com.pipai.dragontiles.spells.CastParams
 import com.pipai.dragontiles.spells.Spell
 import com.pipai.dragontiles.spells.TargetType
@@ -49,6 +50,10 @@ class CombatUiSystem(private val game: DragonTilesGame,
     private val spells: MutableMap<Int, SpellCard> = mutableMapOf()
     private val spellEntityIds: MutableMap<Int, Int> = mutableMapOf()
     private val spellComponentList = SpellComponentList(skin, tileSkin)
+
+    // These use entity ids
+    private val enemyStatusTables: MutableMap<Int, StatusInfoTable> = mutableMapOf()
+    private val spellStatusTables: MutableMap<Int, StatusInfoTable> = mutableMapOf()
 
     val layout = CombatUiLayout(config, tileSkin, runData.hero.handSize)
 
@@ -134,6 +139,19 @@ class CombatUiSystem(private val game: DragonTilesGame,
         spellEntityIds[number] = id
         val cXy = mXy.create(id)
         cXy.setXy(spellCard.x, spellCard.y)
+    }
+
+    fun addStatusInfoToEnemy(enemyEntityId: Int) {
+        val cEnemy = mEnemy.get(enemyEntityId)
+        val cXy = mXy.get(enemyEntityId)
+        val statusInfoTable = StatusInfoTable(cEnemy.hp, cEnemy.hpMax,
+                game.gameStrings.nameDescLocalization(cEnemy.strId).name, skin)
+        statusInfoTable.x = cXy.x
+        statusInfoTable.y = cXy.y - statusInfoTable.prefHeight
+        val cSprite = mSprite.get(enemyEntityId)
+        statusInfoTable.width = cSprite.sprite.width
+        statusInfoTable.height = statusInfoTable.prefHeight
+        stage.addActor(statusInfoTable)
     }
 
     fun disable() {

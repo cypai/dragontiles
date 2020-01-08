@@ -229,6 +229,20 @@ class DragonTilesGame(val gameConfig: GameConfig) : Game() {
 
         val windowStyle = Window.WindowStyle(smallFont, Color.BLACK, frameDrawable)
         skin.add("default", windowStyle)
+
+        val bigPix = Pixmap(1, 16, Format.RGBA8888)
+        bigPix.setColor(Color.WHITE)
+        bigPix.fill()
+        skin.add("bigWhite", Texture(bigPix))
+
+        val bigWhiteDrawable = skin.newDrawable("bigWhite")
+        val bigRedDrawable = skin.newDrawable("bigWhite", Color.RED)
+        val redBarStyle = ProgressBar.ProgressBarStyle()
+        redBarStyle.background = bigRedDrawable
+        skin.add("redBar", redBarStyle)
+        val whiteBarStyle = ProgressBar.ProgressBarStyle()
+        whiteBarStyle.background = bigWhiteDrawable
+        skin.add("whiteBar", whiteBarStyle)
     }
 
     override fun render() {
