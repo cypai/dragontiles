@@ -14,7 +14,7 @@ class CombatRenderingSystem(private val game: DragonTilesGame) : BaseSystem() {
     private val mXy by mapper<XYComponent>()
     private val mSprite by mapper<SpriteComponent>()
     private val mRadial by mapper<RadialSpriteComponent>()
-    private val mAttackCircle by mapper<AttackCircleComponent>()
+    private val mTextLabel by mapper<TextLabelComponent>()
     private val mEnemy by mapper<EnemyComponent>()
     private val mLine by mapper<LineComponent>()
     private val mTargetHighlight by mapper<TargetHighlightComponent>()
@@ -50,16 +50,11 @@ class CombatRenderingSystem(private val game: DragonTilesGame) : BaseSystem() {
                                 cTh.height + cTh.padding * 2)
                     }
                 }
-        world.fetch(allOf(XYComponent::class, AttackCircleComponent::class))
+        world.fetch(allOf(XYComponent::class, TextLabelComponent::class))
                 .forEach {
                     val cXy = mXy.get(it)
-                    val cAttackCircle = mAttackCircle.get(it)
-                    val text = if (cAttackCircle.damagingAttack) {
-                        cAttackCircle.displayedSpellPower.toString()
-                    } else {
-                        "(${cAttackCircle.displayedSpellPower})"
-                    }
-                    game.font.draw(batch, text, cXy.x + 26f, cXy.y + 36f)
+                    val cTextLabel = mTextLabel.get(it)
+                    game.font.draw(batch, cTextLabel.text, cXy.x + cTextLabel.xOffset, cXy.y + cTextLabel.yOffset)
                 }
         batch.end()
         batch.setBlendFunction(GL20.GL_SRC_ALPHA, GL20.GL_ONE)

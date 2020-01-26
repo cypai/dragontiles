@@ -117,3 +117,9 @@ class HoverableComponent : Component() {
     lateinit var enterEvent: Event
     lateinit var exitEvent: Event
 }
+
+class TextLabelComponent : Component() {
+    var text = ""
+    var xOffset = 0f
+    var yOffset = 0f
+}

@@ -20,7 +20,7 @@ abstract class CountdownAttack(override var id: Int) : Targetable {
 
     abstract fun discardTile(rng: Random): Tile
 
-    fun isDamaging() = attackPower - counteredAttackPower > 0
+    fun isActive() = calcAttackPower() + calcEffectPower() > 0
     fun calcAttackPower() = attackPower - counteredAttackPower
     fun calcEffectPower() = effectPower - counteredEffectPower
 }

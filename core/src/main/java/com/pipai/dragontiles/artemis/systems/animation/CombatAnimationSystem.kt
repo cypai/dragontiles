@@ -118,7 +118,7 @@ class CombatAnimationSystem(private val game: DragonTilesGame) : BaseSystem(), A
 
     @Subscribe
     fun handleCountdownDamageEvent(ev: CountdownAttackDamageEvent) {
-        queueAnimation(AttackCircleDamageAnimation(ev.countdownAttack))
+        queueAnimation(UpdateAttackCircleAnimation(ev.countdownAttack))
     }
 
     @Subscribe

@@ -25,43 +25,8 @@ class AttackCircleHoverSystem(private val gameStrings: GameStrings) : NoProcessi
         val ac = ev.cAttackCircle
         val l = gameStrings.nameDescLocalization(ac.strId)
         sTooltip.addText("Spell: ${l.name}", l.description, false)
-        sTooltip.addText("Current Power", spellPowerText(ac), false)
-        sTooltip.addKeyword("@AttackPower")
-        sTooltip.addKeyword("@EffectPower")
         sTooltip.addKeywordsInString(l.description)
         sTooltip.showTooltip(stage)
-    }
-
-    private fun spellPowerText(ac: AttackCircleComponent): String {
-        return when {
-            ac.effectPower == 0 -> {
-                "%s - %s = %s\nElement: %s".format(
-                        ac.attackPower,
-                        ac.counteredAttackPower,
-                        ac.attackPower - ac.counteredAttackPower,
-                        ac.element
-                )
-            }
-            ac.attackPower == 0 -> {
-                "(%s) - (%s) = (%s)\nElement: %s".format(
-                        ac.effectPower,
-                        ac.counteredEffectPower,
-                        ac.effectPower - ac.counteredEffectPower,
-                        ac.element
-                )
-            }
-            else -> {
-                "%s + (%s) - %s - (%s) = %s + (%s)\nElement: %s".format(
-                        ac.attackPower,
-                        ac.effectPower,
-                        ac.counteredAttackPower,
-                        ac.counteredEffectPower,
-                        ac.attackPower - ac.counteredAttackPower,
-                        ac.effectPower - ac.counteredEffectPower,
-                        ac.element
-                )
-            }
-        }
     }
 
     @Subscribe

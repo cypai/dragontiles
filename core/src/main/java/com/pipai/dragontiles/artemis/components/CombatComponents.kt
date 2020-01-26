@@ -53,14 +53,9 @@ class EnemyComponent : Component() {
 class AttackCircleComponent : Component() {
     var id = 0
     var enemyId = 0
-    var displayedSpellPower = 0
-    var damagingAttack = true
-    var attackPower = 0
-    var effectPower = 0
-    var counteredAttackPower = 0
-    var counteredEffectPower = 0
-    var turnsLeft = 0
-    var maxTurns = 0
+    var swordId: Int? = null
+    var spiralId: Int? = null
+    var hourglassId = 0
     lateinit var element: Element
     lateinit var strId: String
 
@@ -70,18 +65,6 @@ class AttackCircleComponent : Component() {
 
     fun setByCountdown(countdownAttack: CountdownAttack) {
         id = countdownAttack.id
-        displayedSpellPower = if (countdownAttack.isDamaging()) {
-            countdownAttack.calcAttackPower()
-        } else {
-            countdownAttack.calcEffectPower()
-        }
-        damagingAttack = countdownAttack.isDamaging()
-        attackPower = countdownAttack.attackPower
-        effectPower = countdownAttack.effectPower
-        counteredAttackPower = countdownAttack.counteredAttackPower
-        counteredEffectPower = countdownAttack.counteredEffectPower
-        turnsLeft = countdownAttack.turnsLeft
-        maxTurns = countdownAttack.turnsLeft
         element = countdownAttack.element
         strId = countdownAttack.strId
 
