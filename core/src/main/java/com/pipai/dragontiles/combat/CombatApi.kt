@@ -205,11 +205,11 @@ class CombatApi(val runData: RunData,
         combat.enemyAttacks[enemy.id] = countdownAttack
         countdownAttack.attackPower += fetchEnemyStatus(enemy.id, Status.POWER)
         eventBus.dispatch(EnemyCountdownAttackEvent(enemy, countdownAttack))
-        enemyDiscard(enemy.id, countdownAttack.discardTile(runData.rng))
     }
 
     suspend fun countdownAttackTick(enemyId: Int) {
         val countdownAttack = combat.enemyAttacks[enemyId]!!
+        enemyDiscard(enemyId, countdownAttack.discardTile(runData.rng))
         countdownAttack.turnsLeft -= 1
         if (countdownAttack.turnsLeft == 0) {
             combat.enemyAttacks.remove(enemyId)
@@ -220,7 +220,6 @@ class CombatApi(val runData: RunData,
             countdownAttack.activateEffects(this)
         } else {
             eventBus.dispatch(CountdownAttackTickEvent(countdownAttack))
-            enemyDiscard(enemyId, countdownAttack.discardTile(runData.rng))
         }
     }
 

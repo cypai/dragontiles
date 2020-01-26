@@ -25,7 +25,7 @@ class CombatTest : CombatBackendTest(QueryHandler()) {
 
         runBlocking { controller.runTurn() }
 
-        Assert.assertEquals(10, combat.openPool.size)
+        Assert.assertEquals(9, combat.openPool.size)
         Assert.assertEquals(15, combat.hand.size)
         Assert.assertEquals(112, combat.drawPile.size)
 
