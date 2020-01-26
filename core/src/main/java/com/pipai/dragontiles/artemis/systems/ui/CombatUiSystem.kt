@@ -369,8 +369,8 @@ class CombatUiSystem(private val game: DragonTilesGame,
     @Subscribe
     fun handleAttackCircleClick(ev: AttackCircleClickEvent) {
         if (ev.button == Input.Buttons.LEFT) {
-            val spell = getSelectedSpell()
             if (stateMachine.currentState == CombatUiState.TARGET_SELECTION) {
+                val spell = getSelectedSpell()
 
                 if (spell.targetType == TargetType.SINGLE_ENEMY
                         || spell.targetType == TargetType.SINGLE) {
