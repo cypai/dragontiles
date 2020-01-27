@@ -38,7 +38,13 @@ base:keywords:Exhaust:
   en:
     key: "@Exhaust"
     name: Exhaust
-    description: Can only be cast once per combat.
+    description: Can only be casted once per combat.
+
+base:keywords:Power:
+  en:
+    key: "@Power"
+    name: Power
+    description: Effects last for the duration of combat. Can only be casted once per combat.
 
 base:keywords:ElementalTile:
   en:
@@ -46,10 +52,10 @@ base:keywords:ElementalTile:
     name: Elemental Tile
     description: Fire Ice or Lightning tile.
 
-base:keywords:NonElementalTile:
+base:keywords:ArcaneTile:
   en:
-    key: "@NonElementalTile"
-    name: Non-Elemental Tile
+    key: "@ArcaneTile"
+    name: Arcane Tile
     description: Star or Life tile.
 
 base:keywords:Break:
@@ -57,6 +63,12 @@ base:keywords:Break:
     key: "@Break"
     name: Break
     description: Takes 50% more damage when attacked with the broken element.
+
+base:keywords:Chain:
+  en:
+    key: "@Chain"
+    name: Chain
+    description: Takes damage when attacked with the chained element.
 
 base:keywords:Strength:
   en:
@@ -75,3 +87,27 @@ base:keywords:Disrupt:
     key: "@Disrupt"
     name: Disrupt
     description: When a spell's Attack Power and Effect Power is 0, the spell is Disrupted and is destroyed.
+
+base:keywords:Burn:
+  en:
+    key: "@Burn"
+    name: Burn
+    description: Take 2 damage if a Burning Tile is used as a @Component.
+
+base:keywords:Freeze:
+  en:
+    key: "@Freeze"
+    name: Freeze
+    description: Tile cannot be discarded or transformed.
+
+base:keywords:Shock:
+  en:
+    key: "@Shock"
+    name: Shock
+    description: "@Disable the spell if a Shock Tile is used as a @Component."
+
+base:keywords:Disable:
+  en:
+    key: "@Disable"
+    name: Disable
+    description: Spell cannot be played this turn.

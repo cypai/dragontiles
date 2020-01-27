@@ -22,6 +22,18 @@ base:spells:Strike:
     description: Deal !d @Elemented damage.
     upgradeDescription: Deal !d @Elemented damage. @Repeatable !r.
 
+base:spells:Chain:
+  en:
+    name: Chain
+    description: Inflict 5 @Elemented @Chain.
+    upgradeDescription: Inflict 8 @Elemented @Chain.
+
+base:spells:ChainFractal:
+  en:
+    name: Chain Fractal
+    description: Inflict X @Elemented @Chain @AOE.
+    upgradeDescription: Inflict X+1 @Elemented @Chain @AOE.
+
 base:spells:QuickInvoke:
   en:
     name: Quick Invoke
@@ -32,7 +44,7 @@ base:spells:MultiInvoke:
   en:
     name: Multi Invoke
     description: Deal !d @Elemented damage @X times.
-    upgradeDescription: Deal !d @Elemented damage @X times.
+    upgradeDescription: Deal !d @Elemented damage @X + 1 times.
 
 base:spells:Mulligan:
   en:
@@ -105,3 +117,45 @@ base:spells:FeedbackLoop:
     name: FeedbackLoop
     description: Double your @Strength. @Exhaust.
     upgradeDescription: Double your @Strength.
+
+base:spells:Fireball:
+  en:
+    name: Fireball
+    description: Deal !d Fire damage. @Burn a tile in your hand.
+    upgradeDescription: Deal !d Fire damage. @Burn a tile in your hand.
+
+base:spells:IceShard:
+  en:
+    name: Ice Shard
+    description: Deal !d Ice damage. Gain 2 @Shield. @Freeze a tile in your hand.
+    upgradeDescription: Deal !d Ice damage. Gain 4 @Shield. @Freeze a tile in your hand.
+
+base:spells:ChainLightning:
+  en:
+    name: Chain Lightning
+    description: Deal !d Lightning damage @AOE. @Shock a tile in your hand.
+    upgradeDescription: Deal !d Lightning damage @AOE. @Shock a tile in your hand.
+
+base:spells:ElementalRune:
+  en:
+    name: Elemental Rune
+    description: Increases damage from same-Elemented attacks by @X.
+    upgradeDescription: Increases damage from same-Elemented attacks by @X + 1.
+
+base:spells:BarrierRune:
+  en:
+    name: Barrier Rune
+    description: At the end of your turn, deal @X damage to all spells.
+    upgradeDescription: At the end of your turn, deal @X + 1 damage to all spells.
+
+base:spells:HasteRune:
+  en:
+    name: Haste Rune
+    description: After casting a spell, draw 1 tile.
+    upgradeDescription: After casting a spell, draw 1 tile.
+
+base:spells:Meld:
+  en:
+    name: Meld
+    description: "@Component must be addable to an active @Rune. Fetch a tile from the discard pile."
+    upgradeDescription: "@Component must be addable to an active @Rune. Fetch a tile from the discard pile. @Repeatable !r."
