@@ -12,6 +12,7 @@ class HeroSpells {
                 RampStrike(rngUpgrade(runData.rng)),
                 Break(rngUpgrade(runData.rng)),
                 Concentrate(rngUpgrade(runData.rng)),
+                FeedbackLoop(rngUpgrade(runData.rng)),
                 Blast(rngUpgrade(runData.rng)),
                 Explosion(rngUpgrade(runData.rng))
         )
