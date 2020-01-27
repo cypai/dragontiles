@@ -74,8 +74,9 @@ abstract class Spell(var upgraded: Boolean) {
     }
 
     fun fill(components: List<TileInstance>) {
-        requirement.componentSlots.zip(components) { slot, tile ->
-            slot.tile = tile
+        requirement.componentSlots.clear()
+        components.forEach {
+            requirement.componentSlots.add(ComponentSlot(it))
         }
     }
 
@@ -94,10 +95,10 @@ data class CastParams(val targets: List<Int>)
 
 data class ComponentSlot(var tile: TileInstance?)
 
-abstract class ComponentRequirement(val slotAmount: Int) {
+abstract class ComponentRequirement {
     abstract val reqString: String
     abstract val description: String
-    val componentSlots: List<ComponentSlot> = generateSlots(slotAmount)
+    val componentSlots: MutableList<ComponentSlot> = mutableListOf()
 
     abstract fun find(hand: List<TileInstance>): List<List<TileInstance>>
     abstract fun findGiven(hand: List<TileInstance>, given: List<TileInstance>): List<List<TileInstance>>
@@ -126,7 +127,7 @@ private fun suitReqString(allowedSuits: Set<Suit>): String {
     }
 }
 
-class Single(private val allowedSuits: Set<Suit>) : ComponentRequirement(1) {
+class Single(private val allowedSuits: Set<Suit>) : ComponentRequirement() {
     constructor() : this(anySet)
 
     override val reqString = "1 ${suitReqString(allowedSuits)}"
@@ -153,7 +154,7 @@ class Single(private val allowedSuits: Set<Suit>) : ComponentRequirement(1) {
     }
 }
 
-class Identical(slotAmount: Int, private val allowedSuits: Set<Suit>) : ComponentRequirement(slotAmount) {
+class Identical(var slotAmount: Int, private val allowedSuits: Set<Suit>) : ComponentRequirement() {
     constructor(slotAmount: Int) : this(slotAmount, anySet)
 
     override val reqString = "$slotAmount I ${suitReqString(allowedSuits)}"
@@ -213,7 +214,7 @@ class Identical(slotAmount: Int, private val allowedSuits: Set<Suit>) : Componen
     }
 }
 
-class Sequential(slotAmount: Int, private val allowedSuits: Set<Suit>) : ComponentRequirement(slotAmount) {
+class Sequential(var slotAmount: Int, private val allowedSuits: Set<Suit>) : ComponentRequirement() {
     constructor(slotAmount: Int) : this(slotAmount, elementalSet)
 
     override val reqString = "$slotAmount S ${suitReqString(allowedSuits)}"
@@ -267,8 +268,7 @@ class Sequential(slotAmount: Int, private val allowedSuits: Set<Suit>) : Compone
                             && tile.number >= minimum
                             && tile.number <= maximum
                             && (handTile in given || tile.number !in givenTiles.map { it.number })
-                }.also { println(it) })
-                        .also { println("Returned $it") }
+                })
             }
         }
     }
