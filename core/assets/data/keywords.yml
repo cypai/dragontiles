@@ -58,29 +58,17 @@ base:keywords:Break:
     name: Break
     description: Takes 50% more damage when attacked with the broken element.
 
-base:keywords:Power:
+base:keywords:Strength:
   en:
-    key: "@Power"
-    name: Power
-    description: Spell Attack Power increased by 1 per point of Power.
+    key: "@Strength"
+    name: Strength
+    description: Attack damage increased by 1 per point of Strength.
 
 base:keywords:Defense:
   en:
     key: "@Defense"
     name: Defense
     description: Damage taken via attacks decreased by 1 per point of Defense.
-
-base:keywords:AttackPower:
-  en:
-    key: "@AttackPower"
-    name: Attack Power
-    description: The base damage of the spell. Can be decreased by attacking the spell. Written in Current Power without parenthesis.
-
-base:keywords:EffectPower:
-  en:
-    key: "@EffectPower"
-    name: Effect Power
-    description: Can be decreased by attacking the spell when Attack Power is 0. Written in Current Power in parenthesis.
 
 base:keywords:Disrupt:
   en:

@@ -91,5 +91,11 @@ base:spells:Break:
 base:spells:Concentrate:
   en:
     name: Concentrate
-    description: Gain 2 @Power.
-    upgradeDescription: Gain 3 @Power.
+    description: Gain 2 @Strength.
+    upgradeDescription: Gain 3 @Strength.
+
+base:spells:FeedbackLoop:
+  en:
+    name: FeedbackLoop
+    description: Double your @Strength. @Exhaust.
+    upgradeDescription: Double your @Strength.

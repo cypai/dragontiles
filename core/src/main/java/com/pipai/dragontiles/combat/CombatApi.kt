@@ -100,7 +100,7 @@ class CombatApi(val runData: RunData,
     }
 
     fun calculateBaseDamage(attackerStatus: StatusData, amount: Int): Int {
-        return (amount + attackerStatus[Status.POWER]).coerceAtLeast(0)
+        return (amount + attackerStatus[Status.STRENGTH]).coerceAtLeast(0)
     }
 
     fun calculateActualDamage(attackerStatus: StatusData, targetStatus: StatusData, element: Element, amount: Int): Int {
@@ -203,7 +203,7 @@ class CombatApi(val runData: RunData,
 
     suspend fun enemyCreateAttack(enemy: Enemy, countdownAttack: CountdownAttack) {
         combat.enemyAttacks[enemy.id] = countdownAttack
-        countdownAttack.attackPower += fetchEnemyStatus(enemy.id, Status.POWER)
+        countdownAttack.attackPower += fetchEnemyStatus(enemy.id, Status.STRENGTH)
         eventBus.dispatch(EnemyCountdownAttackEvent(enemy, countdownAttack))
     }
 

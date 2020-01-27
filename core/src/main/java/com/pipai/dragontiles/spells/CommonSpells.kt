@@ -110,7 +110,7 @@ class Concentrate(upgraded: Boolean) : Spell(upgraded) {
     }
 
     override suspend fun onCast(params: CastParams, api: CombatApi) {
-        api.changeStatusIncrement(Status.POWER, if (upgraded) 3 else 2)
+        api.changeStatusIncrement(Status.STRENGTH, if (upgraded) 3 else 2)
     }
 }
 

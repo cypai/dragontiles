@@ -25,7 +25,7 @@ class FlameTurtle : Enemy() {
                             api.nextId(), 0, 8,
                             listOf(
                                     Pair(Status.DEFENSE, 1),
-                                    Pair(Status.POWER, 1)),
+                                    Pair(Status.STRENGTH, 1)),
                             listOf(this),
                             Element.NONE, Suit.LIFE,
                             "base:enemies:FlameTurtle:Steady",

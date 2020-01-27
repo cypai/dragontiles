@@ -19,7 +19,7 @@ data class Combat(val enemies: List<Enemy>) {
 }
 
 enum class Status(val strId: String, val decreasing: Boolean, val positive: Boolean) {
-    POWER("base:status:Power", false, false),
+    STRENGTH("base:status:Power", false, false),
     DEFENSE("base:status:Defense", false, false),
     FIRE_BREAK("base:status:FireBreak", true, true),
     ICE_BREAK("base:status:IceBreak", true, true),
