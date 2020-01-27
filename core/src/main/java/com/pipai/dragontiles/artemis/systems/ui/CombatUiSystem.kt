@@ -285,6 +285,7 @@ class CombatUiSystem(private val game: DragonTilesGame,
         when (spell.targetType) {
             TargetType.SINGLE -> {
                 highlightEnemies()
+                highlightEnemySpells()
             }
             else -> {
             }
@@ -303,6 +304,17 @@ class CombatUiSystem(private val game: DragonTilesGame,
             val cTargetHighlight = mTargetHighlight.create(it)
             cTargetHighlight.width = cSprite.sprite.width
             cTargetHighlight.height = cSprite.sprite.height
+            cTargetHighlight.padding = 8f
+            cTargetHighlight.alpha = 0.5f
+        }
+    }
+
+    private fun highlightEnemySpells() {
+        world.fetch(allOf(AttackCircleComponent::class)).forEach {
+            val cTargetHighlight = mTargetHighlight.create(it)
+            cTargetHighlight.xOffset = -48f
+            cTargetHighlight.width = 160f
+            cTargetHighlight.height = 64f
             cTargetHighlight.padding = 8f
             cTargetHighlight.alpha = 0.5f
         }

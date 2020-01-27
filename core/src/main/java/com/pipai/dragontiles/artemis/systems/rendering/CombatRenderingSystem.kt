@@ -40,11 +40,15 @@ class CombatRenderingSystem(private val game: DragonTilesGame) : BaseSystem() {
                     game.smallFont.draw(batch,
                             "${game.gameStrings.nameDescLocalization(cEnemy.strId).name}   ${cEnemy.hp}/${cEnemy.hpMax}",
                             cXy.x, cXy.y - 4f)
+                }
+        world.fetch(allOf(XYComponent::class, TargetHighlightComponent::class))
+                .forEach {
+                    val cXy = mXy.get(it)
                     val cTh = mTargetHighlight.getSafe(it, null)
                     if (cTh != null) {
                         val highlight = game.skin.newDrawable("targetOutlineWhite", 1f, 1f, 1f, cTh.alpha)
                         highlight.draw(batch,
-                                cXy.x - cTh.padding,
+                                cXy.x - cTh.padding + cTh.xOffset,
                                 cXy.y - cTh.padding,
                                 cTh.width + cTh.padding * 2,
                                 cTh.height + cTh.padding * 2)

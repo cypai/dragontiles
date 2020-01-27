@@ -78,6 +78,7 @@ class AttackCircleComponent : Component() {
 }
 
 class TargetHighlightComponent : Component() {
+    var xOffset = 0f
     var width = 0f
     var height = 0f
     var padding = 0f
