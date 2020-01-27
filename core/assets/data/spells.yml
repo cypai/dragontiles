@@ -52,6 +52,12 @@ base:spells:Reserve:
     description: "@OpenDiscard the @Component. @Repeatable !r."
     upgradeDescription: "@OpenDiscard the @Component. @Repeatable !r."
 
+base:spells:PreFetch:
+  en:
+    name: Pre-Fetch
+    description: Fill the Open Discard Pool.
+    upgradeDescription: Fill the Open Discard Pool.
+
 base:spells:Ground:
   en:
     name: Ground

@@ -127,7 +127,7 @@ private fun suitReqString(allowedSuits: Set<Suit>): String {
     }
 }
 
-class Single(private val allowedSuits: Set<Suit>) : ComponentRequirement() {
+open class Single(private val allowedSuits: Set<Suit>) : ComponentRequirement() {
     constructor() : this(anySet)
 
     override val reqString = "1 ${suitReqString(allowedSuits)}"
@@ -152,6 +152,25 @@ class Single(private val allowedSuits: Set<Suit>) : ComponentRequirement() {
         return slots.size == 1
                 && slots.firstOrNull()?.tile?.let { allowedSuits.contains(it.tile.suit) } ?: false
     }
+}
+
+class SinglePredicate(private val predicate: (TileInstance) -> Boolean,
+                      allowedSuits: Set<Suit>) : Single(allowedSuits) {
+
+    override fun find(hand: List<TileInstance>): List<List<TileInstance>> {
+        return super.find(hand)
+                .filter { predicate.invoke(it[0]) }
+    }
+
+    override fun findGiven(hand: List<TileInstance>, given: List<TileInstance>): List<List<TileInstance>> {
+        return super.findGiven(hand, given)
+                .filter { predicate.invoke(it[0]) }
+    }
+
+    override fun satisfied(slots: List<ComponentSlot>): Boolean {
+        return super.satisfied(slots) && predicate.invoke(slots[0].tile!!)
+    }
+
 }
 
 class Identical(var slotAmount: Int, private val allowedSuits: Set<Suit>) : ComponentRequirement() {
