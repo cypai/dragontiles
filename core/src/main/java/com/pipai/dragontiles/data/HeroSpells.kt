@@ -11,7 +11,9 @@ class HeroSpells {
                 Strike(rngUpgrade(runData.rng)),
                 RampStrike(rngUpgrade(runData.rng)),
                 Break(rngUpgrade(runData.rng)),
-                Concentrate(rngUpgrade(runData.rng))
+                Concentrate(rngUpgrade(runData.rng)),
+                Blast(rngUpgrade(runData.rng)),
+                Explosion(rngUpgrade(runData.rng))
         )
         return spells.shuffled().subList(0, amount)
     }

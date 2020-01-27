@@ -287,6 +287,10 @@ class CombatUiSystem(private val game: DragonTilesGame,
                 highlightEnemies()
                 highlightEnemySpells()
             }
+            TargetType.AOE -> {
+                highlightEnemies()
+                highlightEnemySpells()
+            }
             else -> {
             }
         }
