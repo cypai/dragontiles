@@ -44,7 +44,7 @@ abstract class Spell(var upgraded: Boolean) {
 
     fun available() = !exhausted && repeated < repeatableMax
 
-    fun ready() = available() && requirement.satisfied(requirement.componentSlots)
+    fun ready() = available() && requirement.satisfied(requirement.componentSlots.mapNotNull { it.tile })
 
     suspend fun cast(params: CastParams, api: CombatApi) {
         if (!ready()) {
@@ -102,7 +102,7 @@ abstract class ComponentRequirement {
 
     abstract fun find(hand: List<TileInstance>): List<List<TileInstance>>
     abstract fun findGiven(hand: List<TileInstance>, given: List<TileInstance>): List<List<TileInstance>>
-    abstract fun satisfied(slots: List<ComponentSlot>): Boolean
+    abstract fun satisfied(slots: List<TileInstance>): Boolean
 }
 
 fun generateSlots(amount: Int): List<ComponentSlot> {
@@ -148,9 +148,9 @@ open class Single(private val allowedSuits: Set<Suit>) : ComponentRequirement() 
         }
     }
 
-    override fun satisfied(slots: List<ComponentSlot>): Boolean {
+    override fun satisfied(slots: List<TileInstance>): Boolean {
         return slots.size == 1
-                && slots.firstOrNull()?.tile?.let { allowedSuits.contains(it.tile.suit) } ?: false
+                && slots.firstOrNull()?.tile?.let { allowedSuits.contains(it.suit) } ?: false
     }
 }
 
@@ -167,8 +167,8 @@ class SinglePredicate(private val predicate: (TileInstance) -> Boolean,
                 .filter { predicate.invoke(it[0]) }
     }
 
-    override fun satisfied(slots: List<ComponentSlot>): Boolean {
-        return super.satisfied(slots) && predicate.invoke(slots[0].tile!!)
+    override fun satisfied(slots: List<TileInstance>): Boolean {
+        return super.satisfied(slots) && predicate.invoke(slots[0])
     }
 
 }
@@ -225,11 +225,11 @@ class Identical(var slotAmount: Int, private val allowedSuits: Set<Suit>) : Comp
         }
     }
 
-    override fun satisfied(slots: List<ComponentSlot>): Boolean {
+    override fun satisfied(slots: List<TileInstance>): Boolean {
         val first = slots.firstOrNull()?.tile
         return slots.size == slotAmount
-                && first?.tile?.suit in allowedSuits
-                && slots.all { it.tile != null && it.tile?.tile == first?.tile }
+                && first?.suit in allowedSuits
+                && slots.all { it.tile == first }
     }
 }
 
@@ -292,10 +292,10 @@ class Sequential(var slotAmount: Int, private val allowedSuits: Set<Suit>) : Com
         }
     }
 
-    override fun satisfied(slots: List<ComponentSlot>): Boolean {
+    override fun satisfied(slots: List<TileInstance>): Boolean {
         return slots.size == slotAmount
-                && slots.all { it.tile != null && it.tile?.tile?.suit in allowedSuits }
-                && sequential(slots.map { it.tile!!.tile as Tile.ElementalTile })
+                && slots.all { it.tile.suit in allowedSuits }
+                && sequential(slots.map { it.tile as Tile.ElementalTile })
     }
 
     private fun sequential(tiles: List<Tile.ElementalTile>): Boolean {

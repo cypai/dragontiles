@@ -2,10 +2,9 @@ package com.pipai.dragontiles.artemis.systems.animation
 
 import com.artemis.ComponentMapper
 import com.badlogic.gdx.graphics.g2d.Sprite
-import com.pipai.dragontiles.artemis.components.ClickableComponent
-import com.pipai.dragontiles.artemis.components.SpriteComponent
-import com.pipai.dragontiles.artemis.components.TileComponent
-import com.pipai.dragontiles.artemis.components.XYComponent
+import com.badlogic.gdx.math.Interpolation
+import com.badlogic.gdx.math.Vector2
+import com.pipai.dragontiles.artemis.components.*
 import com.pipai.dragontiles.artemis.events.TileClickEvent
 import com.pipai.dragontiles.data.TileInstance
 import com.pipai.dragontiles.gui.CombatUiLayout
@@ -14,6 +13,7 @@ abstract class TileAnimation(protected val layout: CombatUiLayout) : Animation()
 
     private lateinit var mXy: ComponentMapper<XYComponent>
     private lateinit var mTile: ComponentMapper<TileComponent>
+    private lateinit var mPath: ComponentMapper<PathInterpolationComponent>
     private lateinit var mSprite: ComponentMapper<SpriteComponent>
     private lateinit var mClickable: ComponentMapper<ClickableComponent>
 
@@ -30,5 +30,20 @@ abstract class TileAnimation(protected val layout: CombatUiLayout) : Animation()
         val cClickable = mClickable.create(entityId)
         cClickable.eventGenerator = { TileClickEvent(entityId, it) }
         return entityId
+    }
+
+    fun moveTile(entityId: Int, location: Vector2, t: Int, endCallback: (PathInterpolationComponent) -> Unit) {
+        val cXy = mXy.get(entityId)
+        val cPath = mPath.create(entityId)
+        cPath.endpoints.add(cXy.toVector2())
+        cPath.endpoints.add(location)
+        cPath.interpolation = Interpolation.pow3Out
+        cPath.maxT = t
+        cPath.onEnd = EndStrategy.REMOVE
+        cPath.onEndpoint = endCallback
+    }
+
+    fun moveTile(entityId: Int, location: Vector2, endCallback: (PathInterpolationComponent) -> Unit) {
+        moveTile(entityId, location, 30, endCallback)
     }
 }

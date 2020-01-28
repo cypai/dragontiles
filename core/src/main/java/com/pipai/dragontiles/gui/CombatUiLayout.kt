@@ -22,6 +22,7 @@ data class CombatUiLayout(val config: GameConfig, val tileSkin: TileSkin, val ma
     val openBlCorner = Vector2(openPoolCenter.x - tileSkin.width * openPoolSize / 2f, openPoolCenter.y - tileSkin.height / 2f)
 
     fun handTilePosition(number: Int) = Vector2(handBlCorner.x + tileSkin.width * number, handBlCorner.y)
+    fun handActiveTilePosition(number: Int) = Vector2(handBlCorner.x + tileSkin.width * number, handBlCorner.y + 16f)
     fun openTilePosition(number: Int) = Vector2(openBlCorner.x + tileSkin.width * number, openBlCorner.y)
 
     val optionListTlPosition = Vector2(config.resolution.width / 3f, spellCastPosition.y + cardHeight)

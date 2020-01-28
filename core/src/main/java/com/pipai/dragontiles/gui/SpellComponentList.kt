@@ -12,6 +12,8 @@ class SpellComponentList(private val skin: Skin,
 
     private val table = actor as Table
 
+    private val options: MutableList<List<TileInstance>> = mutableListOf()
+    private val optionFilter: MutableList<TileInstance> = mutableListOf()
     private val rows: MutableMap<Int, List<TileInstance>> = mutableMapOf()
 
     private val clickCallbacks: MutableList<(List<TileInstance>) -> Unit> = mutableListOf()
@@ -30,21 +32,35 @@ class SpellComponentList(private val skin: Skin,
     }
 
     fun setOptions(options: List<List<TileInstance>>) {
+        this.options.clear()
+        this.options.addAll(options)
+        optionFilter.clear()
+        refreshOptions()
+    }
+
+    fun filterOptions(tiles: List<TileInstance>) {
+        optionFilter.clear()
+        optionFilter.addAll(tiles)
+        refreshOptions()
+    }
+
+    fun refreshOptions() {
         rows.clear()
         table.clearChildren()
         table.left()
-        options.forEachIndexed { index, option ->
-            rows[index + 1] = option
-            val label = Label((index + 1).toString(), skin, "white")
-            table.add(label)
-            val hGroup = HorizontalGroup()
-            option.forEach { tile ->
-                hGroup.addActor(Image(tileSkin.regionFor(tile.tile)))
-            }
-            table.add(hGroup)
-                    .height(hGroup.prefHeight)
-            table.row()
-        }
+        options.filter { it.containsAll(optionFilter) }
+                .forEachIndexed { index, option ->
+                    rows[index + 1] = option
+                    val label = Label((index + 1).toString(), skin, "white")
+                    table.add(label)
+                    val hGroup = HorizontalGroup()
+                    option.forEach { tile ->
+                        hGroup.addActor(Image(tileSkin.regionFor(tile.tile)))
+                    }
+                    table.add(hGroup)
+                            .height(hGroup.prefHeight)
+                    table.row()
+                }
         table.validate()
         scrollY = 0f
         updateVisualScroll()

@@ -16,7 +16,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.pipai.dragontiles.DragonTilesGame
 import com.pipai.dragontiles.artemis.components.*
 import com.pipai.dragontiles.artemis.events.*
+import com.pipai.dragontiles.artemis.systems.animation.CombatAnimationSystem
 import com.pipai.dragontiles.artemis.systems.combat.CombatControllerSystem
+import com.pipai.dragontiles.combat.HandAdjustedEvent
 import com.pipai.dragontiles.data.TileInstance
 import com.pipai.dragontiles.dungeon.RunData
 import com.pipai.dragontiles.gui.CombatUiLayout
@@ -31,6 +33,7 @@ import com.pipai.dragontiles.utils.mapper
 import com.pipai.dragontiles.utils.system
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import net.mostlyoriginal.api.event.common.EventSystem
 import net.mostlyoriginal.api.event.common.Subscribe
 import kotlin.math.min
 
@@ -54,6 +57,7 @@ class CombatUiSystem(private val game: DragonTilesGame,
 
     private var selectedSpellNumber: Int? = null
     private var mouseFollowEntityId: Int? = null
+    private val givenComponents: MutableList<TileInstance> = mutableListOf()
 
     private val stateMachine = DefaultStateMachine<CombatUiSystem, CombatUiState>(this, CombatUiState.ROOT)
 
@@ -65,9 +69,12 @@ class CombatUiSystem(private val game: DragonTilesGame,
     private val mMouseFollow by mapper<MouseFollowComponent>()
     private val mSprite by mapper<SpriteComponent>()
     private val mTargetHighlight by mapper<TargetHighlightComponent>()
+    private val mTile by mapper<TileComponent>()
 
     private val sCombat by system<CombatControllerSystem>()
     private val sTooltip by system<TooltipSystem>()
+    private val sAnimation by system<CombatAnimationSystem>()
+    private val sEvent by system<EventSystem>()
 
     override fun initialize() {
         rootTable.setFillParent(true)
@@ -107,6 +114,10 @@ class CombatUiSystem(private val game: DragonTilesGame,
             spellCard.x = cXy.x
             spellCard.y = cXy.y
         }
+    }
+
+    fun activeTiles(): List<TileInstance> {
+        return givenComponents.toList()
     }
 
     fun setHpRelative(amount: Int) {
@@ -152,6 +163,8 @@ class CombatUiSystem(private val game: DragonTilesGame,
             }
             CombatUiState.TARGET_SELECTION -> {
                 stateMachine.changeState(CombatUiState.COMPONENT_SELECTION)
+                givenComponents.clear()
+                readjustHand()
                 true
             }
             else -> false
@@ -242,6 +255,9 @@ class CombatUiSystem(private val game: DragonTilesGame,
     }
 
     private fun selectComponents(components: List<TileInstance>) {
+        givenComponents.clear()
+        givenComponents.addAll(components)
+        readjustHand()
         val spell = getSelectedSpell()
         when (spell.targetType) {
             TargetType.SINGLE -> {
@@ -365,10 +381,12 @@ class CombatUiSystem(private val game: DragonTilesGame,
                 if (spell.targetType == TargetType.SINGLE_ENEMY
                         || spell.targetType == TargetType.SINGLE) {
 
+                    sAnimation.pauseUiMode = true
                     GlobalScope.launch {
                         spell.cast(CastParams(listOf(mEnemy.get(ev.entityId).enemy.id)), sCombat.controller.api)
                     }
                 } else if (spell.targetType == TargetType.AOE) {
+                    sAnimation.pauseUiMode = true
                     GlobalScope.launch {
                         spell.cast(
                                 CastParams(sCombat.combat.enemies
@@ -391,10 +409,12 @@ class CombatUiSystem(private val game: DragonTilesGame,
                 if (spell.targetType == TargetType.SINGLE_ENEMY
                         || spell.targetType == TargetType.SINGLE) {
 
+                    sAnimation.pauseUiMode = true
                     GlobalScope.launch {
                         spell.cast(CastParams(listOf(mAttackCircle.get(ev.entityId).id)), sCombat.controller.api)
                     }
                 } else if (spell.targetType == TargetType.AOE) {
+                    sAnimation.pauseUiMode = true
                     GlobalScope.launch {
                         spell.cast(
                                 CastParams(sCombat.combat.enemyAttacks.values.map { it.id }.toList()),
@@ -403,6 +423,44 @@ class CombatUiSystem(private val game: DragonTilesGame,
                 }
             }
         }
+    }
+
+    @Subscribe
+    fun handleTileClick(ev: TileClickEvent) {
+        when (stateMachine.currentState) {
+            CombatUiState.COMPONENT_SELECTION -> {
+                val tile = mTile.get(ev.entityId).tile
+                changeGivenTile(tile)
+            }
+            CombatUiState.TARGET_SELECTION -> {
+                stateMachine.changeState(CombatUiState.COMPONENT_SELECTION)
+                val tile = mTile.get(ev.entityId).tile
+                changeGivenTile(tile)
+            }
+            else -> {
+            }
+        }
+    }
+
+    private fun changeGivenTile(tile: TileInstance) {
+        if (tile in givenComponents) {
+            givenComponents.remove(tile)
+        } else {
+            givenComponents.add(tile)
+            givenComponents.sortWith(compareBy({ it.tile.suit.order }, { it.tile.order() }))
+        }
+        spellComponentList.filterOptions(givenComponents)
+        val spell = getSelectedSpell()
+        if (spell.requirement.satisfied(givenComponents)) {
+            selectComponents(givenComponents.toList())
+        } else {
+            readjustHand()
+        }
+    }
+
+    private fun readjustHand() {
+        sAnimation.pauseUiMode = false
+        sEvent.dispatch(HandAdjustedEvent(sCombat.combat.hand))
     }
 
     override fun keyUp(keycode: Int) = false
@@ -459,6 +517,8 @@ class CombatUiSystem(private val game: DragonTilesGame,
                         spellCard.enable()
                     }
                 }
+                uiSystem.givenComponents.clear()
+                uiSystem.readjustHand()
             }
         },
         COMPONENT_SELECTION() {

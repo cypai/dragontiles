@@ -10,6 +10,7 @@ import net.mostlyoriginal.api.event.common.Subscribe
 
 class CombatAnimationSystem(private val game: DragonTilesGame) : BaseSystem(), AnimationObserver {
 
+    var pauseUiMode = false
     private var animating = false
     private val animationQueue: MutableList<Animation> = mutableListOf()
     private var turnRunning = false
@@ -20,7 +21,9 @@ class CombatAnimationSystem(private val game: DragonTilesGame) : BaseSystem(), A
     override fun processSystem() {
         if (!animating && animationQueue.isNotEmpty()) {
             animating = true
-            sUi.disable()
+            if (pauseUiMode) {
+                sUi.disable()
+            }
             val animation = animationQueue.first()
             animation.startAnimation()
         }
@@ -35,7 +38,7 @@ class CombatAnimationSystem(private val game: DragonTilesGame) : BaseSystem(), A
     override fun notify(animation: Animation) {
         animationQueue.remove(animation)
         animating = false
-        if (animationQueue.isEmpty() && turnRunning) {
+        if (animationQueue.isEmpty() && turnRunning && pauseUiMode) {
             sUi.enable()
         }
     }
