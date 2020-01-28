@@ -28,7 +28,7 @@ class UpdateAttackCircleAnimation(private val attack: CountdownAttack) : Animati
         mTextLabel.get(cAttackCircle.hourglassId).text = attack.turnsLeft.toString()
 
         if (attack.isActive()) {
-            endAnimation(30)
+            endAnimation(0.5f)
         } else {
             endAnimation()
         }

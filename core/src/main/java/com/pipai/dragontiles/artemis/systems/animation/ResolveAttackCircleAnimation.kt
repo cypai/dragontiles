@@ -16,7 +16,7 @@ class ResolveAttackCircleAnimation(private val attack: CountdownAttack) : Animat
 
         world.delete(id)
 
-        endAnimation(30)
+        endAnimation(0.5f)
     }
 
 }

@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.g2d.Sprite
 import com.badlogic.gdx.math.Interpolation
 import com.badlogic.gdx.math.Vector2
 import com.pipai.dragontiles.misc.RadialSprite
-import com.pipai.dragontiles.utils.MathUtils
 import net.mostlyoriginal.api.event.common.Event
 
 class XYComponent : Component() {
@@ -29,10 +28,8 @@ class XYComponent : Component() {
 
 class PathInterpolationComponent : Component() {
     lateinit var interpolation: Interpolation
-    var speed = 0.0
-    var t = 0
-    var maxT = 0
-    var tIncrement = 1
+    var t: Float = 0f
+    var maxT: Float = 0f
 
     var onEndpoint: ((PathInterpolationComponent) -> Unit)? = null
     var onEnd = EndStrategy.REMOVE
@@ -40,36 +37,23 @@ class PathInterpolationComponent : Component() {
     val endpoints: MutableList<Vector2> = mutableListOf()
     var endpointIndex = 0
 
-    fun clear() {
+    fun setPath(start: Vector2, end: Vector2, maxT: Float, interpolation: Interpolation, onEndStrategy: EndStrategy) {
         endpoints.clear()
-        endpointIndex = 0
-        speed = 0.0
-        t = 0
-        maxT = 0
-        tIncrement = 1
-        onEndpoint = null
-        onEnd = EndStrategy.REMOVE
+        endpoints.add(start)
+        endpoints.add(end)
+        t = 0f
+        this.maxT = maxT
+        this.interpolation = interpolation
+        onEnd = onEndStrategy
     }
 
     fun getCurrentPos(): Vector2 {
-        val a = t.toFloat() / maxT.toFloat()
+        val a = t / maxT
         val start = endpoints[endpointIndex]
         val end = endpoints[endpointIndex + 1]
         return Vector2(
                 interpolation.apply(start.x, end.x, a),
                 interpolation.apply(start.y, end.y, a))
-    }
-
-    fun setUsingSpeed(speed: Double) {
-        this.speed = speed
-        if (endpointIndex < endpoints.size - 1) {
-            val start = endpoints[endpointIndex]
-            val end = endpoints[endpointIndex + 1]
-            val distance = MathUtils.distance(start.x, start.y, end.x, end.y)
-            val time = distance / speed
-            t = 0
-            maxT = time.toInt()
-        }
     }
 }
 
@@ -78,9 +62,8 @@ enum class EndStrategy {
 }
 
 class TimerComponent : Component() {
-    var t = 0
-    var maxT = 0
-    var tIncrement = 1
+    var t: Float = 0f
+    var maxT: Float = 0f
 
     var onEnd: EndStrategy = EndStrategy.REMOVE
     var onEndCallback: (() -> Unit)? = null

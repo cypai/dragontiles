@@ -16,11 +16,11 @@ class AdjustHandAnimation(private val tileLocations: List<Pair<TileInstance, Int
         tileLocations.forEach { (tile, index) ->
             val entityId = sTileId.getEntityId(tile.id)
             if (tile in activeTiles) {
-                moveTile(entityId, layout.handActiveTilePosition(index), 5) {
+                moveTile(entityId, layout.handActiveTilePosition(index), 0.1f) {
                     endAnimation()
                 }
             } else {
-                moveTile(entityId, layout.handTilePosition(index)) {
+                moveTile(entityId, layout.handTilePosition(index), 0.3f) {
                     endAnimation()
                 }
             }

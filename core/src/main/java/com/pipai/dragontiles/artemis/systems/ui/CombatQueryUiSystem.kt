@@ -90,12 +90,7 @@ class CombatQueryUiSystem(private val game: DragonTilesGame, private val runData
     fun moveTile(entityId: Int, position: Vector2) {
         val cXy = mXy.get(entityId)
         val cPath = mPath.create(entityId)
-        cPath.endpoints.add(cXy.toVector2())
-        cPath.endpoints.add(position)
-        cPath.interpolation = Interpolation.exp10Out
-        cPath.t = 0
-        cPath.maxT = 15
-        cPath.onEnd = EndStrategy.REMOVE
+        cPath.setPath(cXy.toVector2(), position, 0.25f, Interpolation.exp10Out, EndStrategy.REMOVE)
     }
 
     private fun selectedPosition(index: Int, total: Int): Vector2 {

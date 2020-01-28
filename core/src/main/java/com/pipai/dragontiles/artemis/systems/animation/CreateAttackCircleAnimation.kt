@@ -75,7 +75,7 @@ class CreateAttackCircleAnimation(private val enemy: Enemy,
         }
         addHourglassIcon(attack.turnsLeft, cAttackCircle, md, cCircleXy.x, cCircleXy.y)
 
-        endAnimation(30)
+        endAnimation(0.5f)
     }
 
     private fun addSwordIcon(damage: Int, ac: AttackCircleComponent, md: MutualDestroyComponent, x: Float, y: Float) {

@@ -232,13 +232,7 @@ class CombatUiSystem(private val game: DragonTilesGame,
         val id = spellEntityIds[number]!!
         val cXy = mXy.get(id)
         val cPath = mPath.create(id)
-        cPath.clear()
-        cPath.endpoints.add(cXy.toVector2())
-        cPath.endpoints.add(location)
-        cPath.t = 0
-        cPath.maxT = 15
-        cPath.interpolation = Interpolation.exp10Out
-        cPath.onEnd = EndStrategy.REMOVE
+        cPath.setPath(cXy.toVector2(), location, 0.25f, Interpolation.exp10Out, EndStrategy.REMOVE)
     }
 
     private fun displaySpellComponents(spellCard: SpellCard) {
