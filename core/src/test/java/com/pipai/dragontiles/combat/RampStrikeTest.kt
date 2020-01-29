@@ -19,8 +19,8 @@ class RampStrikeTest : CombatBackendTest(QueryHandler()) {
         controller.initCombat()
         runBlocking { controller.runTurn() }
 
-        val invoke = controller.api.spells[0] as Invoke
-        val rampStrike = controller.api.spells[1]
+        val invoke = controller.api.combat.spells[0] as Invoke
+        val rampStrike = controller.api.combat.spells[1]
         Assert.assertEquals(3, rampStrike.baseDamage())
         invoke.fill(invoke.requirement.find(combat.hand).first())
         runBlocking { invoke.cast(CastParams(listOf(flameTurtle.id)), controller.api) }

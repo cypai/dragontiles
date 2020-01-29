@@ -28,7 +28,7 @@ class SpellCard(private val game: DragonTilesGame,
     private val reqBorder = Image()
     private val reqImage = Image()
     private val reqNumber = Label("", skin)
-    private val nameLabel = Label("", skin, "small")
+    private val nameLabel = Label("", skin, "tiny")
     private val numberLabel = Label("", skin, "tiny")
     private val descriptionLabel = Label("", skin, "tiny")
 

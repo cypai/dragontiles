@@ -28,11 +28,11 @@ class ElementalRuneTest : CombatBackendTest(QueryHandler()) {
 
         runBlocking { controller.runTurn() }
 
-        val invoke = controller.api.spells[0] as Invoke
-        val elementalRune = controller.api.spells[1] as ElementalRune
+        val invoke = controller.api.combat.spells[0] as Invoke
+        val elementalRune = controller.api.combat.spells[1] as ElementalRune
 
         elementalRune.fill(hand.subList(0, 2))
-        elementalRune.activate(CastParams(listOf()), controller.api)
+        runBlocking { elementalRune.activate(controller.api) }
 
         invoke.fill(listOf(hand[2]))
         runBlocking { invoke.cast(CastParams(listOf(flameTurtle.id)), controller.api) }

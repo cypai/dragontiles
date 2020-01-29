@@ -21,7 +21,7 @@ abstract class Spell(var upgraded: Boolean) {
 
     protected val data: MutableMap<String, Int> = mutableMapOf()
 
-    protected abstract fun newClone(upgraded: Boolean): Spell
+    abstract fun newClone(upgraded: Boolean): Spell
 
     abstract fun available(): Boolean
 
@@ -117,20 +117,22 @@ abstract class Rune(upgraded: Boolean) : Spell(upgraded) {
 
     override fun available(): Boolean = (active && canDeactivate) || (!active && canActivate)
 
-    fun activate(params: CastParams, api: CombatApi) {
-        if (!canActivate) {
+    suspend fun activate(api: CombatApi) {
+        if (!canActivate || !requirement.satisfied(components())) {
             logger.error("Attempted activation when canActivate is false. State: $this")
         }
         active = true
         canActivate = false
+        api.activateRune(this, components())
     }
 
-    fun deactivate(api: CombatApi) {
+    suspend fun deactivate(api: CombatApi) {
         if (!canDeactivate) {
             logger.error("Attempted deactivation when canDeactivate is false. State: $this")
         }
         active = false
         canDeactivate = false
+        api.deactivateRune(this)
     }
 
     open fun attackDamageModifier(damageOrigin: DamageOrigin, damageTarget: DamageTarget, attackerStatus: StatusData, targetStatus: StatusData, element: Element, amount: Int) = 0

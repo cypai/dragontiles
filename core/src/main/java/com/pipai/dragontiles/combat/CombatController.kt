@@ -10,10 +10,11 @@ class CombatController(private val runData: RunData,
                        eventSystem: EventSystem) {
 
     private val eventBus = SuspendableEventBus(eventSystem)
-    val api: CombatApi = CombatApi(runData, combat, runData.hero.spells.toList(), eventBus)
+    val api: CombatApi = CombatApi(runData, combat, eventBus)
 
     fun initCombat() {
         eventBus.init(api)
+        combat.spells.addAll(runData.hero.spells)
         combat.enemies.forEach {
             it.preInit(api.nextId())
             it.init(api)
@@ -21,7 +22,7 @@ class CombatController(private val runData: RunData,
         }
         initDrawPile()
         runBlocking { initOpenPile() }
-        api.spells.forEach {
+        combat.spells.forEach {
             it.combatReset()
             eventBus.register(it)
         }
@@ -77,7 +78,7 @@ class CombatController(private val runData: RunData,
         combat.enemyAttacks.keys.toList().forEach {
             api.countdownAttackTick(it)
         }
-        api.spells.forEach {
+        combat.spells.forEach {
             it.turnReset()
         }
         runTurn()

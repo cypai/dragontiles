@@ -35,11 +35,7 @@ abstract class TileAnimation(protected val layout: CombatUiLayout) : Animation()
     fun moveTile(entityId: Int, location: Vector2, t: Float, endCallback: (PathInterpolationComponent) -> Unit) {
         val cXy = mXy.get(entityId)
         val cPath = mPath.create(entityId)
-        cPath.endpoints.add(cXy.toVector2())
-        cPath.endpoints.add(location)
-        cPath.interpolation = Interpolation.pow3Out
-        cPath.maxT = t
-        cPath.onEnd = EndStrategy.REMOVE
+        cPath.setPath(cXy.toVector2(), location, t, Interpolation.pow3Out, EndStrategy.REMOVE)
         cPath.onEndpoint = endCallback
     }
 

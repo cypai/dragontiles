@@ -2,10 +2,13 @@ package com.pipai.dragontiles.combat
 
 import com.pipai.dragontiles.data.TileInstance
 import com.pipai.dragontiles.enemies.Enemy
+import com.pipai.dragontiles.spells.Spell
 
 data class Combat(val enemies: List<Enemy>) {
 
     var turnNumber = 0
+
+    val spells: MutableList<Spell> = mutableListOf()
 
     val hand: MutableList<TileInstance> = mutableListOf()
     val drawPile: MutableList<TileInstance> = mutableListOf()
@@ -13,10 +16,10 @@ data class Combat(val enemies: List<Enemy>) {
     val openPool: MutableList<TileInstance> = mutableListOf()
 
     /**
-     * Tile -> StandardSpell Index in CombatApi
+     * StandardSpell Index -> List<TileInstance> in CombatApi
      * For assigned tiles in runes
      */
-    val assigned: MutableList<Pair<TileInstance, Int>> = mutableListOf()
+    val assigned: MutableMap<Int, List<TileInstance>> = mutableMapOf()
 
     val enemyAttacks: MutableMap<Int, CountdownAttack> = mutableMapOf()
 

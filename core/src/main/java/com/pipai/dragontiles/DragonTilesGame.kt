@@ -35,6 +35,7 @@ import com.pipai.dragontiles.relics.Transmuter
 import com.pipai.dragontiles.spells.common.Invoke
 import com.pipai.dragontiles.spells.common.Strike
 import com.pipai.dragontiles.spells.elementalist.Break
+import com.pipai.dragontiles.spells.elementalist.ElementalRune
 import com.pipai.dragontiles.utils.enemyAssetPath
 import com.pipai.dragontiles.utils.getLogger
 import org.apache.commons.lang3.builder.ToStringBuilder
@@ -132,7 +133,8 @@ class DragonTilesGame(val gameConfig: GameConfig) : Game() {
                         mutableListOf(
                                 Invoke(false),
                                 Strike(false),
-                                Break(false)),
+                                Break(false),
+                                ElementalRune(false)),
                         mutableListOf(
                                 Transmuter())
                 ),

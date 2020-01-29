@@ -7,13 +7,11 @@ import com.pipai.dragontiles.data.TileInstance
 import com.pipai.dragontiles.dungeon.RunData
 import com.pipai.dragontiles.enemies.Enemy
 import com.pipai.dragontiles.spells.Rune
-import com.pipai.dragontiles.spells.Spell
 import com.pipai.dragontiles.spells.StandardSpell
 import kotlin.coroutines.suspendCoroutine
 
 class CombatApi(val runData: RunData,
                 val combat: Combat,
-                val spells: List<Spell>,
                 private val eventBus: SuspendableEventBus) {
 
     private var nextId = 0
@@ -39,6 +37,20 @@ class CombatApi(val runData: RunData,
 
     suspend fun castSpell(spell: StandardSpell) {
         eventBus.dispatch(SpellCastedEvent(spell))
+    }
+
+    suspend fun activateRune(rune: Rune, components: List<TileInstance>) {
+        eventBus.dispatch(RuneActivatedEvent(rune))
+        val runeIndex = combat.spells.indexOf(rune)
+        combat.assigned[runeIndex] = components
+        combat.hand.removeAll(components)
+    }
+
+    suspend fun deactivateRune(rune: Rune) {
+        eventBus.dispatch(RuneDeactivatedEvent(rune))
+        val runeIndex = combat.spells.indexOf(rune)
+        val components = combat.assigned.remove(runeIndex)!!
+        combat.hand.addAll(components)
     }
 
     suspend fun draw(amount: Int) {
@@ -83,7 +95,7 @@ class CombatApi(val runData: RunData,
 
     suspend fun sortHand() {
         combat.hand.sortWith(compareBy({ it.tile.suit.order }, { it.tile.order() }))
-        eventBus.dispatch(HandAdjustedEvent(combat.hand.toList()))
+        eventBus.dispatch(HandAdjustedEvent(combat.hand.toList(), combat.assigned))
     }
 
     suspend fun drawToOpenPool(amount: Int) {
@@ -113,7 +125,7 @@ class CombatApi(val runData: RunData,
                               amount: Int): Int {
 
         var damage = calculateBaseDamage(attackerStatus, amount) - targetStatus[Status.DEFENSE]
-        spells.forEach {
+        combat.spells.forEach {
             if (it is Rune) {
                 damage += it.attackDamageModifier(damageOrigin, damageTarget, attackerStatus, targetStatus, element, amount)
             }
@@ -212,8 +224,8 @@ class CombatApi(val runData: RunData,
 
     suspend fun assign(components: List<TileInstance>, rune: Rune) {
         combat.hand.removeAll(components)
-        val runeIndex = spells.indexOf(rune)
-        combat.assigned.addAll(components.map { Pair(it, runeIndex) })
+        val runeIndex = combat.spells.indexOf(rune)
+        combat.assigned[runeIndex]
         sortHand()
     }
 

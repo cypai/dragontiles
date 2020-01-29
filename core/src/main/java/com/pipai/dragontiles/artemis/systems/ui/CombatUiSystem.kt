@@ -24,10 +24,7 @@ import com.pipai.dragontiles.dungeon.RunData
 import com.pipai.dragontiles.gui.CombatUiLayout
 import com.pipai.dragontiles.gui.SpellCard
 import com.pipai.dragontiles.gui.SpellComponentList
-import com.pipai.dragontiles.spells.CastParams
-import com.pipai.dragontiles.spells.Spell
-import com.pipai.dragontiles.spells.StandardSpell
-import com.pipai.dragontiles.spells.TargetType
+import com.pipai.dragontiles.spells.*
 import com.pipai.dragontiles.utils.allOf
 import com.pipai.dragontiles.utils.fetch
 import com.pipai.dragontiles.utils.mapper
@@ -53,6 +50,9 @@ class CombatUiSystem(private val game: DragonTilesGame,
     private val spells: MutableMap<Int, SpellCard> = mutableMapOf()
     private val spellEntityIds: MutableMap<Int, Int> = mutableMapOf()
     private val spellComponentList = SpellComponentList(skin, tileSkin)
+
+    // (Rune Index, [tile entity ids])
+    private val runeTiles: MutableMap<Int, List<Int>> = mutableMapOf()
 
     val layout = CombatUiLayout(config, tileSkin, runData.hero.handSize)
 
@@ -119,6 +119,10 @@ class CombatUiSystem(private val game: DragonTilesGame,
 
     fun activeTiles(): List<TileInstance> {
         return givenComponents.toList()
+    }
+
+    fun runeTiles(): List<Pair<Int, List<Int>>> {
+        return runeTiles.toList()
     }
 
     fun setHpRelative(amount: Int) {
@@ -254,8 +258,7 @@ class CombatUiSystem(private val game: DragonTilesGame,
         givenComponents.clear()
         givenComponents.addAll(components)
         readjustHand()
-        val spell = getSelectedSpell()
-        when (spell) {
+        when (val spell = getSelectedSpell()) {
             is StandardSpell -> {
                 when (spell.targetType) {
                     TargetType.SINGLE -> {
@@ -276,9 +279,24 @@ class CombatUiSystem(private val game: DragonTilesGame,
                     }
                     TargetType.NONE -> {
                         spell.fill(components)
+                        sAnimation.pauseUiMode = true
                         GlobalScope.launch {
                             spell.cast(CastParams(listOf()), sCombat.controller.api)
                         }
+                    }
+                }
+            }
+            is Rune -> {
+                if (spell.active) {
+                    sAnimation.pauseUiMode = true
+                    GlobalScope.launch {
+                        spell.deactivate(sCombat.controller.api)
+                    }
+                } else {
+                    sAnimation.pauseUiMode = true
+                    spell.fill(components)
+                    GlobalScope.launch {
+                        spell.activate(sCombat.controller.api)
                     }
                 }
             }
@@ -462,7 +480,7 @@ class CombatUiSystem(private val game: DragonTilesGame,
 
     private fun readjustHand() {
         sAnimation.pauseUiMode = false
-        sEvent.dispatch(HandAdjustedEvent(sCombat.combat.hand))
+        sEvent.dispatch(HandAdjustedEvent(sCombat.combat.hand, sCombat.combat.assigned))
     }
 
     override fun keyUp(keycode: Int) = false

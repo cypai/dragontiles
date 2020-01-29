@@ -65,14 +65,18 @@ class CombatAnimationSystem(private val game: DragonTilesGame) : BaseSystem(), A
     @Subscribe
     fun handleDrawFromOpenPoolEvent(ev: DrawFromOpenPoolEvent) {
         val batch = BatchAnimation()
-        batch.addToBatch(AdjustHandAnimation(ev.tiles, sUi.layout))
+        batch.addToBatch(AdjustHandAnimation(ev.tiles, sCombat.combat.assigned, sUi.layout))
         batch.addToBatch(AdjustOpenPoolAnimation(sCombat.combat.openPool, sUi.layout))
         queueAnimation(batch)
     }
 
     @Subscribe
     fun handleHandAdjustedEvent(ev: HandAdjustedEvent) {
-        queueAnimation(AdjustHandAnimation(ev.hand.mapIndexed { index, tileInstance -> Pair(tileInstance, index) }, sUi.layout))
+        adjustHand()
+    }
+
+    private fun adjustHand() {
+        queueAnimation(AdjustHandAnimation(sCombat.combat.hand.mapIndexed { index, tileInstance -> Pair(tileInstance, index) }, sCombat.combat.assigned, sUi.layout))
     }
 
     @Subscribe
@@ -167,4 +171,10 @@ class CombatAnimationSystem(private val game: DragonTilesGame) : BaseSystem(), A
     fun handleBattleWin(ev: BattleWinEvent) {
         queueAnimation(BattleWinAnimation())
     }
+
+    @Subscribe
+    fun handleRuneActivation(ev: RuneActivatedEvent) {
+        adjustHand()
+    }
+
 }

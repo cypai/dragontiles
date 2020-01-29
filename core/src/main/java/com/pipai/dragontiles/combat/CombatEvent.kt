@@ -4,6 +4,7 @@ import com.pipai.dragontiles.data.Element
 import com.pipai.dragontiles.data.Tile
 import com.pipai.dragontiles.data.TileInstance
 import com.pipai.dragontiles.enemies.Enemy
+import com.pipai.dragontiles.spells.Rune
 import com.pipai.dragontiles.spells.StandardSpell
 import net.mostlyoriginal.api.event.common.Event
 import kotlin.coroutines.Continuation
@@ -24,7 +25,7 @@ data class DrawFromOpenPoolEvent(val tiles: List<Pair<TileInstance, Int>>) : Com
 
 data class EnemyDiscardEvent(val enemyId: Int, val tile: TileInstance, val location: Int) : CombatEvent
 
-data class HandAdjustedEvent(val hand: List<TileInstance>) : CombatEvent
+data class HandAdjustedEvent(val hand: List<TileInstance>, val assigned: MutableMap<Int, List<TileInstance>>) : CombatEvent
 
 data class DrawToOpenPoolEvent(val tiles: List<Pair<TileInstance, Int>>) : CombatEvent
 
@@ -55,6 +56,10 @@ data class PlayerDamageEvent(val amount: Int) : CombatEvent
 data class ComponentConsumeEvent(val components: List<TileInstance>) : CombatEvent
 
 data class SpellCastedEvent(val spell: StandardSpell) : CombatEvent
+
+data class RuneActivatedEvent(val rune: Rune) : CombatEvent
+
+data class RuneDeactivatedEvent(val rune: Rune) : CombatEvent
 
 class GameOverEvent : CombatEvent
 
