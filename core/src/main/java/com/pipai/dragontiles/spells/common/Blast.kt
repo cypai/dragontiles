@@ -3,9 +3,10 @@ package com.pipai.dragontiles.spells.common
 import com.pipai.dragontiles.combat.CombatApi
 import com.pipai.dragontiles.spells.*
 
-class Blast(upgraded: Boolean) : Spell(upgraded) {
+class Blast(upgraded: Boolean) : StandardSpell(upgraded) {
     override val id: String = "base:spells:Blast"
     override val requirement: ComponentRequirement = Identical(3)
+    override val type: SpellType = SpellType.ATTACK
     override val targetType: TargetType = TargetType.AOE
 
     override var repeatableMax: Int = 1

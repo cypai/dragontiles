@@ -3,9 +3,10 @@ package com.pipai.dragontiles.spells.common
 import com.pipai.dragontiles.combat.CombatApi
 import com.pipai.dragontiles.spells.*
 
-class Invoke(upgraded: Boolean) : Spell(upgraded) {
+class Invoke(upgraded: Boolean) : StandardSpell(upgraded) {
     override val id: String = "base:spells:Invoke"
     override val requirement: ComponentRequirement = Single()
+    override val type: SpellType = SpellType.ATTACK
     override val targetType: TargetType = TargetType.SINGLE
 
     override var repeatableMax: Int = if (upgraded) 2 else 1

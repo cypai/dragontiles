@@ -26,6 +26,7 @@ import com.pipai.dragontiles.gui.SpellCard
 import com.pipai.dragontiles.gui.SpellComponentList
 import com.pipai.dragontiles.spells.CastParams
 import com.pipai.dragontiles.spells.Spell
+import com.pipai.dragontiles.spells.StandardSpell
 import com.pipai.dragontiles.spells.TargetType
 import com.pipai.dragontiles.utils.allOf
 import com.pipai.dragontiles.utils.fetch
@@ -254,27 +255,31 @@ class CombatUiSystem(private val game: DragonTilesGame,
         givenComponents.addAll(components)
         readjustHand()
         val spell = getSelectedSpell()
-        when (spell.targetType) {
-            TargetType.SINGLE -> {
-                spell.fill(components)
-                stateMachine.changeState(CombatUiState.TARGET_SELECTION)
-            }
-            TargetType.SINGLE_ENEMY -> {
-                spell.fill(components)
-                stateMachine.changeState(CombatUiState.TARGET_SELECTION)
-            }
-            TargetType.SINGLE_CA -> {
-                spell.fill(components)
-                stateMachine.changeState(CombatUiState.TARGET_SELECTION)
-            }
-            TargetType.AOE -> {
-                spell.fill(components)
-                stateMachine.changeState(CombatUiState.TARGET_SELECTION)
-            }
-            TargetType.NONE -> {
-                spell.fill(components)
-                GlobalScope.launch {
-                    spell.cast(CastParams(listOf()), sCombat.controller.api)
+        when (spell) {
+            is StandardSpell -> {
+                when (spell.targetType) {
+                    TargetType.SINGLE -> {
+                        spell.fill(components)
+                        stateMachine.changeState(CombatUiState.TARGET_SELECTION)
+                    }
+                    TargetType.SINGLE_ENEMY -> {
+                        spell.fill(components)
+                        stateMachine.changeState(CombatUiState.TARGET_SELECTION)
+                    }
+                    TargetType.SINGLE_CA -> {
+                        spell.fill(components)
+                        stateMachine.changeState(CombatUiState.TARGET_SELECTION)
+                    }
+                    TargetType.AOE -> {
+                        spell.fill(components)
+                        stateMachine.changeState(CombatUiState.TARGET_SELECTION)
+                    }
+                    TargetType.NONE -> {
+                        spell.fill(components)
+                        GlobalScope.launch {
+                            spell.cast(CastParams(listOf()), sCombat.controller.api)
+                        }
+                    }
                 }
             }
         }
@@ -292,7 +297,7 @@ class CombatUiSystem(private val game: DragonTilesGame,
 
     private fun highlightTargets() {
         val spellCard = getSelectedSpellCard()!!
-        val spell = spellCard.getSpell()!!
+        val spell = spellCard.getSpell() as StandardSpell
         when (spell.targetType) {
             TargetType.SINGLE -> {
                 highlightEnemies()
@@ -371,7 +376,7 @@ class CombatUiSystem(private val game: DragonTilesGame,
     fun handleEnemyClick(ev: EnemyClickEvent) {
         if (ev.button == Input.Buttons.LEFT) {
             val spell = getSelectedSpell()
-            if (stateMachine.currentState == CombatUiState.TARGET_SELECTION) {
+            if (spell is StandardSpell && stateMachine.currentState == CombatUiState.TARGET_SELECTION) {
 
                 if (spell.targetType == TargetType.SINGLE_ENEMY
                         || spell.targetType == TargetType.SINGLE) {
@@ -401,19 +406,21 @@ class CombatUiSystem(private val game: DragonTilesGame,
             if (stateMachine.currentState == CombatUiState.TARGET_SELECTION) {
                 val spell = getSelectedSpell()
 
-                if (spell.targetType == TargetType.SINGLE_ENEMY
-                        || spell.targetType == TargetType.SINGLE) {
+                if (spell is StandardSpell) {
+                    if (spell.targetType == TargetType.SINGLE_ENEMY
+                            || spell.targetType == TargetType.SINGLE) {
 
-                    sAnimation.pauseUiMode = true
-                    GlobalScope.launch {
-                        spell.cast(CastParams(listOf(mAttackCircle.get(ev.entityId).id)), sCombat.controller.api)
-                    }
-                } else if (spell.targetType == TargetType.AOE) {
-                    sAnimation.pauseUiMode = true
-                    GlobalScope.launch {
-                        spell.cast(
-                                CastParams(sCombat.combat.enemyAttacks.values.map { it.id }.toList()),
-                                sCombat.controller.api)
+                        sAnimation.pauseUiMode = true
+                        GlobalScope.launch {
+                            spell.cast(CastParams(listOf(mAttackCircle.get(ev.entityId).id)), sCombat.controller.api)
+                        }
+                    } else if (spell.targetType == TargetType.AOE) {
+                        sAnimation.pauseUiMode = true
+                        GlobalScope.launch {
+                            spell.cast(
+                                    CastParams(sCombat.combat.enemyAttacks.values.map { it.id }.toList()),
+                                    sCombat.controller.api)
+                        }
                     }
                 }
             }

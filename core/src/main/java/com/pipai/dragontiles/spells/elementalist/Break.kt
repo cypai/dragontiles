@@ -5,9 +5,10 @@ import com.pipai.dragontiles.combat.Status
 import com.pipai.dragontiles.data.Element
 import com.pipai.dragontiles.spells.*
 
-class Break(upgraded: Boolean) : Spell(upgraded) {
+class Break(upgraded: Boolean) : StandardSpell(upgraded) {
     override val id: String = "base:spells:Break"
     override val requirement: ComponentRequirement = Identical(3)
+    override val type: SpellType = SpellType.EFFECT
     override val targetType: TargetType = TargetType.SINGLE_ENEMY
 
     override var repeatableMax: Int = 1

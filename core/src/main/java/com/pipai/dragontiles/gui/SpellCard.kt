@@ -84,7 +84,7 @@ class SpellCard(private val game: DragonTilesGame,
 
             override fun enter(event: InputEvent?, x: Float, y: Float, pointer: Int, fromActor: Actor?) {
                 if (spell != null) {
-                    sToolTip.addText("Spell Components", spell!!.requirement.description, true)
+                    sToolTip.addText("StandardSpell Components", spell!!.requirement.description, true)
                     sToolTip.addKeywordsInString(game.gameStrings.spellLocalization(spell!!.id).description)
                     sToolTip.showTooltip(stage)
                 }

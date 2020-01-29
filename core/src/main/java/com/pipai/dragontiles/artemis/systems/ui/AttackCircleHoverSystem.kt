@@ -24,7 +24,7 @@ class AttackCircleHoverSystem(private val gameStrings: GameStrings) : NoProcessi
     fun handleEnter(ev: AttackCircleHoverEnterEvent) {
         val ac = ev.cAttackCircle
         val l = gameStrings.nameDescLocalization(ac.strId)
-        sTooltip.addText("Spell: ${l.name}", l.description, false)
+        sTooltip.addText("StandardSpell: ${l.name}", l.description, false)
         sTooltip.addKeywordsInString(l.description)
         sTooltip.showTooltip(stage)
     }

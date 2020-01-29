@@ -22,9 +22,9 @@ class ComponentRequirementTest {
             Assert.assertEquals(1, it.size)
             Assert.assertTrue(it.first() in hand)
         }
-        val slots = generateSlots(1)
+        val slots: MutableList<TileInstance> = mutableListOf()
         Assert.assertFalse(single.satisfied(slots))
-        slots.first().tile = sets.first().first()
+        slots.add(sets.first().first())
         Assert.assertTrue(single.satisfied(slots))
 
         val givenSets = single.findGiven(hand, listOf(hand.first()))
@@ -46,11 +46,9 @@ class ComponentRequirementTest {
             Assert.assertEquals(3, it.size)
             Assert.assertTrue(it.first() in hand)
         }
-        val slots = generateSlots(3)
+        val slots: MutableList<TileInstance> = mutableListOf()
         Assert.assertFalse(identical.satisfied(slots))
-        slots.zip(sets.first()) { slot, tile ->
-            slot.tile = tile
-        }
+        slots.addAll(sets.first())
         Assert.assertTrue(identical.satisfied(slots))
 
         var givenSets = identical.findGiven(hand, listOf(hand.first()))
@@ -92,11 +90,9 @@ class ComponentRequirementTest {
             Assert.assertEquals(3, it.size)
             Assert.assertTrue(it.first() in hand)
         }
-        val slots = generateSlots(3)
+        val slots: MutableList<TileInstance> = mutableListOf()
         Assert.assertFalse(sequential.satisfied(slots))
-        slots.zip(sets.first()) { slot, tile ->
-            slot.tile = tile
-        }
+        slots.addAll(sets.first())
         Assert.assertTrue(sequential.satisfied(slots))
 
         var givenSets = sequential.findGiven(hand, listOf(hand.last()))

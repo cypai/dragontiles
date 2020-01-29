@@ -6,9 +6,10 @@ import com.pipai.dragontiles.combat.SpellCastedEvent
 import com.pipai.dragontiles.combat.TurnStartEvent
 import com.pipai.dragontiles.spells.*
 
-class RampStrike(upgraded: Boolean) : Spell(upgraded) {
+class RampStrike(upgraded: Boolean) : StandardSpell(upgraded) {
     override val id: String = "base:spells:RampStrike"
     override val requirement: ComponentRequirement = Sequential(3, SuitGroup.ELEMENTAL)
+    override val type: SpellType = SpellType.ATTACK
     override val targetType: TargetType = TargetType.SINGLE
 
     override var repeatableMax: Int = 1

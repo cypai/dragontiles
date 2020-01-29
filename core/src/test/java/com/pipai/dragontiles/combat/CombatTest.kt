@@ -27,19 +27,16 @@ class CombatTest : CombatBackendTest(QueryHandler()) {
         Assert.assertEquals(15, combat.hand.size)
         Assert.assertEquals(112, combat.drawPile.size)
 
-        val invoke = controller.api.spells.first()
+        val invoke = controller.api.spells.first() as Invoke
         Assert.assertTrue(invoke.available())
-        Assert.assertFalse(invoke.ready())
         runBlocking { invoke.cast(CastParams(listOf(flameTurtle.id)), controller.api) }
         Assert.assertEquals(15, combat.hand.size)
         Assert.assertEquals(30, flameTurtle.hp)
 
         invoke.fill(listOf(controller.api.combat.hand.first()))
         Assert.assertTrue(invoke.available())
-        Assert.assertTrue(invoke.ready())
         runBlocking { invoke.cast(CastParams(listOf(flameTurtle.id)), controller.api) }
         Assert.assertFalse(invoke.available())
-        Assert.assertFalse(invoke.ready())
         Assert.assertEquals(14, combat.hand.size)
         Assert.assertEquals(28, flameTurtle.hp)
     }
@@ -54,7 +51,7 @@ class CombatTest : CombatBackendTest(QueryHandler()) {
         controller.initCombat()
         runBlocking { controller.runTurn() }
 
-        val invoke = controller.api.spells.first()
+        val invoke = controller.api.spells.first() as Invoke
         invoke.fill(listOf(controller.api.combat.hand.first()))
         Assert.assertTrue(invoke.available())
         Assert.assertEquals(0, invoke.repeated)

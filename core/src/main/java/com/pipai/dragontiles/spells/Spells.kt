@@ -1,6 +1,10 @@
 package com.pipai.dragontiles.spells
 
 import com.pipai.dragontiles.combat.CombatApi
+import com.pipai.dragontiles.combat.DamageOrigin
+import com.pipai.dragontiles.combat.DamageTarget
+import com.pipai.dragontiles.combat.StatusData
+import com.pipai.dragontiles.data.Element
 import com.pipai.dragontiles.data.Suit
 import com.pipai.dragontiles.data.Tile
 import com.pipai.dragontiles.data.TileInstance
@@ -10,10 +14,54 @@ import com.pipai.dragontiles.utils.withoutAll
 import org.apache.commons.lang3.builder.ToStringBuilder
 
 abstract class Spell(var upgraded: Boolean) {
+    abstract val id: String
+
+    abstract val requirement: ComponentRequirement
+    abstract val type: SpellType
+
+    protected val data: MutableMap<String, Int> = mutableMapOf()
+
+    protected abstract fun newClone(upgraded: Boolean): Spell
+
+    abstract fun available(): Boolean
+
+    open fun baseDamage(): Int = 0
+
+    open fun dynamicValue(key: String, api: CombatApi, params: CastParams): Int {
+        return when (key) {
+            "!d" -> {
+                return if (params.targets.isEmpty()) {
+                    api.calculateBaseDamage(api.combat.heroStatus, baseDamage())
+                } else {
+                    val target = api.getTargetable(params.targets.first())
+                    api.calculateAttackDamage(target, elemental(components()), baseDamage())
+                }
+            }
+            else -> data[key] ?: 0
+        }
+    }
+
+    abstract fun turnReset()
+
+    abstract fun combatReset()
+
+    fun components() = requirement.componentSlots.filter { it.tile != null }.map { it.tile!! }.toList()
+
+    fun fill(components: List<TileInstance>) {
+        requirement.componentSlots.clear()
+        components.forEach {
+            requirement.componentSlots.add(ComponentSlot(it))
+        }
+    }
+
+    override fun toString(): String {
+        return ToStringBuilder.reflectionToString(this)
+    }
+}
+
+abstract class StandardSpell(upgraded: Boolean) : Spell(upgraded) {
     private val logger = getLogger()
 
-    abstract val id: String
-    abstract val requirement: ComponentRequirement
     abstract val targetType: TargetType
 
     abstract var repeatableMax: Int
@@ -21,33 +69,17 @@ abstract class Spell(var upgraded: Boolean) {
     var repeated = 0
     var exhausted = false
 
-    private val data: MutableMap<String, Int> = mutableMapOf()
+    override fun available(): Boolean = !exhausted && repeated < repeatableMax
 
-    protected abstract fun newClone(upgraded: Boolean): Spell
-
-    open fun baseDamage(): Int = 0
-
-    fun dynamicValue(key: String, api: CombatApi, params: CastParams): Int {
+    override fun dynamicValue(key: String, api: CombatApi, params: CastParams): Int {
         return when (key) {
             "!r" -> repeatableMax - repeated
-            "!d" -> {
-                return if (params.targets.isEmpty()) {
-                    api.calculateBaseDamage(api.combat.heroStatus, baseDamage())
-                } else {
-                    val target = api.getTargetable(params.targets.first())
-                    api.calculateTargetDamage(target, elemental(components()), baseDamage())
-                }
-            }
-            else -> data[key] ?: 0
+            else -> super.dynamicValue(key, api, params)
         }
     }
 
-    fun available() = !exhausted && repeated < repeatableMax
-
-    fun ready() = available() && requirement.satisfied(requirement.componentSlots.mapNotNull { it.tile })
-
     suspend fun cast(params: CastParams, api: CombatApi) {
-        if (!ready()) {
+        if (available() && !requirement.satisfied(requirement.componentSlots.mapNotNull { it.tile })) {
             logger.error("Attempted to cast without being ready. State: $this")
             return
         }
@@ -63,28 +95,60 @@ abstract class Spell(var upgraded: Boolean) {
         api.consume(components())
     }
 
-    fun turnReset() {
+    override fun turnReset() {
         repeated = 0
     }
 
-    fun combatReset() {
+    override fun combatReset() {
         exhausted = false
         repeated = 0
         data.clear()
     }
+}
 
-    fun fill(components: List<TileInstance>) {
-        requirement.componentSlots.clear()
-        components.forEach {
-            requirement.componentSlots.add(ComponentSlot(it))
+abstract class Rune(upgraded: Boolean) : Spell(upgraded) {
+    private val logger = getLogger()
+
+    override val type: SpellType = SpellType.RUNE
+
+    var active = false
+    var canActivate = true
+    var canDeactivate = true
+
+    override fun available(): Boolean = (active && canDeactivate) || (!active && canActivate)
+
+    fun activate(params: CastParams, api: CombatApi) {
+        if (!canActivate) {
+            logger.error("Attempted activation when canActivate is false. State: $this")
         }
+        active = true
+        canActivate = false
     }
 
-    fun components() = requirement.componentSlots.filter { it.tile != null }.map { it.tile!! }.toList()
-
-    override fun toString(): String {
-        return ToStringBuilder.reflectionToString(this)
+    fun deactivate(api: CombatApi) {
+        if (!canDeactivate) {
+            logger.error("Attempted deactivation when canDeactivate is false. State: $this")
+        }
+        active = false
+        canDeactivate = false
     }
+
+    open fun attackDamageModifier(damageOrigin: DamageOrigin, damageTarget: DamageTarget, attackerStatus: StatusData, targetStatus: StatusData, element: Element, amount: Int) = 0
+
+    override fun combatReset() {
+        active = false
+        canActivate = true
+        canDeactivate = true
+    }
+
+    override fun turnReset() {
+        canActivate = true
+        canDeactivate = true
+    }
+}
+
+enum class SpellType {
+    ATTACK, EFFECT, RUNE
 }
 
 enum class TargetType {
@@ -253,7 +317,7 @@ class Identical(slotAmount: Int, override var suitGroup: SuitGroup) : ComponentR
 }
 
 class Sequential(slotAmount: Int, override var suitGroup: SuitGroup) : ComponentRequirement() {
-    constructor(slotAmount: Int) : this(slotAmount, SuitGroup.ANY)
+    constructor(slotAmount: Int) : this(slotAmount, SuitGroup.ELEMENTAL)
 
     override val type = SetType.SEQUENTIAL
     override val reqAmount = ReqAmount.Numeric(slotAmount)

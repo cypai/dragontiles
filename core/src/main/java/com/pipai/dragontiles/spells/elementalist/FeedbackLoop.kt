@@ -4,9 +4,10 @@ import com.pipai.dragontiles.combat.CombatApi
 import com.pipai.dragontiles.combat.Status
 import com.pipai.dragontiles.spells.*
 
-class FeedbackLoop(upgraded: Boolean) : Spell(upgraded) {
+class FeedbackLoop(upgraded: Boolean) : StandardSpell(upgraded) {
     override val id: String = "base:spells:FeedbackLoop"
     override val requirement: ComponentRequirement = Identical(3, SuitGroup.ARCANE)
+    override val type: SpellType = SpellType.EFFECT
     override val targetType: TargetType = TargetType.NONE
 
     override var repeatableMax: Int = 1

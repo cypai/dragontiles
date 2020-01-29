@@ -12,6 +12,12 @@ data class Combat(val enemies: List<Enemy>) {
     val discardPile: MutableList<TileInstance> = mutableListOf()
     val openPool: MutableList<TileInstance> = mutableListOf()
 
+    /**
+     * Tile -> StandardSpell Index in CombatApi
+     * For assigned tiles in runes
+     */
+    val assigned: MutableList<Pair<TileInstance, Int>> = mutableListOf()
+
     val enemyAttacks: MutableMap<Int, CountdownAttack> = mutableMapOf()
 
     val heroStatus = StatusData()

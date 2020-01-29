@@ -1,7 +1,7 @@
 package com.pipai.dragontiles.data
 
 import com.pipai.dragontiles.dungeon.RunData
-import com.pipai.dragontiles.spells.*
+import com.pipai.dragontiles.spells.Spell
 import com.pipai.dragontiles.spells.common.Blast
 import com.pipai.dragontiles.spells.elementalist.*
 import java.util.*

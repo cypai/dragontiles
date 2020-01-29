@@ -6,7 +6,9 @@ import com.pipai.dragontiles.data.Tile
 import com.pipai.dragontiles.data.TileInstance
 import com.pipai.dragontiles.dungeon.RunData
 import com.pipai.dragontiles.enemies.Enemy
+import com.pipai.dragontiles.spells.Rune
 import com.pipai.dragontiles.spells.Spell
+import com.pipai.dragontiles.spells.StandardSpell
 import kotlin.coroutines.suspendCoroutine
 
 class CombatApi(val runData: RunData,
@@ -35,7 +37,7 @@ class CombatApi(val runData: RunData,
         return combat.enemyAttacks.values.first { it.id == id }
     }
 
-    suspend fun castSpell(spell: Spell) {
+    suspend fun castSpell(spell: StandardSpell) {
         eventBus.dispatch(SpellCastedEvent(spell))
     }
 
@@ -103,8 +105,19 @@ class CombatApi(val runData: RunData,
         return (amount + attackerStatus[Status.STRENGTH]).coerceAtLeast(0)
     }
 
-    fun calculateActualDamage(attackerStatus: StatusData, targetStatus: StatusData, element: Element, amount: Int): Int {
+    fun calculateActualDamage(damageOrigin: DamageOrigin,
+                              damageTarget: DamageTarget,
+                              attackerStatus: StatusData,
+                              targetStatus: StatusData,
+                              element: Element,
+                              amount: Int): Int {
+
         var damage = calculateBaseDamage(attackerStatus, amount) - targetStatus[Status.DEFENSE]
+        spells.forEach {
+            if (it is Rune) {
+                damage += it.attackDamageModifier(damageOrigin, damageTarget, attackerStatus, targetStatus, element, amount)
+            }
+        }
         val broken = when (element) {
             Element.FIRE -> targetStatus.has(Status.FIRE_BREAK)
             Element.ICE -> targetStatus.has(Status.ICE_BREAK)
@@ -117,20 +130,28 @@ class CombatApi(val runData: RunData,
         return damage.coerceAtLeast(0)
     }
 
-    fun calculateTargetEnemyDamage(target: Enemy, element: Element, amount: Int): Int {
-        return calculateActualDamage(combat.heroStatus, combat.enemyStatus[target.id]!!, element, amount)
-    }
-
-    fun calculateTargetDamage(target: Targetable, element: Element, amount: Int): Int {
+    fun calculateAttackDamage(target: Targetable, element: Element, amount: Int): Int {
         return when (target) {
-            is Enemy -> calculateTargetEnemyDamage(target, element, amount)
-            is CountdownAttack -> calculateActualDamage(combat.heroStatus, StatusData(), element, amount)
+            is Enemy -> calculateActualDamage(
+                    DamageOrigin.HERO_ATTACK,
+                    DamageTarget.ENEMY,
+                    combat.heroStatus,
+                    combat.enemyStatus[target.id]!!,
+                    element,
+                    amount)
+            is CountdownAttack -> calculateActualDamage(
+                    DamageOrigin.HERO_ATTACK,
+                    DamageTarget.ENEMY_SPELL,
+                    combat.heroStatus,
+                    StatusData(),
+                    element,
+                    amount)
             else -> throw IllegalStateException("Received unknown target $target")
         }
     }
 
     suspend fun attack(target: Targetable, element: Element, amount: Int) {
-        val damage = calculateTargetDamage(target, element, amount)
+        val damage = calculateAttackDamage(target, element, amount)
         when (target) {
             is Enemy -> {
                 eventBus.dispatch(PlayerAttackEnemyEvent(target, element, amount))
@@ -189,6 +210,13 @@ class CombatApi(val runData: RunData,
         sortHand()
     }
 
+    suspend fun assign(components: List<TileInstance>, rune: Rune) {
+        combat.hand.removeAll(components)
+        val runeIndex = spells.indexOf(rune)
+        combat.assigned.addAll(components.map { Pair(it, runeIndex) })
+        sortHand()
+    }
+
     suspend fun dealDamageToHero(damage: Int) {
         runData.hero.hp -= damage
         eventBus.dispatch(PlayerDamageEvent(damage))
@@ -215,7 +243,13 @@ class CombatApi(val runData: RunData,
             combat.enemyAttacks.remove(enemyId)
             eventBus.dispatch(CountdownAttackResolveEvent(countdownAttack))
             val baseDamage = countdownAttack.attackPower - countdownAttack.counteredAttackPower
-            val damage = calculateActualDamage(combat.enemyStatus[enemyId]!!, combat.heroStatus, countdownAttack.element, baseDamage)
+            val damage = calculateActualDamage(
+                    DamageOrigin.ENEMY_ATTACK,
+                    DamageTarget.HERO,
+                    combat.enemyStatus[enemyId]!!,
+                    combat.heroStatus,
+                    countdownAttack.element,
+                    baseDamage)
             dealDamageToHero(damage)
             countdownAttack.activateEffects(this)
         } else {
@@ -285,4 +319,12 @@ class CombatApi(val runData: RunData,
         return queryTileOptions("Transform this tile", tile, options, 1, 1).first()
     }
 
+}
+
+enum class DamageOrigin {
+    HERO_ATTACK, HERO_MISC, ENEMY_ATTACK, ENEMY_MISC
+}
+
+enum class DamageTarget {
+    HERO, ENEMY, ENEMY_SPELL
 }
