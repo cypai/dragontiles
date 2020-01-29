@@ -1,13 +1,11 @@
 package com.pipai.dragontiles.combat
 
 import com.pipai.dragontiles.enemies.FlameTurtle
-import com.pipai.dragontiles.hero.Hero
 import com.pipai.dragontiles.spells.CastParams
-import com.pipai.dragontiles.spells.Invoke
+import com.pipai.dragontiles.spells.common.Invoke
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert
 import org.junit.Test
-import java.util.*
 
 class CombatTest : CombatBackendTest(QueryHandler()) {
     @Test

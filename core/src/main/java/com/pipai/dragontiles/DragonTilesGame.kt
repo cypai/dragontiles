@@ -32,7 +32,9 @@ import com.pipai.dragontiles.enemies.FlameTurtle
 import com.pipai.dragontiles.enemies.Slime
 import com.pipai.dragontiles.hero.Hero
 import com.pipai.dragontiles.relics.Transmuter
-import com.pipai.dragontiles.spells.*
+import com.pipai.dragontiles.spells.common.Invoke
+import com.pipai.dragontiles.spells.common.Strike
+import com.pipai.dragontiles.spells.elementalist.Break
 import com.pipai.dragontiles.utils.enemyAssetPath
 import com.pipai.dragontiles.utils.getLogger
 import org.apache.commons.lang3.builder.ToStringBuilder
