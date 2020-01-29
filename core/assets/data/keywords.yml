@@ -38,13 +38,7 @@ base:keywords:Exhaust:
   en:
     key: "@Exhaust"
     name: Exhaust
-    description: Can only be casted once per combat.
-
-base:keywords:Power:
-  en:
-    key: "@Power"
-    name: Power
-    description: Effects last for the duration of combat. Can only be casted once per combat.
+    description: After casting, Disable the spell for the rest of combat.
 
 base:keywords:ElementalTile:
   en:
@@ -81,12 +75,6 @@ base:keywords:Defense:
     key: "@Defense"
     name: Defense
     description: Damage taken via attacks decreased by 1 per point of Defense.
-
-base:keywords:Disrupt:
-  en:
-    key: "@Disrupt"
-    name: Disrupt
-    description: When a spell's Attack Power and Effect Power is 0, the spell is Disrupted and is destroyed.
 
 base:keywords:Burn:
   en:

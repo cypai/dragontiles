@@ -34,6 +34,12 @@ base:spells:ChainFractal:
     description: Inflict X @Elemented @Chain @AOE.
     upgradeDescription: Inflict X+1 @Elemented @Chain @AOE.
 
+base:spells:ChainRune:
+  en:
+    name: Chain Rune
+    description: After you cast an attack with the same element, inflict 1 @Elemented @Chain.
+    upgradeDescription: After you cast an attack with the same element, inflict 2 @Elemented @Chain.
+
 base:spells:QuickInvoke:
   en:
     name: Quick Invoke
