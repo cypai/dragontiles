@@ -180,6 +180,7 @@ class CombatUiSystem(private val game: DragonTilesGame,
                 when (stateMachine.currentState) {
                     CombatUiState.ROOT -> {
                         stateMachine.changeState(CombatUiState.DISABLED)
+                        sAnimation.pauseUiMode = true
                         GlobalScope.launch {
                             sCombat.controller.endTurn()
                         }
