@@ -25,7 +25,7 @@ class Invoke(upgraded: Boolean) : Spell(upgraded) {
 
 class Strike(upgraded: Boolean) : Spell(upgraded) {
     override val id: String = "base:spells:Strike"
-    override val requirement: ComponentRequirement = Sequential(3, elementalSet)
+    override val requirement: ComponentRequirement = Sequential(3, SuitGroup.ELEMENTAL)
     override val targetType: TargetType = TargetType.SINGLE
 
     override var repeatableMax: Int = 1
@@ -44,7 +44,7 @@ class Strike(upgraded: Boolean) : Spell(upgraded) {
 
 class RampStrike(upgraded: Boolean) : Spell(upgraded) {
     override val id: String = "base:spells:RampStrike"
-    override val requirement: ComponentRequirement = Sequential(3, elementalSet)
+    override val requirement: ComponentRequirement = Sequential(3, SuitGroup.ELEMENTAL)
     override val targetType: TargetType = TargetType.SINGLE
 
     override var repeatableMax: Int = 1
@@ -99,7 +99,7 @@ class Break(upgraded: Boolean) : Spell(upgraded) {
 
 class Concentrate(upgraded: Boolean) : Spell(upgraded) {
     override val id: String = "base:spells:Concentrate"
-    override val requirement: ComponentRequirement = Identical(2, arcaneSet)
+    override val requirement: ComponentRequirement = Identical(2, SuitGroup.ARCANE)
     override val targetType: TargetType = TargetType.NONE
 
     override var repeatableMax: Int = 1
@@ -117,7 +117,7 @@ class Concentrate(upgraded: Boolean) : Spell(upgraded) {
 
 class FeedbackLoop(upgraded: Boolean) : Spell(upgraded) {
     override val id: String = "base:spells:FeedbackLoop"
-    override val requirement: ComponentRequirement = Identical(3, arcaneSet)
+    override val requirement: ComponentRequirement = Identical(3, SuitGroup.ARCANE)
     override val targetType: TargetType = TargetType.NONE
 
     override var repeatableMax: Int = 1
@@ -184,7 +184,9 @@ class Explosion(upgraded: Boolean) : Spell(upgraded) {
 
 class Spark(upgraded: Boolean) : Spell(upgraded) {
     override val id: String = "base:spells:Spark"
-    override val requirement: ComponentRequirement = SinglePredicate({ it.tile.let { t -> t is Tile.ElementalTile && t.number == 1 } }, elementalSet)
+    override val requirement: ComponentRequirement = SinglePredicate(
+            { it.tile.let { t -> t is Tile.ElementalTile && t.number == 1 } },
+            SuitGroup.ELEMENTAL)
     override val targetType: TargetType = TargetType.SINGLE
 
     override var repeatableMax: Int = Int.MAX_VALUE

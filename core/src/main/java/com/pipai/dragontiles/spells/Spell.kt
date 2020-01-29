@@ -96,8 +96,10 @@ data class CastParams(val targets: List<Int>)
 data class ComponentSlot(var tile: TileInstance?)
 
 abstract class ComponentRequirement {
-    abstract val reqString: String
     abstract val description: String
+    abstract val type: SetType
+    abstract var suitGroup: SuitGroup
+    abstract val reqAmount: ReqAmount
     val componentSlots: MutableList<ComponentSlot> = mutableListOf()
 
     abstract fun find(hand: List<TileInstance>): List<List<TileInstance>>
@@ -113,30 +115,47 @@ fun generateSlots(amount: Int): List<ComponentSlot> {
     return slots
 }
 
-private fun suitReqString(allowedSuits: Set<Suit>): String {
-    return when (allowedSuits) {
-        setOf(Suit.FIRE, Suit.ICE, Suit.LIGHTNING, Suit.LIFE, Suit.STAR) -> "@Any"
-        setOf(Suit.FIRE, Suit.ICE, Suit.LIGHTNING) -> "@Elemental"
-        setOf(Suit.LIFE, Suit.STAR) -> "@Arcane"
-        setOf(Suit.FIRE) -> "@Fire"
-        setOf(Suit.ICE) -> "@Ice"
-        setOf(Suit.LIGHTNING) -> "@Lightning"
-        setOf(Suit.LIFE) -> "@Life"
-        setOf(Suit.STAR) -> "@Star"
-        else -> ""
+enum class SetType {
+    MISC, IDENTICAL, SEQUENTIAL
+}
+
+enum class SuitGroup(val allowedSuits: Set<Suit>) {
+    FIRE(setOf(Suit.FIRE)),
+    ICE(setOf(Suit.ICE)),
+    LIGHTNING(setOf(Suit.LIGHTNING)),
+    STAR(setOf(Suit.STAR)),
+    LIFE(setOf(Suit.LIFE)),
+    ELEMENTAL(elementalSet),
+    ARCANE(arcaneSet),
+    ANY(anySet),
+}
+
+sealed class ReqAmount {
+    abstract fun text(): String
+
+    data class ImmutableNumeric(val amount: Int) : ReqAmount() {
+        override fun text(): String = amount.toString()
+    }
+
+    data class Numeric(var amount: Int) : ReqAmount() {
+        override fun text(): String = amount.toString()
+    }
+
+    class XAmount : ReqAmount() {
+        override fun text(): String = "X"
     }
 }
 
-open class Single(private val allowedSuits: Set<Suit>) : ComponentRequirement() {
-    constructor() : this(anySet)
+open class Single(override var suitGroup: SuitGroup) : ComponentRequirement() {
+    constructor() : this(SuitGroup.ANY)
 
-    override val reqString = "1 ${suitReqString(allowedSuits)}"
-
+    override var type = SetType.MISC
+    override val reqAmount = ReqAmount.ImmutableNumeric(1)
     override val description = "A single tile"
 
     override fun find(hand: List<TileInstance>): List<List<TileInstance>> {
         return hand
-                .filter { it.tile.suit in allowedSuits }
+                .filter { it.tile.suit in suitGroup.allowedSuits }
                 .map { listOf(it) }
     }
 
@@ -150,12 +169,12 @@ open class Single(private val allowedSuits: Set<Suit>) : ComponentRequirement() 
 
     override fun satisfied(slots: List<TileInstance>): Boolean {
         return slots.size == 1
-                && slots.firstOrNull()?.tile?.let { allowedSuits.contains(it.suit) } ?: false
+                && slots.firstOrNull()?.tile?.let { suitGroup.allowedSuits.contains(it.suit) } ?: false
     }
 }
 
 class SinglePredicate(private val predicate: (TileInstance) -> Boolean,
-                      allowedSuits: Set<Suit>) : Single(allowedSuits) {
+                      suitGroup: SuitGroup) : Single(suitGroup) {
 
     override fun find(hand: List<TileInstance>): List<List<TileInstance>> {
         return super.find(hand)
@@ -173,39 +192,39 @@ class SinglePredicate(private val predicate: (TileInstance) -> Boolean,
 
 }
 
-class Identical(var slotAmount: Int, private val allowedSuits: Set<Suit>) : ComponentRequirement() {
-    constructor(slotAmount: Int) : this(slotAmount, anySet)
+class Identical(slotAmount: Int, override var suitGroup: SuitGroup) : ComponentRequirement() {
+    constructor(slotAmount: Int) : this(slotAmount, SuitGroup.ANY)
 
-    override val reqString = "$slotAmount I ${suitReqString(allowedSuits)}"
-
+    override val type = SetType.IDENTICAL
+    override val reqAmount = ReqAmount.Numeric(slotAmount)
     override val description = "A set of $slotAmount identical tiles"
 
     override fun find(hand: List<TileInstance>): List<List<TileInstance>> {
         val count: MutableMap<Tile, MutableList<TileInstance>> = mutableMapOf()
-        hand.filter { it.tile.suit in allowedSuits }
+        hand.filter { it.tile.suit in suitGroup.allowedSuits }
                 .forEach {
                     if (it.tile in count) {
                         val list = count[it.tile]!!
-                        if (list.size < slotAmount) {
+                        if (list.size < reqAmount.amount) {
                             list.add(it)
                         }
                     } else {
                         count[it.tile] = mutableListOf(it)
                     }
                 }
-        return count.filterValues { it.size >= slotAmount }
+        return count.filterValues { it.size >= reqAmount.amount }
                 .values
                 .toList()
     }
 
     override fun findGiven(hand: List<TileInstance>, given: List<TileInstance>): List<List<TileInstance>> {
-        if (given.size > slotAmount) {
+        if (given.size > reqAmount.amount) {
             return listOf()
         }
         return when (given.size) {
             0 -> find(hand)
             1 -> find(hand.filter { it.tile == given.first().tile })
-            slotAmount -> {
+            reqAmount.amount -> {
                 if (given.all { it.tile == given.first().tile }) {
                     listOf(given)
                 } else {
@@ -215,7 +234,7 @@ class Identical(var slotAmount: Int, private val allowedSuits: Set<Suit>) : Comp
             else -> {
                 val first = given.first()
                 if (given.all { it.tile == first.tile }) {
-                    Identical(slotAmount - given.size, allowedSuits)
+                    Identical(reqAmount.amount - given.size, suitGroup)
                             .find(hand.withoutAll(given).filter { it.tile == first.tile })
                             .map { it.withAll(given) }
                 } else {
@@ -227,42 +246,42 @@ class Identical(var slotAmount: Int, private val allowedSuits: Set<Suit>) : Comp
 
     override fun satisfied(slots: List<TileInstance>): Boolean {
         val first = slots.firstOrNull()?.tile
-        return slots.size == slotAmount
-                && first?.suit in allowedSuits
+        return slots.size == reqAmount.amount
+                && first?.suit in suitGroup.allowedSuits
                 && slots.all { it.tile == first }
     }
 }
 
-class Sequential(var slotAmount: Int, private val allowedSuits: Set<Suit>) : ComponentRequirement() {
-    constructor(slotAmount: Int) : this(slotAmount, elementalSet)
+class Sequential(slotAmount: Int, override var suitGroup: SuitGroup) : ComponentRequirement() {
+    constructor(slotAmount: Int) : this(slotAmount, SuitGroup.ANY)
 
-    override val reqString = "$slotAmount S ${suitReqString(allowedSuits)}"
-
+    override val type = SetType.SEQUENTIAL
+    override val reqAmount = ReqAmount.Numeric(slotAmount)
     override val description = "A set of $slotAmount sequential tiles"
 
     override fun find(hand: List<TileInstance>): List<List<TileInstance>> {
         val sequences: MutableMap<TileInstance, MutableList<TileInstance>> = hand
-                .filter { it.tile.suit in allowedSuits }
+                .filter { it.tile.suit in suitGroup.allowedSuits }
                 .associateWith { mutableListOf(it) }
                 .toMutableMap()
 
-        hand.filter { it.tile.suit in allowedSuits }
+        hand.filter { it.tile.suit in suitGroup.allowedSuits }
                 .forEach {
                     val tile = it.tile as Tile.ElementalTile
                     sequences.values.forEach { s ->
                         val last = s.last().tile as Tile.ElementalTile
-                        if (s.size < slotAmount && last.suit == tile.suit && last.number == tile.number - 1) {
+                        if (s.size < reqAmount.amount && last.suit == tile.suit && last.number == tile.number - 1) {
                             s.add(it)
                         }
                     }
                 }
-        return sequences.filterValues { it.size >= slotAmount }
+        return sequences.filterValues { it.size >= reqAmount.amount }
                 .values
                 .toList()
     }
 
     override fun findGiven(hand: List<TileInstance>, given: List<TileInstance>): List<List<TileInstance>> {
-        if (given.size > slotAmount) {
+        if (given.size > reqAmount.amount) {
             return listOf()
         }
         return when (given.size) {
@@ -270,18 +289,18 @@ class Sequential(var slotAmount: Int, private val allowedSuits: Set<Suit>) : Com
             else -> {
                 val first = given.first().tile
                 if (first !is Tile.ElementalTile
-                        || !given.all { it.tile.suit in allowedSuits && it.tile.suit == first.suit }
+                        || !given.all { it.tile.suit in suitGroup.allowedSuits && it.tile.suit == first.suit }
                         || !sequential(given.map { it.tile as Tile.ElementalTile })) {
                     return listOf()
                 }
-                if (given.size == slotAmount) {
+                if (given.size == reqAmount.amount) {
                     return listOf(given)
                 }
                 return find(hand.filter { handTile ->
                     val tile = handTile.tile
                     val givenTiles = given.map { it.tile as Tile.ElementalTile }
-                    val minimum = givenTiles.minBy { it.number }!!.number - slotAmount
-                    val maximum = givenTiles.maxBy { it.number }!!.number + slotAmount
+                    val minimum = givenTiles.minBy { it.number }!!.number - reqAmount.amount
+                    val maximum = givenTiles.maxBy { it.number }!!.number + reqAmount.amount
                     tile is Tile.ElementalTile
                             && tile.suit == first.suit
                             && tile.number >= minimum
@@ -293,8 +312,8 @@ class Sequential(var slotAmount: Int, private val allowedSuits: Set<Suit>) : Com
     }
 
     override fun satisfied(slots: List<TileInstance>): Boolean {
-        return slots.size == slotAmount
-                && slots.all { it.tile.suit in allowedSuits }
+        return slots.size == reqAmount.amount
+                && slots.all { it.tile.suit in suitGroup.allowedSuits }
                 && sequential(slots.map { it.tile as Tile.ElementalTile })
     }
 
