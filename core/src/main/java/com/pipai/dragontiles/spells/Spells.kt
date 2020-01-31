@@ -9,6 +9,7 @@ import com.pipai.dragontiles.data.Suit
 import com.pipai.dragontiles.data.Tile
 import com.pipai.dragontiles.data.TileInstance
 import com.pipai.dragontiles.utils.getLogger
+import com.pipai.dragontiles.utils.with
 import com.pipai.dragontiles.utils.withAll
 import com.pipai.dragontiles.utils.withoutAll
 import org.apache.commons.lang3.builder.ToStringBuilder
@@ -173,14 +174,6 @@ abstract class ComponentRequirement {
     abstract fun satisfied(slots: List<TileInstance>): Boolean
 }
 
-fun generateSlots(amount: Int): List<ComponentSlot> {
-    val slots = mutableListOf<ComponentSlot>()
-    repeat(amount) {
-        slots.add(ComponentSlot(null))
-    }
-    return slots
-}
-
 enum class SetType {
     MISC, IDENTICAL, SEQUENTIAL
 }
@@ -315,6 +308,56 @@ class Identical(slotAmount: Int, override var suitGroup: SuitGroup) : ComponentR
         return slots.size == reqAmount.amount
                 && first?.suit in suitGroup.allowedSuits
                 && slots.all { it.tile == first }
+    }
+}
+
+class IdenticalX(override var suitGroup: SuitGroup) : ComponentRequirement() {
+    constructor() : this(SuitGroup.ANY)
+
+    override val type = SetType.IDENTICAL
+    override val reqAmount = ReqAmount.XAmount()
+    override val description = "A variable set of identical tiles"
+
+    override fun find(hand: List<TileInstance>): List<List<TileInstance>> {
+        val sets: MutableList<List<TileInstance>> = mutableListOf()
+        sets.addAll(hand.map { listOf(it) })
+        var x = 2
+        while (true) {
+            val foundSets = Identical(x, suitGroup).find(hand)
+            if (foundSets.isEmpty()) {
+                break
+            } else {
+                sets.addAll(foundSets)
+            }
+            x++
+        }
+        return sets
+    }
+
+    override fun findGiven(hand: List<TileInstance>, given: List<TileInstance>): List<List<TileInstance>> {
+        when (given.size) {
+            0 -> return find(hand)
+            1 -> return find(hand.filter { it.tile == given.first().tile }).map { it.with(given.first()) }
+            else -> {
+                val sets: MutableList<List<TileInstance>> = mutableListOf(given)
+                var x = given.size + 1
+                val tile = given.first().tile
+                while (true) {
+                    val foundSets = Identical(x, suitGroup).find(hand.filter { it.tile == tile })
+                    if (foundSets.isEmpty()) {
+                        break
+                    } else {
+                        sets.addAll(foundSets)
+                    }
+                    x++
+                }
+                return sets
+            }
+        }
+    }
+
+    override fun satisfied(slots: List<TileInstance>): Boolean {
+        return slots.isNotEmpty() && slots.all { it.tile == slots.first().tile }
     }
 }
 

@@ -4,7 +4,6 @@ import com.pipai.dragontiles.data.*
 import com.pipai.dragontiles.spells.Identical
 import com.pipai.dragontiles.spells.Sequential
 import com.pipai.dragontiles.spells.Single
-import com.pipai.dragontiles.spells.generateSlots
 import org.junit.Assert
 import org.junit.Test
 
@@ -33,7 +32,7 @@ class ComponentRequirementTest {
     }
 
     @Test
-    fun testIdentical() {
+    fun testIdentical3() {
         val identical = Identical(3)
         val hand = mutableListOf(
                 TileInstance(Tile.ElementalTile(Suit.FIRE, 1), 0),
