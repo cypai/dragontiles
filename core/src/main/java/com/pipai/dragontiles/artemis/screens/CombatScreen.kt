@@ -48,7 +48,7 @@ class CombatScreen(game: DragonTilesGame, runData: RunData, encounter: Encounter
                         CombatControllerSystem(runData, combat),
                         TileIdSystem(),
                         CombatAnimationSystem(game),
-                        MouseFollowLineSystem(game.gameConfig),
+                        MouseXySystem(game.gameConfig),
                         AttackCircleSystem(),
                         AttackCircleHoverSystem(game.gameStrings),
 
@@ -67,7 +67,7 @@ class CombatScreen(game: DragonTilesGame, runData: RunData, encounter: Encounter
         world = World(config)
 
         val inputProcessor = world.getSystem(InputProcessingSystem::class.java)
-        inputProcessor.addAlwaysOnProcessor(world.getSystem(MouseFollowLineSystem::class.java))
+        inputProcessor.addAlwaysOnProcessor(world.getSystem(MouseXySystem::class.java))
         inputProcessor.addAlwaysOnProcessor(world.getSystem(ClickableSystem::class.java))
         inputProcessor.addAlwaysOnProcessor(world.getSystem(HoverableSystem::class.java))
         inputProcessor.addAlwaysOnProcessor(world.getSystem(CombatUiSystem::class.java))

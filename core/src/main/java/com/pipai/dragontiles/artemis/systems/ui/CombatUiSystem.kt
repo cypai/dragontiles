@@ -67,11 +67,12 @@ class CombatUiSystem(private val game: DragonTilesGame,
     private val mPath by mapper<PathInterpolationComponent>()
     private val mEnemy by mapper<EnemyComponent>()
     private val mAttackCircle by mapper<AttackCircleComponent>()
-    private val mLine by mapper<LineComponent>()
+    private val mLine by mapper<AnchoredLineComponent>()
     private val mMouseFollow by mapper<MouseFollowComponent>()
     private val mSprite by mapper<SpriteComponent>()
     private val mTargetHighlight by mapper<TargetHighlightComponent>()
     private val mTile by mapper<TileComponent>()
+    private val mMutualDestroy by mapper<MutualDestroyComponent>()
 
     private val sCombat by system<CombatControllerSystem>()
     private val sTooltip by system<TooltipSystem>()
@@ -122,8 +123,8 @@ class CombatUiSystem(private val game: DragonTilesGame,
         return givenComponents.toList()
     }
 
-    fun runeTiles(): List<Pair<Int, List<Int>>> {
-        return runeTiles.toList()
+    fun spellCardEntityId(index: Int): Int? {
+        return spellEntityIds[index]
     }
 
     fun setHpRelative(amount: Int) {
@@ -143,7 +144,7 @@ class CombatUiSystem(private val game: DragonTilesGame,
         spellCard.width = layout.cardWidth
         spellCard.height = layout.cardHeight
         spellCard.x = layout.cardWidth * number
-        spellCard.y = -spellCard.cardHeight / 2f
+        spellCard.y = -SpellCard.cardHeight / 2f
         stage.addActor(spellCard)
         spells[number] = spellCard
 
@@ -581,11 +582,13 @@ class CombatUiSystem(private val game: DragonTilesGame,
                 uiSystem.getSelectedSpellCard()?.update()
                 val id = uiSystem.world.create()
                 uiSystem.mouseFollowEntityId = id
+                uiSystem.mXy.create(id)
+                val spellCardId = uiSystem.spellEntityIds[uiSystem.selectedSpellNumber]!!
                 val cLine = uiSystem.mLine.create(id)
                 cLine.color = Color.GRAY
-                val spellCard = uiSystem.spells[uiSystem.selectedSpellNumber!!]!!
-                cLine.start = spellCard.localToStageCoordinates(Vector2(spellCard.width / 2, spellCard.height / 2))
-                cLine.end = Vector2()
+                cLine.safeSetAnchor1(id, spellCardId, uiSystem.mMutualDestroy)
+                cLine.anchor1Offset.set(SpellCard.cardWidth / 2f, SpellCard.cardHeight / 2f)
+                cLine.anchor2 = id
                 uiSystem.mMouseFollow.create(id)
                 uiSystem.highlightTargets()
             }

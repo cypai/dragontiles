@@ -1,27 +1,22 @@
 package com.pipai.dragontiles.artemis.systems.ui
 
 import com.artemis.systems.IteratingSystem
-import com.badlogic.gdx.Gdx
-import com.badlogic.gdx.Input
 import com.badlogic.gdx.InputProcessor
 import com.badlogic.gdx.math.Vector2
 import com.pipai.dragontiles.GameConfig
-import com.pipai.dragontiles.artemis.components.EndStrategy
-import com.pipai.dragontiles.artemis.components.LineComponent
 import com.pipai.dragontiles.artemis.components.MouseFollowComponent
-import com.pipai.dragontiles.artemis.components.TimerComponent
+import com.pipai.dragontiles.artemis.components.XYComponent
 import com.pipai.dragontiles.utils.allOf
 import com.pipai.dragontiles.utils.require
 
-class MouseFollowLineSystem(private val config: GameConfig) : IteratingSystem(allOf()), InputProcessor {
-    private val mLine by require<LineComponent>()
+class MouseXySystem(private val config: GameConfig) : IteratingSystem(allOf()), InputProcessor {
+    private val mXy by require<XYComponent>()
     private val mMouseFollow by require<MouseFollowComponent>()
 
     private val mouse = Vector2()
 
     override fun process(entityId: Int) {
-        val cLine = mLine.get(entityId)
-        cLine.end.set(mouse)
+        mXy.get(entityId).setXy(mouse)
     }
 
     override fun keyDown(keycode: Int) = false

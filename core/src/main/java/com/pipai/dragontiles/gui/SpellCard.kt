@@ -32,8 +32,10 @@ class SpellCard(private val game: DragonTilesGame,
     private val numberLabel = Label("", skin, "tiny")
     private val descriptionLabel = Label("", skin, "tiny")
 
-    val cardWidth = 140f
-    val cardHeight = 196f
+    companion object {
+        val cardWidth = 140f
+        val cardHeight = 196f
+    }
 
     private val regex = "(!\\w+)(\\[.+])?".toRegex()
 

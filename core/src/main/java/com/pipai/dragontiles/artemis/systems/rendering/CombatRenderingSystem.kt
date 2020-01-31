@@ -16,7 +16,7 @@ class CombatRenderingSystem(private val game: DragonTilesGame) : BaseSystem() {
     private val mRadial by mapper<RadialSpriteComponent>()
     private val mTextLabel by mapper<TextLabelComponent>()
     private val mEnemy by mapper<EnemyComponent>()
-    private val mLine by mapper<LineComponent>()
+    private val mLine by mapper<AnchoredLineComponent>()
     private val mTargetHighlight by mapper<TargetHighlightComponent>()
 
     private val batch = game.spriteBatch
@@ -73,10 +73,12 @@ class CombatRenderingSystem(private val game: DragonTilesGame) : BaseSystem() {
         batch.setBlendFunction(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA)
 
         game.shapeRenderer.begin()
-        world.fetch(allOf(LineComponent::class))
+        world.fetch(allOf(AnchoredLineComponent::class))
                 .forEach {
                     val cLine = mLine.get(it)
-                    game.shapeRenderer.line(cLine.start.x, cLine.start.y, cLine.end.x, cLine.end.y, cLine.color, cLine.color)
+                    val xy1 = mXy.get(cLine.anchor1).toVector2().add(cLine.anchor1Offset)
+                    val xy2 = mXy.get(cLine.anchor2).toVector2().add(cLine.anchor2Offset)
+                    game.shapeRenderer.line(xy1.x, xy1.y, xy2.x, xy2.y, cLine.color, cLine.color)
                 }
         game.shapeRenderer.end()
     }
