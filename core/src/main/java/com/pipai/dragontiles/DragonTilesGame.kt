@@ -52,6 +52,9 @@ class DragonTilesGame(val gameConfig: GameConfig) : Game() {
     lateinit var shapeRenderer: ShapeRenderer
         private set
 
+    lateinit var outlinedFont: BitmapFont
+        private set
+
     lateinit var font: BitmapFont
         private set
 
@@ -105,7 +108,11 @@ class DragonTilesGame(val gameConfig: GameConfig) : Game() {
         tileSkin = TileSkin(assets.get("assets/binassets/graphics/tiles/tiles.png", Texture::class.java))
 
         val fontGenerator = FreeTypeFontGenerator(Gdx.files.internal("assets/binassets/graphics/fonts/SourceSansPro-Regular.ttf"))
+        val outlinedFontGenerator = FreeTypeFontGenerator(Gdx.files.internal("assets/binassets/graphics/fonts/C_BOX.TTF"))
         val fontParameter = FreeTypeFontParameter()
+        fontParameter.size = 18
+        outlinedFont = outlinedFontGenerator.generateFont(fontParameter)
+
         fontParameter.size = 20
         font = fontGenerator.generateFont(fontParameter)
 
@@ -202,6 +209,7 @@ class DragonTilesGame(val gameConfig: GameConfig) : Game() {
         val grayDrawable = skin.newDrawable("white", Color.LIGHT_GRAY)
         val blackDrawable = skin.newDrawable("white", Color.BLACK)
 
+        skin.add("cardReq", LabelStyle(outlinedFont, Color.BLACK))
         skin.add("default", LabelStyle(font, Color.BLACK))
         skin.add("small", LabelStyle(smallFont, Color.BLACK))
         skin.add("tiny", LabelStyle(tinyFont, Color.BLACK))

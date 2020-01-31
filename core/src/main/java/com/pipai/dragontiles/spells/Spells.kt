@@ -201,7 +201,7 @@ sealed class ReqAmount {
     }
 
     class XAmount : ReqAmount() {
-        override fun text(): String = "X"
+        override fun text(): String = "x"
     }
 }
 

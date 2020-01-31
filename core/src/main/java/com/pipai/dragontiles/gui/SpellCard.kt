@@ -27,7 +27,7 @@ class SpellCard(private val game: DragonTilesGame,
 
     private val reqBorder = Image()
     private val reqImage = Image()
-    private val reqNumber = Label("", skin)
+    private val reqNumber = Label("", skin, "cardReq")
     private val nameLabel = Label("", skin, "tiny")
     private val numberLabel = Label("", skin, "tiny")
     private val descriptionLabel = Label("", skin, "tiny")
@@ -111,7 +111,7 @@ class SpellCard(private val game: DragonTilesGame,
         } else {
             reqBorder.drawable = borderDrawable(spell.requirement.type)
             reqImage.drawable = reqSuitDrawable(spell.requirement.suitGroup)
-            reqNumber.setText("   " + spell.requirement.reqAmount.text())
+            reqNumber.setText("  " + spell.requirement.reqAmount.text())
         }
         update()
     }
