@@ -177,4 +177,9 @@ class CombatAnimationSystem(private val game: DragonTilesGame) : BaseSystem(), A
         adjustHand()
     }
 
+    @Subscribe
+    fun handleRuneDeactivation(ev: RuneDeactivatedEvent) {
+        adjustHand()
+    }
+
 }

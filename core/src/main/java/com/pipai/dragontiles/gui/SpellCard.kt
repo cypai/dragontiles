@@ -1,5 +1,6 @@
 package com.pipai.dragontiles.gui
 
+import com.badlogic.gdx.Input
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.InputEvent
@@ -94,6 +95,13 @@ class SpellCard(private val game: DragonTilesGame,
 
             override fun exit(event: InputEvent?, x: Float, y: Float, pointer: Int, toActor: Actor?) {
                 sToolTip.hideTooltip()
+            }
+        })
+        addListener(object : ClickListener(Input.Buttons.RIGHT) {
+            override fun clicked(event: InputEvent?, x: Float, y: Float) {
+                if (enabled) {
+                    clickCallbacks.forEach { it.invoke(event!!, this@SpellCard) }
+                }
             }
         })
     }

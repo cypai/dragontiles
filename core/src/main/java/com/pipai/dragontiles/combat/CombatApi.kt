@@ -40,17 +40,18 @@ class CombatApi(val runData: RunData,
     }
 
     suspend fun activateRune(rune: Rune, components: List<TileInstance>) {
-        eventBus.dispatch(RuneActivatedEvent(rune))
         val runeIndex = combat.spells.indexOf(rune)
         combat.assigned[runeIndex] = components
         combat.hand.removeAll(components)
+        eventBus.dispatch(RuneActivatedEvent(rune))
     }
 
     suspend fun deactivateRune(rune: Rune) {
-        eventBus.dispatch(RuneDeactivatedEvent(rune))
         val runeIndex = combat.spells.indexOf(rune)
         val components = combat.assigned.remove(runeIndex)!!
         combat.hand.addAll(components)
+        eventBus.dispatch(RuneDeactivatedEvent(rune))
+        sortHand()
     }
 
     suspend fun draw(amount: Int) {
