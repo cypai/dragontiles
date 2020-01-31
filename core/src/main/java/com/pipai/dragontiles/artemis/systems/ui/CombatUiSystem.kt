@@ -471,7 +471,7 @@ class CombatUiSystem(private val game: DragonTilesGame,
         }
         spellComponentList.filterOptions(givenComponents)
         val spell = getSelectedSpell()
-        if (spell.requirement.satisfied(givenComponents)) {
+        if (spell.requirement.reqAmount !is ReqAmount.XAmount && spell.requirement.satisfied(givenComponents)) {
             selectComponents(givenComponents.toList())
         } else {
             readjustHand()
