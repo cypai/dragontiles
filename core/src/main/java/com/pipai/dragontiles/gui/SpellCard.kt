@@ -37,7 +37,7 @@ class SpellCard(private val game: DragonTilesGame,
 
     private val regex = "(!\\w+)(\\[.+])?".toRegex()
 
-    private val clickCallbacks: MutableList<(SpellCard) -> Unit> = mutableListOf()
+    private val clickCallbacks: MutableList<(InputEvent, SpellCard) -> Unit> = mutableListOf()
 
     var target: Targetable? = null
     private var enabled = true
@@ -78,7 +78,7 @@ class SpellCard(private val game: DragonTilesGame,
         addListener(object : ClickListener() {
             override fun clicked(event: InputEvent?, x: Float, y: Float) {
                 if (enabled) {
-                    clickCallbacks.forEach { it.invoke(this@SpellCard) }
+                    clickCallbacks.forEach { it.invoke(event!!, this@SpellCard) }
                 }
             }
 
@@ -96,7 +96,7 @@ class SpellCard(private val game: DragonTilesGame,
         })
     }
 
-    fun addClickCallback(callback: (SpellCard) -> Unit) {
+    fun addClickCallback(callback: (InputEvent, SpellCard) -> Unit) {
         clickCallbacks.add(callback)
     }
 

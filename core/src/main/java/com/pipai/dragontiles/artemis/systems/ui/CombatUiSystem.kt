@@ -10,6 +10,7 @@ import com.badlogic.gdx.ai.msg.Telegram
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.math.Interpolation
 import com.badlogic.gdx.math.Vector2
+import com.badlogic.gdx.scenes.scene2d.InputEvent
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Table
@@ -227,10 +228,24 @@ class CombatUiSystem(private val game: DragonTilesGame,
         return spell != null
     }
 
-    private fun spellCardClickCallback(spellCard: SpellCard) {
+    private fun spellCardClickCallback(event: InputEvent, spellCard: SpellCard) {
         if (stateMachine.currentState == CombatUiState.ROOT) {
-            selectedSpellNumber = spellCard.number
-            stateMachine.changeState(CombatUiState.COMPONENT_SELECTION)
+            val spell = spellCard.getSpell()
+            when (event.button) {
+                Input.Buttons.LEFT -> {
+                    if (!(spell is Rune && spell.active && spell.canDeactivate)) {
+                        selectedSpellNumber = spellCard.number
+                        stateMachine.changeState(CombatUiState.COMPONENT_SELECTION)
+                    }
+                }
+                Input.Buttons.RIGHT -> {
+                    if (spell is Rune && spell.active && spell.canDeactivate) {
+                        GlobalScope.launch {
+                            spell.deactivate(sCombat.controller.api)
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -471,7 +486,10 @@ class CombatUiSystem(private val game: DragonTilesGame,
         }
         spellComponentList.filterOptions(givenComponents)
         val spell = getSelectedSpell()
-        if (spell.requirement.reqAmount !is ReqAmount.XAmount && spell.requirement.satisfied(givenComponents)) {
+        if (spell is StandardSpell
+                && spell.targetType != TargetType.NONE
+                && spell.requirement.reqAmount !is ReqAmount.XAmount
+                && spell.requirement.satisfied(givenComponents)) {
             selectComponents(givenComponents.toList())
         } else {
             readjustHand()

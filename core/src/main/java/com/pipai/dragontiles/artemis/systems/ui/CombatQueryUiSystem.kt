@@ -189,7 +189,7 @@ class CombatQueryUiSystem(private val game: DragonTilesGame, private val runData
         val rewardsTable = Table()
         spells.forEach { spell ->
             val spellCard = SpellCard(game, spell, null, game.skin, sCombat.controller.api, sToolTip)
-            spellCard.addClickCallback {
+            spellCard.addClickCallback { _, _ ->
                 runData.hero.spells.add(spell)
                 runData.dungeon.currentFloor += 1
                 val encounter = when {
