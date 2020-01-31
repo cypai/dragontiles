@@ -234,13 +234,14 @@ class CombatUiSystem(private val game: DragonTilesGame,
             val spell = spellCard.getSpell()
             when (event.button) {
                 Input.Buttons.LEFT -> {
-                    if (!(spell is Rune && spell.active && spell.canDeactivate)) {
+                    if (!(spell is Rune && spell.active)) {
                         selectedSpellNumber = spellCard.number
                         stateMachine.changeState(CombatUiState.COMPONENT_SELECTION)
                     }
                 }
                 Input.Buttons.RIGHT -> {
-                    if (spell is Rune && spell.active && spell.canDeactivate) {
+                    if (spell is Rune && spell.active) {
+                        sAnimation.pauseUiMode = true
                         GlobalScope.launch {
                             spell.deactivate(sCombat.controller.api)
                         }

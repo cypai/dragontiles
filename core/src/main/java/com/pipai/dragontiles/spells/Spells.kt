@@ -114,13 +114,13 @@ abstract class Rune(upgraded: Boolean) : Spell(upgraded) {
 
     var active = false
     var canActivate = true
-    var canDeactivate = true
 
-    override fun available(): Boolean = (active && canDeactivate) || (!active && canActivate)
+    override fun available(): Boolean = active || (!active && canActivate)
 
     suspend fun activate(api: CombatApi) {
-        if (!canActivate || !requirement.satisfied(components())) {
+        if (active || !canActivate || !requirement.satisfied(components())) {
             logger.error("Attempted activation when canActivate is false. State: $this")
+            return
         }
         active = true
         canActivate = false
@@ -128,11 +128,11 @@ abstract class Rune(upgraded: Boolean) : Spell(upgraded) {
     }
 
     suspend fun deactivate(api: CombatApi) {
-        if (!canDeactivate) {
+        if (!active) {
             logger.error("Attempted deactivation when canDeactivate is false. State: $this")
+            return
         }
         active = false
-        canDeactivate = false
         api.deactivateRune(this)
     }
 
@@ -141,12 +141,10 @@ abstract class Rune(upgraded: Boolean) : Spell(upgraded) {
     override fun combatReset() {
         active = false
         canActivate = true
-        canDeactivate = true
     }
 
     override fun turnReset() {
         canActivate = true
-        canDeactivate = true
     }
 }
 
