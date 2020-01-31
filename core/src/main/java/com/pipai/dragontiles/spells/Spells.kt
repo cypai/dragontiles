@@ -318,7 +318,7 @@ class IdenticalX(override var suitGroup: SuitGroup) : ComponentRequirement() {
 
     override fun find(hand: List<TileInstance>): List<List<TileInstance>> {
         val sets: MutableList<List<TileInstance>> = mutableListOf()
-        sets.addAll(hand.map { listOf(it) })
+        sets.addAll(hand.filter { it.tile.suit in suitGroup.allowedSuits }.map { listOf(it) })
         var x = 2
         while (true) {
             val foundSets = Identical(x, suitGroup).find(hand)
