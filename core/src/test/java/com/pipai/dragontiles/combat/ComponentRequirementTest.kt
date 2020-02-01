@@ -3,6 +3,7 @@ package com.pipai.dragontiles.combat
 import com.pipai.dragontiles.data.*
 import com.pipai.dragontiles.spells.Identical
 import com.pipai.dragontiles.spells.Sequential
+import com.pipai.dragontiles.spells.SequentialX
 import com.pipai.dragontiles.spells.Single
 import org.junit.Assert
 import org.junit.Test
@@ -123,5 +124,20 @@ class ComponentRequirementTest {
 
         givenSets = sequential.findGiven(hand, listOf(hand[1], hand[2], hand[3]))
         Assert.assertEquals(1, givenSets.size)
+    }
+
+    @Test
+    fun testSequentialX2() {
+        val sequential = SequentialX()
+        val hand = mutableListOf(
+                TileInstance(Tile.ElementalTile(Suit.FIRE, 1), 0),
+                TileInstance(Tile.ElementalTile(Suit.FIRE, 2), 1),
+                TileInstance(Tile.StarTile(StarType.STAR), 2)
+        )
+        val sets = sequential.find(hand)
+        Assert.assertEquals(3, sets.size)
+        sets.forEach {
+            Assert.assertTrue(sequential.satisfied(it))
+        }
     }
 }

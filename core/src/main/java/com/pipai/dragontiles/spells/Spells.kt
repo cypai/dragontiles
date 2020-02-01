@@ -127,6 +127,9 @@ abstract class Rune(upgraded: Boolean) : Spell(upgraded) {
         api.activateRune(this, components())
     }
 
+    protected open suspend fun onActivate(api: CombatApi) {
+    }
+
     suspend fun deactivate(api: CombatApi) {
         if (!active) {
             logger.error("Attempted deactivation when canDeactivate is false. State: $this")
@@ -134,6 +137,9 @@ abstract class Rune(upgraded: Boolean) : Spell(upgraded) {
         }
         active = false
         api.deactivateRune(this)
+    }
+
+    protected open suspend fun onDeactivate(api: CombatApi) {
     }
 
     open fun attackDamageModifier(damageOrigin: DamageOrigin, damageTarget: DamageTarget, attackerStatus: StatusData, targetStatus: StatusData, element: Element, amount: Int) = 0
@@ -145,6 +151,7 @@ abstract class Rune(upgraded: Boolean) : Spell(upgraded) {
 
     override fun turnReset() {
         canActivate = true
+        data.clear()
     }
 }
 
@@ -420,6 +427,68 @@ class Sequential(slotAmount: Int, override var suitGroup: SuitGroup) : Component
 
     override fun satisfied(slots: List<TileInstance>): Boolean {
         return slots.size == reqAmount.amount
+                && slots.all { it.tile.suit in suitGroup.allowedSuits }
+                && sequential(slots.map { it.tile as Tile.ElementalTile })
+    }
+
+    private fun sequential(tiles: List<Tile.ElementalTile>): Boolean {
+        return tiles.windowed(2)
+                .all { it[0].number == it[1].number - 1 }
+    }
+}
+
+class SequentialX(override var suitGroup: SuitGroup) : ComponentRequirement() {
+    constructor() : this(SuitGroup.ELEMENTAL)
+
+    override val type = SetType.SEQUENTIAL
+    override val reqAmount = ReqAmount.XAmount()
+    override val description = "A variable set of sequential tiles"
+
+    override fun find(hand: List<TileInstance>): List<List<TileInstance>> {
+        val sets: MutableList<List<TileInstance>> = mutableListOf()
+        sets.addAll(hand.filter { it.tile.suit in suitGroup.allowedSuits }.map { listOf(it) })
+        var x = 2
+        while (true) {
+            val foundSets = Sequential(x, suitGroup).find(hand)
+            if (foundSets.isEmpty()) {
+                break
+            } else {
+                sets.addAll(foundSets)
+            }
+            x++
+        }
+        return sets
+    }
+
+    override fun findGiven(hand: List<TileInstance>, given: List<TileInstance>): List<List<TileInstance>> {
+        when (given.size) {
+            0 -> return find(hand)
+            1 -> {
+                val first = given.first()
+                return find(hand.filter { it.tile.suit == first.tile.suit })
+                        .filter { it.contains(first) }
+                        .map { it.with(given.first()) }
+            }
+            else -> {
+                val sets: MutableList<List<TileInstance>> = mutableListOf(given)
+                var x = given.size + 1
+                val tile = given.first().tile
+                while (true) {
+                    val foundSets = Sequential(x, suitGroup).find(hand.filter { it.tile == tile })
+                    if (foundSets.isEmpty()) {
+                        break
+                    } else {
+                        sets.addAll(foundSets)
+                    }
+                    x++
+                }
+                return sets
+            }
+        }
+    }
+
+    override fun satisfied(slots: List<TileInstance>): Boolean {
+        return slots.isNotEmpty()
                 && slots.all { it.tile.suit in suitGroup.allowedSuits }
                 && sequential(slots.map { it.tile as Tile.ElementalTile })
     }
