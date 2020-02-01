@@ -13,6 +13,7 @@ class HeroSpells {
                 EnhanceRune(rngUpgrade(runData.rng)),
                 StrengthRune(rngUpgrade(runData.rng)),
                 RampStrike(rngUpgrade(runData.rng)),
+                MultiInvoke(rngUpgrade(runData.rng)),
                 Concentrate(rngUpgrade(runData.rng)),
                 FeedbackLoop(rngUpgrade(runData.rng)),
                 Spark(rngUpgrade(runData.rng)),
