@@ -10,10 +10,13 @@ class HeroSpells {
 
     fun generateRewards(runData: RunData, amount: Int): List<Spell> {
         val spells = listOf(
+                Mulligan(rngUpgrade(runData.rng)),
+                Ground(rngUpgrade(runData.rng)),
+                QuickInvoke(rngUpgrade(runData.rng)),
+                MultiInvoke(rngUpgrade(runData.rng)),
                 EnhanceRune(rngUpgrade(runData.rng)),
                 StrengthRune(rngUpgrade(runData.rng)),
                 RampStrike(rngUpgrade(runData.rng)),
-                MultiInvoke(rngUpgrade(runData.rng)),
                 Concentrate(rngUpgrade(runData.rng)),
                 FeedbackLoop(rngUpgrade(runData.rng)),
                 Spark(rngUpgrade(runData.rng)),
