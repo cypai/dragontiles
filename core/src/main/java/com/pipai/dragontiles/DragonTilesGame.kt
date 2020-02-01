@@ -32,11 +32,6 @@ import com.pipai.dragontiles.enemies.FlameTurtle
 import com.pipai.dragontiles.enemies.Slime
 import com.pipai.dragontiles.hero.Hero
 import com.pipai.dragontiles.relics.Transmuter
-import com.pipai.dragontiles.spells.common.Invoke
-import com.pipai.dragontiles.spells.common.Strike
-import com.pipai.dragontiles.spells.elementalist.Break
-import com.pipai.dragontiles.spells.elementalist.ElementalRune
-import com.pipai.dragontiles.spells.elementalist.MultiInvoke
 import com.pipai.dragontiles.utils.enemyAssetPath
 import com.pipai.dragontiles.utils.getLogger
 import org.apache.commons.lang3.builder.ToStringBuilder
@@ -138,11 +133,7 @@ class DragonTilesGame(val gameConfig: GameConfig) : Game() {
         val runData = RunData(
                 Random(),
                 Hero("Elementalist", 80, 80, 17,
-                        mutableListOf(
-                                Invoke(false),
-                                Strike(false),
-                                Break(false),
-                                ElementalRune(false)),
+                        heroSpells.elementalistStarterDeck(),
                         mutableListOf(
                                 Transmuter())
                 ),
