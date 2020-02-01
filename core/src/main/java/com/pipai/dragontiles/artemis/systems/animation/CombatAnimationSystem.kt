@@ -94,6 +94,11 @@ class CombatAnimationSystem(private val game: DragonTilesGame) : BaseSystem(), A
     }
 
     @Subscribe
+    fun handleOpenPooltoDiscard(ev: OpenPoolToDiscardEvent) {
+        queueAnimation(TileDestroyAnimation(ev.tiles))
+    }
+
+    @Subscribe
     fun handleOpenPoolAdjustedEvent(ev: OpenPoolAdjustedEvent) {
         queueAnimation(AdjustOpenPoolAnimation(ev.openPool, sUi.layout))
     }
@@ -149,7 +154,7 @@ class CombatAnimationSystem(private val game: DragonTilesGame) : BaseSystem(), A
 
     @Subscribe
     fun handleDestroy(ev: TileDestroyedEvent) {
-        queueAnimation(TileDestroyAnimation(ev.tile))
+        queueAnimation(TileDestroyAnimation(listOf(ev.tile)))
     }
 
     @Subscribe

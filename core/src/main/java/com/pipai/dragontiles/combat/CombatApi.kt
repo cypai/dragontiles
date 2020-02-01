@@ -139,11 +139,6 @@ class CombatApi(val runData: RunData,
         eventBus.dispatch(DrawToOpenPoolEvent(drawnTiles))
     }
 
-    suspend fun sortOpenPool() {
-        combat.openPool.sortWith(compareBy({ it.tile.suit.order }, { it.tile.order() }))
-        eventBus.dispatch(OpenPoolAdjustedEvent(combat.openPool.toList()))
-    }
-
     fun calculateBaseDamage(attackerStatus: StatusData, amount: Int): Int {
         return (amount + attackerStatus[Status.STRENGTH]).coerceAtLeast(0)
     }
@@ -304,6 +299,11 @@ class CombatApi(val runData: RunData,
         val tileInstance = TileInstance(tile, nextId())
         combat.openPool.add(tileInstance)
         eventBus.dispatch(EnemyDiscardEvent(enemyId, tileInstance, combat.openPool.size - 1))
+        if (combat.openPool.size > 9) {
+            val discardedTile = combat.openPool.removeAt(0)
+            eventBus.dispatch(OpenPoolToDiscardEvent(listOf(discardedTile)))
+            eventBus.dispatch(OpenPoolAdjustedEvent(combat.openPool.toList()))
+        }
     }
 
     fun changeStatus(status: Status, amount: Int) {

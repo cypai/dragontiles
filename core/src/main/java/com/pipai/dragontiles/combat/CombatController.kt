@@ -21,7 +21,7 @@ class CombatController(private val runData: RunData,
             combat.enemyStatus[it.id] = StatusData()
         }
         initDrawPile()
-        runBlocking { initOpenPile() }
+        runBlocking { api.drawToOpenPool(9) }
         combat.spells.forEach {
             it.combatReset()
             eventBus.register(it)
@@ -51,11 +51,6 @@ class CombatController(private val runData: RunData,
             combat.drawPile.add(TileInstance(Tile.LifeTile(LifeType.SOUL), api.nextId()))
         }
         combat.drawPile.shuffle(runData.rng)
-    }
-
-    private suspend fun initOpenPile() {
-        api.drawToOpenPool(9)
-        api.sortOpenPool()
     }
 
     suspend fun runTurn() {
