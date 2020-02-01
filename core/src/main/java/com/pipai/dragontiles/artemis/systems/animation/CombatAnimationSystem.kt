@@ -104,6 +104,11 @@ class CombatAnimationSystem(private val game: DragonTilesGame) : BaseSystem(), A
     }
 
     @Subscribe
+    fun handleOpenDiscard(ev: OpenDiscardEvent) {
+        queueAnimation(AdjustOpenPoolAnimation(sCombat.combat.openPool, sUi.layout))
+    }
+
+    @Subscribe
     fun handleEnemyDamageEvent(ev: EnemyDamageEvent) {
         queueAnimation(EnemyDamageAnimation(ev.target, ev.amount))
     }

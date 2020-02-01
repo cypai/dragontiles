@@ -114,6 +114,21 @@ class CombatApi(val runData: RunData,
         sortHand()
     }
 
+    suspend fun openDiscard(tiles: List<TileInstance>) {
+        combat.hand.removeAll(tiles)
+        combat.openPool.addAll(tiles)
+        eventBus.dispatch(OpenDiscardEvent(tiles))
+        if (combat.openPool.size > 9) {
+            removeFromOpenPool(combat.openPool.slice(0 until combat.openPool.size - 9))
+        }
+    }
+
+    suspend fun removeFromOpenPool(tiles: List<TileInstance>) {
+        combat.openPool.removeAll(tiles)
+        eventBus.dispatch(OpenPoolToDiscardEvent(tiles))
+        eventBus.dispatch(OpenPoolAdjustedEvent(combat.openPool.toList()))
+    }
+
     suspend fun drawFromOpenPool(tiles: List<TileInstance>) {
         val drawnTiles: MutableList<Pair<TileInstance, Int>> = mutableListOf()
         tiles.forEach {
@@ -300,9 +315,7 @@ class CombatApi(val runData: RunData,
         combat.openPool.add(tileInstance)
         eventBus.dispatch(EnemyDiscardEvent(enemyId, tileInstance, combat.openPool.size - 1))
         if (combat.openPool.size > 9) {
-            val discardedTile = combat.openPool.removeAt(0)
-            eventBus.dispatch(OpenPoolToDiscardEvent(listOf(discardedTile)))
-            eventBus.dispatch(OpenPoolAdjustedEvent(combat.openPool.toList()))
+            removeFromOpenPool(listOf(combat.openPool.first()))
         }
     }
 

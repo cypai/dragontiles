@@ -37,6 +37,8 @@ data class DrawToOpenPoolEvent(val tiles: List<Pair<TileInstance, Int>>) : Comba
 
 data class OpenPoolToDiscardEvent(val tiles: List<TileInstance>) : CombatEvent
 
+data class OpenDiscardEvent(val tiles: List<TileInstance>) : CombatEvent
+
 data class OpenPoolAdjustedEvent(val openPool: List<TileInstance>) : CombatEvent
 
 data class PlayerAttackEnemyEvent(val target: Enemy, val element: Element, val amount: Int) : CombatEvent

@@ -22,6 +22,7 @@ class HeroSpells {
         val spells = listOf(
                 Mulligan(rngUpgrade(runData.rng)),
                 Ground(rngUpgrade(runData.rng)),
+                Reserve(rngUpgrade(runData.rng)),
                 QuickInvoke(rngUpgrade(runData.rng)),
                 MultiInvoke(rngUpgrade(runData.rng)),
                 EnhanceRune(rngUpgrade(runData.rng)),
