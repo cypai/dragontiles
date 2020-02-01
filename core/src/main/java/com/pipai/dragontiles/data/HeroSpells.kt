@@ -31,6 +31,7 @@ class HeroSpells {
                 FeedbackLoop(rngUpgrade(runData.rng)),
                 Bump(rngUpgrade(runData.rng)),
                 Nudge(rngUpgrade(runData.rng)),
+                Singularity(rngUpgrade(runData.rng)),
                 Spark(rngUpgrade(runData.rng)),
                 Blast(rngUpgrade(runData.rng)),
                 Explosion(rngUpgrade(runData.rng))

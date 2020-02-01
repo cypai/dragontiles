@@ -21,6 +21,10 @@ class CombatApi(val runData: RunData,
         return nextId
     }
 
+    fun numTilesInHand(): Int {
+        return combat.hand.size + combat.assigned.values.map { it.size }.sum()
+    }
+
     fun getTargetable(id: Int): Targetable {
         val target: Targetable? = combat.enemies.find { it.id == id }
                 ?: combat.enemyAttacks.values.find { it.id == id }
@@ -57,7 +61,7 @@ class CombatApi(val runData: RunData,
     suspend fun draw(amount: Int) {
         val drawnTiles: MutableList<Pair<TileInstance, Int>> = mutableListOf()
         val drawnDiscardTiles: MutableList<TileInstance> = mutableListOf()
-        var currentSize = combat.hand.size
+        var currentSize = numTilesInHand()
         repeat(amount) {
             val tile = combat.drawPile.removeAt(0)
             if (currentSize >= runData.hero.handSize) {
@@ -81,6 +85,32 @@ class CombatApi(val runData: RunData,
         val previous = tileInstance.tile
         tileInstance.tile = tile
         eventBus.dispatch(TileTransformedEvent(tileInstance, previous))
+        sortHand()
+    }
+
+    suspend fun destroyTile(tileInstance: TileInstance) {
+        combat.hand.remove(tileInstance)
+        eventBus.dispatch(TileDestroyedEvent(tileInstance))
+        sortHand()
+    }
+
+    suspend fun addTilesToHand(tiles: List<Tile>) {
+        val addedTiles: MutableList<Pair<TileInstance, Int>> = mutableListOf()
+        val discardedTiles: MutableList<TileInstance> = mutableListOf()
+        tiles.forEach {
+            val tileInstance = TileInstance(it, nextId())
+            if (numTilesInHand() < runData.hero.handSize) {
+                combat.hand.add(tileInstance)
+                addedTiles.add(Pair(tileInstance, combat.hand.size))
+            } else {
+                combat.discardPile.add(tileInstance)
+                discardedTiles.add(tileInstance)
+            }
+        }
+        eventBus.dispatch(TilesAddedToHandEvent(addedTiles))
+        if (discardedTiles.isNotEmpty()) {
+            eventBus.dispatch(TilesAddedDiscardedEvent(discardedTiles))
+        }
         sortHand()
     }
 
@@ -305,7 +335,7 @@ class CombatApi(val runData: RunData,
     }
 
     suspend fun queryOpenPoolDraw() {
-        val amount = runData.hero.handSize - combat.hand.size
+        val amount = runData.hero.handSize - numTilesInHand()
         val tiles = queryTiles("Select up to $amount tile(s) to draw from the Open Pool",
                 combat.openPool, 0, amount)
         if (tiles.isNotEmpty()) {

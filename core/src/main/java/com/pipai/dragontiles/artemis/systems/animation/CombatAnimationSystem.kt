@@ -148,6 +148,16 @@ class CombatAnimationSystem(private val game: DragonTilesGame) : BaseSystem(), A
     }
 
     @Subscribe
+    fun handleDestroy(ev: TileDestroyedEvent) {
+        queueAnimation(TileDestroyAnimation(ev.tile))
+    }
+
+    @Subscribe
+    fun handleAddedToHand(ev: TilesAddedToHandEvent) {
+        queueAnimation(TilesAddedToHandAnimation(ev.tiles, sUi.layout))
+    }
+
+    @Subscribe
     fun handleSelectQuery(ev: QueryTilesEvent) {
         queueAnimation(QueryTilesAnimation(ev))
     }
