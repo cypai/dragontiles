@@ -172,11 +172,11 @@ base:spells:HasteRune:
     description: After casting a spell, draw 1 tile.
     upgradeDescription: After casting a spell, draw 1 tile.
 
-base:spells:Meld:
+base:spells:MeldPromotion:
   en:
-    name: Meld
-    description: "@Component must be addable to an active @Rune. Fetch a tile from the discard pile."
-    upgradeDescription: "@Component must be addable to an active @Rune. Fetch a tile from the discard pile. @Repeatable !r."
+    name: MeldPromotion
+    description: "@Component must be addable to an active @Rune. Add it, then fetch a tile from the discard pile."
+    upgradeDescription: "@Component must be addable to an active @Rune. Add it, then fetch a tile from the discard pile. @Repeatable !r."
 
 base:spells:AllForOne:
   en:

@@ -34,6 +34,18 @@ base:keywords:Numeric:
     name: Numeric
     description: Uses the highest numeric value of the @Components.
 
+base:keywords:Successor:
+  en:
+    key: "@Successor"
+    name: Successor
+    description: For Elemental Tiles, the number+1, or 1 if the number is 9. Life succession is Life, Mind, Soul. Star succession is Earth, Moon, Sun, Star.
+
+base:keywords:Predecessor:
+  en:
+    key: "@Predecessor"
+    name: Predecessor
+    description: For Elemental Tiles, the number-1, or 9 if the number is 1. Life predecession is Soul, Mind, Life. Star predecession is Star, Sun, Moon, Earth.
+
 base:keywords:Exhaust:
   en:
     key: "@Exhaust"
