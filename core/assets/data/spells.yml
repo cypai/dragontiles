@@ -177,3 +177,9 @@ base:spells:Meld:
     name: Meld
     description: "@Component must be addable to an active @Rune. Fetch a tile from the discard pile."
     upgradeDescription: "@Component must be addable to an active @Rune. Fetch a tile from the discard pile. @Repeatable !r."
+
+base:spells:AllForOne:
+  en:
+    name: All For One
+    description: Deal !d damage. Put all tiles matching the @Component from the discard pile into your hand.
+    upgradeDescription: Deal !d damage. Put all tiles matching the @Component from the discard pile into your hand.
