@@ -2,9 +2,7 @@ package com.pipai.dragontiles.data
 
 import com.pipai.dragontiles.dungeon.RunData
 import com.pipai.dragontiles.spells.Spell
-import com.pipai.dragontiles.spells.common.Blast
-import com.pipai.dragontiles.spells.common.Invoke
-import com.pipai.dragontiles.spells.common.Strike
+import com.pipai.dragontiles.spells.common.*
 import com.pipai.dragontiles.spells.elementalist.*
 import java.util.*
 

@@ -1,4 +1,4 @@
-package com.pipai.dragontiles.spells.elementalist
+package com.pipai.dragontiles.spells.common
 
 import com.pipai.dragontiles.combat.CombatApi
 import com.pipai.dragontiles.spells.*
