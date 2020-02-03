@@ -23,6 +23,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.MultiDrawable
 import com.badlogic.gdx.scenes.scene2d.utils.OffsetDrawable
 import com.kotcrab.vis.ui.VisUI
 import com.pipai.dragontiles.artemis.screens.CombatScreen
+import com.pipai.dragontiles.artemis.screens.MainMenuScreen
 import com.pipai.dragontiles.data.GameStrings
 import com.pipai.dragontiles.data.HeroSpells
 import com.pipai.dragontiles.data.TileSkin
@@ -130,16 +131,7 @@ class DragonTilesGame(val gameConfig: GameConfig) : Game() {
 
         initSkin()
 
-        val runData = RunData(
-                Random(),
-                Hero("Elementalist", 80, 80, 17,
-                        heroSpells.elementalistStarterDeck(),
-                        mutableListOf(
-                                Transmuter())
-                ),
-                PlainsDungeon())
-        runData.dungeon.generateMap(runData.rng)
-        setScreen(CombatScreen(this, runData, runData.dungeon.easyEncounter(runData)))
+        setScreen(MainMenuScreen(this))
     }
 
     private fun initSkin() {
