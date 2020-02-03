@@ -22,22 +22,16 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable
 import com.badlogic.gdx.scenes.scene2d.utils.MultiDrawable
 import com.badlogic.gdx.scenes.scene2d.utils.OffsetDrawable
 import com.kotcrab.vis.ui.VisUI
-import com.pipai.dragontiles.artemis.screens.CombatScreen
 import com.pipai.dragontiles.artemis.screens.MainMenuScreen
 import com.pipai.dragontiles.data.GameStrings
 import com.pipai.dragontiles.data.HeroSpells
 import com.pipai.dragontiles.data.TileSkin
-import com.pipai.dragontiles.dungeon.PlainsDungeon
-import com.pipai.dragontiles.dungeon.RunData
 import com.pipai.dragontiles.enemies.FlameTurtle
 import com.pipai.dragontiles.enemies.Slime
-import com.pipai.dragontiles.hero.Hero
-import com.pipai.dragontiles.relics.Transmuter
 import com.pipai.dragontiles.utils.enemyAssetPath
 import com.pipai.dragontiles.utils.getLogger
 import org.apache.commons.lang3.builder.ToStringBuilder
 import org.apache.commons.lang3.builder.ToStringStyle
-import java.util.*
 
 class DragonTilesGame(val gameConfig: GameConfig) : Game() {
 
@@ -126,6 +120,7 @@ class DragonTilesGame(val gameConfig: GameConfig) : Game() {
         gameStrings.load(Gdx.files.internal("assets/data/spells.yml").readString())
         gameStrings.load(Gdx.files.internal("assets/data/relics.yml").readString())
         gameStrings.load(Gdx.files.internal("assets/data/enemies.yml").readString())
+        gameStrings.loadEvent(Gdx.files.internal("assets/data/events.yml").readString())
 
         ToStringBuilder.setDefaultStyle(ToStringStyle.SHORT_PREFIX_STYLE)
 

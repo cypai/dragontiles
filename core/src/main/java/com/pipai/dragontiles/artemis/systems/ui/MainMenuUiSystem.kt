@@ -8,9 +8,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.pipai.dragontiles.DragonTilesGame
-import com.pipai.dragontiles.artemis.screens.CombatScreen
+import com.pipai.dragontiles.artemis.screens.EventScreen
 import com.pipai.dragontiles.dungeon.PlainsDungeon
 import com.pipai.dragontiles.dungeon.RunData
+import com.pipai.dragontiles.dungeonevents.PlainsStartEvent
 import com.pipai.dragontiles.hero.Hero
 import com.pipai.dragontiles.relics.Transmuter
 import java.util.*
@@ -28,7 +29,10 @@ class MainMenuUiSystem(private val game: DragonTilesGame,
     override fun initialize() {
         rootTable.setFillParent(true)
         rootTable.background = game.skin.getDrawable("frameDrawable")
+        rootTable.add(Label("Dragontiles", skin))
+        rootTable.row()
         rootTable.add(newGameLabel)
+                .padTop(64f)
         rootTable.row()
         rootTable.add(quitLabel)
         rootTable.row()
@@ -44,7 +48,7 @@ class MainMenuUiSystem(private val game: DragonTilesGame,
                         ),
                         PlainsDungeon())
                 runData.dungeon.generateMap(runData.rng)
-                game.screen = CombatScreen(game, runData, runData.dungeon.easyEncounter(runData))
+                game.screen = EventScreen(game, runData, PlainsStartEvent())
             }
         })
         quitLabel.addListener(object : ClickListener() {

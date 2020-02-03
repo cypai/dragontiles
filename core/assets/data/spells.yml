@@ -183,3 +183,15 @@ base:spells:AllForOne:
     name: All For One
     description: Deal !d damage. Put all tiles matching the @Component from the discard pile into your hand.
     upgradeDescription: Deal !d damage. Put all tiles matching the @Component from the discard pile into your hand.
+
+base:spells:DragonRage:
+  en:
+    name: Dragon Rage
+    description: "@Power: Gain 2 Strength for every Sequence you play."
+    upgradeDescription: "@Power: Gain 3 Strength for every Sequence you play."
+
+base:spells:DragonScale:
+  en:
+    name: Dragon Scale
+    description: "@Power: Drawn Elemental Tiles transform to the @Component Element. @Exhaust."
+    upgradeDescription: "@Power: Elemental tiles added to your hand transform to the @Component Element. @Exhaust."

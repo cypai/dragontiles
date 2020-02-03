@@ -6,6 +6,7 @@ class GameStrings {
 
     var language = Language.EN
     private val strings: MutableMap<String, Map<Language, Map<String, String>>> = mutableMapOf()
+    private val eventStrings: MutableMap<String, Map<String, Map<Language, Map<String, String>>>> = mutableMapOf()
     private val keywordIds: MutableMap<Language, MutableMap<String, String>> = mutableMapOf()
 
     private val keywordIdRegex = "\\w+:keywords:\\w+".toRegex()
@@ -13,9 +14,9 @@ class GameStrings {
 
     fun load(raw: String) {
         val map = Yaml().load<Map<String, Map<String, Map<String, String>>>>(raw)
-        map.forEach { id, langs ->
+        map.forEach { (id, langs) ->
             val langMap: MutableMap<Language, Map<String, String>> = mutableMapOf()
-            langs.forEach { langStr, data ->
+            langs.forEach { (langStr, data) ->
                 val lang = Language.valueOf(langStr.toUpperCase())
                 langMap[lang] = data
                 if (keywordIdRegex.matches(id)) {
@@ -29,6 +30,22 @@ class GameStrings {
         }
     }
 
+    fun loadEvent(raw: String) {
+        val map = Yaml().load<Map<String, Map<String, Map<String, Map<String, String>>>>>(raw)
+        map.forEach { (eventId, eventMap) ->
+            val parsedEventMap: MutableMap<String, MutableMap<Language, Map<String, String>>> = mutableMapOf()
+            eventMap.forEach { (eventKey, langData) ->
+                val parsedLangMap: MutableMap<Language, Map<String, String>> = mutableMapOf()
+                langData.forEach { (langStr, data) ->
+                    val lang = Language.valueOf(langStr.toUpperCase())
+                    parsedLangMap[lang] = data
+                }
+                parsedEventMap[eventKey] = parsedLangMap
+            }
+            eventStrings[eventId] = parsedEventMap
+        }
+    }
+
     fun spellLocalization(id: String): SpellLocalization {
         val data = strings[id]?.get(language) ?: throw IllegalArgumentException("$id not found")
         return SpellLocalization(
@@ -37,14 +54,14 @@ class GameStrings {
                 data["upgradeDescription"] ?: throw IllegalStateException("$id upgradeDescription not found"))
     }
 
-    fun nameDescLocalization(id: String) : NameDescLocalization {
+    fun nameDescLocalization(id: String): NameDescLocalization {
         val data = strings[id]?.get(language) ?: throw IllegalArgumentException("$id not found")
         return NameDescLocalization(
                 data["name"] ?: throw IllegalStateException("$id name not found"),
                 data["description"] ?: throw IllegalStateException("$id description not found"))
     }
 
-    fun keywordLocalization(id: String) : KeywordLocalization {
+    fun keywordLocalization(id: String): KeywordLocalization {
         val data = strings[id]?.get(language) ?: throw IllegalArgumentException("$id not found")
         return KeywordLocalization(
                 data["key"] ?: throw IllegalStateException("$id key not found"),
@@ -66,8 +83,16 @@ class GameStrings {
                 .map { it.value }
                 .toList()
     }
+
+    fun eventLocalization(id: String): EventLocalization {
+        val event = eventStrings[id]!!
+        val keyText = event.mapValues { it.value[language]?.get("text") ?: "" }.toMutableMap()
+        val name = keyText.remove("name")!!
+        return EventLocalization(name, keyText)
+    }
 }
 
 data class NameDescLocalization(val name: String, val description: String)
 data class SpellLocalization(val name: String, val description: String, val upgradeDescription: String)
 data class KeywordLocalization(val key: String, val name: String, val description: String)
+data class EventLocalization(val name: String, val keyText: Map<String, String>)

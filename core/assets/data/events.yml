@@ -1,0 +1,44 @@
+base:events:PlainsStartEvent:
+  name:
+    en:
+      text: The Hero's Journey
+  start:
+    en:
+      text: You set out on a pilgrimage to gain Honor for your clan! Gazing out across the Plains, you decide on your path...
+  option:
+    en:
+      text: Choose your path
+
+base:events:DragonInquiry:
+  name:
+    en:
+      text: A Dragon's Inquiry
+  start:
+    en:
+      text: |
+        A massive dragon out of nowhere suddenly rears up in front of you!
+
+        "You who seek Honor, what is it that you desire? Ask and you shall receive!"
+
+        What do you want?
+  power:
+    en:
+      text: "Power! (Gain Dragon Rage)"
+  powerMain:
+    en:
+      text: Is strength alone enough for you to pass the trials ahead? We shall see!
+  wisdom:
+    en:
+      text: "Wisdom! (Gain Dragon Scale)"
+  wisdomMain:
+    en:
+      text: Ah, a wise choice indeed.
+  wealth:
+    en:
+      text: "Wealth! (Gain 100 Gold)"
+  wealthMain:
+    en:
+      text: How boring. Though I cannot fault you for taking the easy choice.
+  next:
+    en:
+      text: Next
