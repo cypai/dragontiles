@@ -85,8 +85,8 @@ abstract class StandardSpell(upgraded: Boolean) : Spell(upgraded) {
             return
         }
         api.castSpell(this)
-        onCast(params, api)
         handleComponents(api)
+        onCast(params, api)
         repeated++
     }
 

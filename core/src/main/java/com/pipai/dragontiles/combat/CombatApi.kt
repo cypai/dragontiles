@@ -79,6 +79,7 @@ class CombatApi(val runData: RunData,
             combat.discardPile.addAll(drawnDiscardTiles)
             eventBus.dispatch(DrawDiscardedEvent(drawnDiscardTiles))
         }
+        sortHand()
     }
 
     suspend fun transformTile(tileInstance: TileInstance, tile: Tile) {

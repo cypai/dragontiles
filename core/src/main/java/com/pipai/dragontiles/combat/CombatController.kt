@@ -64,7 +64,6 @@ class CombatController(private val runData: RunData,
         if (runData.hero.handSize > combat.hand.size) {
             api.draw(runData.hero.handSize - combat.hand.size - combat.assigned.values.map { it.size }.sum())
         }
-        api.sortHand()
         eventBus.dispatch(TurnStartEvent(combat.turnNumber))
     }
 
