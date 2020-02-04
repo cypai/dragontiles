@@ -25,7 +25,7 @@ abstract class Dungeon {
             val floor: MutableList<MapNode> = mutableListOf()
             when (i) {
                 0 -> {
-                    floor.add(MapNode(MapNodeType.NOOP, false, mutableListOf(), mutableListOf(0, 1, 2)))
+                    floor.add(MapNode(MapNodeType.START, false, mutableListOf(), mutableListOf(0, 1, 2)))
                 }
                 1 -> {
                     repeat(3) {
@@ -103,7 +103,7 @@ abstract class Dungeon {
 data class MapNode(val type: MapNodeType, val hidden: Boolean, val prev: MutableList<Int>, val next: MutableList<Int>)
 
 enum class MapNodeType {
-    NOOP, COMBAT, BOSS, EVENT, TOWN;
+    START, COMBAT, BOSS, EVENT, TOWN;
 }
 
 class PlainsDungeon : Dungeon() {

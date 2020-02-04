@@ -26,3 +26,5 @@ class AnchoredLineComponent : Component() {
 }
 
 class MouseFollowComponent : Component()
+
+class MapNodeComponent : Component()

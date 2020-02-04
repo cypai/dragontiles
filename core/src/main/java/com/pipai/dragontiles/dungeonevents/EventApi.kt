@@ -2,6 +2,7 @@ package com.pipai.dragontiles.dungeonevents
 
 import com.pipai.dragontiles.DragonTilesGame
 import com.pipai.dragontiles.artemis.systems.ui.EventUiSystem
+import com.pipai.dragontiles.artemis.systems.ui.MapUiSystem
 import com.pipai.dragontiles.data.EventLocalization
 import com.pipai.dragontiles.dungeon.RunData
 
@@ -22,11 +23,11 @@ class EventApi(val game: DragonTilesGame, val runData: RunData, val sUi: EventUi
     }
 
     fun allowMapAdvance() {
-
+        sUi.allowMapAdvance()
     }
 
     fun showMap() {
-
+        sUi.showMap()
     }
 
 }

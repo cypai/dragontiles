@@ -11,6 +11,7 @@ import com.pipai.dragontiles.dungeon.RunData
 import com.pipai.dragontiles.dungeonevents.DungeonEvent
 import com.pipai.dragontiles.dungeonevents.EventApi
 import com.pipai.dragontiles.dungeonevents.EventOption
+import com.pipai.dragontiles.utils.system
 
 class EventUiSystem(private val game: DragonTilesGame,
                     private val stage: Stage,
@@ -24,6 +25,8 @@ class EventUiSystem(private val game: DragonTilesGame,
     private val mainTextLabel = Label("", skin)
     private val optionLabels: MutableList<Label> = mutableListOf()
 
+    private val sMap by system<MapUiSystem>()
+
     private val api: EventApi = EventApi(game, runData, this, game.gameStrings.eventLocalization(event.id))
 
     override fun initialize() {
@@ -33,6 +36,16 @@ class EventUiSystem(private val game: DragonTilesGame,
         stage.addActor(rootTable)
 
         event.initialize(api)
+        event.onEventStart(api)
+    }
+
+    fun allowMapAdvance() {
+        sMap.canAdvanceMap = true
+    }
+
+    fun showMap() {
+        rootTable.remove()
+        sMap.showMap()
     }
 
     fun setMainText(text: String) {

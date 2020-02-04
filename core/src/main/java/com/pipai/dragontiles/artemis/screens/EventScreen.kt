@@ -9,12 +9,15 @@ import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.utils.viewport.ScreenViewport
 import com.pipai.dragontiles.DragonTilesGame
+import com.pipai.dragontiles.artemis.systems.ClickableSystem
 import com.pipai.dragontiles.artemis.systems.input.ExitInputProcessor
 import com.pipai.dragontiles.artemis.systems.input.InputProcessingSystem
+import com.pipai.dragontiles.artemis.systems.rendering.MapRenderingSystem
 import com.pipai.dragontiles.artemis.systems.ui.EventUiSystem
-import com.pipai.dragontiles.artemis.systems.ui.MainMenuUiSystem
+import com.pipai.dragontiles.artemis.systems.ui.MapUiSystem
 import com.pipai.dragontiles.dungeon.RunData
 import com.pipai.dragontiles.dungeonevents.DungeonEvent
+import net.mostlyoriginal.api.event.common.EventSystem
 
 class EventScreen(game: DragonTilesGame, runData: RunData, event: DungeonEvent) : Screen {
 
@@ -26,8 +29,13 @@ class EventScreen(game: DragonTilesGame, runData: RunData, event: DungeonEvent) 
         val config = WorldConfigurationBuilder()
                 .with(
                         TagManager(),
+                        EventSystem(),
+                        ClickableSystem(game.gameConfig),
                         InputProcessingSystem(),
-                        EventUiSystem(game, stage, runData, event))
+                        EventUiSystem(game, stage, runData, event),
+                        MapUiSystem(game, runData))
+                .with(-1,
+                        MapRenderingSystem(game))
                 .build()
 
         world = World(config)
@@ -35,6 +43,7 @@ class EventScreen(game: DragonTilesGame, runData: RunData, event: DungeonEvent) 
         val inputProcessor = world.getSystem(InputProcessingSystem::class.java)
         inputProcessor.addAlwaysOnProcessor(stage)
         inputProcessor.addAlwaysOnProcessor(ExitInputProcessor())
+        inputProcessor.addAlwaysOnProcessor(world.getSystem(ClickableSystem::class.java))
         inputProcessor.activateInput()
 
         StandardScreenInit(world).initialize()

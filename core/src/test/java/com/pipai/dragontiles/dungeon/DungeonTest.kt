@@ -40,7 +40,7 @@ class DungeonTest {
                 0 -> {
                     Assert.assertEquals(1, floor.size)
                     val node = floor.first()
-                    Assert.assertEquals(MapNodeType.NOOP, node.type)
+                    Assert.assertEquals(MapNodeType.START, node.type)
                     Assert.assertFalse(node.next.isEmpty())
                     Assert.assertTrue(node.prev.isEmpty())
                 }
