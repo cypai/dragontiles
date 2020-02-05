@@ -33,7 +33,7 @@ class EventScreen(game: DragonTilesGame, runData: RunData, event: DungeonEvent) 
                         ClickableSystem(game.gameConfig),
                         InputProcessingSystem(),
                         EventUiSystem(game, stage, runData, event),
-                        MapUiSystem(game, runData))
+                        MapUiSystem(game, stage, runData))
                 .with(-1,
                         MapRenderingSystem(game))
                 .build()
