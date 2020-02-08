@@ -8,6 +8,7 @@ class MultiInvoke(upgraded: Boolean) : StandardSpell(upgraded) {
     override val requirement: ComponentRequirement = SequentialX()
     override val type: SpellType = SpellType.ATTACK
     override val targetType: TargetType = TargetType.SINGLE
+    override val rarity: Rarity = Rarity.UNCOMMON
 
     override var repeatableMax: Int = 1
 

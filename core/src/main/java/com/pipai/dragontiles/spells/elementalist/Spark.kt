@@ -12,6 +12,7 @@ class Spark(upgraded: Boolean) : StandardSpell(upgraded) {
             SuitGroup.ELEMENTAL)
     override val type: SpellType = SpellType.ATTACK
     override val targetType: TargetType = TargetType.SINGLE
+    override val rarity: Rarity = Rarity.UNCOMMON
 
     override var repeatableMax: Int = Int.MAX_VALUE
 

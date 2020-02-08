@@ -10,6 +10,7 @@ class Break(upgraded: Boolean) : StandardSpell(upgraded) {
     override val requirement: ComponentRequirement = Identical(3)
     override val type: SpellType = SpellType.EFFECT
     override val targetType: TargetType = TargetType.SINGLE_ENEMY
+    override val rarity: Rarity = Rarity.COMMON
 
     override var repeatableMax: Int = 1
 

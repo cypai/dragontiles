@@ -4,13 +4,11 @@ import com.pipai.dragontiles.combat.DamageOrigin
 import com.pipai.dragontiles.combat.DamageTarget
 import com.pipai.dragontiles.combat.StatusData
 import com.pipai.dragontiles.data.Element
-import com.pipai.dragontiles.spells.ComponentRequirement
-import com.pipai.dragontiles.spells.Identical
-import com.pipai.dragontiles.spells.IdenticalX
-import com.pipai.dragontiles.spells.Rune
+import com.pipai.dragontiles.spells.*
 
 class StrengthRune(upgraded: Boolean) : Rune(upgraded) {
     override val id: String = "base:spells:StrengthRune"
+    override val rarity: Rarity = Rarity.UNCOMMON
 
     override val requirement: ComponentRequirement = IdenticalX()
 

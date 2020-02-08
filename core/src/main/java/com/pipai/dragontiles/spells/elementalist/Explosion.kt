@@ -8,6 +8,7 @@ class Explosion(upgraded: Boolean) : StandardSpell(upgraded) {
     override val requirement: ComponentRequirement = Identical(3)
     override val type: SpellType = SpellType.ATTACK
     override val targetType: TargetType = TargetType.AOE
+    override val rarity: Rarity = Rarity.UNCOMMON
 
     override var repeatableMax: Int = 1
 

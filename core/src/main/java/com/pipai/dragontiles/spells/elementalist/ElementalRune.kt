@@ -8,6 +8,7 @@ import com.pipai.dragontiles.spells.*
 
 class ElementalRune(upgraded: Boolean) : Rune(upgraded) {
     override val id: String = "base:spells:ElementalRune"
+    override val rarity: Rarity = Rarity.COMMON
 
     override val requirement: ComponentRequirement = Identical(2, SuitGroup.ELEMENTAL)
 

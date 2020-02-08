@@ -10,6 +10,7 @@ class Singularity(upgraded: Boolean) : StandardSpell(upgraded) {
     override val requirement: ComponentRequirement = Single(SuitGroup.ELEMENTAL)
     override val type: SpellType = SpellType.EFFECT
     override val targetType: TargetType = TargetType.NONE
+    override val rarity: Rarity = Rarity.UNCOMMON
 
     override var repeatableMax: Int = 1
 

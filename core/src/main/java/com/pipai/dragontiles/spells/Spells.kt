@@ -19,6 +19,7 @@ abstract class Spell(var upgraded: Boolean) {
 
     abstract val requirement: ComponentRequirement
     abstract val type: SpellType
+    abstract val rarity: Rarity
 
     protected val data: MutableMap<String, Int> = mutableMapOf()
 
@@ -58,6 +59,10 @@ abstract class Spell(var upgraded: Boolean) {
     override fun toString(): String {
         return ToStringBuilder.reflectionToString(this)
     }
+}
+
+enum class Rarity {
+    COMMON, UNCOMMON, RARE
 }
 
 abstract class StandardSpell(upgraded: Boolean) : Spell(upgraded) {

@@ -9,6 +9,7 @@ class FeedbackLoop(upgraded: Boolean) : StandardSpell(upgraded) {
     override val requirement: ComponentRequirement = Identical(3, SuitGroup.ARCANE)
     override val type: SpellType = SpellType.EFFECT
     override val targetType: TargetType = TargetType.NONE
+    override val rarity: Rarity = Rarity.RARE
 
     override var repeatableMax: Int = 1
 

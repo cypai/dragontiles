@@ -8,6 +8,7 @@ class Strike(upgraded: Boolean) : StandardSpell(upgraded) {
     override val requirement: ComponentRequirement = Sequential(3, SuitGroup.ELEMENTAL)
     override val type: SpellType = SpellType.ATTACK
     override val targetType: TargetType = TargetType.SINGLE
+    override val rarity: Rarity = Rarity.COMMON
 
     override var repeatableMax: Int = 1
 

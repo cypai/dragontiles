@@ -9,6 +9,7 @@ class Concentrate(upgraded: Boolean) : StandardSpell(upgraded) {
     override val requirement: ComponentRequirement = Identical(2, SuitGroup.ARCANE)
     override val type: SpellType = SpellType.EFFECT
     override val targetType: TargetType = TargetType.NONE
+    override val rarity: Rarity = Rarity.UNCOMMON
 
     override var repeatableMax: Int = 1
 

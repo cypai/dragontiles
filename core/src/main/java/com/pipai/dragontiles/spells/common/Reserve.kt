@@ -8,6 +8,7 @@ class Reserve(upgraded: Boolean) : StandardSpell(upgraded) {
     override val requirement: ComponentRequirement = Single()
     override val type: SpellType = SpellType.EFFECT
     override val targetType: TargetType = TargetType.NONE
+    override val rarity: Rarity = Rarity.COMMON
 
     override var repeatableMax: Int = if (upgraded) 3 else 2
 
