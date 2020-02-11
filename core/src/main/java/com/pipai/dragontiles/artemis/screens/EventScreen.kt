@@ -15,6 +15,7 @@ import com.pipai.dragontiles.artemis.systems.input.InputProcessingSystem
 import com.pipai.dragontiles.artemis.systems.rendering.MapRenderingSystem
 import com.pipai.dragontiles.artemis.systems.ui.EventUiSystem
 import com.pipai.dragontiles.artemis.systems.ui.MapUiSystem
+import com.pipai.dragontiles.artemis.systems.ui.TopRowUiSystem
 import com.pipai.dragontiles.dungeon.RunData
 import com.pipai.dragontiles.dungeonevents.DungeonEvent
 import net.mostlyoriginal.api.event.common.EventSystem
@@ -35,7 +36,8 @@ class EventScreen(game: DragonTilesGame, runData: RunData, event: DungeonEvent) 
                         EventUiSystem(game, stage, runData, event),
                         MapUiSystem(game, stage, runData))
                 .with(-1,
-                        MapRenderingSystem(game))
+                        MapRenderingSystem(game),
+                        TopRowUiSystem(game, runData, stage))
                 .build()
 
         world = World(config)

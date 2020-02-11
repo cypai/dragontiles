@@ -12,8 +12,6 @@ import com.badlogic.gdx.math.Interpolation
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.scenes.scene2d.InputEvent
 import com.badlogic.gdx.scenes.scene2d.Stage
-import com.badlogic.gdx.scenes.scene2d.ui.Label
-import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.pipai.dragontiles.DragonTilesGame
 import com.pipai.dragontiles.artemis.components.*
 import com.pipai.dragontiles.artemis.events.*
@@ -44,16 +42,9 @@ class CombatUiSystem(private val game: DragonTilesGame,
     private val skin = game.skin
     private val tileSkin = game.tileSkin
 
-    private val rootTable = Table()
-    private val topRow = Table()
-
-    private val hpLabel = Label("${runData.hero.hp}/${runData.hero.hpMax}", skin)
     private val spells: MutableMap<Int, SpellCard> = mutableMapOf()
     private val spellEntityIds: MutableMap<Int, Int> = mutableMapOf()
     private val spellComponentList = SpellComponentList(skin, tileSkin)
-
-    // (Rune Index, [tile entity ids])
-    private val runeTiles: MutableMap<Int, List<Int>> = mutableMapOf()
 
     val layout = CombatUiLayout(config, tileSkin, runData.hero.handSize)
 
@@ -81,32 +72,9 @@ class CombatUiSystem(private val game: DragonTilesGame,
     private val sMap by system<MapUiSystem>()
 
     override fun initialize() {
-        rootTable.setFillParent(true)
-
-        topRow.background = skin.getDrawable("frameDrawable")
-        topRow.add(Label("Elementalist", skin))
-                .width(260f)
-                .pad(8f)
-                .padLeft(16f)
-                .left()
-                .top()
-        topRow.add(hpLabel)
-                .width(120f)
-        topRow.add()
-                .expand()
-
-        rootTable.add(topRow)
-                .width(config.resolution.width.toFloat())
-                .top()
-                .left()
-        rootTable.row()
-        rootTable.add()
-                .expand()
-
         runData.hero.spells.forEachIndexed { index, spell ->
             addSpellCard(index, spell)
         }
-        stage.addActor(rootTable)
 
         spellComponentList.addClickCallback { selectComponents(it) }
     }
@@ -126,17 +94,6 @@ class CombatUiSystem(private val game: DragonTilesGame,
 
     fun spellCardEntityId(index: Int): Int? {
         return spellEntityIds[index]
-    }
-
-    fun setHpRelative(amount: Int) {
-        val tokens = hpLabel.text.split("/")
-        val hp = tokens[0].toInt()
-        val hpMax = tokens[1].toInt()
-        setHp(hp + amount, hpMax)
-    }
-
-    fun setHp(hp: Int, hpMax: Int) {
-        hpLabel.setText("$hp/$hpMax")
     }
 
     private fun addSpellCard(number: Int, spell: Spell) {

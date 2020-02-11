@@ -44,7 +44,8 @@ class MainMenuUiSystem(private val game: DragonTilesGame,
                         Hero("Elementalist", 80, 80, 17,
                                 game.heroSpells.elementalistStarterDeck(),
                                 mutableListOf(
-                                        Transmuter())
+                                        Transmuter()),
+                                100
                         ),
                         PlainsDungeon())
                 runData.dungeon.generateMap(runData.rng)

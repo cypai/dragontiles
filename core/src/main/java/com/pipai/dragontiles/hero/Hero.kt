@@ -8,4 +8,5 @@ data class Hero(val name: String,
                 var hpMax: Int,
                 val handSize: Int,
                 val spells: MutableList<Spell>,
-                val relics: MutableList<Relic>)
+                val relics: MutableList<Relic>,
+                var gold: Int)

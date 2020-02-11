@@ -37,8 +37,10 @@ class MapUiSystem(private val game: DragonTilesGame,
 
     fun showMap() {
         showing = true
-        table.setFillParent(true)
         table.background = game.skin.getDrawable("frameDrawableDark")
+        table.width = game.gameConfig.resolution.width.toFloat()
+        table.height = game.gameConfig.resolution.height.toFloat() / 2f
+        table.y = table.height / 2f
         stage.addActor(table)
         val centerY = game.gameConfig.resolution.height.toFloat() / 2f
         val rightX = game.gameConfig.resolution.width.toFloat() - 64f

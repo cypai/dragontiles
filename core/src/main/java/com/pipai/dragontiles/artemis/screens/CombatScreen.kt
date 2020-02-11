@@ -58,6 +58,7 @@ class CombatScreen(game: DragonTilesGame, runData: RunData, encounter: Encounter
                         ClickableSystem(game.gameConfig))
                 .with(-1,
                         CombatUiSystem(game, runData, stage),
+                        TopRowUiSystem(game, runData, stage),
                         FullScreenColorRenderingSystem(game))
                 .with(-2,
                         CombatRenderingSystem(game),
