@@ -1,6 +1,5 @@
 package com.pipai.dragontiles.artemis.systems.ui
 
-import com.artemis.BaseSystem
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.Sprite
@@ -11,6 +10,7 @@ import com.pipai.dragontiles.DragonTilesGame
 import com.pipai.dragontiles.artemis.components.*
 import com.pipai.dragontiles.artemis.events.MapNodeClickEvent
 import com.pipai.dragontiles.artemis.screens.CombatScreen
+import com.pipai.dragontiles.artemis.systems.NoProcessingSystem
 import com.pipai.dragontiles.dungeon.MapNodeType
 import com.pipai.dragontiles.dungeon.RunData
 import com.pipai.dragontiles.utils.allOf
@@ -20,7 +20,7 @@ import net.mostlyoriginal.api.event.common.Subscribe
 
 class MapUiSystem(private val game: DragonTilesGame,
                   private val stage: Stage,
-                  private val runData: RunData) : BaseSystem() {
+                  private val runData: RunData) : NoProcessingSystem() {
 
     private val mXy by mapper<XYComponent>()
     private val mSprite by mapper<SpriteComponent>()
@@ -29,13 +29,14 @@ class MapUiSystem(private val game: DragonTilesGame,
     private val mAnchoredLine by mapper<AnchoredLineComponent>()
     private val mMutualDestroy by mapper<MutualDestroyComponent>()
 
-    var canAdvanceMap = false
+    private val table = Table()
 
-    override fun initialize() {
-    }
+    var canAdvanceMap = false
+    var showing = false
+        private set
 
     fun showMap() {
-        val table = Table()
+        showing = true
         table.setFillParent(true)
         table.background = game.skin.getDrawable("frameDrawableDark")
         stage.addActor(table)
@@ -86,6 +87,8 @@ class MapUiSystem(private val game: DragonTilesGame,
 
     fun hideMap() {
         world.fetch(allOf(MapNodeComponent::class)).forEach { world.delete(it) }
+        table.remove()
+        showing = false
     }
 
     @Subscribe
@@ -105,9 +108,6 @@ class MapUiSystem(private val game: DragonTilesGame,
                 }
             }
         }
-    }
-
-    override fun processSystem() {
     }
 
 }

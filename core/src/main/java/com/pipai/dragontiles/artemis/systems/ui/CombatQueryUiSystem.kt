@@ -45,6 +45,7 @@ class CombatQueryUiSystem(private val game: DragonTilesGame, private val runData
     private val sTileId by system<TileIdSystem>()
     private val sCombat by system<CombatControllerSystem>()
     private val sToolTip by system<TooltipSystem>()
+    private val sMap by system<MapUiSystem>()
 
     private val tilePrevXy: MutableMap<Int, Vector2> = mutableMapOf()
     private val selectedTiles: MutableList<Int> = mutableListOf()
@@ -191,13 +192,8 @@ class CombatQueryUiSystem(private val game: DragonTilesGame, private val runData
             val spellCard = SpellCard(game, spell, null, game.skin, sCombat.controller.api, sToolTip)
             spellCard.addClickCallback { _, _ ->
                 runData.hero.spells.add(spell)
-                runData.dungeon.currentFloor += 1
-                val encounter = when {
-                    runData.dungeon.currentFloor <= 3 -> runData.dungeon.easyEncounter(runData)
-                    runData.dungeon.currentFloor <= 9 -> runData.dungeon.standardEncounter(runData)
-                    else -> runData.dungeon.bossEncounter(runData)
-                }
-                game.screen = CombatScreen(game, runData, encounter)
+                sMap.showMap()
+                rewardsTable.remove()
             }
             rewardsTable.add(spellCard)
         }

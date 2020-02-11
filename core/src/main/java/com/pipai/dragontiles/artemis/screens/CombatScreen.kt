@@ -51,6 +51,7 @@ class CombatScreen(game: DragonTilesGame, runData: RunData, encounter: Encounter
                         MouseXySystem(game.gameConfig),
                         AttackCircleSystem(),
                         AttackCircleHoverSystem(game.gameStrings),
+                        TooltipSystem(game, stage),
 
                         InputProcessingSystem(),
                         HoverableSystem(game.gameConfig),
@@ -60,8 +61,9 @@ class CombatScreen(game: DragonTilesGame, runData: RunData, encounter: Encounter
                         FullScreenColorRenderingSystem(game))
                 .with(-2,
                         CombatRenderingSystem(game),
-                        CombatQueryUiSystem(game, runData),
-                        TooltipSystem(game, stage))
+                        CombatQueryUiSystem(game, runData))
+                .with(-3,
+                        MapUiSystem(game, stage, runData))
                 .build()
 
         world = World(config)

@@ -78,6 +78,7 @@ class CombatUiSystem(private val game: DragonTilesGame,
     private val sTooltip by system<TooltipSystem>()
     private val sAnimation by system<CombatAnimationSystem>()
     private val sEvent by system<EventSystem>()
+    private val sMap by system<MapUiSystem>()
 
     override fun initialize() {
         rootTable.setFillParent(true)
@@ -195,6 +196,13 @@ class CombatUiSystem(private val game: DragonTilesGame,
                     }
                     else -> {
                     }
+                }
+            }
+            Keys.M -> {
+                if (sMap.showing) {
+                    sMap.hideMap()
+                } else {
+                    sMap.showMap()
                 }
             }
         }
