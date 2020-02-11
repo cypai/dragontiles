@@ -17,6 +17,7 @@ class TopRowUiSystem(game: DragonTilesGame,
     private val rootTable = Table()
     private val topRow = Table()
     private val hpLabel = Label("${runData.hero.hp}/${runData.hero.hpMax}", skin)
+    private val goldLabel = Label("Gold: ${runData.hero.gold}", skin)
 
     override fun initialize() {
         rootTable.setFillParent(true)
@@ -28,6 +29,8 @@ class TopRowUiSystem(game: DragonTilesGame,
                 .left()
                 .top()
         topRow.add(hpLabel)
+                .width(160f)
+        topRow.add(goldLabel)
                 .width(120f)
         topRow.add()
                 .expand()
