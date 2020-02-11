@@ -50,7 +50,7 @@ class HeroSpells {
             rarityRoll < 6 -> uncommons
             else -> commons
         }
-        return rewardSpells.shuffled().subList(0, amount).map { it.newClone(rngUpgrade(rng)) }
+        return rewardSpells.shuffled().subList(0, amount - 1).map { it.newClone(rngUpgrade(rng)) }
     }
 
     private fun rngUpgrade(rng: Random) = rng.nextInt(100) < 10
