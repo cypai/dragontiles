@@ -72,6 +72,11 @@ class CombatController(private val runData: RunData,
         combat.enemyAttacks.keys.toList().forEach {
             api.countdownAttackTick(it)
         }
+        combat.heroStatus.decrementAll()
+        combat.enemyStatus.values.forEach { it.decrementAll() }
+        eventBus.dispatch(StatusAdjustedEvent(
+                combat.heroStatus.pairs(),
+                combat.enemyStatus.mapValues { it.value.pairs() }))
         combat.spells.forEach {
             it.turnReset()
         }

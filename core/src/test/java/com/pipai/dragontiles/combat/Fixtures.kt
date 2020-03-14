@@ -10,6 +10,6 @@ import java.util.*
 fun runDataFixture(spells: MutableList<Spell>, relics: MutableList<Relic>): RunData {
     return RunData(
             Random(),
-            Hero("Elementalist", 80, 80, 15, spells, relics),
+            Hero("Elementalist", 80, 80, 15, spells, relics, 0),
             PlainsDungeon())
 }

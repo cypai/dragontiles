@@ -39,7 +39,7 @@ class CombatRenderingSystem(private val game: DragonTilesGame) : BaseSystem() {
                     val cXy = mXy.get(it)
                     game.smallFont.draw(batch,
                             "${game.gameStrings.nameDescLocalization(cEnemy.strId).name}   ${cEnemy.hp}/${cEnemy.hpMax}",
-                            cXy.x, cXy.y - 4f)
+                            cXy.x, cXy.y - 24f)
                 }
         world.fetch(allOf(XYComponent::class, TargetHighlightComponent::class))
                 .forEach {

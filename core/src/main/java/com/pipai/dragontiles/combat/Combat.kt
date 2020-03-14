@@ -27,13 +27,13 @@ data class Combat(val enemies: List<Enemy>) {
     val enemyStatus: MutableMap<Int, StatusData> = mutableMapOf()
 }
 
-enum class Status(val strId: String, val decreasing: Boolean, val positive: Boolean) {
-    STRENGTH("base:status:Power", false, false),
-    DEFENSE("base:status:Defense", false, false),
-    FIRE_BREAK("base:status:FireBreak", true, true),
-    ICE_BREAK("base:status:IceBreak", true, true),
-    LIGHTNING_BREAK("base:status:LightningBreak", true, true),
-    NONELEMENTAL_BREAK("base:status:NonElementalBreak", true, true)
+enum class Status(val strId: String, val decreasing: Boolean) {
+    STRENGTH("base:status:Power", false),
+    DEFENSE("base:status:Defense", false),
+    FIRE_BREAK("base:status:FireBreak", true),
+    ICE_BREAK("base:status:IceBreak", true),
+    LIGHTNING_BREAK("base:status:LightningBreak", true),
+    NONELEMENTAL_BREAK("base:status:NonElementalBreak", true)
 }
 
 data class StatusData(val data: MutableMap<Status, Int> = mutableMapOf()) {
@@ -54,8 +54,12 @@ data class StatusData(val data: MutableMap<Status, Int> = mutableMapOf()) {
         return data[status] ?: 0 > 0
     }
 
+    fun pairs(): List<Pair<Status, Int>> {
+        return data.entries.map { it.toPair() }
+    }
+
     fun increment(status: Status, amount: Int) {
-        data[status] = data[status] ?: 0 + amount
+        data[status] = (data[status] ?: 0) + amount
     }
 
     fun decrementAll() {

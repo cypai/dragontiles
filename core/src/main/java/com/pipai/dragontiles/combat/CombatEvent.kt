@@ -85,3 +85,6 @@ data class QueryTileOptionsEvent(val text: String,
                                  val minAmount: Int,
                                  val maxAmount: Int,
                                  val continuation: Continuation<List<Tile>>) : CombatEvent
+
+data class StatusAdjustedEvent(val heroStatus: List<Pair<Status, Int>>,
+                               val enemyStatus: Map<Int, List<Pair<Status, Int>>>) : CombatEvent

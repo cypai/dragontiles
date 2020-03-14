@@ -9,7 +9,7 @@ import org.junit.Test
 
 class BreakTest : CombatBackendTest(QueryHandler()) {
     @Test
-    fun testRampStrike() {
+    fun testBreak() {
         val flameTurtle = FlameTurtle()
         val runData = runDataFixture(mutableListOf(Invoke(false)), mutableListOf())
         val combat = Combat(mutableListOf(flameTurtle))
@@ -23,5 +23,11 @@ class BreakTest : CombatBackendTest(QueryHandler()) {
         controller.api.changeEnemyStatusIncrement(flameTurtle.id, Status.FIRE_BREAK, 1)
 
         Assert.assertEquals(2, controller.api.calculateAttackDamage(flameTurtle, Element.FIRE, 1))
+
+        Assert.assertEquals(1, combat.enemyStatus[flameTurtle.id]!![Status.FIRE_BREAK])
+
+        runBlocking { controller.endTurn() }
+
+        Assert.assertEquals(0, controller.api.combat.enemyStatus[flameTurtle.id]!![Status.FIRE_BREAK])
     }
 }
