@@ -61,9 +61,7 @@ class CombatController(private val runData: RunData,
         if (combat.turnNumber > 1) {
             api.queryOpenPoolDraw()
         }
-        if (runData.hero.handSize > combat.hand.size) {
-            api.draw(runData.hero.handSize - combat.hand.size - combat.assigned.values.map { it.size }.sum())
-        }
+        api.draw(runData.hero.handSize - combat.hand.size - combat.assigned.values.map { it.size }.sum())
         eventBus.dispatch(TurnStartEvent(combat.turnNumber))
     }
 
