@@ -4,6 +4,7 @@ import com.badlogic.gdx.math.MathUtils.ceil
 import com.pipai.dragontiles.data.Element
 import com.pipai.dragontiles.data.Tile
 import com.pipai.dragontiles.data.TileInstance
+import com.pipai.dragontiles.dungeon.GlobalApi
 import com.pipai.dragontiles.dungeon.RunData
 import com.pipai.dragontiles.enemies.Enemy
 import com.pipai.dragontiles.spells.Rune
@@ -12,7 +13,7 @@ import kotlin.coroutines.suspendCoroutine
 
 class CombatApi(val runData: RunData,
                 val combat: Combat,
-                private val eventBus: SuspendableEventBus) {
+                private val eventBus: SuspendableEventBus) : GlobalApi(runData) {
 
     private var nextId = 0
 

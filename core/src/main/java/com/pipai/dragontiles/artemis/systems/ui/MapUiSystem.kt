@@ -10,9 +10,11 @@ import com.pipai.dragontiles.DragonTilesGame
 import com.pipai.dragontiles.artemis.components.*
 import com.pipai.dragontiles.artemis.events.MapNodeClickEvent
 import com.pipai.dragontiles.artemis.screens.CombatScreen
+import com.pipai.dragontiles.artemis.screens.EventScreen
 import com.pipai.dragontiles.artemis.systems.NoProcessingSystem
 import com.pipai.dragontiles.dungeon.MapNodeType
 import com.pipai.dragontiles.dungeon.RunData
+import com.pipai.dragontiles.dungeonevents.DragonInquiryEvent
 import com.pipai.dragontiles.utils.allOf
 import com.pipai.dragontiles.utils.fetch
 import com.pipai.dragontiles.utils.mapper
@@ -104,6 +106,9 @@ class MapUiSystem(private val game: DragonTilesGame,
             when (map[ev.floorNum][ev.index].type) {
                 MapNodeType.COMBAT -> {
                     game.screen = CombatScreen(game, runData, runData.dungeon.easyEncounter(runData))
+                }
+                MapNodeType.EVENT -> {
+                    game.screen = EventScreen(game, runData, DragonInquiryEvent())
                 }
                 else -> {
                     game.screen = CombatScreen(game, runData, runData.dungeon.easyEncounter(runData))

@@ -20,3 +20,12 @@ interface EventOption {
     val id: String
     fun onSelect(api: EventApi)
 }
+
+class FinishEventOption : EventOption {
+    override val id = "next"
+
+    override fun onSelect(api: EventApi) {
+        api.allowMapAdvance()
+        api.showMap()
+    }
+}
