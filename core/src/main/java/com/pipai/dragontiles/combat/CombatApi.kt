@@ -9,7 +9,6 @@ import com.pipai.dragontiles.dungeon.RunData
 import com.pipai.dragontiles.enemies.Enemy
 import com.pipai.dragontiles.spells.Rune
 import com.pipai.dragontiles.spells.StandardSpell
-import com.pipai.dragontiles.utils.getLogger
 import kotlinx.coroutines.runBlocking
 import kotlin.coroutines.suspendCoroutine
 
@@ -138,6 +137,7 @@ class CombatApi(val runData: RunData,
         if (combat.openPool.size > 9) {
             removeFromOpenPool(combat.openPool.slice(0 until combat.openPool.size - 9))
         }
+        sortHand()
     }
 
     suspend fun removeFromOpenPool(tiles: List<TileInstance>) {
