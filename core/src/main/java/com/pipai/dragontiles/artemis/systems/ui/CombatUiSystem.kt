@@ -124,6 +124,7 @@ class CombatUiSystem(private val game: DragonTilesGame,
         return when (stateMachine.currentState) {
             CombatUiState.COMPONENT_SELECTION -> {
                 stateMachine.changeState(CombatUiState.ROOT)
+                readjustHand()
                 true
             }
             CombatUiState.TARGET_SELECTION -> {
@@ -523,7 +524,6 @@ class CombatUiSystem(private val game: DragonTilesGame,
                     }
                 }
                 uiSystem.givenComponents.clear()
-                uiSystem.readjustHand()
             }
         },
         COMPONENT_SELECTION() {

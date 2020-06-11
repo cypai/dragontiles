@@ -1,6 +1,7 @@
 package com.pipai.dragontiles.dungeonevents
 
 import com.pipai.dragontiles.spells.common.DragonRage
+import com.pipai.dragontiles.spells.common.DragonScale
 
 class DragonInquiryEvent : DungeonEvent() {
 
@@ -25,6 +26,7 @@ class DragonInquiryEvent : DungeonEvent() {
         override val id = "wisdom"
 
         override fun onSelect(api: EventApi) {
+            api.addSpellToDeck(DragonScale(false))
             api.changeToEventEnd("wisdomMain")
         }
     }

@@ -20,7 +20,7 @@ class Nudge(upgraded: Boolean) : StandardSpell(upgraded) {
 
     override suspend fun handleComponents(api: CombatApi) {
         val tile = components().first()
-        api.transformTile(tile, predecessor(tile.tile))
+        api.transformTile(tile, predecessor(tile.tile), true)
     }
 
     override fun newClone(upgraded: Boolean): Nudge {

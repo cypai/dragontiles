@@ -13,7 +13,6 @@ class SuspendableEventBus(private val eventSystem: EventSystem) {
 
     private val subscriptions: MutableMap<KClass<*>, PriorityQueue<Subscription>> = mutableMapOf()
     private lateinit var api: CombatApi
-    private val dispatchQueue: MutableList<CombatEvent> = mutableListOf()
 
     fun init(api: CombatApi) {
         this.api = api
@@ -39,11 +38,7 @@ class SuspendableEventBus(private val eventSystem: EventSystem) {
     suspend fun dispatch(ev: CombatEvent) {
         logger.info("Dispatch $ev")
         eventSystem.dispatch(ev)
-        subscriptions[ev::class]?.forEach { it.func.callSuspend(it.obj, ev, api) }
-    }
-
-    fun syncDispatch(ev: CombatEvent) {
-        eventSystem.dispatch(ev)
+        subscriptions[ev::class]?.forEach { logger.debug("$it");it.func.callSuspend(it.obj, ev, api) }
     }
 
     private data class Subscription(val priority: Int, val obj: Any, val func: KFunction<*>)

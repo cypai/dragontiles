@@ -20,7 +20,7 @@ class Bump(upgraded: Boolean) : StandardSpell(upgraded) {
 
     override suspend fun handleComponents(api: CombatApi) {
         val tile = components().first()
-        api.transformTile(tile, successor(tile.tile))
+        api.transformTile(tile, successor(tile.tile), true)
     }
 
     override fun newClone(upgraded: Boolean): Bump {

@@ -5,10 +5,13 @@ import com.pipai.dragontiles.DragonTilesGame
 import com.pipai.dragontiles.artemis.systems.combat.CombatControllerSystem
 import com.pipai.dragontiles.artemis.systems.ui.CombatUiSystem
 import com.pipai.dragontiles.combat.*
+import com.pipai.dragontiles.utils.getLogger
 import com.pipai.dragontiles.utils.system
 import net.mostlyoriginal.api.event.common.Subscribe
 
 class CombatAnimationSystem(private val game: DragonTilesGame) : BaseSystem(), AnimationObserver {
+
+    private val logger = getLogger()
 
     var pauseUiMode = false
     private var animating = false
@@ -25,11 +28,13 @@ class CombatAnimationSystem(private val game: DragonTilesGame) : BaseSystem(), A
                 sUi.disable()
             }
             val animation = animationQueue.first()
+            logger.debug("Start animation: $animation")
             animation.startAnimation()
         }
     }
 
     private fun queueAnimation(animation: Animation) {
+        logger.debug("Received animation queue: $animation")
         animation.init(world, game)
         animation.initObserver(this)
         animationQueue.add(animation)
@@ -154,7 +159,7 @@ class CombatAnimationSystem(private val game: DragonTilesGame) : BaseSystem(), A
 
     @Subscribe
     fun handleTransformation(ev: TileTransformedEvent) {
-        queueAnimation(TileTransformAnimation(ev.tile, game.tileSkin))
+        queueAnimation(TileTransformAnimation(ev, game.tileSkin))
     }
 
     @Subscribe

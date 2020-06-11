@@ -35,6 +35,9 @@ enum class Status(val strId: String, val decreasing: Boolean) {
     LIGHTNING_BREAK("base:status:LightningBreak", true),
     NONELEMENTAL_BREAK("base:status:NonElementalBreak", true),
     DRAGON_RAGE("base:status:DragonRage", false),
+    FIRE_DRAGON_SCALE("base:status:FireDragonScale", false),
+    ICE_DRAGON_SCALE("base:status:IceDragonScale", false),
+    LIGHTNING_DRAGON_SCALE("base:status:LightningDragonScale", false),
 }
 
 data class StatusData(val data: MutableMap<Status, Int> = mutableMapOf()) {
@@ -49,6 +52,10 @@ data class StatusData(val data: MutableMap<Status, Int> = mutableMapOf()) {
 
     fun clear() {
         data.clear()
+    }
+
+    fun remove(status: Status): Int? {
+        return data.remove(status)
     }
 
     fun has(status: Status): Boolean {

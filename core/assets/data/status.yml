@@ -32,3 +32,18 @@ base:status:DragonRage:
   en:
     name: Dragon Rage
     description: Gain Strength each time a Sequence is played.
+
+base:status:FireDragonScale:
+  en:
+    name: Fire Dragon Scale
+    description: Transforms all drawn Elemental tiles to Fire.
+
+base:status:IceDragonScale:
+  en:
+    name: Ice Dragon Scale
+    description: Transforms all drawn Elemental tiles to Ice.
+
+base:status:LightningDragonScale:
+  en:
+    name: Lightning Dragon Scale
+    description: Transforms all drawn Elemental tiles to Lightning.

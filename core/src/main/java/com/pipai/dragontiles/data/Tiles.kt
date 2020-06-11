@@ -41,7 +41,7 @@ val lightningTiles = (1..9).map { Tile.ElementalTile(Suit.LIGHTNING, it) }
 val starTiles = StarType.values().map { Tile.StarTile(it) }
 val lifeTiles = LifeType.values().map { Tile.LifeTile(it) }
 
-data class TileInstance(var tile: Tile, val id: Int)
+data class TileInstance(val tile: Tile, val id: Int)
 
 fun successor(tile: Tile): Tile {
     return when (tile) {

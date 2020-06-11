@@ -16,6 +16,13 @@ class Transmuter : Relic() {
     }
 
     @CombatSubscribe
+    fun handleTransform(ev: TileTransformedEvent, api: CombatApi) {
+        if (firstDraw?.id == ev.previous.id) {
+            firstDraw = ev.tile
+        }
+    }
+
+    @CombatSubscribe(1)
     suspend fun onTurnStart(ev: TurnStartEvent, api: CombatApi) {
         val options = when (firstDraw?.tile?.suit) {
             Suit.FIRE -> fireTiles
@@ -25,9 +32,8 @@ class Transmuter : Relic() {
         }
         if (options != null) {
             val target = api.queryTransform(firstDraw!!, options)
-            api.transformTile(firstDraw!!, target)
+            api.transformTile(firstDraw!!, target, true)
         }
-
     }
 
     @CombatSubscribe

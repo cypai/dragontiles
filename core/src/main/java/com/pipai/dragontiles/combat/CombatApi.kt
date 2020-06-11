@@ -9,6 +9,8 @@ import com.pipai.dragontiles.dungeon.RunData
 import com.pipai.dragontiles.enemies.Enemy
 import com.pipai.dragontiles.spells.Rune
 import com.pipai.dragontiles.spells.StandardSpell
+import com.pipai.dragontiles.utils.getLogger
+import kotlinx.coroutines.runBlocking
 import kotlin.coroutines.suspendCoroutine
 
 class CombatApi(val runData: RunData,
@@ -24,6 +26,11 @@ class CombatApi(val runData: RunData,
 
     fun register(o: Any) {
         eventBus.register(o)
+    }
+
+    suspend fun exhaust(spell: StandardSpell) {
+        spell.exhausted = true
+        eventBus.dispatch(SpellExhaustedEvent(spell))
     }
 
     fun numTilesInHand(): Int {
@@ -87,11 +94,15 @@ class CombatApi(val runData: RunData,
         sortHand()
     }
 
-    suspend fun transformTile(tileInstance: TileInstance, tile: Tile) {
-        val previous = tileInstance.tile
-        tileInstance.tile = tile
-        eventBus.dispatch(TileTransformedEvent(tileInstance, previous))
-        sortHand()
+    suspend fun transformTile(tileInstance: TileInstance, tile: Tile, sortHand: Boolean) {
+        val newTile = TileInstance(tile, nextId())
+        val index = combat.hand.indexOf(tileInstance)
+        combat.hand.removeAt(index)
+        combat.hand.add(index, newTile)
+        eventBus.dispatch(TileTransformedEvent(newTile, tileInstance))
+        if (sortHand) {
+            sortHand()
+        }
     }
 
     suspend fun destroyTile(tileInstance: TileInstance) {
@@ -333,7 +344,13 @@ class CombatApi(val runData: RunData,
         combat.heroStatus.increment(status, increment)
     }
 
+    fun hasStatus(status: Status) = combat.heroStatus[status] > 0
+
     fun fetchStatus(status: Status) = combat.heroStatus[status]
+
+    fun removeStatus(status: Status): Int? {
+        return combat.heroStatus.remove(status)
+    }
 
     fun changeEnemyStatus(id: Int, status: Status, amount: Int) {
         combat.enemyStatus[id]!![status] = amount
@@ -350,7 +367,9 @@ class CombatApi(val runData: RunData,
             listOf()
         } else {
             suspendCoroutine {
-                eventBus.syncDispatch(QueryTilesEvent(text, tiles, minAmount, maxAmount, it))
+                runBlocking {
+                    eventBus.dispatch(QueryTilesEvent(text, tiles, minAmount, maxAmount, it))
+                }
             }
         }
     }
@@ -374,7 +393,9 @@ class CombatApi(val runData: RunData,
             listOf()
         } else {
             suspendCoroutine {
-                eventBus.syncDispatch(QueryTileOptionsEvent(text, displayTile, options, minAmount, maxAmount, it))
+                runBlocking {
+                    eventBus.dispatch(QueryTileOptionsEvent(text, displayTile, options, minAmount, maxAmount, it))
+                }
             }
         }
     }

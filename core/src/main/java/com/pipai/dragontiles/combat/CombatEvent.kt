@@ -19,7 +19,7 @@ data class DrawEvent(val tiles: List<Pair<TileInstance, Int>>) : CombatEvent
 
 data class DrawDiscardedEvent(val tiles: List<TileInstance>) : CombatEvent
 
-data class TileTransformedEvent(val tile: TileInstance, val previous: Tile) : CombatEvent
+data class TileTransformedEvent(val tile: TileInstance, val previous: TileInstance) : CombatEvent
 
 data class TileDestroyedEvent(val tile: TileInstance) : CombatEvent
 
@@ -70,6 +70,8 @@ data class SpellCastedEvent(val spell: StandardSpell) : CombatEvent
 data class RuneActivatedEvent(val rune: Rune) : CombatEvent
 
 data class RuneDeactivatedEvent(val rune: Rune) : CombatEvent
+
+data class SpellExhaustedEvent(val spell: StandardSpell) : CombatEvent
 
 class GameOverEvent : CombatEvent
 
