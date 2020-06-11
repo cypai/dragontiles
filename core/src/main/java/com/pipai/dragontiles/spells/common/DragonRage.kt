@@ -15,22 +15,26 @@ class DragonRage(upgraded: Boolean) : StandardSpell(upgraded) {
 
     override var repeatableMax: Int = 1
 
+    companion object {
+        val DRAGON_RAGE = Status("base:status:DragonRage", false)
+    }
+
     override fun newClone(upgraded: Boolean): DragonRage {
         return DragonRage(upgraded)
     }
 
     override suspend fun onCast(params: CastParams, api: CombatApi) {
-        if (api.fetchStatus(Status.DRAGON_RAGE) == 0) {
+        if (api.fetchStatus(DRAGON_RAGE) == 0) {
             api.register(DragonRageImpl())
         }
-        api.changeStatusIncrement(Status.DRAGON_RAGE, if (upgraded) 3 else 2)
+        api.changeStatusIncrement(DRAGON_RAGE, if (upgraded) 3 else 2)
     }
 
     class DragonRageImpl {
         @CombatSubscribe
         fun onSpellCast(ev: SpellCastedEvent, api: CombatApi) {
             if (ev.spell.requirement.type == SetType.SEQUENTIAL) {
-                val amount = api.fetchStatus(Status.DRAGON_RAGE)
+                val amount = api.fetchStatus(DRAGON_RAGE)
                 api.changeStatusIncrement(Status.STRENGTH, amount)
             }
         }

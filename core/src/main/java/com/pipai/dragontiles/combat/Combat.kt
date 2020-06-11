@@ -27,17 +27,15 @@ data class Combat(val enemies: List<Enemy>) {
     val enemyStatus: MutableMap<Int, StatusData> = mutableMapOf()
 }
 
-enum class Status(val strId: String, val decreasing: Boolean) {
-    STRENGTH("base:status:Power", false),
-    DEFENSE("base:status:Defense", false),
-    FIRE_BREAK("base:status:FireBreak", true),
-    ICE_BREAK("base:status:IceBreak", true),
-    LIGHTNING_BREAK("base:status:LightningBreak", true),
-    NONELEMENTAL_BREAK("base:status:NonElementalBreak", true),
-    DRAGON_RAGE("base:status:DragonRage", false),
-    FIRE_DRAGON_SCALE("base:status:FireDragonScale", false),
-    ICE_DRAGON_SCALE("base:status:IceDragonScale", false),
-    LIGHTNING_DRAGON_SCALE("base:status:LightningDragonScale", false),
+data class Status(val strId: String, val decreasing: Boolean) {
+    companion object {
+        val STRENGTH = Status("base:status:Power", false)
+        val DEFENSE = Status("base:status:Defense", false)
+        val FIRE_BREAK = Status("base:status:FireBreak", true)
+        val ICE_BREAK = Status("base:status:IceBreak", true)
+        val LIGHTNING_BREAK = Status("base:status:LightningBreak", true)
+        val NONELEMENTAL_BREAK = Status("base:status:NonElementalBreak", true)
+    }
 }
 
 data class StatusData(val data: MutableMap<Status, Int> = mutableMapOf()) {

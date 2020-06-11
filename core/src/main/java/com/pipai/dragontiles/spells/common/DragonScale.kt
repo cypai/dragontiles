@@ -18,6 +18,12 @@ class DragonScale(upgraded: Boolean) : StandardSpell(upgraded) {
 
     override var repeatableMax: Int = 1
 
+    companion object {
+        val FIRE_DRAGON_SCALE = Status("base:status:FireDragonScale", false)
+        val ICE_DRAGON_SCALE = Status("base:status:IceDragonScale", false)
+        val LIGHTNING_DRAGON_SCALE = Status("base:status:LightningDragonScale", false)
+    }
+
     override fun newClone(upgraded: Boolean): DragonScale {
         return DragonScale(upgraded)
     }
@@ -25,13 +31,13 @@ class DragonScale(upgraded: Boolean) : StandardSpell(upgraded) {
     override suspend fun onCast(params: CastParams, api: CombatApi) {
         api.exhaust(this)
         var register = true
-        register = register && api.removeStatus(Status.FIRE_DRAGON_SCALE) == null
-        register = register && api.removeStatus(Status.ICE_DRAGON_SCALE) == null
-        register = register && api.removeStatus(Status.LIGHTNING_DRAGON_SCALE) == null
+        register = register && api.removeStatus(FIRE_DRAGON_SCALE) == null
+        register = register && api.removeStatus(ICE_DRAGON_SCALE) == null
+        register = register && api.removeStatus(LIGHTNING_DRAGON_SCALE) == null
         when (elemental(components())) {
-            Element.FIRE -> api.changeStatusIncrement(Status.FIRE_DRAGON_SCALE, 1)
-            Element.ICE -> api.changeStatusIncrement(Status.ICE_DRAGON_SCALE, 1)
-            Element.LIGHTNING -> api.changeStatusIncrement(Status.LIGHTNING_DRAGON_SCALE, 1)
+            Element.FIRE -> api.changeStatusIncrement(FIRE_DRAGON_SCALE, 1)
+            Element.ICE -> api.changeStatusIncrement(ICE_DRAGON_SCALE, 1)
+            Element.LIGHTNING -> api.changeStatusIncrement(LIGHTNING_DRAGON_SCALE, 1)
             else -> {
             }
         }
@@ -42,9 +48,9 @@ class DragonScale(upgraded: Boolean) : StandardSpell(upgraded) {
         @CombatSubscribe
         suspend fun onDraw(ev: DrawEvent, api: CombatApi) {
             val suit = when {
-                api.hasStatus(Status.FIRE_DRAGON_SCALE) -> Suit.FIRE
-                api.hasStatus(Status.ICE_DRAGON_SCALE) -> Suit.ICE
-                api.hasStatus(Status.LIGHTNING_DRAGON_SCALE) -> Suit.LIGHTNING
+                api.hasStatus(FIRE_DRAGON_SCALE) -> Suit.FIRE
+                api.hasStatus(ICE_DRAGON_SCALE) -> Suit.ICE
+                api.hasStatus(LIGHTNING_DRAGON_SCALE) -> Suit.LIGHTNING
                 else -> return
             }
             ev.tiles.map { it.first }
