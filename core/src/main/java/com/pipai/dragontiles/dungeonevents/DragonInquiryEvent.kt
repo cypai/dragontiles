@@ -1,5 +1,7 @@
 package com.pipai.dragontiles.dungeonevents
 
+import com.pipai.dragontiles.spells.common.DragonRage
+
 class DragonInquiryEvent : DungeonEvent() {
 
     override val id = "base:events:DragonInquiry"
@@ -14,6 +16,7 @@ class DragonInquiryEvent : DungeonEvent() {
         override val id = "power"
 
         override fun onSelect(api: EventApi) {
+            api.addSpellToDeck(DragonRage(false))
             api.changeToEventEnd("powerMain")
         }
     }

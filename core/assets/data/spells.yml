@@ -187,8 +187,8 @@ base:spells:AllForOne:
 base:spells:DragonRage:
   en:
     name: Dragon Rage
-    description: "@Power: Gain 2 Strength for every Sequence you play."
-    upgradeDescription: "@Power: Gain 3 Strength for every Sequence you play."
+    description: "@Power: Gain 2 Strength each time you play a Sequence."
+    upgradeDescription: "@Power: Gain 3 Strength each time you play a Sequence."
 
 base:spells:DragonScale:
   en:

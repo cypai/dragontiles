@@ -45,7 +45,7 @@ class HeroSpells {
         val rares = spells.filter { it.rarity == Rarity.RARE }
         val rng = runData.rng
         val rarityRoll = rng.nextInt(20)
-        val rewardSpells = when  {
+        val rewardSpells = when {
             rarityRoll == 0 -> rares
             rarityRoll < 6 -> uncommons
             else -> commons

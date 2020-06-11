@@ -33,7 +33,8 @@ enum class Status(val strId: String, val decreasing: Boolean) {
     FIRE_BREAK("base:status:FireBreak", true),
     ICE_BREAK("base:status:IceBreak", true),
     LIGHTNING_BREAK("base:status:LightningBreak", true),
-    NONELEMENTAL_BREAK("base:status:NonElementalBreak", true)
+    NONELEMENTAL_BREAK("base:status:NonElementalBreak", true),
+    DRAGON_RAGE("base:status:DragonRage", false),
 }
 
 data class StatusData(val data: MutableMap<Status, Int> = mutableMapOf()) {

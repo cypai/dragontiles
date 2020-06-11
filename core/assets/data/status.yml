@@ -27,3 +27,8 @@ base:status:NonElementalBreak:
   en:
     name: Non-Elemental Break
     description: Takes 50% more damage when attacked with no element.
+
+base:status:DragonRage:
+  en:
+    name: Dragon Rage
+    description: Gain Strength each time a Sequence is played.

@@ -22,6 +22,10 @@ class CombatApi(val runData: RunData,
         return nextId
     }
 
+    fun register(o: Any) {
+        eventBus.register(o)
+    }
+
     fun numTilesInHand(): Int {
         return combat.hand.size + combat.assigned.values.map { it.size }.sum()
     }
@@ -328,6 +332,8 @@ class CombatApi(val runData: RunData,
     fun changeStatusIncrement(status: Status, increment: Int) {
         combat.heroStatus.increment(status, increment)
     }
+
+    fun fetchStatus(status: Status) = combat.heroStatus[status]
 
     fun changeEnemyStatus(id: Int, status: Status, amount: Int) {
         combat.enemyStatus[id]!![status] = amount
