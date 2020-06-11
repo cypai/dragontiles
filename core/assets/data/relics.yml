@@ -1,7 +1,7 @@
 base:relics:Transmuter:
   en:
     name: Transmuter
-    description: Transform the number of the first Elemental Tile you draw per turn.
+    description: Transform the number of the first Elemental Tile you draw at turn start.
 
 base:relics:LeatherArmor:
   en:
