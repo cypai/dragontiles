@@ -157,7 +157,9 @@ class CombatQueryUiSystem(private val game: DragonTilesGame, private val runData
                     if (event.entityId in selectedTiles) {
                         moveTileBack(event.entityId)
                     } else {
-                        moveTileToSelected(event.entityId)
+                        if (selectedTiles.size < queryTilesEvent!!.maxAmount) {
+                            moveTileToSelected(event.entityId)
+                        }
                     }
                 }
             }
