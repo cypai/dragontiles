@@ -24,5 +24,5 @@ class ExitInputProcessor : InputProcessor {
 
     override fun mouseMoved(screenX: Int, screenY: Int) = false
 
-    override fun scrolled(amount: Int) = false
+    override fun scrolled(amountX: Float, amountY: Float) = false
 }

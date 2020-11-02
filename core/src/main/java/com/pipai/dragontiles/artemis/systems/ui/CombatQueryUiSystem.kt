@@ -237,7 +237,7 @@ class CombatQueryUiSystem(private val game: DragonTilesGame, private val runData
 
     override fun mouseMoved(screenX: Int, screenY: Int) = false
 
-    override fun scrolled(p0: Int) = false
+    override fun scrolled(amountX: Float, amountY: Float) = false
 
     enum class CombatQueryUiState : State<CombatQueryUiSystem> {
         QUERY_TILES {

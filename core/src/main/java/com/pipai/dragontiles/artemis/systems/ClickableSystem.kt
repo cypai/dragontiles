@@ -53,5 +53,5 @@ class ClickableSystem(private val config: GameConfig) : NoProcessingSystem(), In
 
     override fun mouseMoved(screenX: Int, screenY: Int) = false
 
-    override fun scrolled(amount: Int) = false
+    override fun scrolled(amountX: Float, amountY: Float) = false
 }

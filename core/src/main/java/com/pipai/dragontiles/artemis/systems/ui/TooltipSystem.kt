@@ -114,5 +114,5 @@ class TooltipSystem(game: DragonTilesGame, var stage: Stage) : NoProcessingSyste
         return false
     }
 
-    override fun scrolled(amount: Int) = false
+    override fun scrolled(amountX: Float, amountY: Float) = false
 }

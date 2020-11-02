@@ -37,5 +37,5 @@ class MouseXySystem(private val config: GameConfig) : IteratingSystem(allOf()), 
         return false
     }
 
-    override fun scrolled(amount: Int) = false
+    override fun scrolled(amountX: Float, amountY: Float) = false
 }
