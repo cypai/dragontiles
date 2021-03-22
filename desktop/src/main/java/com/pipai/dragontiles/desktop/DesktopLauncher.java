@@ -1,10 +1,10 @@
 package com.pipai.dragontiles.desktop;
 
-import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
-import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
+import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
+import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.badlogic.gdx.files.FileHandle;
-import com.pipai.dragontiles.GameConfig;
 import com.pipai.dragontiles.DragonTilesGame;
+import com.pipai.dragontiles.GameConfig;
 
 import java.io.File;
 
@@ -18,9 +18,8 @@ public final class DesktopLauncher {
         GameConfig gameConfig = new GameConfig(new FileHandle(new File("config/config.properties")));
         gameConfig.writeToFile();
 
-        LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-        config.width = gameConfig.getResolution().getWidth();
-        config.height = gameConfig.getResolution().getHeight();
-        new LwjglApplication(new DragonTilesGame(gameConfig), config);
+        Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
+        config.setWindowedMode(gameConfig.getResolution().getWidth(), gameConfig.getResolution().getHeight());
+        new Lwjgl3Application(new DragonTilesGame(gameConfig), config);
     }
 }
