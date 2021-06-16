@@ -1,6 +1,7 @@
 package com.pipai.dragontiles.enemies
 
-import com.pipai.dragontiles.combat.CombatApi
+import com.pipai.dragontiles.combat.*
+import com.pipai.dragontiles.data.Element
 
 class Slime : Enemy() {
 
@@ -16,7 +17,14 @@ class Slime : Enemy() {
         attacks = api.runData.rng.nextInt(2) - 1
     }
 
-    override suspend fun runTurn(api: CombatApi) {
+    override fun getIntent(): Intent {
+        return when (attacks % 4) {
+            0 -> DebuffIntent(id, Status.ICE_BREAK, 2, null)
+            else -> AttackIntent(id, 8, 1, false, Element.ICE)
+        }
     }
 
+    override fun nextIntent(api: CombatApi) {
+        attacks++
+    }
 }

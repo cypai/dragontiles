@@ -85,3 +85,12 @@ data class StatusAdjustedEvent(
     val heroStatus: List<Pair<Status, Int>>,
     val enemyStatus: Map<Int, List<Pair<Status, Int>>>
 ) : CombatEvent
+
+data class DamageAdjustSubQuery(
+    val damageOrigin: DamageOrigin,
+    val damageTarget: DamageTarget,
+    val attackerStatus: StatusData,
+    val defenderStatus: StatusData,
+    var flat: Int,
+    var scaling: Float
+) : CombatEvent

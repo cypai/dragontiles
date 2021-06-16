@@ -27,7 +27,7 @@ data class Combat(val enemies: List<Enemy>) {
 
 data class Status(val strId: String, val decreasing: Boolean) {
     companion object {
-        val STRENGTH = Status("base:status:Power", false)
+        val STRENGTH = Status("base:status:Strength", false)
         val DEFENSE = Status("base:status:Defense", false)
         val FIRE_BREAK = Status("base:status:FireBreak", true)
         val ICE_BREAK = Status("base:status:IceBreak", true)

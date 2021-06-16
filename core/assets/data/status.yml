@@ -1,7 +1,7 @@
-base:status:Power:
+base:status:Strength:
   en:
-    name: Power
-    description: Spell Attack Power increased by 1 per point of Power.
+    name: Strength
+    description: Deal 1 more damage per point of Strength.
 
 base:status:Defense:
   en:

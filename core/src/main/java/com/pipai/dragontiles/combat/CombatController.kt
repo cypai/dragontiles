@@ -57,9 +57,8 @@ class CombatController(
 
     suspend fun runTurn() {
         combat.turnNumber += 1
-        combat.enemies
-            .filter { it.hp > 0 }
-            .forEach { it.runTurn(api) }
+        // TODO: Add tiles to open discard
+        // TODO: Display intents
         if (combat.turnNumber > 1) {
             api.queryOpenPoolDraw()
         }
@@ -69,6 +68,12 @@ class CombatController(
 
     suspend fun endTurn() {
         eventBus.dispatch(TurnEndEvent(combat.turnNumber))
+        combat.enemies
+            .filter { it.hp > 0 }
+            .forEach { it.getIntent().execute(api) }
+        combat.enemies
+            .filter { it.hp > 0 }
+            .forEach { it.nextIntent(api) }
         combat.heroStatus.decrementAll()
         combat.enemyStatus.values.forEach { it.decrementAll() }
         eventBus.dispatch(

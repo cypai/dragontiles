@@ -1,6 +1,7 @@
 package com.pipai.dragontiles.enemies
 
 import com.pipai.dragontiles.combat.CombatApi
+import com.pipai.dragontiles.combat.Intent
 
 abstract class Enemy {
 
@@ -21,6 +22,7 @@ abstract class Enemy {
     open fun init(api: CombatApi) {
     }
 
-    abstract suspend fun runTurn(api: CombatApi)
+    abstract fun getIntent(): Intent
 
+    abstract fun nextIntent(api: CombatApi)
 }

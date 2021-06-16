@@ -3,6 +3,8 @@ package com.pipai.dragontiles.combat
 import com.pipai.dragontiles.utils.getLogger
 import net.mostlyoriginal.api.event.common.EventSystem
 import java.util.*
+import kotlin.coroutines.Continuation
+import kotlin.coroutines.resume
 import kotlin.reflect.KClass
 import kotlin.reflect.KFunction
 import kotlin.reflect.full.callSuspend
@@ -38,7 +40,13 @@ class SuspendableEventBus(private val eventSystem: EventSystem) {
     suspend fun dispatch(ev: CombatEvent) {
         logger.info("Dispatch $ev")
         eventSystem.dispatch(ev)
-        subscriptions[ev::class]?.forEach { logger.debug("$it");it.func.callSuspend(it.obj, ev, api) }
+        subscriptions[ev::class]?.forEach { it.func.callSuspend(it.obj, ev, api) }
+    }
+
+    suspend fun <T : CombatEvent> dispatchQuery(ev: T, continuation: Continuation<T>) {
+        eventSystem.dispatch(ev)
+        subscriptions[ev::class]?.forEach { it.func.callSuspend(it.obj, ev, api) }
+        continuation.resume(ev)
     }
 
     private data class Subscription(val priority: Int, val obj: Any, val func: KFunction<*>)
