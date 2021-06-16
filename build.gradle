@@ -33,7 +33,6 @@ allprojects {
         junitVersion = '4.12'
 
         checkstyleVersion = '7.6'
-        sevntuCheckstyleVersion = '1.23.1'
     }
 
     repositories {
@@ -41,7 +40,6 @@ allprojects {
         mavenCentral()
         maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
         maven { url "https://oss.sonatype.org/content/repositories/releases/" }
-        maven { url "http://sevntu-checkstyle.github.io/sevntu.checkstyle/maven2/" }
     }
 }
 
@@ -96,9 +94,6 @@ project(":core") {
         testCompile "com.badlogicgames.gdx:gdx-backend-headless:$gdxVersion"
         testCompile "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
         testCompile "org.mockito:mockito-core:$mockitoVersion"
-
-        checkstyle "com.github.sevntu.checkstyle:sevntu-checks:$sevntuCheckstyleVersion"
-        checkstyle "com.github.sevntu.checkstyle:sevntu-checkstyle-maven-plugin:$sevntuCheckstyleVersion"
     }
 }
 
