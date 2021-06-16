@@ -10,6 +10,7 @@ class Slime : Enemy() {
     override val assetName: String = "slime.png"
 
     override val hpMax: Int = 13
+    override val fluxMax: Int = 0
 
     private var attacks: Int = 0
 

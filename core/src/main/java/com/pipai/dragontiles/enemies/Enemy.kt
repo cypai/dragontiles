@@ -10,6 +10,8 @@ abstract class Enemy : Targetable {
 
     abstract val hpMax: Int
     var hp: Int = 0
+    abstract val fluxMax: Int
+    var flux: Int = 0
     override var id: Int = 0
 
     fun preInit(id: Int) {

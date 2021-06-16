@@ -6,6 +6,8 @@ import com.pipai.dragontiles.spells.Spell
 data class Hero(val name: String,
                 var hp: Int,
                 var hpMax: Int,
+                var flux: Int,
+                var fluxMax: Int,
                 val handSize: Int,
                 val spells: MutableList<Spell>,
                 val relics: MutableList<Relic>,

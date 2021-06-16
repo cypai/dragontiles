@@ -41,7 +41,7 @@ class MainMenuUiSystem(private val game: DragonTilesGame,
             override fun clicked(event: InputEvent?, x: Float, y: Float) {
                 val runData = RunData(
                         Random(),
-                        Hero("Elementalist", 80, 80, 17,
+                        Hero("Elementalist", 80, 80, 0,40, 17,
                                 game.heroSpells.elementalistStarterDeck(),
                                 mutableListOf(
                                         Transmuter()),
