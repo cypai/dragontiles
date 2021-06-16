@@ -34,9 +34,11 @@ import net.mostlyoriginal.api.event.common.EventSystem
 import net.mostlyoriginal.api.event.common.Subscribe
 import kotlin.math.min
 
-class CombatUiSystem(private val game: DragonTilesGame,
-                     private val runData: RunData,
-                     private val stage: Stage) : BaseSystem(), InputProcessor {
+class CombatUiSystem(
+    private val game: DragonTilesGame,
+    private val runData: RunData,
+    private val stage: Stage
+) : BaseSystem(), InputProcessor {
 
     private val config = game.gameConfig
     private val skin = game.skin
@@ -57,7 +59,6 @@ class CombatUiSystem(private val game: DragonTilesGame,
     private val mXy by mapper<XYComponent>()
     private val mPath by mapper<PathInterpolationComponent>()
     private val mEnemy by mapper<EnemyComponent>()
-    private val mAttackCircle by mapper<AttackCircleComponent>()
     private val mLine by mapper<AnchoredLineComponent>()
     private val mMouseFollow by mapper<MouseFollowComponent>()
     private val mSprite by mapper<SpriteComponent>()
@@ -302,11 +303,9 @@ class CombatUiSystem(private val game: DragonTilesGame,
         when (spell.targetType) {
             TargetType.SINGLE -> {
                 highlightEnemies()
-                highlightEnemySpells()
             }
             TargetType.AOE -> {
                 highlightEnemies()
-                highlightEnemySpells()
             }
             else -> {
             }
@@ -330,17 +329,6 @@ class CombatUiSystem(private val game: DragonTilesGame,
         }
     }
 
-    private fun highlightEnemySpells() {
-        world.fetch(allOf(AttackCircleComponent::class)).forEach {
-            val cTargetHighlight = mTargetHighlight.create(it)
-            cTargetHighlight.xOffset = -48f
-            cTargetHighlight.width = 160f
-            cTargetHighlight.height = 64f
-            cTargetHighlight.padding = 8f
-            cTargetHighlight.alpha = 0.5f
-        }
-    }
-
     @Subscribe
     fun handleEnemyHoverEnter(ev: EnemyHoverEnterEvent) {
         getSelectedSpellCard()?.let {
@@ -358,29 +346,14 @@ class CombatUiSystem(private val game: DragonTilesGame,
     }
 
     @Subscribe
-    fun handleAttackCircleHoverEnter(ev: AttackCircleHoverEnterEvent) {
-        getSelectedSpellCard()?.let {
-            it.target = sCombat.controller.api.getCountdownAttack(ev.cAttackCircle.id)
-            it.update()
-        }
-    }
-
-    @Subscribe
-    fun handleAttackCircleHoverExit(ev: AttackCircleHoverExitEvent) {
-        getSelectedSpellCard()?.let {
-            it.target = null
-            it.update()
-        }
-    }
-
-    @Subscribe
     fun handleEnemyClick(ev: EnemyClickEvent) {
         if (ev.button == Input.Buttons.LEFT) {
             val spell = getSelectedSpell()
             if (spell is StandardSpell && stateMachine.currentState == CombatUiState.TARGET_SELECTION) {
 
                 if (spell.targetType == TargetType.SINGLE_ENEMY
-                        || spell.targetType == TargetType.SINGLE) {
+                    || spell.targetType == TargetType.SINGLE
+                ) {
 
                     sAnimation.pauseUiMode = true
                     GlobalScope.launch {
@@ -390,38 +363,11 @@ class CombatUiSystem(private val game: DragonTilesGame,
                     sAnimation.pauseUiMode = true
                     GlobalScope.launch {
                         spell.cast(
-                                CastParams(sCombat.combat.enemies
-                                        .filter { it.hp > 0 }
-                                        .map { it.id }
-                                        .toList()),
-                                sCombat.controller.api)
-                    }
-                }
-            }
-        }
-    }
-
-    @Subscribe
-    fun handleAttackCircleClick(ev: AttackCircleClickEvent) {
-        if (ev.button == Input.Buttons.LEFT) {
-            if (stateMachine.currentState == CombatUiState.TARGET_SELECTION) {
-                val spell = getSelectedSpell()
-
-                if (spell is StandardSpell) {
-                    if (spell.targetType == TargetType.SINGLE_ENEMY
-                            || spell.targetType == TargetType.SINGLE) {
-
-                        sAnimation.pauseUiMode = true
-                        GlobalScope.launch {
-                            spell.cast(CastParams(listOf(mAttackCircle.get(ev.entityId).id)), sCombat.controller.api)
-                        }
-                    } else if (spell.targetType == TargetType.AOE) {
-                        sAnimation.pauseUiMode = true
-                        GlobalScope.launch {
-                            spell.cast(
-                                    CastParams(sCombat.combat.enemyAttacks.values.map { it.id }.toList()),
-                                    sCombat.controller.api)
-                        }
+                            CastParams(sCombat.combat.enemies
+                                .filter { it.hp > 0 }
+                                .map { it.id }
+                                .toList()),
+                            sCombat.controller.api)
                     }
                 }
             }
@@ -455,9 +401,10 @@ class CombatUiSystem(private val game: DragonTilesGame,
         spellComponentList.filterOptions(givenComponents)
         val spell = getSelectedSpell()
         if (spell is StandardSpell
-                && spell.targetType != TargetType.NONE
-                && spell.requirement.reqAmount !is ReqAmount.XAmount
-                && spell.requirement.satisfied(givenComponents)) {
+            && spell.targetType != TargetType.NONE
+            && spell.requirement.reqAmount !is ReqAmount.XAmount
+            && spell.requirement.satisfied(givenComponents)
+        ) {
             selectComponents(givenComponents.toList())
         } else {
             readjustHand()
@@ -492,7 +439,11 @@ class CombatUiSystem(private val game: DragonTilesGame,
             CombatUiState.TARGET_SELECTION -> {
                 world.fetch(allOf(EnemyComponent::class, XYComponent::class, SpriteComponent::class)).forEach {
                     val cSprite = mSprite.get(it)
-                    if (cSprite.sprite.boundingRectangle.contains(screenX.toFloat(), config.resolution.height - screenY.toFloat())) {
+                    if (cSprite.sprite.boundingRectangle.contains(
+                            screenX.toFloat(),
+                            config.resolution.height - screenY.toFloat()
+                        )
+                    ) {
                         getSelectedSpellCard()?.target = mEnemy.get(it).enemy
                         updateTarget = true
                     }

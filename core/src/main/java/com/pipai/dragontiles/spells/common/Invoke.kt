@@ -15,7 +15,7 @@ class Invoke(upgraded: Boolean) : StandardSpell(upgraded) {
     override fun baseDamage(): Int = 2
 
     override suspend fun onCast(params: CastParams, api: CombatApi) {
-        val target = api.getTargetable(params.targets.first())
+        val target = api.getEnemy(params.targets.first())
         api.attack(target, elemental(components()), baseDamage())
     }
 

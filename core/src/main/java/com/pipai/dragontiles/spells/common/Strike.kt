@@ -19,7 +19,7 @@ class Strike(upgraded: Boolean) : StandardSpell(upgraded) {
     }
 
     override suspend fun onCast(params: CastParams, api: CombatApi) {
-        val target = api.getTargetable(params.targets.first())
+        val target = api.getEnemy(params.targets.first())
         api.attack(target, elemental(components()), baseDamage() + if (upgraded) 3 else 0)
     }
 }

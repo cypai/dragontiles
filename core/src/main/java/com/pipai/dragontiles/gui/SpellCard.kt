@@ -13,18 +13,20 @@ import com.badlogic.gdx.utils.Align
 import com.pipai.dragontiles.DragonTilesGame
 import com.pipai.dragontiles.artemis.systems.ui.TooltipSystem
 import com.pipai.dragontiles.combat.CombatApi
-import com.pipai.dragontiles.combat.Targetable
+import com.pipai.dragontiles.enemies.Enemy
 import com.pipai.dragontiles.spells.CastParams
 import com.pipai.dragontiles.spells.SetType
 import com.pipai.dragontiles.spells.Spell
 import com.pipai.dragontiles.spells.SuitGroup
 
-class SpellCard(private val game: DragonTilesGame,
-                private var spell: Spell?,
-                val number: Int?,
-                skin: Skin,
-                private val api: CombatApi,
-                private val sToolTip: TooltipSystem) : Table(skin) {
+class SpellCard(
+    private val game: DragonTilesGame,
+    private var spell: Spell?,
+    val number: Int?,
+    skin: Skin,
+    private val api: CombatApi,
+    private val sToolTip: TooltipSystem
+) : Table(skin) {
 
     private val reqBorder = Image()
     private val reqImage = Image()
@@ -42,7 +44,7 @@ class SpellCard(private val game: DragonTilesGame,
 
     private val clickCallbacks: MutableList<(InputEvent, SpellCard) -> Unit> = mutableListOf()
 
-    var target: Targetable? = null
+    var target: Enemy? = null
     private var enabled = true
 
     init {
@@ -59,22 +61,22 @@ class SpellCard(private val game: DragonTilesGame,
         reqStack.add(reqBorder)
         reqStack.add(reqNumber)
         add(reqStack)
-                .prefWidth(32f)
-                .prefHeight(32f)
-                .padTop(8f)
-                .padLeft(8f)
-                .left()
+            .prefWidth(32f)
+            .prefHeight(32f)
+            .padTop(8f)
+            .padLeft(8f)
+            .left()
         add(nameLabel)
-                .left()
-                .expandX()
-                .padLeft(8f)
+            .left()
+            .expandX()
+            .padLeft(8f)
         row()
         add(descriptionLabel)
-                .prefWidth(cardWidth)
-                .prefHeight(cardHeight)
-                .padLeft(8f)
-                .top()
-                .colspan(2)
+            .prefWidth(cardWidth)
+            .prefHeight(cardHeight)
+            .padLeft(8f)
+            .top()
+            .colspan(2)
         row()
 
         touchable = Touchable.enabled
@@ -169,7 +171,8 @@ class SpellCard(private val game: DragonTilesGame,
         } else {
             val spellLocalization = game.gameStrings.spellLocalization(theSpell.id)
             nameLabel.setText(spellLocalization.name + if (theSpell.upgraded) "+" else "")
-            val description = if (theSpell.upgraded) spellLocalization.upgradeDescription else spellLocalization.description
+            val description =
+                if (theSpell.upgraded) spellLocalization.upgradeDescription else spellLocalization.description
             val adjustedDescription = description.replace(regex) {
                 if (target == null && it.groupValues[2].isNotEmpty()) {
                     it.groupValues[2]

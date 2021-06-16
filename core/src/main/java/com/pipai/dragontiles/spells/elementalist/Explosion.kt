@@ -28,7 +28,7 @@ class Explosion(upgraded: Boolean) : StandardSpell(upgraded) {
         exhausted = true
         repeat(2) {
             params.targets.forEach {
-                api.attack(api.getTargetable(it), elemental(components()), baseDamage())
+                api.attack(api.getEnemy(it), elemental(components()), baseDamage())
             }
         }
     }

@@ -15,7 +15,7 @@ class MultiInvoke(upgraded: Boolean) : StandardSpell(upgraded) {
     override fun baseDamage(): Int = 1
 
     override suspend fun onCast(params: CastParams, api: CombatApi) {
-        val target = api.getTargetable(params.targets.first())
+        val target = api.getEnemy(params.targets.first())
         val x = components().size + if (upgraded) 1 else 0
         repeat(x) {
             api.attack(target, elemental(components()), baseDamage())

@@ -2,9 +2,6 @@ package com.pipai.dragontiles.artemis.components
 
 import com.artemis.Component
 import com.badlogic.gdx.Input.Keys
-import com.badlogic.gdx.graphics.Color
-import com.pipai.dragontiles.combat.CountdownAttack
-import com.pipai.dragontiles.data.Element
 import com.pipai.dragontiles.data.TileInstance
 import com.pipai.dragontiles.enemies.Enemy
 
@@ -47,33 +44,6 @@ class EnemyComponent : Component() {
         hp = enemy.hp
         hpMax = enemy.hpMax
         this.enemy = enemy
-    }
-}
-
-class AttackCircleComponent : Component() {
-    var id = 0
-    var enemyId = 0
-    var swordId: Int? = null
-    var spiralId: Int? = null
-    var hourglassId = 0
-    lateinit var element: Element
-    lateinit var strId: String
-
-    lateinit var color: Color
-    var t = 0f
-    var up = true
-
-    fun setByCountdown(countdownAttack: CountdownAttack) {
-        id = countdownAttack.id
-        element = countdownAttack.element
-        strId = countdownAttack.strId
-
-        color = when (element) {
-            Element.FIRE -> Color.RED
-            Element.ICE -> Color.CYAN
-            Element.LIGHTNING -> Color.YELLOW
-            else -> Color.WHITE
-        }
     }
 }
 

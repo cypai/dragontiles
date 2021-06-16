@@ -12,7 +12,6 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport
 import com.pipai.dragontiles.DragonTilesGame
 import com.pipai.dragontiles.artemis.systems.*
 import com.pipai.dragontiles.artemis.systems.animation.CombatAnimationSystem
-import com.pipai.dragontiles.artemis.systems.combat.AttackCircleSystem
 import com.pipai.dragontiles.artemis.systems.combat.CombatControllerSystem
 import com.pipai.dragontiles.artemis.systems.combat.TileIdSystem
 import com.pipai.dragontiles.artemis.systems.input.ExitInputProcessor
@@ -34,38 +33,43 @@ class CombatScreen(game: DragonTilesGame, runData: RunData, encounter: Encounter
     init {
         val combat = Combat(encounter.enemies.map { it.first })
         val config = WorldConfigurationBuilder()
-                .with(
-                        // Managers
-                        TagManager(),
-                        GroupManager(),
-                        EventSystem(),
+            .with(
+                // Managers
+                TagManager(),
+                GroupManager(),
+                EventSystem(),
 
-                        PathInterpolationSystem(),
-                        XyInterpolationSystem(),
-                        TimerSystem(),
-                        MutualDestroySystem(),
+                PathInterpolationSystem(),
+                XyInterpolationSystem(),
+                TimerSystem(),
+                MutualDestroySystem(),
 
-                        CombatControllerSystem(runData, combat),
-                        TileIdSystem(),
-                        CombatAnimationSystem(game),
-                        MouseXySystem(game.gameConfig),
-                        AttackCircleSystem(),
-                        AttackCircleHoverSystem(game.gameStrings),
-                        TooltipSystem(game, stage),
+                CombatControllerSystem(runData, combat),
+                TileIdSystem(),
+                CombatAnimationSystem(game),
+                MouseXySystem(game.gameConfig),
+                TooltipSystem(game, stage),
 
-                        InputProcessingSystem(),
-                        HoverableSystem(game.gameConfig),
-                        ClickableSystem(game.gameConfig))
-                .with(-1,
-                        CombatUiSystem(game, runData, stage),
-                        TopRowUiSystem(game, runData, stage),
-                        FullScreenColorRenderingSystem(game))
-                .with(-2,
-                        CombatRenderingSystem(game),
-                        CombatQueryUiSystem(game, runData))
-                .with(-3,
-                        MapUiSystem(game, stage, runData))
-                .build()
+                InputProcessingSystem(),
+                HoverableSystem(game.gameConfig),
+                ClickableSystem(game.gameConfig)
+            )
+            .with(
+                -1,
+                CombatUiSystem(game, runData, stage),
+                TopRowUiSystem(game, runData, stage),
+                FullScreenColorRenderingSystem(game)
+            )
+            .with(
+                -2,
+                CombatRenderingSystem(game),
+                CombatQueryUiSystem(game, runData)
+            )
+            .with(
+                -3,
+                MapUiSystem(game, stage, runData)
+            )
+            .build()
 
         world = World(config)
 
@@ -82,7 +86,7 @@ class CombatScreen(game: DragonTilesGame, runData: RunData, encounter: Encounter
         inputProcessor.activateInput()
 
         CombatScreenInit(game, world, encounter)
-                .initialize()
+            .initialize()
     }
 
     override fun render(delta: Float) {

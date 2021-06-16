@@ -12,9 +12,11 @@ import com.pipai.dragontiles.spells.StandardSpell
 import kotlinx.coroutines.runBlocking
 import kotlin.coroutines.suspendCoroutine
 
-class CombatApi(val runData: RunData,
-                val combat: Combat,
-                private val eventBus: SuspendableEventBus) : GlobalApi(runData) {
+class CombatApi(
+    val runData: RunData,
+    val combat: Combat,
+    private val eventBus: SuspendableEventBus
+) : GlobalApi(runData) {
 
     private var nextId = 0
 
@@ -36,18 +38,8 @@ class CombatApi(val runData: RunData,
         return combat.hand.size + combat.assigned.values.map { it.size }.sum()
     }
 
-    fun getTargetable(id: Int): Targetable {
-        val target: Targetable? = combat.enemies.find { it.id == id }
-                ?: combat.enemyAttacks.values.find { it.id == id }
-        return target!!
-    }
-
     fun getEnemy(id: Int): Enemy {
         return combat.enemies.first { it.id == id }
-    }
-
-    fun getCountdownAttack(id: Int): CountdownAttack {
-        return combat.enemyAttacks.values.first { it.id == id }
     }
 
     suspend fun castSpell(spell: StandardSpell) {
@@ -175,17 +167,26 @@ class CombatApi(val runData: RunData,
         return (amount + attackerStatus[Status.STRENGTH]).coerceAtLeast(0)
     }
 
-    fun calculateActualDamage(damageOrigin: DamageOrigin,
-                              damageTarget: DamageTarget,
-                              attackerStatus: StatusData,
-                              targetStatus: StatusData,
-                              element: Element,
-                              amount: Int): Int {
+    fun calculateActualDamage(
+        damageOrigin: DamageOrigin,
+        damageTarget: DamageTarget,
+        attackerStatus: StatusData,
+        targetStatus: StatusData,
+        element: Element,
+        amount: Int
+    ): Int {
 
         var damage = calculateBaseDamage(attackerStatus, amount) - targetStatus[Status.DEFENSE]
         combat.spells.forEach {
             if (it is Rune) {
-                damage += it.attackDamageModifier(damageOrigin, damageTarget, attackerStatus, targetStatus, element, amount)
+                damage += it.attackDamageModifier(
+                    damageOrigin,
+                    damageTarget,
+                    attackerStatus,
+                    targetStatus,
+                    element,
+                    amount
+                )
             }
         }
         val broken = when (element) {
@@ -200,38 +201,21 @@ class CombatApi(val runData: RunData,
         return damage.coerceAtLeast(0)
     }
 
-    fun calculateAttackDamage(target: Targetable, element: Element, amount: Int): Int {
-        return when (target) {
-            is Enemy -> calculateActualDamage(
-                    DamageOrigin.HERO_ATTACK,
-                    DamageTarget.ENEMY,
-                    combat.heroStatus,
-                    combat.enemyStatus[target.id]!!,
-                    element,
-                    amount)
-            is CountdownAttack -> calculateActualDamage(
-                    DamageOrigin.HERO_ATTACK,
-                    DamageTarget.ENEMY_SPELL,
-                    combat.heroStatus,
-                    StatusData(),
-                    element,
-                    amount)
-            else -> throw IllegalStateException("Received unknown target $target")
-        }
+    fun calculateAttackDamage(enemy: Enemy, element: Element, amount: Int): Int {
+        return calculateActualDamage(
+            DamageOrigin.HERO_ATTACK,
+            DamageTarget.ENEMY,
+            combat.heroStatus,
+            combat.enemyStatus[enemy.id]!!,
+            element,
+            amount
+        )
     }
 
-    suspend fun attack(target: Targetable, element: Element, amount: Int) {
-        val damage = calculateAttackDamage(target, element, amount)
-        when (target) {
-            is Enemy -> {
-                eventBus.dispatch(PlayerAttackEnemyEvent(target, element, amount))
-                dealDamageToEnemy(target, damage)
-            }
-            is CountdownAttack -> {
-                eventBus.dispatch(PlayerAttackCountdownAttackEvent(target, element, amount))
-                dealDamageToCountdownAttack(target, damage)
-            }
-        }
+    suspend fun attack(enemy: Enemy, element: Element, amount: Int) {
+        val damage = calculateAttackDamage(enemy, element, amount)
+        eventBus.dispatch(PlayerAttackEnemyEvent(enemy, element, amount))
+        dealDamageToEnemy(enemy, damage)
     }
 
     suspend fun dealDamageToEnemy(enemy: Enemy, damage: Int) {
@@ -239,37 +223,10 @@ class CombatApi(val runData: RunData,
         eventBus.dispatch(EnemyDamageEvent(enemy, damage))
         if (enemy.hp <= 0) {
             eventBus.dispatch(EnemyDefeatedEvent(enemy))
-            disruptEnemyCountdownAttack(enemy.id)
             if (combat.enemies.all { it.hp <= 0 }) {
                 combat.heroStatus.clear()
                 eventBus.dispatch(BattleWinEvent())
             }
-        }
-    }
-
-    suspend fun dealDamageToCountdownAttack(ca: CountdownAttack, damage: Int) {
-        ca.counteredAttackPower += damage
-        if (ca.counteredAttackPower >= ca.attackPower) {
-            val residual = ca.counteredAttackPower - ca.attackPower
-            ca.counteredAttackPower = ca.attackPower
-            ca.counteredEffectPower += residual
-            eventBus.dispatch(CountdownAttackDamageEvent(ca, damage - residual, residual))
-            if (ca.counteredEffectPower >= ca.effectPower) {
-                disruptCountdownAttack(ca)
-            }
-        } else {
-            eventBus.dispatch(CountdownAttackDamageEvent(ca, damage, 0))
-        }
-    }
-
-    suspend fun disruptCountdownAttack(ca: CountdownAttack) {
-        disruptEnemyCountdownAttack(combat.enemyAttacks.entries.find { it.value == ca }!!.key)
-    }
-
-    suspend fun disruptEnemyCountdownAttack(enemyId: Int) {
-        val ca = combat.enemyAttacks.remove(enemyId)
-        ca?.let {
-            eventBus.dispatch(CountdownAttackDisruptedEvent(ca))
         }
     }
 
@@ -292,47 +249,6 @@ class CombatApi(val runData: RunData,
         eventBus.dispatch(PlayerDamageEvent(damage))
         if (runData.hero.hp <= 0) {
             eventBus.dispatch(GameOverEvent())
-        }
-    }
-
-    fun fetchAttack(enemyId: Int): CountdownAttack? {
-        return combat.enemyAttacks[enemyId]
-    }
-
-    suspend fun enemyCreateAttack(enemy: Enemy, countdownAttack: CountdownAttack) {
-        combat.enemyAttacks[enemy.id] = countdownAttack
-        countdownAttack.attackPower += fetchEnemyStatus(enemy.id, Status.STRENGTH)
-        eventBus.dispatch(EnemyCountdownAttackEvent(enemy, countdownAttack))
-    }
-
-    suspend fun countdownAttackTick(enemyId: Int) {
-        val countdownAttack = combat.enemyAttacks[enemyId]!!
-        enemyDiscard(enemyId, countdownAttack.discardTile(runData.rng))
-        countdownAttack.turnsLeft -= 1
-        if (countdownAttack.turnsLeft == 0) {
-            combat.enemyAttacks.remove(enemyId)
-            eventBus.dispatch(CountdownAttackResolveEvent(countdownAttack))
-            val baseDamage = countdownAttack.attackPower - countdownAttack.counteredAttackPower
-            val damage = calculateActualDamage(
-                    DamageOrigin.ENEMY_ATTACK,
-                    DamageTarget.HERO,
-                    combat.enemyStatus[enemyId]!!,
-                    combat.heroStatus,
-                    countdownAttack.element,
-                    baseDamage)
-            dealDamageToHero(damage)
-            countdownAttack.activateEffects(this)
-        } else {
-            eventBus.dispatch(CountdownAttackTickEvent(countdownAttack))
-        }
-    }
-
-    suspend fun enemyDiscard(enemyId: Int, tile: Tile) {
-        val tileInstance = TileInstance(tile, nextId())
-        combat.openPool.add(tileInstance)
-        eventBus.dispatch(EnemyDiscardEvent(enemyId, tileInstance, combat.openPool.size - 1))
-        if (combat.openPool.size > 9) {
-            removeFromOpenPool(listOf(combat.openPool.first()))
         }
     }
 
@@ -362,7 +278,12 @@ class CombatApi(val runData: RunData,
 
     fun fetchEnemyStatus(id: Int, status: Status) = combat.enemyStatus[id]!![status]
 
-    suspend fun queryTiles(text: String, tiles: List<TileInstance>, minAmount: Int, maxAmount: Int): List<TileInstance> {
+    suspend fun queryTiles(
+        text: String,
+        tiles: List<TileInstance>,
+        minAmount: Int,
+        maxAmount: Int
+    ): List<TileInstance> {
         return if (maxAmount == 0 || maxAmount < minAmount) {
             listOf()
         } else {
@@ -376,18 +297,22 @@ class CombatApi(val runData: RunData,
 
     suspend fun queryOpenPoolDraw() {
         val amount = runData.hero.handSize - numTilesInHand()
-        val tiles = queryTiles("Select up to $amount tile(s) to draw from the Open Pool",
-                combat.openPool, 0, amount)
+        val tiles = queryTiles(
+            "Select up to $amount tile(s) to draw from the Open Pool",
+            combat.openPool, 0, amount
+        )
         if (tiles.isNotEmpty()) {
             drawFromOpenPool(tiles)
         }
     }
 
-    suspend fun queryTileOptions(text: String,
-                                 displayTile: TileInstance?,
-                                 options: List<Tile>,
-                                 minAmount: Int,
-                                 maxAmount: Int): List<Tile> {
+    suspend fun queryTileOptions(
+        text: String,
+        displayTile: TileInstance?,
+        options: List<Tile>,
+        minAmount: Int,
+        maxAmount: Int
+    ): List<Tile> {
 
         return if (maxAmount == 0 || maxAmount < minAmount) {
             listOf()
@@ -411,5 +336,5 @@ enum class DamageOrigin {
 }
 
 enum class DamageTarget {
-    HERO, ENEMY, ENEMY_SPELL
+    HERO, ENEMY
 }

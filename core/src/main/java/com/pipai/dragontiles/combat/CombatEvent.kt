@@ -31,7 +31,8 @@ data class DrawFromOpenPoolEvent(val tiles: List<Pair<TileInstance, Int>>) : Com
 
 data class EnemyDiscardEvent(val enemyId: Int, val tile: TileInstance, val location: Int) : CombatEvent
 
-data class HandAdjustedEvent(val hand: List<TileInstance>, val assigned: MutableMap<Int, List<TileInstance>>) : CombatEvent
+data class HandAdjustedEvent(val hand: List<TileInstance>, val assigned: MutableMap<Int, List<TileInstance>>) :
+    CombatEvent
 
 data class DrawToOpenPoolEvent(val tiles: List<Pair<TileInstance, Int>>) : CombatEvent
 
@@ -43,23 +44,11 @@ data class OpenPoolAdjustedEvent(val openPool: List<TileInstance>) : CombatEvent
 
 data class PlayerAttackEnemyEvent(val target: Enemy, val element: Element, val amount: Int) : CombatEvent
 
-data class PlayerAttackCountdownAttackEvent(val target: CountdownAttack, val element: Element, val amount: Int) : CombatEvent
-
 data class EnemyDamageEvent(val target: Enemy, val amount: Int) : CombatEvent
 
 data class EnemyDefeatedEvent(val enemy: Enemy) : CombatEvent
 
 class BattleWinEvent : CombatEvent
-
-data class EnemyCountdownAttackEvent(val enemy: Enemy, val countdownAttack: CountdownAttack) : CombatEvent
-
-data class CountdownAttackTickEvent(val countdownAttack: CountdownAttack) : CombatEvent
-
-data class CountdownAttackResolveEvent(val countdownAttack: CountdownAttack) : CombatEvent
-
-data class CountdownAttackDamageEvent(val countdownAttack: CountdownAttack, val attackPowerDamage: Int, val effectPowerDamage: Int) : CombatEvent
-
-data class CountdownAttackDisruptedEvent(val countdownAttack: CountdownAttack) : CombatEvent
 
 data class PlayerDamageEvent(val amount: Int) : CombatEvent
 
@@ -75,18 +64,24 @@ data class SpellExhaustedEvent(val spell: StandardSpell) : CombatEvent
 
 class GameOverEvent : CombatEvent
 
-data class QueryTilesEvent(val text: String,
-                           val tiles: List<TileInstance>,
-                           val minAmount: Int,
-                           val maxAmount: Int,
-                           val continuation: Continuation<List<TileInstance>>) : CombatEvent
+data class QueryTilesEvent(
+    val text: String,
+    val tiles: List<TileInstance>,
+    val minAmount: Int,
+    val maxAmount: Int,
+    val continuation: Continuation<List<TileInstance>>
+) : CombatEvent
 
-data class QueryTileOptionsEvent(val text: String,
-                                 val displayTile: TileInstance?,
-                                 val options: List<Tile>,
-                                 val minAmount: Int,
-                                 val maxAmount: Int,
-                                 val continuation: Continuation<List<Tile>>) : CombatEvent
+data class QueryTileOptionsEvent(
+    val text: String,
+    val displayTile: TileInstance?,
+    val options: List<Tile>,
+    val minAmount: Int,
+    val maxAmount: Int,
+    val continuation: Continuation<List<Tile>>
+) : CombatEvent
 
-data class StatusAdjustedEvent(val heroStatus: List<Pair<Status, Int>>,
-                               val enemyStatus: Map<Int, List<Pair<Status, Int>>>) : CombatEvent
+data class StatusAdjustedEvent(
+    val heroStatus: List<Pair<Status, Int>>,
+    val enemyStatus: Map<Int, List<Pair<Status, Int>>>
+) : CombatEvent

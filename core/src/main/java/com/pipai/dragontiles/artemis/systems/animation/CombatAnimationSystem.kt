@@ -81,7 +81,12 @@ class CombatAnimationSystem(private val game: DragonTilesGame) : BaseSystem(), A
     }
 
     private fun adjustHand() {
-        queueAnimation(AdjustHandAnimation(sCombat.combat.hand.mapIndexed { index, tileInstance -> Pair(tileInstance, index) }, sCombat.combat.assigned, sUi.layout))
+        queueAnimation(AdjustHandAnimation(sCombat.combat.hand.mapIndexed { index, tileInstance ->
+            Pair(
+                tileInstance,
+                index
+            )
+        }, sCombat.combat.assigned, sUi.layout))
     }
 
     @Subscribe
@@ -91,11 +96,6 @@ class CombatAnimationSystem(private val game: DragonTilesGame) : BaseSystem(), A
             batch.addToBatch(DrawToOpenPoolAnimation(it.first, it.second, sUi.layout))
         }
         queueAnimation(batch)
-    }
-
-    @Subscribe
-    fun handleEnemyDiscardEvent(ev: EnemyDiscardEvent) {
-        queueAnimation(EnemyDiscardAnimation(ev.enemyId, ev.tile, ev.location, sUi.layout))
     }
 
     @Subscribe
@@ -121,31 +121,6 @@ class CombatAnimationSystem(private val game: DragonTilesGame) : BaseSystem(), A
     @Subscribe
     fun handlePlayerDamageEvent(ev: PlayerDamageEvent) {
         queueAnimation(PlayerDamageAnimation(ev.amount))
-    }
-
-    @Subscribe
-    fun handleEnemyCountdownAttackEvent(ev: EnemyCountdownAttackEvent) {
-        queueAnimation(CreateAttackCircleAnimation(ev.enemy, ev.countdownAttack))
-    }
-
-    @Subscribe
-    fun handleCountdownAttackTickEvent(ev: CountdownAttackTickEvent) {
-        queueAnimation(UpdateAttackCircleAnimation(ev.countdownAttack))
-    }
-
-    @Subscribe
-    fun handleCountdownResolveEvent(ev: CountdownAttackResolveEvent) {
-        queueAnimation(ResolveAttackCircleAnimation(ev.countdownAttack))
-    }
-
-    @Subscribe
-    fun handleCountdownDamageEvent(ev: CountdownAttackDamageEvent) {
-        queueAnimation(UpdateAttackCircleAnimation(ev.countdownAttack))
-    }
-
-    @Subscribe
-    fun handleCountdownDisruptEvent(ev: CountdownAttackDisruptedEvent) {
-        queueAnimation(AttackCircleDisruptAnimation(ev.countdownAttack))
     }
 
     @Subscribe

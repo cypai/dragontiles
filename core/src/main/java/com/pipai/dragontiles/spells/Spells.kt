@@ -35,7 +35,7 @@ abstract class Spell(var upgraded: Boolean) {
                 return if (params.targets.isEmpty()) {
                     api.calculateBaseDamage(api.combat.heroStatus, baseDamage())
                 } else {
-                    val target = api.getTargetable(params.targets.first())
+                    val target = api.getEnemy(params.targets.first())
                     api.calculateAttackDamage(target, elemental(components()), baseDamage())
                 }
             }
@@ -147,7 +147,14 @@ abstract class Rune(upgraded: Boolean) : Spell(upgraded) {
     protected open suspend fun onDeactivate(api: CombatApi) {
     }
 
-    open fun attackDamageModifier(damageOrigin: DamageOrigin, damageTarget: DamageTarget, attackerStatus: StatusData, targetStatus: StatusData, element: Element, amount: Int) = 0
+    open fun attackDamageModifier(
+        damageOrigin: DamageOrigin,
+        damageTarget: DamageTarget,
+        attackerStatus: StatusData,
+        targetStatus: StatusData,
+        element: Element,
+        amount: Int
+    ) = 0
 
     override fun combatReset() {
         active = false
@@ -224,8 +231,8 @@ open class Single(override var suitGroup: SuitGroup) : ComponentRequirement() {
 
     override fun find(hand: List<TileInstance>): List<List<TileInstance>> {
         return hand
-                .filter { it.tile.suit in suitGroup.allowedSuits }
-                .map { listOf(it) }
+            .filter { it.tile.suit in suitGroup.allowedSuits }
+            .map { listOf(it) }
     }
 
     override fun findGiven(hand: List<TileInstance>, given: List<TileInstance>): List<List<TileInstance>> {
@@ -242,17 +249,19 @@ open class Single(override var suitGroup: SuitGroup) : ComponentRequirement() {
     }
 }
 
-class SinglePredicate(private val predicate: (TileInstance) -> Boolean,
-                      suitGroup: SuitGroup) : Single(suitGroup) {
+class SinglePredicate(
+    private val predicate: (TileInstance) -> Boolean,
+    suitGroup: SuitGroup
+) : Single(suitGroup) {
 
     override fun find(hand: List<TileInstance>): List<List<TileInstance>> {
         return super.find(hand)
-                .filter { predicate.invoke(it[0]) }
+            .filter { predicate.invoke(it[0]) }
     }
 
     override fun findGiven(hand: List<TileInstance>, given: List<TileInstance>): List<List<TileInstance>> {
         return super.findGiven(hand, given)
-                .filter { predicate.invoke(it[0]) }
+            .filter { predicate.invoke(it[0]) }
     }
 
     override fun satisfied(slots: List<TileInstance>): Boolean {
@@ -271,19 +280,19 @@ class Identical(slotAmount: Int, override var suitGroup: SuitGroup) : ComponentR
     override fun find(hand: List<TileInstance>): List<List<TileInstance>> {
         val count: MutableMap<Tile, MutableList<TileInstance>> = mutableMapOf()
         hand.filter { it.tile.suit in suitGroup.allowedSuits }
-                .forEach {
-                    if (it.tile in count) {
-                        val list = count[it.tile]!!
-                        if (list.size < reqAmount.amount) {
-                            list.add(it)
-                        }
-                    } else {
-                        count[it.tile] = mutableListOf(it)
+            .forEach {
+                if (it.tile in count) {
+                    val list = count[it.tile]!!
+                    if (list.size < reqAmount.amount) {
+                        list.add(it)
                     }
+                } else {
+                    count[it.tile] = mutableListOf(it)
                 }
+            }
         return count.filterValues { it.size >= reqAmount.amount }
-                .values
-                .toList()
+            .values
+            .toList()
     }
 
     override fun findGiven(hand: List<TileInstance>, given: List<TileInstance>): List<List<TileInstance>> {
@@ -304,8 +313,8 @@ class Identical(slotAmount: Int, override var suitGroup: SuitGroup) : ComponentR
                 val first = given.first()
                 if (given.all { it.tile == first.tile }) {
                     Identical(reqAmount.amount - given.size, suitGroup)
-                            .find(hand.withoutAll(given).filter { it.tile == first.tile })
-                            .map { it.withAll(given) }
+                        .find(hand.withoutAll(given).filter { it.tile == first.tile })
+                        .map { it.withAll(given) }
                 } else {
                     listOf()
                 }
@@ -380,23 +389,23 @@ class Sequential(slotAmount: Int, override var suitGroup: SuitGroup) : Component
 
     override fun find(hand: List<TileInstance>): List<List<TileInstance>> {
         val sequences: MutableMap<TileInstance, MutableList<TileInstance>> = hand
-                .filter { it.tile.suit in suitGroup.allowedSuits }
-                .associateWith { mutableListOf(it) }
-                .toMutableMap()
+            .filter { it.tile.suit in suitGroup.allowedSuits }
+            .associateWith { mutableListOf(it) }
+            .toMutableMap()
 
         hand.filter { it.tile.suit in suitGroup.allowedSuits }
-                .forEach {
-                    val tile = it.tile as Tile.ElementalTile
-                    sequences.values.forEach { s ->
-                        val last = s.last().tile as Tile.ElementalTile
-                        if (s.size < reqAmount.amount && last.suit == tile.suit && last.number == tile.number - 1) {
-                            s.add(it)
-                        }
+            .forEach {
+                val tile = it.tile as Tile.ElementalTile
+                sequences.values.forEach { s ->
+                    val last = s.last().tile as Tile.ElementalTile
+                    if (s.size < reqAmount.amount && last.suit == tile.suit && last.number == tile.number - 1) {
+                        s.add(it)
                     }
                 }
+            }
         return sequences.filterValues { it.size >= reqAmount.amount }
-                .values
-                .toList()
+            .values
+            .toList()
     }
 
     override fun findGiven(hand: List<TileInstance>, given: List<TileInstance>): List<List<TileInstance>> {
@@ -408,8 +417,9 @@ class Sequential(slotAmount: Int, override var suitGroup: SuitGroup) : Component
             else -> {
                 val first = given.first().tile
                 if (first !is Tile.ElementalTile
-                        || !given.all { it.tile.suit in suitGroup.allowedSuits && it.tile.suit == first.suit }
-                        || !sequential(given.map { it.tile as Tile.ElementalTile })) {
+                    || !given.all { it.tile.suit in suitGroup.allowedSuits && it.tile.suit == first.suit }
+                    || !sequential(given.map { it.tile as Tile.ElementalTile })
+                ) {
                     return listOf()
                 }
                 if (given.size == reqAmount.amount) {
@@ -438,7 +448,7 @@ class Sequential(slotAmount: Int, override var suitGroup: SuitGroup) : Component
 
     private fun sequential(tiles: List<Tile.ElementalTile>): Boolean {
         return tiles.windowed(2)
-                .all { it[0].number == it[1].number - 1 }
+            .all { it[0].number == it[1].number - 1 }
     }
 }
 
@@ -471,8 +481,8 @@ class SequentialX(override var suitGroup: SuitGroup) : ComponentRequirement() {
             1 -> {
                 val first = given.first()
                 return find(hand.filter { it.tile.suit == first.tile.suit })
-                        .filter { it.contains(first) }
-                        .map { it.with(given.first()) }
+                    .filter { it.contains(first) }
+                    .map { it.with(given.first()) }
             }
             else -> {
                 val sets: MutableList<List<TileInstance>> = mutableListOf(given)
@@ -500,6 +510,6 @@ class SequentialX(override var suitGroup: SuitGroup) : ComponentRequirement() {
 
     private fun sequential(tiles: List<Tile.ElementalTile>): Boolean {
         return tiles.windowed(2)
-                .all { it[0].number == it[1].number - 1 }
+            .all { it[0].number == it[1].number - 1 }
     }
 }

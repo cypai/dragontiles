@@ -21,8 +21,6 @@ data class Combat(val enemies: List<Enemy>) {
      */
     val assigned: MutableMap<Int, List<TileInstance>> = mutableMapOf()
 
-    val enemyAttacks: MutableMap<Int, CountdownAttack> = mutableMapOf()
-
     val heroStatus = StatusData()
     val enemyStatus: MutableMap<Int, StatusData> = mutableMapOf()
 }
@@ -70,6 +68,6 @@ data class StatusData(val data: MutableMap<Status, Int> = mutableMapOf()) {
 
     fun decrementAll() {
         data.filter { it.key.decreasing }
-                .forEach { increment(it.key, -1) }
+            .forEach { increment(it.key, -1) }
     }
 }

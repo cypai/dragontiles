@@ -5,9 +5,11 @@ import com.pipai.dragontiles.dungeon.RunData
 import kotlinx.coroutines.runBlocking
 import net.mostlyoriginal.api.event.common.EventSystem
 
-class CombatController(private val runData: RunData,
-                       private val combat: Combat,
-                       eventSystem: EventSystem) {
+class CombatController(
+    private val runData: RunData,
+    private val combat: Combat,
+    eventSystem: EventSystem
+) {
 
     private val eventBus = SuspendableEventBus(eventSystem)
     val api: CombatApi = CombatApi(runData, combat, eventBus)
@@ -56,8 +58,8 @@ class CombatController(private val runData: RunData,
     suspend fun runTurn() {
         combat.turnNumber += 1
         combat.enemies
-                .filter { it.hp > 0 }
-                .forEach { it.runTurn(api) }
+            .filter { it.hp > 0 }
+            .forEach { it.runTurn(api) }
         if (combat.turnNumber > 1) {
             api.queryOpenPoolDraw()
         }
@@ -67,14 +69,13 @@ class CombatController(private val runData: RunData,
 
     suspend fun endTurn() {
         eventBus.dispatch(TurnEndEvent(combat.turnNumber))
-        combat.enemyAttacks.keys.toList().forEach {
-            api.countdownAttackTick(it)
-        }
         combat.heroStatus.decrementAll()
         combat.enemyStatus.values.forEach { it.decrementAll() }
-        eventBus.dispatch(StatusAdjustedEvent(
+        eventBus.dispatch(
+            StatusAdjustedEvent(
                 combat.heroStatus.pairs(),
-                combat.enemyStatus.mapValues { it.value.pairs() }))
+                combat.enemyStatus.mapValues { it.value.pairs() })
+        )
         combat.spells.forEach {
             it.turnReset()
         }

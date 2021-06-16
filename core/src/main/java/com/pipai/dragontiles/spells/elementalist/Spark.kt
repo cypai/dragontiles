@@ -8,8 +8,9 @@ import com.pipai.dragontiles.spells.common.Invoke
 class Spark(upgraded: Boolean) : StandardSpell(upgraded) {
     override val id: String = "base:spells:Spark"
     override val requirement: ComponentRequirement = SinglePredicate(
-            { it.tile.let { t -> t is Tile.ElementalTile && t.number == 1 } },
-            SuitGroup.ELEMENTAL)
+        { it.tile.let { t -> t is Tile.ElementalTile && t.number == 1 } },
+        SuitGroup.ELEMENTAL
+    )
     override val type: SpellType = SpellType.ATTACK
     override val targetType: TargetType = TargetType.SINGLE
     override val rarity: Rarity = Rarity.UNCOMMON
@@ -25,7 +26,7 @@ class Spark(upgraded: Boolean) : StandardSpell(upgraded) {
     }
 
     override suspend fun onCast(params: CastParams, api: CombatApi) {
-        val target = api.getTargetable(params.targets.first())
+        val target = api.getEnemy(params.targets.first())
         api.attack(target, elemental(components()), baseDamage())
     }
 
