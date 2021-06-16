@@ -2,7 +2,6 @@ package com.pipai.dragontiles.spells.elementalist
 
 import com.pipai.dragontiles.combat.DamageOrigin
 import com.pipai.dragontiles.combat.DamageTarget
-import com.pipai.dragontiles.combat.StatusData
 import com.pipai.dragontiles.data.Element
 import com.pipai.dragontiles.spells.*
 
@@ -12,16 +11,20 @@ class EnhanceRune(upgraded: Boolean) : Rune(upgraded) {
 
     override val requirement: ComponentRequirement = SequentialX()
 
-    override fun attackDamageModifier(damageOrigin: DamageOrigin, damageTarget: DamageTarget, attackerStatus: StatusData, targetStatus: StatusData, element: Element, amount: Int): Int {
+    override fun newClone(upgraded: Boolean): EnhanceRune {
+        return EnhanceRune(upgraded)
+    }
+
+    override fun queryFlatAdjustment(origin: DamageOrigin, target: DamageTarget, element: Element): Int {
         val c = components()
-        return if (active && damageOrigin == DamageOrigin.HERO_ATTACK && element == elemental(c)) {
-            c.size + if (upgraded) 1 else 0
+        return if (active
+            && origin == DamageOrigin.SELF_ATTACK
+            && target == DamageTarget.OPPONENT
+            && element == elemental(c)
+        ) {
+            2
         } else {
             0
         }
-    }
-
-    override fun newClone(upgraded: Boolean): EnhanceRune {
-        return EnhanceRune(upgraded)
     }
 }

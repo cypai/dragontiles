@@ -3,30 +3,10 @@ base:status:Strength:
     name: Strength
     description: Deal 1 more damage per point of Strength.
 
-base:status:Defense:
+base:status:Break:
   en:
-    name: Defense
-    description: Damage taken via attacks decreased by 1 per point of Defense.
-
-base:status:FireBreak:
-  en:
-    name: Fire Break
-    description: Takes 50% more damage when attacked with Fire.
-
-base:status:IceBreak:
-  en:
-    name: Ice Break
-    description: Takes 50% more damage when attacked with Ice.
-
-base:status:LightningBreak:
-  en:
-    name: Lightning Break
-    description: Takes 50% more damage when attacked with Lightning.
-
-base:status:NonElementalBreak:
-  en:
-    name: Non-Elemental Break
-    description: Takes 50% more damage when attacked with no element.
+    name: Break
+    description: Takes 50% more damage when attacked with Elemental damage.
 
 base:status:DragonRage:
   en:

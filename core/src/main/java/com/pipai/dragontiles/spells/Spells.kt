@@ -1,9 +1,6 @@
 package com.pipai.dragontiles.spells
 
-import com.pipai.dragontiles.combat.CombatApi
-import com.pipai.dragontiles.combat.DamageOrigin
-import com.pipai.dragontiles.combat.DamageTarget
-import com.pipai.dragontiles.combat.StatusData
+import com.pipai.dragontiles.combat.*
 import com.pipai.dragontiles.data.Element
 import com.pipai.dragontiles.data.Suit
 import com.pipai.dragontiles.data.Tile
@@ -14,7 +11,7 @@ import com.pipai.dragontiles.utils.withAll
 import com.pipai.dragontiles.utils.withoutAll
 import org.apache.commons.lang3.builder.ToStringBuilder
 
-abstract class Spell(var upgraded: Boolean) {
+abstract class Spell(var upgraded: Boolean) : DamageAdjustable {
     abstract val id: String
 
     abstract val requirement: ComponentRequirement
@@ -29,14 +26,19 @@ abstract class Spell(var upgraded: Boolean) {
 
     open fun baseDamage(): Int = 0
 
+    override fun queryFlatAdjustment(origin: DamageOrigin, target: DamageTarget, element: Element): Int = 0
+
+    override fun queryScaledAdjustment(origin: DamageOrigin, target: DamageTarget, element: Element): Float = 1f
+
     open fun dynamicValue(key: String, api: CombatApi, params: CastParams): Int {
         return when (key) {
             "!d" -> {
                 return if (params.targets.isEmpty()) {
-                    api.calculateBaseDamage(api.combat.heroStatus, baseDamage())
+                    // TODO: Fix this
+                    api.calculateBaseDamage(Element.NONE, baseDamage())
                 } else {
                     val target = api.getEnemy(params.targets.first())
-                    api.calculateAttackDamage(target, elemental(components()), baseDamage())
+                    api.calculateDamageOnEnemy(target, elemental(components()), baseDamage())
                 }
             }
             else -> data[key] ?: 0
@@ -147,15 +149,6 @@ abstract class Rune(upgraded: Boolean) : Spell(upgraded) {
     protected open suspend fun onDeactivate(api: CombatApi) {
     }
 
-    open fun attackDamageModifier(
-        damageOrigin: DamageOrigin,
-        damageTarget: DamageTarget,
-        attackerStatus: StatusData,
-        targetStatus: StatusData,
-        element: Element,
-        amount: Int
-    ) = 0
-
     override fun combatReset() {
         active = false
         canActivate = true
@@ -195,15 +188,15 @@ enum class SetType {
     MISC, IDENTICAL, SEQUENTIAL
 }
 
-enum class SuitGroup(val allowedSuits: Set<Suit>) {
-    FIRE(setOf(Suit.FIRE)),
-    ICE(setOf(Suit.ICE)),
-    LIGHTNING(setOf(Suit.LIGHTNING)),
-    STAR(setOf(Suit.STAR)),
-    LIFE(setOf(Suit.LIFE)),
-    ELEMENTAL(elementalSet),
-    ARCANE(arcaneSet),
-    ANY(anySet),
+enum class SuitGroup(val allowedSuits: Set<Suit>, val isElemental: Boolean) {
+    FIRE(setOf(Suit.FIRE), true),
+    ICE(setOf(Suit.ICE), true),
+    LIGHTNING(setOf(Suit.LIGHTNING), true),
+    STAR(setOf(Suit.STAR), false),
+    LIFE(setOf(Suit.LIFE), false),
+    ELEMENTAL(elementalSet, true),
+    ARCANE(arcaneSet, false),
+    ANY(anySet, false),
 }
 
 sealed class ReqAmount {

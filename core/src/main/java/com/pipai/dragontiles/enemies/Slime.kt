@@ -1,7 +1,11 @@
 package com.pipai.dragontiles.enemies
 
-import com.pipai.dragontiles.combat.*
+import com.pipai.dragontiles.combat.AttackIntent
+import com.pipai.dragontiles.combat.CombatApi
+import com.pipai.dragontiles.combat.DebuffIntent
+import com.pipai.dragontiles.combat.Intent
 import com.pipai.dragontiles.data.Element
+import com.pipai.dragontiles.status.BreakStatus
 
 class Slime : Enemy() {
 
@@ -19,8 +23,8 @@ class Slime : Enemy() {
 
     override fun getIntent(): Intent {
         return when (attacks % 4) {
-            0 -> DebuffIntent(id, Status.ICE_BREAK, 2, null)
-            else -> AttackIntent(id, 8, 1, false, Element.ICE)
+            0 -> DebuffIntent(this, BreakStatus(2, true), null)
+            else -> AttackIntent(this, 8, 1, false, Element.ICE)
         }
     }
 

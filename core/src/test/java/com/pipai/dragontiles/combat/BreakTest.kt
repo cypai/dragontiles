@@ -3,6 +3,7 @@ package com.pipai.dragontiles.combat
 import com.pipai.dragontiles.data.Element
 import com.pipai.dragontiles.enemies.FlameTurtle
 import com.pipai.dragontiles.spells.common.Invoke
+import com.pipai.dragontiles.status.BreakStatus
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert
 import org.junit.Test
@@ -18,16 +19,16 @@ class BreakTest : CombatBackendTest(QueryHandler()) {
         controller.initCombat()
         runBlocking { controller.runTurn() }
 
-        Assert.assertEquals(1, controller.api.calculateAttackDamage(flameTurtle, Element.FIRE, 1))
+        Assert.assertEquals(1, controller.api.calculateDamageOnEnemy(flameTurtle, Element.FIRE, 1))
 
-        controller.api.changeEnemyStatusIncrement(flameTurtle.id, Status.FIRE_BREAK, 1)
+        controller.api.addStatusToEnemy(flameTurtle, BreakStatus(1, false))
 
-        Assert.assertEquals(2, controller.api.calculateAttackDamage(flameTurtle, Element.FIRE, 1))
+        Assert.assertEquals(2, controller.api.calculateDamageOnEnemy(flameTurtle, Element.FIRE, 1))
 
-        Assert.assertEquals(1, combat.enemyStatus[flameTurtle.id]!![Status.FIRE_BREAK])
+        Assert.assertEquals(1, controller.api.enemyStatusAmount(flameTurtle, BreakStatus::class))
 
         runBlocking { controller.endTurn() }
 
-        Assert.assertEquals(0, controller.api.combat.enemyStatus[flameTurtle.id]!![Status.FIRE_BREAK])
+        Assert.assertEquals(0, controller.api.enemyStatusAmount(flameTurtle, BreakStatus::class))
     }
 }

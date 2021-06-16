@@ -2,7 +2,6 @@ package com.pipai.dragontiles.spells.elementalist
 
 import com.pipai.dragontiles.combat.DamageOrigin
 import com.pipai.dragontiles.combat.DamageTarget
-import com.pipai.dragontiles.combat.StatusData
 import com.pipai.dragontiles.data.Element
 import com.pipai.dragontiles.spells.*
 
@@ -12,15 +11,15 @@ class ElementalRune(upgraded: Boolean) : Rune(upgraded) {
 
     override val requirement: ComponentRequirement = Identical(2, SuitGroup.ELEMENTAL)
 
-    override fun attackDamageModifier(damageOrigin: DamageOrigin, damageTarget: DamageTarget, attackerStatus: StatusData, targetStatus: StatusData, element: Element, amount: Int): Int {
-        return if (active && damageOrigin == DamageOrigin.HERO_ATTACK && element != Element.NONE) {
-            if (upgraded) 3 else 2
+    override fun newClone(upgraded: Boolean): ElementalRune {
+        return ElementalRune(upgraded)
+    }
+
+    override fun queryFlatAdjustment(origin: DamageOrigin, target: DamageTarget, element: Element): Int {
+        return if (active && origin == DamageOrigin.SELF_ATTACK && target == DamageTarget.OPPONENT && element.isElemental) {
+            2
         } else {
             0
         }
-    }
-
-    override fun newClone(upgraded: Boolean): ElementalRune {
-        return ElementalRune(upgraded)
     }
 }

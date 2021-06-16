@@ -1,7 +1,11 @@
 package com.pipai.dragontiles.enemies
 
-import com.pipai.dragontiles.combat.*
+import com.pipai.dragontiles.combat.AttackIntent
+import com.pipai.dragontiles.combat.BuffIntent
+import com.pipai.dragontiles.combat.CombatApi
+import com.pipai.dragontiles.combat.Intent
 import com.pipai.dragontiles.data.Element
+import com.pipai.dragontiles.status.Strength
 
 class FlameTurtle : Enemy() {
 
@@ -15,9 +19,9 @@ class FlameTurtle : Enemy() {
 
     override fun getIntent(): Intent {
         return when (intents) {
-            0 -> AttackIntent(id, 12, 1, false, Element.FIRE)
-            1 -> AttackIntent(id, 12, 1, false, Element.FIRE)
-            else -> BuffIntent(id, Status.STRENGTH, 4, AttackIntent(id, 4, 1, false, Element.FIRE))
+            0 -> AttackIntent(this, 12, 1, false, Element.FIRE)
+            1 -> AttackIntent(this, 12, 1, false, Element.FIRE)
+            else -> BuffIntent(this, Strength(4), AttackIntent(this, 4, 1, false, Element.FIRE))
         }
     }
 

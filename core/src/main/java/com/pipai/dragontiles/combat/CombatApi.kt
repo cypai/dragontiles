@@ -9,8 +9,11 @@ import com.pipai.dragontiles.dungeon.RunData
 import com.pipai.dragontiles.enemies.Enemy
 import com.pipai.dragontiles.spells.Rune
 import com.pipai.dragontiles.spells.StandardSpell
+import com.pipai.dragontiles.spells.SuitGroup
+import com.pipai.dragontiles.status.Status
 import kotlinx.coroutines.runBlocking
 import kotlin.coroutines.suspendCoroutine
+import kotlin.reflect.KClass
 
 class CombatApi(
     val runData: RunData,
@@ -163,57 +166,70 @@ class CombatApi(
         eventBus.dispatch(DrawToOpenPoolEvent(drawnTiles))
     }
 
-    fun calculateBaseDamage(attackerStatus: StatusData, amount: Int): Int {
-        return (amount + attackerStatus[Status.STRENGTH]).coerceAtLeast(0)
-    }
-
-    fun calculateActualDamage(
-        damageOrigin: DamageOrigin,
-        damageTarget: DamageTarget,
-        attackerStatus: StatusData,
-        targetStatus: StatusData,
-        element: Element,
-        amount: Int
-    ): Int {
-
-        var damage = calculateBaseDamage(attackerStatus, amount) - targetStatus[Status.DEFENSE]
+    fun calculateBaseDamage(element: Element, amount: Int): Int {
+        var flat = 0
+        var scaling = 1f
+        runData.hero.relics.forEach {
+            flat += it.queryFlatAdjustment(DamageOrigin.SELF_ATTACK, DamageTarget.OPPONENT, element)
+            scaling *= it.queryScaledAdjustment(DamageOrigin.SELF_ATTACK, DamageTarget.OPPONENT, element)
+        }
         combat.spells.forEach {
-            if (it is Rune) {
-                damage += it.attackDamageModifier(
-                    damageOrigin,
-                    damageTarget,
-                    attackerStatus,
-                    targetStatus,
-                    element,
-                    amount
-                )
-            }
+            flat += it.queryFlatAdjustment(DamageOrigin.SELF_ATTACK, DamageTarget.OPPONENT, element)
+            scaling *= it.queryScaledAdjustment(DamageOrigin.SELF_ATTACK, DamageTarget.OPPONENT, element)
         }
-        val broken = when (element) {
-            Element.FIRE -> targetStatus.has(Status.FIRE_BREAK)
-            Element.ICE -> targetStatus.has(Status.ICE_BREAK)
-            Element.LIGHTNING -> targetStatus.has(Status.LIGHTNING_BREAK)
-            Element.NONE -> targetStatus.has(Status.NONELEMENTAL_BREAK)
+        combat.heroStatus.forEach {
+            flat += it.queryFlatAdjustment(DamageOrigin.SELF_ATTACK, DamageTarget.OPPONENT, element)
+            scaling *= it.queryScaledAdjustment(DamageOrigin.SELF_ATTACK, DamageTarget.OPPONENT, element)
         }
-        if (broken) {
-            damage = ceil(1.5f * damage.toFloat())
-        }
-        return damage.coerceAtLeast(0)
+        return ((amount + flat) * scaling).toInt()
     }
 
-    fun calculateAttackDamage(enemy: Enemy, element: Element, amount: Int): Int {
-        return calculateActualDamage(
-            DamageOrigin.HERO_ATTACK,
-            DamageTarget.ENEMY,
-            combat.heroStatus,
-            combat.enemyStatus[enemy.id]!!,
-            element,
-            amount
-        )
+    fun calculateDamageOnEnemy(enemy: Enemy, element: Element, amount: Int): Int {
+        var flat = 0
+        var scaling = 1f
+        runData.hero.relics.forEach {
+            flat += it.queryFlatAdjustment(DamageOrigin.SELF_ATTACK, DamageTarget.OPPONENT, element)
+            scaling *= it.queryScaledAdjustment(DamageOrigin.SELF_ATTACK, DamageTarget.OPPONENT, element)
+        }
+        combat.spells.forEach {
+            flat += it.queryFlatAdjustment(DamageOrigin.SELF_ATTACK, DamageTarget.OPPONENT, element)
+            scaling *= it.queryScaledAdjustment(DamageOrigin.SELF_ATTACK, DamageTarget.OPPONENT, element)
+        }
+        combat.heroStatus.forEach {
+            flat += it.queryFlatAdjustment(DamageOrigin.SELF_ATTACK, DamageTarget.OPPONENT, element)
+            scaling *= it.queryScaledAdjustment(DamageOrigin.SELF_ATTACK, DamageTarget.OPPONENT, element)
+        }
+        combat.enemyStatus[enemy.id]!!.forEach {
+            flat += it.queryFlatAdjustment(DamageOrigin.OPPONENT_ATTACK, DamageTarget.SELF, element)
+            scaling *= it.queryScaledAdjustment(DamageOrigin.OPPONENT_ATTACK, DamageTarget.SELF, element)
+        }
+        return ((amount + flat) * scaling).toInt()
+    }
+
+    fun calculateDamageOnHero(enemy: Enemy, element: Element, amount: Int): Int {
+        var flat = 0
+        var scaling = 1f
+        runData.hero.relics.forEach {
+            flat += it.queryFlatAdjustment(DamageOrigin.OPPONENT_ATTACK, DamageTarget.SELF, element)
+            scaling *= it.queryScaledAdjustment(DamageOrigin.OPPONENT_ATTACK, DamageTarget.SELF, element)
+        }
+        combat.spells.forEach {
+            flat += it.queryFlatAdjustment(DamageOrigin.OPPONENT_ATTACK, DamageTarget.SELF, element)
+            scaling *= it.queryScaledAdjustment(DamageOrigin.OPPONENT_ATTACK, DamageTarget.SELF, element)
+        }
+        combat.heroStatus.forEach {
+            flat += it.queryFlatAdjustment(DamageOrigin.OPPONENT_ATTACK, DamageTarget.SELF, element)
+            scaling *= it.queryScaledAdjustment(DamageOrigin.OPPONENT_ATTACK, DamageTarget.SELF, element)
+        }
+        combat.enemyStatus[enemy.id]!!.forEach {
+            flat += it.queryFlatAdjustment(DamageOrigin.SELF_ATTACK, DamageTarget.OPPONENT, element)
+            scaling *= it.queryScaledAdjustment(DamageOrigin.SELF_ATTACK, DamageTarget.OPPONENT, element)
+        }
+        return ((amount + flat) * scaling).toInt()
     }
 
     suspend fun attack(enemy: Enemy, element: Element, amount: Int) {
-        val damage = calculateAttackDamage(enemy, element, amount)
+        val damage = calculateDamageOnEnemy(enemy, element, amount)
         eventBus.dispatch(PlayerAttackEnemyEvent(enemy, element, amount))
         dealDamageToEnemy(enemy, damage)
     }
@@ -252,31 +268,50 @@ class CombatApi(
         }
     }
 
-    fun changeStatus(status: Status, amount: Int) {
-        combat.heroStatus[status] = amount
+    fun addStatusToHero(status: Status) {
+        val maybeStatus = combat.heroStatus.find { it.strId == status.strId }
+        if (maybeStatus == null) {
+            combat.heroStatus.add(status)
+        } else {
+            maybeStatus.amount += status.amount
+        }
     }
 
-    fun changeStatusIncrement(status: Status, increment: Int) {
-        combat.heroStatus.increment(status, increment)
+    fun addStatusToEnemy(enemy: Enemy, status: Status) {
+        val enemyStatus = combat.enemyStatus[enemy.id]!!
+        val maybeStatus = enemyStatus.find { it.strId == status.strId }
+        if (maybeStatus == null) {
+            enemyStatus.add(status)
+        } else {
+            maybeStatus.amount += status.amount
+        }
     }
 
-    fun hasStatus(status: Status) = combat.heroStatus[status] > 0
-
-    fun fetchStatus(status: Status) = combat.heroStatus[status]
-
-    fun removeStatus(status: Status): Int? {
-        return combat.heroStatus.remove(status)
+    fun <T : Status> heroStatusAmount(statusType: KClass<T>): Int {
+        val status = combat.heroStatus.find { statusType.isInstance(it) }
+        return status?.amount ?: 0
     }
 
-    fun changeEnemyStatus(id: Int, status: Status, amount: Int) {
-        combat.enemyStatus[id]!![status] = amount
+    fun heroHasStatus(status: Status): Boolean {
+        return combat.heroStatus.any { it.strId == status.strId }
     }
 
-    fun changeEnemyStatusIncrement(id: Int, status: Status, increment: Int) {
-        combat.enemyStatus[id]!!.increment(status, increment)
+    fun removeHeroStatus(status: Status): Boolean {
+        return combat.heroStatus.removeAll { it.strId == status.strId }
     }
 
-    fun fetchEnemyStatus(id: Int, status: Status) = combat.enemyStatus[id]!![status]
+    fun <T : Status> enemyStatusAmount(enemy: Enemy, statusType: KClass<T>): Int {
+        val status = combat.enemyStatus[enemy.id]!!.find { statusType.isInstance(it) }
+        return status?.amount ?: 0
+    }
+
+    fun enemyHasStatus(enemy: Enemy, status: Status): Boolean {
+        return combat.enemyStatus[enemy.id]!!.any { it.strId == status.strId }
+    }
+
+    fun removeEnemyStatus(enemy: Enemy, status: Status): Boolean {
+        return combat.enemyStatus[enemy.id]!!.removeAll { it.strId == status.strId }
+    }
 
     suspend fun queryTiles(
         text: String,
@@ -332,9 +367,9 @@ class CombatApi(
 }
 
 enum class DamageOrigin {
-    HERO_ATTACK, HERO_MISC, ENEMY_ATTACK, ENEMY_MISC
+    SELF_ATTACK, SELF_MISC, OPPONENT_ATTACK, OPPONENT_MISC
 }
 
 enum class DamageTarget {
-    HERO, ENEMY
+    SELF, OPPONENT
 }

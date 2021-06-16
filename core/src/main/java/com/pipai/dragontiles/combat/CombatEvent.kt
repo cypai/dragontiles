@@ -6,6 +6,7 @@ import com.pipai.dragontiles.data.TileInstance
 import com.pipai.dragontiles.enemies.Enemy
 import com.pipai.dragontiles.spells.Rune
 import com.pipai.dragontiles.spells.StandardSpell
+import com.pipai.dragontiles.status.Status
 import net.mostlyoriginal.api.event.common.Event
 import kotlin.coroutines.Continuation
 
@@ -14,6 +15,10 @@ interface CombatEvent : Event
 data class TurnStartEvent(val turnNumber: Int) : CombatEvent
 
 data class TurnEndEvent(val turnNumber: Int) : CombatEvent
+
+data class EnemyTurnStartEvent(val turnNumber: Int) : CombatEvent
+
+data class EnemyTurnEndEvent(val turnNumber: Int) : CombatEvent
 
 data class DrawEvent(val tiles: List<Pair<TileInstance, Int>>) : CombatEvent
 
@@ -82,15 +87,6 @@ data class QueryTileOptionsEvent(
 ) : CombatEvent
 
 data class StatusAdjustedEvent(
-    val heroStatus: List<Pair<Status, Int>>,
-    val enemyStatus: Map<Int, List<Pair<Status, Int>>>
-) : CombatEvent
-
-data class DamageAdjustSubQuery(
-    val damageOrigin: DamageOrigin,
-    val damageTarget: DamageTarget,
-    val attackerStatus: StatusData,
-    val defenderStatus: StatusData,
-    var flat: Int,
-    var scaling: Float
+    val heroStatus: List<Status>,
+    val enemyStatus: Map<Int, List<Status>>
 ) : CombatEvent

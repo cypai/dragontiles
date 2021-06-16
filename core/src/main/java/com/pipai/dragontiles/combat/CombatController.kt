@@ -20,7 +20,7 @@ class CombatController(
         combat.enemies.forEach {
             it.preInit(api.nextId())
             it.init(api)
-            combat.enemyStatus[it.id] = StatusData()
+            combat.enemyStatus[it.id] = mutableListOf()
         }
         initDrawPile()
         runBlocking { api.drawToOpenPool(9) }
@@ -68,19 +68,14 @@ class CombatController(
 
     suspend fun endTurn() {
         eventBus.dispatch(TurnEndEvent(combat.turnNumber))
+        eventBus.dispatch(EnemyTurnStartEvent(combat.turnNumber))
         combat.enemies
             .filter { it.hp > 0 }
             .forEach { it.getIntent().execute(api) }
+        eventBus.dispatch(EnemyTurnEndEvent(combat.turnNumber))
         combat.enemies
             .filter { it.hp > 0 }
             .forEach { it.nextIntent(api) }
-        combat.heroStatus.decrementAll()
-        combat.enemyStatus.values.forEach { it.decrementAll() }
-        eventBus.dispatch(
-            StatusAdjustedEvent(
-                combat.heroStatus.pairs(),
-                combat.enemyStatus.mapValues { it.value.pairs() })
-        )
         combat.spells.forEach {
             it.turnReset()
         }

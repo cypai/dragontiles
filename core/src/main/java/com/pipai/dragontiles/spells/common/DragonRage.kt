@@ -3,8 +3,9 @@ package com.pipai.dragontiles.spells.common
 import com.pipai.dragontiles.combat.CombatApi
 import com.pipai.dragontiles.combat.CombatSubscribe
 import com.pipai.dragontiles.combat.SpellCastedEvent
-import com.pipai.dragontiles.combat.Status
 import com.pipai.dragontiles.spells.*
+import com.pipai.dragontiles.status.Status
+import com.pipai.dragontiles.status.Strength
 
 class DragonRage(upgraded: Boolean) : StandardSpell(upgraded) {
     override val id: String = "base:spells:DragonRage"
@@ -15,27 +16,22 @@ class DragonRage(upgraded: Boolean) : StandardSpell(upgraded) {
 
     override var repeatableMax: Int = 1
 
-    companion object {
-        val DRAGON_RAGE = Status("base:status:DragonRage", false)
-    }
-
     override fun newClone(upgraded: Boolean): DragonRage {
         return DragonRage(upgraded)
     }
 
     override suspend fun onCast(params: CastParams, api: CombatApi) {
-        if (api.fetchStatus(DRAGON_RAGE) == 0) {
-            api.register(DragonRageImpl())
-        }
-        api.changeStatusIncrement(DRAGON_RAGE, if (upgraded) 3 else 2)
+        api.addStatusToHero(DragonRageStatus(2))
     }
 
-    class DragonRageImpl {
+    class DragonRageStatus(amount: Int) : Status(amount) {
+        override val displayAmount = true
+        override val strId = "base:status:DragonRage"
+
         @CombatSubscribe
         fun onSpellCast(ev: SpellCastedEvent, api: CombatApi) {
             if (ev.spell.requirement.type == SetType.SEQUENTIAL) {
-                val amount = api.fetchStatus(DRAGON_RAGE)
-                api.changeStatusIncrement(Status.STRENGTH, amount)
+                api.addStatusToHero(Strength(amount))
             }
         }
     }

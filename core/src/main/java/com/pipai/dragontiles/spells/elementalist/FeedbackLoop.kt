@@ -1,8 +1,8 @@
 package com.pipai.dragontiles.spells.elementalist
 
 import com.pipai.dragontiles.combat.CombatApi
-import com.pipai.dragontiles.combat.Status
 import com.pipai.dragontiles.spells.*
+import com.pipai.dragontiles.status.Strength
 
 class FeedbackLoop(upgraded: Boolean) : StandardSpell(upgraded) {
     override val id: String = "base:spells:FeedbackLoop"
@@ -20,6 +20,6 @@ class FeedbackLoop(upgraded: Boolean) : StandardSpell(upgraded) {
     }
 
     override suspend fun onCast(params: CastParams, api: CombatApi) {
-        api.changeStatusIncrement(Status.STRENGTH, api.combat.heroStatus[Status.STRENGTH])
+        api.addStatusToHero(Strength(api.heroStatusAmount(Strength::class)))
     }
 }

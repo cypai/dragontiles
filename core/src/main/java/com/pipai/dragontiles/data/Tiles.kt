@@ -4,8 +4,8 @@ enum class Suit(val order: Int) {
     FIRE(1), ICE(2), LIGHTNING(3), STAR(4), LIFE(5)
 }
 
-enum class Element {
-    FIRE, ICE, LIGHTNING, NONE
+enum class Element(val isElemental: Boolean) {
+    FIRE(true), ICE(true), LIGHTNING(true), NONE(false)
 }
 
 enum class StarType(val order: Int) {
