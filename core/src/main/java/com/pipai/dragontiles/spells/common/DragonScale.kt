@@ -9,18 +9,13 @@ import com.pipai.dragontiles.data.Tile
 import com.pipai.dragontiles.spells.*
 import com.pipai.dragontiles.status.SimpleStatus
 
-class DragonScale(upgraded: Boolean) : StandardSpell(upgraded) {
+class DragonScale : StandardSpell() {
     override val id: String = "base:spells:DragonScale"
     override val requirement: ComponentRequirement = Sequential(9, SuitGroup.ELEMENTAL)
     override val type: SpellType = SpellType.EFFECT
     override val targetType: TargetType = TargetType.NONE
     override val rarity: Rarity = Rarity.COMMON
-
-    override var repeatableMax: Int = 1
-
-    override fun newClone(upgraded: Boolean): DragonScale {
-        return DragonScale(upgraded)
-    }
+    override val aspects: MutableList<SpellAspect> = mutableListOf()
 
     override suspend fun onCast(params: CastParams, api: CombatApi) {
         api.exhaust(this)

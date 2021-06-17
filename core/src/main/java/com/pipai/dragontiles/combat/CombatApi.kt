@@ -10,6 +10,7 @@ import com.pipai.dragontiles.spells.Rune
 import com.pipai.dragontiles.spells.StandardSpell
 import com.pipai.dragontiles.status.Overloaded
 import com.pipai.dragontiles.status.Status
+import com.pipai.dragontiles.utils.deepCopy
 import kotlinx.coroutines.runBlocking
 import kotlin.coroutines.suspendCoroutine
 import kotlin.reflect.KClass
@@ -382,7 +383,8 @@ class CombatApi(
     }
 
     suspend fun notifyStatusUpdated() {
-        eventBus.dispatch(StatusAdjustedEvent(combat.heroStatus, combat.enemyStatus))
+        val enemyStatusCopy = combat.enemyStatus.mapValues { es -> es.value.map { s -> s.deepCopy() } }
+        eventBus.dispatch(StatusAdjustedEvent(deepCopy(combat.heroStatus), enemyStatusCopy))
     }
 
     suspend fun queryTiles(

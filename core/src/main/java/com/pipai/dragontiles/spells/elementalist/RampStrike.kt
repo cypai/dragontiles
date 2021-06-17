@@ -5,31 +5,29 @@ import com.pipai.dragontiles.combat.CombatSubscribe
 import com.pipai.dragontiles.combat.SpellCastedEvent
 import com.pipai.dragontiles.combat.TurnStartEvent
 import com.pipai.dragontiles.spells.*
+import com.pipai.dragontiles.utils.findAs
 
-class RampStrike(upgraded: Boolean) : StandardSpell(upgraded) {
+class RampStrike : StandardSpell() {
     override val id: String = "base:spells:RampStrike"
     override val requirement: ComponentRequirement = Sequential(3, SuitGroup.ELEMENTAL)
     override val type: SpellType = SpellType.ATTACK
     override val targetType: TargetType = TargetType.SINGLE
     override val rarity: Rarity = Rarity.COMMON
-
-    override var repeatableMax: Int = 1
+    override val aspects: MutableList<SpellAspect> = mutableListOf(
+        AttackDamageAspect(3)
+    )
 
     private var spellsCasted = 0
 
-    override fun baseDamage(): Int = 3 + spellsCasted * (if (upgraded) 3 else 2)
-
-    override fun newClone(upgraded: Boolean): RampStrike {
-        return RampStrike(upgraded)
-    }
-
     @CombatSubscribe
     fun onTurnStart(ev: TurnStartEvent, api: CombatApi) {
+        aspects.findAs(AttackDamageAspect::class)!!.amount -= 3 * spellsCasted
         spellsCasted = 0
     }
 
     @CombatSubscribe
     fun onSpellCast(ev: SpellCastedEvent, api: CombatApi) {
+        aspects.findAs(AttackDamageAspect::class)!!.amount += 3
         spellsCasted += 1
     }
 

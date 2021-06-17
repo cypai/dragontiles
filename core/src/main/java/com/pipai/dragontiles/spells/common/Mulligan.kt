@@ -3,22 +3,17 @@ package com.pipai.dragontiles.spells.common
 import com.pipai.dragontiles.combat.CombatApi
 import com.pipai.dragontiles.spells.*
 
-class Mulligan(upgraded: Boolean) : StandardSpell(upgraded) {
+class Mulligan : StandardSpell() {
     override val id: String = "base:spells:Mulligan"
     override val requirement: ComponentRequirement = Single()
     override val type: SpellType = SpellType.EFFECT
     override val targetType: TargetType = TargetType.NONE
     override val rarity: Rarity = Rarity.COMMON
-
-    override var repeatableMax: Int = if (upgraded) 2 else 1
-
-    override fun baseDamage(): Int = 0
+    override val aspects: MutableList<SpellAspect> = mutableListOf(
+        LimitedRepeatableAspect(2)
+    )
 
     override suspend fun onCast(params: CastParams, api: CombatApi) {
         api.draw(1)
-    }
-
-    override fun newClone(upgraded: Boolean): Mulligan {
-        return Mulligan(upgraded)
     }
 }

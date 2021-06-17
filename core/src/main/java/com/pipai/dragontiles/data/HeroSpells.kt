@@ -11,30 +11,30 @@ class HeroSpells {
 
     fun elementalistStarterDeck(): MutableList<Spell> {
         return mutableListOf(
-                Invoke(false),
-                Strike(false),
-                Break(false),
-                ElementalRune(false))
+            Invoke(),
+            Strike(),
+            Break(),
+            ElementalRune()
+        )
     }
 
     fun elementalistSpells(): List<Spell> {
         return listOf(
-                Mulligan(false),
-                Ground(false),
-                Reserve(false),
-                QuickInvoke(false),
-                MultiInvoke(false),
-                EnhanceRune(false),
-                StrengthRune(false),
-                RampStrike(false),
-                Concentrate(false),
-                FeedbackLoop(false),
-                Bump(false),
-                Nudge(false),
-                Singularity(false),
-                Spark(false),
-                Blast(false),
-                Explosion(false)
+            Mulligan(),
+            Ground(),
+            Reserve(),
+            QuickInvoke(),
+            MultiInvoke(),
+            StrengthRune(),
+            RampStrike(),
+            Concentrate(),
+            FeedbackLoop(),
+            Bump(),
+            Nudge(),
+            Singularity(),
+            Spark(),
+            Blast(),
+            Explosion()
         )
     }
 
@@ -50,7 +50,7 @@ class HeroSpells {
             rarityRoll < 6 -> uncommons
             else -> commons
         }
-        return rewardSpells.shuffled().subList(0, amount).map { it.newClone(rngUpgrade(rng)) }
+        return rewardSpells.shuffled().subList(0, amount).map { it.newClone() }
     }
 
     private fun rngUpgrade(rng: Random) = rng.nextInt(100) < 10

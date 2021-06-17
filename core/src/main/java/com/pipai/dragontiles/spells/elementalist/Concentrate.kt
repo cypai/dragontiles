@@ -3,23 +3,20 @@ package com.pipai.dragontiles.spells.elementalist
 import com.pipai.dragontiles.combat.CombatApi
 import com.pipai.dragontiles.spells.*
 import com.pipai.dragontiles.status.Strength
+import com.pipai.dragontiles.utils.findAsWhere
 
-class Concentrate(upgraded: Boolean) : StandardSpell(upgraded) {
+class Concentrate : StandardSpell() {
     override val id: String = "base:spells:Concentrate"
     override val requirement: ComponentRequirement = Identical(2, SuitGroup.ARCANE)
     override val type: SpellType = SpellType.EFFECT
     override val targetType: TargetType = TargetType.NONE
     override val rarity: Rarity = Rarity.UNCOMMON
-
-    override var repeatableMax: Int = 1
-
-    override fun baseDamage(): Int = 0
-
-    override fun newClone(upgraded: Boolean): Concentrate {
-        return Concentrate(upgraded)
-    }
+    override val aspects: MutableList<SpellAspect> = mutableListOf(
+        StackableAspect(Strength(2), 1)
+    )
 
     override suspend fun onCast(params: CastParams, api: CombatApi) {
-        api.addStatusToHero(Strength(2))
+        val stackable = aspects.findAsWhere(StackableAspect::class) { it.status is Strength }!!
+        api.addStatusToHero(stackable.status.deepCopy())
     }
 }

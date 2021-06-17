@@ -7,6 +7,10 @@ class BreakStatus(amount: Int, var skip: Boolean) : Status(amount) {
     override val strId = "base:status:Break"
     override val displayAmount = true
 
+    override fun deepCopy(): Status {
+        return BreakStatus(amount, skip)
+    }
+
     override fun queryScaledAdjustment(origin: DamageOrigin, target: DamageTarget, element: Element): Float {
         return if (origin == DamageOrigin.OPPONENT_ATTACK) {
             1.5f

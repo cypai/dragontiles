@@ -4,8 +4,10 @@ import com.pipai.dragontiles.combat.DamageAdjustable
 import com.pipai.dragontiles.combat.DamageOrigin
 import com.pipai.dragontiles.combat.DamageTarget
 import com.pipai.dragontiles.data.Element
+import com.pipai.dragontiles.utils.DeepCopyable
 
-abstract class Status(var amount: Int) : DamageAdjustable {
+abstract class Status(var amount: Int) : DamageAdjustable, DeepCopyable<Status> {
+
     abstract val strId: String
     abstract val displayAmount: Boolean
 

@@ -170,9 +170,8 @@ class SpellCard(
             descriptionLabel.setText("")
         } else {
             val spellLocalization = game.gameStrings.spellLocalization(theSpell.id)
-            nameLabel.setText(spellLocalization.name + if (theSpell.upgraded) "+" else "")
-            val description =
-                if (theSpell.upgraded) spellLocalization.upgradeDescription else spellLocalization.description
+            nameLabel.setText(spellLocalization.name)
+            val description = spellLocalization.description
             val adjustedDescription = description.replace(regex) {
                 if (target == null && it.groupValues[2].isNotEmpty()) {
                     it.groupValues[2]

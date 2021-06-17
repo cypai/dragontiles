@@ -11,7 +11,7 @@ class CombatTest : CombatBackendTest(QueryHandler()) {
     @Test
     fun testCombat() {
         val flameTurtle = FlameTurtle()
-        val runData = runDataFixture(mutableListOf(Invoke(false)), mutableListOf())
+        val runData = runDataFixture(mutableListOf(Invoke()), mutableListOf())
         val combat = Combat(mutableListOf(flameTurtle))
 
         val controller = CombatController(runData, combat, sEvent)
@@ -27,6 +27,7 @@ class CombatTest : CombatBackendTest(QueryHandler()) {
         Assert.assertEquals(15, combat.hand.size)
         Assert.assertEquals(112, combat.drawPile.size)
 
+        // Test cast attempt without proper fill
         val invoke = controller.api.combat.spells.first() as Invoke
         Assert.assertTrue(invoke.available())
         runBlocking { invoke.cast(CastParams(listOf(flameTurtle.id)), controller.api) }
@@ -34,6 +35,7 @@ class CombatTest : CombatBackendTest(QueryHandler()) {
         Assert.assertEquals(10, flameTurtle.hp)
         Assert.assertEquals(0, flameTurtle.flux)
 
+        // Properly filled
         invoke.fill(listOf(controller.api.combat.hand.first()))
         Assert.assertTrue(invoke.available())
         runBlocking { invoke.cast(CastParams(listOf(flameTurtle.id)), controller.api) }

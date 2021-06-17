@@ -8,6 +8,10 @@ class Overloaded(amount: Int) : Status(amount) {
     override val strId = "base:status:Overloaded"
     override val displayAmount = true
 
+    override fun deepCopy(): Status {
+        return Overloaded(amount)
+    }
+
     @CombatSubscribe
     suspend fun onEnemyTurnEnd(ev: EnemyTurnEndEvent, api: CombatApi) {
         amount--

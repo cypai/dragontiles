@@ -8,6 +8,10 @@ class Strength(amount: Int) : Status(amount) {
     override val strId = "base:status:Strength"
     override val displayAmount = true
 
+    override fun deepCopy(): Status {
+        return Strength(amount)
+    }
+
     override fun queryFlatAdjustment(origin: DamageOrigin, target: DamageTarget, element: Element): Int {
         return if (origin == DamageOrigin.SELF_ATTACK && target == DamageTarget.OPPONENT) {
             amount

@@ -17,7 +17,7 @@ class DragonInquiryEvent : DungeonEvent() {
         override val id = "power"
 
         override fun onSelect(api: EventApi) {
-            api.addSpellToDeck(DragonRage(false))
+            api.addSpellToDeck(DragonRage())
             api.changeToEventEnd("powerMain")
         }
     }
@@ -26,7 +26,7 @@ class DragonInquiryEvent : DungeonEvent() {
         override val id = "wisdom"
 
         override fun onSelect(api: EventApi) {
-            api.addSpellToDeck(DragonScale(false))
+            api.addSpellToDeck(DragonScale())
             api.changeToEventEnd("wisdomMain")
         }
     }

@@ -5,18 +5,19 @@ import com.pipai.dragontiles.combat.DamageTarget
 import com.pipai.dragontiles.data.Element
 import com.pipai.dragontiles.spells.*
 
-class ElementalRune(upgraded: Boolean) : Rune(upgraded) {
+class ElementalRune : Rune() {
     override val id: String = "base:spells:ElementalRune"
     override val rarity: Rarity = Rarity.COMMON
-
     override val requirement: ComponentRequirement = Identical(2, SuitGroup.ELEMENTAL)
-
-    override fun newClone(upgraded: Boolean): ElementalRune {
-        return ElementalRune(upgraded)
-    }
+    override val aspects: MutableList<SpellAspect> = mutableListOf()
 
     override fun queryFlatAdjustment(origin: DamageOrigin, target: DamageTarget, element: Element): Int {
-        return if (active && origin == DamageOrigin.SELF_ATTACK && target == DamageTarget.OPPONENT && element.isElemental) {
+        val c = components()
+        return if (active
+            && origin == DamageOrigin.SELF_ATTACK
+            && target == DamageTarget.OPPONENT
+            && element == elemental(c)
+        ) {
             2
         } else {
             0

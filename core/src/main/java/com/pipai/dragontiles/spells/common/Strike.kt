@@ -3,23 +3,18 @@ package com.pipai.dragontiles.spells.common
 import com.pipai.dragontiles.combat.CombatApi
 import com.pipai.dragontiles.spells.*
 
-class Strike(upgraded: Boolean) : StandardSpell(upgraded) {
+class Strike : StandardSpell() {
     override val id: String = "base:spells:Strike"
     override val requirement: ComponentRequirement = Sequential(3, SuitGroup.ELEMENTAL)
     override val type: SpellType = SpellType.ATTACK
     override val targetType: TargetType = TargetType.SINGLE
     override val rarity: Rarity = Rarity.COMMON
-
-    override var repeatableMax: Int = 1
-
-    override fun baseDamage(): Int = 7
-
-    override fun newClone(upgraded: Boolean): Strike {
-        return Strike(upgraded)
-    }
+    override val aspects: MutableList<SpellAspect> = mutableListOf(
+        AttackDamageAspect(7)
+    )
 
     override suspend fun onCast(params: CastParams, api: CombatApi) {
         val target = api.getEnemy(params.targets.first())
-        api.attack(target, elemental(components()), baseDamage() + if (upgraded) 3 else 0)
+        api.attack(target, elemental(components()), baseDamage())
     }
 }

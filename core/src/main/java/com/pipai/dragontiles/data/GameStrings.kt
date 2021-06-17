@@ -50,8 +50,7 @@ class GameStrings {
         val data = strings[id]?.get(language) ?: throw IllegalArgumentException("$id not found")
         return SpellLocalization(
                 data["name"] ?: throw IllegalStateException("$id name not found"),
-                data["description"] ?: throw IllegalStateException("$id description not found"),
-                data["upgradeDescription"] ?: throw IllegalStateException("$id upgradeDescription not found"))
+                data["description"] ?: throw IllegalStateException("$id description not found"))
     }
 
     fun nameDescLocalization(id: String): NameDescLocalization {
@@ -93,6 +92,6 @@ class GameStrings {
 }
 
 data class NameDescLocalization(val name: String, val description: String)
-data class SpellLocalization(val name: String, val description: String, val upgradeDescription: String)
+data class SpellLocalization(val name: String, val description: String)
 data class KeywordLocalization(val key: String, val name: String, val description: String)
 data class EventLocalization(val name: String, val keyText: Map<String, String>)

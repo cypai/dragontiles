@@ -2,196 +2,158 @@ base:spells:Invoke:
   en:
     name: Invoke
     description: Deal !d @Elemented damage.
-    upgradeDescription: Deal !d @Elemented damage. @Repeatable !r.
 
 base:spells:Blast:
   en:
     name: Blast
     description: Deal !d @Elemented @AOE damage.
-    upgradeDescription: Deal !d @Elemented @AOE damage.
 
 base:spells:Explosion:
   en:
     name: Explosion
     description: Deal !d[2x@Numeric] @Elemented @AOE damage. @Exhaust.
-    upgradeDescription: Deal !d[3x@Numeric] @Elemented @AOE damage. @Exhaust.
 
 base:spells:Strike:
   en:
     name: Strike
     description: Deal !d @Elemented damage.
-    upgradeDescription: Deal !d @Elemented damage. @Repeatable !r.
 
 base:spells:Chain:
   en:
     name: Chain
     description: Inflict 5 @Elemented @Chain.
-    upgradeDescription: Inflict 8 @Elemented @Chain.
 
 base:spells:ChainFractal:
   en:
     name: Chain Fractal
     description: Inflict X @Elemented @Chain @AOE.
-    upgradeDescription: Inflict X+1 @Elemented @Chain @AOE.
 
 base:spells:ChainRune:
   en:
     name: Chain Rune
     description: After you cast an attack with the same element, inflict 1 @Elemented @Chain.
-    upgradeDescription: After you cast an attack with the same element, inflict 2 @Elemented @Chain.
 
 base:spells:QuickInvoke:
   en:
     name: Quick Invoke
     description: Deal !d @Elemented damage. @Repeatable !r.
-    upgradeDescription: Deal !d @Elemented damage. @Repeatable !r.
 
 base:spells:MultiInvoke:
   en:
     name: Multi Invoke
     description: Deal !d @Elemented damage @X times.
-    upgradeDescription: Deal !d @Elemented damage @X + 1 times.
 
 base:spells:Mulligan:
   en:
     name: Mulligan
     description: Draw 1 tile.
-    upgradeDescription: Draw 1 tile. @Repeatable !r.
 
 base:spells:Spark:
   en:
     name: Spark
     description: "@Component must be a 1. Deal !d @Elemented damage. @Repeatable."
-    upgradeDescription: "@Component must be a 1. Deal !d @Elemented damage. @Repeatable."
 
 base:spells:Reserve:
   en:
     name: Reserve
     description: "@OpenDiscard the @Component. @Repeatable !r."
-    upgradeDescription: "@OpenDiscard the @Component. @Repeatable !r."
 
 base:spells:PreFetch:
   en:
     name: Pre-Fetch
     description: Fill the Open Discard Pool.
-    upgradeDescription: Fill the Open Discard Pool.
 
 base:spells:Ground:
   en:
     name: Ground
     description: "@Repeatable !r."
-    upgradeDescription: "@Repeatable !r."
 
 base:spells:Bump:
   en:
     name: Bump
     description: Transform the @Component into its @Successor.
-    upgradeDescription: Transform the @Component into its @Successor. @Repeatable !r.
 
 base:spells:Nudge:
   en:
     name: Nudge
     description: Transform the @Component into its @Predecessor.
-    upgradeDescription: Transform the @Component into its @Predecessor. @Repeatable !r.
 
 base:spells:RampStrike:
   en:
     name: Ramp Strike
     description: Deal !d @Elemented damage. Increases damage by 1 per spells cast this turn.
-    upgradeDescription: Deal !d @Elemented damage. Increases damage by 2 per spells cast this turn.
 
 base:spells:Singularity:
   en:
     name: Singularity
     description: Split an @ElementalTile into at most 3 1s.
-    upgradeDescription: Split an @ElementalTile into 1s.
 
 base:spells:Break:
   en:
     name: Break
     description: Inflict 3 @Elemented @Break.
-    upgradeDescription: Inflict 4 @Elemented @Break.
 
 base:spells:Concentrate:
   en:
     name: Concentrate
     description: Gain 2 @Strength.
-    upgradeDescription: Gain 3 @Strength.
 
 base:spells:FeedbackLoop:
   en:
     name: FeedbackLoop
     description: Double your @Strength. @Exhaust.
-    upgradeDescription: Double your @Strength.
 
 base:spells:Fireball:
   en:
     name: Fireball
     description: Deal !d Fire damage. @Burn a tile in your hand.
-    upgradeDescription: Deal !d Fire damage. @Burn a tile in your hand.
 
 base:spells:IceShard:
   en:
     name: Ice Shard
     description: Deal !d Ice damage. Gain 2 @Shield. @Freeze a tile in your hand.
-    upgradeDescription: Deal !d Ice damage. Gain 4 @Shield. @Freeze a tile in your hand.
 
 base:spells:ChainLightning:
   en:
     name: Chain Lightning
     description: Deal !d Lightning damage @AOE. @Shock a tile in your hand.
-    upgradeDescription: Deal !d Lightning damage @AOE. @Shock a tile in your hand.
 
 base:spells:ElementalRune:
   en:
     name: Elemental Rune
-    description: Increases Elemental damage by 2.
-    upgradeDescription: Increases Elemental damage by 3.
+    description: Increases damage from same-Elemented attacks by 2.
 
 base:spells:EnhanceRune:
   en:
     name: Enhance Rune
     description: Increases damage from same-Elemented attacks by @X.
-    upgradeDescription: Increases damage from same-Elemented attacks by @X + 1.
 
 base:spells:StrengthRune:
   en:
     name: Strength Rune
     description: Increases damage by @X.
-    upgradeDescription: Increases damage by @X + 1.
-
-base:spells:BarrierRune:
-  en:
-    name: Barrier Rune
-    description: At the end of your turn, deal @X damage to all spells.
-    upgradeDescription: At the end of your turn, deal @X + 1 damage to all spells.
 
 base:spells:HasteRune:
   en:
     name: Haste Rune
     description: After casting a spell, draw 1 tile.
-    upgradeDescription: After casting a spell, draw 1 tile.
 
 base:spells:MeldPromotion:
   en:
     name: MeldPromotion
     description: "@Component must be addable to an active @Rune. Add it, then fetch a tile from the discard pile."
-    upgradeDescription: "@Component must be addable to an active @Rune. Add it, then fetch a tile from the discard pile. @Repeatable !r."
 
 base:spells:AllForOne:
   en:
     name: All For One
     description: Deal !d damage. Put all tiles matching the @Component from the discard pile into your hand.
-    upgradeDescription: Deal !d damage. Put all tiles matching the @Component from the discard pile into your hand.
 
 base:spells:DragonRage:
   en:
     name: Dragon Rage
     description: "@Power: Gain 2 Strength each time you play a Sequence."
-    upgradeDescription: "@Power: Gain 3 Strength each time you play a Sequence."
 
 base:spells:DragonScale:
   en:
     name: Dragon Scale
     description: "@Power: Drawn Elemental Tiles transform to the @Component Element. @Exhaust."
-    upgradeDescription: "@Power: Elemental tiles added to your hand transform to the @Component Element. @Exhaust."

@@ -12,7 +12,7 @@ class BreakTest : CombatBackendTest(QueryHandler()) {
     @Test
     fun testBreak() {
         val flameTurtle = FlameTurtle()
-        val runData = runDataFixture(mutableListOf(Invoke(false)), mutableListOf())
+        val runData = runDataFixture(mutableListOf(Invoke()), mutableListOf())
         val combat = Combat(mutableListOf(flameTurtle))
 
         val controller = CombatController(runData, combat, sEvent)

@@ -6,16 +6,16 @@ import com.pipai.dragontiles.data.TileInstance
 import com.pipai.dragontiles.enemies.FlameTurtle
 import com.pipai.dragontiles.spells.CastParams
 import com.pipai.dragontiles.spells.common.Invoke
-import com.pipai.dragontiles.spells.elementalist.EnhanceRune
+import com.pipai.dragontiles.spells.elementalist.ElementalRune
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert
 import org.junit.Test
 
-class EnhanceRuneTest : CombatBackendTest(QueryHandler()) {
+class ElementalRuneTest : CombatBackendTest(QueryHandler()) {
     @Test
-    fun testEnhanceRune() {
+    fun testElementalRune() {
         val flameTurtle = FlameTurtle()
-        val runData = runDataFixture(mutableListOf(Invoke(false), EnhanceRune(false)), mutableListOf())
+        val runData = runDataFixture(mutableListOf(Invoke(), ElementalRune()), mutableListOf())
         val combat = Combat(mutableListOf(flameTurtle))
 
         val controller = CombatController(runData, combat, sEvent)
@@ -25,14 +25,14 @@ class EnhanceRuneTest : CombatBackendTest(QueryHandler()) {
         val hand = controller.api.combat.hand
         hand.clear()
         hand.add(TileInstance(Tile.ElementalTile(Suit.FIRE, 1), 1))
-        hand.add(TileInstance(Tile.ElementalTile(Suit.FIRE, 2), 2))
-        hand.add(TileInstance(Tile.ElementalTile(Suit.FIRE, 3), 3))
+        hand.add(TileInstance(Tile.ElementalTile(Suit.FIRE, 1), 2))
+        hand.add(TileInstance(Tile.ElementalTile(Suit.FIRE, 1), 3))
 
         val invoke = controller.api.combat.spells[0] as Invoke
-        val enhanceRune = controller.api.combat.spells[1] as EnhanceRune
+        val elementalRune = controller.api.combat.spells[1] as ElementalRune
 
-        enhanceRune.fill(hand.subList(0, 2))
-        runBlocking { enhanceRune.activate(controller.api) }
+        elementalRune.fill(hand.subList(0, 2))
+        runBlocking { elementalRune.activate(controller.api) }
         // Runes remove tile from hand -> assigned
         Assert.assertEquals(1, hand.size)
         Assert.assertEquals(2, combat.assigned[1]?.size)

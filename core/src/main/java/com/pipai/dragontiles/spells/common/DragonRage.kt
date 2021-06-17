@@ -6,27 +6,30 @@ import com.pipai.dragontiles.combat.SpellCastedEvent
 import com.pipai.dragontiles.spells.*
 import com.pipai.dragontiles.status.Status
 import com.pipai.dragontiles.status.Strength
+import com.pipai.dragontiles.utils.findAsWhere
 
-class DragonRage(upgraded: Boolean) : StandardSpell(upgraded) {
+class DragonRage : StandardSpell() {
     override val id: String = "base:spells:DragonRage"
     override val requirement: ComponentRequirement = Sequential(9, SuitGroup.ELEMENTAL)
     override val type: SpellType = SpellType.EFFECT
     override val targetType: TargetType = TargetType.NONE
     override val rarity: Rarity = Rarity.COMMON
-
-    override var repeatableMax: Int = 1
-
-    override fun newClone(upgraded: Boolean): DragonRage {
-        return DragonRage(upgraded)
-    }
+    override val aspects: MutableList<SpellAspect> = mutableListOf(
+        StackableAspect(DragonRageStatus(2), 1)
+    )
 
     override suspend fun onCast(params: CastParams, api: CombatApi) {
-        api.addStatusToHero(DragonRageStatus(2))
+        val stackable = aspects.findAsWhere(StackableAspect::class) { it.status is DragonRageStatus }!!
+        api.addStatusToHero(stackable.status.deepCopy())
     }
 
     class DragonRageStatus(amount: Int) : Status(amount) {
         override val displayAmount = true
         override val strId = "base:status:DragonRage"
+
+        override fun deepCopy(): Status {
+            return DragonRageStatus(amount)
+        }
 
         @CombatSubscribe
         suspend fun onSpellCast(ev: SpellCastedEvent, api: CombatApi) {

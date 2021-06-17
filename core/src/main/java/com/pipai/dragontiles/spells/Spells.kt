@@ -5,26 +5,28 @@ import com.pipai.dragontiles.data.Element
 import com.pipai.dragontiles.data.Suit
 import com.pipai.dragontiles.data.Tile
 import com.pipai.dragontiles.data.TileInstance
-import com.pipai.dragontiles.utils.getLogger
-import com.pipai.dragontiles.utils.with
-import com.pipai.dragontiles.utils.withAll
-import com.pipai.dragontiles.utils.withoutAll
+import com.pipai.dragontiles.utils.*
 import org.apache.commons.lang3.builder.ToStringBuilder
+import kotlin.reflect.full.createInstance
 
-abstract class Spell(var upgraded: Boolean) : DamageAdjustable {
+abstract class Spell : DamageAdjustable {
     abstract val id: String
 
     abstract val requirement: ComponentRequirement
     abstract val type: SpellType
     abstract val rarity: Rarity
+    abstract val aspects: MutableList<SpellAspect>
+    val upgrades: MutableList<SpellUpgrade> = mutableListOf()
 
     protected val data: MutableMap<String, Int> = mutableMapOf()
 
-    abstract fun newClone(upgraded: Boolean): Spell
+    fun newClone(): Spell {
+        val clone = this::class.createInstance()
+        clone.upgrades.addAll(upgrades)
+        return clone
+    }
 
     abstract fun available(): Boolean
-
-    open fun baseDamage(): Int = 0
 
     override fun queryFlatAdjustment(origin: DamageOrigin, target: DamageTarget, element: Element): Int = 0
 
@@ -67,23 +69,26 @@ enum class Rarity {
     COMMON, UNCOMMON, RARE
 }
 
-abstract class StandardSpell(upgraded: Boolean) : Spell(upgraded) {
+abstract class StandardSpell : Spell() {
     private val logger = getLogger()
 
     abstract val targetType: TargetType
 
-    abstract var repeatableMax: Int
-
     var repeated = 0
     var exhausted = false
 
-    override fun available(): Boolean = !exhausted && repeated < repeatableMax
-
     override fun dynamicValue(key: String, api: CombatApi, params: CastParams): Int {
         return when (key) {
-            "!r" -> repeatableMax - repeated
+            "!r" -> (aspects.findAs(LimitedRepeatableAspect::class)?.max ?: 1) - repeated
             else -> super.dynamicValue(key, api, params)
+
         }
+    }
+
+    override fun available(): Boolean {
+        val repeatOk = aspects.findAs(RepeatableAspect::class) != null
+                || repeated < aspects.findAs(LimitedRepeatableAspect::class)?.max ?: 1
+        return !exhausted && repeatOk
     }
 
     suspend fun cast(params: CastParams, api: CombatApi) {
@@ -108,13 +113,13 @@ abstract class StandardSpell(upgraded: Boolean) : Spell(upgraded) {
     }
 
     override fun combatReset() {
-        exhausted = false
         repeated = 0
+        exhausted = false
         data.clear()
     }
 }
 
-abstract class Rune(upgraded: Boolean) : Spell(upgraded) {
+abstract class Rune : Spell() {
     private val logger = getLogger()
 
     override val type: SpellType = SpellType.RUNE
@@ -421,8 +426,8 @@ class Sequential(slotAmount: Int, override var suitGroup: SuitGroup) : Component
                 return find(hand.filter { handTile ->
                     val tile = handTile.tile
                     val givenTiles = given.map { it.tile as Tile.ElementalTile }
-                    val minimum = givenTiles.minBy { it.number }!!.number - reqAmount.amount
-                    val maximum = givenTiles.maxBy { it.number }!!.number + reqAmount.amount
+                    val minimum = givenTiles.minByOrNull { it.number }!!.number - reqAmount.amount
+                    val maximum = givenTiles.maxByOrNull { it.number }!!.number + reqAmount.amount
                     tile is Tile.ElementalTile
                             && tile.suit == first.suit
                             && tile.number >= minimum
