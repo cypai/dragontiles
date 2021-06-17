@@ -3,7 +3,6 @@ buildscript {
         mavenLocal()
         mavenCentral()
         maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
-        jcenter()
     }
 
     ext.kotlinVersion = '1.4.31'
