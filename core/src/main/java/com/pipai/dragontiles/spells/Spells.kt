@@ -16,7 +16,7 @@ abstract class Spell : DamageAdjustable {
     abstract val type: SpellType
     abstract val rarity: Rarity
     abstract val aspects: MutableList<SpellAspect>
-    val upgrades: MutableList<SpellUpgrade> = mutableListOf()
+    private val upgrades: MutableList<SpellUpgrade> = mutableListOf()
 
     protected val data: MutableMap<String, Int> = mutableMapOf()
 
@@ -24,6 +24,13 @@ abstract class Spell : DamageAdjustable {
         val clone = this::class.createInstance()
         clone.upgrades.addAll(upgrades)
         return clone
+    }
+
+    fun getUpgrades() = upgrades.toList()
+
+    fun upgrade(upgrade: SpellUpgrade) {
+        upgrade.onUpgrade(this)
+        upgrades.add(upgrade)
     }
 
     abstract fun available(): Boolean
