@@ -13,14 +13,9 @@ data class AttackIntent(
     override val enemy: Enemy, val attackPower: Int, val multistrike: Int, val piercing: Boolean, val element: Element
 ) : Intent {
 
-    fun calculateDamage(api: CombatApi): Int {
-        return api.calculateDamageOnHero(enemy, element, attackPower)
-    }
-
     override suspend fun execute(api: CombatApi) {
         repeat(multistrike) {
-            val damage = calculateDamage(api)
-            api.dealDamageToHero(damage)
+            api.attackHero(enemy, element, attackPower)
         }
     }
 }
@@ -42,5 +37,10 @@ data class DebuffIntent(
     override suspend fun execute(api: CombatApi) {
         attackIntent?.execute(api)
         api.addStatusToHero(status)
+    }
+}
+
+data class StunnedIntent(override val enemy: Enemy) : Intent {
+    override suspend fun execute(api: CombatApi) {
     }
 }

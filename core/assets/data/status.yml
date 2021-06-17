@@ -1,3 +1,8 @@
+base:status:Overloaded:
+  en:
+    name: Overloaded
+    description: Cannot do anything.
+
 base:status:Strength:
   en:
     name: Strength

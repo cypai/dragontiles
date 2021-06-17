@@ -24,5 +24,5 @@ abstract class Enemy {
 
     abstract fun getIntent(): Intent
 
-    abstract fun nextIntent(api: CombatApi)
+    abstract fun nextIntent(api: CombatApi): Intent
 }

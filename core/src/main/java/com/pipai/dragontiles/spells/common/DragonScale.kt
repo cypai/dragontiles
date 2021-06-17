@@ -18,12 +18,6 @@ class DragonScale(upgraded: Boolean) : StandardSpell(upgraded) {
 
     override var repeatableMax: Int = 1
 
-    companion object {
-        val FIRE_DRAGON_SCALE = SimpleStatus("base:status:FireDragonScale", false, 1)
-        val ICE_DRAGON_SCALE = SimpleStatus("base:status:IceDragonScale", false, 1)
-        val LIGHTNING_DRAGON_SCALE = SimpleStatus("base:status:LightningDragonScale", false, 1)
-    }
-
     override fun newClone(upgraded: Boolean): DragonScale {
         return DragonScale(upgraded)
     }
@@ -31,26 +25,30 @@ class DragonScale(upgraded: Boolean) : StandardSpell(upgraded) {
     override suspend fun onCast(params: CastParams, api: CombatApi) {
         api.exhaust(this)
         var register = true
-        register = register && !api.removeHeroStatus(FIRE_DRAGON_SCALE)
-        register = register && !api.removeHeroStatus(ICE_DRAGON_SCALE)
-        register = register && !api.removeHeroStatus(LIGHTNING_DRAGON_SCALE)
+        register = register && !api.removeHeroStatus(FireDragonScale::class)
+        register = register && !api.removeHeroStatus(IceDragonScale::class)
+        register = register && !api.removeHeroStatus(LightningDragonScale::class)
         when (elemental(components())) {
-            Element.FIRE -> api.addStatusToHero(FIRE_DRAGON_SCALE)
-            Element.ICE -> api.addStatusToHero(ICE_DRAGON_SCALE)
-            Element.LIGHTNING -> api.addStatusToHero(LIGHTNING_DRAGON_SCALE)
+            Element.FIRE -> api.addStatusToHero(FireDragonScale())
+            Element.ICE -> api.addStatusToHero(IceDragonScale())
+            Element.LIGHTNING -> api.addStatusToHero(LightningDragonScale())
             else -> {
             }
         }
         if (register) api.register(DragonScaleImpl())
     }
 
+    class FireDragonScale : SimpleStatus("base:status:FireDragonScale", false, 1)
+    class IceDragonScale : SimpleStatus("base:status:IceDragonScale", false, 1)
+    class LightningDragonScale : SimpleStatus("base:status:LightningDragonScale", false, 1)
+
     class DragonScaleImpl {
         @CombatSubscribe
         suspend fun onDraw(ev: DrawEvent, api: CombatApi) {
             val suit = when {
-                api.heroHasStatus(FIRE_DRAGON_SCALE) -> Suit.FIRE
-                api.heroHasStatus(ICE_DRAGON_SCALE) -> Suit.ICE
-                api.heroHasStatus(LIGHTNING_DRAGON_SCALE) -> Suit.LIGHTNING
+                api.heroHasStatus(FireDragonScale::class) -> Suit.FIRE
+                api.heroHasStatus(IceDragonScale::class) -> Suit.ICE
+                api.heroHasStatus(LightningDragonScale::class) -> Suit.LIGHTNING
                 else -> return
             }
             ev.tiles.map { it.first }

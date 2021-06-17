@@ -25,8 +25,9 @@ class FlameTurtle : Enemy() {
         }
     }
 
-    override fun nextIntent(api: CombatApi) {
+    override fun nextIntent(api: CombatApi): Intent {
         intents++
         if (intents > 2) intents = 0
+        return getIntent()
     }
 }

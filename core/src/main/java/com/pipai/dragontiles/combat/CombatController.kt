@@ -2,6 +2,7 @@ package com.pipai.dragontiles.combat
 
 import com.pipai.dragontiles.data.*
 import com.pipai.dragontiles.dungeon.RunData
+import com.pipai.dragontiles.status.Overloaded
 import kotlinx.coroutines.runBlocking
 import net.mostlyoriginal.api.event.common.EventSystem
 
@@ -57,8 +58,14 @@ class CombatController(
 
     suspend fun runTurn() {
         combat.turnNumber += 1
-        // TODO: Add tiles to open discard
-        // TODO: Display intents
+        combat.enemies.forEach {
+            val intent = if (api.enemyHasStatus(it, Overloaded::class)) {
+                StunnedIntent(it)
+            } else {
+                it.getIntent()
+            }
+            api.changeEnemyIntent(it, intent)
+        }
         if (combat.turnNumber > 1) {
             api.queryOpenPoolDraw()
         }
@@ -71,14 +78,22 @@ class CombatController(
         eventBus.dispatch(EnemyTurnStartEvent(combat.turnNumber))
         combat.enemies
             .filter { it.hp > 0 }
-            .forEach { it.getIntent().execute(api) }
+            .forEach {
+                combat.enemyIntent[it.id]?.execute(api)
+                api.changeEnemyIntent(it, null)
+            }
         eventBus.dispatch(EnemyTurnEndEvent(combat.turnNumber))
+        combat.heroStatus.removeAll { it.amount <= 0 }
+        combat.enemyStatus.values.forEach { es -> es.removeAll { it.amount <= 0 } }
         combat.enemies
             .filter { it.hp > 0 }
-            .forEach { it.nextIntent(api) }
+            .forEach {
+                api.changeEnemyIntent(it, it.nextIntent(api))
+            }
         combat.spells.forEach {
             it.turnReset()
         }
+        api.drawToOpenPool(1)
         runTurn()
     }
 

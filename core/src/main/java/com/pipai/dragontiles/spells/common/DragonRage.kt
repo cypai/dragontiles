@@ -29,7 +29,7 @@ class DragonRage(upgraded: Boolean) : StandardSpell(upgraded) {
         override val strId = "base:status:DragonRage"
 
         @CombatSubscribe
-        fun onSpellCast(ev: SpellCastedEvent, api: CombatApi) {
+        suspend fun onSpellCast(ev: SpellCastedEvent, api: CombatApi) {
             if (ev.spell.requirement.type == SetType.SEQUENTIAL) {
                 api.addStatusToHero(Strength(amount))
             }

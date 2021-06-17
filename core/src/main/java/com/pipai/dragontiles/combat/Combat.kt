@@ -24,4 +24,5 @@ data class Combat(val enemies: List<Enemy>) {
 
     val heroStatus: MutableList<Status> = mutableListOf()
     val enemyStatus: MutableMap<Int, MutableList<Status>> = mutableMapOf()
+    val enemyIntent: MutableMap<Int, Intent> = mutableMapOf()
 }

@@ -39,6 +39,6 @@ class EnhanceRuneTest : CombatBackendTest(QueryHandler()) {
 
         invoke.fill(listOf(hand[0]))
         runBlocking { invoke.cast(CastParams(listOf(flameTurtle.id)), controller.api) }
-        Assert.assertEquals(26, flameTurtle.hp)
+        Assert.assertEquals(4, flameTurtle.flux)
     }
 }

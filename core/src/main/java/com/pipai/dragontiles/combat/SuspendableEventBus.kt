@@ -22,11 +22,17 @@ class SuspendableEventBus(private val eventSystem: EventSystem) {
 
     fun register(o: Any) {
         o::class.declaredFunctions
-                .filter { it.annotations.any { a -> a is CombatSubscribe } }
-                .forEach {
-                    val annotation = it.annotations.find { a -> a is CombatSubscribe } as CombatSubscribe
-                    addSubscription(annotation.priority, o, it)
-                }
+            .filter { it.annotations.any { a -> a is CombatSubscribe } }
+            .forEach {
+                val annotation = it.annotations.find { a -> a is CombatSubscribe } as CombatSubscribe
+                addSubscription(annotation.priority, o, it)
+            }
+    }
+
+    fun unregister(o: Any) {
+        subscriptions.values.forEach { queue ->
+            queue.removeIf { it.obj == o }
+        }
     }
 
     private fun addSubscription(priority: Int, o: Any, f: KFunction<*>) {

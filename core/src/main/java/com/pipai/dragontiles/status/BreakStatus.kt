@@ -16,11 +16,12 @@ class BreakStatus(amount: Int, var skip: Boolean) : Status(amount) {
     }
 
     @CombatSubscribe
-    fun onEnemyTurnEnd(ev: EnemyTurnEndEvent, api: CombatApi) {
+    suspend fun onEnemyTurnEnd(ev: EnemyTurnEndEvent, api: CombatApi) {
         if (skip) {
             skip = false
         } else {
             amount--
+            api.notifyStatusUpdated()
         }
     }
 }

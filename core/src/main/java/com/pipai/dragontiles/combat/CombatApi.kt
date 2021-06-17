@@ -1,6 +1,5 @@
 package com.pipai.dragontiles.combat
 
-import com.badlogic.gdx.math.MathUtils.ceil
 import com.pipai.dragontiles.data.Element
 import com.pipai.dragontiles.data.Tile
 import com.pipai.dragontiles.data.TileInstance
@@ -9,7 +8,7 @@ import com.pipai.dragontiles.dungeon.RunData
 import com.pipai.dragontiles.enemies.Enemy
 import com.pipai.dragontiles.spells.Rune
 import com.pipai.dragontiles.spells.StandardSpell
-import com.pipai.dragontiles.spells.SuitGroup
+import com.pipai.dragontiles.status.Overloaded
 import com.pipai.dragontiles.status.Status
 import kotlinx.coroutines.runBlocking
 import kotlin.coroutines.suspendCoroutine
@@ -162,6 +161,9 @@ class CombatApi(
             val tile = combat.drawPile.removeAt(0)
             combat.openPool.add(tile)
             drawnTiles.add(Pair(tile, combat.openPool.size - 1))
+            if (combat.openPool.size > 9) {
+                removeFromOpenPool(combat.openPool.slice(0 until combat.openPool.size - 9))
+            }
         }
         eventBus.dispatch(DrawToOpenPoolEvent(drawnTiles))
     }
@@ -231,13 +233,37 @@ class CombatApi(
     suspend fun attack(enemy: Enemy, element: Element, amount: Int) {
         val damage = calculateDamageOnEnemy(enemy, element, amount)
         eventBus.dispatch(PlayerAttackEnemyEvent(enemy, element, amount))
-        dealDamageToEnemy(enemy, damage)
+        if (enemy.flux < enemy.fluxMax) {
+            dealFluxDamageToEnemy(enemy, damage)
+        } else {
+            dealDamageToEnemy(enemy, damage)
+        }
+    }
+
+    suspend fun dealFluxDamageToEnemy(enemy: Enemy, damage: Int) {
+        enemy.flux += damage
+        eventBus.dispatch(EnemyFluxDamageEvent(enemy, damage))
+        if (enemy.flux > enemy.fluxMax) {
+            enemy.flux = enemy.fluxMax
+            addStatusToEnemy(enemy, Overloaded(2))
+        }
+    }
+
+    suspend fun changeEnemyIntent(enemy: Enemy, intent: Intent?) {
+        if (intent == null) {
+            combat.enemyIntent.remove(enemy.id)
+        } else {
+            combat.enemyIntent[enemy.id] = intent
+        }
+        eventBus.dispatch(EnemyChangeIntentEvent(enemy.id, intent))
     }
 
     suspend fun dealDamageToEnemy(enemy: Enemy, damage: Int) {
         enemy.hp -= damage
         eventBus.dispatch(EnemyDamageEvent(enemy, damage))
         if (enemy.hp <= 0) {
+            combat.enemyIntent.remove(enemy.id)
+            eventBus.dispatch(EnemyChangeIntentEvent(enemy.id, null))
             eventBus.dispatch(EnemyDefeatedEvent(enemy))
             if (combat.enemies.all { it.hp <= 0 }) {
                 combat.heroStatus.clear()
@@ -260,6 +286,24 @@ class CombatApi(
         sortHand()
     }
 
+    suspend fun attackHero(enemy: Enemy, element: Element, amount: Int) {
+        val damage = calculateDamageOnHero(enemy, element, amount)
+        if (runData.hero.flux < runData.hero.fluxMax) {
+            dealFluxDamageToHero(damage)
+        } else {
+            dealDamageToHero(damage)
+        }
+    }
+
+    suspend fun dealFluxDamageToHero(damage: Int) {
+        runData.hero.flux += damage
+        eventBus.dispatch(PlayerFluxDamageEvent(damage))
+        if (runData.hero.flux > runData.hero.fluxMax) {
+            runData.hero.flux = runData.hero.fluxMax
+            addStatusToHero(Overloaded(2))
+        }
+    }
+
     suspend fun dealDamageToHero(damage: Int) {
         runData.hero.hp -= damage
         eventBus.dispatch(PlayerDamageEvent(damage))
@@ -268,23 +312,32 @@ class CombatApi(
         }
     }
 
-    fun addStatusToHero(status: Status) {
+    suspend fun addStatusToHero(status: Status) {
         val maybeStatus = combat.heroStatus.find { it.strId == status.strId }
         if (maybeStatus == null) {
             combat.heroStatus.add(status)
         } else {
             maybeStatus.amount += status.amount
+            if (maybeStatus.amount == 0) {
+                removeHeroStatus(status::class)
+            }
         }
+        notifyStatusUpdated()
     }
 
-    fun addStatusToEnemy(enemy: Enemy, status: Status) {
+    suspend fun addStatusToEnemy(enemy: Enemy, status: Status) {
         val enemyStatus = combat.enemyStatus[enemy.id]!!
         val maybeStatus = enemyStatus.find { it.strId == status.strId }
         if (maybeStatus == null) {
             enemyStatus.add(status)
+            eventBus.register(status)
         } else {
             maybeStatus.amount += status.amount
+            if (maybeStatus.amount == 0) {
+                removeEnemyStatus(enemy, status::class)
+            }
         }
+        notifyStatusUpdated()
     }
 
     fun <T : Status> heroStatusAmount(statusType: KClass<T>): Int {
@@ -292,12 +345,19 @@ class CombatApi(
         return status?.amount ?: 0
     }
 
-    fun heroHasStatus(status: Status): Boolean {
-        return combat.heroStatus.any { it.strId == status.strId }
+    fun <T : Status> heroHasStatus(statusType: KClass<T>): Boolean {
+        return combat.heroStatus.any { statusType.isInstance(it) }
     }
 
-    fun removeHeroStatus(status: Status): Boolean {
-        return combat.heroStatus.removeAll { it.strId == status.strId }
+    suspend fun <T : Status> removeHeroStatus(statusType: KClass<T>): Boolean {
+        val item = combat.heroStatus.find { statusType.isInstance(it) }
+        if (item != null) {
+            combat.heroStatus.remove(item)
+            eventBus.unregister(item)
+            notifyStatusUpdated()
+            return true
+        }
+        return false
     }
 
     fun <T : Status> enemyStatusAmount(enemy: Enemy, statusType: KClass<T>): Int {
@@ -305,12 +365,24 @@ class CombatApi(
         return status?.amount ?: 0
     }
 
-    fun enemyHasStatus(enemy: Enemy, status: Status): Boolean {
-        return combat.enemyStatus[enemy.id]!!.any { it.strId == status.strId }
+    fun <T : Status> enemyHasStatus(enemy: Enemy, statusType: KClass<T>): Boolean {
+        return combat.enemyStatus[enemy.id]!!.any { statusType.isInstance(it) }
     }
 
-    fun removeEnemyStatus(enemy: Enemy, status: Status): Boolean {
-        return combat.enemyStatus[enemy.id]!!.removeAll { it.strId == status.strId }
+    suspend fun <T : Status> removeEnemyStatus(enemy: Enemy, statusType: KClass<T>): Boolean {
+        val statusList = combat.enemyStatus[enemy.id]!!
+        val item = statusList.find { statusType.isInstance(it) }
+        if (item != null) {
+            statusList.remove(item)
+            eventBus.unregister(item)
+            notifyStatusUpdated()
+            return true
+        }
+        return false
+    }
+
+    suspend fun notifyStatusUpdated() {
+        eventBus.dispatch(StatusAdjustedEvent(combat.heroStatus, combat.enemyStatus))
     }
 
     suspend fun queryTiles(

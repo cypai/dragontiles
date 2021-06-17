@@ -28,7 +28,8 @@ class Slime : Enemy() {
         }
     }
 
-    override fun nextIntent(api: CombatApi) {
+    override fun nextIntent(api: CombatApi): Intent {
         attacks++
+        return getIntent()
     }
 }

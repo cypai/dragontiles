@@ -8,6 +8,6 @@ interface DeepCopyable<T : DeepCopyable<T>> {
     fun deepCopy(): T
 }
 
-fun <T : DeepCopyable<T>> deepCopy(list: List<List<T>>) : List<List<T>> {
-    return list.map { it.map { it.deepCopy() } }
+fun <T : DeepCopyable<T>> deepCopy(list: List<T>): List<T> {
+    return list.map { it.deepCopy() }
 }
