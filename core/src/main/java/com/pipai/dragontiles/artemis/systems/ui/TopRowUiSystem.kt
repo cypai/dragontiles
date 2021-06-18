@@ -6,6 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.pipai.dragontiles.DragonTilesGame
 import com.pipai.dragontiles.artemis.systems.NoProcessingSystem
 import com.pipai.dragontiles.dungeon.RunData
+import java.lang.Integer.min
 
 class TopRowUiSystem(
     game: DragonTilesGame,
@@ -18,6 +19,10 @@ class TopRowUiSystem(
 
     private val rootTable = Table()
     private val topRow = Table()
+    private var hp = 0
+    private var hpMax = 0
+    private var flux = 0
+    private var fluxMax = 0
     private val hpLabel = Label("HP: ${runData.hero.hp}/${runData.hero.hpMax}", skin)
     private val fluxLabel = Label("Flux: ${runData.hero.hp}/${runData.hero.hpMax}", skin)
     private val goldLabel = Label("Gold: ${runData.hero.gold}", skin)
@@ -51,17 +56,22 @@ class TopRowUiSystem(
     }
 
     fun setHpRelative(amount: Int) {
-        val tokens = hpLabel.text.split("/")
-        val hp = tokens[0].toInt()
-        val hpMax = tokens[1].toInt()
         setHp(hp + amount, hpMax)
     }
 
     fun setHp(hp: Int, hpMax: Int) {
+        this.hp = hp
+        this.hpMax = hpMax
         hpLabel.setText("HP: $hp/$hpMax")
     }
 
+    fun setFluxRelative(amount: Int) {
+        setFlux(min(flux + amount, fluxMax), fluxMax)
+    }
+
     fun setFlux(flux: Int, fluxMax: Int) {
-        hpLabel.setText("Flux: $flux/$fluxMax")
+        this.flux = flux
+        this.fluxMax = fluxMax
+        fluxLabel.setText("Flux: $flux/$fluxMax")
     }
 }

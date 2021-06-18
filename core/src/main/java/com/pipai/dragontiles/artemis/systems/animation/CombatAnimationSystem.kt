@@ -119,8 +119,18 @@ class CombatAnimationSystem(private val game: DragonTilesGame) : BaseSystem(), A
     }
 
     @Subscribe
+    fun handleEnemyFluxDamageEvent(ev: EnemyFluxDamageEvent) {
+        queueAnimation(EnemyFluxDamageAnimation(ev.target, ev.amount))
+    }
+
+    @Subscribe
     fun handleEnemyDamageEvent(ev: EnemyDamageEvent) {
         queueAnimation(EnemyDamageAnimation(ev.target, ev.amount))
+    }
+
+    @Subscribe
+    fun handlePlayerFluxDamageEvent(ev: PlayerFluxDamageEvent) {
+        queueAnimation(PlayerFluxDamageAnimation(ev.amount))
     }
 
     @Subscribe

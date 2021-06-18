@@ -27,8 +27,7 @@ class SpellComponentList(
         table.touchable = Touchable.enabled
         table.addListener(object : ClickListener() {
             override fun clicked(event: InputEvent?, x: Float, y: Float) {
-                val rowHeight = (table.height - 16) / table.rows
-                val index = table.rows - (y / rowHeight).toInt()
+                val index = table.getRow(y)
                 if (index in rows) {
                     clickCallbacks.forEach { it.invoke(rows[index]!!) }
                 }
@@ -54,7 +53,7 @@ class SpellComponentList(
         table.clearChildren()
         table.left()
         val topLabel = Label(topText, skin, "white")
-        table.add(topLabel).colspan(2).height(16f)
+        table.add(topLabel).colspan(2)
         table.row()
         options.filter { it.containsAll(optionFilter) }
             .forEachIndexed { index, option ->
