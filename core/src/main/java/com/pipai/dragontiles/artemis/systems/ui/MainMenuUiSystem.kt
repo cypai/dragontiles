@@ -16,8 +16,10 @@ import com.pipai.dragontiles.hero.Hero
 import com.pipai.dragontiles.relics.Transmuter
 import java.util.*
 
-class MainMenuUiSystem(private val game: DragonTilesGame,
-                       private val stage: Stage) : BaseSystem() {
+class MainMenuUiSystem(
+    private val game: DragonTilesGame,
+    private val stage: Stage
+) : BaseSystem() {
 
     private val skin = game.skin
 
@@ -32,7 +34,7 @@ class MainMenuUiSystem(private val game: DragonTilesGame,
         rootTable.add(Label("Dragontiles", skin))
         rootTable.row()
         rootTable.add(newGameLabel)
-                .padTop(64f)
+            .padTop(64f)
         rootTable.row()
         rootTable.add(quitLabel)
         rootTable.row()
@@ -40,14 +42,17 @@ class MainMenuUiSystem(private val game: DragonTilesGame,
         newGameLabel.addListener(object : ClickListener() {
             override fun clicked(event: InputEvent?, x: Float, y: Float) {
                 val runData = RunData(
-                        Random(),
-                        Hero("Elementalist", 80, 80, 0,40, 17,
-                                game.heroSpells.elementalistStarterDeck(),
-                                mutableListOf(
-                                        Transmuter()),
-                                100
+                    Random(),
+                    Hero(
+                        "Elementalist", 60, 60, 0, 40, 17,
+                        game.heroSpells.elementalistStarterDeck(),
+                        mutableListOf(
+                            Transmuter()
                         ),
-                        PlainsDungeon())
+                        5
+                    ),
+                    PlainsDungeon()
+                )
                 runData.dungeon.generateMap(runData.rng)
                 game.screen = EventScreen(game, runData, PlainsStartEvent())
             }
