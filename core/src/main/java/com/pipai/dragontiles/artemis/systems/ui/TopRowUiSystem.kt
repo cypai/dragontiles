@@ -19,13 +19,14 @@ class TopRowUiSystem(
 
     private val rootTable = Table()
     private val topRow = Table()
-    private var hp = 0
-    private var hpMax = 0
-    private var flux = 0
-    private var fluxMax = 0
-    private val hpLabel = Label("HP: ${runData.hero.hp}/${runData.hero.hpMax}", skin)
-    private val fluxLabel = Label("Flux: ${runData.hero.hp}/${runData.hero.hpMax}", skin)
-    private val goldLabel = Label("Gold: ${runData.hero.gold}", skin)
+    private var hp = runData.hero.hp
+    private var hpMax = runData.hero.hpMax
+    private var flux = runData.hero.flux
+    private var fluxMax = runData.hero.fluxMax
+    private var gold = runData.hero.gold
+    private val hpLabel = Label("HP: $hp/$hpMax", skin)
+    private val fluxLabel = Label("Flux: $flux/$fluxMax", skin)
+    private val goldLabel = Label("Gold: $gold", skin)
 
     override fun initialize() {
         rootTable.setFillParent(true)
