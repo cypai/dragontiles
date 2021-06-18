@@ -162,11 +162,11 @@ class CombatApi(
             val tile = combat.drawPile.removeAt(0)
             combat.openPool.add(tile)
             drawnTiles.add(Pair(tile, combat.openPool.size - 1))
-            if (combat.openPool.size > 9) {
-                removeFromOpenPool(combat.openPool.slice(0 until combat.openPool.size - 9))
-            }
         }
         eventBus.dispatch(DrawToOpenPoolEvent(drawnTiles))
+        if (combat.openPool.size > 9) {
+            removeFromOpenPool(combat.openPool.slice(0 until combat.openPool.size - 9))
+        }
     }
 
     fun calculateBaseDamage(element: Element, amount: Int): Int {
