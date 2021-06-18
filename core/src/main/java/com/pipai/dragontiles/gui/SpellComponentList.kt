@@ -57,7 +57,7 @@ class SpellComponentList(
         table.row()
         options.filter { it.containsAll(optionFilter) }
             .forEachIndexed { index, option ->
-                rows[index + 1] = option
+                rows[index + 1] = option.toList()
                 val label = Label((index + 1).toString(), skin, "white")
                 table.add(label)
                 val hGroup = HorizontalGroup()

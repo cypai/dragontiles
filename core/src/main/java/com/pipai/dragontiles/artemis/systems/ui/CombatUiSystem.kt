@@ -427,7 +427,7 @@ class CombatUiSystem(
             && spell.requirement.reqAmount !is ReqAmount.XAmount
             && spell.requirement.satisfied(givenComponents)
         ) {
-            selectComponents(givenComponents.toList())
+            selectComponents(givenComponents)
         } else {
             readjustHand()
         }
