@@ -262,7 +262,7 @@ class CombatApi(
         } else {
             combat.enemyIntent[enemy.id] = intent
         }
-        eventBus.dispatch(EnemyChangeIntentEvent(enemy.id, intent))
+        eventBus.dispatch(EnemyChangeIntentEvent(enemy, intent))
     }
 
     suspend fun dealDamageToEnemy(enemy: Enemy, damage: Int) {
@@ -270,7 +270,7 @@ class CombatApi(
         eventBus.dispatch(EnemyDamageEvent(enemy, damage))
         if (enemy.hp <= 0) {
             combat.enemyIntent.remove(enemy.id)
-            eventBus.dispatch(EnemyChangeIntentEvent(enemy.id, null))
+            eventBus.dispatch(EnemyChangeIntentEvent(enemy, null))
             eventBus.dispatch(EnemyDefeatedEvent(enemy))
             if (combat.enemies.all { it.hp <= 0 }) {
                 combat.heroStatus.clear()

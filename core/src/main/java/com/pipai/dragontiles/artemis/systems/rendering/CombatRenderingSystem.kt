@@ -5,6 +5,11 @@ import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.GL20
 import com.pipai.dragontiles.DragonTilesGame
 import com.pipai.dragontiles.artemis.components.*
+import com.pipai.dragontiles.combat.AttackIntent
+import com.pipai.dragontiles.combat.BuffIntent
+import com.pipai.dragontiles.combat.DebuffIntent
+import com.pipai.dragontiles.combat.StunnedIntent
+import com.pipai.dragontiles.data.Element
 import com.pipai.dragontiles.utils.allOf
 import com.pipai.dragontiles.utils.fetch
 import com.pipai.dragontiles.utils.mapper
@@ -26,61 +31,103 @@ class CombatRenderingSystem(private val game: DragonTilesGame) : BaseSystem() {
         batch.setBlendFunction(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA)
         batch.begin()
         world.fetch(allOf(XYComponent::class, SpriteComponent::class))
-                .forEach {
-                    val sprite = mSprite.get(it).sprite
-                    val cXy = mXy.get(it)
-                    sprite.x = cXy.x
-                    sprite.y = cXy.y
-                    sprite.draw(batch)
-                }
+            .forEach {
+                val sprite = mSprite.get(it).sprite
+                val cXy = mXy.get(it)
+                sprite.x = cXy.x
+                sprite.y = cXy.y
+                sprite.draw(batch)
+            }
         world.fetch(allOf(XYComponent::class, SpriteComponent::class, EnemyComponent::class))
-                .forEach {
-                    val cEnemy = mEnemy.get(it)
-                    val cXy = mXy.get(it)
-                    game.smallFont.draw(batch,
-                            "${game.gameStrings.nameDescLocalization(cEnemy.strId).name}   ${cEnemy.hp}/${cEnemy.hpMax}",
-                            cXy.x, cXy.y - 24f)
-                }
-        world.fetch(allOf(XYComponent::class, TargetHighlightComponent::class))
-                .forEach {
-                    val cXy = mXy.get(it)
-                    val cTh = mTargetHighlight.getSafe(it, null)
-                    if (cTh != null) {
-                        val highlight = game.skin.newDrawable("targetOutlineWhite", 1f, 1f, 1f, cTh.alpha)
-                        highlight.draw(batch,
-                                cXy.x - cTh.padding + cTh.xOffset,
-                                cXy.y - cTh.padding,
-                                cTh.width + cTh.padding * 2,
-                                cTh.height + cTh.padding * 2)
+            .forEach {
+                val cEnemy = mEnemy.get(it)
+                val sprite = mSprite.get(it).sprite
+                val cXy = mXy.get(it)
+                game.smallFont.draw(
+                    batch,
+                    "${game.gameStrings.nameDescLocalization(cEnemy.strId).name}   ${cEnemy.hp}/${cEnemy.hpMax}   ${cEnemy.flux}/${cEnemy.fluxMax}",
+                    cXy.x, cXy.y - 24f
+                )
+                when (val intent = cEnemy.intent) {
+                    is AttackIntent -> {
+                        game.smallFont.color = elementColor(intent.element)
+                        game.smallFont.draw(batch, "Attack ${intent.attackPower}", cXy.x, cXy.y + sprite.height + 16f)
+                        game.smallFont.color = Color.WHITE
+                    }
+                    is BuffIntent -> {
+                        if (intent.attackIntent == null) {
+                            game.smallFont.draw(batch, "Buffing", cXy.x, cXy.y + sprite.height + 16f)
+                        } else {
+                            game.smallFont.color = elementColor(intent.attackIntent.element)
+                            game.smallFont.draw(batch, "Buffing, Attack ${intent.attackIntent.attackPower}", cXy.x, cXy.y + sprite.height + 16f)
+                            game.smallFont.color = Color.WHITE
+                        }
+                    }
+                    is DebuffIntent -> {
+                        if (intent.attackIntent == null) {
+                            game.smallFont.draw(batch, "Debuffing", cXy.x, cXy.y + sprite.height + 16f)
+                        } else {
+                            game.smallFont.color = elementColor(intent.attackIntent.element)
+                            game.smallFont.draw(batch, "Debuffing, Attack ${intent.attackIntent.attackPower}", cXy.x, cXy.y + sprite.height + 16f)
+                            game.smallFont.color = Color.WHITE
+                        }
+                    }
+                    is StunnedIntent -> game.smallFont.draw(batch, "Stunned", cXy.x, cXy.y + sprite.height + 16f)
+                    null -> {
                     }
                 }
-        world.fetch(allOf(XYComponent::class, TextLabelComponent::class))
-                .forEach {
-                    val cXy = mXy.get(it)
-                    val cTextLabel = mTextLabel.get(it)
-                    game.font.draw(batch, cTextLabel.text, cXy.x + cTextLabel.xOffset, cXy.y + cTextLabel.yOffset)
+            }
+        world.fetch(allOf(XYComponent::class, TargetHighlightComponent::class))
+            .forEach {
+                val cXy = mXy.get(it)
+                val cTh = mTargetHighlight.getSafe(it, null)
+                if (cTh != null) {
+                    val highlight = game.skin.newDrawable("targetOutlineWhite", 1f, 1f, 1f, cTh.alpha)
+                    highlight.draw(
+                        batch,
+                        cXy.x - cTh.padding + cTh.xOffset,
+                        cXy.y - cTh.padding,
+                        cTh.width + cTh.padding * 2,
+                        cTh.height + cTh.padding * 2
+                    )
                 }
+            }
+        world.fetch(allOf(XYComponent::class, TextLabelComponent::class))
+            .forEach {
+                val cXy = mXy.get(it)
+                val cTextLabel = mTextLabel.get(it)
+                game.font.draw(batch, cTextLabel.text, cXy.x + cTextLabel.xOffset, cXy.y + cTextLabel.yOffset)
+            }
         batch.end()
         batch.setBlendFunction(GL20.GL_SRC_ALPHA, GL20.GL_ONE)
         batch.begin()
         world.fetch(allOf(XYComponent::class, RadialSpriteComponent::class))
-                .forEach {
-                    val cXy = mXy.get(it)
-                    val cRadial = mRadial.get(it)
-                    cRadial.sprite.draw(batch, cXy.x, cXy.y, cRadial.sprite.getAngle())
-                }
+            .forEach {
+                val cXy = mXy.get(it)
+                val cRadial = mRadial.get(it)
+                cRadial.sprite.draw(batch, cXy.x, cXy.y, cRadial.sprite.getAngle())
+            }
         batch.end()
         batch.setBlendFunction(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA)
 
         game.shapeRenderer.begin()
         world.fetch(allOf(AnchoredLineComponent::class))
-                .forEach {
-                    val cLine = mLine.get(it)
-                    val xy1 = mXy.get(cLine.anchor1).toVector2().add(cLine.anchor1Offset)
-                    val xy2 = mXy.get(cLine.anchor2).toVector2().add(cLine.anchor2Offset)
-                    game.shapeRenderer.line(xy1.x, xy1.y, xy2.x, xy2.y, cLine.color, cLine.color)
-                }
+            .forEach {
+                val cLine = mLine.get(it)
+                val xy1 = mXy.get(cLine.anchor1).toVector2().add(cLine.anchor1Offset)
+                val xy2 = mXy.get(cLine.anchor2).toVector2().add(cLine.anchor2Offset)
+                game.shapeRenderer.line(xy1.x, xy1.y, xy2.x, xy2.y, cLine.color, cLine.color)
+            }
         game.shapeRenderer.end()
+    }
+
+    private fun elementColor(element: Element?): Color {
+        return when (element) {
+            Element.FIRE -> Color.RED
+            Element.ICE -> Color.SKY
+            Element.LIGHTNING -> Color.YELLOW
+            else -> Color.WHITE
+        }
     }
 
 }

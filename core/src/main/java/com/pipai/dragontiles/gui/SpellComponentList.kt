@@ -29,7 +29,9 @@ class SpellComponentList(
             override fun clicked(event: InputEvent?, x: Float, y: Float) {
                 val rowHeight = (table.height - 16) / table.rows
                 val index = table.rows - (y / rowHeight).toInt()
-                clickCallbacks.forEach { it.invoke(rows[index]!!) }
+                if (index in rows) {
+                    clickCallbacks.forEach { it.invoke(rows[index]!!) }
+                }
             }
         })
     }

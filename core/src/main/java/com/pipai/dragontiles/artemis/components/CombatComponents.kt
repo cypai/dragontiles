@@ -2,6 +2,7 @@ package com.pipai.dragontiles.artemis.components
 
 import com.artemis.Component
 import com.badlogic.gdx.Input.Keys
+import com.pipai.dragontiles.combat.Intent
 import com.pipai.dragontiles.data.TileInstance
 import com.pipai.dragontiles.enemies.Enemy
 
@@ -37,12 +38,17 @@ class EnemyComponent : Component() {
     var strId = ""
     var hp = 0
     var hpMax = 0
+    var flux = 0
+    var fluxMax = 0
     lateinit var enemy: Enemy
+    var intent: Intent? = null
 
     fun setByEnemy(enemy: Enemy) {
         strId = enemy.strId
         hp = enemy.hp
         hpMax = enemy.hpMax
+        flux = enemy.flux
+        fluxMax = enemy.fluxMax
         this.enemy = enemy
     }
 }

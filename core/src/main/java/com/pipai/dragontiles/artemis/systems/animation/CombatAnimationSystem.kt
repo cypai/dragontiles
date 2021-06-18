@@ -114,6 +114,11 @@ class CombatAnimationSystem(private val game: DragonTilesGame) : BaseSystem(), A
     }
 
     @Subscribe
+    fun handleEnemyChangeIntent(ev: EnemyChangeIntentEvent) {
+        queueAnimation(EnemyIntentAnimation(ev.enemy, ev.intent))
+    }
+
+    @Subscribe
     fun handleEnemyDamageEvent(ev: EnemyDamageEvent) {
         queueAnimation(EnemyDamageAnimation(ev.target, ev.amount))
     }
