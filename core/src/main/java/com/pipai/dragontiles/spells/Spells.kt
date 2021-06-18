@@ -189,11 +189,24 @@ abstract class ComponentRequirement {
     abstract val type: SetType
     abstract var suitGroup: SuitGroup
     abstract val reqAmount: ReqAmount
+    open val manualOnly: Boolean = false
     val componentSlots: MutableList<ComponentSlot> = mutableListOf()
 
     abstract fun find(hand: List<TileInstance>): List<List<TileInstance>>
     abstract fun findGiven(hand: List<TileInstance>, given: List<TileInstance>): List<List<TileInstance>>
     abstract fun satisfied(slots: List<TileInstance>): Boolean
+}
+
+abstract class ManualComponentRequirement : ComponentRequirement() {
+    override val manualOnly = true
+
+    override fun find(hand: List<TileInstance>): List<List<TileInstance>> {
+        return listOf()
+    }
+
+    override fun findGiven(hand: List<TileInstance>, given: List<TileInstance>): List<List<TileInstance>> {
+        return listOf()
+    }
 }
 
 enum class SetType {
@@ -272,7 +285,19 @@ class SinglePredicate(
     override fun satisfied(slots: List<TileInstance>): Boolean {
         return super.satisfied(slots) && predicate.invoke(slots[0])
     }
+}
 
+class AnyCombo(slotAmount: Int, override var suitGroup: SuitGroup) : ManualComponentRequirement() {
+    constructor(slotAmount: Int) : this(slotAmount, SuitGroup.ANY)
+
+    override val type = SetType.MISC
+    override val reqAmount = ReqAmount.Numeric(slotAmount)
+    override val description = "Any $slotAmount tiles"
+
+    override fun satisfied(slots: List<TileInstance>): Boolean {
+        return slots.size == reqAmount.amount
+                && slots.all { it.tile.suit in suitGroup.allowedSuits }
+    }
 }
 
 class Identical(slotAmount: Int, override var suitGroup: SuitGroup) : ComponentRequirement() {
