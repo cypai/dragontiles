@@ -50,6 +50,7 @@ abstract class Spell : DamageAdjustable {
                     api.calculateDamageOnEnemy(target, elemental(components()), baseDamage())
                 }
             }
+            "!f" -> baseFluxLoss()
             else -> data[key] ?: 0
         }
     }

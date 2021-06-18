@@ -26,6 +26,10 @@ fun Spell.baseDamage(): Int {
     return aspects.findAs(AttackDamageAspect::class)!!.amount
 }
 
+fun Spell.baseFluxLoss(): Int {
+    return aspects.findAs(FluxLossAspect::class)!!.amount
+}
+
 val anySet = setOf(Suit.FIRE, Suit.ICE, Suit.LIGHTNING, Suit.LIFE, Suit.STAR)
 val elementalSet = setOf(Suit.FIRE, Suit.ICE, Suit.LIGHTNING)
 val arcaneSet = setOf(Suit.LIFE, Suit.STAR)

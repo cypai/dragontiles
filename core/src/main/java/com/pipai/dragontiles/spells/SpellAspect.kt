@@ -13,6 +13,10 @@ interface SpellAspect {
 
 data class AttackDamageAspect(var amount: Int) : SpellAspect
 
+data class FluxGainAspect(var amount: Int) : SpellAspect
+
+data class FluxLossAspect(var amount: Int) : SpellAspect
+
 class PostExhaustAspect : SpellAspect {
     override fun adjustDescription(description: String): String {
         return "$description Exhaust."

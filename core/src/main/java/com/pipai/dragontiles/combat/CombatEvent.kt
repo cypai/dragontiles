@@ -51,6 +51,8 @@ data class PlayerAttackEnemyEvent(val target: Enemy, val element: Element, val a
 
 data class EnemyFluxDamageEvent(val target: Enemy, val amount: Int) : CombatEvent
 
+data class EnemyLoseFluxEvent(val target: Enemy, val amount: Int) : CombatEvent
+
 data class EnemyDamageEvent(val target: Enemy, val amount: Int) : CombatEvent
 
 data class EnemyDefeatedEvent(val enemy: Enemy) : CombatEvent
@@ -58,6 +60,8 @@ data class EnemyDefeatedEvent(val enemy: Enemy) : CombatEvent
 class BattleWinEvent : CombatEvent
 
 data class PlayerFluxDamageEvent(val amount: Int) : CombatEvent
+
+data class PlayerLoseFluxEvent(val amount: Int) : CombatEvent
 
 data class PlayerDamageEvent(val amount: Int) : CombatEvent
 

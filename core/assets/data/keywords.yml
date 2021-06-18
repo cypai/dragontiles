@@ -1,3 +1,15 @@
+base:keywords:Flux:
+  en:
+    key: "@Flux"
+    name: Flux
+    description: Gained when damaged. If over the maximum, become @Overloaded until the following turn.
+
+base:keywords:Overloaded:
+  en:
+    key: "@Overloaded"
+    name: Overloaded
+    description: Cannot do anything. Lose half your maximum Flux afterwards.
+
 base:keywords:Elemented:
   en:
     key: "@Elemented"

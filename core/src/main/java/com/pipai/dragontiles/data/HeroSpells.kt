@@ -13,8 +13,9 @@ class HeroSpells {
         return mutableListOf(
             Invoke(),
             Strike(),
-            Break(),
-            ElementalRune()
+            Vent(),
+            ElementalRune(),
+            Break()
         )
     }
 

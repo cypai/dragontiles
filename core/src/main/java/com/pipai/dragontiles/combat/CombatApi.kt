@@ -250,6 +250,12 @@ class CombatApi(
         }
     }
 
+    suspend fun enemyLoseFlux(enemy: Enemy, amount: Int) {
+        val actualAmount = if (enemy.flux >= amount) amount else enemy.flux
+        enemy.flux -= actualAmount
+        eventBus.dispatch(EnemyLoseFluxEvent(enemy, actualAmount))
+    }
+
     suspend fun changeEnemyIntent(enemy: Enemy, intent: Intent?) {
         if (intent == null) {
             combat.enemyIntent.remove(enemy.id)
@@ -303,6 +309,12 @@ class CombatApi(
             runData.hero.flux = runData.hero.fluxMax
             addStatusToHero(Overloaded(2))
         }
+    }
+
+    suspend fun heroLoseFlux(amount: Int) {
+        val actualAmount = if (runData.hero.flux >= amount) amount else runData.hero.flux
+        runData.hero.flux -= actualAmount
+        eventBus.dispatch(PlayerLoseFluxEvent(actualAmount))
     }
 
     suspend fun dealDamageToHero(damage: Int) {
