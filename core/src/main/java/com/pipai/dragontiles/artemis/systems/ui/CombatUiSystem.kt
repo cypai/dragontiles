@@ -227,15 +227,29 @@ class CombatUiSystem(
 
     private fun displaySpellComponents(spellCard: SpellCard) {
         val spell = spellCard.getSpell()!!
-        spellComponentList.setOptions(spell.requirement.find(sCombat.combat.hand))
-        spellComponentList.height = min(spellComponentList.prefHeight, spellCard.height)
-        val position = layout.optionListTlPosition
-        spellComponentList.x = position.x
-        spellComponentList.y = position.y - spellComponentList.height
+        val options = spell.requirement.find(sCombat.combat.hand)
+        if (spell.requirement.manualOnly) {
+            spellComponentList.topText = "Manual Selection"
+        } else {
+            if (options.isEmpty()) {
+                spellComponentList.topText = "None available"
+            } else {
+                spellComponentList.topText = "Viable"
+            }
+        }
+        setSpellComponentOptions(options)
 
         stage.addActor(spellComponentList)
         stage.keyboardFocus = spellComponentList
         stage.scrollFocus = spellComponentList
+    }
+
+    private fun setSpellComponentOptions(options: List<List<TileInstance>>) {
+        spellComponentList.setOptions(options)
+        spellComponentList.height = min(spellComponentList.prefHeight, SpellCard.cardHeight)
+        val position = layout.optionListTlPosition
+        spellComponentList.x = position.x
+        spellComponentList.y = position.y - spellComponentList.height
     }
 
     private fun selectComponents(components: List<TileInstance>) {
@@ -398,8 +412,16 @@ class CombatUiSystem(
             givenComponents.add(tile)
             givenComponents.sortWith(compareBy({ it.tile.suit.order }, { it.tile.order() }))
         }
-        spellComponentList.filterOptions(givenComponents)
         val spell = getSelectedSpell()
+        if (spell.requirement.manualOnly) {
+            val options = spell.requirement.findGiven(sCombat.combat.hand, givenComponents)
+            if (options.isNotEmpty()) {
+                spellComponentList.topText = "Viable"
+                setSpellComponentOptions(options)
+            }
+        } else {
+            spellComponentList.filterOptions(givenComponents)
+        }
         if (spell is StandardSpell
             && spell.targetType != TargetType.NONE
             && spell.requirement.reqAmount !is ReqAmount.XAmount

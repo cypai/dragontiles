@@ -206,7 +206,11 @@ abstract class ManualComponentRequirement : ComponentRequirement() {
     }
 
     override fun findGiven(hand: List<TileInstance>, given: List<TileInstance>): List<List<TileInstance>> {
-        return listOf()
+        return if (satisfied(given)) {
+            listOf(given)
+        } else {
+            listOf()
+        }
     }
 }
 
