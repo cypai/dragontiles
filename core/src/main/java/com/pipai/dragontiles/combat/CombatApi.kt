@@ -400,6 +400,8 @@ class CombatApi(
     }
 
     suspend fun notifyStatusUpdated() {
+        combat.heroStatus.removeAll { it.amount <= 0 }
+        combat.enemyStatus.values.forEach { es -> es.removeAll { it.amount <= 0 } }
         val enemyStatusCopy = combat.enemyStatus.mapValues { es -> es.value.map { s -> s.deepCopy() } }
         eventBus.dispatch(StatusAdjustedEvent(deepCopy(combat.heroStatus), enemyStatusCopy))
     }

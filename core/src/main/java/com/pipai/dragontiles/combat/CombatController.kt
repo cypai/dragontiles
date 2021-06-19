@@ -83,8 +83,6 @@ class CombatController(
                 api.changeEnemyIntent(it, null)
             }
         eventBus.dispatch(EnemyTurnEndEvent(combat.turnNumber))
-        combat.heroStatus.removeAll { it.amount <= 0 }
-        combat.enemyStatus.values.forEach { es -> es.removeAll { it.amount <= 0 } }
         combat.enemies
             .filter { it.hp > 0 }
             .forEach {
