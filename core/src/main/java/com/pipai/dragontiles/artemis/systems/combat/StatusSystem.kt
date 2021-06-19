@@ -26,22 +26,31 @@ class StatusSystem(private val game: DragonTilesGame) : NoProcessingSystem() {
         val cHeroXy = mXy.get(world.fetch(allOf(HeroComponent::class)).first())
         heroStatuses.forEach { world.delete(it) }
         statuses.forEachIndexed { index, s ->
-            createStatus(cHeroXy, index, s)
+            heroStatuses.add(createStatus(cHeroXy, index, s))
         }
     }
 
     fun handleEnemyStatus(enemyId: BackendId, statuses: List<Status>) {
-        val cEnemyXy = mXy.get(world.fetch(allOf(EnemyComponent::class)).find { mEnemy.get(it).enemy.id == enemyId }!!)
-        if (enemyId !in enemyStatuses) {
-            enemyStatuses[enemyId] = mutableListOf()
-        }
-        enemyStatuses[enemyId]!!.forEach { world.delete(it) }
-        statuses.forEachIndexed { index, s ->
-            createStatus(cEnemyXy, index, s)
+        world.fetch(allOf(EnemyComponent::class)).find { mEnemy.get(it).enemy.id == enemyId }?.let { enemyEntityId ->
+            val cEnemyXy = mXy.get(enemyEntityId)
+            if (enemyEntityId !in enemyStatuses) {
+                enemyStatuses[enemyEntityId] = mutableListOf()
+            }
+            val list = enemyStatuses[enemyEntityId]!!
+            list.forEach { world.delete(it) }
+            list.clear()
+            statuses.forEachIndexed { index, s ->
+                list.add(createStatus(cEnemyXy, index, s))
+            }
         }
     }
 
-    private fun createStatus(cTargetXy: XYComponent, index: Int, status: Status) {
+    fun handleEnemyDefeat(enemyId: EntityId) {
+        enemyStatuses[enemyId]?.forEach { world.delete(it) }
+        enemyStatuses.remove(enemyId)
+    }
+
+    private fun createStatus(cTargetXy: XYComponent, index: Int, status: Status): Int {
         val eid = world.create()
         val cStatus = mStatus.create(eid)
         cStatus.setByStatus(status)
@@ -55,5 +64,6 @@ class StatusSystem(private val game: DragonTilesGame) : NoProcessingSystem() {
             cText.size = TextLabelSize.TINY
             cText.text = status.amount.toString()
         }
+        return eid
     }
 }
