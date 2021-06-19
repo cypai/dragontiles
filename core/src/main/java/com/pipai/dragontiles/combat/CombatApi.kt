@@ -1,5 +1,6 @@
 package com.pipai.dragontiles.combat
 
+import com.pipai.dragontiles.artemis.components.HeroComponent
 import com.pipai.dragontiles.data.Element
 import com.pipai.dragontiles.data.Tile
 import com.pipai.dragontiles.data.TileInstance
@@ -327,9 +328,11 @@ class CombatApi(
     }
 
     suspend fun addStatusToHero(status: Status) {
+        status.combatant = Combatant.HeroCombatant
         val maybeStatus = combat.heroStatus.find { it.strId == status.strId }
         if (maybeStatus == null) {
             combat.heroStatus.add(status)
+            eventBus.register(status)
         } else {
             maybeStatus.amount += status.amount
             if (maybeStatus.amount == 0) {
@@ -340,6 +343,7 @@ class CombatApi(
     }
 
     suspend fun addStatusToEnemy(enemy: Enemy, status: Status) {
+        status.combatant = Combatant.EnemyCombatant(enemy)
         val enemyStatus = combat.enemyStatus[enemy.id]!!
         val maybeStatus = enemyStatus.find { it.strId == status.strId }
         if (maybeStatus == null) {
