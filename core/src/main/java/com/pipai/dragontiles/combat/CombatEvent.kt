@@ -49,11 +49,11 @@ data class OpenPoolAdjustedEvent(val openPool: List<TileInstance>) : CombatEvent
 
 data class PlayerAttackEnemyEvent(val target: Enemy, val element: Element, val amount: Int) : CombatEvent
 
-data class EnemyFluxDamageEvent(val target: Enemy, val amount: Int) : CombatEvent
+data class EnemyFluxDamageEvent(val enemy: Enemy, val amount: Int) : CombatEvent
 
-data class EnemyLoseFluxEvent(val target: Enemy, val amount: Int) : CombatEvent
+data class EnemyLoseFluxEvent(val enemy: Enemy, val amount: Int) : CombatEvent
 
-data class EnemyDamageEvent(val target: Enemy, val amount: Int) : CombatEvent
+data class EnemyDamageEvent(val enemy: Enemy, val amount: Int) : CombatEvent
 
 data class EnemyDefeatedEvent(val enemy: Enemy) : CombatEvent
 
