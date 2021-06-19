@@ -4,6 +4,7 @@ import com.artemis.Component
 import com.badlogic.gdx.Input.Keys
 import com.pipai.dragontiles.combat.Intent
 import com.pipai.dragontiles.data.TileInstance
+import com.pipai.dragontiles.dungeon.RunData
 import com.pipai.dragontiles.enemies.Enemy
 
 class TileComponent : Component() {
@@ -31,6 +32,21 @@ class HandLocationComponent : Component() {
             else -> Keys.Q
         }
         keyShift = location > 10
+    }
+}
+
+class HeroComponent : Component() {
+    var strId = ""
+    var hp = 0
+    var hpMax = 0
+    var flux = 0
+    var fluxMax = 0
+
+    fun setByRunData(runData: RunData) {
+        hp = runData.hero.hp
+        hpMax = runData.hero.hpMax
+        flux = runData.hero.flux
+        fluxMax = runData.hero.fluxMax
     }
 }
 

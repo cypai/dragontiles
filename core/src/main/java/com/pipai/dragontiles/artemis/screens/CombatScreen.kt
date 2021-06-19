@@ -85,7 +85,7 @@ class CombatScreen(game: DragonTilesGame, runData: RunData, encounter: Encounter
         inputProcessor.addAlwaysOnProcessor(ExitInputProcessor())
         inputProcessor.activateInput()
 
-        CombatScreenInit(game, world, encounter)
+        CombatScreenInit(game, world, runData, encounter)
             .initialize()
     }
 

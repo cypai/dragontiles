@@ -46,9 +46,7 @@ class MainMenuUiSystem(
                     Hero(
                         "Elementalist", 60, 60, 0, 40, 17,
                         game.heroSpells.elementalistStarterDeck(),
-                        mutableListOf(
-                            Transmuter()
-                        ),
+                        mutableListOf(Transmuter()),
                         5
                     ),
                     PlainsDungeon()

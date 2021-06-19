@@ -20,6 +20,7 @@ class CombatRenderingSystem(private val game: DragonTilesGame) : BaseSystem() {
     private val mSprite by mapper<SpriteComponent>()
     private val mRadial by mapper<RadialSpriteComponent>()
     private val mTextLabel by mapper<TextLabelComponent>()
+    private val mHero by mapper<HeroComponent>()
     private val mEnemy by mapper<EnemyComponent>()
     private val mLine by mapper<AnchoredLineComponent>()
     private val mTargetHighlight by mapper<TargetHighlightComponent>()
@@ -37,6 +38,17 @@ class CombatRenderingSystem(private val game: DragonTilesGame) : BaseSystem() {
                 sprite.x = cXy.x
                 sprite.y = cXy.y
                 sprite.draw(batch)
+            }
+        world.fetch(allOf(XYComponent::class, SpriteComponent::class, HeroComponent::class))
+            .forEach {
+                val cHero = mHero.get(it)
+                val sprite = mSprite.get(it).sprite
+                val cXy = mXy.get(it)
+                game.smallFont.draw(
+                    batch,
+                    "${cHero.hp}/${cHero.hpMax}   ${cHero.flux}/${cHero.fluxMax}",
+                    cXy.x, cXy.y - 24f
+                )
             }
         world.fetch(allOf(XYComponent::class, SpriteComponent::class, EnemyComponent::class))
             .forEach {

@@ -79,6 +79,7 @@ class DragonTilesGame(val gameConfig: GameConfig) : Game() {
 
         assets = AssetManager()
         assets.load("assets/binassets/graphics/tiles/tiles.png", Texture::class.java)
+        assets.load("assets/binassets/graphics/heros/elementalist.png", Texture::class.java)
         assets.load(enemyAssetPath(FlameTurtle().assetName), Texture::class.java)
         assets.load(enemyAssetPath(Slime().assetName), Texture::class.java)
         assets.load("assets/binassets/graphics/textures/sword.png", Texture::class.java)

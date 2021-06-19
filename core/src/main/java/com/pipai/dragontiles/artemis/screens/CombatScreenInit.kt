@@ -15,14 +15,21 @@ import com.pipai.dragontiles.artemis.events.EnemyHoverExitEvent
 import com.pipai.dragontiles.artemis.systems.combat.CombatControllerSystem
 import com.pipai.dragontiles.artemis.systems.ui.CombatUiSystem
 import com.pipai.dragontiles.dungeon.Encounter
+import com.pipai.dragontiles.dungeon.RunData
 import com.pipai.dragontiles.utils.enemyAssetPath
 
 @Wire
-class CombatScreenInit(private val game: DragonTilesGame, private val world: World, private val encounter: Encounter) {
+class CombatScreenInit(
+    private val game: DragonTilesGame,
+    private val world: World,
+    private val runData: RunData,
+    private val encounter: Encounter
+) {
 
     private lateinit var mCamera: ComponentMapper<OrthographicCameraComponent>
     private lateinit var mXy: ComponentMapper<XYComponent>
     private lateinit var mSprite: ComponentMapper<SpriteComponent>
+    private lateinit var mHero: ComponentMapper<HeroComponent>
     private lateinit var mEnemy: ComponentMapper<EnemyComponent>
     private lateinit var mHoverable: ComponentMapper<HoverableComponent>
     private lateinit var mClickable: ComponentMapper<ClickableComponent>
@@ -30,7 +37,6 @@ class CombatScreenInit(private val game: DragonTilesGame, private val world: Wor
     private lateinit var sTags: TagManager
 
     private lateinit var sController: CombatControllerSystem
-    private lateinit var sUi: CombatUiSystem
 
     init {
         world.inject(this)
@@ -42,6 +48,8 @@ class CombatScreenInit(private val game: DragonTilesGame, private val world: Wor
         sTags.register(Tags.CAMERA.toString(), cameraId)
 
         sController.controller.initCombat()
+
+        initHero()
 
         encounter.enemies.forEach { (enemy, position) ->
             val entityId = world.create()
@@ -60,6 +68,17 @@ class CombatScreenInit(private val game: DragonTilesGame, private val world: Wor
 
             mClickable.create(entityId).eventGenerator = { EnemyClickEvent(entityId, it) }
         }
+    }
+
+    private fun initHero() {
+        val entityId = world.create()
+        val cXy = mXy.create(entityId)
+        cXy.setXy(100f, 420f)
+        val cHero = mHero.create(entityId)
+        cHero.setByRunData(runData)
+        val cSprite = mSprite.create(entityId)
+        cSprite.sprite =
+            Sprite(game.assets.get("assets/binassets/graphics/heros/elementalist.png", Texture::class.java))
     }
 
 }
