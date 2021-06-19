@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.GL20
 import com.pipai.dragontiles.DragonTilesGame
 import com.pipai.dragontiles.artemis.components.*
+import com.pipai.dragontiles.artemis.systems.combat.CombatControllerSystem
 import com.pipai.dragontiles.combat.AttackIntent
 import com.pipai.dragontiles.combat.BuffIntent
 import com.pipai.dragontiles.combat.DebuffIntent
@@ -13,11 +14,11 @@ import com.pipai.dragontiles.data.Element
 import com.pipai.dragontiles.utils.allOf
 import com.pipai.dragontiles.utils.fetch
 import com.pipai.dragontiles.utils.mapper
+import com.pipai.dragontiles.utils.system
 
 class CombatRenderingSystem(private val game: DragonTilesGame) : BaseSystem() {
 
     private val mXy by mapper<XYComponent>()
-    private val mStatus by mapper<StatusComponent>()
     private val mSprite by mapper<SpriteComponent>()
     private val mRadial by mapper<RadialSpriteComponent>()
     private val mTextLabel by mapper<TextLabelComponent>()
@@ -25,6 +26,8 @@ class CombatRenderingSystem(private val game: DragonTilesGame) : BaseSystem() {
     private val mEnemy by mapper<EnemyComponent>()
     private val mLine by mapper<AnchoredLineComponent>()
     private val mTargetHighlight by mapper<TargetHighlightComponent>()
+
+    private val sCombat by system<CombatControllerSystem>()
 
     private val batch = game.spriteBatch
 
@@ -63,16 +66,18 @@ class CombatRenderingSystem(private val game: DragonTilesGame) : BaseSystem() {
                 )
                 when (val intent = cEnemy.intent) {
                     is AttackIntent -> {
+                        val attackPower = sCombat.controller.api.calculateDamageOnHero(cEnemy.enemy, intent.element, intent.attackPower)
                         game.smallFont.color = elementColor(intent.element)
-                        game.smallFont.draw(batch, "Attack ${intent.attackPower}", cXy.x, cXy.y + sprite.height + 16f)
+                        game.smallFont.draw(batch, "Attack $attackPower", cXy.x, cXy.y + sprite.height + 16f)
                         game.smallFont.color = Color.WHITE
                     }
                     is BuffIntent -> {
                         if (intent.attackIntent == null) {
                             game.smallFont.draw(batch, "Buffing", cXy.x, cXy.y + sprite.height + 16f)
                         } else {
+                            val attackPower = sCombat.controller.api.calculateDamageOnHero(cEnemy.enemy, intent.attackIntent.element, intent.attackIntent.attackPower)
                             game.smallFont.color = elementColor(intent.attackIntent.element)
-                            game.smallFont.draw(batch, "Buffing, Attack ${intent.attackIntent.attackPower}", cXy.x, cXy.y + sprite.height + 16f)
+                            game.smallFont.draw(batch, "Buffing, Attack $attackPower", cXy.x, cXy.y + sprite.height + 16f)
                             game.smallFont.color = Color.WHITE
                         }
                     }
@@ -80,8 +85,9 @@ class CombatRenderingSystem(private val game: DragonTilesGame) : BaseSystem() {
                         if (intent.attackIntent == null) {
                             game.smallFont.draw(batch, "Debuffing", cXy.x, cXy.y + sprite.height + 16f)
                         } else {
+                            val attackPower = sCombat.controller.api.calculateDamageOnHero(cEnemy.enemy, intent.attackIntent.element, intent.attackIntent.attackPower)
                             game.smallFont.color = elementColor(intent.attackIntent.element)
-                            game.smallFont.draw(batch, "Debuffing, Attack ${intent.attackIntent.attackPower}", cXy.x, cXy.y + sprite.height + 16f)
+                            game.smallFont.draw(batch, "Debuffing, Attack $attackPower", cXy.x, cXy.y + sprite.height + 16f)
                             game.smallFont.color = Color.WHITE
                         }
                     }
