@@ -245,7 +245,7 @@ class CombatApi(
     suspend fun dealFluxDamageToEnemy(enemy: Enemy, damage: Int) {
         enemy.flux += damage
         eventBus.dispatch(EnemyFluxDamageEvent(enemy, damage))
-        if (enemy.flux > enemy.fluxMax) {
+        if (enemy.flux >= enemy.fluxMax) {
             enemy.flux = enemy.fluxMax
             addStatusToEnemy(enemy, Overloaded(2))
         }
@@ -307,7 +307,7 @@ class CombatApi(
     suspend fun dealFluxDamageToHero(damage: Int) {
         runData.hero.flux += damage
         eventBus.dispatch(PlayerFluxDamageEvent(damage))
-        if (runData.hero.flux > runData.hero.fluxMax) {
+        if (runData.hero.flux >= runData.hero.fluxMax) {
             runData.hero.flux = runData.hero.fluxMax
             addStatusToHero(Overloaded(2))
         }
