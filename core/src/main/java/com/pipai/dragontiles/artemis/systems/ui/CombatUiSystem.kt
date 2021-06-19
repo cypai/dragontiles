@@ -50,6 +50,7 @@ class CombatUiSystem(
 
     val layout = CombatUiLayout(config, tileSkin, runData.hero.handSize)
 
+    var overloaded = false
     private var selectedSpellNumber: Int? = null
     private var mouseFollowEntityId: Int? = null
     private val givenComponents: MutableList<TileInstance> = mutableListOf()
@@ -490,7 +491,7 @@ class CombatUiSystem(
                     spellCard.target = null
                     spellCard.update()
                     val spell = spellCard.getSpell()
-                    if (spell == null || !spell.available()) {
+                    if (spell == null || !spell.available() || uiSystem.overloaded) {
                         spellCard.disable()
                     } else {
                         spellCard.enable()
