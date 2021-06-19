@@ -17,6 +17,7 @@ import com.pipai.dragontiles.utils.mapper
 class CombatRenderingSystem(private val game: DragonTilesGame) : BaseSystem() {
 
     private val mXy by mapper<XYComponent>()
+    private val mStatus by mapper<StatusComponent>()
     private val mSprite by mapper<SpriteComponent>()
     private val mRadial by mapper<RadialSpriteComponent>()
     private val mTextLabel by mapper<TextLabelComponent>()
@@ -39,15 +40,15 @@ class CombatRenderingSystem(private val game: DragonTilesGame) : BaseSystem() {
                 sprite.y = cXy.y
                 sprite.draw(batch)
             }
+
         world.fetch(allOf(XYComponent::class, SpriteComponent::class, HeroComponent::class))
             .forEach {
                 val cHero = mHero.get(it)
-                val sprite = mSprite.get(it).sprite
                 val cXy = mXy.get(it)
                 game.smallFont.draw(
                     batch,
                     "${cHero.hp}/${cHero.hpMax}   ${cHero.flux}/${cHero.fluxMax}",
-                    cXy.x, cXy.y - 24f
+                    cXy.x, cXy.y - 10f
                 )
             }
         world.fetch(allOf(XYComponent::class, SpriteComponent::class, EnemyComponent::class))
@@ -58,7 +59,7 @@ class CombatRenderingSystem(private val game: DragonTilesGame) : BaseSystem() {
                 game.smallFont.draw(
                     batch,
                     "${game.gameStrings.nameDescLocalization(cEnemy.strId).name}   ${cEnemy.hp}/${cEnemy.hpMax}   ${cEnemy.flux}/${cEnemy.fluxMax}",
-                    cXy.x, cXy.y - 24f
+                    cXy.x, cXy.y - 10f
                 )
                 when (val intent = cEnemy.intent) {
                     is AttackIntent -> {
@@ -108,7 +109,13 @@ class CombatRenderingSystem(private val game: DragonTilesGame) : BaseSystem() {
             .forEach {
                 val cXy = mXy.get(it)
                 val cTextLabel = mTextLabel.get(it)
-                game.font.draw(batch, cTextLabel.text, cXy.x + cTextLabel.xOffset, cXy.y + cTextLabel.yOffset)
+                val font = when (cTextLabel.size) {
+                    TextLabelSize.NORMAL -> game.font
+                    TextLabelSize.SMALL -> game.smallFont
+                    TextLabelSize.TINY -> game.tinyFont
+                }
+                font.color = cTextLabel.color
+                font.draw(batch, cTextLabel.text, cXy.x + cTextLabel.xOffset, cXy.y + cTextLabel.yOffset)
             }
         batch.end()
         batch.setBlendFunction(GL20.GL_SRC_ALPHA, GL20.GL_ONE)

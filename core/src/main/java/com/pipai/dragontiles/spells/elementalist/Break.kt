@@ -17,6 +17,6 @@ class Break : StandardSpell() {
 
     override suspend fun onCast(params: CastParams, api: CombatApi) {
         val stackable = aspects.findAsWhere(StackableAspect::class) { it.status is BreakStatus }!!
-        api.addStatusToHero(stackable.status.deepCopy())
+        api.addStatusToEnemy(api.getEnemy(params.targets.first()), stackable.status.deepCopy())
     }
 }

@@ -5,6 +5,7 @@ import com.pipai.dragontiles.data.Element
 
 class BreakStatus(amount: Int, var skip: Boolean) : Status(amount) {
     override val strId = "base:status:Break"
+    override val assetName = "assets/binassets/graphics/status/break.png"
     override val displayAmount = true
 
     override fun deepCopy(): Status {

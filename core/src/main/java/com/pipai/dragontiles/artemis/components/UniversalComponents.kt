@@ -2,6 +2,7 @@ package com.pipai.dragontiles.artemis.components
 
 import com.artemis.Component
 import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.g2d.Sprite
 import com.badlogic.gdx.math.Interpolation
@@ -103,6 +104,12 @@ class HoverableComponent : Component() {
 
 class TextLabelComponent : Component() {
     var text = ""
+    var size: TextLabelSize = TextLabelSize.NORMAL
     var xOffset = 0f
     var yOffset = 0f
+    var color: Color = Color.WHITE
+}
+
+enum class TextLabelSize {
+    NORMAL, SMALL, TINY
 }

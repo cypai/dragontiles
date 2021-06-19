@@ -6,6 +6,7 @@ import com.pipai.dragontiles.combat.EnemyTurnEndEvent
 
 class Overloaded(amount: Int) : Status(amount) {
     override val strId = "base:status:Overloaded"
+    override val assetName = "assets/binassets/graphics/status/overloaded.png"
     override val displayAmount = true
 
     override fun deepCopy(): Status {

@@ -32,6 +32,7 @@ import com.pipai.dragontiles.utils.enemyAssetPath
 import com.pipai.dragontiles.utils.getLogger
 import org.apache.commons.lang3.builder.ToStringBuilder
 import org.apache.commons.lang3.builder.ToStringStyle
+import java.io.File
 
 class DragonTilesGame(val gameConfig: GameConfig) : Game() {
 
@@ -78,6 +79,8 @@ class DragonTilesGame(val gameConfig: GameConfig) : Game() {
         shapeRenderer.setAutoShapeType(true)
 
         assets = AssetManager()
+        File("assets/binassets/graphics/status").listFiles()!!
+            .forEach { assets.load(it.toString(), Texture::class.java) }
         assets.load("assets/binassets/graphics/tiles/tiles.png", Texture::class.java)
         assets.load("assets/binassets/graphics/heros/elementalist.png", Texture::class.java)
         assets.load(enemyAssetPath(FlameTurtle().assetName), Texture::class.java)
@@ -99,8 +102,10 @@ class DragonTilesGame(val gameConfig: GameConfig) : Game() {
         assets.finishLoading()
         tileSkin = TileSkin(assets.get("assets/binassets/graphics/tiles/tiles.png", Texture::class.java))
 
-        val fontGenerator = FreeTypeFontGenerator(Gdx.files.internal("assets/binassets/graphics/fonts/SourceSansPro-Regular.ttf"))
-        val outlinedFontGenerator = FreeTypeFontGenerator(Gdx.files.internal("assets/binassets/graphics/fonts/C_BOX.TTF"))
+        val fontGenerator =
+            FreeTypeFontGenerator(Gdx.files.internal("assets/binassets/graphics/fonts/SourceSansPro-Regular.ttf"))
+        val outlinedFontGenerator =
+            FreeTypeFontGenerator(Gdx.files.internal("assets/binassets/graphics/fonts/C_BOX.TTF"))
         val fontParameter = FreeTypeFontParameter()
         fontParameter.size = 18
         outlinedFont = outlinedFontGenerator.generateFont(fontParameter)
@@ -157,18 +162,26 @@ class DragonTilesGame(val gameConfig: GameConfig) : Game() {
         val framePatch = NinePatch(frameTexture, 5, 5, 5, 5)
         skin.add("frameTexture", frameTexture)
         skin.add("frame", framePatch)
-        val frameDrawable = MultiDrawable(arrayOf(
+        val frameDrawable = MultiDrawable(
+            arrayOf(
                 OffsetDrawable(skin.getTiledDrawable("bg"), 1f, 3f, -4f, -4f),
-                skin.getDrawable("frame")))
+                skin.getDrawable("frame")
+            )
+        )
         skin.add("frameDrawable", frameDrawable, Drawable::class.java)
-        val frameDrawableDark = MultiDrawable(arrayOf(
+        val frameDrawableDark = MultiDrawable(
+            arrayOf(
                 OffsetDrawable(skin.getTiledDrawable("bg"), 1f, 3f, -4f, -4f),
                 OffsetDrawable(disabledDrawable, 1f, 3f, -4f, -4f),
-                skin.getDrawable("frame")))
+                skin.getDrawable("frame")
+            )
+        )
         skin.add("frameDrawableDark", frameDrawableDark, Drawable::class.java)
-        val targetOutlineTexture = Texture(Gdx.files.local("assets/binassets/graphics/textures/target_outline_gray.png"))
+        val targetOutlineTexture =
+            Texture(Gdx.files.local("assets/binassets/graphics/textures/target_outline_gray.png"))
         val targetOutlinePatch = NinePatch(targetOutlineTexture, 5, 5, 5, 5)
-        val targetOutlineWhiteTexture = Texture(Gdx.files.local("assets/binassets/graphics/textures/target_outline_white.png"))
+        val targetOutlineWhiteTexture =
+            Texture(Gdx.files.local("assets/binassets/graphics/textures/target_outline_white.png"))
         val targetOutlineWhitePatch = NinePatch(targetOutlineWhiteTexture, 5, 5, 5, 5)
         skin.add("targetOutlineGray", targetOutlinePatch)
         skin.add("targetOutlineWhite", targetOutlineWhitePatch)
@@ -177,9 +190,12 @@ class DragonTilesGame(val gameConfig: GameConfig) : Game() {
         val flatFramePatch = NinePatch(flatFrameTexture, 5, 5, 5, 5)
         skin.add("flatFrameTexture", flatFrameTexture)
         skin.add("flatFrame", flatFramePatch)
-        val flatFrameDrawable = MultiDrawable(arrayOf(
+        val flatFrameDrawable = MultiDrawable(
+            arrayOf(
                 OffsetDrawable(skin.getTiledDrawable("bg"), 1f, 3f, -4f, -4f),
-                skin.getDrawable("flatFrame")))
+                skin.getDrawable("flatFrame")
+            )
+        )
         skin.add("flatFrameDrawable", flatFrameDrawable, Drawable::class.java)
 
         val transparencyBgTexture = Texture(Gdx.files.local("assets/binassets/graphics/textures/transparencyBg.png"))
@@ -198,12 +214,16 @@ class DragonTilesGame(val gameConfig: GameConfig) : Game() {
         devLabelStyle.background = whiteDrawable
         skin.add("dev", devLabelStyle)
 
-        val textFieldStyle = TextFieldStyle(font, Color.BLACK,
-                blackDrawable, grayDrawable, whiteDrawable)
+        val textFieldStyle = TextFieldStyle(
+            font, Color.BLACK,
+            blackDrawable, grayDrawable, whiteDrawable
+        )
         skin.add("default", textFieldStyle)
 
-        val smallTextFieldStyle = TextFieldStyle(smallFont, Color.BLACK,
-                blackDrawable, grayDrawable, whiteDrawable)
+        val smallTextFieldStyle = TextFieldStyle(
+            smallFont, Color.BLACK,
+            blackDrawable, grayDrawable, whiteDrawable
+        )
         skin.add("small", smallTextFieldStyle)
 
         val textButtonStyle = TextButton.TextButtonStyle(frameDrawable, flatFrameDrawable, frameDrawable, smallFont)
@@ -225,12 +245,16 @@ class DragonTilesGame(val gameConfig: GameConfig) : Game() {
         val selectBoxStyle = SelectBox.SelectBoxStyle(smallFont, Color.BLACK, whiteDrawable, scrollPaneStyle, listStyle)
         skin.add("default", selectBoxStyle)
 
-        val menuListStyle = List.ListStyle(font, Color.BLACK, Color.BLACK,
-                OffsetDrawable(clearGrayDrawable, 4f, 4f, -8f, -8f))
+        val menuListStyle = List.ListStyle(
+            font, Color.BLACK, Color.BLACK,
+            OffsetDrawable(clearGrayDrawable, 4f, 4f, -8f, -8f)
+        )
         menuListStyle.background = frameDrawable
         skin.add("menuList", menuListStyle)
-        val smallMenuListStyle = List.ListStyle(smallFont, Color.BLACK, Color.BLACK,
-                OffsetDrawable(skin.newDrawable("white", Color(0.5f, 0.5f, 0.5f, 0.5f)), 4f, 1f, -16f, -2f))
+        val smallMenuListStyle = List.ListStyle(
+            smallFont, Color.BLACK, Color.BLACK,
+            OffsetDrawable(skin.newDrawable("white", Color(0.5f, 0.5f, 0.5f, 0.5f)), 4f, 1f, -16f, -2f)
+        )
         skin.add("smallMenuList", smallMenuListStyle)
 
         val windowStyle = Window.WindowStyle(smallFont, Color.BLACK, frameDrawable)

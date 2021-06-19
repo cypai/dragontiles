@@ -2,10 +2,12 @@ package com.pipai.dragontiles.artemis.components
 
 import com.artemis.Component
 import com.badlogic.gdx.Input.Keys
+import com.badlogic.gdx.graphics.g2d.Sprite
 import com.pipai.dragontiles.combat.Intent
 import com.pipai.dragontiles.data.TileInstance
 import com.pipai.dragontiles.dungeon.RunData
 import com.pipai.dragontiles.enemies.Enemy
+import com.pipai.dragontiles.status.Status
 
 class TileComponent : Component() {
     lateinit var tile: TileInstance
@@ -75,4 +77,16 @@ class TargetHighlightComponent : Component() {
     var height = 0f
     var padding = 0f
     var alpha = 0f
+}
+
+class StatusComponent : Component() {
+    var amount = 0
+    var showAmount = false
+    lateinit var status: Status
+
+    fun setByStatus(status: Status) {
+        amount = status.amount
+        showAmount = status.displayAmount
+        this.status = status
+    }
 }

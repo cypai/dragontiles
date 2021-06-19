@@ -9,6 +9,7 @@ import com.pipai.dragontiles.utils.DeepCopyable
 abstract class Status(var amount: Int) : DamageAdjustable, DeepCopyable<Status> {
 
     abstract val strId: String
+    abstract val assetName: String
     abstract val displayAmount: Boolean
 
     override fun queryFlatAdjustment(origin: DamageOrigin, target: DamageTarget, element: Element): Int = 0

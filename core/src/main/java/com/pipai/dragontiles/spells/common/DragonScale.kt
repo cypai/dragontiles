@@ -33,9 +33,14 @@ class DragonScale : StandardSpell() {
         if (register) api.register(DragonScaleImpl())
     }
 
-    class FireDragonScale : SimpleStatus("base:status:FireDragonScale", false, 1)
-    class IceDragonScale : SimpleStatus("base:status:IceDragonScale", false, 1)
-    class LightningDragonScale : SimpleStatus("base:status:LightningDragonScale", false, 1)
+    class FireDragonScale :
+        SimpleStatus("base:status:FireDragonScale", "assets/binassets/graphics/status/red.png", false, 1)
+
+    class IceDragonScale :
+        SimpleStatus("base:status:IceDragonScale", "assets/binassets/graphics/status/blue.png", false, 1)
+
+    class LightningDragonScale :
+        SimpleStatus("base:status:LightningDragonScale", "assets/binassets/graphics/status/yellow.png", false, 1)
 
     class DragonScaleImpl {
         @CombatSubscribe

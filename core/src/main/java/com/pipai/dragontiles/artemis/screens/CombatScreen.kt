@@ -13,6 +13,7 @@ import com.pipai.dragontiles.DragonTilesGame
 import com.pipai.dragontiles.artemis.systems.*
 import com.pipai.dragontiles.artemis.systems.animation.CombatAnimationSystem
 import com.pipai.dragontiles.artemis.systems.combat.CombatControllerSystem
+import com.pipai.dragontiles.artemis.systems.combat.StatusSystem
 import com.pipai.dragontiles.artemis.systems.combat.TileIdSystem
 import com.pipai.dragontiles.artemis.systems.input.ExitInputProcessor
 import com.pipai.dragontiles.artemis.systems.input.InputProcessingSystem
@@ -46,6 +47,7 @@ class CombatScreen(game: DragonTilesGame, runData: RunData, encounter: Encounter
 
                 CombatControllerSystem(runData, combat),
                 TileIdSystem(),
+                StatusSystem(game),
                 CombatAnimationSystem(game),
                 MouseXySystem(game.gameConfig),
                 TooltipSystem(game, stage),
