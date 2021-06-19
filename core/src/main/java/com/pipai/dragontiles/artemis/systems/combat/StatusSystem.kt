@@ -25,6 +25,7 @@ class StatusSystem(private val game: DragonTilesGame) : NoProcessingSystem() {
     fun handleHeroStatus(statuses: List<Status>) {
         val cHeroXy = mXy.get(world.fetch(allOf(HeroComponent::class)).first())
         heroStatuses.forEach { world.delete(it) }
+        heroStatuses.clear()
         statuses.forEachIndexed { index, s ->
             heroStatuses.add(createStatus(cHeroXy, index, s))
         }
