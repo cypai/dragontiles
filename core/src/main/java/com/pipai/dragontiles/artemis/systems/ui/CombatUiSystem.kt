@@ -46,6 +46,8 @@ class CombatUiSystem(
 
     private val spells: MutableMap<Int, SpellCard> = mutableMapOf()
     private val spellEntityIds: MutableMap<Int, Int> = mutableMapOf()
+    private val sideboard: MutableMap<Int, SpellCard> = mutableMapOf()
+    private val sideboardEntityIds: MutableMap<Int, Int> = mutableMapOf()
     private val spellComponentList = SpellComponentList(skin, tileSkin)
 
     val layout = CombatUiLayout(config, tileSkin, runData.hero.handSize)
@@ -58,6 +60,7 @@ class CombatUiSystem(
     private val stateMachine = DefaultStateMachine<CombatUiSystem, CombatUiState>(this, CombatUiState.ROOT)
 
     private val mXy by mapper<XYComponent>()
+    private val mAnchor by mapper<AnchorComponent>()
     private val mPath by mapper<PathInterpolationComponent>()
     private val mEnemy by mapper<EnemyComponent>()
     private val mLine by mapper<AnchoredLineComponent>()
@@ -76,6 +79,9 @@ class CombatUiSystem(
     override fun initialize() {
         runData.hero.spells.forEachIndexed { index, spell ->
             addSpellCard(index, spell)
+        }
+        runData.hero.sideDeck.forEachIndexed { index, spell ->
+            addSpellCardToSideboard(index, spell)
         }
 
         spellComponentList.addClickCallback { selectComponents(it) }
@@ -112,6 +118,26 @@ class CombatUiSystem(
         spellEntityIds[number] = id
         val cXy = mXy.create(id)
         cXy.setXy(spellCard.x, spellCard.y)
+        val cAnchor = mAnchor.create(id)
+        cAnchor.setXy(spellCard.x, spellCard.y)
+    }
+
+    private fun addSpellCardToSideboard(number: Int, spell: Spell) {
+        val spellCard = SpellCard(game, spell, number, game.skin, sCombat.controller.api, sTooltip)
+        spellCard.addClickCallback(this::spellCardClickCallback)
+        spellCard.width = layout.cardWidth
+        spellCard.height = layout.cardHeight
+        spellCard.x = game.gameConfig.resolution.width - layout.cardWidth * 3 + number * layout.cardWidth / 3
+        spellCard.y = -SpellCard.cardHeight / 2f
+        stage.addActor(spellCard)
+        sideboard[number] = spellCard
+
+        val id = world.create()
+        sideboardEntityIds[number] = id
+        val cXy = mXy.create(id)
+        cXy.setXy(spellCard.x, spellCard.y)
+        val cAnchor = mAnchor.create(id)
+        cAnchor.setXy(spellCard.x, spellCard.y)
     }
 
     fun disable() {
@@ -198,28 +224,33 @@ class CombatUiSystem(
     }
 
     private fun spellCardClickCallback(event: InputEvent, spellCard: SpellCard) {
-        if (stateMachine.currentState == CombatUiState.ROOT) {
-            val spell = spellCard.getSpell()
-            when (event.button) {
-                Input.Buttons.LEFT -> {
-                    if (!(spell is Rune && spell.active)) {
-                        selectedSpellNumber = spellCard.number
-                        stateMachine.changeState(CombatUiState.COMPONENT_SELECTION)
+        when (stateMachine.currentState) {
+            CombatUiState.ROOT -> {
+                val spell = spellCard.getSpell()
+                when (event.button) {
+                    Input.Buttons.LEFT -> {
+                        if (!(spell is Rune && spell.active)) {
+                            selectedSpellNumber = spellCard.number
+                            stateMachine.changeState(CombatUiState.COMPONENT_SELECTION)
+                        }
                     }
-                }
-                Input.Buttons.RIGHT -> {
-                    if (spell is Rune && spell.active) {
-                        sAnimation.pauseUiMode = true
-                        GlobalScope.launch {
-                            spell.deactivate(sCombat.controller.api)
+                    Input.Buttons.RIGHT -> {
+                        if (spell is Rune && spell.active) {
+                            sAnimation.pauseUiMode = true
+                            GlobalScope.launch {
+                                spell.deactivate(sCombat.controller.api)
+                            }
                         }
                     }
                 }
             }
+            CombatUiState.QUERY -> {
+
+            }
         }
     }
 
-    private fun moveSpellToLocation(number: Int, location: Vector2) {
+    public fun moveSpellToLocation(number: Int, location: Vector2) {
         val id = spellEntityIds[number]!!
         val cXy = mXy.get(id)
         val cPath = mPath.create(id)
@@ -439,6 +470,10 @@ class CombatUiSystem(
         sEvent.dispatch(HandAdjustedEvent(sCombat.combat.hand, sCombat.combat.assigned))
     }
 
+    public fun changeState(state: CombatUiState) {
+        stateMachine.changeState(state)
+    }
+
     override fun keyUp(keycode: Int) = false
 
     override fun keyTyped(character: Char) = false
@@ -544,6 +579,14 @@ class CombatUiSystem(
                 uiSystem.spells.forEach { (_, spellCard) ->
                     spellCard.update()
                     spellCard.disable()
+                }
+            }
+        },
+        QUERY() {
+            override fun enter(uiSystem: CombatUiSystem) {
+                uiSystem.spells.forEach { (_, spellCard) ->
+                    spellCard.enable()
+                    spellCard.update()
                 }
             }
         };

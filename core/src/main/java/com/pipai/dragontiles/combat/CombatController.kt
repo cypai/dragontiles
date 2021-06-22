@@ -18,6 +18,7 @@ class CombatController(
     fun initCombat() {
         eventBus.init(api)
         combat.spells.addAll(runData.hero.spells)
+        combat.sideDeck.addAll(runData.hero.sideDeck)
         combat.enemies.forEach {
             it.preInit(api.nextId())
             it.init(api)
@@ -26,6 +27,10 @@ class CombatController(
         initDrawPile()
         runBlocking { api.drawToOpenPool(9) }
         combat.spells.forEach {
+            it.combatReset()
+            eventBus.register(it)
+        }
+        combat.sideDeck.forEach {
             it.combatReset()
             eventBus.register(it)
         }
@@ -88,9 +93,9 @@ class CombatController(
             .forEach {
                 api.changeEnemyIntent(it, it.nextIntent(api))
             }
-        combat.spells.forEach {
-            it.turnReset()
-        }
+        combat.spells.forEach { it.turnReset() }
+        combat.sideDeck.forEach { it.turnReset() }
+        api.swapQuery(1)
         api.drawToOpenPool(1)
         runTurn()
     }

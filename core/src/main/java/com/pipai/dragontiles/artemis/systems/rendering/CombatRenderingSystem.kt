@@ -35,7 +35,7 @@ class CombatRenderingSystem(private val game: DragonTilesGame) : BaseSystem() {
         batch.color = Color.WHITE
         batch.setBlendFunction(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA)
         batch.begin()
-        world.fetch(allOf(XYComponent::class, SpriteComponent::class))
+        world.fetch(allOf(XYComponent::class, SpriteComponent::class).exclude())
             .forEach {
                 val sprite = mSprite.get(it).sprite
                 val cXy = mXy.get(it)

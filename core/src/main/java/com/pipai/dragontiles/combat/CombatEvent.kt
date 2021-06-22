@@ -5,6 +5,7 @@ import com.pipai.dragontiles.data.Tile
 import com.pipai.dragontiles.data.TileInstance
 import com.pipai.dragontiles.enemies.Enemy
 import com.pipai.dragontiles.spells.Rune
+import com.pipai.dragontiles.spells.Spell
 import com.pipai.dragontiles.spells.StandardSpell
 import com.pipai.dragontiles.status.Status
 import net.mostlyoriginal.api.event.common.Event
@@ -98,3 +99,13 @@ data class StatusAdjustedEvent(
     val heroStatus: List<Status>,
     val enemyStatus: Map<Int, List<Status>>
 ) : CombatEvent
+
+data class QuerySwapEvent(
+    val amount: Int,
+    val continuation: Continuation<List<SwapData>>
+) : CombatEvent {
+
+    data class SwapData(val spellInHand: Spell, val spellOnSide: Spell)
+}
+
+data class SwapEvent(val spellInHand: Spell, val spellOnSide: Spell) : CombatEvent

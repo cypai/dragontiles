@@ -8,11 +8,16 @@ import com.pipai.dragontiles.dungeon.GlobalApi
 import com.pipai.dragontiles.dungeon.RunData
 import com.pipai.dragontiles.enemies.Enemy
 import com.pipai.dragontiles.spells.Rune
+import com.pipai.dragontiles.spells.Spell
 import com.pipai.dragontiles.spells.StandardSpell
 import com.pipai.dragontiles.status.Overloaded
 import com.pipai.dragontiles.status.Status
 import com.pipai.dragontiles.utils.deepCopy
+import com.pipai.dragontiles.utils.getLogger
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 import kotlin.coroutines.suspendCoroutine
 import kotlin.reflect.KClass
 
@@ -22,6 +27,7 @@ class CombatApi(
     private val eventBus: SuspendableEventBus
 ) : GlobalApi(runData) {
 
+    private val logger = getLogger()
     private var nextId = 0
 
     fun nextId(): Int {
@@ -168,6 +174,31 @@ class CombatApi(
         if (combat.openPool.size > 9) {
             removeFromOpenPool(combat.openPool.slice(0 until combat.openPool.size - 9))
         }
+    }
+
+    suspend fun swapQuery(amount: Int) {
+        val swapList: List<QuerySwapEvent.SwapData> = suspendCoroutine {
+            runBlocking {
+                eventBus.dispatch(QuerySwapEvent(amount, it))
+            }
+        }
+        swapList.forEach {
+            swap(it.spellInHand, it.spellOnSide)
+        }
+    }
+
+    suspend fun swap(spellInHand: Spell, spellOnSide: Spell) {
+        if (spellInHand is Rune && spellInHand.active) {
+            logger.error("Attempted to swap an active rune.")
+            return
+        }
+        val handIndex = combat.spells.indexOf(spellInHand)
+        val sideIndex = combat.sideDeck.indexOf(spellOnSide)
+        combat.spells.removeAt(handIndex)
+        combat.spells.add(handIndex, spellOnSide)
+        combat.sideDeck.removeAt(sideIndex)
+        combat.sideDeck.add(sideIndex, spellInHand)
+        eventBus.dispatch(SwapEvent(spellInHand, spellOnSide))
     }
 
     fun calculateBaseDamage(element: Element, amount: Int): Int {

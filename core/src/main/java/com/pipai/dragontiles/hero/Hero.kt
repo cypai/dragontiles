@@ -10,5 +10,8 @@ data class Hero(val name: String,
                 var fluxMax: Int,
                 val handSize: Int,
                 val spells: MutableList<Spell>,
+                val spellsSize: Int,
+                val sideDeck: MutableList<Spell>,
+                var sideDeckSize: Int,
                 val relics: MutableList<Relic>,
                 var gold: Int)

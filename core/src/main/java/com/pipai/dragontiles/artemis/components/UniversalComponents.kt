@@ -27,6 +27,23 @@ class XYComponent : Component() {
     fun toVector2() = Vector2(x, y)
 }
 
+class AnchorComponent : Component() {
+    var x = 0f
+    var y = 0f
+
+    fun setXy(x: Float, y: Float) {
+        this.x = x
+        this.y = y
+    }
+
+    fun setXy(vec: Vector2) {
+        this.x = vec.x
+        this.y = vec.y
+    }
+
+    fun toVector2() = Vector2(x, y)
+}
+
 class PathInterpolationComponent : Component() {
     lateinit var interpolation: Interpolation
     var t: Float = 0f

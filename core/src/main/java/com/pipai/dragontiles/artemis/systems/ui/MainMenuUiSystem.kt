@@ -45,7 +45,8 @@ class MainMenuUiSystem(
                     Random(),
                     Hero(
                         "Elementalist", 60, 60, 0, 40, 17,
-                        game.heroSpells.elementalistStarterDeck(),
+                        game.heroSpells.elementalistStarterDeck(), 6,
+                        mutableListOf(), 3,
                         mutableListOf(Transmuter()),
                         5
                     ),

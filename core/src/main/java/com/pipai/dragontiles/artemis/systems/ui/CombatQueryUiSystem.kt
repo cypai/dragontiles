@@ -22,6 +22,7 @@ import com.pipai.dragontiles.artemis.screens.CombatScreen
 import com.pipai.dragontiles.artemis.systems.combat.CombatControllerSystem
 import com.pipai.dragontiles.artemis.systems.combat.TileIdSystem
 import com.pipai.dragontiles.artemis.systems.rendering.FullScreenColorRenderingSystem
+import com.pipai.dragontiles.combat.QuerySwapEvent
 import com.pipai.dragontiles.combat.QueryTileOptionsEvent
 import com.pipai.dragontiles.combat.QueryTilesEvent
 import com.pipai.dragontiles.data.Tile
@@ -44,6 +45,7 @@ class CombatQueryUiSystem(private val game: DragonTilesGame, private val runData
     private val sFsTexture by system<FullScreenColorRenderingSystem>()
     private val sTileId by system<TileIdSystem>()
     private val sCombat by system<CombatControllerSystem>()
+    private val sUi by system<CombatUiSystem>()
     private val sToolTip by system<TooltipSystem>()
     private val sMap by system<MapUiSystem>()
 
@@ -56,6 +58,7 @@ class CombatQueryUiSystem(private val game: DragonTilesGame, private val runData
     private val stateMachine = DefaultStateMachine<CombatQueryUiSystem, CombatQueryUiState>(this, CombatQueryUiState.DISABLED)
     private var queryTilesEvent: QueryTilesEvent? = null
     private var queryTileOptionsEvent: QueryTileOptionsEvent? = null
+    private var querySwapEvent: QuerySwapEvent? = null
 
     val stage = Stage()
     private val table = Table()
@@ -176,6 +179,13 @@ class CombatQueryUiSystem(private val game: DragonTilesGame, private val runData
         }
     }
 
+    fun querySwap(event: QuerySwapEvent) {
+        querySwapEvent = event
+        label.setText("Select up to ${event.amount} spells to swap")
+        stateMachine.changeState(CombatQueryUiState.QUERY_TILES)
+        sUi.changeState(CombatUiSystem.CombatUiState.QUERY)
+    }
+
     private fun confirm() {
         if (stateMachine.currentState != CombatQueryUiState.DISABLED) {
             queryTilesEvent!!.continuation.resume(selectedTiles.map { mTile.get(it).tile })
@@ -193,7 +203,11 @@ class CombatQueryUiSystem(private val game: DragonTilesGame, private val runData
         spells.forEach { spell ->
             val spellCard = SpellCard(game, spell, null, game.skin, sCombat.controller.api, sToolTip)
             spellCard.addClickCallback { _, _ ->
-                runData.hero.spells.add(spell)
+                if (runData.hero.spells.size > runData.hero.spellsSize) {
+                    runData.hero.sideDeck.add(spell)
+                } else {
+                    runData.hero.spells.add(spell)
+                }
                 sMap.showMap()
                 rewardsTable.remove()
             }
@@ -240,6 +254,16 @@ class CombatQueryUiSystem(private val game: DragonTilesGame, private val runData
     override fun scrolled(amountX: Float, amountY: Float) = false
 
     enum class CombatQueryUiState : State<CombatQueryUiSystem> {
+        QUERY_SWAP {
+            override fun enter(uiSystem: CombatQueryUiSystem) {
+                uiSystem.sFsTexture.fadeIn(10)
+                uiSystem.stage.addActor(uiSystem.table)
+            }
+
+            override fun exit(uiSystem: CombatQueryUiSystem) {
+                uiSystem.sFsTexture.fadeOut(10)
+            }
+        },
         QUERY_TILES {
             override fun enter(uiSystem: CombatQueryUiSystem) {
                 uiSystem.sFsTexture.fadeIn(10)

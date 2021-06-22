@@ -10,6 +10,7 @@ data class Combat(val enemies: List<Enemy>) {
     var turnNumber = 0
 
     val spells: MutableList<Spell> = mutableListOf()
+    val sideDeck: MutableList<Spell> = mutableListOf()
 
     val hand: MutableList<TileInstance> = mutableListOf()
     val drawPile: MutableList<TileInstance> = mutableListOf()
