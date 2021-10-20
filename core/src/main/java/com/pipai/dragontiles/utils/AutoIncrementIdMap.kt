@@ -23,7 +23,7 @@ class AutoIncrementIdMap<T> : Iterable<Map.Entry<Int, T>>, ShallowCopyable<AutoI
     }
 
     fun add(item: T): Int {
-        val id = (items.keys.max() ?: -1) + 1
+        val id = (items.keys.maxOrNull() ?: -1) + 1
         items[id] = item
         return id
     }
