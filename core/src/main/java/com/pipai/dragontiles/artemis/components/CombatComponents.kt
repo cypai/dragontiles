@@ -90,3 +90,7 @@ class StatusComponent : Component() {
         this.status = status
     }
 }
+
+class IntentComponent : Component() {
+    var intent: Intent? = null
+}

@@ -17,6 +17,7 @@ import com.pipai.dragontiles.artemis.systems.ui.CombatUiSystem
 import com.pipai.dragontiles.dungeon.Encounter
 import com.pipai.dragontiles.dungeon.RunData
 import com.pipai.dragontiles.utils.enemyAssetPath
+import com.pipai.dragontiles.utils.mapper
 
 @Wire
 class CombatScreenInit(
@@ -33,6 +34,7 @@ class CombatScreenInit(
     private lateinit var mEnemy: ComponentMapper<EnemyComponent>
     private lateinit var mHoverable: ComponentMapper<HoverableComponent>
     private lateinit var mClickable: ComponentMapper<ClickableComponent>
+    private lateinit var mTextLabel: ComponentMapper<TextLabelComponent>
 
     private lateinit var sTags: TagManager
 
@@ -79,6 +81,9 @@ class CombatScreenInit(
         val cSprite = mSprite.create(entityId)
         cSprite.sprite =
             Sprite(game.assets.get("assets/binassets/graphics/heros/elementalist.png", Texture::class.java))
+        val cHeroText = mTextLabel.create(entityId)
+        cHeroText.size = TextLabelSize.SMALL
+        cHeroText.yOffset = -10f
     }
 
 }
