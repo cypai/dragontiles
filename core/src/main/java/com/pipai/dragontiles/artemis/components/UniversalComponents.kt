@@ -103,6 +103,7 @@ class MutualDestroyComponent : Component() {
 
 class SpriteComponent : Component() {
     lateinit var sprite: Sprite
+    var depth = 0
 }
 
 class RadialSpriteComponent : Component() {

@@ -36,6 +36,7 @@ class CombatRenderingSystem(private val game: DragonTilesGame) : BaseSystem() {
         batch.setBlendFunction(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA)
         batch.begin()
         world.fetch(allOf(XYComponent::class, SpriteComponent::class))
+            .sortedByDescending { mSprite.get(it).depth }
             .forEach {
                 val sprite = mSprite.get(it).sprite
                 val cXy = mXy.get(it)
