@@ -8,36 +8,48 @@ import com.badlogic.gdx.ai.fsm.DefaultStateMachine
 import com.badlogic.gdx.ai.fsm.State
 import com.badlogic.gdx.ai.msg.Telegram
 import com.badlogic.gdx.graphics.Color
+import com.badlogic.gdx.graphics.g2d.Sprite
 import com.badlogic.gdx.math.Interpolation
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.scenes.scene2d.InputEvent
 import com.badlogic.gdx.scenes.scene2d.Stage
+import com.badlogic.gdx.scenes.scene2d.ui.Label
+import com.badlogic.gdx.scenes.scene2d.ui.Table
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.pipai.dragontiles.DragonTilesGame
+import com.pipai.dragontiles.artemis.EntityId
 import com.pipai.dragontiles.artemis.components.*
 import com.pipai.dragontiles.artemis.events.*
+import com.pipai.dragontiles.artemis.systems.AnchorSystem
 import com.pipai.dragontiles.artemis.systems.animation.CombatAnimationSystem
 import com.pipai.dragontiles.artemis.systems.combat.CombatControllerSystem
+import com.pipai.dragontiles.artemis.systems.combat.TileIdSystem
+import com.pipai.dragontiles.artemis.systems.rendering.FullScreenColorRenderingSystem
 import com.pipai.dragontiles.combat.HandAdjustedEvent
+import com.pipai.dragontiles.combat.QuerySwapEvent
+import com.pipai.dragontiles.combat.QueryTileOptionsEvent
+import com.pipai.dragontiles.combat.QueryTilesEvent
+import com.pipai.dragontiles.data.Tile
 import com.pipai.dragontiles.data.TileInstance
 import com.pipai.dragontiles.dungeon.RunData
 import com.pipai.dragontiles.gui.CombatUiLayout
 import com.pipai.dragontiles.gui.SpellCard
 import com.pipai.dragontiles.gui.SpellComponentList
 import com.pipai.dragontiles.spells.*
-import com.pipai.dragontiles.utils.allOf
-import com.pipai.dragontiles.utils.fetch
-import com.pipai.dragontiles.utils.mapper
-import com.pipai.dragontiles.utils.system
+import com.pipai.dragontiles.utils.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import net.mostlyoriginal.api.event.common.EventSystem
 import net.mostlyoriginal.api.event.common.Subscribe
+import kotlin.coroutines.resume
 import kotlin.math.min
 
 class CombatUiSystem(
     private val game: DragonTilesGame,
     private val runData: RunData,
-    private val stage: Stage
+    private val backStage: Stage,
+    private val frontStage: Stage
 ) : BaseSystem(), InputProcessor {
 
     private val config = game.gameConfig
@@ -45,12 +57,30 @@ class CombatUiSystem(
     private val tileSkin = game.tileSkin
 
     private val spells: MutableMap<Int, SpellCard> = mutableMapOf()
-    private val spellEntityIds: MutableMap<Int, Int> = mutableMapOf()
+    private val spellEntityIds: MutableMap<Int, EntityId> = mutableMapOf()
     private val sideboard: MutableMap<Int, SpellCard> = mutableMapOf()
-    private val sideboardEntityIds: MutableMap<Int, Int> = mutableMapOf()
+    private val sideboardEntityIds: MutableMap<Int, EntityId> = mutableMapOf()
     private val spellComponentList = SpellComponentList(skin, tileSkin)
 
+    private var queryTilesEvent: QueryTilesEvent? = null
+    private var queryTileOptionsEvent: QueryTileOptionsEvent? = null
+    private var querySwapEvent: QuerySwapEvent? = null
+
+    private val tilePrevXy: MutableMap<Int, Vector2> = mutableMapOf()
+    private val selectedTiles: MutableList<Int> = mutableListOf()
+    private val tileOptions: MutableMap<Int, Tile> = mutableMapOf()
+
+    private val spacing = 16f
+    private val queryTable = Table()
+    private val queryLabel = Label("", game.skin, "white")
+    private val queryConfirmBtn = TextButton("  Confirm  ", game.skin)
+
     val layout = CombatUiLayout(config, tileSkin, runData.hero.handSize)
+
+    private val leftSpellClosedCenter = Vector2(layout.cardWidth, -SpellCard.cardHeight / 2f)
+    private val leftSpellOpenCenter = Vector2(layout.cardWidth * 3, -SpellCard.cardHeight / 2f)
+    private val rightSpellClosedCenter = Vector2(game.gameConfig.resolution.width - layout.cardWidth * 2, -SpellCard.cardHeight / 2f)
+    private val rightSpellOpenCenter = Vector2(game.gameConfig.resolution.width - layout.cardWidth * 3, -SpellCard.cardHeight / 2f)
 
     var overloaded = false
     private var selectedSpellNumber: Int? = null
@@ -59,7 +89,10 @@ class CombatUiSystem(
 
     private val stateMachine = DefaultStateMachine<CombatUiSystem, CombatUiState>(this, CombatUiState.ROOT)
 
+    private var initted = false
+
     private val mXy by mapper<XYComponent>()
+    private val mClick by mapper<ClickableComponent>()
     private val mAnchor by mapper<AnchorComponent>()
     private val mPath by mapper<PathInterpolationComponent>()
     private val mEnemy by mapper<EnemyComponent>()
@@ -70,11 +103,15 @@ class CombatUiSystem(
     private val mTile by mapper<TileComponent>()
     private val mMutualDestroy by mapper<MutualDestroyComponent>()
 
+    private val sFsTexture by system<FullScreenColorRenderingSystem>()
+    private val sTileId by system<TileIdSystem>()
     private val sCombat by system<CombatControllerSystem>()
     private val sTooltip by system<TooltipSystem>()
     private val sAnimation by system<CombatAnimationSystem>()
     private val sEvent by system<EventSystem>()
     private val sMap by system<MapUiSystem>()
+    private val sToolTip by system<TooltipSystem>()
+    private val sAnchor by system<AnchorSystem>()
 
     override fun initialize() {
         runData.hero.spells.forEachIndexed { index, spell ->
@@ -85,12 +122,41 @@ class CombatUiSystem(
         }
 
         spellComponentList.addClickCallback { selectComponents(it) }
+        queryTable.setFillParent(true)
+        queryTable.add(queryLabel)
+            .top()
+            .padTop(64f)
+            .center()
+        queryTable.row()
+        queryTable.add()
+            .height(game.gameConfig.resolution.height * 2f / 3f)
+        queryTable.row()
+        queryTable.add(queryConfirmBtn)
+            .pad(8f)
+        queryTable.row()
+
+        queryConfirmBtn.addListener(object : ClickListener() {
+            override fun clicked(event: InputEvent?, x: Float, y: Float) {
+                confirm()
+            }
+        })
     }
 
     override fun processSystem() {
+        if (!initted) {
+            initted = true
+            openActiveSpells()
+            closeSideboardSpells()
+        }
         spellEntityIds.forEach { (number, id) ->
             val cXy = mXy.get(id)
             val spellCard = spells[number]!!
+            spellCard.x = cXy.x
+            spellCard.y = cXy.y
+        }
+        sideboardEntityIds.forEach { (number, id) ->
+            val cXy = mXy.get(id)
+            val spellCard = sideboard[number]!!
             spellCard.x = cXy.x
             spellCard.y = cXy.y
         }
@@ -111,33 +177,31 @@ class CombatUiSystem(
         spellCard.height = layout.cardHeight
         spellCard.x = layout.cardWidth * number
         spellCard.y = -SpellCard.cardHeight / 2f
-        stage.addActor(spellCard)
+        frontStage.addActor(spellCard)
         spells[number] = spellCard
 
         val id = world.create()
         spellEntityIds[number] = id
         val cXy = mXy.create(id)
-        cXy.setXy(spellCard.x, spellCard.y)
         val cAnchor = mAnchor.create(id)
-        cAnchor.setXy(spellCard.x, spellCard.y)
+        spellCard.addHoverEnterCallback { openActiveSpells(); closeSideboardSpells() }
     }
 
     private fun addSpellCardToSideboard(number: Int, spell: Spell) {
         val spellCard = SpellCard(game, spell, number, game.skin, sCombat.controller.api, sTooltip)
-        spellCard.addClickCallback(this::spellCardClickCallback)
+        //spellCard.addClickCallback(this::spellCardClickCallback)
         spellCard.width = layout.cardWidth
         spellCard.height = layout.cardHeight
-        spellCard.x = game.gameConfig.resolution.width - layout.cardWidth * 3 + number * layout.cardWidth / 3
+        spellCard.x = game.gameConfig.resolution.width - layout.cardWidth * 3 + number * layout.cardWidth * 0.8f
         spellCard.y = -SpellCard.cardHeight / 2f
-        stage.addActor(spellCard)
+        frontStage.addActor(spellCard)
         sideboard[number] = spellCard
 
         val id = world.create()
         sideboardEntityIds[number] = id
         val cXy = mXy.create(id)
-        cXy.setXy(spellCard.x, spellCard.y)
         val cAnchor = mAnchor.create(id)
-        cAnchor.setXy(spellCard.x, spellCard.y)
+        spellCard.addHoverEnterCallback { openSideboardSpells(); closeActiveSpells() }
     }
 
     fun disable() {
@@ -183,6 +247,9 @@ class CombatUiSystem(
                     else -> {
                     }
                 }
+            }
+            Input.Keys.ENTER -> {
+                confirm()
             }
             Keys.M -> {
                 if (sMap.showing) {
@@ -244,8 +311,7 @@ class CombatUiSystem(
                     }
                 }
             }
-            CombatUiState.QUERY -> {
-
+            else -> {
             }
         }
     }
@@ -271,9 +337,9 @@ class CombatUiSystem(
         }
         setSpellComponentOptions(options)
 
-        stage.addActor(spellComponentList)
-        stage.keyboardFocus = spellComponentList
-        stage.scrollFocus = spellComponentList
+        frontStage.addActor(spellComponentList)
+        frontStage.keyboardFocus = spellComponentList
+        frontStage.scrollFocus = spellComponentList
     }
 
     private fun setSpellComponentOptions(options: List<List<TileInstance>>) {
@@ -432,6 +498,26 @@ class CombatUiSystem(
                 val tile = mTile.get(ev.entityId).tile
                 changeGivenTile(tile)
             }
+            CombatUiState.QUERY_TILES -> {
+                if (mTile.get(ev.entityId).tile in queryTilesEvent!!.tiles) {
+                    if (ev.entityId in selectedTiles) {
+                        moveTileBack(ev.entityId)
+                        stateMachine.changeState(CombatUiState.ROOT)
+                    } else {
+                        if (selectedTiles.size < queryTilesEvent!!.maxAmount) {
+                            moveTileToSelected(ev.entityId)
+                        }
+                    }
+                }
+            }
+            CombatUiState.QUERY_OPTIONS -> {
+                if (ev.entityId in tileOptions) {
+                    if (queryTileOptionsEvent!!.minAmount == 1 && queryTileOptionsEvent!!.maxAmount == 1) {
+                        queryTileOptionsEvent!!.continuation.resume(listOf(tileOptions[ev.entityId]!!))
+                        stateMachine.changeState(CombatUiState.ROOT)
+                    }
+                }
+            }
             else -> {
             }
         }
@@ -470,8 +556,137 @@ class CombatUiSystem(
         sEvent.dispatch(HandAdjustedEvent(sCombat.combat.hand, sCombat.combat.assigned))
     }
 
-    public fun changeState(state: CombatUiState) {
-        stateMachine.changeState(state)
+    fun moveTile(entityId: Int, position: Vector2) {
+        val cXy = mXy.get(entityId)
+        val cPath = mPath.create(entityId)
+        cPath.setPath(cXy.toVector2(), position, 0.25f, Interpolation.exp10Out, EndStrategy.REMOVE)
+    }
+
+    private fun selectedPosition(index: Int, total: Int): Vector2 {
+        val width = game.gameConfig.resolution.width
+        val totalSpacing = spacing * (total - 1)
+        val totalWidth = totalSpacing + game.tileSkin.width * total
+        val firstX = (width - totalWidth) / 2f
+        return Vector2(firstX + index * (spacing + game.tileSkin.width), game.gameConfig.resolution.height / 2f)
+    }
+
+    fun moveTileToSelected(entityId: Int) {
+        tilePrevXy[entityId] = mXy.get(entityId).toVector2()
+        selectedTiles.add(entityId)
+        reposition()
+    }
+
+    fun moveTileBack(entityId: Int) {
+        moveTile(entityId, tilePrevXy[entityId]!!)
+        selectedTiles.remove(entityId)
+        reposition()
+    }
+
+    private fun reposition() {
+        selectedTiles.forEachIndexed { index, tileEntityId ->
+            moveTile(tileEntityId, selectedPosition(index, selectedTiles.size))
+        }
+    }
+
+    fun queryTiles(event: QueryTilesEvent) {
+        queryTilesEvent = event
+        queryLabel.setText(event.text)
+        stateMachine.changeState(CombatUiState.QUERY_TILES)
+    }
+
+    fun moveTileToDisplay(entityId: Int) {
+        moveTile(entityId, Vector2(game.gameConfig.resolution.width / 2f, game.gameConfig.resolution.height * 2f / 3f))
+    }
+
+    fun queryTileOptions(event: QueryTileOptionsEvent) {
+        queryTileOptionsEvent = event
+        queryLabel.setText(event.text)
+        event.displayTile?.let {
+            moveTileToDisplay(sTileId.getEntityId(it.id))
+        }
+        event.options.forEachIndexed { index, tile ->
+            val entityId = world.create()
+            tileOptions[entityId] = tile
+            val cSprite = mSprite.create(entityId)
+            cSprite.sprite = Sprite(game.tileSkin.regionFor(tile))
+            val cXy = mXy.create(entityId)
+            cXy.setXy(selectedPosition(index, event.options.size))
+            val cClick = mClick.create(entityId)
+            cClick.eventGenerator = { TileClickEvent(entityId, it) }
+        }
+        stateMachine.changeState(CombatUiState.QUERY_OPTIONS)
+    }
+
+    @Subscribe
+    fun tileClicked(event: TileClickEvent) {
+        when (stateMachine.currentState) {
+            CombatUiState.QUERY_TILES -> {
+                if (mTile.get(event.entityId).tile in queryTilesEvent!!.tiles) {
+                    if (event.entityId in selectedTiles) {
+                        moveTileBack(event.entityId)
+                    } else {
+                        if (selectedTiles.size < queryTilesEvent!!.maxAmount) {
+                            moveTileToSelected(event.entityId)
+                        }
+                    }
+                }
+            }
+            CombatUiState.QUERY_OPTIONS -> {
+                if (event.entityId in tileOptions) {
+                    if (queryTileOptionsEvent!!.minAmount == 1 && queryTileOptionsEvent!!.maxAmount == 1) {
+                        queryTileOptionsEvent!!.continuation.resume(listOf(tileOptions[event.entityId]!!))
+                        stateMachine.changeState(CombatUiState.ROOT)
+                    }
+                }
+            }
+            else -> {
+            }
+        }
+    }
+
+    fun querySwap(event: QuerySwapEvent) {
+        querySwapEvent = event
+        queryLabel.setText("Select up to ${event.amount} spells to swap")
+        stateMachine.changeState(CombatUiState.QUERY_TILES)
+    }
+
+    private fun confirm() {
+        if (stateMachine.currentState != CombatUiState.DISABLED) {
+            queryTilesEvent!!.continuation.resume(selectedTiles.map { mTile.get(it).tile })
+            stateMachine.changeState(CombatUiState.ROOT)
+        }
+    }
+
+    private fun generateRewardsTable(spells: List<Spell>) {
+        val rewardsTable = Table()
+        spells.forEach { spell ->
+            val spellCard = SpellCard(game, spell, null, game.skin, sCombat.controller.api, sToolTip)
+            spellCard.addClickCallback { _, _ ->
+                if (runData.hero.spells.size > runData.hero.spellsSize) {
+                    runData.hero.sideDeck.add(spell)
+                } else {
+                    runData.hero.spells.add(spell)
+                }
+                sMap.showMap()
+                rewardsTable.remove()
+            }
+            rewardsTable.add(spellCard)
+        }
+        queryLabel.setText("Rewards! Choose a spell.")
+
+        queryTable.clearChildren()
+        queryTable.setFillParent(true)
+        queryTable.add(queryLabel)
+            .top()
+            .padTop(64f)
+            .center()
+        queryTable.row()
+        queryTable.add(rewardsTable)
+            .height(game.gameConfig.resolution.height * 2f / 3f)
+            .width(game.gameConfig.resolution.width * 3f / 4f)
+        queryTable.row()
+
+        frontStage.addActor(queryTable)
     }
 
     override fun keyUp(keycode: Int) = false
@@ -518,8 +733,44 @@ class CombatUiSystem(
 
     override fun scrolled(amountX: Float, amountY: Float) = false
 
+    private fun openActiveSpells() {
+        spellEntityIds.forEach { (number, entityId) ->
+            val cAnchor = mAnchor.get(entityId)
+            cAnchor.x = leftSpellOpenCenter.x + layout.cardWidth * (number - spellEntityIds.size / 2)
+            cAnchor.y = leftSpellOpenCenter.y
+            sAnchor.returnToAnchor(entityId)
+        }
+    }
+
+    private fun closeActiveSpells() {
+        spellEntityIds.forEach { (number, entityId) ->
+            val cAnchor = mAnchor.get(entityId)
+            cAnchor.x = leftSpellClosedCenter.x + layout.cardWidth / 4 * (number - spellEntityIds.size / 2)
+            cAnchor.y = leftSpellClosedCenter.y
+            sAnchor.returnToAnchor(entityId)
+        }
+    }
+
+    private fun openSideboardSpells() {
+        sideboardEntityIds.forEach { (number, entityId) ->
+            val cAnchor = mAnchor.get(entityId)
+            cAnchor.x = rightSpellOpenCenter.x + layout.cardWidth * (number - spellEntityIds.size / 2)
+            cAnchor.y = rightSpellOpenCenter.y
+            sAnchor.returnToAnchor(entityId)
+        }
+    }
+
+    private fun closeSideboardSpells() {
+        sideboardEntityIds.forEach { (number, entityId) ->
+            val cAnchor = mAnchor.get(entityId)
+            cAnchor.x = rightSpellClosedCenter.x + layout.cardWidth / 4 * (number - spellEntityIds.size / 2)
+            cAnchor.y = rightSpellClosedCenter.y
+            sAnchor.returnToAnchor(entityId)
+        }
+    }
+
     enum class CombatUiState : State<CombatUiSystem> {
-        ROOT() {
+        ROOT {
             override fun enter(uiSystem: CombatUiSystem) {
                 uiSystem.spells.forEach { (number, spellCard) ->
                     uiSystem.moveSpellToLocation(number, uiSystem.layout.spellStartPosition(number))
@@ -535,7 +786,7 @@ class CombatUiSystem(
                 uiSystem.givenComponents.clear()
             }
         },
-        COMPONENT_SELECTION() {
+        COMPONENT_SELECTION {
             override fun enter(uiSystem: CombatUiSystem) {
                 uiSystem.spells.forEach { (number, spellCard) ->
                     if (number == uiSystem.selectedSpellNumber) {
@@ -552,7 +803,7 @@ class CombatUiSystem(
                 uiSystem.spellComponentList.remove()
             }
         },
-        TARGET_SELECTION() {
+        TARGET_SELECTION {
             override fun enter(uiSystem: CombatUiSystem) {
                 uiSystem.getSelectedSpellCard()?.update()
                 val id = uiSystem.world.create()
@@ -574,19 +825,46 @@ class CombatUiSystem(
                 uiSystem.removeHighlights()
             }
         },
-        DISABLED() {
+        QUERY_SWAP {
+            override fun enter(uiSystem: CombatUiSystem) {
+                uiSystem.sFsTexture.fadeIn(10)
+                uiSystem.frontStage.addActor(uiSystem.queryTable)
+            }
+
+            override fun exit(uiSystem: CombatUiSystem) {
+                uiSystem.sFsTexture.fadeOut(10)
+            }
+        },
+        QUERY_TILES {
+            override fun enter(uiSystem: CombatUiSystem) {
+                uiSystem.sFsTexture.fadeIn(10)
+                uiSystem.frontStage.addActor(uiSystem.queryTable)
+            }
+
+            override fun exit(uiSystem: CombatUiSystem) {
+                uiSystem.sFsTexture.fadeOut(10)
+                uiSystem.queryTable.remove()
+            }
+        },
+        QUERY_OPTIONS {
+            override fun enter(uiSystem: CombatUiSystem) {
+                println("Q")
+                uiSystem.sFsTexture.fadeIn(10)
+                uiSystem.frontStage.addActor(uiSystem.queryTable)
+            }
+
+            override fun exit(uiSystem: CombatUiSystem) {
+                uiSystem.sFsTexture.fadeOut(10)
+                uiSystem.tileOptions.forEach { uiSystem.world.delete(it.key) }
+                uiSystem.tileOptions.clear()
+                uiSystem.queryTable.remove()
+            }
+        },
+        DISABLED {
             override fun enter(uiSystem: CombatUiSystem) {
                 uiSystem.spells.forEach { (_, spellCard) ->
                     spellCard.update()
                     spellCard.disable()
-                }
-            }
-        },
-        QUERY() {
-            override fun enter(uiSystem: CombatUiSystem) {
-                uiSystem.spells.forEach { (_, spellCard) ->
-                    spellCard.enable()
-                    spellCard.update()
                 }
             }
         };

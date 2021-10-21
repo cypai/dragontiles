@@ -1,14 +1,14 @@
 package com.pipai.dragontiles.artemis.systems.animation
 
-import com.pipai.dragontiles.artemis.systems.ui.CombatQueryUiSystem
+import com.pipai.dragontiles.artemis.systems.ui.CombatUiSystem
 import com.pipai.dragontiles.combat.QueryTileOptionsEvent
 
 data class QueryTileOptionsAnimation(val ev: QueryTileOptionsEvent) : Animation() {
 
-    private lateinit var sQueryUi: CombatQueryUiSystem
+    private lateinit var sUi: CombatUiSystem
 
     override fun startAnimation() {
-        sQueryUi.queryTileOptions(ev)
+        sUi.queryTileOptions(ev)
         endAnimation()
     }
 

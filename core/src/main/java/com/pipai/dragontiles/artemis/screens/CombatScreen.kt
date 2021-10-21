@@ -25,7 +25,8 @@ import net.mostlyoriginal.api.event.common.EventSystem
 
 class CombatScreen(game: DragonTilesGame, runData: RunData, encounter: Encounter) : Screen {
 
-    private val stage = Stage(ScreenViewport(), game.spriteBatch)
+    private val backStage = Stage(ScreenViewport(), game.spriteBatch)
+    private val frontStage = Stage(ScreenViewport(), game.spriteBatch)
 
     val world: World
 
@@ -49,9 +50,10 @@ class CombatScreen(game: DragonTilesGame, runData: RunData, encounter: Encounter
                 HeroStatusSystem(),
                 EnemyStatusSystem(game),
                 StatusSystem(game),
+                AnchorSystem(),
                 CombatAnimationSystem(game),
                 MouseXySystem(game.gameConfig),
-                TooltipSystem(game, stage),
+                TooltipSystem(game, backStage),
 
                 InputProcessingSystem(),
                 HoverableSystem(game.gameConfig),
@@ -59,18 +61,17 @@ class CombatScreen(game: DragonTilesGame, runData: RunData, encounter: Encounter
             )
             .with(
                 -1,
-                CombatUiSystem(game, runData, stage),
-                TopRowUiSystem(game, runData, stage),
-                FullScreenColorRenderingSystem(game)
+                CombatUiSystem(game, runData, backStage, frontStage),
+                TopRowUiSystem(game, runData, frontStage)
             )
             .with(
                 -2,
-                CombatRenderingSystem(game),
-                CombatQueryUiSystem(game, runData)
+                CombatRenderingSystem(game)
             )
             .with(
                 -3,
-                MapUiSystem(game, stage, runData)
+                FullScreenColorRenderingSystem(game),
+                MapUiSystem(game, frontStage, runData)
             )
             .build()
 
@@ -81,10 +82,9 @@ class CombatScreen(game: DragonTilesGame, runData: RunData, encounter: Encounter
         inputProcessor.addAlwaysOnProcessor(world.getSystem(ClickableSystem::class.java))
         inputProcessor.addAlwaysOnProcessor(world.getSystem(HoverableSystem::class.java))
         inputProcessor.addAlwaysOnProcessor(world.getSystem(CombatUiSystem::class.java))
-        inputProcessor.addAlwaysOnProcessor(world.getSystem(CombatQueryUiSystem::class.java))
-        inputProcessor.addAlwaysOnProcessor(world.getSystem(CombatQueryUiSystem::class.java).stage)
         inputProcessor.addAlwaysOnProcessor(world.getSystem(TooltipSystem::class.java))
-        inputProcessor.addAlwaysOnProcessor(stage)
+        inputProcessor.addAlwaysOnProcessor(backStage)
+        inputProcessor.addAlwaysOnProcessor(frontStage)
         inputProcessor.addAlwaysOnProcessor(ExitInputProcessor())
         inputProcessor.activateInput()
 
@@ -96,10 +96,12 @@ class CombatScreen(game: DragonTilesGame, runData: RunData, encounter: Encounter
         Gdx.gl.glClearColor(0f, 0f, 0f, 1f)
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA)
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
-        stage.act()
-        stage.draw()
+        backStage.act()
+        backStage.draw()
         world.setDelta(delta)
         world.process()
+        frontStage.act()
+        frontStage.draw()
     }
 
     override fun resize(width: Int, height: Int) {
@@ -119,6 +121,6 @@ class CombatScreen(game: DragonTilesGame, runData: RunData, encounter: Encounter
 
     override fun dispose() {
         world.dispose()
-        stage.dispose()
+        backStage.dispose()
     }
 }

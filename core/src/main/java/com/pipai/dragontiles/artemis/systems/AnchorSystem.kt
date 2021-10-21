@@ -13,7 +13,7 @@ class AnchorSystem : NoProcessingSystem() {
     private val mAnchor by mapper<AnchorComponent>()
     private val mPath by mapper<PathInterpolationComponent>()
 
-    public fun returnToAnchor(id: EntityId) {
+    fun returnToAnchor(id: EntityId) {
         val cPath = mPath.create(id)
         cPath.setPath(mXy.get(id).toVector2(), mAnchor.get(id).toVector2(), 0.25f, Interpolation.exp10Out, EndStrategy.REMOVE)
     }

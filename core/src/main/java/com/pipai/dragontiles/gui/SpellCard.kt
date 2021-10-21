@@ -35,6 +35,8 @@ class SpellCard(
     private val numberLabel = Label("", skin, "tiny")
     private val descriptionLabel = Label("", skin, "tiny")
 
+    private var zPrevious = 0
+
     companion object {
         val cardWidth = 140f
         val cardHeight = 196f
@@ -43,6 +45,7 @@ class SpellCard(
     private val regex = "(!\\w+)(\\[.+])?".toRegex()
 
     private val clickCallbacks: MutableList<(InputEvent, SpellCard) -> Unit> = mutableListOf()
+    private val hoverEnterCallbacks: MutableList<(SpellCard) -> Unit> = mutableListOf()
 
     var target: Enemy? = null
     private var enabled = true
@@ -89,14 +92,18 @@ class SpellCard(
 
             override fun enter(event: InputEvent?, x: Float, y: Float, pointer: Int, fromActor: Actor?) {
                 if (spell != null) {
-                    sToolTip.addText("Spell Components", spell!!.requirement.description, true)
-                    sToolTip.addKeywordsInString(game.gameStrings.spellLocalization(spell!!.id).description)
-                    sToolTip.showTooltip(stage)
+                    hoverEnterCallbacks.forEach { it.invoke(this@SpellCard) }
+                    zPrevious = zIndex
+                    toFront()
+//                    sToolTip.addText("Spell Components", spell!!.requirement.description, true)
+//                    sToolTip.addKeywordsInString(game.gameStrings.spellLocalization(spell!!.id).description)
+//                    sToolTip.showTooltip(stage)
                 }
             }
 
             override fun exit(event: InputEvent?, x: Float, y: Float, pointer: Int, toActor: Actor?) {
-                sToolTip.hideTooltip()
+                zIndex = zPrevious
+//                sToolTip.hideTooltip()
             }
         })
         addListener(object : ClickListener(Input.Buttons.RIGHT) {
@@ -110,6 +117,10 @@ class SpellCard(
 
     fun addClickCallback(callback: (InputEvent, SpellCard) -> Unit) {
         clickCallbacks.add(callback)
+    }
+
+    fun addHoverEnterCallback(callback: (SpellCard) -> Unit) {
+        hoverEnterCallbacks.add(callback)
     }
 
     fun getSpell() = spell
