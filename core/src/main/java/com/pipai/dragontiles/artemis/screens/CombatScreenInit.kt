@@ -64,6 +64,10 @@ class CombatScreenInit(
             val cEnemy = mEnemy.create(entityId)
             cEnemy.setByEnemy(enemy)
 
+            val cTextLabel = mTextLabel.create(entityId)
+            cTextLabel.size = TextLabelSize.SMALL
+            cTextLabel.yOffset = -10f
+
             val cHover = mHoverable.create(entityId)
             cHover.enterEvent = EnemyHoverEnterEvent(cEnemy)
             cHover.exitEvent = EnemyHoverExitEvent()

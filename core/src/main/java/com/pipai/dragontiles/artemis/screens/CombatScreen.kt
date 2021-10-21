@@ -12,9 +12,7 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport
 import com.pipai.dragontiles.DragonTilesGame
 import com.pipai.dragontiles.artemis.systems.*
 import com.pipai.dragontiles.artemis.systems.animation.CombatAnimationSystem
-import com.pipai.dragontiles.artemis.systems.combat.CombatControllerSystem
-import com.pipai.dragontiles.artemis.systems.combat.StatusSystem
-import com.pipai.dragontiles.artemis.systems.combat.TileIdSystem
+import com.pipai.dragontiles.artemis.systems.combat.*
 import com.pipai.dragontiles.artemis.systems.input.ExitInputProcessor
 import com.pipai.dragontiles.artemis.systems.input.InputProcessingSystem
 import com.pipai.dragontiles.artemis.systems.rendering.CombatRenderingSystem
@@ -47,6 +45,9 @@ class CombatScreen(game: DragonTilesGame, runData: RunData, encounter: Encounter
 
                 CombatControllerSystem(runData, combat),
                 TileIdSystem(),
+                EnemyIntentSystem(),
+                HeroStatusSystem(),
+                EnemyStatusSystem(game),
                 StatusSystem(game),
                 CombatAnimationSystem(game),
                 MouseXySystem(game.gameConfig),

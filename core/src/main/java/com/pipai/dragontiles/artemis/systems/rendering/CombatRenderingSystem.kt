@@ -35,56 +35,13 @@ class CombatRenderingSystem(private val game: DragonTilesGame) : BaseSystem() {
         batch.color = Color.WHITE
         batch.setBlendFunction(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA)
         batch.begin()
-        world.fetch(allOf(XYComponent::class, SpriteComponent::class).exclude())
+        world.fetch(allOf(XYComponent::class, SpriteComponent::class))
             .forEach {
                 val sprite = mSprite.get(it).sprite
                 val cXy = mXy.get(it)
                 sprite.x = cXy.x
                 sprite.y = cXy.y
                 sprite.draw(batch)
-            }
-
-        world.fetch(allOf(XYComponent::class, SpriteComponent::class, EnemyComponent::class))
-            .forEach {
-                val cEnemy = mEnemy.get(it)
-                val sprite = mSprite.get(it).sprite
-                val cXy = mXy.get(it)
-                game.smallFont.draw(
-                    batch,
-                    "${game.gameStrings.nameDescLocalization(cEnemy.strId).name}   ${cEnemy.hp}/${cEnemy.hpMax}   ${cEnemy.flux}/${cEnemy.fluxMax}",
-                    cXy.x, cXy.y - 10f
-                )
-                when (val intent = cEnemy.intent) {
-                    is AttackIntent -> {
-                        val attackPower = sCombat.controller.api.calculateDamageOnHero(cEnemy.enemy, intent.element, intent.attackPower)
-                        game.smallFont.color = elementColor(intent.element)
-                        game.smallFont.draw(batch, "Attack $attackPower", cXy.x, cXy.y + sprite.height + 16f)
-                        game.smallFont.color = Color.WHITE
-                    }
-                    is BuffIntent -> {
-                        if (intent.attackIntent == null) {
-                            game.smallFont.draw(batch, "Buffing", cXy.x, cXy.y + sprite.height + 16f)
-                        } else {
-                            val attackPower = sCombat.controller.api.calculateDamageOnHero(cEnemy.enemy, intent.attackIntent.element, intent.attackIntent.attackPower)
-                            game.smallFont.color = elementColor(intent.attackIntent.element)
-                            game.smallFont.draw(batch, "Buffing, Attack $attackPower", cXy.x, cXy.y + sprite.height + 16f)
-                            game.smallFont.color = Color.WHITE
-                        }
-                    }
-                    is DebuffIntent -> {
-                        if (intent.attackIntent == null) {
-                            game.smallFont.draw(batch, "Debuffing", cXy.x, cXy.y + sprite.height + 16f)
-                        } else {
-                            val attackPower = sCombat.controller.api.calculateDamageOnHero(cEnemy.enemy, intent.attackIntent.element, intent.attackIntent.attackPower)
-                            game.smallFont.color = elementColor(intent.attackIntent.element)
-                            game.smallFont.draw(batch, "Debuffing, Attack $attackPower", cXy.x, cXy.y + sprite.height + 16f)
-                            game.smallFont.color = Color.WHITE
-                        }
-                    }
-                    is StunnedIntent -> game.smallFont.draw(batch, "Stunned", cXy.x, cXy.y + sprite.height + 16f)
-                    null -> {
-                    }
-                }
             }
 
         world.fetch(allOf(XYComponent::class, TargetHighlightComponent::class))
@@ -116,15 +73,7 @@ class CombatRenderingSystem(private val game: DragonTilesGame) : BaseSystem() {
                 font.draw(batch, cTextLabel.text, cXy.x + cTextLabel.xOffset, cXy.y + cTextLabel.yOffset)
             }
         batch.end()
-        batch.setBlendFunction(GL20.GL_SRC_ALPHA, GL20.GL_ONE)
-        batch.begin()
-        world.fetch(allOf(XYComponent::class, RadialSpriteComponent::class))
-            .forEach {
-                val cXy = mXy.get(it)
-                val cRadial = mRadial.get(it)
-                cRadial.sprite.draw(batch, cXy.x, cXy.y, cRadial.sprite.getAngle())
-            }
-        batch.end()
+
         batch.setBlendFunction(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA)
 
         game.shapeRenderer.begin()
