@@ -339,9 +339,11 @@ class CombatUiSystem(
                         sAnchor.returnToAnchor(sideboardEntityIds[spellCard.number]!!)
                         swapSideboardSpells.remove(spellCard)
                     } else {
-                        spellCard.data[allowHoverMove] = 0
-                        moveSpellToLocation(sideboardEntityIds[spellCard.number]!!, rightSpellSwapCenter)
-                        swapSideboardSpells.add(spellCard)
+                        if (swapSideboardSpells.size < querySwapEvent!!.amount) {
+                            spellCard.data[allowHoverMove] = 0
+                            moveSpellToLocation(sideboardEntityIds[spellCard.number]!!, rightSpellSwapCenter)
+                            swapSideboardSpells.add(spellCard)
+                        }
                     }
                 } else {
                     if (swapActiveSpells.contains(spellCard)) {
@@ -349,9 +351,11 @@ class CombatUiSystem(
                         sAnchor.returnToAnchor(spellEntityIds[spellCard.number]!!)
                         swapActiveSpells.remove(spellCard)
                     } else {
-                        spellCard.data[allowHoverMove] = 0
-                        moveSpellToLocation(spellEntityIds[spellCard.number]!!, leftSpellSwapCenter)
-                        swapActiveSpells.add(spellCard)
+                        if (swapActiveSpells.size < querySwapEvent!!.amount) {
+                            spellCard.data[allowHoverMove] = 0
+                            moveSpellToLocation(spellEntityIds[spellCard.number]!!, leftSpellSwapCenter)
+                            swapActiveSpells.add(spellCard)
+                        }
                     }
                 }
             }
@@ -645,7 +649,9 @@ class CombatUiSystem(
         queryTileOptionsEvent = event
         queryLabel.setText(event.text)
         event.displayTile?.let {
-            moveTileToDisplay(sTileId.getEntityId(it.id))
+            val eid = sTileId.getEntityId(it.id)
+            mSprite.get(eid).depth = -2
+            moveTileToDisplay(eid)
         }
         event.options.forEachIndexed { index, tile ->
             val entityId = world.create()
@@ -817,6 +823,7 @@ class CombatUiSystem(
                 spellCard.toFront()
             }
         }
+        queryTable.toFront()
     }
 
     private fun openSideboardSpells() {
@@ -842,6 +849,7 @@ class CombatUiSystem(
                 spellCard.toFront()
             }
         }
+        queryTable.toFront()
     }
 
     private fun moveActiveSpellsFront() {
@@ -938,7 +946,12 @@ class CombatUiSystem(
         },
         QUERY_SWAP {
             override fun enter(uiSystem: CombatUiSystem) {
-                uiSystem.spells.values.forEach { it.enable() }
+                uiSystem.spells.values.forEach {
+                    val spell = it.getSpell()
+                    if (spell !is Rune || !spell.active) {
+                        it.enable()
+                    }
+                }
                 uiSystem.sideboard.values.forEach { it.enable() }
                 uiSystem.moveActiveSpellsFront()
                 uiSystem.moveSideboardSpellsFront()
@@ -967,7 +980,6 @@ class CombatUiSystem(
         },
         QUERY_OPTIONS {
             override fun enter(uiSystem: CombatUiSystem) {
-                uiSystem.setTileDepth(-2)
                 uiSystem.moveActiveSpellsBack()
                 uiSystem.moveSideboardSpellsBack()
                 uiSystem.sFsTexture.fadeIn(10)

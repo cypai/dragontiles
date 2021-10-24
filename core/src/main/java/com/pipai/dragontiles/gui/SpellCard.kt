@@ -94,8 +94,8 @@ class SpellCard(
             override fun enter(event: InputEvent?, x: Float, y: Float, pointer: Int, fromActor: Actor?) {
                 if (spell != null) {
                     hoverEnterCallbacks.forEach { it.invoke(this@SpellCard) }
-                    zPrevious = zIndex
-                    toFront()
+//                    zPrevious = zIndex
+//                    toFront()
 //                    sToolTip.addText("Spell Components", spell!!.requirement.description, true)
 //                    sToolTip.addKeywordsInString(game.gameStrings.spellLocalization(spell!!.id).description)
 //                    sToolTip.showTooltip(stage)
