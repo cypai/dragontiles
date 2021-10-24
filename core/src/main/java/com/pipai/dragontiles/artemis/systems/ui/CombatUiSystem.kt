@@ -25,7 +25,7 @@ import com.pipai.dragontiles.artemis.systems.AnchorSystem
 import com.pipai.dragontiles.artemis.systems.animation.CombatAnimationSystem
 import com.pipai.dragontiles.artemis.systems.combat.CombatControllerSystem
 import com.pipai.dragontiles.artemis.systems.combat.TileIdSystem
-import com.pipai.dragontiles.artemis.systems.rendering.FullScreenColorRenderingSystem
+import com.pipai.dragontiles.artemis.systems.rendering.FullScreenColorSystem
 import com.pipai.dragontiles.combat.HandAdjustedEvent
 import com.pipai.dragontiles.combat.QuerySwapEvent
 import com.pipai.dragontiles.combat.QueryTileOptionsEvent
@@ -103,7 +103,7 @@ class CombatUiSystem(
     private val mTile by mapper<TileComponent>()
     private val mMutualDestroy by mapper<MutualDestroyComponent>()
 
-    private val sFsTexture by system<FullScreenColorRenderingSystem>()
+    private val sFsTexture by system<FullScreenColorSystem>()
     private val sTileId by system<TileIdSystem>()
     private val sCombat by system<CombatControllerSystem>()
     private val sTooltip by system<TooltipSystem>()

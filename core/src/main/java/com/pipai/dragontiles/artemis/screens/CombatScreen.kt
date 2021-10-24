@@ -16,7 +16,7 @@ import com.pipai.dragontiles.artemis.systems.combat.*
 import com.pipai.dragontiles.artemis.systems.input.ExitInputProcessor
 import com.pipai.dragontiles.artemis.systems.input.InputProcessingSystem
 import com.pipai.dragontiles.artemis.systems.rendering.CombatRenderingSystem
-import com.pipai.dragontiles.artemis.systems.rendering.FullScreenColorRenderingSystem
+import com.pipai.dragontiles.artemis.systems.rendering.FullScreenColorSystem
 import com.pipai.dragontiles.artemis.systems.ui.*
 import com.pipai.dragontiles.combat.Combat
 import com.pipai.dragontiles.dungeon.Encounter
@@ -54,6 +54,7 @@ class CombatScreen(game: DragonTilesGame, runData: RunData, encounter: Encounter
                 CombatAnimationSystem(game),
                 MouseXySystem(game.gameConfig),
                 TooltipSystem(game, backStage),
+                FullScreenColorSystem(game),
 
                 InputProcessingSystem(),
                 HoverableSystem(game.gameConfig),
@@ -66,11 +67,10 @@ class CombatScreen(game: DragonTilesGame, runData: RunData, encounter: Encounter
             )
             .with(
                 -2,
-                CombatRenderingSystem(game)
+                CombatRenderingSystem(game, backStage, frontStage)
             )
             .with(
                 -3,
-                FullScreenColorRenderingSystem(game),
                 MapUiSystem(game, frontStage, runData)
             )
             .build()

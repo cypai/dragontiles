@@ -3,6 +3,7 @@ package com.pipai.dragontiles.artemis.systems.rendering
 import com.artemis.BaseSystem
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.GL20
+import com.badlogic.gdx.scenes.scene2d.Stage
 import com.pipai.dragontiles.DragonTilesGame
 import com.pipai.dragontiles.artemis.components.*
 import com.pipai.dragontiles.artemis.systems.combat.CombatControllerSystem
@@ -16,18 +17,19 @@ import com.pipai.dragontiles.utils.fetch
 import com.pipai.dragontiles.utils.mapper
 import com.pipai.dragontiles.utils.system
 
-class CombatRenderingSystem(private val game: DragonTilesGame) : BaseSystem() {
+class CombatRenderingSystem(
+    private val game: DragonTilesGame,
+    private val backStage: Stage,
+    private val frontStage: Stage
+) : BaseSystem() {
+
+    private val skin = game.skin
 
     private val mXy by mapper<XYComponent>()
     private val mSprite by mapper<SpriteComponent>()
-    private val mRadial by mapper<RadialSpriteComponent>()
     private val mTextLabel by mapper<TextLabelComponent>()
-    private val mHero by mapper<HeroComponent>()
-    private val mEnemy by mapper<EnemyComponent>()
     private val mLine by mapper<AnchoredLineComponent>()
     private val mTargetHighlight by mapper<TargetHighlightComponent>()
-
-    private val sCombat by system<CombatControllerSystem>()
 
     private val batch = game.spriteBatch
 
@@ -38,11 +40,17 @@ class CombatRenderingSystem(private val game: DragonTilesGame) : BaseSystem() {
         world.fetch(allOf(XYComponent::class, SpriteComponent::class))
             .sortedByDescending { mSprite.get(it).depth }
             .forEach {
-                val sprite = mSprite.get(it).sprite
+                val cSprite = mSprite.get(it)
+                val sprite = cSprite.sprite
                 val cXy = mXy.get(it)
                 sprite.x = cXy.x
                 sprite.y = cXy.y
-                sprite.draw(batch)
+                batch.color = sprite.color
+                if (cSprite.width == 0f && cSprite.height == 0f) {
+                    sprite.draw(batch)
+                } else {
+                    batch.draw(sprite, sprite.x, sprite.y, cSprite.width, cSprite.height)
+                }
             }
 
         world.fetch(allOf(XYComponent::class, TargetHighlightComponent::class))

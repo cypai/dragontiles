@@ -2,17 +2,19 @@ package com.pipai.dragontiles.artemis.systems.rendering
 
 import com.artemis.BaseSystem
 import com.badlogic.gdx.graphics.Color
-import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.math.Interpolation
 import com.pipai.dragontiles.DragonTilesGame
+import com.pipai.dragontiles.artemis.EntityId
+import com.pipai.dragontiles.artemis.components.SpriteComponent
+import com.pipai.dragontiles.artemis.components.XYComponent
+import com.pipai.dragontiles.utils.mapper
 
-class FullScreenColorRenderingSystem(game: DragonTilesGame) : BaseSystem() {
+class FullScreenColorSystem(game: DragonTilesGame) : BaseSystem() {
 
     private val batch = game.spriteBatch
     private val config = game.gameConfig
     private val skin = game.skin
 
-    private var texture: Texture = skin.get("white", Texture::class.java)
     private var bgColor: Color = Color(0f, 0f, 0f, 0f)
     private var targetAlpha = 0.7f
 
@@ -20,7 +22,24 @@ class FullScreenColorRenderingSystem(game: DragonTilesGame) : BaseSystem() {
     private var maxT = 0f
     private var state: State = State.NONE
 
+    private var initted = false
+    private var fsId: EntityId = 0
+
+    private val mSprite by mapper<SpriteComponent>()
+    private val mXy by mapper<XYComponent>()
+
     override fun processSystem() {
+        if (!initted) {
+            initted = true
+            fsId = world.create()
+            val cSprite = mSprite.create(fsId)
+            cSprite.sprite = skin.getSprite("white")
+            cSprite.sprite.color = bgColor
+            cSprite.width = config.resolution.width.toFloat()
+            cSprite.height = config.resolution.height.toFloat()
+            cSprite.depth = -1
+            mXy.create(fsId)
+        }
         when (state) {
             State.FADE_IN -> {
                 bgColor.a = Interpolation.linear.apply(0f, targetAlpha, t / maxT)
@@ -32,24 +51,14 @@ class FullScreenColorRenderingSystem(game: DragonTilesGame) : BaseSystem() {
                 // Do nothing
             }
         }
+        val cSprite = mSprite.get(fsId)
+        cSprite.sprite.color = bgColor
         if (state != State.NONE) {
             t++
             if (t > maxT) {
                 state = State.NONE
             }
         }
-
-        batch.color = Color.WHITE
-        batch.begin()
-        if (bgColor.a > 0) {
-            skin.newDrawable("white", bgColor)
-                    .draw(batch, 0f, 0f, config.resolution.width.toFloat(), config.resolution.height.toFloat())
-        }
-        batch.end()
-    }
-
-    fun changeTexture(textureName: String) {
-        texture = skin.get(textureName, Texture::class.java)
     }
 
     fun fadeIn(time: Int) {
