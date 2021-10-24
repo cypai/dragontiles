@@ -199,8 +199,8 @@ class CombatUiSystem(
 
         val id = world.create()
         sideboardEntityIds[number] = id
-        val cXy = mXy.create(id)
-        val cAnchor = mAnchor.create(id)
+        mXy.create(id)
+        mAnchor.create(id)
         spellCard.addHoverEnterCallback { openSideboardSpells(); closeActiveSpells() }
     }
 
@@ -609,12 +609,20 @@ class CombatUiSystem(
             tileOptions[entityId] = tile
             val cSprite = mSprite.create(entityId)
             cSprite.sprite = Sprite(game.tileSkin.regionFor(tile))
+            cSprite.depth = -2
             val cXy = mXy.create(entityId)
             cXy.setXy(selectedPosition(index, event.options.size))
             val cClick = mClick.create(entityId)
             cClick.eventGenerator = { TileClickEvent(entityId, it) }
         }
         stateMachine.changeState(CombatUiState.QUERY_OPTIONS)
+    }
+
+    private fun setTileDepth(depth: Int) {
+        world.fetch(allOf(TileComponent::class, SpriteComponent::class)).forEach {
+            val cSprite = mSprite.get(it)
+            cSprite.depth = depth
+        }
     }
 
     @Subscribe
@@ -769,6 +777,32 @@ class CombatUiSystem(
         }
     }
 
+    private fun moveActiveSpellsFront() {
+        spells.values.forEach {
+            it.remove()
+            frontStage.addActor(it)
+        }
+    }
+    private fun moveActiveSpellsBack() {
+        spells.values.forEach {
+            it.remove()
+            backStage.addActor(it)
+        }
+    }
+
+    private fun moveSideboardSpellsFront() {
+        sideboard.values.forEach {
+            it.remove()
+            frontStage.addActor(it)
+        }
+    }
+    private fun moveSideboardSpellsBack() {
+        sideboard.values.forEach {
+            it.remove()
+            backStage.addActor(it)
+        }
+    }
+
     enum class CombatUiState : State<CombatUiSystem> {
         ROOT {
             override fun enter(uiSystem: CombatUiSystem) {
@@ -827,6 +861,8 @@ class CombatUiSystem(
         },
         QUERY_SWAP {
             override fun enter(uiSystem: CombatUiSystem) {
+                uiSystem.moveActiveSpellsFront()
+                uiSystem.moveSideboardSpellsFront()
                 uiSystem.sFsTexture.fadeIn(10)
                 uiSystem.frontStage.addActor(uiSystem.queryTable)
             }
@@ -837,6 +873,9 @@ class CombatUiSystem(
         },
         QUERY_TILES {
             override fun enter(uiSystem: CombatUiSystem) {
+                uiSystem.setTileDepth(-2)
+                uiSystem.moveActiveSpellsBack()
+                uiSystem.moveSideboardSpellsBack()
                 uiSystem.sFsTexture.fadeIn(10)
                 uiSystem.frontStage.addActor(uiSystem.queryTable)
             }
@@ -844,11 +883,14 @@ class CombatUiSystem(
             override fun exit(uiSystem: CombatUiSystem) {
                 uiSystem.sFsTexture.fadeOut(10)
                 uiSystem.queryTable.remove()
+                uiSystem.setTileDepth(0)
             }
         },
         QUERY_OPTIONS {
             override fun enter(uiSystem: CombatUiSystem) {
-                println("Q")
+                uiSystem.setTileDepth(-2)
+                uiSystem.moveActiveSpellsBack()
+                uiSystem.moveSideboardSpellsBack()
                 uiSystem.sFsTexture.fadeIn(10)
                 uiSystem.frontStage.addActor(uiSystem.queryTable)
             }
@@ -858,6 +900,7 @@ class CombatUiSystem(
                 uiSystem.tileOptions.forEach { uiSystem.world.delete(it.key) }
                 uiSystem.tileOptions.clear()
                 uiSystem.queryTable.remove()
+                uiSystem.setTileDepth(0)
             }
         },
         DISABLED {
