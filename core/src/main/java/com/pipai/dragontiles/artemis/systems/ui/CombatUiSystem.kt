@@ -803,11 +803,20 @@ class CombatUiSystem(
         }
     }
 
+    private fun moveSpellsToAnchor() {
+        spells.keys.forEach {
+            sAnchor.returnToAnchor(it)
+        }
+        sideboard.keys.forEach {
+            sAnchor.returnToAnchor(it)
+        }
+    }
+
     enum class CombatUiState : State<CombatUiSystem> {
         ROOT {
             override fun enter(uiSystem: CombatUiSystem) {
                 uiSystem.spells.forEach { (number, spellCard) ->
-                    uiSystem.moveSpellToLocation(number, uiSystem.layout.spellStartPosition(number))
+                    uiSystem.moveSpellsToAnchor()
                     spellCard.target = null
                     spellCard.update()
                     val spell = spellCard.getSpell()
