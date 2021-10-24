@@ -200,7 +200,7 @@ class CombatUiSystem(
 
     private fun addSpellCardToSideboard(number: Int, spell: Spell) {
         val spellCard = SpellCard(game, spell, number, game.skin, sCombat.controller.api, sTooltip)
-        //spellCard.addClickCallback(this::spellCardClickCallback)
+        spellCard.addClickCallback(this::spellCardClickCallback)
         spellCard.width = layout.cardWidth
         spellCard.height = layout.cardHeight
         spellCard.x = game.gameConfig.resolution.width - layout.cardWidth * 3 + number * layout.cardWidth * 0.8f
@@ -310,20 +310,22 @@ class CombatUiSystem(
     private fun spellCardClickCallback(event: InputEvent, spellCard: SpellCard) {
         when (stateMachine.currentState) {
             CombatUiState.ROOT -> {
-                val spell = spellCard.getSpell()
-                when (event.button) {
-                    Input.Buttons.LEFT -> {
-                        if (!(spell is Rune && spell.active)) {
-                            spellCard.data[allowHoverMove] = 0
-                            selectedSpellNumber = spellCard.number
-                            stateMachine.changeState(CombatUiState.COMPONENT_SELECTION)
+                if (spells.values.contains(spellCard)) {
+                    val spell = spellCard.getSpell()
+                    when (event.button) {
+                        Input.Buttons.LEFT -> {
+                            if (!(spell is Rune && spell.active)) {
+                                spellCard.data[allowHoverMove] = 0
+                                selectedSpellNumber = spellCard.number
+                                stateMachine.changeState(CombatUiState.COMPONENT_SELECTION)
+                            }
                         }
-                    }
-                    Input.Buttons.RIGHT -> {
-                        if (spell is Rune && spell.active) {
-                            sAnimation.pauseUiMode = true
-                            GlobalScope.launch {
-                                spell.deactivate(sCombat.controller.api)
+                        Input.Buttons.RIGHT -> {
+                            if (spell is Rune && spell.active) {
+                                sAnimation.pauseUiMode = true
+                                GlobalScope.launch {
+                                    spell.deactivate(sCombat.controller.api)
+                                }
                             }
                         }
                     }
@@ -333,17 +335,21 @@ class CombatUiSystem(
                 val isSideboard = sideboard.values.contains(spellCard)
                 if (isSideboard) {
                     if (swapSideboardSpells.contains(spellCard)) {
+                        spellCard.data[allowHoverMove] = 1
                         sAnchor.returnToAnchor(sideboardEntityIds[spellCard.number]!!)
                         swapSideboardSpells.remove(spellCard)
                     } else {
+                        spellCard.data[allowHoverMove] = 0
                         moveSpellToLocation(sideboardEntityIds[spellCard.number]!!, rightSpellSwapCenter)
                         swapSideboardSpells.add(spellCard)
                     }
                 } else {
                     if (swapActiveSpells.contains(spellCard)) {
+                        spellCard.data[allowHoverMove] = 1
                         sAnchor.returnToAnchor(spellEntityIds[spellCard.number]!!)
                         swapActiveSpells.remove(spellCard)
                     } else {
+                        spellCard.data[allowHoverMove] = 0
                         moveSpellToLocation(spellEntityIds[spellCard.number]!!, leftSpellSwapCenter)
                         swapActiveSpells.add(spellCard)
                     }
