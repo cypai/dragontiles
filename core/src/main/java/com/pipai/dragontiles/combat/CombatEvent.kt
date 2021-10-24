@@ -105,7 +105,7 @@ data class QuerySwapEvent(
     val continuation: Continuation<List<SwapData>>
 ) : CombatEvent {
 
-    data class SwapData(val spellInHand: Spell, val spellOnSide: Spell)
+    data class SwapData(val spellInHand: List<Spell>, val spellOnSide: List<Spell>)
 }
 
 data class SwapEvent(val spellInHand: Spell, val spellOnSide: Spell) : CombatEvent

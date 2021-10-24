@@ -182,8 +182,11 @@ class CombatApi(
                 eventBus.dispatch(QuerySwapEvent(amount, it))
             }
         }
-        swapList.forEach {
-            swap(it.spellInHand, it.spellOnSide)
+        swapList.forEach { sd ->
+            val zipList = sd.spellInHand.zip(sd.spellOnSide)
+            zipList.forEach {
+                swap(it.first, it.second)
+            }
         }
     }
 

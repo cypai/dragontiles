@@ -69,6 +69,9 @@ class CombatUiSystem(
     private val tilePrevXy: MutableMap<Int, Vector2> = mutableMapOf()
     private val selectedTiles: MutableList<Int> = mutableListOf()
     private val tileOptions: MutableMap<Int, Tile> = mutableMapOf()
+    private val swapActiveSpells: MutableList<SpellCard> = mutableListOf()
+    private val swapSideboardSpells: MutableList<SpellCard> = mutableListOf()
+    private val allowHoverMove = "allowHoverMove"
 
     private val spacing = 16f
     private val queryTable = Table()
@@ -79,8 +82,10 @@ class CombatUiSystem(
 
     private val leftSpellClosedCenter = Vector2(layout.cardWidth, -SpellCard.cardHeight / 2f)
     private val leftSpellOpenCenter = Vector2(layout.cardWidth * 3, -SpellCard.cardHeight / 2f)
+    private val leftSpellSwapCenter = Vector2(layout.cardWidth * 3, game.gameConfig.resolution.height.toFloat() / 2)
     private val rightSpellClosedCenter = Vector2(game.gameConfig.resolution.width - layout.cardWidth * 2, -SpellCard.cardHeight / 2f)
     private val rightSpellOpenCenter = Vector2(game.gameConfig.resolution.width - layout.cardWidth * 3, -SpellCard.cardHeight / 2f)
+    private val rightSpellSwapCenter = Vector2(game.gameConfig.resolution.width - layout.cardWidth * 3, game.gameConfig.resolution.height.toFloat() / 2)
 
     var overloaded = false
     private var selectedSpellNumber: Int? = null
@@ -184,7 +189,13 @@ class CombatUiSystem(
         spellEntityIds[number] = id
         val cXy = mXy.create(id)
         val cAnchor = mAnchor.create(id)
-        spellCard.addHoverEnterCallback { openActiveSpells(); closeSideboardSpells() }
+        spellCard.data[allowHoverMove] = 1
+        spellCard.addHoverEnterCallback {
+            if (it.data[allowHoverMove] == 1) {
+                openActiveSpells()
+                closeSideboardSpells()
+            }
+        }
     }
 
     private fun addSpellCardToSideboard(number: Int, spell: Spell) {
@@ -201,7 +212,13 @@ class CombatUiSystem(
         sideboardEntityIds[number] = id
         mXy.create(id)
         mAnchor.create(id)
-        spellCard.addHoverEnterCallback { openSideboardSpells(); closeActiveSpells() }
+        spellCard.data[allowHoverMove] = 1
+        spellCard.addHoverEnterCallback {
+            if (it.data[allowHoverMove] == 1) {
+                openSideboardSpells()
+                closeActiveSpells()
+            }
+        }
     }
 
     fun disable() {
@@ -297,6 +314,7 @@ class CombatUiSystem(
                 when (event.button) {
                     Input.Buttons.LEFT -> {
                         if (!(spell is Rune && spell.active)) {
+                            spellCard.data[allowHoverMove] = 0
                             selectedSpellNumber = spellCard.number
                             stateMachine.changeState(CombatUiState.COMPONENT_SELECTION)
                         }
@@ -311,13 +329,32 @@ class CombatUiSystem(
                     }
                 }
             }
+            CombatUiState.QUERY_SWAP -> {
+                val isSideboard = sideboard.values.contains(spellCard)
+                if (isSideboard) {
+                    if (swapSideboardSpells.contains(spellCard)) {
+                        sAnchor.returnToAnchor(sideboardEntityIds[spellCard.number]!!)
+                        swapSideboardSpells.remove(spellCard)
+                    } else {
+                        moveSpellToLocation(sideboardEntityIds[spellCard.number]!!, rightSpellSwapCenter)
+                        swapSideboardSpells.add(spellCard)
+                    }
+                } else {
+                    if (swapActiveSpells.contains(spellCard)) {
+                        sAnchor.returnToAnchor(spellEntityIds[spellCard.number]!!)
+                        swapActiveSpells.remove(spellCard)
+                    } else {
+                        moveSpellToLocation(spellEntityIds[spellCard.number]!!, leftSpellSwapCenter)
+                        swapActiveSpells.add(spellCard)
+                    }
+                }
+            }
             else -> {
             }
         }
     }
 
-    public fun moveSpellToLocation(number: Int, location: Vector2) {
-        val id = spellEntityIds[number]!!
+    fun moveSpellToLocation(id: EntityId, location: Vector2) {
         val cXy = mXy.get(id)
         val cPath = mPath.create(id)
         cPath.setPath(cXy.toVector2(), location, 0.25f, Interpolation.exp10Out, EndStrategy.REMOVE)
@@ -655,13 +692,23 @@ class CombatUiSystem(
     fun querySwap(event: QuerySwapEvent) {
         querySwapEvent = event
         queryLabel.setText("Select up to ${event.amount} spells to swap")
-        stateMachine.changeState(CombatUiState.QUERY_TILES)
+        stateMachine.changeState(CombatUiState.QUERY_SWAP)
     }
 
     private fun confirm() {
-        if (stateMachine.currentState != CombatUiState.DISABLED) {
-            queryTilesEvent!!.continuation.resume(selectedTiles.map { mTile.get(it).tile })
-            stateMachine.changeState(CombatUiState.ROOT)
+        when (stateMachine.currentState) {
+            CombatUiState.QUERY_TILES -> {
+                queryTilesEvent!!.continuation.resume(selectedTiles.map { mTile.get(it).tile })
+                stateMachine.changeState(CombatUiState.ROOT)
+            }
+            CombatUiState.QUERY_SWAP -> {
+                querySwapEvent!!.continuation.resume(listOf(QuerySwapEvent.SwapData(
+                    swapActiveSpells.map { it.getSpell()!! },
+                    swapSideboardSpells.map { it.getSpell()!! })))
+                stateMachine.revertToPreviousState()
+            }
+            else -> {
+            }
         }
     }
 
@@ -742,38 +789,52 @@ class CombatUiSystem(
     override fun scrolled(amountX: Float, amountY: Float) = false
 
     private fun openActiveSpells() {
-        spellEntityIds.forEach { (number, entityId) ->
-            val cAnchor = mAnchor.get(entityId)
-            cAnchor.x = leftSpellOpenCenter.x + layout.cardWidth * (number - spellEntityIds.size / 2)
-            cAnchor.y = leftSpellOpenCenter.y
-            sAnchor.returnToAnchor(entityId)
+        spells.forEach { (number, spellCard) ->
+            if (spellCard.data[allowHoverMove] == 1) {
+                val entityId = spellEntityIds[number]!!
+                val cAnchor = mAnchor.get(entityId)
+                cAnchor.x = leftSpellOpenCenter.x + layout.cardWidth * (number - spellEntityIds.size / 2)
+                cAnchor.y = leftSpellOpenCenter.y
+                sAnchor.returnToAnchor(entityId)
+            }
         }
     }
 
     private fun closeActiveSpells() {
-        spellEntityIds.forEach { (number, entityId) ->
-            val cAnchor = mAnchor.get(entityId)
-            cAnchor.x = leftSpellClosedCenter.x + layout.cardWidth / 4 * (number - spellEntityIds.size / 2)
-            cAnchor.y = leftSpellClosedCenter.y
-            sAnchor.returnToAnchor(entityId)
+        spells.forEach { (number, spellCard) ->
+            if (spellCard.data[allowHoverMove] == 1) {
+                val entityId = spellEntityIds[number]!!
+                val cAnchor = mAnchor.get(entityId)
+                cAnchor.x = leftSpellClosedCenter.x + layout.cardWidth / 4 * (number - spellEntityIds.size / 2)
+                cAnchor.y = leftSpellClosedCenter.y
+                sAnchor.returnToAnchor(entityId)
+                spellCard.toFront()
+            }
         }
     }
 
     private fun openSideboardSpells() {
-        sideboardEntityIds.forEach { (number, entityId) ->
-            val cAnchor = mAnchor.get(entityId)
-            cAnchor.x = rightSpellOpenCenter.x + layout.cardWidth * (number - spellEntityIds.size / 2)
-            cAnchor.y = rightSpellOpenCenter.y
-            sAnchor.returnToAnchor(entityId)
+        sideboard.forEach { (number, spellCard) ->
+            if (spellCard.data[allowHoverMove] == 1) {
+                val entityId = sideboardEntityIds[number]!!
+                val cAnchor = mAnchor.get(entityId)
+                cAnchor.x = rightSpellOpenCenter.x + layout.cardWidth * (number - sideboardEntityIds.size / 2)
+                cAnchor.y = rightSpellOpenCenter.y
+                sAnchor.returnToAnchor(entityId)
+            }
         }
     }
 
     private fun closeSideboardSpells() {
-        sideboardEntityIds.forEach { (number, entityId) ->
-            val cAnchor = mAnchor.get(entityId)
-            cAnchor.x = rightSpellClosedCenter.x + layout.cardWidth / 4 * (number - spellEntityIds.size / 2)
-            cAnchor.y = rightSpellClosedCenter.y
-            sAnchor.returnToAnchor(entityId)
+        sideboard.forEach { (number, spellCard) ->
+            if (spellCard.data[allowHoverMove] == 1) {
+                val entityId = sideboardEntityIds[number]!!
+                val cAnchor = mAnchor.get(entityId)
+                cAnchor.x = rightSpellClosedCenter.x + layout.cardWidth / 4 * (number - sideboardEntityIds.size / 2)
+                cAnchor.y = rightSpellClosedCenter.y
+                sAnchor.returnToAnchor(entityId)
+                spellCard.toFront()
+            }
         }
     }
 
@@ -818,6 +879,7 @@ class CombatUiSystem(
                 uiSystem.spells.forEach { (number, spellCard) ->
                     uiSystem.moveSpellsToAnchor()
                     spellCard.target = null
+                    spellCard.data[uiSystem.allowHoverMove] = 1
                     spellCard.update()
                     val spell = spellCard.getSpell()
                     if (spell == null || !spell.available() || uiSystem.overloaded) {
@@ -870,6 +932,8 @@ class CombatUiSystem(
         },
         QUERY_SWAP {
             override fun enter(uiSystem: CombatUiSystem) {
+                uiSystem.spells.values.forEach { it.enable() }
+                uiSystem.sideboard.values.forEach { it.enable() }
                 uiSystem.moveActiveSpellsFront()
                 uiSystem.moveSideboardSpellsFront()
                 uiSystem.sFsTexture.fadeIn(10)

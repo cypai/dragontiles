@@ -49,6 +49,7 @@ class SpellCard(
 
     var target: Enemy? = null
     private var enabled = true
+    val data: MutableMap<String, Int> = mutableMapOf()
 
     init {
         setSpell(spell) // Just to update border/req icons
