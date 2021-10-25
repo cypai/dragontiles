@@ -177,30 +177,31 @@ class CombatApi(
     }
 
     suspend fun swapQuery(amount: Int) {
-        val swapList: List<QuerySwapEvent.SwapData> = suspendCoroutine {
+        val data: QuerySwapEvent.SwapData = suspendCoroutine {
             runBlocking {
                 eventBus.dispatch(QuerySwapEvent(amount, it))
             }
         }
-        swapList.forEach { sd ->
-            val zipList = sd.spellInHand.zip(sd.spellOnSide)
-            zipList.forEach {
-                swap(it.first, it.second)
-            }
-        }
+        swap(data.spellInHand, data.spellOnSide)
     }
 
-    suspend fun swap(spellInHand: Spell, spellOnSide: Spell) {
+    suspend fun swap(spellInHand: List<Spell>, spellOnSide: List<Spell>) {
         if (spellInHand is Rune && spellInHand.active) {
             logger.error("Attempted to swap an active rune.")
             return
         }
-        val handIndex = combat.spells.indexOf(spellInHand)
-        val sideIndex = combat.sideDeck.indexOf(spellOnSide)
-        combat.spells.removeAt(handIndex)
-        combat.spells.add(handIndex, spellOnSide)
-        combat.sideDeck.removeAt(sideIndex)
-        combat.sideDeck.add(sideIndex, spellInHand)
+        if (spellInHand.size != spellOnSide.size) {
+            logger.error("Swap size not equal.")
+            return
+        }
+        spellInHand.zip(spellOnSide).forEach {
+            val handIndex = combat.spells.indexOf(it.first)
+            val sideIndex = combat.sideDeck.indexOf(it.second)
+            combat.spells.removeAt(handIndex)
+            combat.spells.add(handIndex, it.second)
+            combat.sideDeck.removeAt(sideIndex)
+            combat.sideDeck.add(sideIndex, it.first)
+        }
         eventBus.dispatch(SwapEvent(spellInHand, spellOnSide))
     }
 

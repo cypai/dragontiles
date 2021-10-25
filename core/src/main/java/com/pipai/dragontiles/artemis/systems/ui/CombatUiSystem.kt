@@ -714,9 +714,9 @@ class CombatUiSystem(
                 stateMachine.changeState(CombatUiState.ROOT)
             }
             CombatUiState.QUERY_SWAP -> {
-                querySwapEvent!!.continuation.resume(listOf(QuerySwapEvent.SwapData(
+                querySwapEvent!!.continuation.resume(QuerySwapEvent.SwapData(
                     swapActiveSpells.map { it.getSpell()!! },
-                    swapSideboardSpells.map { it.getSpell()!! })))
+                    swapSideboardSpells.map { it.getSpell()!! }))
                 stateMachine.revertToPreviousState()
             }
             else -> {
@@ -871,6 +871,7 @@ class CombatUiSystem(
             frontStage.addActor(it)
         }
     }
+
     private fun moveSideboardSpellsBack() {
         sideboard.values.forEach {
             it.remove()
@@ -885,6 +886,40 @@ class CombatUiSystem(
         sideboard.keys.forEach {
             sAnchor.returnToAnchor(it)
         }
+    }
+
+    fun swapSpells(spellInHand: List<Spell>, spellOnSide: List<Spell>) {
+        spellInHand.zip(spellOnSide).forEach { (spell, sideSpell) ->
+            val activeSpellCard = findSpellCard(spell)!!
+            val sideboardSpellCard = findSideboardCard(sideSpell)!!
+            val activeNumber = activeSpellCard.number!!
+            val sideNumber = sideboardSpellCard.number!!
+            val activeEntityId = spellEntityIds[activeNumber]!!
+            val sideEntityId = sideboardEntityIds[sideNumber]!!
+            spells[activeNumber] = sideboardSpellCard
+            sideboardSpellCard.number = activeNumber
+            sideboard[sideNumber] = activeSpellCard
+            activeSpellCard.number = sideNumber
+            spellEntityIds[activeNumber] = sideEntityId
+            sideboardEntityIds[sideNumber] = activeEntityId
+            val activeAnchor = mAnchor.get(activeEntityId)
+            val sideAnchor = mAnchor.get(sideEntityId)
+            val tmpAnchor = activeAnchor.toVector2()
+            activeAnchor.setXy(sideAnchor.toVector2())
+            sideAnchor.setXy(tmpAnchor)
+            activeSpellCard.data[allowHoverMove] = 1
+            sideboardSpellCard.data[allowHoverMove] = 1
+        }
+        openActiveSpells()
+        closeSideboardSpells()
+    }
+
+    private fun findSpellCard(spell: Spell): SpellCard? {
+        return spells.values.find { it.getSpell() == spell }
+    }
+
+    private fun findSideboardCard(spell: Spell): SpellCard? {
+        return sideboard.values.find { it.getSpell() == spell }
     }
 
     enum class CombatUiState : State<CombatUiSystem> {
@@ -961,6 +996,7 @@ class CombatUiSystem(
 
             override fun exit(uiSystem: CombatUiSystem) {
                 uiSystem.sFsTexture.fadeOut(10)
+                uiSystem.queryTable.remove()
             }
         },
         QUERY_TILES {

@@ -102,10 +102,10 @@ data class StatusAdjustedEvent(
 
 data class QuerySwapEvent(
     val amount: Int,
-    val continuation: Continuation<List<SwapData>>
+    val continuation: Continuation<SwapData>
 ) : CombatEvent {
 
     data class SwapData(val spellInHand: List<Spell>, val spellOnSide: List<Spell>)
 }
 
-data class SwapEvent(val spellInHand: Spell, val spellOnSide: Spell) : CombatEvent
+data class SwapEvent(val spellInHand: List<Spell>, val spellOnSide: List<Spell>) : CombatEvent

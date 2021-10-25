@@ -22,7 +22,7 @@ import com.pipai.dragontiles.spells.SuitGroup
 class SpellCard(
     private val game: DragonTilesGame,
     private var spell: Spell?,
-    val number: Int?,
+    var number: Int?,
     skin: Skin,
     private val api: CombatApi,
     private val sToolTip: TooltipSystem
