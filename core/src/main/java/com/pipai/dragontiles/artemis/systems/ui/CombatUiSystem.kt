@@ -859,10 +859,10 @@ class CombatUiSystem(
     }
 
     private fun moveSpellsToAnchor() {
-        spells.keys.forEach {
+        spellEntityIds.values.forEach {
             sAnchor.returnToAnchor(it)
         }
-        sideboard.keys.forEach {
+        sideboardEntityIds.values.forEach {
             sAnchor.returnToAnchor(it)
         }
     }
@@ -921,19 +921,26 @@ class CombatUiSystem(
                 uiSystem.querySwapEvent = null
                 uiSystem.queryTileOptionsEvent = null
                 uiSystem.queryTilesEvent = null
-                uiSystem.spells.forEach { (number, spellCard) ->
-                    uiSystem.moveSpellsToAnchor()
-                    spellCard.target = null
-                    spellCard.data[uiSystem.allowHoverMove] = 1
-                    spellCard.update()
-                    val spell = spellCard.getSpell()
-                    if (spell == null || !spell.available() || uiSystem.overloaded) {
-                        spellCard.disable()
-                    } else {
-                        spellCard.enable()
-                    }
+                uiSystem.moveSpellsToAnchor()
+                uiSystem.spells.forEach { (_, spellCard) ->
+                    resetSpellCard(uiSystem, spellCard)
+                }
+                uiSystem.sideboard.forEach { (_, spellCard) ->
+                    resetSpellCard(uiSystem, spellCard)
                 }
                 uiSystem.givenComponents.clear()
+            }
+
+            private fun resetSpellCard(uiSystem: CombatUiSystem, spellCard: SpellCard) {
+                spellCard.target = null
+                spellCard.data[uiSystem.allowHoverMove] = 1
+                spellCard.update()
+                val spell = spellCard.getSpell()
+                if (spell == null || !spell.available() || uiSystem.overloaded) {
+                    spellCard.disable()
+                } else {
+                    spellCard.enable()
+                }
             }
         },
         COMPONENT_SELECTION {
