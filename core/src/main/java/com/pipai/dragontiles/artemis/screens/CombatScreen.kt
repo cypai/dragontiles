@@ -55,6 +55,8 @@ class CombatScreen(game: DragonTilesGame, runData: RunData, encounter: Encounter
                 MouseXySystem(game.gameConfig),
                 TooltipSystem(game, backStage),
                 FullScreenColorSystem(game),
+                RewardsSystem(game, runData, frontStage),
+                MapUiSystem(game, backStage, runData),
 
                 InputProcessingSystem(),
                 HoverableSystem(game.gameConfig),
@@ -68,10 +70,6 @@ class CombatScreen(game: DragonTilesGame, runData: RunData, encounter: Encounter
             .with(
                 -2,
                 CombatRenderingSystem(game, backStage, frontStage)
-            )
-            .with(
-                -3,
-                MapUiSystem(game, frontStage, runData)
             )
             .build()
 

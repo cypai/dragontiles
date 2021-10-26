@@ -115,7 +115,6 @@ class CombatUiSystem(
     private val sAnimation by system<CombatAnimationSystem>()
     private val sEvent by system<EventSystem>()
     private val sMap by system<MapUiSystem>()
-    private val sToolTip by system<TooltipSystem>()
     private val sAnchor by system<AnchorSystem>()
 
     override fun initialize() {
@@ -701,38 +700,6 @@ class CombatUiSystem(
             else -> {
             }
         }
-    }
-
-    private fun generateRewardsTable(spells: List<Spell>) {
-        val rewardsTable = Table()
-        spells.forEach { spell ->
-            val spellCard = SpellCard(game, spell, null, game.skin, sCombat.controller.api, sToolTip)
-            spellCard.addClickCallback { _, _ ->
-                if (runData.hero.spells.size > runData.hero.spellsSize) {
-                    runData.hero.sideDeck.add(spell)
-                } else {
-                    runData.hero.spells.add(spell)
-                }
-                sMap.showMap()
-                rewardsTable.remove()
-            }
-            rewardsTable.add(spellCard)
-        }
-        queryLabel.setText("Rewards! Choose a spell.")
-
-        queryTable.clearChildren()
-        queryTable.setFillParent(true)
-        queryTable.add(queryLabel)
-            .top()
-            .padTop(64f)
-            .center()
-        queryTable.row()
-        queryTable.add(rewardsTable)
-            .height(game.gameConfig.resolution.height * 2f / 3f)
-            .width(game.gameConfig.resolution.width * 3f / 4f)
-        queryTable.row()
-
-        frontStage.addActor(queryTable)
     }
 
     override fun keyUp(keycode: Int) = false
