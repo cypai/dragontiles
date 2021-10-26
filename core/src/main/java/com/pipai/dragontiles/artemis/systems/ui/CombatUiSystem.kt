@@ -694,6 +694,8 @@ class CombatUiSystem(
                 querySwapEvent!!.continuation.resume(QuerySwapEvent.SwapData(
                     swapActiveSpells.map { it.getSpell()!! },
                     swapSideboardSpells.map { it.getSpell()!! }))
+                swapActiveSpells.clear()
+                swapSideboardSpells.clear()
                 stateMachine.revertToPreviousState()
             }
             else -> {
@@ -916,6 +918,9 @@ class CombatUiSystem(
     enum class CombatUiState : State<CombatUiSystem> {
         ROOT {
             override fun enter(uiSystem: CombatUiSystem) {
+                uiSystem.querySwapEvent = null
+                uiSystem.queryTileOptionsEvent = null
+                uiSystem.queryTilesEvent = null
                 uiSystem.spells.forEach { (number, spellCard) ->
                     uiSystem.moveSpellsToAnchor()
                     spellCard.target = null
