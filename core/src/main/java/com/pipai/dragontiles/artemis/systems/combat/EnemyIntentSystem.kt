@@ -33,10 +33,10 @@ class EnemyIntentSystem() : NoProcessingSystem() {
                 override fun inserted(entities: IntBag?) {
                     entities?.forEach { enemyEntityId ->
                         val intentId: EntityId = world.create()
+                        val enemyMutualDestroy = mMutualDestroy.create(enemyEntityId)
+                        enemyMutualDestroy.ids.add(intentId)
                         val cXy = mXy.create(intentId)
                         cXy.setXy(mXy.get(enemyEntityId).toVector2())
-                        val cMutualDestroy = mMutualDestroy.create(intentId)
-                        cMutualDestroy.ids.add(enemyEntityId)
                         val cTextLabel = mTextLabel.create(intentId)
                         cTextLabel.yOffset = mSprite.get(enemyEntityId).sprite.height + 16f
                         val cIntent = mIntent.create(intentId)
