@@ -190,15 +190,17 @@ class CombatApi(
             logger.error("Swap size not equal.")
             return
         }
-        spellInHand.zip(spellOnSide).forEach {
-            val handIndex = combat.spells.indexOf(it.first)
-            val sideIndex = combat.sideDeck.indexOf(it.second)
-            combat.spells.removeAt(handIndex)
-            combat.spells.add(handIndex, it.second)
-            combat.sideDeck.removeAt(sideIndex)
-            combat.sideDeck.add(sideIndex, it.first)
+        if (spellInHand.isNotEmpty()) {
+            spellInHand.zip(spellOnSide).forEach {
+                val handIndex = combat.spells.indexOf(it.first)
+                val sideIndex = combat.sideDeck.indexOf(it.second)
+                combat.spells.removeAt(handIndex)
+                combat.spells.add(handIndex, it.second)
+                combat.sideDeck.removeAt(sideIndex)
+                combat.sideDeck.add(sideIndex, it.first)
+            }
+            eventBus.dispatch(SwapEvent(spellInHand, spellOnSide))
         }
-        eventBus.dispatch(SwapEvent(spellInHand, spellOnSide))
     }
 
     fun calculateBaseDamage(element: Element, amount: Int): Int {
