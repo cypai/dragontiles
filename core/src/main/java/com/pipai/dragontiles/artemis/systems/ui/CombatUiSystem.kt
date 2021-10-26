@@ -886,6 +886,20 @@ class CombatUiSystem(
             sideAnchor.setXy(tmpAnchor)
             activeSpellCard.data[allowHoverMove] = 1
             sideboardSpellCard.data[allowHoverMove] = 1
+            activeSpellCard.clearHoverCallbacks()
+            activeSpellCard.addHoverEnterCallback {
+                if (it.data[allowHoverMove] == 1) {
+                    openSideboardSpells()
+                    closeActiveSpells()
+                }
+            }
+            sideboardSpellCard.clearHoverCallbacks()
+            sideboardSpellCard.addHoverEnterCallback {
+                if (it.data[allowHoverMove] == 1) {
+                    openActiveSpells()
+                    closeSideboardSpells()
+                }
+            }
         }
         openActiveSpells()
         closeSideboardSpells()

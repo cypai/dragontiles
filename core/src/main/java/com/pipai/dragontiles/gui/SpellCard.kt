@@ -124,6 +124,10 @@ class SpellCard(
         hoverEnterCallbacks.add(callback)
     }
 
+    fun clearHoverCallbacks() {
+        hoverEnterCallbacks.clear()
+    }
+
     fun getSpell() = spell
 
     fun setSpell(spell: Spell?) {
