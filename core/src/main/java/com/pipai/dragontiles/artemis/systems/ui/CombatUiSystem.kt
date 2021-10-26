@@ -549,7 +549,6 @@ class CombatUiSystem(
                 if (mTile.get(ev.entityId).tile in queryTilesEvent!!.tiles) {
                     if (ev.entityId in selectedTiles) {
                         moveTileBack(ev.entityId)
-                        stateMachine.changeState(CombatUiState.ROOT)
                     } else {
                         if (selectedTiles.size < queryTilesEvent!!.maxAmount) {
                             moveTileToSelected(ev.entityId)
@@ -671,33 +670,6 @@ class CombatUiSystem(
         world.fetch(allOf(TileComponent::class, SpriteComponent::class)).forEach {
             val cSprite = mSprite.get(it)
             cSprite.depth = depth
-        }
-    }
-
-    @Subscribe
-    fun tileClicked(event: TileClickEvent) {
-        when (stateMachine.currentState) {
-            CombatUiState.QUERY_TILES -> {
-                if (mTile.get(event.entityId).tile in queryTilesEvent!!.tiles) {
-                    if (event.entityId in selectedTiles) {
-                        moveTileBack(event.entityId)
-                    } else {
-                        if (selectedTiles.size < queryTilesEvent!!.maxAmount) {
-                            moveTileToSelected(event.entityId)
-                        }
-                    }
-                }
-            }
-            CombatUiState.QUERY_OPTIONS -> {
-                if (event.entityId in tileOptions) {
-                    if (queryTileOptionsEvent!!.minAmount == 1 && queryTileOptionsEvent!!.maxAmount == 1) {
-                        queryTileOptionsEvent!!.continuation.resume(listOf(tileOptions[event.entityId]!!))
-                        stateMachine.changeState(CombatUiState.ROOT)
-                    }
-                }
-            }
-            else -> {
-            }
         }
     }
 
