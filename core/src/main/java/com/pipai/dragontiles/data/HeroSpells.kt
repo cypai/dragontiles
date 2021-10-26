@@ -40,20 +40,20 @@ class HeroSpells {
     }
 
     fun generateRewards(runData: RunData, amount: Int): List<Spell> {
-        val spells = elementalistSpells()
-        val commons = spells.filter { it.rarity == Rarity.COMMON }
-        val uncommons = spells.filter { it.rarity == Rarity.UNCOMMON }
-        val rares = spells.filter { it.rarity == Rarity.RARE }
-        val rng = runData.rng
-        val rarityRoll = rng.nextInt(20)
-        val rewardSpells = when {
-            rarityRoll == 0 -> rares
-            rarityRoll < 6 -> uncommons
-            else -> commons
+        val spells = elementalistSpells().shuffled().toMutableList()
+        val rewards: MutableList<Spell> = mutableListOf()
+        repeat(amount) {
+            val rarityRoll = runData.rng.nextInt(20)
+            val rarity = when {
+                rarityRoll == 0 -> Rarity.RARE
+                rarityRoll < 6 -> Rarity.UNCOMMON
+                else -> Rarity.COMMON
+            }
+            val spell = spells.first { it.rarity == rarity }
+            spells.remove(spell)
+            rewards.add(spell)
         }
-        return rewardSpells.shuffled().subList(0, amount).map { it.newClone() }
+        return rewards
     }
-
-    private fun rngUpgrade(rng: Random) = rng.nextInt(100) < 10
 
 }
