@@ -63,7 +63,9 @@ class CombatController(
 
     suspend fun runTurn() {
         combat.turnNumber += 1
-        combat.enemies.forEach {
+        combat.enemies
+            .filter { it.hp > 0 }
+            .forEach {
             val intent = if (api.enemyHasStatus(it, Overloaded::class)) {
                 StunnedIntent(it)
             } else {
