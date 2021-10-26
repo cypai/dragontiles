@@ -226,7 +226,9 @@ class CombatUiSystem(
     }
 
     fun enable() {
-        stateMachine.changeState(CombatUiState.ROOT)
+        if (stateMachine.currentState == CombatUiState.DISABLED) {
+            stateMachine.changeState(CombatUiState.ROOT)
+        }
     }
 
     fun setStateBack(): Boolean {
@@ -248,6 +250,9 @@ class CombatUiSystem(
 
     override fun keyDown(keycode: Int): Boolean {
         when (keycode) {
+            Keys.F1 -> {
+                println(stateMachine.currentState)
+            }
             Keys.ESCAPE -> {
                 return setStateBack()
             }
@@ -265,7 +270,7 @@ class CombatUiSystem(
                     }
                 }
             }
-            Input.Keys.ENTER -> {
+            Keys.ENTER -> {
                 confirm()
             }
             Keys.M -> {
@@ -683,7 +688,7 @@ class CombatUiSystem(
         when (stateMachine.currentState) {
             CombatUiState.QUERY_TILES -> {
                 queryTilesEvent!!.continuation.resume(selectedTiles.map { mTile.get(it).tile })
-                stateMachine.changeState(CombatUiState.ROOT)
+                stateMachine.revertToPreviousState()
             }
             CombatUiState.QUERY_SWAP -> {
                 querySwapEvent!!.continuation.resume(QuerySwapEvent.SwapData(
