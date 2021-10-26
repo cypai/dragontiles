@@ -940,7 +940,7 @@ class CombatUiSystem(
             override fun enter(uiSystem: CombatUiSystem) {
                 uiSystem.spells.forEach { (number, spellCard) ->
                     if (number == uiSystem.selectedSpellNumber) {
-                        uiSystem.moveSpellToLocation(number, uiSystem.layout.spellCastPosition)
+                        uiSystem.moveSpellToLocation(uiSystem.spellCardEntityId(number)!!, uiSystem.layout.spellCastPosition)
                         spellCard.enable()
                         uiSystem.displaySpellComponents(spellCard)
                     } else {
