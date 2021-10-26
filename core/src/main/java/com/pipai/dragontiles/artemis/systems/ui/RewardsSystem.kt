@@ -1,8 +1,11 @@
 package com.pipai.dragontiles.artemis.systems.ui
 
+import com.badlogic.gdx.scenes.scene2d.InputEvent
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Table
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.pipai.dragontiles.DragonTilesGame
 import com.pipai.dragontiles.artemis.systems.NoProcessingSystem
 import com.pipai.dragontiles.artemis.systems.combat.CombatControllerSystem
@@ -23,6 +26,7 @@ class RewardsSystem(
 
     private val rewardsTable = Table()
     private val rewardsTitle = Label("Rewards! Choose a spell.", skin, "white")
+    private val skipBtn = TextButton("  Skip (+1 gold)  ", skin)
 
     private val spellRewards: List<Spell> = game.heroSpells.generateRewards(runData, 3)
 
@@ -32,6 +36,14 @@ class RewardsSystem(
     private val sFsc by system<FullScreenColorSystem>()
 
     override fun initialize() {
+        skipBtn.addListener(object : ClickListener() {
+            override fun clicked(event: InputEvent?, x: Float, y: Float) {
+                runData.hero.gold += 1
+                sMap.showMap()
+                rewardsTable.remove()
+            }
+        })
+
         rewardsTable.setFillParent(true)
         rewardsTable.add(rewardsTitle)
             .colspan(3)
@@ -52,6 +64,10 @@ class RewardsSystem(
             }
             rewardsTable.add(spellCard)
         }
+        rewardsTable.row()
+        rewardsTable.add()
+        rewardsTable.add(skipBtn)
+        rewardsTable.add()
         rewardsTable.row()
     }
 
