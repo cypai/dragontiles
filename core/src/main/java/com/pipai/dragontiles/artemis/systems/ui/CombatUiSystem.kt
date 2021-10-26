@@ -1024,7 +1024,6 @@ class CombatUiSystem(
         DISABLED {
             override fun enter(uiSystem: CombatUiSystem) {
                 uiSystem.spells.forEach { (_, spellCard) ->
-                    spellCard.update()
                     spellCard.disable()
                 }
             }
