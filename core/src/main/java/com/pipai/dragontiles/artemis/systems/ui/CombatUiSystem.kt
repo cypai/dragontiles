@@ -922,6 +922,7 @@ class CombatUiSystem(
                 uiSystem.queryTileOptionsEvent = null
                 uiSystem.queryTilesEvent = null
                 uiSystem.moveSpellsToAnchor()
+                uiSystem.selectedTiles.clear()
                 uiSystem.spells.forEach { (_, spellCard) ->
                     resetSpellCard(uiSystem, spellCard)
                 }
