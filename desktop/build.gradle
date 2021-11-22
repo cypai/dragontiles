@@ -36,7 +36,7 @@ task run(dependsOn: classes, type: JavaExec) {
     makeRunDirs()
     copyAssets()
 
-    main = project.mainClassName
+    mainClass = project.mainClassName
     classpath = sourceSets.main.runtimeClasspath
     standardInput = System.in
     workingDir = project.runDir
