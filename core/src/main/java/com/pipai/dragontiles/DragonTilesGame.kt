@@ -85,20 +85,8 @@ class DragonTilesGame(val gameConfig: GameConfig) : Game() {
         assets.load("assets/binassets/graphics/heros/elementalist.png", Texture::class.java)
         assets.load(enemyAssetPath(FlameTurtle().assetName), Texture::class.java)
         assets.load(enemyAssetPath(Slime().assetName), Texture::class.java)
-        assets.load("assets/binassets/graphics/textures/sword.png", Texture::class.java)
-        assets.load("assets/binassets/graphics/textures/spiral.png", Texture::class.java)
-        assets.load("assets/binassets/graphics/textures/hourglass.png", Texture::class.java)
-        assets.load("assets/binassets/graphics/textures/fire_circle.png", Texture::class.java)
-        assets.load("assets/binassets/graphics/textures/ice_circle.png", Texture::class.java)
-        assets.load("assets/binassets/graphics/textures/lightning_circle.png", Texture::class.java)
-        assets.load("assets/binassets/graphics/textures/life_circle.png", Texture::class.java)
-        assets.load("assets/binassets/graphics/textures/star_circle.png", Texture::class.java)
-        assets.load("assets/binassets/graphics/textures/elemental_circle.png", Texture::class.java)
-        assets.load("assets/binassets/graphics/textures/arcane_circle.png", Texture::class.java)
-        assets.load("assets/binassets/graphics/textures/any_circle.png", Texture::class.java)
-        assets.load("assets/binassets/graphics/textures/misc_border.png", Texture::class.java)
-        assets.load("assets/binassets/graphics/textures/identical_border.png", Texture::class.java)
-        assets.load("assets/binassets/graphics/textures/sequential_border.png", Texture::class.java)
+        File("assets/binassets/graphics/textures").listFiles()!!
+            .forEach { assets.load(it.toString(), Texture::class.java) }
         assets.finishLoading()
         tileSkin = TileSkin(assets.get("assets/binassets/graphics/tiles/tiles.png", Texture::class.java))
 

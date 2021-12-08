@@ -10,3 +10,4 @@ data class EnemyHoverEnterEvent(val cEnemy: EnemyComponent) : Event
 class EnemyHoverExitEvent : Event
 
 data class MapNodeClickEvent(val floorNum: Int, val index: Int) : Event
+class ShopClickEvent : Event

@@ -25,7 +25,7 @@ class CombatController(
             combat.enemyStatus[it.id] = mutableListOf()
         }
         initDrawPile()
-        runBlocking { api.drawToOpenPool(9) }
+        runBlocking { api.drawToOpenPool(CombatApi.OPEN_POOL_SIZE) }
         combat.spells.forEach {
             it.combatReset()
             eventBus.register(it)

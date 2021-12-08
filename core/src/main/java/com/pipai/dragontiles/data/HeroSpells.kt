@@ -5,7 +5,6 @@ import com.pipai.dragontiles.spells.Rarity
 import com.pipai.dragontiles.spells.Spell
 import com.pipai.dragontiles.spells.common.*
 import com.pipai.dragontiles.spells.elementalist.*
-import java.util.*
 
 class HeroSpells {
 
@@ -36,6 +35,23 @@ class HeroSpells {
             Spark(),
             Blast(),
             Explosion()
+        )
+    }
+
+    fun cantrips(): List<Spell> {
+        return listOf(
+            Bump(),
+            Mulligan(),
+            Reserve(),
+            Nudge(),
+            Ground()
+        )
+    }
+
+    fun colorlessSpells(): List<Spell> {
+        return listOf(
+            Singularity(),
+            Fetch()
         )
     }
 

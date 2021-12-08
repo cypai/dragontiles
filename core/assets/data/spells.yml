@@ -63,10 +63,15 @@ base:spells:Reserve:
     name: Reserve
     description: "@OpenDiscard the @Component. @Repeatable !r."
 
+base:spells:Fetch:
+  en:
+    name: Fetch
+    description: Fill the Open Pool.
+
 base:spells:PreFetch:
   en:
     name: Pre-Fetch
-    description: Fill the Open Discard Pool.
+    description: At the start of your turn, draw a tile into the Open Pool.
 
 base:spells:Ground:
   en:

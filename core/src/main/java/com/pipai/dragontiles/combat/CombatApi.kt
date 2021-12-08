@@ -23,6 +23,10 @@ class CombatApi(
     private val eventBus: SuspendableEventBus
 ) : GlobalApi(runData) {
 
+    companion object {
+        const val OPEN_POOL_SIZE = 9
+    }
+
     private val logger = getLogger()
     private var nextId = 0
 
@@ -132,8 +136,8 @@ class CombatApi(
         combat.hand.removeAll(tiles)
         combat.openPool.addAll(tiles)
         eventBus.dispatch(OpenDiscardEvent(tiles))
-        if (combat.openPool.size > 9) {
-            removeFromOpenPool(combat.openPool.slice(0 until combat.openPool.size - 9))
+        if (combat.openPool.size > OPEN_POOL_SIZE) {
+            removeFromOpenPool(combat.openPool.slice(0 until combat.openPool.size - OPEN_POOL_SIZE))
         }
         sortHand()
     }
@@ -167,8 +171,8 @@ class CombatApi(
             drawnTiles.add(Pair(tile, combat.openPool.size - 1))
         }
         eventBus.dispatch(DrawToOpenPoolEvent(drawnTiles))
-        if (combat.openPool.size > 9) {
-            removeFromOpenPool(combat.openPool.slice(0 until combat.openPool.size - 9))
+        if (combat.openPool.size > OPEN_POOL_SIZE) {
+            removeFromOpenPool(combat.openPool.slice(0 until combat.openPool.size - OPEN_POOL_SIZE))
         }
     }
 
