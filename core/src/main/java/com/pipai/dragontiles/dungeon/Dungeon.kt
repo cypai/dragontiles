@@ -21,7 +21,7 @@ abstract class Dungeon {
 
     fun generateMap(rng: Random) {
         var previousFloor: List<MapNode>? = null
-        for (i in 0..10) {
+        for (i in 0..11) {
             val floor: MutableList<MapNode> = mutableListOf()
             when (i) {
                 0 -> {
@@ -32,13 +32,13 @@ abstract class Dungeon {
                         floor.add(MapNode(MapNodeType.COMBAT, false, mutableListOf(0), mutableListOf()))
                     }
                 }
-                9 -> {
+                10 -> {
                     val node = MapNode(MapNodeType.TOWN, false, mutableListOf(), mutableListOf())
                     previousFloor!!.forEach { it.next.add(0) }
                     node.prev.addAll(previousFloor.indices)
                     floor.add(node)
                 }
-                10 -> {
+                11 -> {
                     val node = MapNode(MapNodeType.BOSS, false, mutableListOf(), mutableListOf())
                     previousFloor!!.forEach { it.next.add(0) }
                     node.prev.add(0)
@@ -46,7 +46,16 @@ abstract class Dungeon {
                 }
                 else -> {
                     repeat(3) {
-                        val node = randomNode(rng)
+                        val allowedNodes = if (i == 5) {
+                            listOf(MapNodeType.TOWN)
+                        } else {
+                            if (i in listOf(4,6,8) && rng.nextBoolean()) {
+                                listOf(MapNodeType.ELITE)
+                            } else {
+                                listOf(MapNodeType.COMBAT, MapNodeType.EVENT)
+                            }
+                        }
+                        val node = randomNode(rng, allowedNodes)
                         floor.add(node)
                     }
                     previousFloor!![0].next.add(0)
@@ -78,9 +87,9 @@ abstract class Dungeon {
         }
     }
 
-    private fun randomNode(rng: Random): MapNode {
-        val type = listOf(MapNodeType.COMBAT, MapNodeType.EVENT).choose(rng)
-        return MapNode(type, if (type == MapNodeType.EVENT) true else rng.nextBoolean(), mutableListOf(), mutableListOf())
+    private fun randomNode(rng: Random, allowedNodes: List<MapNodeType>): MapNode {
+        val type = allowedNodes.choose(rng)
+        return MapNode(type, false, mutableListOf(), mutableListOf())
     }
 
     open fun easyEncounter(runData: RunData): Encounter {
@@ -103,7 +112,7 @@ abstract class Dungeon {
 data class MapNode(val type: MapNodeType, val hidden: Boolean, val prev: MutableList<Int>, val next: MutableList<Int>)
 
 enum class MapNodeType {
-    START, COMBAT, BOSS, EVENT, TOWN;
+    START, COMBAT, ELITE, BOSS, EVENT, TOWN;
 }
 
 class PlainsDungeon : Dungeon() {

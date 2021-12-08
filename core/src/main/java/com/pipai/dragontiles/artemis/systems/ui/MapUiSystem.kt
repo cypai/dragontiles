@@ -61,6 +61,9 @@ class MapUiSystem(private val game: DragonTilesGame,
                         MapNodeType.COMBAT -> {
                             Sprite(game.assets.get("assets/binassets/graphics/textures/fire_circle.png", Texture::class.java))
                         }
+                        MapNodeType.ELITE -> {
+                            Sprite(game.assets.get("assets/binassets/graphics/textures/star_circle.png", Texture::class.java))
+                        }
                         MapNodeType.TOWN -> {
                             Sprite(game.assets.get("assets/binassets/graphics/textures/ice_circle.png", Texture::class.java))
                         }
