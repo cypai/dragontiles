@@ -30,6 +30,10 @@ class DeckDisplayUiSystem(
         private const val SECTION = "SECTION"
     }
 
+    enum class Section {
+        QUERY, ACTIVE, SIDEBOARD, SORCERIES
+    }
+
     private val sFsc by system<FullScreenColorSystem>()
 
     private var active = false
@@ -40,10 +44,13 @@ class DeckDisplayUiSystem(
     private val dragAndDrop = DragAndDrop()
 
     override fun initialize() {
+        scrollPane.width = game.gameConfig.resolution.width.toFloat()
+        scrollPane.height = game.gameConfig.resolution.height.toFloat() - 40f
     }
 
     fun standardDisplay() {
         table.clearChildren()
+        topLabel.setText("Current Spellbook")
         table.add(topLabel).colspan(6)
         table.row()
         addSectionHeader("Starting Active Spells")
@@ -52,17 +59,54 @@ class DeckDisplayUiSystem(
             addSectionHeader("Sideboard Spells")
             addSpellsInSection(runData.hero.sideDeck, { _, _ -> }, true, Section.SIDEBOARD)
         }
-        scrollPane.width = game.gameConfig.resolution.width.toFloat()
-        scrollPane.height = game.gameConfig.resolution.height.toFloat()
+    }
+
+    fun queryReplace(spell: Spell) {
+        table.clearChildren()
+        topLabel.setText("Not enough spell slots, choose a spell to replace")
+        table.add(topLabel).colspan(6)
+        table.row()
+        addSectionHeader("New Spell")
+        table.add(SpellCard(game, spell, null, game.skin, null))
+            .colspan(6)
+        table.row()
+        addSectionHeader("Starting Active Spells")
+        addSpellsInSection(
+            runData.hero.spells,
+            { clickedSpell, section -> replaceSpell(clickedSpell, spell, section) },
+            false,
+            Section.ACTIVE
+        )
+        if (runData.hero.sideDeck.isNotEmpty()) {
+            addSectionHeader("Sideboard Spells")
+            addSpellsInSection(
+                runData.hero.sideDeck,
+                { clickedSpell, section -> replaceSpell(clickedSpell, spell, section) },
+                false,
+                Section.SIDEBOARD
+            )
+        }
+    }
+
+    private fun replaceSpell(originalSpell: Spell, newSpell: Spell, section: Section) {
+        when (section) {
+            Section.ACTIVE -> {
+                runData.hero.spells.remove(originalSpell)
+                runData.hero.spells.add(newSpell)
+            }
+            Section.SIDEBOARD -> {
+                runData.hero.sideDeck.remove(originalSpell)
+                runData.hero.sideDeck.add(newSpell)
+            }
+            else -> {
+            }
+        }
+        deactivate()
     }
 
     private fun addSectionHeader(text: String) {
         table.add(Label(text, game.skin, "white")).colspan(6)
         table.row()
-    }
-
-    enum class Section {
-        QUERY, ACTIVE, SIDEBOARD, SORCERIES
     }
 
     private fun addSpellsInSection(
@@ -80,6 +124,7 @@ class DeckDisplayUiSystem(
             spellCard.data[SECTION] = section.ordinal
             cell = table.add(spellCard)
                 .pad(10f)
+            spellCard.addClickCallback { _, _ -> onClick(spell, section) }
             if (enableSwapDnd) {
                 dragAndDrop.setDragActorPosition(SpellCard.cardWidth / 2f, -SpellCard.cardHeight / 2f)
                 dragAndDrop.addSource(object : DragAndDrop.Source(spellCard) {
@@ -169,6 +214,7 @@ class DeckDisplayUiSystem(
         sFsc.fadeIn(10)
         stage.addActor(scrollPane)
         scrollPane.toBack()
+        scrollPane.scrollY = 0f
     }
 
     fun deactivate() {
