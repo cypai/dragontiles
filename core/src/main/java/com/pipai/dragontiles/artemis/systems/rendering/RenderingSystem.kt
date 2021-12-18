@@ -22,7 +22,9 @@ class RenderingSystem(
 ) : BaseSystem() {
 
     private val mXy by mapper<XYComponent>()
+    private val mDepth by mapper<DepthComponent>()
     private val mSprite by mapper<SpriteComponent>()
+    private val mActor by mapper<ActorComponent>()
     private val mTextLabel by mapper<TextLabelComponent>()
     private val mLine by mapper<AnchoredLineComponent>()
     private val mTargetHighlight by mapper<TargetHighlightComponent>()
@@ -33,19 +35,24 @@ class RenderingSystem(
         batch.color = Color.WHITE
         batch.setBlendFunction(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA)
         batch.begin()
-        world.fetch(allOf(XYComponent::class, SpriteComponent::class))
-            .sortedByDescending { mSprite.get(it).depth }
+        world.fetch(allOf(XYComponent::class).one(ActorComponent::class.java, SpriteComponent::class.java))
+            .sortedByDescending { mDepth.getSafe(it, null)?.depth ?: 0 }
             .forEach {
-                val cSprite = mSprite.get(it)
-                val sprite = cSprite.sprite
-                val cXy = mXy.get(it)
-                sprite.x = cXy.x
-                sprite.y = cXy.y
-                batch.color = sprite.color
-                if (cSprite.width == 0f && cSprite.height == 0f) {
-                    sprite.draw(batch)
+                val cSprite = mSprite.getSafe(it, null)
+                if (cSprite == null) {
+                    val cActor = mActor.get(it)
+                    cActor.actor.draw(batch, 1f)
                 } else {
-                    batch.draw(sprite, sprite.x, sprite.y, cSprite.width, cSprite.height)
+                    val sprite = cSprite.sprite
+                    val cXy = mXy.get(it)
+                    sprite.x = cXy.x
+                    sprite.y = cXy.y
+                    batch.color = sprite.color
+                    if (cSprite.width == 0f && cSprite.height == 0f) {
+                        sprite.draw(batch)
+                    } else {
+                        batch.draw(sprite, sprite.x, sprite.y, cSprite.width, cSprite.height)
+                    }
                 }
             }
 

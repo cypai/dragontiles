@@ -5,13 +5,13 @@ import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.math.Interpolation
 import com.pipai.dragontiles.DragonTilesGame
 import com.pipai.dragontiles.artemis.EntityId
+import com.pipai.dragontiles.artemis.components.DepthComponent
 import com.pipai.dragontiles.artemis.components.SpriteComponent
 import com.pipai.dragontiles.artemis.components.XYComponent
 import com.pipai.dragontiles.utils.mapper
 
 class FullScreenColorSystem(game: DragonTilesGame) : BaseSystem() {
 
-    private val batch = game.spriteBatch
     private val config = game.gameConfig
     private val skin = game.skin
 
@@ -25,6 +25,7 @@ class FullScreenColorSystem(game: DragonTilesGame) : BaseSystem() {
     private var initted = false
     private var fsId: EntityId = 0
 
+    private val mDepth by mapper<DepthComponent>()
     private val mSprite by mapper<SpriteComponent>()
     private val mXy by mapper<XYComponent>()
 
@@ -37,7 +38,7 @@ class FullScreenColorSystem(game: DragonTilesGame) : BaseSystem() {
             cSprite.sprite.color = bgColor
             cSprite.width = config.resolution.width.toFloat()
             cSprite.height = config.resolution.height.toFloat()
-            cSprite.depth = -1
+            mDepth.create(fsId).depth = -1
             mXy.create(fsId)
         }
         when (state) {

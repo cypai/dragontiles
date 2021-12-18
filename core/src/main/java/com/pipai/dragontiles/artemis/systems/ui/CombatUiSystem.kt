@@ -103,6 +103,7 @@ class CombatUiSystem(
     private val mEnemy by mapper<EnemyComponent>()
     private val mLine by mapper<AnchoredLineComponent>()
     private val mMouseFollow by mapper<MouseFollowComponent>()
+    private val mDepth by mapper<DepthComponent>()
     private val mSprite by mapper<SpriteComponent>()
     private val mTargetHighlight by mapper<TargetHighlightComponent>()
     private val mTile by mapper<TileComponent>()
@@ -653,7 +654,7 @@ class CombatUiSystem(
         queryLabel.setText(event.text)
         event.displayTile?.let {
             val eid = sTileId.getEntityId(it.id)
-            mSprite.get(eid).depth = -2
+            mDepth.get(eid).depth = -2
             moveTileToDisplay(eid)
         }
         event.options.forEachIndexed { index, tile ->
@@ -661,7 +662,8 @@ class CombatUiSystem(
             tileOptions[entityId] = tile
             val cSprite = mSprite.create(entityId)
             cSprite.sprite = Sprite(game.tileSkin.regionFor(tile))
-            cSprite.depth = -2
+            val cDepth = mDepth.create(entityId)
+            cDepth.depth = -2
             val cXy = mXy.create(entityId)
             cXy.setXy(selectedPosition(index, event.options.size))
             val cClick = mClick.create(entityId)
@@ -671,9 +673,9 @@ class CombatUiSystem(
     }
 
     private fun setTileDepth(depth: Int) {
-        world.fetch(allOf(TileComponent::class, SpriteComponent::class)).forEach {
-            val cSprite = mSprite.get(it)
-            cSprite.depth = depth
+        world.fetch(allOf(TileComponent::class, DepthComponent::class, SpriteComponent::class)).forEach {
+            val cDepth = mDepth.get(it)
+            cDepth.depth = depth
         }
     }
 

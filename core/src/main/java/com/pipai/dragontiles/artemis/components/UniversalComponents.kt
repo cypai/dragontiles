@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.g2d.Sprite
 import com.badlogic.gdx.math.Interpolation
 import com.badlogic.gdx.math.Vector2
+import com.badlogic.gdx.scenes.scene2d.Actor
 import com.pipai.dragontiles.misc.RadialSprite
 import net.mostlyoriginal.api.event.common.Event
 
@@ -101,11 +102,18 @@ class MutualDestroyComponent : Component() {
     val ids: MutableList<Int> = mutableListOf()
 }
 
+class DepthComponent : Component() {
+    var depth = 0
+}
+
 class SpriteComponent : Component() {
     lateinit var sprite: Sprite
-    var depth = 0
     var width = 0f
     var height = 0f
+}
+
+class ActorComponent : Component() {
+    lateinit var actor: Actor
 }
 
 class RadialSpriteComponent : Component() {

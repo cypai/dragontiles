@@ -14,6 +14,7 @@ abstract class TileAnimation(protected val layout: CombatUiLayout) : Animation()
     private lateinit var mXy: ComponentMapper<XYComponent>
     private lateinit var mTile: ComponentMapper<TileComponent>
     private lateinit var mPath: ComponentMapper<PathInterpolationComponent>
+    private lateinit var mDepth: ComponentMapper<DepthComponent>
     private lateinit var mSprite: ComponentMapper<SpriteComponent>
     private lateinit var mClickable: ComponentMapper<ClickableComponent>
 
@@ -25,6 +26,7 @@ abstract class TileAnimation(protected val layout: CombatUiLayout) : Animation()
         cTile.tile = tile
         val cSprite = mSprite.create(entityId)
         cSprite.sprite = Sprite(layout.tileSkin.regionFor(tile.tile))
+        mDepth.create(entityId)
         val cXy = mXy.create(entityId)
         cXy.setXy(x, y)
         val cClickable = mClickable.create(entityId)
