@@ -38,6 +38,7 @@ class DeckDisplayUiSystem(
     private val sFsc by system<FullScreenColorSystem>()
 
     private var active = false
+    var enableSwap = true
 
     private val table = Table()
     private val scrollPane = ScrollPane(table)
@@ -49,16 +50,16 @@ class DeckDisplayUiSystem(
         scrollPane.height = game.gameConfig.resolution.height.toFloat() - 40f
     }
 
-    fun standardDisplay() {
+    fun standardDisplay(enableSwapDnd: Boolean) {
         table.clearChildren()
         topLabel.setText("Current Spellbook")
         table.add(topLabel).colspan(6)
         table.row()
         addSectionHeader("Starting Active Spells")
-        addSpellsInSection(runData.hero.spells, { _, _ -> }, true, Section.ACTIVE)
+        addSpellsInSection(runData.hero.spells, { _, _ -> }, enableSwapDnd, Section.ACTIVE)
         if (runData.hero.sideDeck.isNotEmpty()) {
             addSectionHeader("Sideboard Spells")
-            addSpellsInSection(runData.hero.sideDeck, { _, _ -> }, true, Section.SIDEBOARD)
+            addSpellsInSection(runData.hero.sideDeck, { _, _ -> }, enableSwapDnd, Section.SIDEBOARD)
         }
     }
 
@@ -168,7 +169,7 @@ class DeckDisplayUiSystem(
                         target: DragAndDrop.Target?
                     ) {
                         if (target == null) {
-                            standardDisplay()
+                            standardDisplay(enableSwapDnd)
                         }
                     }
                 })
@@ -219,7 +220,7 @@ class DeckDisplayUiSystem(
                                     runData.hero.spells[index2] = first.getSpell()!!
                                 }
                             }
-                            standardDisplay()
+                            standardDisplay(enableSwapDnd)
                         }
                     }
                 })
@@ -253,7 +254,7 @@ class DeckDisplayUiSystem(
                 if (active) {
                     deactivate()
                 } else {
-                    standardDisplay()
+                    standardDisplay(enableSwap)
                     activate()
                 }
                 return true
