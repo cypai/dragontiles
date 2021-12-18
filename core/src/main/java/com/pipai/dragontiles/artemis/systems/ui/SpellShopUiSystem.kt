@@ -63,15 +63,16 @@ class SpellShopUiSystem(
         cText.color = Color.WHITE
         cText.text = "${ps.price} Gold"
         val cClickable = mClickable.create(entityId)
-        cClickable.eventGenerator = { PricedSpellClickEvent(ps) }
+        cClickable.eventGenerator = { PricedSpellClickEvent(entityId, ps) }
     }
 
     @Subscribe
     fun handleSpellCardClick(ev: PricedSpellClickEvent) {
         if (runData.hero.gold >= ev.pricedSpell.price) {
-            runData.hero.gold -= ev.pricedSpell.price
+            api.gainGold(-ev.pricedSpell.price)
             logger.info("Adding ${ev.pricedSpell.spell.id} to deck at price ${ev.pricedSpell.price}")
             api.addSpellToDeck(ev.pricedSpell.spell)
+            world.delete(ev.entityId)
         }
     }
 

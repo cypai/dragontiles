@@ -4,13 +4,16 @@ import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.pipai.dragontiles.DragonTilesGame
+import com.pipai.dragontiles.artemis.events.GoldChangeEvent
+import com.pipai.dragontiles.artemis.events.PricedSpellClickEvent
 import com.pipai.dragontiles.artemis.systems.NoProcessingSystem
 import com.pipai.dragontiles.dungeon.RunData
+import net.mostlyoriginal.api.event.common.Subscribe
 import java.lang.Integer.min
 
 class TopRowUiSystem(
     game: DragonTilesGame,
-    runData: RunData,
+    private val runData: RunData,
     private val stage: Stage
 ) : NoProcessingSystem() {
 
@@ -74,5 +77,10 @@ class TopRowUiSystem(
         this.flux = flux
         this.fluxMax = fluxMax
         fluxLabel.setText("Flux: $flux/$fluxMax")
+    }
+
+    @Subscribe
+    fun handleGoldChange(ev: GoldChangeEvent) {
+        goldLabel.setText("Gold: ${runData.hero.gold}")
     }
 }

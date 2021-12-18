@@ -1,5 +1,6 @@
 package com.pipai.dragontiles.dungeon
 
+import com.pipai.dragontiles.artemis.events.GoldChangeEvent
 import com.pipai.dragontiles.artemis.events.ReplaceSpellQueryEvent
 import com.pipai.dragontiles.spells.Spell
 import net.mostlyoriginal.api.event.common.EventSystem
@@ -24,5 +25,6 @@ open class GlobalApi(private val runData: RunData, private val sEvent: EventSyst
 
     fun gainGold(gold: Int) {
         runData.hero.gold += gold
+        sEvent.dispatch(GoldChangeEvent(gold))
     }
 }
