@@ -15,6 +15,7 @@ import com.pipai.dragontiles.artemis.systems.rendering.FullScreenColorSystem
 import com.pipai.dragontiles.dungeon.RunData
 import com.pipai.dragontiles.gui.SpellCard
 import com.pipai.dragontiles.spells.Spell
+import com.pipai.dragontiles.spells.SpellUpgrade
 import com.pipai.dragontiles.utils.getLogger
 import com.pipai.dragontiles.utils.system
 
@@ -82,6 +83,29 @@ class DeckDisplayUiSystem(
             addSpellsInSection(
                 runData.hero.sideDeck,
                 { clickedSpell, section -> replaceSpell(clickedSpell, spell, section) },
+                false,
+                Section.SIDEBOARD
+            )
+        }
+    }
+
+    fun queryUpgrade(upgrade: SpellUpgrade) {
+        table.clearChildren()
+        topLabel.setText("Choose a spell to upgrade")
+        table.add(topLabel).colspan(6)
+        table.row()
+        addSectionHeader("Starting Active Spells")
+        addSpellsInSection(
+            runData.hero.spells,
+            { clickedSpell, _ -> clickedSpell.upgrade(upgrade); deactivate() },
+            false,
+            Section.ACTIVE
+        )
+        if (runData.hero.sideDeck.isNotEmpty()) {
+            addSectionHeader("Sideboard Spells")
+            addSpellsInSection(
+                runData.hero.sideDeck,
+                { clickedSpell, _ -> clickedSpell.upgrade(upgrade); deactivate() },
                 false,
                 Section.SIDEBOARD
             )
