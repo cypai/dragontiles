@@ -55,7 +55,7 @@ class SpellShopUiSystem(
         cText.color = Color.WHITE
         cText.text = "${ps.price} Gold"
         val cClickable = mClickable.create(entityId)
-        cClickable.eventGenerator = { SpellCardClickEvent(entityId) }
+        cClickable.eventGenerator = { SpellCardClickEvent(entityId, ps.spell, SpellCardClickEvent.Origin.SHOP) }
     }
 
     @Subscribe

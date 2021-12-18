@@ -12,7 +12,9 @@ import com.pipai.dragontiles.DragonTilesGame
 import com.pipai.dragontiles.artemis.systems.ClickableSystem
 import com.pipai.dragontiles.artemis.systems.input.ExitInputProcessor
 import com.pipai.dragontiles.artemis.systems.input.InputProcessingSystem
+import com.pipai.dragontiles.artemis.systems.rendering.FullScreenColorSystem
 import com.pipai.dragontiles.artemis.systems.rendering.RenderingSystem
+import com.pipai.dragontiles.artemis.systems.ui.DeckDisplayUiSystem
 import com.pipai.dragontiles.artemis.systems.ui.MapUiSystem
 import com.pipai.dragontiles.artemis.systems.ui.TopRowUiSystem
 import com.pipai.dragontiles.artemis.systems.ui.TownUiSystem
@@ -33,7 +35,9 @@ class TownScreen(game: DragonTilesGame, runData: RunData, init: Boolean) : Scree
                 ClickableSystem(game.gameConfig),
                 InputProcessingSystem(),
                 TownUiSystem(game, runData),
-                MapUiSystem(game, stage, runData)
+                DeckDisplayUiSystem(game, runData, stage),
+                MapUiSystem(game, stage, runData),
+                FullScreenColorSystem(game)
             )
             .with(
                 -1,
@@ -47,8 +51,9 @@ class TownScreen(game: DragonTilesGame, runData: RunData, init: Boolean) : Scree
         val inputProcessor = world.getSystem(InputProcessingSystem::class.java)
         inputProcessor.addAlwaysOnProcessor(stage)
         inputProcessor.addAlwaysOnProcessor(world.getSystem(MapUiSystem::class.java))
-        inputProcessor.addAlwaysOnProcessor(ExitInputProcessor())
+        inputProcessor.addAlwaysOnProcessor(world.getSystem(DeckDisplayUiSystem::class.java))
         inputProcessor.addAlwaysOnProcessor(world.getSystem(ClickableSystem::class.java))
+        inputProcessor.addAlwaysOnProcessor(ExitInputProcessor())
         inputProcessor.activateInput()
 
         TownScreenInit(game, runData, world, init).initialize()
@@ -58,10 +63,10 @@ class TownScreen(game: DragonTilesGame, runData: RunData, init: Boolean) : Scree
         Gdx.gl.glClearColor(0f, 0f, 0f, 1f)
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA)
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
-        stage.act()
-        stage.draw()
         world.setDelta(delta)
         world.process()
+        stage.act()
+        stage.draw()
     }
 
     override fun resize(width: Int, height: Int) {
