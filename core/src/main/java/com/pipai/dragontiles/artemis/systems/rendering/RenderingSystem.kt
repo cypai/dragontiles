@@ -41,6 +41,9 @@ class RenderingSystem(
                 val cSprite = mSprite.getSafe(it, null)
                 if (cSprite == null) {
                     val cActor = mActor.get(it)
+                    val cXy = mXy.get(it)
+                    cActor.actor.x = cXy.x
+                    cActor.actor.y = cXy.y
                     cActor.actor.draw(batch, 1f)
                 } else {
                     val sprite = cSprite.sprite

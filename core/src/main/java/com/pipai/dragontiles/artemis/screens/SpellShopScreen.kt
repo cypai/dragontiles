@@ -11,12 +11,13 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport
 import com.pipai.dragontiles.DragonTilesGame
 import com.pipai.dragontiles.artemis.systems.ClickableSystem
 import com.pipai.dragontiles.artemis.systems.input.InputProcessingSystem
-import com.pipai.dragontiles.artemis.systems.ui.ShopUiSystem
+import com.pipai.dragontiles.artemis.systems.rendering.RenderingSystem
+import com.pipai.dragontiles.artemis.systems.ui.SpellShopUiSystem
 import com.pipai.dragontiles.artemis.systems.ui.TopRowUiSystem
 import com.pipai.dragontiles.dungeon.RunData
 import net.mostlyoriginal.api.event.common.EventSystem
 
-class ShopScreen(game: DragonTilesGame, runData: RunData) : Screen {
+class SpellShopScreen(game: DragonTilesGame, runData: RunData) : Screen {
 
     private val stage = Stage(ScreenViewport(), game.spriteBatch)
 
@@ -29,11 +30,15 @@ class ShopScreen(game: DragonTilesGame, runData: RunData) : Screen {
                 EventSystem(),
                 ClickableSystem(game.gameConfig),
                 InputProcessingSystem(),
-                ShopUiSystem(game, runData),
+                SpellShopUiSystem(game, runData),
             )
             .with(
                 -1,
                 TopRowUiSystem(game, runData, stage)
+            )
+            .with(
+                -2,
+                RenderingSystem(game)
             )
             .build()
 
@@ -41,7 +46,7 @@ class ShopScreen(game: DragonTilesGame, runData: RunData) : Screen {
 
         val inputProcessor = world.getSystem(InputProcessingSystem::class.java)
         inputProcessor.addAlwaysOnProcessor(stage)
-        inputProcessor.addAlwaysOnProcessor(world.getSystem(ShopUiSystem::class.java))
+        inputProcessor.addAlwaysOnProcessor(world.getSystem(SpellShopUiSystem::class.java))
         inputProcessor.addAlwaysOnProcessor(world.getSystem(ClickableSystem::class.java))
         inputProcessor.activateInput()
 
@@ -52,10 +57,10 @@ class ShopScreen(game: DragonTilesGame, runData: RunData) : Screen {
         Gdx.gl.glClearColor(0f, 0f, 0f, 1f)
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA)
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
-        stage.act()
-        stage.draw()
         world.setDelta(delta)
         world.process()
+        stage.act()
+        stage.draw()
     }
 
     override fun resize(width: Int, height: Int) {

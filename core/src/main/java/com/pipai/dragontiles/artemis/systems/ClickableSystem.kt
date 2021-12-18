@@ -2,10 +2,7 @@ package com.pipai.dragontiles.artemis.systems
 
 import com.badlogic.gdx.InputProcessor
 import com.pipai.dragontiles.GameConfig
-import com.pipai.dragontiles.artemis.components.ClickableComponent
-import com.pipai.dragontiles.artemis.components.RadialSpriteComponent
-import com.pipai.dragontiles.artemis.components.SpriteComponent
-import com.pipai.dragontiles.artemis.components.XYComponent
+import com.pipai.dragontiles.artemis.components.*
 import com.pipai.dragontiles.utils.*
 import net.mostlyoriginal.api.event.common.EventSystem
 
@@ -13,6 +10,7 @@ class ClickableSystem(private val config: GameConfig) : NoProcessingSystem(), In
 
     private val mClickable by mapper<ClickableComponent>()
     private val mSprite by mapper<SpriteComponent>()
+    private val mActor by mapper<ActorComponent>()
     private val mRadial by mapper<RadialSpriteComponent>()
     private val mXy by mapper<XYComponent>()
 
@@ -34,6 +32,13 @@ class ClickableSystem(private val config: GameConfig) : NoProcessingSystem(), In
                         sEvent.dispatch(mClickable.get(it).eventGenerator.invoke(button))
                     }
                 }
+        world.fetch(allOf(ClickableComponent::class, ActorComponent::class))
+            .forEach {
+                val hover = mActor.get(it).actor.boundingRectangle().contains(mouseX, mouseY)
+                if (hover) {
+                    sEvent.dispatch(mClickable.get(it).eventGenerator.invoke(button))
+                }
+            }
         world.fetch(allOf(ClickableComponent::class, XYComponent::class, RadialSpriteComponent::class))
                 .forEach {
                     val cRadial = mRadial.get(it)

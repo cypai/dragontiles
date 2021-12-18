@@ -16,8 +16,8 @@ data class Town(
 data class SpellShop(
     val classSpells: MutableList<PricedSpell>,
     val sorceries: MutableList<PricedSpell>,
-    var cantrip: PricedSpell,
-    var colorlessSpell: PricedSpell,
+    var cantrip: PricedSpell?,
+    var colorlessSpell: PricedSpell?,
 )
 
 data class ItemShop(

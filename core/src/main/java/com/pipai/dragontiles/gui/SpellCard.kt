@@ -14,18 +14,14 @@ import com.pipai.dragontiles.DragonTilesGame
 import com.pipai.dragontiles.artemis.systems.ui.TooltipSystem
 import com.pipai.dragontiles.combat.CombatApi
 import com.pipai.dragontiles.enemies.Enemy
-import com.pipai.dragontiles.spells.CastParams
-import com.pipai.dragontiles.spells.SetType
-import com.pipai.dragontiles.spells.Spell
-import com.pipai.dragontiles.spells.SuitGroup
+import com.pipai.dragontiles.spells.*
 
 class SpellCard(
     private val game: DragonTilesGame,
     private var spell: Spell?,
     var number: Int?,
     skin: Skin,
-    private val api: CombatApi,
-    private val sToolTip: TooltipSystem
+    private val api: CombatApi?
 ) : Table(skin) {
 
     private val reqBorder = Image()
@@ -82,6 +78,9 @@ class SpellCard(
             .top()
             .colspan(2)
         row()
+
+        width = cardWidth
+        height = cardHeight
 
         touchable = Touchable.enabled
         addListener(object : ClickListener() {
@@ -193,7 +192,11 @@ class SpellCard(
                     it.groupValues[2]
                 } else {
                     val castParams = CastParams(if (target == null) listOf() else listOf(target!!.id))
-                    theSpell.dynamicValue(it.groupValues[1], api, castParams).toString()
+                    if (api == null) {
+                        theSpell.baseDamage().toString()
+                    } else {
+                        theSpell.dynamicValue(it.groupValues[1], api, castParams).toString()
+                    }
                 }
             }.replace("[@\\[\\]]".toRegex(), "")
             descriptionLabel.setText(adjustedDescription)

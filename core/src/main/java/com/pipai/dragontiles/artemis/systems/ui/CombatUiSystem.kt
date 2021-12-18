@@ -83,9 +83,14 @@ class CombatUiSystem(
     private val leftSpellClosedCenter = Vector2(layout.cardWidth, -SpellCard.cardHeight / 2f)
     private val leftSpellOpenCenter = Vector2(layout.cardWidth * 3, -SpellCard.cardHeight / 2f)
     private val leftSpellSwapCenter = Vector2(layout.cardWidth * 3, game.gameConfig.resolution.height.toFloat() / 2)
-    private val rightSpellClosedCenter = Vector2(game.gameConfig.resolution.width - layout.cardWidth * 2, -SpellCard.cardHeight / 2f)
-    private val rightSpellOpenCenter = Vector2(game.gameConfig.resolution.width - layout.cardWidth * 3, -SpellCard.cardHeight / 2f)
-    private val rightSpellSwapCenter = Vector2(game.gameConfig.resolution.width - layout.cardWidth * 3, game.gameConfig.resolution.height.toFloat() / 2)
+    private val rightSpellClosedCenter =
+        Vector2(game.gameConfig.resolution.width - layout.cardWidth * 2, -SpellCard.cardHeight / 2f)
+    private val rightSpellOpenCenter =
+        Vector2(game.gameConfig.resolution.width - layout.cardWidth * 3, -SpellCard.cardHeight / 2f)
+    private val rightSpellSwapCenter = Vector2(
+        game.gameConfig.resolution.width - layout.cardWidth * 3,
+        game.gameConfig.resolution.height.toFloat() / 2
+    )
 
     var overloaded = false
     private var selectedSpellNumber: Int? = null
@@ -176,7 +181,7 @@ class CombatUiSystem(
     }
 
     private fun addSpellCard(number: Int, spell: Spell) {
-        val spellCard = SpellCard(game, spell, number, game.skin, sCombat.controller.api, sTooltip)
+        val spellCard = SpellCard(game, spell, number, game.skin, sCombat.controller.api)
         spellCard.addClickCallback(this::spellCardClickCallback)
         spellCard.width = layout.cardWidth
         spellCard.height = layout.cardHeight
@@ -199,7 +204,7 @@ class CombatUiSystem(
     }
 
     private fun addSpellCardToSideboard(number: Int, spell: Spell) {
-        val spellCard = SpellCard(game, spell, number, game.skin, sCombat.controller.api, sTooltip)
+        val spellCard = SpellCard(game, spell, number, game.skin, sCombat.controller.api)
         spellCard.addClickCallback(this::spellCardClickCallback)
         spellCard.width = layout.cardWidth
         spellCard.height = layout.cardHeight
@@ -692,9 +697,11 @@ class CombatUiSystem(
                 stateMachine.revertToPreviousState()
             }
             CombatUiState.QUERY_SWAP -> {
-                querySwapEvent!!.continuation.resume(QuerySwapEvent.SwapData(
-                    swapActiveSpells.map { it.getSpell()!! },
-                    swapSideboardSpells.map { it.getSpell()!! }))
+                querySwapEvent!!.continuation.resume(
+                    QuerySwapEvent.SwapData(
+                        swapActiveSpells.map { it.getSpell()!! },
+                        swapSideboardSpells.map { it.getSpell()!! })
+                )
                 swapActiveSpells.clear()
                 swapSideboardSpells.clear()
                 stateMachine.revertToPreviousState()
@@ -806,6 +813,7 @@ class CombatUiSystem(
             frontStage.addActor(it)
         }
     }
+
     private fun moveActiveSpellsBack() {
         spells.values.forEach {
             it.remove()
@@ -917,7 +925,10 @@ class CombatUiSystem(
             override fun enter(uiSystem: CombatUiSystem) {
                 uiSystem.spells.forEach { (number, spellCard) ->
                     if (number == uiSystem.selectedSpellNumber) {
-                        uiSystem.moveSpellToLocation(uiSystem.spellCardEntityId(number)!!, uiSystem.layout.spellCastPosition)
+                        uiSystem.moveSpellToLocation(
+                            uiSystem.spellCardEntityId(number)!!,
+                            uiSystem.layout.spellCastPosition
+                        )
                         spellCard.enable()
                         uiSystem.displaySpellComponents(spellCard)
                     } else {

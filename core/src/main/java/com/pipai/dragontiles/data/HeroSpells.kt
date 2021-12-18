@@ -5,6 +5,7 @@ import com.pipai.dragontiles.spells.Rarity
 import com.pipai.dragontiles.spells.Spell
 import com.pipai.dragontiles.spells.common.*
 import com.pipai.dragontiles.spells.elementalist.*
+import com.pipai.dragontiles.utils.choose
 
 class HeroSpells {
 
@@ -20,17 +21,12 @@ class HeroSpells {
 
     fun elementalistSpells(): List<Spell> {
         return listOf(
-            Mulligan(),
-            Ground(),
-            Reserve(),
             QuickInvoke(),
             MultiInvoke(),
             StrengthRune(),
             RampStrike(),
             Concentrate(),
             FeedbackLoop(),
-            Bump(),
-            Nudge(),
             Singularity(),
             Spark(),
             Blast(),
@@ -40,11 +36,11 @@ class HeroSpells {
 
     fun cantrips(): List<Spell> {
         return listOf(
-            Bump(),
+            Ground(),
             Mulligan(),
             Reserve(),
+            Bump(),
             Nudge(),
-            Ground()
         )
     }
 
@@ -65,7 +61,7 @@ class HeroSpells {
                 rarityRoll < 6 -> Rarity.UNCOMMON
                 else -> Rarity.COMMON
             }
-            val spell = spells.first { it.rarity == rarity }
+            val spell = spells.firstOrNull { it.rarity == rarity } ?: spells.choose(runData.rng)
             spells.remove(spell)
             rewards.add(spell)
         }

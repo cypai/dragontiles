@@ -52,7 +52,7 @@ class RewardsSystem(
             .center()
         rewardsTable.row()
         spellRewards.forEach { spell ->
-            val spellCard = SpellCard(game, spell, null, game.skin, sCombat.controller.api, sTooltip)
+            val spellCard = SpellCard(game, spell, null, game.skin, sCombat.controller.api)
             spellCard.addClickCallback { _, _ ->
                 if (runData.hero.spells.size >= runData.hero.spellsSize) {
                     runData.hero.sideDeck.add(spell)

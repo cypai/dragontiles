@@ -23,11 +23,11 @@ fun numeric(components: List<TileInstance>): Int {
 }
 
 fun Spell.baseDamage(): Int {
-    return aspects.findAs(AttackDamageAspect::class)!!.amount
+    return aspects.findAs(AttackDamageAspect::class)?.amount ?: 0
 }
 
 fun Spell.baseFluxLoss(): Int {
-    return aspects.findAs(FluxLossAspect::class)!!.amount
+    return aspects.findAs(FluxLossAspect::class)?.amount ?: 0
 }
 
 val anySet = setOf(Suit.FIRE, Suit.ICE, Suit.LIGHTNING, Suit.LIFE, Suit.STAR)

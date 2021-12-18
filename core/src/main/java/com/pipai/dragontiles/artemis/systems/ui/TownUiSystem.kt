@@ -3,7 +3,7 @@ package com.pipai.dragontiles.artemis.systems.ui
 import com.artemis.BaseSystem
 import com.pipai.dragontiles.DragonTilesGame
 import com.pipai.dragontiles.artemis.events.ShopClickEvent
-import com.pipai.dragontiles.artemis.screens.ShopScreen
+import com.pipai.dragontiles.artemis.screens.SpellShopScreen
 import com.pipai.dragontiles.dungeon.RunData
 import net.mostlyoriginal.api.event.common.Subscribe
 
@@ -17,7 +17,7 @@ class TownUiSystem(
 
     @Subscribe
     fun handleShopClick(ev: ShopClickEvent) {
-        game.screen = ShopScreen(game, runData)
+        game.screen = SpellShopScreen(game, runData)
     }
 
     override fun processSystem() {
