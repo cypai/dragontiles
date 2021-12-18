@@ -2,18 +2,20 @@ package com.pipai.dragontiles.artemis.systems.ui
 
 import com.badlogic.gdx.Input
 import com.badlogic.gdx.InputProcessor
-import com.badlogic.gdx.scenes.scene2d.Actor
+import com.badlogic.gdx.scenes.scene2d.InputEvent
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.ui.Cell
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane
 import com.badlogic.gdx.scenes.scene2d.ui.Table
+import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop
 import com.pipai.dragontiles.DragonTilesGame
 import com.pipai.dragontiles.artemis.systems.NoProcessingSystem
 import com.pipai.dragontiles.artemis.systems.rendering.FullScreenColorSystem
 import com.pipai.dragontiles.dungeon.RunData
 import com.pipai.dragontiles.gui.SpellCard
 import com.pipai.dragontiles.spells.Spell
+import com.pipai.dragontiles.utils.getLogger
 import com.pipai.dragontiles.utils.system
 
 class DeckDisplayUiSystem(
@@ -22,6 +24,12 @@ class DeckDisplayUiSystem(
     private val stage: Stage,
 ) : NoProcessingSystem(), InputProcessor {
 
+    private val logger = getLogger()
+
+    companion object {
+        private const val SECTION = "SECTION"
+    }
+
     private val sFsc by system<FullScreenColorSystem>()
 
     private var active = false
@@ -29,6 +37,7 @@ class DeckDisplayUiSystem(
     private val table = Table()
     private val scrollPane = ScrollPane(table)
     private val topLabel = Label("", game.skin, "white")
+    private val dragAndDrop = DragAndDrop()
 
     override fun initialize() {
     }
@@ -38,14 +47,13 @@ class DeckDisplayUiSystem(
         table.add(topLabel).colspan(6)
         table.row()
         addSectionHeader("Starting Active Spells")
-        addSpellsInSection(runData.hero.spells)
+        addSpellsInSection(runData.hero.spells, { _, _ -> }, true, Section.ACTIVE)
         if (runData.hero.sideDeck.isNotEmpty()) {
             addSectionHeader("Sideboard Spells")
-            addSpellsInSection(runData.hero.sideDeck)
+            addSpellsInSection(runData.hero.sideDeck, { _, _ -> }, true, Section.SIDEBOARD)
         }
         scrollPane.width = game.gameConfig.resolution.width.toFloat()
         scrollPane.height = game.gameConfig.resolution.height.toFloat()
-        activate()
     }
 
     private fun addSectionHeader(text: String) {
@@ -53,14 +61,100 @@ class DeckDisplayUiSystem(
         table.row()
     }
 
-    private fun addSpellsInSection(spells: List<Spell>) {
+    enum class Section {
+        QUERY, ACTIVE, SIDEBOARD, SORCERIES
+    }
+
+    private fun addSpellsInSection(
+        spells: List<Spell>,
+        onClick: (Spell, Section) -> Unit,
+        enableSwapDnd: Boolean,
+        section: Section,
+    ) {
         var cell: Cell<SpellCard>? = null
         spells.forEachIndexed { i, spell ->
             if (i % 6 == 0 && i != 0) {
                 table.row()
             }
-            cell = table.add(SpellCard(game, spell, null, game.skin, null))
+            val spellCard = SpellCard(game, spell, null, game.skin, null)
+            spellCard.data[SECTION] = section.ordinal
+            cell = table.add(spellCard)
                 .pad(10f)
+            if (enableSwapDnd) {
+                dragAndDrop.setDragActorPosition(SpellCard.cardWidth / 2f, -SpellCard.cardHeight / 2f)
+                dragAndDrop.addSource(object : DragAndDrop.Source(spellCard) {
+                    override fun dragStart(event: InputEvent?, x: Float, y: Float, pointer: Int): DragAndDrop.Payload {
+                        val payload = DragAndDrop.Payload()
+                        payload.`object` = spellCard
+                        payload.dragActor = spellCard
+                        return payload
+                    }
+
+                    override fun dragStop(
+                        event: InputEvent?,
+                        x: Float,
+                        y: Float,
+                        pointer: Int,
+                        payload: DragAndDrop.Payload?,
+                        target: DragAndDrop.Target?
+                    ) {
+                        if (target == null) {
+                            standardDisplay()
+                        }
+                    }
+                })
+                dragAndDrop.addTarget(object : DragAndDrop.Target(spellCard) {
+                    override fun drag(
+                        source: DragAndDrop.Source?,
+                        payload: DragAndDrop.Payload?,
+                        x: Float,
+                        y: Float,
+                        pointer: Int
+                    ): Boolean {
+                        return true
+                    }
+
+                    override fun drop(
+                        source: DragAndDrop.Source?,
+                        payload: DragAndDrop.Payload?,
+                        x: Float,
+                        y: Float,
+                        pointer: Int
+                    ) {
+                        val first = (payload!!.`object` as SpellCard)
+                        val second = (this.actor as SpellCard)
+                        if (first != second) {
+                            logger.info("Swapping ${first.getSpell()!!.id} and ${second.getSpell()!!.id}")
+                            if (Section.values()[first.data[SECTION]!!] == Section.ACTIVE) {
+                                if (first.data[SECTION] == second.data[SECTION]) {
+                                    val index1 = runData.hero.spells.indexOf(first.getSpell())
+                                    val index2 = runData.hero.spells.indexOf(second.getSpell())
+                                    runData.hero.spells[index1] = second.getSpell()!!
+                                    runData.hero.spells[index2] = first.getSpell()!!
+                                } else {
+                                    val index1 = runData.hero.spells.indexOf(first.getSpell())
+                                    val index2 = runData.hero.sideDeck.indexOf(second.getSpell())
+                                    runData.hero.spells[index1] = second.getSpell()!!
+                                    runData.hero.sideDeck[index2] = first.getSpell()!!
+                                }
+                            } else {
+                                if (first.data[SECTION] == second.data[SECTION]) {
+                                    val index1 = runData.hero.sideDeck.indexOf(first.getSpell())
+                                    val index2 = runData.hero.sideDeck.indexOf(second.getSpell())
+                                    runData.hero.sideDeck[index1] = second.getSpell()!!
+                                    runData.hero.sideDeck[index2] = first.getSpell()!!
+                                } else {
+                                    val index1 = runData.hero.sideDeck.indexOf(first.getSpell())
+                                    val index2 = runData.hero.spells.indexOf(second.getSpell())
+                                    runData.hero.sideDeck[index1] = second.getSpell()!!
+                                    runData.hero.spells[index2] = first.getSpell()!!
+                                }
+                            }
+                            standardDisplay()
+                        }
+                    }
+                })
+            }
         }
         if (cell != null && spells.size % 6 != 0) {
             repeat(6 - spells.size % 6) {
@@ -90,6 +184,7 @@ class DeckDisplayUiSystem(
                     deactivate()
                 } else {
                     standardDisplay()
+                    activate()
                 }
                 return true
             }
