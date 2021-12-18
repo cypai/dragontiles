@@ -65,6 +65,7 @@ class CombatScreen(game: DragonTilesGame, runData: RunData, encounter: Encounter
             .with(
                 -1,
                 CombatUiSystem(game, runData, backStage, frontStage),
+                DeckDisplayUiSystem(game, runData, frontStage),
                 TopRowUiSystem(game, runData, frontStage)
             )
             .with(
@@ -80,6 +81,7 @@ class CombatScreen(game: DragonTilesGame, runData: RunData, encounter: Encounter
         inputProcessor.addAlwaysOnProcessor(world.getSystem(ClickableSystem::class.java))
         inputProcessor.addAlwaysOnProcessor(world.getSystem(HoverableSystem::class.java))
         inputProcessor.addAlwaysOnProcessor(world.getSystem(CombatUiSystem::class.java))
+        inputProcessor.addAlwaysOnProcessor(world.getSystem(DeckDisplayUiSystem::class.java))
         inputProcessor.addAlwaysOnProcessor(frontStage)
         inputProcessor.addAlwaysOnProcessor(backStage)
         inputProcessor.addAlwaysOnProcessor(ExitInputProcessor())

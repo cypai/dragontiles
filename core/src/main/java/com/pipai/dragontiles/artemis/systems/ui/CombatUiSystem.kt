@@ -291,7 +291,7 @@ class CombatUiSystem(
             CombatUiState.ROOT -> {
                 selectSpell(keycode)
             }
-            else -> false
+            else -> true
         }
     }
 

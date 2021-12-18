@@ -14,6 +14,7 @@ import com.pipai.dragontiles.artemis.events.EnemyHoverEnterEvent
 import com.pipai.dragontiles.artemis.events.EnemyHoverExitEvent
 import com.pipai.dragontiles.artemis.systems.combat.CombatControllerSystem
 import com.pipai.dragontiles.artemis.systems.ui.CombatUiSystem
+import com.pipai.dragontiles.artemis.systems.ui.DeckDisplayUiSystem
 import com.pipai.dragontiles.dungeon.Encounter
 import com.pipai.dragontiles.dungeon.RunData
 import com.pipai.dragontiles.utils.enemyAssetPath
@@ -39,6 +40,7 @@ class CombatScreenInit(
     private lateinit var sTags: TagManager
 
     private lateinit var sController: CombatControllerSystem
+    private lateinit var sDeckDisplay: DeckDisplayUiSystem
 
     init {
         world.inject(this)
@@ -50,6 +52,7 @@ class CombatScreenInit(
         sTags.register(Tags.CAMERA.toString(), cameraId)
 
         sController.controller.initCombat()
+        sDeckDisplay.enableSwap = false
 
         initHero()
 
