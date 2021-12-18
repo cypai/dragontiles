@@ -12,7 +12,7 @@ class CombatController(
     eventSystem: EventSystem
 ) {
 
-    private val eventBus = SuspendableEventBus(eventSystem)
+    private val eventBus = CombatEventBus(eventSystem)
     val api: CombatApi = CombatApi(runData, combat, eventBus)
 
     fun initCombat() {

@@ -20,8 +20,8 @@ import kotlin.reflect.KClass
 class CombatApi(
     val runData: RunData,
     val combat: Combat,
-    private val eventBus: SuspendableEventBus
-) : GlobalApi(runData) {
+    private val eventBus: CombatEventBus
+) : GlobalApi(runData, eventBus.sEvent) {
 
     companion object {
         const val OPEN_POOL_SIZE = 9

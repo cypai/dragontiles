@@ -12,10 +12,11 @@ import com.pipai.dragontiles.dungeonevents.DungeonEvent
 import com.pipai.dragontiles.dungeonevents.EventApi
 import com.pipai.dragontiles.dungeonevents.EventOption
 import com.pipai.dragontiles.utils.system
+import net.mostlyoriginal.api.event.common.EventSystem
 
 class EventUiSystem(private val game: DragonTilesGame,
                     private val stage: Stage,
-                    runData: RunData,
+                    private val runData: RunData,
                     private val event: DungeonEvent) : BaseSystem() {
 
     private val skin = game.skin
@@ -26,10 +27,12 @@ class EventUiSystem(private val game: DragonTilesGame,
     private val optionLabels: MutableList<Label> = mutableListOf()
 
     private val sMap by system<MapUiSystem>()
+    private val sEvent by system<EventSystem>()
 
-    private val api: EventApi = EventApi(game, runData, this, game.gameStrings.eventLocalization(event.id))
+    private lateinit var api: EventApi
 
     override fun initialize() {
+        api = EventApi(game, runData, sEvent, this, game.gameStrings.eventLocalization(event.id))
         rootTable.setFillParent(true)
         rootTable.background = game.skin.getDrawable("frameDrawable")
 

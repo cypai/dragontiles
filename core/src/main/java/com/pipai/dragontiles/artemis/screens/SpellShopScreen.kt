@@ -11,7 +11,9 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport
 import com.pipai.dragontiles.DragonTilesGame
 import com.pipai.dragontiles.artemis.systems.ClickableSystem
 import com.pipai.dragontiles.artemis.systems.input.InputProcessingSystem
+import com.pipai.dragontiles.artemis.systems.rendering.FullScreenColorSystem
 import com.pipai.dragontiles.artemis.systems.rendering.RenderingSystem
+import com.pipai.dragontiles.artemis.systems.ui.DeckDisplayUiSystem
 import com.pipai.dragontiles.artemis.systems.ui.SpellShopUiSystem
 import com.pipai.dragontiles.artemis.systems.ui.TopRowUiSystem
 import com.pipai.dragontiles.dungeon.RunData
@@ -31,10 +33,12 @@ class SpellShopScreen(game: DragonTilesGame, runData: RunData) : Screen {
                 ClickableSystem(game.gameConfig),
                 InputProcessingSystem(),
                 SpellShopUiSystem(game, runData),
+                FullScreenColorSystem(game),
             )
             .with(
                 -1,
-                TopRowUiSystem(game, runData, stage)
+                TopRowUiSystem(game, runData, stage),
+                DeckDisplayUiSystem(game, runData, stage),
             )
             .with(
                 -2,
@@ -46,6 +50,7 @@ class SpellShopScreen(game: DragonTilesGame, runData: RunData) : Screen {
 
         val inputProcessor = world.getSystem(InputProcessingSystem::class.java)
         inputProcessor.addAlwaysOnProcessor(stage)
+        inputProcessor.addAlwaysOnProcessor(world.getSystem(DeckDisplayUiSystem::class.java))
         inputProcessor.addAlwaysOnProcessor(world.getSystem(SpellShopUiSystem::class.java))
         inputProcessor.addAlwaysOnProcessor(world.getSystem(ClickableSystem::class.java))
         inputProcessor.activateInput()

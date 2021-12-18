@@ -10,14 +10,18 @@ import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop
 import com.pipai.dragontiles.DragonTilesGame
+import com.pipai.dragontiles.artemis.events.ReplaceSpellQueryEvent
 import com.pipai.dragontiles.artemis.systems.NoProcessingSystem
 import com.pipai.dragontiles.artemis.systems.rendering.FullScreenColorSystem
+import com.pipai.dragontiles.dungeon.GlobalApi
 import com.pipai.dragontiles.dungeon.RunData
 import com.pipai.dragontiles.gui.SpellCard
 import com.pipai.dragontiles.spells.Spell
 import com.pipai.dragontiles.spells.SpellUpgrade
 import com.pipai.dragontiles.utils.getLogger
 import com.pipai.dragontiles.utils.system
+import net.mostlyoriginal.api.event.common.EventSystem
+import net.mostlyoriginal.api.event.common.Subscribe
 
 class DeckDisplayUiSystem(
     private val game: DragonTilesGame,
@@ -36,7 +40,9 @@ class DeckDisplayUiSystem(
     }
 
     private val sFsc by system<FullScreenColorSystem>()
+    private val sEvent by system<EventSystem>()
 
+    private lateinit var api: GlobalApi
     private var active = false
     var enableSwap = true
 
@@ -48,6 +54,7 @@ class DeckDisplayUiSystem(
     override fun initialize() {
         scrollPane.width = game.gameConfig.resolution.width.toFloat()
         scrollPane.height = game.gameConfig.resolution.height.toFloat() - 40f
+        api = GlobalApi(runData, sEvent)
     }
 
     fun standardDisplay(enableSwapDnd: Boolean) {
@@ -61,6 +68,12 @@ class DeckDisplayUiSystem(
             addSectionHeader("Sideboard Spells")
             addSpellsInSection(runData.hero.sideDeck, { _, _ -> }, enableSwapDnd, Section.SIDEBOARD)
         }
+    }
+
+    @Subscribe
+    fun handleReplaceQuery(ev: ReplaceSpellQueryEvent) {
+        queryReplace(ev.spell)
+        activate()
     }
 
     fun queryReplace(spell: Spell) {
@@ -117,11 +130,11 @@ class DeckDisplayUiSystem(
         when (section) {
             Section.ACTIVE -> {
                 runData.hero.spells.remove(originalSpell)
-                runData.hero.spells.add(newSpell)
+                api.addSpellToDeck(newSpell)
             }
             Section.SIDEBOARD -> {
                 runData.hero.sideDeck.remove(originalSpell)
-                runData.hero.sideDeck.add(newSpell)
+                api.addSpellToSideboard(newSpell)
             }
             else -> {
             }

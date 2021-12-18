@@ -10,7 +10,7 @@ import kotlin.reflect.KFunction
 import kotlin.reflect.full.callSuspend
 import kotlin.reflect.full.declaredFunctions
 
-class SuspendableEventBus(private val eventSystem: EventSystem) {
+class CombatEventBus(val sEvent: EventSystem) {
     private val logger = getLogger()
 
     private val subscriptions: MutableMap<KClass<*>, PriorityQueue<Subscription>> = mutableMapOf()
@@ -45,12 +45,12 @@ class SuspendableEventBus(private val eventSystem: EventSystem) {
 
     suspend fun dispatch(ev: CombatEvent) {
         logger.info("Dispatch $ev")
-        eventSystem.dispatch(ev)
+        sEvent.dispatch(ev)
         subscriptions[ev::class]?.forEach { it.func.callSuspend(it.obj, ev, api) }
     }
 
     suspend fun <T : CombatEvent> dispatchQuery(ev: T, continuation: Continuation<T>) {
-        eventSystem.dispatch(ev)
+        sEvent.dispatch(ev)
         subscriptions[ev::class]?.forEach { it.func.callSuspend(it.obj, ev, api) }
         continuation.resume(ev)
     }

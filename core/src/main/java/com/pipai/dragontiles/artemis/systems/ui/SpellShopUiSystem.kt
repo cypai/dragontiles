@@ -4,20 +4,21 @@ import com.artemis.BaseSystem
 import com.badlogic.gdx.Input
 import com.badlogic.gdx.InputProcessor
 import com.badlogic.gdx.graphics.Color
-import com.badlogic.gdx.scenes.scene2d.Stage
-import com.badlogic.gdx.scenes.scene2d.actions.RotateByAction
 import com.pipai.dragontiles.DragonTilesGame
 import com.pipai.dragontiles.artemis.components.ActorComponent
 import com.pipai.dragontiles.artemis.components.ClickableComponent
 import com.pipai.dragontiles.artemis.components.TextLabelComponent
 import com.pipai.dragontiles.artemis.components.XYComponent
-import com.pipai.dragontiles.artemis.events.SpellCardClickEvent
+import com.pipai.dragontiles.artemis.events.PricedSpellClickEvent
 import com.pipai.dragontiles.artemis.screens.TownScreen
 import com.pipai.dragontiles.data.PricedSpell
+import com.pipai.dragontiles.dungeon.GlobalApi
 import com.pipai.dragontiles.dungeon.RunData
 import com.pipai.dragontiles.gui.SpellCard
 import com.pipai.dragontiles.utils.getLogger
 import com.pipai.dragontiles.utils.mapper
+import com.pipai.dragontiles.utils.system
+import net.mostlyoriginal.api.event.common.EventSystem
 import net.mostlyoriginal.api.event.common.Subscribe
 
 class SpellShopUiSystem(
@@ -25,12 +26,19 @@ class SpellShopUiSystem(
     private val runData: RunData,
 ) : BaseSystem(), InputProcessor {
 
+    private val logger = getLogger()
+
+    private lateinit var api: GlobalApi
+
     private val mXy by mapper<XYComponent>()
     private val mActor by mapper<ActorComponent>()
     private val mText by mapper<TextLabelComponent>()
     private val mClickable by mapper<ClickableComponent>()
 
+    private val sEvent by system<EventSystem>()
+
     override fun initialize() {
+        api = GlobalApi(runData, sEvent)
         val spellShop = runData.town!!.spellShop
         if (spellShop.cantrip != null) {
             createSpell(spellShop.cantrip!!, SpellCard.cardWidth * 1, SpellCard.cardHeight * 2)
@@ -55,12 +63,16 @@ class SpellShopUiSystem(
         cText.color = Color.WHITE
         cText.text = "${ps.price} Gold"
         val cClickable = mClickable.create(entityId)
-        cClickable.eventGenerator = { SpellCardClickEvent(entityId, ps.spell, SpellCardClickEvent.Origin.SHOP) }
+        cClickable.eventGenerator = { PricedSpellClickEvent(ps) }
     }
 
     @Subscribe
-    fun handleSpellCardClick(ev: SpellCardClickEvent) {
-        // TODO
+    fun handleSpellCardClick(ev: PricedSpellClickEvent) {
+        if (runData.hero.gold >= ev.pricedSpell.price) {
+            runData.hero.gold -= ev.pricedSpell.price
+            logger.info("Adding ${ev.pricedSpell.spell.id} to deck at price ${ev.pricedSpell.price}")
+            api.addSpellToDeck(ev.pricedSpell.spell)
+        }
     }
 
     override fun processSystem() {
