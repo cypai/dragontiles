@@ -17,13 +17,9 @@ import com.pipai.dragontiles.utils.fetch
 import com.pipai.dragontiles.utils.mapper
 import com.pipai.dragontiles.utils.system
 
-class CombatRenderingSystem(
-    private val game: DragonTilesGame,
-    private val backStage: Stage,
-    private val frontStage: Stage
+class RenderingSystem(
+    private val game: DragonTilesGame
 ) : BaseSystem() {
-
-    private val skin = game.skin
 
     private val mXy by mapper<XYComponent>()
     private val mSprite by mapper<SpriteComponent>()
@@ -94,15 +90,6 @@ class CombatRenderingSystem(
                 game.shapeRenderer.line(xy1.x, xy1.y, xy2.x, xy2.y, cLine.color, cLine.color)
             }
         game.shapeRenderer.end()
-    }
-
-    private fun elementColor(element: Element?): Color {
-        return when (element) {
-            Element.FIRE -> Color.RED
-            Element.ICE -> Color.SKY
-            Element.LIGHTNING -> Color.YELLOW
-            else -> Color.WHITE
-        }
     }
 
 }

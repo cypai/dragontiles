@@ -15,7 +15,7 @@ import com.pipai.dragontiles.artemis.systems.animation.CombatAnimationSystem
 import com.pipai.dragontiles.artemis.systems.combat.*
 import com.pipai.dragontiles.artemis.systems.input.ExitInputProcessor
 import com.pipai.dragontiles.artemis.systems.input.InputProcessingSystem
-import com.pipai.dragontiles.artemis.systems.rendering.CombatRenderingSystem
+import com.pipai.dragontiles.artemis.systems.rendering.RenderingSystem
 import com.pipai.dragontiles.artemis.systems.rendering.FullScreenColorSystem
 import com.pipai.dragontiles.artemis.systems.ui.*
 import com.pipai.dragontiles.combat.Combat
@@ -69,7 +69,7 @@ class CombatScreen(game: DragonTilesGame, runData: RunData, encounter: Encounter
             )
             .with(
                 -2,
-                CombatRenderingSystem(game, backStage, frontStage)
+                RenderingSystem(game)
             )
             .build()
 

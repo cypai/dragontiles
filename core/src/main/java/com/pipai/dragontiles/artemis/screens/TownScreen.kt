@@ -12,7 +12,7 @@ import com.pipai.dragontiles.DragonTilesGame
 import com.pipai.dragontiles.artemis.systems.ClickableSystem
 import com.pipai.dragontiles.artemis.systems.input.ExitInputProcessor
 import com.pipai.dragontiles.artemis.systems.input.InputProcessingSystem
-import com.pipai.dragontiles.artemis.systems.rendering.MapRenderingSystem
+import com.pipai.dragontiles.artemis.systems.rendering.RenderingSystem
 import com.pipai.dragontiles.artemis.systems.ui.MapUiSystem
 import com.pipai.dragontiles.artemis.systems.ui.TopRowUiSystem
 import com.pipai.dragontiles.artemis.systems.ui.TownUiSystem
@@ -37,7 +37,7 @@ class TownScreen(game: DragonTilesGame, runData: RunData, init: Boolean) : Scree
             )
             .with(
                 -1,
-                MapRenderingSystem(game),
+                RenderingSystem(game),
                 TopRowUiSystem(game, runData, stage)
             )
             .build()

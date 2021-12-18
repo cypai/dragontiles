@@ -12,7 +12,7 @@ import com.pipai.dragontiles.DragonTilesGame
 import com.pipai.dragontiles.artemis.systems.ClickableSystem
 import com.pipai.dragontiles.artemis.systems.input.ExitInputProcessor
 import com.pipai.dragontiles.artemis.systems.input.InputProcessingSystem
-import com.pipai.dragontiles.artemis.systems.rendering.MapRenderingSystem
+import com.pipai.dragontiles.artemis.systems.rendering.RenderingSystem
 import com.pipai.dragontiles.artemis.systems.ui.EventUiSystem
 import com.pipai.dragontiles.artemis.systems.ui.MapUiSystem
 import com.pipai.dragontiles.artemis.systems.ui.TopRowUiSystem
@@ -28,17 +28,20 @@ class EventScreen(game: DragonTilesGame, runData: RunData, event: DungeonEvent) 
 
     init {
         val config = WorldConfigurationBuilder()
-                .with(
-                        TagManager(),
-                        EventSystem(),
-                        ClickableSystem(game.gameConfig),
-                        InputProcessingSystem(),
-                        EventUiSystem(game, stage, runData, event),
-                        MapUiSystem(game, stage, runData))
-                .with(-1,
-                        MapRenderingSystem(game),
-                        TopRowUiSystem(game, runData, stage))
-                .build()
+            .with(
+                TagManager(),
+                EventSystem(),
+                ClickableSystem(game.gameConfig),
+                InputProcessingSystem(),
+                EventUiSystem(game, stage, runData, event),
+                MapUiSystem(game, stage, runData)
+            )
+            .with(
+                -1,
+                RenderingSystem(game),
+                TopRowUiSystem(game, runData, stage)
+            )
+            .build()
 
         world = World(config)
 
