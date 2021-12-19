@@ -21,7 +21,7 @@ class KillerRabbit : Enemy() {
     override fun getIntent(): Intent {
         return when (intents) {
             0 -> BuffIntent(this, Frenzy(1), null)
-            else -> AttackIntent(this, 6, 1, false, Element.NONE)
+            else -> AttackIntent(this, 13, 1, false, Element.NONE)
         }
     }
 

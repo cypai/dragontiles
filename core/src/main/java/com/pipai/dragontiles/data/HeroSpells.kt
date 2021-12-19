@@ -15,7 +15,8 @@ class HeroSpells {
             Strike(),
             Vent(),
             ElementalRune(),
-            Break()
+            Break(),
+            Concentrate(),
         )
     }
 
