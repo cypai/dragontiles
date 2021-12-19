@@ -2,10 +2,7 @@ package com.pipai.dragontiles.artemis.systems
 
 import com.badlogic.gdx.InputProcessor
 import com.pipai.dragontiles.GameConfig
-import com.pipai.dragontiles.artemis.components.HoverableComponent
-import com.pipai.dragontiles.artemis.components.RadialSpriteComponent
-import com.pipai.dragontiles.artemis.components.SpriteComponent
-import com.pipai.dragontiles.artemis.components.XYComponent
+import com.pipai.dragontiles.artemis.components.*
 import com.pipai.dragontiles.utils.*
 import net.mostlyoriginal.api.event.common.EventSystem
 
@@ -13,6 +10,7 @@ class HoverableSystem(private val config: GameConfig) : NoProcessingSystem(), In
 
     private val mHoverable by mapper<HoverableComponent>()
     private val mSprite by mapper<SpriteComponent>()
+    private val mActor by mapper<ActorComponent>()
     private val mRadial by mapper<RadialSpriteComponent>()
     private val mXy by mapper<XYComponent>()
 
@@ -39,6 +37,12 @@ class HoverableSystem(private val config: GameConfig) : NoProcessingSystem(), In
                     val hover = mSprite.get(it).sprite.boundingRectangle.contains(mouseX, mouseY)
                     updateHover(cHover, hover)
                 }
+        world.fetch(allOf(HoverableComponent::class, ActorComponent::class))
+            .forEach {
+                val cHover = mHoverable.get(it)
+                val hover = mActor.get(it).actor.boundingRectangle().contains(mouseX, mouseY)
+                updateHover(cHover, hover)
+            }
         world.fetch(allOf(HoverableComponent::class, XYComponent::class, RadialSpriteComponent::class))
                 .forEach {
                     val cHover = mHoverable.get(it)

@@ -43,6 +43,7 @@ class SpellCard(
 
     private val clickCallbacks: MutableList<(InputEvent, SpellCard) -> Unit> = mutableListOf()
     private val hoverEnterCallbacks: MutableList<(SpellCard) -> Unit> = mutableListOf()
+    private val hoverExitCallbacks: MutableList<(SpellCard) -> Unit> = mutableListOf()
 
     var target: Enemy? = null
     private var enabled = true
@@ -110,6 +111,9 @@ class SpellCard(
 
             override fun exit(event: InputEvent?, x: Float, y: Float, pointer: Int, toActor: Actor?) {
                 zIndex = zPrevious
+                if (spell != null) {
+                    hoverExitCallbacks.forEach { it.invoke(this@SpellCard) }
+                }
 //                sToolTip.hideTooltip()
             }
         })
@@ -130,8 +134,13 @@ class SpellCard(
         hoverEnterCallbacks.add(callback)
     }
 
+    fun addHoverExitCallback(callback: (SpellCard) -> Unit) {
+        hoverExitCallbacks.add(callback)
+    }
+
     fun clearHoverCallbacks() {
         hoverEnterCallbacks.clear()
+        hoverExitCallbacks.clear()
     }
 
     fun getSpell() = spell

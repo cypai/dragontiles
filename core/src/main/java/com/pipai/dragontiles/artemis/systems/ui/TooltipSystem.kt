@@ -64,6 +64,9 @@ class TooltipSystem(game: DragonTilesGame, var stage: Stage) : NoProcessingSyste
     }
 
     fun showTooltip() {
+        if (textPairs.isEmpty()) {
+            return
+        }
         table.clearChildren()
         table.remove()
         table.background = skin.getDrawable("frameDrawable")

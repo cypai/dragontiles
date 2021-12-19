@@ -196,10 +196,15 @@ class CombatUiSystem(
         val cAnchor = mAnchor.create(id)
         spellCard.data[allowHoverMove] = 1
         spellCard.addHoverEnterCallback {
+            sTooltip.addKeywordsInString(game.gameStrings.spellLocalization(spell.id).description)
+            sTooltip.showTooltip()
             if (it.data[allowHoverMove] == 1) {
                 openActiveSpells()
                 closeSideboardSpells()
             }
+        }
+        spellCard.addHoverExitCallback {
+            sTooltip.hideTooltip()
         }
     }
 
@@ -219,10 +224,15 @@ class CombatUiSystem(
         mAnchor.create(id)
         spellCard.data[allowHoverMove] = 1
         spellCard.addHoverEnterCallback {
+            sTooltip.addKeywordsInString(game.gameStrings.spellLocalization(spell.id).description)
+            sTooltip.showTooltip()
             if (it.data[allowHoverMove] == 1) {
                 openSideboardSpells()
                 closeActiveSpells()
             }
+        }
+        spellCard.addHoverExitCallback {
+            sTooltip.hideTooltip()
         }
     }
 
@@ -255,9 +265,6 @@ class CombatUiSystem(
 
     override fun keyDown(keycode: Int): Boolean {
         when (keycode) {
-            Keys.F1 -> {
-                println(stateMachine.currentState)
-            }
             Keys.ESCAPE -> {
                 return setStateBack()
             }

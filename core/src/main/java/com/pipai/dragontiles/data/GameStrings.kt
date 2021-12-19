@@ -24,6 +24,9 @@ class GameStrings {
                         keywordIds[lang] = mutableMapOf()
                     }
                     keywordIds[lang]!![data["key"]!!] = id
+                    if ("alias" in data) {
+                        keywordIds[lang]!![data["alias"]!!] = id
+                    }
                 }
             }
             strings[id] = langMap

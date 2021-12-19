@@ -25,6 +25,7 @@ base:keywords:AOE:
 base:keywords:Components:
   en:
     key: "@Components"
+    alias: "@Component"
     name: Components
     description: The tiles used to activate the spell.
 
@@ -80,7 +81,7 @@ base:keywords:Break:
   en:
     key: "@Break"
     name: Break
-    description: Takes 50% more damage when attacked with the broken element.
+    description: Takes 50% more damage when attacked with @Elemental damage.
 
 base:keywords:Chain:
   en:
