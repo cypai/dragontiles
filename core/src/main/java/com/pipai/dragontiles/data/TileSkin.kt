@@ -8,6 +8,7 @@ class TileSkin(texture: Texture) {
     private val elementalRegions: MutableMap<Pair<Suit, Int>, TextureRegion> = mutableMapOf()
     private val lifeRegions: MutableMap<LifeType, TextureRegion> = mutableMapOf()
     private val starRegions: MutableMap<StarType, TextureRegion> = mutableMapOf()
+    private val fumbleRegion = TextureRegion(texture, 96, 144, 32, 48)
 
     val width = 32
     val height = 48
@@ -31,6 +32,7 @@ class TileSkin(texture: Texture) {
         is Tile.ElementalTile -> elementalRegions[Pair(tile.suit, tile.number)]
         is Tile.LifeTile -> lifeRegions[tile.type]
         is Tile.StarTile -> starRegions[tile.type]
+        is Tile.FumbleTile -> fumbleRegion
     }
 
 }

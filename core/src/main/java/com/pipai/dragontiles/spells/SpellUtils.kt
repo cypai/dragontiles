@@ -34,6 +34,7 @@ fun Spell.baseFluxLoss(): Int {
     return aspects.findAs(FluxLossAspect::class)?.amount ?: 0
 }
 
-val anySet = setOf(Suit.FIRE, Suit.ICE, Suit.LIGHTNING, Suit.LIFE, Suit.STAR)
+val anySet = setOf(Suit.FIRE, Suit.ICE, Suit.LIGHTNING, Suit.LIFE, Suit.STAR, Suit.FUMBLE)
+val anyNoFumbleSet = setOf(Suit.FIRE, Suit.ICE, Suit.LIGHTNING, Suit.LIFE, Suit.STAR)
 val elementalSet = setOf(Suit.FIRE, Suit.ICE, Suit.LIGHTNING)
 val arcaneSet = setOf(Suit.LIFE, Suit.STAR)

@@ -172,6 +172,7 @@ class SpellCard(
             SuitGroup.STAR -> "assets/binassets/graphics/textures/star_circle.png"
             SuitGroup.ELEMENTAL -> "assets/binassets/graphics/textures/elemental_circle.png"
             SuitGroup.ARCANE -> "assets/binassets/graphics/textures/arcane_circle.png"
+            SuitGroup.ANY_NO_FUMBLE -> "assets/binassets/graphics/textures/any_circle.png"
             SuitGroup.ANY -> "assets/binassets/graphics/textures/any_circle.png"
         }
         return TextureRegionDrawable(game.assets.get(filename, Texture::class.java))

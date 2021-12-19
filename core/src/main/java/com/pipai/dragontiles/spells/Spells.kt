@@ -261,6 +261,7 @@ enum class SuitGroup(val allowedSuits: Set<Suit>, val isElemental: Boolean) {
     LIFE(setOf(Suit.LIFE), false),
     ELEMENTAL(elementalSet, true),
     ARCANE(arcaneSet, false),
+    ANY_NO_FUMBLE(anyNoFumbleSet, false),
     ANY(anySet, false),
 }
 
@@ -341,7 +342,7 @@ class AnyCombo(slotAmount: Int, override var suitGroup: SuitGroup) : ManualCompo
 }
 
 class Identical(slotAmount: Int, override var suitGroup: SuitGroup) : ComponentRequirement() {
-    constructor(slotAmount: Int) : this(slotAmount, SuitGroup.ANY)
+    constructor(slotAmount: Int) : this(slotAmount, SuitGroup.ANY_NO_FUMBLE)
 
     override val type = SetType.IDENTICAL
     override val reqAmount = ReqAmount.Numeric(slotAmount)
@@ -401,7 +402,7 @@ class Identical(slotAmount: Int, override var suitGroup: SuitGroup) : ComponentR
 }
 
 class IdenticalX(override var suitGroup: SuitGroup) : ComponentRequirement() {
-    constructor() : this(SuitGroup.ANY)
+    constructor() : this(SuitGroup.ANY_NO_FUMBLE)
 
     override val type = SetType.IDENTICAL
     override val reqAmount = ReqAmount.XAmount()
