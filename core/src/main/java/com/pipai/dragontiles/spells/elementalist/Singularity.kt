@@ -11,7 +11,9 @@ class Singularity : StandardSpell() {
     override val type: SpellType = SpellType.EFFECT
     override val targetType: TargetType = TargetType.NONE
     override val rarity: Rarity = Rarity.UNCOMMON
-    override val aspects: MutableList<SpellAspect> = mutableListOf()
+    override val aspects: MutableList<SpellAspect> = mutableListOf(
+        FluxGainAspect(2),
+    )
 
     override suspend fun onCast(params: CastParams, api: CombatApi) {
         val tileInstance = components().first()

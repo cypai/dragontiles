@@ -10,7 +10,8 @@ class Concentrate : PowerSpell() {
     override val requirement: ComponentRequirement = Identical(2, SuitGroup.ARCANE)
     override val rarity: Rarity = Rarity.UNCOMMON
     override val aspects: MutableList<SpellAspect> = mutableListOf(
-        StackableAspect(Strength(2), 1)
+        StackableAspect(Strength(2), 1),
+        FluxGainAspect(3),
     )
 
     override suspend fun onCast(params: CastParams, api: CombatApi) {

@@ -32,3 +32,13 @@ class RepeatUpgrade : SpellUpgrade {
         }
     }
 }
+
+class EfficiencyUpgrade : SpellUpgrade {
+    override fun canUpgrade(spell: Spell): Boolean {
+        return spell.aspects.any { it is FluxGainAspect }
+    }
+
+    override fun onUpgrade(spell: Spell) {
+        spell.aspects.findAs(FluxGainAspect::class)!!.amount /= 2
+    }
+}

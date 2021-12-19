@@ -9,6 +9,7 @@ import com.pipai.dragontiles.enemies.Enemy
 import com.pipai.dragontiles.spells.Rune
 import com.pipai.dragontiles.spells.Spell
 import com.pipai.dragontiles.spells.StandardSpell
+import com.pipai.dragontiles.spells.baseFluxGain
 import com.pipai.dragontiles.status.Overloaded
 import com.pipai.dragontiles.status.Status
 import com.pipai.dragontiles.utils.deepCopy
@@ -54,6 +55,12 @@ class CombatApi(
 
     suspend fun castSpell(spell: Spell) {
         eventBus.dispatch(SpellCastedEvent(spell))
+        val flux = spell.baseFluxGain()
+        if (runData.hero.flux + flux >= runData.hero.fluxMax) {
+            logger.error("Attempted to cast spell that would cause self-overload")
+            return
+        }
+        dealFluxDamageToHero(flux)
     }
 
     suspend fun activateRune(rune: Rune, components: List<TileInstance>) {

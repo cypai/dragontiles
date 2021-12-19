@@ -10,7 +10,9 @@ class FeedbackLoop : StandardSpell() {
     override val type: SpellType = SpellType.EFFECT
     override val targetType: TargetType = TargetType.NONE
     override val rarity: Rarity = Rarity.RARE
-    override val aspects: MutableList<SpellAspect> = mutableListOf()
+    override val aspects: MutableList<SpellAspect> = mutableListOf(
+        FluxGainAspect(3),
+    )
 
     override suspend fun onCast(params: CastParams, api: CombatApi) {
         api.addStatusToHero(Strength(api.heroStatusAmount(Strength::class)))

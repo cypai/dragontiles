@@ -10,7 +10,8 @@ class MultiInvoke : StandardSpell() {
     override val targetType: TargetType = TargetType.SINGLE
     override val rarity: Rarity = Rarity.UNCOMMON
     override val aspects: MutableList<SpellAspect> = mutableListOf(
-        AttackDamageAspect(1)
+        AttackDamageAspect(1),
+        FluxGainAspect(3),
     )
 
     override suspend fun onCast(params: CastParams, api: CombatApi) {

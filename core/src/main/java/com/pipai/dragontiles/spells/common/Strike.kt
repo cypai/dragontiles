@@ -10,7 +10,8 @@ class Strike : StandardSpell() {
     override val targetType: TargetType = TargetType.SINGLE
     override val rarity: Rarity = Rarity.COMMON
     override val aspects: MutableList<SpellAspect> = mutableListOf(
-        AttackDamageAspect(7)
+        AttackDamageAspect(7),
+        FluxGainAspect(2)
     )
 
     override suspend fun onCast(params: CastParams, api: CombatApi) {

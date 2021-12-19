@@ -10,7 +10,7 @@ class Ground : StandardSpell() {
     override val targetType: TargetType = TargetType.NONE
     override val rarity: Rarity = Rarity.COMMON
     override val aspects: MutableList<SpellAspect> = mutableListOf(
-        LimitedRepeatableAspect(3)
+        LimitedRepeatableAspect(2), FluxGainAspect(1)
     )
 
     override suspend fun onCast(params: CastParams, api: CombatApi) {

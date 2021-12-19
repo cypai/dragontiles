@@ -27,6 +27,7 @@ class SpellCard(
     private val reqBorder = Image()
     private val reqImage = Image()
     private val reqNumber = Label("", skin, "cardReq")
+    private val fluxNumber = Label("", skin, "cardReq")
     private val nameLabel = Label("", skin, "tiny")
     private val numberLabel = Label("", skin, "tiny")
     private val descriptionLabel = Label("", skin, "tiny")
@@ -73,13 +74,16 @@ class SpellCard(
             .left()
             .expandX()
             .padLeft(8f)
+        add(fluxNumber)
+            .padRight(12f)
+            .right()
         row()
         add(descriptionLabel)
             .prefWidth(cardWidth)
             .prefHeight(cardHeight)
             .padLeft(8f)
             .top()
-            .colspan(2)
+            .colspan(3)
         row()
 
         width = cardWidth
@@ -138,10 +142,14 @@ class SpellCard(
             reqBorder.drawable = null
             reqImage.drawable = null
             reqNumber.setText("")
+            fluxNumber.setText("")
         } else {
             reqBorder.drawable = borderDrawable(spell.requirement.type)
             reqImage.drawable = reqSuitDrawable(spell.requirement.suitGroup)
             reqNumber.setText("  " + spell.requirement.reqAmount.text())
+            if (spell.aspects.any { it is FluxGainAspect }) {
+                fluxNumber.setText(spell.baseFluxGain())
+            }
         }
         update()
     }

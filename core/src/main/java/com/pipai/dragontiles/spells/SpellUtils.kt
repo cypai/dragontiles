@@ -26,6 +26,10 @@ fun Spell.baseDamage(): Int {
     return aspects.findAs(AttackDamageAspect::class)?.amount ?: 0
 }
 
+fun Spell.baseFluxGain(): Int {
+    return aspects.findAs(FluxGainAspect::class)?.amount ?: 0
+}
+
 fun Spell.baseFluxLoss(): Int {
     return aspects.findAs(FluxLossAspect::class)?.amount ?: 0
 }

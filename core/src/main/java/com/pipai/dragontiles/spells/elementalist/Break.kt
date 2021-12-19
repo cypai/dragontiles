@@ -12,7 +12,8 @@ class Break : StandardSpell() {
     override val targetType: TargetType = TargetType.SINGLE_ENEMY
     override val rarity: Rarity = Rarity.COMMON
     override val aspects: MutableList<SpellAspect> = mutableListOf(
-        StackableAspect(BreakStatus(3, false), 1)
+        StackableAspect(BreakStatus(3, false), 1),
+        FluxGainAspect(2)
     )
 
     override suspend fun onCast(params: CastParams, api: CombatApi) {

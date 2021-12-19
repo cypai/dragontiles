@@ -15,7 +15,8 @@ class Spark : StandardSpell() {
     override val rarity: Rarity = Rarity.UNCOMMON
     override val aspects: MutableList<SpellAspect> = mutableListOf(
         AttackDamageAspect(2),
-        RepeatableAspect()
+        RepeatableAspect(),
+        FluxGainAspect(1),
     )
 
     override suspend fun onCast(params: CastParams, api: CombatApi) {
