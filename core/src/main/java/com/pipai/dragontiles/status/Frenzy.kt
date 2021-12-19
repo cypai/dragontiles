@@ -8,7 +8,7 @@ import com.pipai.dragontiles.spells.SpellType
 
 class Frenzy(amount: Int) : Status(amount) {
     override val strId = "base:status:Frenzy"
-    override val assetName = "assets/binassets/graphics/status/break.png"
+    override val assetName = "assets/binassets/graphics/status/frenzy.png"
     override val displayAmount = true
 
     override fun deepCopy(): Status {
