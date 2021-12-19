@@ -3,6 +3,7 @@ package com.pipai.dragontiles.combat
 import com.pipai.dragontiles.data.Element
 import com.pipai.dragontiles.data.Tile
 import com.pipai.dragontiles.data.TileInstance
+import com.pipai.dragontiles.data.TileStatus
 import com.pipai.dragontiles.dungeon.GlobalApi
 import com.pipai.dragontiles.dungeon.RunData
 import com.pipai.dragontiles.enemies.Enemy
@@ -103,7 +104,7 @@ class CombatApi(
     }
 
     suspend fun transformTile(tileInstance: TileInstance, tile: Tile, sortHand: Boolean) {
-        val newTile = TileInstance(tile, nextId())
+        val newTile = TileInstance(tile, TileStatus.NONE, nextId())
         val index = combat.hand.indexOf(tileInstance)
         combat.hand.removeAt(index)
         combat.hand.add(index, newTile)
@@ -119,11 +120,11 @@ class CombatApi(
         sortHand()
     }
 
-    suspend fun addTilesToHand(tiles: List<Tile>) {
+    suspend fun addTilesToHand(tiles: List<Tile>, status: TileStatus) {
         val addedTiles: MutableList<Pair<TileInstance, Int>> = mutableListOf()
         val discardedTiles: MutableList<TileInstance> = mutableListOf()
         tiles.forEach {
-            val tileInstance = TileInstance(it, nextId())
+            val tileInstance = TileInstance(it, status, nextId())
             if (numTilesInHand() < runData.hero.handSize) {
                 combat.hand.add(tileInstance)
                 addedTiles.add(Pair(tileInstance, combat.hand.size))
@@ -324,10 +325,17 @@ class CombatApi(
         }
     }
 
-    suspend fun consume(components: List<TileInstance>) {
+    suspend fun consume(components: List<TileInstance>, spell: Spell) {
         combat.hand.removeAll(components)
         combat.discardPile.addAll(components)
         eventBus.dispatch(ComponentConsumeEvent(components))
+        components.forEach { tile ->
+            when (tile.tileStatus) {
+                TileStatus.BURN -> dealDamageToHero(2)
+                TileStatus.VOLATILE -> dealFluxDamageToHero(spell.baseFluxGain())
+                else -> {}
+            }
+        }
         sortHand()
     }
 

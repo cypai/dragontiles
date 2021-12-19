@@ -62,3 +62,8 @@ base:enemies:Slime:Acid:
   en:
     name: Acid
     description: Inflicts 3 @IceBreak.
+
+base:enemies:KillerRabbit:
+  en:
+    name: Killer Rabbit
+    description: A killer rabbit. Deceptively dangerous.

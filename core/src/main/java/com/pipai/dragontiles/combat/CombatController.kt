@@ -42,21 +42,21 @@ class CombatController(
     private fun initDrawPile() {
         for (i in 1..9) {
             repeat(4) {
-                combat.drawPile.add(TileInstance(Tile.ElementalTile(Suit.FIRE, i), api.nextId()))
-                combat.drawPile.add(TileInstance(Tile.ElementalTile(Suit.ICE, i), api.nextId()))
-                combat.drawPile.add(TileInstance(Tile.ElementalTile(Suit.LIGHTNING, i), api.nextId()))
+                combat.drawPile.add(TileInstance(Tile.ElementalTile(Suit.FIRE, i), TileStatus.NONE, api.nextId()))
+                combat.drawPile.add(TileInstance(Tile.ElementalTile(Suit.ICE, i), TileStatus.NONE, api.nextId()))
+                combat.drawPile.add(TileInstance(Tile.ElementalTile(Suit.LIGHTNING, i), TileStatus.NONE, api.nextId()))
             }
         }
         repeat(4) {
-            combat.drawPile.add(TileInstance(Tile.StarTile(StarType.EARTH), api.nextId()))
-            combat.drawPile.add(TileInstance(Tile.StarTile(StarType.MOON), api.nextId()))
-            combat.drawPile.add(TileInstance(Tile.StarTile(StarType.SUN), api.nextId()))
-            combat.drawPile.add(TileInstance(Tile.StarTile(StarType.STAR), api.nextId()))
+            combat.drawPile.add(TileInstance(Tile.StarTile(StarType.EARTH), TileStatus.NONE, api.nextId()))
+            combat.drawPile.add(TileInstance(Tile.StarTile(StarType.MOON), TileStatus.NONE, api.nextId()))
+            combat.drawPile.add(TileInstance(Tile.StarTile(StarType.SUN), TileStatus.NONE, api.nextId()))
+            combat.drawPile.add(TileInstance(Tile.StarTile(StarType.STAR), TileStatus.NONE, api.nextId()))
         }
         repeat(4) {
-            combat.drawPile.add(TileInstance(Tile.LifeTile(LifeType.LIFE), api.nextId()))
-            combat.drawPile.add(TileInstance(Tile.LifeTile(LifeType.MIND), api.nextId()))
-            combat.drawPile.add(TileInstance(Tile.LifeTile(LifeType.SOUL), api.nextId()))
+            combat.drawPile.add(TileInstance(Tile.LifeTile(LifeType.LIFE), TileStatus.NONE, api.nextId()))
+            combat.drawPile.add(TileInstance(Tile.LifeTile(LifeType.MIND), TileStatus.NONE, api.nextId()))
+            combat.drawPile.add(TileInstance(Tile.LifeTile(LifeType.SOUL), TileStatus.NONE, api.nextId()))
         }
         combat.drawPile.shuffle(runData.rng)
     }
@@ -66,13 +66,13 @@ class CombatController(
         combat.enemies
             .filter { it.hp > 0 }
             .forEach {
-            val intent = if (api.enemyHasStatus(it, Overloaded::class)) {
-                StunnedIntent(it)
-            } else {
-                it.getIntent()
+                val intent = if (api.enemyHasStatus(it, Overloaded::class)) {
+                    StunnedIntent(it)
+                } else {
+                    it.getIntent()
+                }
+                api.changeEnemyIntent(it, intent)
             }
-            api.changeEnemyIntent(it, intent)
-        }
         if (combat.turnNumber > 1) {
             api.queryOpenPoolDraw()
         }

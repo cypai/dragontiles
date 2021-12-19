@@ -1,7 +1,7 @@
 package com.pipai.dragontiles.data
 
 enum class Suit(val order: Int) {
-    FIRE(1), ICE(2), LIGHTNING(3), STAR(4), LIFE(5), FUMBLE(0)
+    FUMBLE(0), FIRE(1), ICE(2), LIGHTNING(3), STAR(4), LIFE(5)
 }
 
 enum class Element(val isElemental: Boolean) {
@@ -21,7 +21,6 @@ enum class TileStatus {
 }
 
 sealed class Tile {
-    var status = TileStatus.NONE
     abstract var suit: Suit
     abstract fun order(): Int
 
@@ -40,7 +39,7 @@ sealed class Tile {
     }
 
     class FumbleTile : Tile() {
-        override var suit = Suit.LIFE
+        override var suit = Suit.FUMBLE
         override fun order(): Int = 0
     }
 }
@@ -51,7 +50,7 @@ val lightningTiles = (1..9).map { Tile.ElementalTile(Suit.LIGHTNING, it) }
 val starTiles = StarType.values().map { Tile.StarTile(it) }
 val lifeTiles = LifeType.values().map { Tile.LifeTile(it) }
 
-data class TileInstance(val tile: Tile, val id: Int)
+data class TileInstance(val tile: Tile, var tileStatus: TileStatus, val id: Int)
 
 fun successor(tile: Tile): Tile {
     return when (tile) {

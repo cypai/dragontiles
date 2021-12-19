@@ -100,24 +100,6 @@ base:keywords:Defense:
     name: Defense
     description: Damage taken via attacks decreased by 1 per point of Defense.
 
-base:keywords:Burn:
-  en:
-    key: "@Burn"
-    name: Burn
-    description: Take 2 damage if a Burning Tile is used as a @Component.
-
-base:keywords:Freeze:
-  en:
-    key: "@Freeze"
-    name: Freeze
-    description: Tile cannot be discarded or transformed.
-
-base:keywords:Shock:
-  en:
-    key: "@Shock"
-    name: Shock
-    description: "@Disable the spell if a Shock Tile is used as a @Component."
-
 base:keywords:Disable:
   en:
     key: "@Disable"

@@ -103,16 +103,16 @@ abstract class StandardSpell : Spell() {
             logger.error("Attempted to cast without being ready. State: $this")
             return
         }
-        api.castSpell(this)
         handleComponents(api)
         onCast(params, api)
+        api.castSpell(this) // After casting to have effects on spellcast resolve in the proper order
         repeated++
     }
 
     protected abstract suspend fun onCast(params: CastParams, api: CombatApi)
 
     open suspend fun handleComponents(api: CombatApi) {
-        api.consume(components())
+        api.consume(components(), this)
     }
 
     override fun turnReset() {
@@ -195,7 +195,7 @@ abstract class PowerSpell : Spell() {
     protected abstract suspend fun onCast(params: CastParams, api: CombatApi)
 
     open suspend fun handleComponents(api: CombatApi) {
-        api.consume(components())
+        api.consume(components(), this)
     }
 
     override fun combatReset() {

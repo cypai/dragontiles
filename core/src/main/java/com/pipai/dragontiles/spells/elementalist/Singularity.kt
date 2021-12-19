@@ -2,6 +2,7 @@ package com.pipai.dragontiles.spells.elementalist
 
 import com.pipai.dragontiles.combat.CombatApi
 import com.pipai.dragontiles.data.Tile
+import com.pipai.dragontiles.data.TileStatus
 import com.pipai.dragontiles.spells.*
 import kotlin.math.min
 
@@ -24,7 +25,7 @@ class Singularity : StandardSpell() {
         repeat(amount) {
             newTiles.add(Tile.ElementalTile(tile.suit, 1))
         }
-        api.addTilesToHand(newTiles)
+        api.addTilesToHand(newTiles, TileStatus.NONE)
     }
 
     override suspend fun handleComponents(api: CombatApi) {

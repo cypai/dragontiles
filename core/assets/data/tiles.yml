@@ -1,0 +1,29 @@
+base:tilestatus:FumbleTile:
+  en:
+    key: "@FumbleTile"
+    name: Fumble Tile
+    description: A tile that doesn't match any suit or other tiles.
+
+base:tilestatus:Burn:
+  en:
+    key: "@Burn"
+    name: Burn
+    description: "Take 2 piercing damage if used as a @Component."
+
+base:tilestatus:Freeze:
+  en:
+    key: "@Freeze"
+    name: Freeze
+    description: Tile cannot be discarded or transformed.
+
+base:keywords:Shock:
+  en:
+    key: "@Shock"
+    name: Shock
+    description: "@Disable the spell if used as a @Component."
+
+base:tilestatus:Volatile:
+  en:
+    key: "@Volatile"
+    name: Volatile
+    description: "Take damage equal to the spell's Flux cost if used as a @Component."

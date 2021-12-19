@@ -83,9 +83,9 @@ class DragonTilesGame(val gameConfig: GameConfig) : Game() {
             .forEach { assets.load(it.toString(), Texture::class.java) }
         assets.load("assets/binassets/graphics/tiles/tiles.png", Texture::class.java)
         assets.load("assets/binassets/graphics/heros/elementalist.png", Texture::class.java)
-        assets.load(enemyAssetPath(FlameTurtle().assetName), Texture::class.java)
-        assets.load(enemyAssetPath(Slime().assetName), Texture::class.java)
         File("assets/binassets/graphics/textures").listFiles()!!
+            .forEach { assets.load(it.toString(), Texture::class.java) }
+        File("assets/binassets/graphics/enemies").listFiles()!!
             .forEach { assets.load(it.toString(), Texture::class.java) }
         assets.finishLoading()
         tileSkin = TileSkin(assets.get("assets/binassets/graphics/tiles/tiles.png", Texture::class.java))
@@ -114,6 +114,7 @@ class DragonTilesGame(val gameConfig: GameConfig) : Game() {
         gameStrings.load(Gdx.files.internal("assets/data/spells.yml").readString())
         gameStrings.load(Gdx.files.internal("assets/data/relics.yml").readString())
         gameStrings.load(Gdx.files.internal("assets/data/enemies.yml").readString())
+        gameStrings.load(Gdx.files.internal("assets/data/tiles.yml").readString())
         gameStrings.loadEvent(Gdx.files.internal("assets/data/events.yml").readString())
 
         ToStringBuilder.setDefaultStyle(ToStringStyle.SHORT_PREFIX_STYLE)

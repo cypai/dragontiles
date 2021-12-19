@@ -13,6 +13,11 @@ base:status:Break:
     name: Break
     description: Takes 50% more damage when attacked with Elemental damage.
 
+base:status:Frenzy:
+  en:
+    name: Frenzy
+    description: Put a Volatile Fumble Tile on top of the draw pile each time you cast an Effect.
+
 base:status:DragonRage:
   en:
     name: Dragon Rage
