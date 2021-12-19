@@ -130,6 +130,7 @@ class HoverableComponent : Component() {
     var exitEvent: Event? = null
     var enterCallback: (() -> Unit)? = null
     var exitCallback: (() -> Unit)? = null
+    var recheck = false
 }
 
 class TextLabelComponent : Component() {

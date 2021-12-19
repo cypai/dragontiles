@@ -66,6 +66,7 @@ class StatusSystem(private val game: DragonTilesGame) : NoProcessingSystem() {
         cSprite.sprite = Sprite(game.assets.get(status.assetName, Texture::class.java))
         val cHover = mHoverable.create(eid)
         cHover.enterCallback = {
+            cHover.recheck = true
             sTooltip.addNameDescLocalization(game.gameStrings.nameDescLocalization(status.strId))
             sTooltip.showTooltip()
         }

@@ -1,12 +1,16 @@
 package com.pipai.dragontiles.artemis.systems.animation
 
 import com.artemis.ComponentMapper
+import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.g2d.Sprite
 import com.badlogic.gdx.math.Interpolation
 import com.badlogic.gdx.math.Vector2
 import com.pipai.dragontiles.artemis.components.*
 import com.pipai.dragontiles.artemis.events.TileClickEvent
+import com.pipai.dragontiles.artemis.systems.ui.TooltipSystem
+import com.pipai.dragontiles.data.Suit
 import com.pipai.dragontiles.data.TileInstance
+import com.pipai.dragontiles.data.TileStatus
 import com.pipai.dragontiles.gui.CombatUiLayout
 
 abstract class TileAnimation(protected val layout: CombatUiLayout) : Animation() {
@@ -17,20 +21,52 @@ abstract class TileAnimation(protected val layout: CombatUiLayout) : Animation()
     private lateinit var mDepth: ComponentMapper<DepthComponent>
     private lateinit var mSprite: ComponentMapper<SpriteComponent>
     private lateinit var mClickable: ComponentMapper<ClickableComponent>
+    private lateinit var mHoverable: ComponentMapper<HoverableComponent>
 
-    fun createTile(tile: TileInstance,
-                   x: Float,
-                   y: Float): Int {
+    private lateinit var sTooltip: TooltipSystem
+
+    fun createTile(
+        tile: TileInstance,
+        x: Float,
+        y: Float
+    ): Int {
         val entityId = world.create()
         val cTile = mTile.create(entityId)
         cTile.tile = tile
         val cSprite = mSprite.create(entityId)
         cSprite.sprite = Sprite(layout.tileSkin.regionFor(tile.tile))
+        when (tile.tileStatus) {
+            TileStatus.BURN -> cSprite.sprite.color = Color.RED
+            TileStatus.FREEZE -> cSprite.sprite.color = Color.BLUE
+            TileStatus.SHOCK -> cSprite.sprite.color = Color.YELLOW
+            TileStatus.VOLATILE -> cSprite.sprite.color = Color.PINK
+            else -> {
+            }
+        }
         mDepth.create(entityId)
         val cXy = mXy.create(entityId)
         cXy.setXy(x, y)
         val cClickable = mClickable.create(entityId)
         cClickable.eventGenerator = { TileClickEvent(entityId, it) }
+        val cHoverable = mHoverable.create(entityId)
+        cHoverable.enterCallback = {
+            cHoverable.recheck = true
+            if (tile.tile.suit == Suit.FUMBLE) {
+                sTooltip.addKeyword("@FumbleTile")
+            }
+            when (tile.tileStatus) {
+                TileStatus.BURN -> sTooltip.addKeyword("@Burn")
+                TileStatus.FREEZE -> sTooltip.addKeyword("@Freeze")
+                TileStatus.SHOCK -> sTooltip.addKeyword("@Shock")
+                TileStatus.VOLATILE -> sTooltip.addKeyword("@Volatile")
+                else -> {
+                }
+            }
+            sTooltip.showTooltip()
+        }
+        cHoverable.exitCallback = {
+            sTooltip.hideTooltip()
+        }
         return entityId
     }
 

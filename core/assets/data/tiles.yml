@@ -1,16 +1,16 @@
-base:tilestatus:FumbleTile:
+base:keywords:FumbleTile:
   en:
     key: "@FumbleTile"
     name: Fumble Tile
     description: A tile that doesn't match any suit or other tiles.
 
-base:tilestatus:Burn:
+base:keywords:Burn:
   en:
     key: "@Burn"
     name: Burn
     description: "Take 2 piercing damage if used as a @Component."
 
-base:tilestatus:Freeze:
+base:keywords:Freeze:
   en:
     key: "@Freeze"
     name: Freeze
@@ -22,7 +22,7 @@ base:keywords:Shock:
     name: Shock
     description: "@Disable the spell if used as a @Component."
 
-base:tilestatus:Volatile:
+base:keywords:Volatile:
   en:
     key: "@Volatile"
     name: Volatile
