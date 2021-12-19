@@ -174,7 +174,7 @@ abstract class Rune : Spell() {
 }
 
 enum class SpellType {
-    ATTACK, EFFECT, RUNE
+    ATTACK, EFFECT, POWER, RUNE, SORCERY
 }
 
 enum class TargetType {

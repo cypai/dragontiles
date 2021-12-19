@@ -4,7 +4,7 @@ import com.pipai.dragontiles.data.StarType
 import com.pipai.dragontiles.data.Suit
 import com.pipai.dragontiles.data.Tile
 import com.pipai.dragontiles.data.TileInstance
-import com.pipai.dragontiles.fullcast.findFullCastHand
+import com.pipai.dragontiles.sorceries.findFullCastHand
 import org.junit.Assert
 import org.junit.Test
 

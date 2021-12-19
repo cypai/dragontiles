@@ -1,4 +1,4 @@
-package com.pipai.dragontiles.fullcast
+package com.pipai.dragontiles.sorceries
 
 import com.pipai.dragontiles.combat.CombatApi
 import com.pipai.dragontiles.data.TileInstance
@@ -7,7 +7,7 @@ import com.pipai.dragontiles.spells.Sequential
 import com.pipai.dragontiles.utils.with
 import com.pipai.dragontiles.utils.withoutAll
 
-abstract class FullCastSpell {
+abstract class Sorcery {
     abstract val id: String
     abstract suspend fun onCast(hand: FullCastHand, api: CombatApi)
 }
