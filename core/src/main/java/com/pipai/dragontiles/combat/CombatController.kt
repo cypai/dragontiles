@@ -63,18 +63,15 @@ class CombatController(
 
     suspend fun runTurn() {
         combat.turnNumber += 1
-        combat.enemies
-            .filter { it.hp > 0 }
-            .forEach {
-                val intent = if (api.enemyHasStatus(it, Overloaded::class)) {
-                    StunnedIntent(it)
-                } else {
-                    it.getIntent()
-                }
-                api.changeEnemyIntent(it, intent)
-            }
         if (combat.turnNumber > 1) {
             api.queryOpenPoolDraw()
+        }
+        if (combat.turnNumber == 1) {
+            // Normally intents are changed after endTurn(), this inits the intents and avoids messing with Stunned
+            combat.enemies
+                .forEach {
+                    api.changeEnemyIntent(it, it.getIntent())
+                }
         }
         api.draw(runData.hero.handSize - combat.hand.size - combat.assigned.values.map { it.size }.sum())
         eventBus.dispatch(TurnStartEvent(combat.turnNumber))
@@ -93,7 +90,11 @@ class CombatController(
         combat.enemies
             .filter { it.hp > 0 }
             .forEach {
-                api.changeEnemyIntent(it, it.nextIntent(api))
+                var intent = it.nextIntent(api)
+                if (api.enemyHasStatus(it, Overloaded::class)) {
+                    intent = StunnedIntent(it)
+                }
+                api.changeEnemyIntent(it, intent)
             }
         combat.spells.forEach { it.turnReset() }
         combat.sideDeck.forEach { it.turnReset() }
