@@ -316,7 +316,9 @@ class CombatApi(
         eventBus.dispatch(EnemyDamageEvent(enemy, damage))
         if (enemy.hp <= 0) {
             combat.enemyIntent.remove(enemy.id)
-            combat.enemyStatus[enemy.id]!!.clear()
+            val statuses = combat.enemyStatus[enemy.id]!!
+            statuses.forEach { eventBus.unregister(it) }
+            statuses.clear()
             eventBus.dispatch(EnemyDefeatedEvent(enemy))
             if (combat.enemies.all { it.hp <= 0 }) {
                 combat.heroStatus.clear()
