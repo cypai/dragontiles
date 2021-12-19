@@ -293,6 +293,7 @@ class CombatApi(
         if (enemy.flux >= enemy.fluxMax) {
             enemy.flux = enemy.fluxMax
             addStatusToEnemy(enemy, Overloaded(2))
+            changeEnemyIntent(enemy, StunnedIntent(enemy))
         }
     }
 
