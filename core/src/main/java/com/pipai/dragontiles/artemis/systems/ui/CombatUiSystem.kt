@@ -320,7 +320,7 @@ class CombatUiSystem(
     private fun spellCardClickCallback(event: InputEvent, spellCard: SpellCard) {
         when (stateMachine.currentState) {
             CombatUiState.ROOT -> {
-                if (spells.values.contains(spellCard)) {
+                if (!spellCard.powered && spells.values.contains(spellCard)) {
                     val spell = spellCard.getSpell()
                     when (event.button) {
                         Input.Buttons.LEFT -> {
@@ -451,6 +451,13 @@ class CombatUiSystem(
                     GlobalScope.launch {
                         spell.activate(sCombat.controller.api)
                     }
+                }
+            }
+            is PowerSpell -> {
+                spell.fill(components)
+                sAnimation.pauseUiMode = true
+                GlobalScope.launch {
+                    spell.cast(CastParams(listOf()), sCombat.controller.api)
                 }
             }
         }
@@ -914,6 +921,9 @@ class CombatUiSystem(
                 spellCard.data[uiSystem.allowHoverMove] = 1
                 spellCard.update()
                 val spell = spellCard.getSpell()
+                if (spell != null && spell is PowerSpell && spell.powered) {
+                    spellCard.makePowered()
+                }
                 if (spell == null || !spell.available() || uiSystem.overloaded) {
                     spellCard.disable()
                 } else {

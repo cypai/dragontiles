@@ -45,6 +45,9 @@ class SpellCard(
 
     var target: Enemy? = null
     private var enabled = true
+    var powered = false
+        private set
+
     val data: MutableMap<String, Int> = mutableMapOf()
 
     init {
@@ -168,12 +171,21 @@ class SpellCard(
 
     fun disable() {
         enabled = false
-        background = skin.getDrawable("frameDrawableDark")
+        if (!powered) {
+            background = skin.getDrawable("frameDrawableDark")
+        }
+    }
+
+    fun makePowered() {
+        powered = true
+        background = skin.getDrawable("frameDrawableLight")
     }
 
     fun enable() {
         enabled = true
-        background = skin.getDrawable("frameDrawable")
+        if (!powered) {
+            background = skin.getDrawable("frameDrawable")
+        }
     }
 
     fun update() {

@@ -68,7 +68,7 @@ data class PlayerDamageEvent(val amount: Int) : CombatEvent
 
 data class ComponentConsumeEvent(val components: List<TileInstance>) : CombatEvent
 
-data class SpellCastedEvent(val spell: StandardSpell) : CombatEvent
+data class SpellCastedEvent(val spell: Spell) : CombatEvent
 
 data class RuneActivatedEvent(val rune: Rune) : CombatEvent
 

@@ -89,7 +89,6 @@ abstract class StandardSpell : Spell() {
         return when (key) {
             "!r" -> (aspects.findAs(LimitedRepeatableAspect::class)?.max ?: 1) - repeated
             else -> super.dynamicValue(key, api, params)
-
         }
     }
 
@@ -173,8 +172,44 @@ abstract class Rune : Spell() {
     }
 }
 
+abstract class PowerSpell : Spell() {
+    private val logger = getLogger()
+
+    override val type: SpellType = SpellType.POWER
+
+    var powered = false
+
+    override fun available(): Boolean = !powered
+
+    suspend fun cast(params: CastParams, api: CombatApi) {
+        if (available() && !requirement.satisfied(requirement.componentSlots.mapNotNull { it.tile })) {
+            logger.error("Attempted to cast without being ready. State: $this")
+            return
+        }
+        api.castSpell(this)
+        handleComponents(api)
+        onCast(params, api)
+        powered = true
+    }
+
+    protected abstract suspend fun onCast(params: CastParams, api: CombatApi)
+
+    open suspend fun handleComponents(api: CombatApi) {
+        api.consume(components())
+    }
+
+    override fun combatReset() {
+        powered = false
+    }
+
+    override fun turnReset() {
+        powered = false
+        data.clear()
+    }
+}
+
 enum class SpellType {
-    ATTACK, EFFECT, POWER, RUNE, SORCERY
+    ATTACK, EFFECT, POWER, RUNE
 }
 
 enum class TargetType {

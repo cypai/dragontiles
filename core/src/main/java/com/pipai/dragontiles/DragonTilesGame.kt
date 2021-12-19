@@ -145,6 +145,8 @@ class DragonTilesGame(val gameConfig: GameConfig) : Game() {
 
         val disabledDrawable = skin.newDrawable("white", Color(0.1f, 0.1f, 0.1f, 0.5f))
         skin.add("disabled", disabledDrawable, Drawable::class.java)
+        val poweredDrawable = skin.newDrawable("white", Color(1f, 1f, 1f, 0.8f))
+        skin.add("powered", poweredDrawable, Drawable::class.java)
 
         val frameTexture = Texture(Gdx.files.local("assets/binassets/graphics/textures/frame.png"))
         val framePatch = NinePatch(frameTexture, 5, 5, 5, 5)
@@ -165,6 +167,14 @@ class DragonTilesGame(val gameConfig: GameConfig) : Game() {
             )
         )
         skin.add("frameDrawableDark", frameDrawableDark, Drawable::class.java)
+        val frameDrawableLight = MultiDrawable(
+            arrayOf(
+                OffsetDrawable(skin.getTiledDrawable("bg"), 1f, 3f, -4f, -4f),
+                OffsetDrawable(poweredDrawable, 1f, 3f, -4f, -4f),
+                skin.getDrawable("frame")
+            )
+        )
+        skin.add("frameDrawableLight", frameDrawableLight, Drawable::class.java)
         val targetOutlineTexture =
             Texture(Gdx.files.local("assets/binassets/graphics/textures/target_outline_gray.png"))
         val targetOutlinePatch = NinePatch(targetOutlineTexture, 5, 5, 5, 5)

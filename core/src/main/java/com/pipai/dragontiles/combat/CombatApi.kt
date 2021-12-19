@@ -52,7 +52,7 @@ class CombatApi(
         return combat.enemies.first { it.id == id }
     }
 
-    suspend fun castSpell(spell: StandardSpell) {
+    suspend fun castSpell(spell: Spell) {
         eventBus.dispatch(SpellCastedEvent(spell))
     }
 
