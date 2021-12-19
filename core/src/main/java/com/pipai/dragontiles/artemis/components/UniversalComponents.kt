@@ -126,8 +126,10 @@ class ClickableComponent : Component() {
 
 class HoverableComponent : Component() {
     var hovering: Boolean = false
-    lateinit var enterEvent: Event
-    lateinit var exitEvent: Event
+    var enterEvent: Event? = null
+    var exitEvent: Event? = null
+    var enterCallback: (() -> Unit)? = null
+    var exitCallback: (() -> Unit)? = null
 }
 
 class TextLabelComponent : Component() {

@@ -55,11 +55,13 @@ class HoverableSystem(private val config: GameConfig) : NoProcessingSystem(), In
     private fun updateHover(cHover: HoverableComponent, hover: Boolean) {
         if (!cHover.hovering && hover) {
             cHover.hovering = true
-            sEvent.dispatch(cHover.enterEvent)
+            cHover.enterEvent?.let { sEvent.dispatch(it) }
+            cHover.enterCallback?.invoke()
         }
         if (cHover.hovering && !hover) {
             cHover.hovering = false
-            sEvent.dispatch(cHover.exitEvent)
+            cHover.exitEvent?.let { sEvent.dispatch(it) }
+            cHover.exitCallback?.invoke()
         }
 
     }

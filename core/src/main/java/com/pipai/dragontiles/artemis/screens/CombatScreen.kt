@@ -53,7 +53,7 @@ class CombatScreen(game: DragonTilesGame, runData: RunData, encounter: Encounter
                 AnchorSystem(),
                 CombatAnimationSystem(game),
                 MouseXySystem(game.gameConfig),
-                TooltipSystem(game, backStage),
+                TooltipSystem(game, frontStage),
                 FullScreenColorSystem(game),
                 RewardsSystem(game, runData, frontStage),
                 MapUiSystem(game, backStage, runData),
@@ -82,6 +82,7 @@ class CombatScreen(game: DragonTilesGame, runData: RunData, encounter: Encounter
         inputProcessor.addAlwaysOnProcessor(world.getSystem(HoverableSystem::class.java))
         inputProcessor.addAlwaysOnProcessor(world.getSystem(CombatUiSystem::class.java))
         inputProcessor.addAlwaysOnProcessor(world.getSystem(DeckDisplayUiSystem::class.java))
+        inputProcessor.addAlwaysOnProcessor(world.getSystem(TooltipSystem::class.java))
         inputProcessor.addAlwaysOnProcessor(frontStage)
         inputProcessor.addAlwaysOnProcessor(backStage)
         inputProcessor.addAlwaysOnProcessor(ExitInputProcessor())

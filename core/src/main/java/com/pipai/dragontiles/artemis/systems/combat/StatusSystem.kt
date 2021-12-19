@@ -7,10 +7,12 @@ import com.pipai.dragontiles.artemis.BackendId
 import com.pipai.dragontiles.artemis.EntityId
 import com.pipai.dragontiles.artemis.components.*
 import com.pipai.dragontiles.artemis.systems.NoProcessingSystem
+import com.pipai.dragontiles.artemis.systems.ui.TooltipSystem
 import com.pipai.dragontiles.status.Status
 import com.pipai.dragontiles.utils.allOf
 import com.pipai.dragontiles.utils.fetch
 import com.pipai.dragontiles.utils.mapper
+import com.pipai.dragontiles.utils.system
 
 class StatusSystem(private val game: DragonTilesGame) : NoProcessingSystem() {
     private val mXy by mapper<XYComponent>()
@@ -18,6 +20,9 @@ class StatusSystem(private val game: DragonTilesGame) : NoProcessingSystem() {
     private val mStatus by mapper<StatusComponent>()
     private val mSprite by mapper<SpriteComponent>()
     private val mTextLabel by mapper<TextLabelComponent>()
+    private val mHoverable by mapper<HoverableComponent>()
+
+    private val sTooltip by system<TooltipSystem>()
 
     private val heroStatuses: MutableList<EntityId> = mutableListOf()
     private val enemyStatuses: MutableMap<EntityId, MutableList<BackendId>> = mutableMapOf()
@@ -59,6 +64,12 @@ class StatusSystem(private val game: DragonTilesGame) : NoProcessingSystem() {
         cXy.setXy(cTargetXy.x + 16f * index, cTargetXy.y - 44f)
         val cSprite = mSprite.create(eid)
         cSprite.sprite = Sprite(game.assets.get(status.assetName, Texture::class.java))
+        val cHover = mHoverable.create(eid)
+        cHover.enterCallback = {
+            sTooltip.addNameDescLocalization(game.gameStrings.nameDescLocalization(status.strId))
+            sTooltip.showTooltip()
+        }
+        cHover.exitCallback = { sTooltip.hideTooltip() }
 
         if (status.displayAmount) {
             val cText = mTextLabel.create(eid)

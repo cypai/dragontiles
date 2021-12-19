@@ -7,6 +7,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.utils.Align
 import com.pipai.dragontiles.DragonTilesGame
 import com.pipai.dragontiles.artemis.systems.NoProcessingSystem
+import com.pipai.dragontiles.data.KeywordLocalization
+import com.pipai.dragontiles.data.NameDescLocalization
 
 class TooltipSystem(game: DragonTilesGame, var stage: Stage) : NoProcessingSystem(), InputProcessor {
 
@@ -21,6 +23,10 @@ class TooltipSystem(game: DragonTilesGame, var stage: Stage) : NoProcessingSyste
 
     private var mouseX: Float = 0f
     private var mouseY: Float = 0f
+
+    fun addNameDescLocalization(nameDescLocalization: NameDescLocalization) {
+        addText(nameDescLocalization.name, nameDescLocalization.description, true)
+    }
 
     fun addText(header: String, text: String, recurse: Boolean) {
         if (header !in headerSet) {
@@ -57,10 +63,9 @@ class TooltipSystem(game: DragonTilesGame, var stage: Stage) : NoProcessingSyste
         table.remove()
     }
 
-    fun showTooltip(stage: Stage) {
+    fun showTooltip() {
         table.clearChildren()
         table.remove()
-        this.stage = stage
         table.background = skin.getDrawable("frameDrawable")
         textPairs.forEach {
             val header = Label(it.first, skin, "small")
