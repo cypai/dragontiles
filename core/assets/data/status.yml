@@ -16,7 +16,7 @@ base:status:Break:
 base:status:Frenzy:
   en:
     name: Frenzy
-    description: Put a Volatile Fumble Tile on top of the draw pile each time you cast an Effect.
+    description: Gain a @Volatile @FumbleTile each time you cast an Effect.
 
 base:status:DragonRage:
   en:
