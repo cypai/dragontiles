@@ -105,6 +105,10 @@ class CombatApi(
     }
 
     suspend fun transformTile(tileInstance: TileInstance, tile: Tile, sortHand: Boolean) {
+        if (tileInstance.tileStatus == TileStatus.FREEZE) {
+            logger.error("Attempted to transform a frozen tile")
+            return
+        }
         val newTile = TileInstance(tile, TileStatus.NONE, nextId())
         val index = combat.hand.indexOf(tileInstance)
         combat.hand.removeAt(index)
