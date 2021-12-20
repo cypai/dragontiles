@@ -90,9 +90,10 @@ class CombatController(
         combat.enemies
             .filter { it.hp > 0 }
             .forEach {
-                var intent = it.nextIntent(api)
-                if (api.enemyHasStatus(it, Overloaded::class)) {
-                    intent = StunnedIntent(it)
+                val intent = if (api.enemyHasStatus(it, Overloaded::class)) {
+                    StunnedIntent(it)
+                } else {
+                    it.nextIntent(api)
                 }
                 api.changeEnemyIntent(it, intent)
             }
