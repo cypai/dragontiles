@@ -10,9 +10,9 @@ class QuickInvoke : StandardSpell() {
     override val targetType: TargetType = TargetType.SINGLE
     override val rarity: Rarity = Rarity.COMMON
     override val aspects: MutableList<SpellAspect> = mutableListOf(
-        AttackDamageAspect(3),
+        AttackDamageAspect(1),
         LimitedRepeatableAspect(2),
-        FluxGainAspect(1)
+        FluxGainAspect(2)
     )
 
     override suspend fun onCast(params: CastParams, api: CombatApi) {
