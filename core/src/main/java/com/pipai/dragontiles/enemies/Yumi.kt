@@ -12,7 +12,7 @@ class Yumi : Enemy() {
     override val assetName: String = "rabbit_youkai.png"
 
     override val hpMax: Int = 40
-    override val fluxMax: Int = 50
+    override val fluxMax: Int = 60
 
     private var turns: Int = 1
     private var hasOverloaded = false
