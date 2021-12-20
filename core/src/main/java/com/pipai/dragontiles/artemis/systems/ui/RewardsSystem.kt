@@ -10,10 +10,12 @@ import com.pipai.dragontiles.DragonTilesGame
 import com.pipai.dragontiles.artemis.systems.NoProcessingSystem
 import com.pipai.dragontiles.artemis.systems.combat.CombatControllerSystem
 import com.pipai.dragontiles.artemis.systems.rendering.FullScreenColorSystem
+import com.pipai.dragontiles.dungeon.GlobalApi
 import com.pipai.dragontiles.dungeon.RunData
 import com.pipai.dragontiles.gui.SpellCard
 import com.pipai.dragontiles.spells.Spell
 import com.pipai.dragontiles.utils.system
+import net.mostlyoriginal.api.event.common.EventSystem
 
 class RewardsSystem(
     private val game: DragonTilesGame,
@@ -22,7 +24,6 @@ class RewardsSystem(
 ) : NoProcessingSystem() {
 
     private val skin = game.skin
-    private val config = game.gameConfig
 
     private val rewardsTable = Table()
     private val rewardsTitle = Label("Rewards! Choose a spell.", skin, "white")
@@ -31,11 +32,15 @@ class RewardsSystem(
     private val spellRewards: List<Spell> = game.heroSpells.generateRewards(runData, 3)
 
     private val sCombat by system<CombatControllerSystem>()
-    private val sTooltip by system<TooltipSystem>()
     private val sMap by system<MapUiSystem>()
     private val sFsc by system<FullScreenColorSystem>()
+    private val sEvent by system<EventSystem>()
+
+    private lateinit var api: GlobalApi
 
     override fun initialize() {
+        api = GlobalApi(runData, sEvent)
+
         skipBtn.addListener(object : ClickListener() {
             override fun clicked(event: InputEvent?, x: Float, y: Float) {
                 runData.hero.gold += 1
@@ -54,11 +59,7 @@ class RewardsSystem(
         spellRewards.forEach { spell ->
             val spellCard = SpellCard(game, spell, null, game.skin, sCombat.controller.api)
             spellCard.addClickCallback { _, _ ->
-                if (runData.hero.spells.size >= runData.hero.spellsSize) {
-                    runData.hero.sideDeck.add(spell)
-                } else {
-                    runData.hero.spells.add(spell)
-                }
+                api.addSpellToDeck(spell)
                 sMap.showMap()
                 rewardsTable.remove()
             }
