@@ -109,6 +109,10 @@ class CombatApi(
         eventBus.dispatch(TileStatusChangeEvent(tiles, tileStatus))
     }
 
+    suspend fun inflictTileStatusOnHand(strategy: TileStatusInflictStrategy) {
+        setTileStatus(strategy.select(combat.hand, runData.rng), strategy.tileStatus)
+    }
+
     suspend fun transformTile(tileInstance: TileInstance, tile: Tile, sortHand: Boolean) {
         if (tileInstance.tileStatus == TileStatus.FREEZE) {
             logger.error("Attempted to transform a frozen tile")
@@ -311,6 +315,11 @@ class CombatApi(
         }
     }
 
+    suspend fun dealAoeFluxDamage(damage: Int) {
+        combat.enemies.filter { it.hp > 0 }
+            .forEach { dealFluxDamageToEnemy(it, damage) }
+    }
+
     suspend fun enemyLoseFlux(enemy: Enemy, amount: Int) {
         val actualAmount = if (enemy.flux >= amount) amount else enemy.flux
         enemy.flux -= actualAmount
@@ -324,11 +333,6 @@ class CombatApi(
             combat.enemyIntent[enemy.id] = intent
         }
         eventBus.dispatch(EnemyChangeIntentEvent(enemy, intent))
-    }
-
-    suspend fun dealAoeDamage(damage: Int) {
-        combat.enemies.filter { it.hp > 0 }
-            .forEach { dealDamageToEnemy(it, damage) }
     }
 
     suspend fun dealDamageToEnemy(enemy: Enemy, damage: Int) {

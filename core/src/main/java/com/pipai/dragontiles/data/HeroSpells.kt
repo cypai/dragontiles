@@ -16,7 +16,7 @@ class HeroSpells {
             Vent(),
             ElementalRune(),
             Break(),
-            Concentrate(),
+            Fireball(),
         )
     }
 
@@ -35,6 +35,9 @@ class HeroSpells {
             Precipitate(),
             BurnRune(),
             FrostRune(),
+            Fireball(),
+            IceShard(),
+            ChainLightning(),
         )
     }
 

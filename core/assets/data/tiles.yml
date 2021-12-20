@@ -1,3 +1,21 @@
+base:keywords:BurnTile:
+  en:
+    key: "@BurnTile"
+    name: Burn Tile
+    description: A tile with @Burn.
+
+base:keywords:FreezeTile:
+  en:
+    key: "@FreezeTile"
+    name: Freeze Tile
+    description: A tile with @Freeze.
+
+base:keywords:ShockTile:
+  en:
+    key: "@ShockTile"
+    name: Shock Tile
+    description: A tile with @Shock.
+
 base:keywords:FumbleTile:
   en:
     key: "@FumbleTile"

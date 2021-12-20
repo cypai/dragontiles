@@ -73,7 +73,7 @@ data class DebuffIntent(
         attackIntent?.execute(api)
         status?.let { api.addStatusToHero(status) }
         inflictTileStatuses.forEach { strategy ->
-            api.setTileStatus(strategy.select(api.combat.hand, api.runData.rng), strategy.tileStatus)
+            api.inflictTileStatusOnHand(strategy)
         }
     }
 }

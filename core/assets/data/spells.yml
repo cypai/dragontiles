@@ -116,12 +116,12 @@ base:spells:FeedbackLoop:
 base:spells:BurnRune:
   en:
     name: Burn Rune
-    description: Deal @X @AOE damage for each @Burn in your hand at the end of your turn.
+    description: Deal @X @AOE damage for each @BurnTile in your hand at the end of your turn.
 
 base:spells:FrostRune:
   en:
     name: Frost Rune
-    description: Lose @X @Flux for each @Freeze in your hand at the end of your turn.
+    description: Lose @X @Flux for each @FreezeTile in your hand at the end of your turn.
 
 base:spells:ThunderRune:
   en:
@@ -142,6 +142,16 @@ base:spells:ChainLightning:
   en:
     name: Chain Lightning
     description: Deal !d Lightning damage @AOE. @Shock a tile in your hand.
+
+base:spells:Chillsink:
+  en:
+    name: Chillsink
+    description: Remove all @Freeze from your hand. Lose 3 @Flux for each unfrozen tile.
+
+base:spells:MassTransmute:
+  en:
+    name: Mass Transmute
+    description: Transform all @Elemented tiles in your hand to the element of the @Components.
 
 base:spells:ElementalRune:
   en:

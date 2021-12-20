@@ -17,6 +17,7 @@ import com.pipai.dragontiles.relics.Transmuter
 import com.pipai.dragontiles.spells.common.Blast
 import com.pipai.dragontiles.spells.common.Bump
 import com.pipai.dragontiles.spells.common.Fetch
+import com.pipai.dragontiles.spells.elementalist.BurnRune
 import com.pipai.dragontiles.spells.elementalist.QuickInvoke
 import java.util.*
 
@@ -50,7 +51,7 @@ class MainMenuUiSystem(
                     Hero(
                         "Elementalist", 60, 60, 0, 40, 17,
                         game.heroSpells.elementalistStarterDeck(), 6,
-                        mutableListOf(QuickInvoke(), Bump(), Blast()), 3,
+                        mutableListOf(QuickInvoke(), Bump(), BurnRune()), 3,
                         mutableListOf(Transmuter()),
                         5
                     ),
