@@ -29,7 +29,8 @@ abstract class Dungeon {
                 1 -> {
                     repeat(3) {
                         //floor.add(MapNode(MapNodeType.TOWN, false, mutableListOf(0), mutableListOf()))
-                        floor.add(MapNode(MapNodeType.COMBAT, false, mutableListOf(0), mutableListOf()))
+                        //floor.add(MapNode(MapNodeType.COMBAT, false, mutableListOf(0), mutableListOf()))
+                        floor.add(MapNode(MapNodeType.ELITE, false, mutableListOf(0), mutableListOf()))
                     }
                 }
                 10 -> {
@@ -143,6 +144,10 @@ class PlainsDungeon : Dungeon() {
                     Pair(Slime(), Vector2(1000f, 420f))
             ))
     )
-    override val eliteEncounters: MutableList<Encounter> = mutableListOf()
+    override val eliteEncounters: MutableList<Encounter> = mutableListOf(
+        Encounter(listOf(
+            Pair(Yumi(), Vector2(750f, 420f))
+        )),
+    )
     override val bossEncounters: MutableList<Encounter> = mutableListOf()
 }

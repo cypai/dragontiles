@@ -27,3 +27,8 @@ base:enemies:RiverSpirit:
   en:
     name: River Spirit
     description: Naturally vents flux.
+
+base:enemies:Yumi:
+  en:
+    name: Yumi
+    description: A Moon Rabbit. Her name sounds like Corn or Bow, but actually means Jade Seeds.

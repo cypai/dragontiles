@@ -150,6 +150,9 @@ class MapUiSystem(
                 MapNodeType.COMBAT -> {
                     game.screen = CombatScreen(game, runData, runData.dungeon.easyEncounter(runData))
                 }
+                MapNodeType.ELITE -> {
+                    game.screen = CombatScreen(game, runData, runData.dungeon.eliteEncounter(runData))
+                }
                 MapNodeType.EVENT -> {
                     game.screen = EventScreen(game, runData, DragonInquiryEvent())
                 }
