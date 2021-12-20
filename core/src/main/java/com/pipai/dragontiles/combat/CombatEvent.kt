@@ -95,7 +95,13 @@ data class QueryTileOptionsEvent(
     val continuation: Continuation<List<Tile>>
 ) : CombatEvent
 
-data class StatusAdjustedEvent(
+data class EnemyStatusChangeEvent(
+    val enemy: Enemy,
+    val status: Status,
+    val previousAmount: Int,
+) : CombatEvent
+
+data class StatusOverviewAdjustedEvent(
     val heroStatus: List<Status>,
     val enemyStatus: Map<Int, List<Status>>
 ) : CombatEvent

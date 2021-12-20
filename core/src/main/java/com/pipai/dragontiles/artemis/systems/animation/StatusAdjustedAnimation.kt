@@ -2,10 +2,10 @@ package com.pipai.dragontiles.artemis.systems.animation
 
 import com.pipai.dragontiles.artemis.systems.combat.StatusSystem
 import com.pipai.dragontiles.artemis.systems.ui.CombatUiSystem
-import com.pipai.dragontiles.combat.StatusAdjustedEvent
+import com.pipai.dragontiles.combat.StatusOverviewAdjustedEvent
 import com.pipai.dragontiles.status.Overloaded
 
-class StatusAdjustedAnimation(private val ev: StatusAdjustedEvent) : Animation() {
+class StatusAdjustedAnimation(private val ev: StatusOverviewAdjustedEvent) : Animation() {
 
     private lateinit var sStatus: StatusSystem
     private lateinit var sUi: CombatUiSystem

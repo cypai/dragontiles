@@ -67,3 +67,8 @@ base:enemies:KillerRabbit:
   en:
     name: Killer Rabbit
     description: A killer rabbit. Deceptively dangerous.
+
+base:enemies:Bull:
+  en:
+    name: Bull
+    description: Pumps itself up.

@@ -1,6 +1,7 @@
 package com.pipai.dragontiles.dungeon
 
 import com.badlogic.gdx.math.Vector2
+import com.pipai.dragontiles.enemies.Bull
 import com.pipai.dragontiles.enemies.FlameTurtle
 import com.pipai.dragontiles.enemies.KillerRabbit
 import com.pipai.dragontiles.enemies.Slime
@@ -128,6 +129,7 @@ class PlainsDungeon : Dungeon() {
                 Pair(KillerRabbit(), Vector2(740f, 400f)),
                 Pair(KillerRabbit(), Vector2(1010f, 400f))
             )),
+            Encounter(listOf(Pair(Bull(), Vector2(750f, 420f)))),
     )
     override val standardEncounters: MutableList<Encounter> = mutableListOf(
             Encounter(listOf(

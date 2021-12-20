@@ -320,6 +320,7 @@ class CombatApi(
             val statuses = combat.enemyStatus[enemy.id]!!
             statuses.forEach { eventBus.unregister(it) }
             statuses.clear()
+            eventBus.unregister(enemy)
             eventBus.dispatch(EnemyDefeatedEvent(enemy))
             if (combat.enemies.all { it.hp <= 0 }) {
                 combat.heroStatus.clear()
@@ -403,10 +404,15 @@ class CombatApi(
         if (maybeStatus == null) {
             enemyStatus.add(status)
             eventBus.register(status)
+            eventBus.dispatch(EnemyStatusChangeEvent(enemy, status, 0))
         } else {
+            val previousAmount = maybeStatus.amount
             maybeStatus.amount += status.amount
             if (maybeStatus.amount == 0) {
+                // No dispatch since removeEnemyStatus calls the EnemyStatusChangeEvent
                 removeEnemyStatus(enemy, status::class)
+            } else {
+                eventBus.dispatch(EnemyStatusChangeEvent(enemy, maybeStatus, previousAmount))
             }
         }
         notifyStatusUpdated()
@@ -445,6 +451,8 @@ class CombatApi(
         val statusList = combat.enemyStatus[enemy.id]!!
         val item = statusList.find { statusType.isInstance(it) }
         if (item != null) {
+            item.amount = 0
+            eventBus.dispatch(EnemyStatusChangeEvent(enemy, item, item.amount))
             statusList.remove(item)
             eventBus.unregister(item)
             notifyStatusUpdated()
@@ -457,7 +465,7 @@ class CombatApi(
         combat.heroStatus.removeAll { it.amount <= 0 }
         combat.enemyStatus.values.forEach { es -> es.removeAll { it.amount <= 0 } }
         val enemyStatusCopy = combat.enemyStatus.mapValues { es -> es.value.map { s -> s.deepCopy() } }
-        eventBus.dispatch(StatusAdjustedEvent(deepCopy(combat.heroStatus), enemyStatusCopy))
+        eventBus.dispatch(StatusOverviewAdjustedEvent(deepCopy(combat.heroStatus), enemyStatusCopy))
     }
 
     suspend fun queryTiles(

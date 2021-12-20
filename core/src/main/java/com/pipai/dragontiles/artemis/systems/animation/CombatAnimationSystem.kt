@@ -114,7 +114,7 @@ class CombatAnimationSystem(private val game: DragonTilesGame) : BaseSystem(), A
     }
 
     @Subscribe
-    fun handleStatusAdjusted(ev: StatusAdjustedEvent) {
+    fun handleStatusAdjusted(ev: StatusOverviewAdjustedEvent) {
         queueAnimation(StatusAdjustedAnimation(ev))
     }
 
