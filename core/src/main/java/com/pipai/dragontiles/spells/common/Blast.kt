@@ -15,8 +15,6 @@ class Blast : StandardSpell() {
     )
 
     override suspend fun onCast(params: CastParams, api: CombatApi) {
-        params.targets.forEach {
-            api.attack(api.getEnemy(it), elemental(components()), baseDamage())
-        }
+        api.aoeAttack(elemental(components()), baseDamage())
     }
 }

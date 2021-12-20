@@ -116,7 +116,7 @@ base:spells:FeedbackLoop:
 base:spells:BurnRune:
   en:
     name: Burn Rune
-    description: Deal @X @AOE damage for each @BurnTile in your hand at the end of your turn.
+    description: Deal @X Fire @AOE damage for each @BurnTile in your hand at the end of your turn.
 
 base:spells:FrostRune:
   en:

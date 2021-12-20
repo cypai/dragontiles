@@ -2,14 +2,20 @@ package com.pipai.dragontiles.sorceries
 
 import com.pipai.dragontiles.combat.CombatApi
 import com.pipai.dragontiles.data.TileInstance
+import com.pipai.dragontiles.spells.ComponentRequirement
 import com.pipai.dragontiles.spells.Identical
 import com.pipai.dragontiles.spells.Sequential
+import com.pipai.dragontiles.spells.SpellAspect
 import com.pipai.dragontiles.utils.with
 import com.pipai.dragontiles.utils.withoutAll
 
 abstract class Sorcery {
-    abstract val id: String
+    abstract val strId: String
+    abstract val requirement: ComponentRequirement
+    abstract val aspects: MutableList<SpellAspect>
     abstract suspend fun onCast(hand: FullCastHand, api: CombatApi)
+
+    fun components() = requirement.componentSlots.filter { it.tile != null }.map { it.tile!! }.toList()
 }
 
 fun findFullCastHand(hand: List<TileInstance>, fullHandSize: Int): List<FullCastHand> {

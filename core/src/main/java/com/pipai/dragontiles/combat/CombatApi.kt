@@ -291,9 +291,11 @@ class CombatApi(
         return ((amount + flat) * scaling).toInt()
     }
 
-    suspend fun attack(enemy: Enemy, element: Element, amount: Int) {
+    suspend fun attack(enemy: Enemy, element: Element, amount: Int, asAttack: Boolean = true) {
         val damage = calculateDamageOnEnemy(enemy, element, amount)
-        eventBus.dispatch(PlayerAttackEnemyEvent(enemy, element, amount))
+        if (asAttack) {
+            eventBus.dispatch(PlayerAttackEnemyEvent(enemy, element, amount))
+        }
         if (enemyHasStatus(enemy, Dodge::class)) {
             addStatusToEnemy(enemy, Dodge(-1))
         } else {
@@ -305,6 +307,11 @@ class CombatApi(
         }
     }
 
+    suspend fun aoeAttack(element: Element, amount: Int, asAttack: Boolean = true) {
+        combat.enemies.filter { it.hp > 0 }
+            .forEach { attack(it, element, amount, asAttack) }
+    }
+
     suspend fun dealFluxDamageToEnemy(enemy: Enemy, damage: Int) {
         enemy.flux += damage
         eventBus.dispatch(EnemyFluxDamageEvent(enemy, damage))
@@ -313,11 +320,6 @@ class CombatApi(
             addStatusToEnemy(enemy, Overloaded(2))
             changeEnemyIntent(enemy, StunnedIntent(enemy))
         }
-    }
-
-    suspend fun dealAoeFluxDamage(damage: Int) {
-        combat.enemies.filter { it.hp > 0 }
-            .forEach { dealFluxDamageToEnemy(it, damage) }
     }
 
     suspend fun enemyLoseFlux(enemy: Enemy, amount: Int) {

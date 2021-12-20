@@ -3,6 +3,7 @@ package com.pipai.dragontiles.spells.elementalist
 import com.pipai.dragontiles.combat.CombatApi
 import com.pipai.dragontiles.combat.CombatSubscribe
 import com.pipai.dragontiles.combat.TurnEndEvent
+import com.pipai.dragontiles.data.Element
 import com.pipai.dragontiles.data.TileStatus
 import com.pipai.dragontiles.spells.*
 
@@ -15,6 +16,6 @@ class BurnRune : Rune() {
     @CombatSubscribe
     suspend fun onTurnEnd(ev: TurnEndEvent, api: CombatApi) {
         val burns = api.combat.hand.filter { it.tileStatus == TileStatus.BURN }.size
-        api.dealAoeFluxDamage(components().size * burns)
+        api.aoeAttack(Element.FIRE, components().size * burns, false)
     }
 }

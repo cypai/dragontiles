@@ -1,6 +1,8 @@
 package com.pipai.dragontiles.data
 
 import com.pipai.dragontiles.dungeon.RunData
+import com.pipai.dragontiles.sorceries.Eyes
+import com.pipai.dragontiles.sorceries.Sorcery
 import com.pipai.dragontiles.spells.Rarity
 import com.pipai.dragontiles.spells.Spell
 import com.pipai.dragontiles.spells.common.*
@@ -9,14 +11,20 @@ import com.pipai.dragontiles.utils.choose
 
 class HeroSpells {
 
-    fun elementalistStarterDeck(): MutableList<Spell> {
-        return mutableListOf(
+    fun elementalistStarterDeck(): List<Spell> {
+        return listOf(
             Invoke(),
             Strike(),
             Vent(),
             ElementalRune(),
             Break(),
             Fireball(),
+        )
+    }
+
+    fun elementalistStarterSorceries(): List<Sorcery> {
+        return listOf(
+            Eyes(),
         )
     }
 

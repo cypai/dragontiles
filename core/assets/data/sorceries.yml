@@ -1,0 +1,14 @@
+base:sorceries:Eyes:
+  en:
+    name: Eyes
+    description: Deal !d @Elemented damage.
+
+base:sorceries:Pong:
+  en:
+    name: Pong
+    description: Deal !d @Elemented damage.
+
+base:sorceries:Chow:
+  en:
+    name: Chow
+    description: Deal !d @Elemented damage.

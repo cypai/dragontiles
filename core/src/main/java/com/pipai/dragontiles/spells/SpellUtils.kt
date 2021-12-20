@@ -4,6 +4,7 @@ import com.pipai.dragontiles.data.Element
 import com.pipai.dragontiles.data.Suit
 import com.pipai.dragontiles.data.Tile
 import com.pipai.dragontiles.data.TileInstance
+import com.pipai.dragontiles.sorceries.Sorcery
 import com.pipai.dragontiles.utils.findAs
 
 fun elemental(components: List<TileInstance>): Element {
@@ -32,6 +33,10 @@ fun Spell.baseFluxGain(): Int {
 
 fun Spell.baseFluxLoss(): Int {
     return aspects.findAs(FluxLossAspect::class)?.amount ?: 0
+}
+
+fun Sorcery.baseDamage(): Int {
+    return aspects.findAs(AttackDamageAspect::class)?.amount ?: 0
 }
 
 val anySet = setOf(Suit.FIRE, Suit.ICE, Suit.LIGHTNING, Suit.LIFE, Suit.STAR, Suit.FUMBLE)
