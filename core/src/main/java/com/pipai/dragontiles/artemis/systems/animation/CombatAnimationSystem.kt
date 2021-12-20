@@ -168,6 +168,11 @@ class CombatAnimationSystem(private val game: DragonTilesGame) : BaseSystem(), A
     }
 
     @Subscribe
+    fun handleTileStatus(ev: TileStatusChangeEvent) {
+        queueAnimation(TileStatusChangeAnimation(ev))
+    }
+
+    @Subscribe
     fun handleDestroy(ev: TileDestroyedEvent) {
         queueAnimation(TileDestroyAnimation(listOf(ev.tile)))
     }

@@ -3,6 +3,7 @@ package com.pipai.dragontiles.combat
 import com.pipai.dragontiles.data.Element
 import com.pipai.dragontiles.data.Tile
 import com.pipai.dragontiles.data.TileInstance
+import com.pipai.dragontiles.data.TileStatus
 import com.pipai.dragontiles.enemies.Enemy
 import com.pipai.dragontiles.spells.Rune
 import com.pipai.dragontiles.spells.Spell
@@ -28,6 +29,8 @@ data class DrawDiscardedEvent(val tiles: List<TileInstance>) : CombatEvent
 data class TileTransformedEvent(val tile: TileInstance, val previous: TileInstance) : CombatEvent
 
 data class TileDestroyedEvent(val tile: TileInstance) : CombatEvent
+
+data class TileStatusChangeEvent(val tiles: List<TileInstance>, val tileStatus: TileStatus) : CombatEvent
 
 data class TilesAddedToHandEvent(val tiles: List<Pair<TileInstance, Int>>) : CombatEvent
 

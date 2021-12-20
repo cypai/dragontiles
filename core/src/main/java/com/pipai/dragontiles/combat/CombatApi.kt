@@ -104,6 +104,11 @@ class CombatApi(
         sortHand()
     }
 
+    suspend fun setTileStatus(tiles: List<TileInstance>, tileStatus: TileStatus) {
+        tiles.forEach { it.tileStatus = tileStatus }
+        eventBus.dispatch(TileStatusChangeEvent(tiles, tileStatus))
+    }
+
     suspend fun transformTile(tileInstance: TileInstance, tile: Tile, sortHand: Boolean) {
         if (tileInstance.tileStatus == TileStatus.FREEZE) {
             logger.error("Attempted to transform a frozen tile")

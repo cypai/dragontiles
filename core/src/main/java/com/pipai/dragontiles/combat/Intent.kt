@@ -6,7 +6,6 @@ import com.pipai.dragontiles.data.TileInstance
 import com.pipai.dragontiles.data.TileStatus
 import com.pipai.dragontiles.enemies.Enemy
 import com.pipai.dragontiles.status.Status
-import com.pipai.dragontiles.utils.choose
 import com.pipai.dragontiles.utils.chooseAmount
 import java.util.*
 
@@ -74,7 +73,7 @@ data class DebuffIntent(
         attackIntent?.execute(api)
         status?.let { api.addStatusToHero(status) }
         inflictTileStatuses.forEach { strategy ->
-            strategy.inflict(api.combat.hand, api.runData.rng)
+            api.setTileStatus(strategy.select(api.combat.hand, api.runData.rng), strategy.tileStatus)
         }
     }
 }
@@ -82,7 +81,7 @@ data class DebuffIntent(
 interface TileStatusInflictStrategy {
     val tileStatus: TileStatus
     val amount: Int
-    fun inflict(hand: List<TileInstance>, rng: Random): List<TileInstance>
+    fun select(hand: List<TileInstance>, rng: Random): List<TileInstance>
 }
 
 data class RandomTileStatusInflictStrategy(
@@ -90,7 +89,7 @@ data class RandomTileStatusInflictStrategy(
     override val amount: Int
 ) : TileStatusInflictStrategy {
 
-    override fun inflict(hand: List<TileInstance>, rng: Random): List<TileInstance> {
+    override fun select(hand: List<TileInstance>, rng: Random): List<TileInstance> {
         return hand
             .filter { it.tileStatus == TileStatus.NONE }
             .chooseAmount(amount, rng)
