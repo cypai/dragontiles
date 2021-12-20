@@ -15,6 +15,9 @@ class EnemyFluxDamageAnimation(private val enemy: Enemy, private val amount: Int
             val cEnemy = mEnemy.get(it)
             if (cEnemy.enemy == enemy) {
                 cEnemy.flux += amount
+                if (cEnemy.flux > cEnemy.fluxMax) {
+                    cEnemy.flux = cEnemy.fluxMax
+                }
             }
         }
         endAnimation()
