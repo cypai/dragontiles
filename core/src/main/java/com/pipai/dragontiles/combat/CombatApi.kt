@@ -11,6 +11,7 @@ import com.pipai.dragontiles.spells.Rune
 import com.pipai.dragontiles.spells.Spell
 import com.pipai.dragontiles.spells.StandardSpell
 import com.pipai.dragontiles.spells.baseFluxGain
+import com.pipai.dragontiles.status.Dodge
 import com.pipai.dragontiles.status.Overloaded
 import com.pipai.dragontiles.status.Status
 import com.pipai.dragontiles.utils.deepCopy
@@ -280,10 +281,14 @@ class CombatApi(
     suspend fun attack(enemy: Enemy, element: Element, amount: Int) {
         val damage = calculateDamageOnEnemy(enemy, element, amount)
         eventBus.dispatch(PlayerAttackEnemyEvent(enemy, element, amount))
-        if (enemy.flux < enemy.fluxMax) {
-            dealFluxDamageToEnemy(enemy, damage)
+        if (enemyHasStatus(enemy, Dodge::class)) {
+            addStatusToEnemy(enemy, Dodge(-1))
         } else {
-            dealDamageToEnemy(enemy, damage)
+            if (enemy.flux < enemy.fluxMax) {
+                dealFluxDamageToEnemy(enemy, damage)
+            } else {
+                dealDamageToEnemy(enemy, damage)
+            }
         }
     }
 
@@ -351,11 +356,15 @@ class CombatApi(
     }
 
     suspend fun attackHero(enemy: Enemy, element: Element, amount: Int) {
-        val damage = calculateDamageOnHero(enemy, element, amount)
-        if (runData.hero.flux < runData.hero.fluxMax) {
-            dealFluxDamageToHero(damage)
+        if (heroHasStatus(Dodge::class)) {
+            addStatusToHero(Dodge(-1))
         } else {
-            dealDamageToHero(damage)
+            val damage = calculateDamageOnHero(enemy, element, amount)
+            if (runData.hero.flux < runData.hero.fluxMax) {
+                dealFluxDamageToHero(damage)
+            } else {
+                dealDamageToHero(damage)
+            }
         }
     }
 
