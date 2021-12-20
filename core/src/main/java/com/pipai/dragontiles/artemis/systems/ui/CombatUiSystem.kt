@@ -139,7 +139,7 @@ class CombatUiSystem(
             .center()
         queryTable.row()
         queryTable.add()
-            .height(game.gameConfig.resolution.height * 2f / 3f)
+            .height(game.gameConfig.resolution.height * 3f / 5f)
         queryTable.row()
         queryTable.add(queryConfirmBtn)
             .pad(8f)

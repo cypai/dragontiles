@@ -119,12 +119,12 @@ class PlainsDungeon : Dungeon() {
     override val easyEncounters: MutableList<Encounter> = mutableListOf(
 //            Encounter(listOf(Pair(LargeTurtle(), Vector2(750f, 420f)))),
 //            Encounter(listOf(
-//                    Pair(Slime(), Vector2(740f, 400f)),
-//                    Pair(Slime(), Vector2(910f, 400f))
+//                    Pair(Slime(), Vector2(740f, 430f)),
+//                    Pair(Slime(), Vector2(910f, 430f))
 //            )),
 //            Encounter(listOf(
-//                Pair(KillerRabbit(), Vector2(740f, 400f)),
-//                Pair(KillerRabbit(), Vector2(1010f, 400f))
+//                Pair(KillerRabbit(), Vector2(740f, 430f)),
+//                Pair(KillerRabbit(), Vector2(1010f, 430f))
 //            )),
 //            Encounter(listOf(Pair(Bull(), Vector2(750f, 420f)))),
 //            Encounter(listOf(
@@ -133,8 +133,8 @@ class PlainsDungeon : Dungeon() {
 //                Pair(Rat(), Vector2(1010f, 280f)),
 //            )),
             Encounter(listOf(
-                    Pair(RiverSpirit(), Vector2(740f, 400f)),
-                    Pair(Slime(), Vector2(1010f, 400f))
+                    Pair(RiverSpirit(), Vector2(740f, 430f)),
+                    Pair(Slime(), Vector2(1010f, 430f))
             )),
     )
     override val standardEncounters: MutableList<Encounter> = mutableListOf(
