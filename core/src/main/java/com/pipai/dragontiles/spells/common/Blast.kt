@@ -10,8 +10,8 @@ class Blast : StandardSpell() {
     override val targetType: TargetType = TargetType.AOE
     override val rarity: Rarity = Rarity.UNCOMMON
     override val aspects: MutableList<SpellAspect> = mutableListOf(
-        AttackDamageAspect(5),
-        FluxGainAspect(3)
+        AttackDamageAspect(9),
+        FluxGainAspect(2)
     )
 
     override suspend fun onCast(params: CastParams, api: CombatApi) {
