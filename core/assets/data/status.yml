@@ -13,9 +13,9 @@ base:status:Break:
     name: Break
     description: Takes 50% more damage when attacked with Elemental damage.
 
-base:status:Frenzy:
+base:status:MenacingAura:
   en:
-    name: Frenzy
+    name: Menacing Aura
     description: Gain a @Volatile @FumbleTile each time you cast an Effect.
 
 base:status:DragonRage:

@@ -5,8 +5,7 @@ import com.pipai.dragontiles.combat.BuffIntent
 import com.pipai.dragontiles.combat.CombatApi
 import com.pipai.dragontiles.combat.Intent
 import com.pipai.dragontiles.data.Element
-import com.pipai.dragontiles.status.Frenzy
-import com.pipai.dragontiles.status.Strength
+import com.pipai.dragontiles.status.MenacingAura
 
 class KillerRabbit : Enemy() {
 
@@ -20,7 +19,7 @@ class KillerRabbit : Enemy() {
 
     override fun getIntent(): Intent {
         return when (intents) {
-            0 -> BuffIntent(this, Frenzy(1), null)
+            0 -> BuffIntent(this, MenacingAura(1), null)
             else -> AttackIntent(this, 13, 1, false, Element.NONE)
         }
     }
