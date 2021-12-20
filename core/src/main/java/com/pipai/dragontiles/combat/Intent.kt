@@ -2,9 +2,13 @@ package com.pipai.dragontiles.combat
 
 import com.pipai.dragontiles.data.Element
 import com.pipai.dragontiles.data.Tile
+import com.pipai.dragontiles.data.TileInstance
 import com.pipai.dragontiles.data.TileStatus
 import com.pipai.dragontiles.enemies.Enemy
 import com.pipai.dragontiles.status.Status
+import com.pipai.dragontiles.utils.choose
+import com.pipai.dragontiles.utils.chooseAmount
+import java.util.*
 
 interface Intent {
     val enemy: Enemy
@@ -58,14 +62,38 @@ data class BuffIntent(
 }
 
 data class DebuffIntent(
-    override val enemy: Enemy, val status: Status, val attackIntent: AttackIntent?
+    override val enemy: Enemy,
+    val status: Status?,
+    val attackIntent: AttackIntent?,
+    val inflictTileStatuses: List<TileStatusInflictStrategy>
 ) : Intent {
 
     override val type: IntentType = IntentType.DEBUFF
 
     override suspend fun execute(api: CombatApi) {
         attackIntent?.execute(api)
-        api.addStatusToHero(status)
+        status?.let { api.addStatusToHero(status) }
+        inflictTileStatuses.forEach { strategy ->
+            strategy.inflict(api.combat.hand, api.runData.rng)
+        }
+    }
+}
+
+interface TileStatusInflictStrategy {
+    val tileStatus: TileStatus
+    val amount: Int
+    fun inflict(hand: List<TileInstance>, rng: Random): List<TileInstance>
+}
+
+data class RandomTileStatusInflictStrategy(
+    override val tileStatus: TileStatus,
+    override val amount: Int
+) : TileStatusInflictStrategy {
+
+    override fun inflict(hand: List<TileInstance>, rng: Random): List<TileInstance> {
+        return hand
+            .filter { it.tileStatus == TileStatus.NONE }
+            .chooseAmount(amount, rng)
     }
 }
 

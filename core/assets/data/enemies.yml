@@ -32,3 +32,23 @@ base:enemies:Yumi:
   en:
     name: Yumi
     description: A Moon Rabbit. Her name sounds like Corn or Bow, but actually means Jade Seeds.
+
+base:enemies:Minotaur:
+  en:
+    name: Minotaur
+    description: What a brute!
+
+base:enemies:FlameDragonHorse:
+  en:
+    name: Flame Dragon Horse
+    description: Hot.
+
+base:enemies:RiverDragonHorse:
+  en:
+    name: River Dragon Horse
+    description: Cool.
+
+base:enemies:WhiteDragonHorse:
+  en:
+    name: White Dragon Horse
+    description: Volatile.

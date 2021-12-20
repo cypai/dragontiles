@@ -145,8 +145,16 @@ class PlainsDungeon : Dungeon() {
             ))
     )
     override val eliteEncounters: MutableList<Encounter> = mutableListOf(
+//        Encounter(listOf(
+//            Pair(Yumi(), Vector2(750f, 420f))
+//        )),
+//        Encounter(listOf(
+//            Pair(Minotaur(), Vector2(750f, 420f))
+//        )),
         Encounter(listOf(
-            Pair(Yumi(), Vector2(750f, 420f))
+                Pair(FlameDragonHorse(), Vector2(740f, 400f)),
+                Pair(RiverDragonHorse(), Vector2(1010f, 500f)),
+                Pair(WhiteDragonHorse(), Vector2(1010f, 280f)),
         )),
     )
     override val bossEncounters: MutableList<Encounter> = mutableListOf()

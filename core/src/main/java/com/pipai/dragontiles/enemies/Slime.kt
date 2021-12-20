@@ -23,7 +23,7 @@ class Slime : Enemy() {
 
     override fun getIntent(): Intent {
         return when (attacks % 4) {
-            0 -> DebuffIntent(this, BreakStatus(2, true), null)
+            0 -> DebuffIntent(this, BreakStatus(2, true), null, listOf())
             else -> AttackIntent(this, 8, 1, false, Element.ICE)
         }
     }

@@ -1,6 +1,7 @@
 package com.pipai.dragontiles.utils
 
 import java.util.*
+import kotlin.math.min
 
 fun Float.clamp(min: Float, max: Float): Float = Math.max(min, Math.min(this, max))
 fun Double.clamp(min: Double, max: Double): Double = Math.max(min, Math.min(this, max))
@@ -51,4 +52,13 @@ fun <T> MutableCollection<T>.removeRandom(rng: Random): T {
     val elem = elementAt(n)
     remove(elem)
     return elem
+}
+
+fun <T> Collection<T>.chooseAmount(amount: Int, rng: Random): List<T> {
+    val mut = this.toMutableList()
+    val chosen: MutableList<T> = mutableListOf()
+    while (chosen.size < amount && mut.isNotEmpty()) {
+        chosen.add(mut.removeRandom(rng))
+    }
+    return chosen
 }
