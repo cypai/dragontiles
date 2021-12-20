@@ -15,6 +15,7 @@ import com.pipai.dragontiles.artemis.systems.rendering.FullScreenColorSystem
 import com.pipai.dragontiles.artemis.systems.rendering.RenderingSystem
 import com.pipai.dragontiles.artemis.systems.ui.DeckDisplayUiSystem
 import com.pipai.dragontiles.artemis.systems.ui.SpellShopUiSystem
+import com.pipai.dragontiles.artemis.systems.ui.TooltipSystem
 import com.pipai.dragontiles.artemis.systems.ui.TopRowUiSystem
 import com.pipai.dragontiles.dungeon.RunData
 import net.mostlyoriginal.api.event.common.EventSystem
@@ -34,6 +35,7 @@ class SpellShopScreen(game: DragonTilesGame, runData: RunData) : Screen {
                 InputProcessingSystem(),
                 SpellShopUiSystem(game, runData),
                 FullScreenColorSystem(game),
+                TooltipSystem(game, stage),
             )
             .with(
                 -1,
@@ -53,6 +55,7 @@ class SpellShopScreen(game: DragonTilesGame, runData: RunData) : Screen {
         inputProcessor.addAlwaysOnProcessor(world.getSystem(DeckDisplayUiSystem::class.java))
         inputProcessor.addAlwaysOnProcessor(world.getSystem(SpellShopUiSystem::class.java))
         inputProcessor.addAlwaysOnProcessor(world.getSystem(ClickableSystem::class.java))
+        inputProcessor.addAlwaysOnProcessor(world.getSystem(TooltipSystem::class.java))
         inputProcessor.activateInput()
 
         StandardScreenInit(world).initialize()

@@ -1,18 +1,24 @@
 package com.pipai.dragontiles.artemis.systems.ui
 
+import com.badlogic.gdx.graphics.Texture
+import com.badlogic.gdx.scenes.scene2d.Actor
+import com.badlogic.gdx.scenes.scene2d.InputEvent
 import com.badlogic.gdx.scenes.scene2d.Stage
+import com.badlogic.gdx.scenes.scene2d.ui.Image
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Table
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.pipai.dragontiles.DragonTilesGame
 import com.pipai.dragontiles.artemis.events.GoldChangeEvent
-import com.pipai.dragontiles.artemis.events.PricedSpellClickEvent
 import com.pipai.dragontiles.artemis.systems.NoProcessingSystem
 import com.pipai.dragontiles.dungeon.RunData
+import com.pipai.dragontiles.utils.relicAssetPath
+import com.pipai.dragontiles.utils.system
 import net.mostlyoriginal.api.event.common.Subscribe
 import java.lang.Integer.min
 
 class TopRowUiSystem(
-    game: DragonTilesGame,
+    private val game: DragonTilesGame,
     private val runData: RunData,
     private val stage: Stage
 ) : NoProcessingSystem() {
@@ -22,6 +28,7 @@ class TopRowUiSystem(
 
     private val rootTable = Table()
     private val topRow = Table()
+    private val relicRow = Table()
     private var hp = runData.hero.hp
     private var hpMax = runData.hero.hpMax
     private var flux = runData.hero.flux
@@ -30,6 +37,8 @@ class TopRowUiSystem(
     private val hpLabel = Label("HP: $hp/$hpMax", skin)
     private val fluxLabel = Label("Flux: $flux/$fluxMax", skin)
     private val goldLabel = Label("Gold: $gold", skin)
+
+    private val sTooltip by system<TooltipSystem>()
 
     override fun initialize() {
         rootTable.setFillParent(true)
@@ -49,14 +58,42 @@ class TopRowUiSystem(
         topRow.add()
             .expand()
 
+        updateRelicRow()
+
         rootTable.add(topRow)
             .width(config.resolution.width.toFloat())
             .top()
             .left()
         rootTable.row()
+        rootTable.add(relicRow)
+            .left()
+        rootTable.row()
         rootTable.add()
             .expand()
+        rootTable.row()
         stage.addActor(rootTable)
+    }
+
+    fun updateRelicRow() {
+        relicRow.clearChildren()
+        runData.hero.relics.forEach { relic ->
+            val image = Image(game.assets.get(relicAssetPath(relic.assetName), Texture::class.java))
+            image.addListener(object : ClickListener() {
+                override fun enter(event: InputEvent?, x: Float, y: Float, pointer: Int, fromActor: Actor?) {
+                    sTooltip.addNameDescLocalization(game.gameStrings.nameDescLocalization(relic.strId))
+                    sTooltip.showTooltip()
+                }
+
+                override fun exit(event: InputEvent?, x: Float, y: Float, pointer: Int, toActor: Actor?) {
+                    sTooltip.hideTooltip()
+                }
+            })
+            relicRow.add(image)
+                .left()
+                .prefHeight(64f)
+                .prefWidth(64f)
+        }
+        relicRow.row()
     }
 
     fun setHpRelative(amount: Int) {

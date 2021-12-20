@@ -3,11 +3,6 @@ base:relics:Transmuter:
     name: Transmuter
     description: Transform the number of the first Elemental Tile you draw at turn start.
 
-base:relics:LeatherArmor:
-  en:
-    name: Leather Armor
-    description: +1 Defense
-
 base:relics:Buckler:
   en:
     name: Buckler
@@ -16,7 +11,7 @@ base:relics:Buckler:
 base:relics:PowerAmp:
   en:
     name: Power Amp
-    description: +1 Power
+    description: +1 Strength
 
 base:relics:Flamberge:
   en:

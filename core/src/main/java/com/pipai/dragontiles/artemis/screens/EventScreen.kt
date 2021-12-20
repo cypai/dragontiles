@@ -15,6 +15,7 @@ import com.pipai.dragontiles.artemis.systems.input.InputProcessingSystem
 import com.pipai.dragontiles.artemis.systems.rendering.RenderingSystem
 import com.pipai.dragontiles.artemis.systems.ui.EventUiSystem
 import com.pipai.dragontiles.artemis.systems.ui.MapUiSystem
+import com.pipai.dragontiles.artemis.systems.ui.TooltipSystem
 import com.pipai.dragontiles.artemis.systems.ui.TopRowUiSystem
 import com.pipai.dragontiles.dungeon.RunData
 import com.pipai.dragontiles.dungeonevents.DungeonEvent
@@ -34,7 +35,8 @@ class EventScreen(game: DragonTilesGame, runData: RunData, event: DungeonEvent) 
                 ClickableSystem(game.gameConfig),
                 InputProcessingSystem(),
                 EventUiSystem(game, stage, runData, event),
-                MapUiSystem(game, stage, runData)
+                MapUiSystem(game, stage, runData),
+                TooltipSystem(game, stage),
             )
             .with(
                 -1,
@@ -49,6 +51,7 @@ class EventScreen(game: DragonTilesGame, runData: RunData, event: DungeonEvent) 
         inputProcessor.addAlwaysOnProcessor(stage)
         inputProcessor.addAlwaysOnProcessor(ExitInputProcessor())
         inputProcessor.addAlwaysOnProcessor(world.getSystem(ClickableSystem::class.java))
+        inputProcessor.addAlwaysOnProcessor(world.getSystem(TooltipSystem::class.java))
         inputProcessor.activateInput()
 
         StandardScreenInit(world).initialize()

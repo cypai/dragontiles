@@ -4,7 +4,8 @@ import com.pipai.dragontiles.combat.*
 import com.pipai.dragontiles.data.*
 
 class Transmuter : Relic() {
-    override val id = "base:Transmuter"
+    override val strId = "base:relics:Transmuter"
+    override val assetName = "transmuter.png"
 
     private var firstDraw: TileInstance? = null
 

@@ -7,7 +7,8 @@ import com.pipai.dragontiles.combat.DamageTarget
 import com.pipai.dragontiles.data.Element
 
 abstract class Relic : DamageAdjustable {
-    abstract val id: String
+    abstract val strId: String
+    abstract val assetName: String
 
     lateinit var api: CombatApi
 

@@ -14,10 +14,7 @@ import com.pipai.dragontiles.artemis.systems.input.ExitInputProcessor
 import com.pipai.dragontiles.artemis.systems.input.InputProcessingSystem
 import com.pipai.dragontiles.artemis.systems.rendering.FullScreenColorSystem
 import com.pipai.dragontiles.artemis.systems.rendering.RenderingSystem
-import com.pipai.dragontiles.artemis.systems.ui.DeckDisplayUiSystem
-import com.pipai.dragontiles.artemis.systems.ui.MapUiSystem
-import com.pipai.dragontiles.artemis.systems.ui.TopRowUiSystem
-import com.pipai.dragontiles.artemis.systems.ui.TownUiSystem
+import com.pipai.dragontiles.artemis.systems.ui.*
 import com.pipai.dragontiles.dungeon.RunData
 import net.mostlyoriginal.api.event.common.EventSystem
 
@@ -37,7 +34,8 @@ class TownScreen(game: DragonTilesGame, runData: RunData, init: Boolean) : Scree
                 TownUiSystem(game, runData),
                 DeckDisplayUiSystem(game, runData, stage),
                 MapUiSystem(game, stage, runData),
-                FullScreenColorSystem(game)
+                FullScreenColorSystem(game),
+                TooltipSystem(game, stage),
             )
             .with(
                 -1,
@@ -53,6 +51,7 @@ class TownScreen(game: DragonTilesGame, runData: RunData, init: Boolean) : Scree
         inputProcessor.addAlwaysOnProcessor(world.getSystem(MapUiSystem::class.java))
         inputProcessor.addAlwaysOnProcessor(world.getSystem(DeckDisplayUiSystem::class.java))
         inputProcessor.addAlwaysOnProcessor(world.getSystem(ClickableSystem::class.java))
+        inputProcessor.addAlwaysOnProcessor(world.getSystem(TooltipSystem::class.java))
         inputProcessor.addAlwaysOnProcessor(ExitInputProcessor())
         inputProcessor.activateInput()
 
