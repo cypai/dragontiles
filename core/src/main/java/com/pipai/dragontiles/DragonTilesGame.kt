@@ -26,9 +26,6 @@ import com.pipai.dragontiles.artemis.screens.MainMenuScreen
 import com.pipai.dragontiles.data.GameStrings
 import com.pipai.dragontiles.data.HeroSpells
 import com.pipai.dragontiles.data.TileSkin
-import com.pipai.dragontiles.enemies.FlameTurtle
-import com.pipai.dragontiles.enemies.Slime
-import com.pipai.dragontiles.utils.enemyAssetPath
 import com.pipai.dragontiles.utils.getLogger
 import org.apache.commons.lang3.builder.ToStringBuilder
 import org.apache.commons.lang3.builder.ToStringStyle

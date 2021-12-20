@@ -13,6 +13,26 @@ base:status:Break:
     name: Break
     description: Takes 50% more damage when attacked with Elemental damage.
 
+base:status:Weak:
+  en:
+    name: Weak
+    description: Deal 30% less damage.
+
+base:status:Ritual:
+  en:
+    name: Ritual
+    description: Gain @Strength per turn.
+
+base:status:Ventilation:
+  en:
+    name: Ventilation
+    description: Lose @Flux per turn while not @Overloaded.
+
+base:status:Dodge:
+  en:
+    name: Dodge
+    description: Avoids a single instance of damage from an attack.
+
 base:status:MenacingAura:
   en:
     name: Menacing Aura

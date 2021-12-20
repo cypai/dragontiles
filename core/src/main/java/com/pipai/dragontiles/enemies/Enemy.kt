@@ -19,7 +19,7 @@ abstract class Enemy {
         this.id = id
     }
 
-    open fun init(api: CombatApi) {
+    open suspend fun init(api: CombatApi) {
     }
 
     abstract fun getIntent(): Intent

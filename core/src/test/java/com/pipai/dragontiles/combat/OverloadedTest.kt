@@ -1,8 +1,6 @@
 package com.pipai.dragontiles.combat
 
-import com.pipai.dragontiles.enemies.FlameTurtle
-import com.pipai.dragontiles.spells.CastParams
-import com.pipai.dragontiles.spells.baseDamage
+import com.pipai.dragontiles.enemies.LargeTurtle
 import com.pipai.dragontiles.spells.common.Invoke
 import com.pipai.dragontiles.spells.elementalist.RampStrike
 import com.pipai.dragontiles.status.Overloaded
@@ -13,7 +11,7 @@ import org.junit.Test
 class OverloadedTest : CombatBackendTest(QueryHandler()) {
     @Test
     fun testPlayerOverload() {
-        val flameTurtle = FlameTurtle()
+        val flameTurtle = LargeTurtle()
         val runData = runDataFixture(mutableListOf(Invoke(), RampStrike()), mutableListOf())
         val combat = Combat(mutableListOf(flameTurtle))
 
@@ -35,7 +33,7 @@ class OverloadedTest : CombatBackendTest(QueryHandler()) {
 
     @Test
     fun testEnemyOverload() {
-        val flameTurtle = FlameTurtle()
+        val flameTurtle = LargeTurtle()
         val runData = runDataFixture(mutableListOf(Invoke(), RampStrike()), mutableListOf())
         val combat = Combat(mutableListOf(flameTurtle))
 

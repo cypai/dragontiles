@@ -1,10 +1,7 @@
 package com.pipai.dragontiles.dungeon
 
 import com.badlogic.gdx.math.Vector2
-import com.pipai.dragontiles.enemies.Bull
-import com.pipai.dragontiles.enemies.FlameTurtle
-import com.pipai.dragontiles.enemies.KillerRabbit
-import com.pipai.dragontiles.enemies.Slime
+import com.pipai.dragontiles.enemies.*
 import com.pipai.dragontiles.utils.choose
 import java.util.*
 
@@ -120,20 +117,29 @@ enum class MapNodeType {
 
 class PlainsDungeon : Dungeon() {
     override val easyEncounters: MutableList<Encounter> = mutableListOf(
-//            Encounter(listOf(Pair(FlameTurtle(), Vector2(750f, 420f)))),
+//            Encounter(listOf(Pair(LargeTurtle(), Vector2(750f, 420f)))),
 //            Encounter(listOf(
 //                    Pair(Slime(), Vector2(740f, 400f)),
 //                    Pair(Slime(), Vector2(910f, 400f))
 //            )),
+//            Encounter(listOf(
+//                Pair(KillerRabbit(), Vector2(740f, 400f)),
+//                Pair(KillerRabbit(), Vector2(1010f, 400f))
+//            )),
+//            Encounter(listOf(Pair(Bull(), Vector2(750f, 420f)))),
+//            Encounter(listOf(
+//                Pair(Rat(), Vector2(740f, 400f)),
+//                Pair(Rat(), Vector2(1010f, 500f)),
+//                Pair(Rat(), Vector2(1010f, 280f)),
+//            )),
             Encounter(listOf(
-                Pair(KillerRabbit(), Vector2(740f, 400f)),
-                Pair(KillerRabbit(), Vector2(1010f, 400f))
+                    Pair(RiverSpirit(), Vector2(740f, 400f)),
+                    Pair(Slime(), Vector2(1010f, 400f))
             )),
-            Encounter(listOf(Pair(Bull(), Vector2(750f, 420f)))),
     )
     override val standardEncounters: MutableList<Encounter> = mutableListOf(
             Encounter(listOf(
-                    Pair(FlameTurtle(), Vector2(650f, 420f)),
+                    Pair(LargeTurtle(), Vector2(650f, 420f)),
                     Pair(Slime(), Vector2(1000f, 420f))
             ))
     )

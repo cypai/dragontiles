@@ -21,9 +21,9 @@ class CombatController(
         combat.sideDeck.addAll(runData.hero.sideDeck)
         combat.enemies.forEach {
             it.preInit(api.nextId())
-            it.init(api)
             combat.enemyStatus[it.id] = mutableListOf()
             eventBus.register(it)
+            runBlocking { it.init(api) }
         }
         initDrawPile()
         runBlocking { api.drawToOpenPool(CombatApi.OPEN_POOL_SIZE) }

@@ -97,8 +97,41 @@ class EnemyIntentSystem() : NoProcessingSystem() {
                 cTextLabel.color = Color.WHITE
                 cTextLabel.text = "Stunned"
             }
+            is FumbleIntent -> {
+                when (val innerIntent = intent.intent) {
+                    is AttackIntent -> {
+                        val attackPower = sCombat.controller.api.calculateDamageOnHero(enemy, innerIntent.element, innerIntent.attackPower)
+                        cTextLabel.color = elementColor(innerIntent.element)
+                        cTextLabel.text = "Debuffing, Attack $attackPower"
+                    }
+                    is BuffIntent -> {
+                        cTextLabel.color = Color.WHITE
+                        cTextLabel.text = "Buffing"
+                    }
+                    else -> {
+                        cTextLabel.color = Color.WHITE
+                        cTextLabel.text = "Debuffing"
+                    }
+                }
+            }
             null -> {
                 cTextLabel.text = ""
+            }
+            else -> {
+                when (intent.type) {
+                    IntentType.BUFF -> {
+                        cTextLabel.color = Color.WHITE
+                        cTextLabel.text = "Buffing"
+                    }
+                    IntentType.DEBUFF -> {
+                        cTextLabel.color = Color.WHITE
+                        cTextLabel.text = "Debuffing"
+                    }
+                    else -> {
+                        cTextLabel.color = Color.WHITE
+                        cTextLabel.text = "Unknown"
+                    }
+                }
             }
         }
     }

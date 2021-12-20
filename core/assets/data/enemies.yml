@@ -1,67 +1,12 @@
-base:enemies:standard:Ember:
+base:enemies:LargeTurtle:
   en:
-    name: Ember
-    description: No special effects.
-
-base:enemies:standard:Frost:
-  en:
-    name: Frost
-    description: No special effects.
-
-base:enemies:standard:Spark:
-  en:
-    name: Spark
-    description: No special effects.
-
-base:enemies:standard:FlameStrike:
-  en:
-    name: Flame Strike
-    description: No special effects.
-
-base:enemies:standard:IceStrike:
-  en:
-    name: Ice Strike
-    description: No special effects.
-
-base:enemies:standard:LightningStrike:
-  en:
-    name: Lightning Strike
-    description: No special effects.
-
-base:enemies:standard:ManaStrike:
-  en:
-    name: Mana Strike
-    description: No special effects.
-
-base:enemies:FlameTurtle:
-  en:
-    name: Flame Turtle
+    name: Large Turtle
     description: A turtle. Fairly defensive.
-
-base:enemies:FlameTurtle:Steady:
-  en:
-    name: Steady
-    description: Increases @Defense and @Power by 1.
-
-base:enemies:FlameTurtle:Ember:
-  en:
-    name: Ember
-    description: No special effects.
-
-base:enemies:FlameTurtle:ShellProjection:
-  en:
-    name: Shell Projection
-    description: "@AttackPower scales with @Defense."
 
 base:enemies:Slime:
   en:
     name: Slime
     description: A standard slime. A bit more dangerous than appears at first sight.
-
-base:enemies:Slime:Acid:
-  en:
-    name: Acid
-    description: Inflicts 3 @IceBreak.
 
 base:enemies:KillerRabbit:
   en:
@@ -72,3 +17,13 @@ base:enemies:Bull:
   en:
     name: Bull
     description: Pumps itself up.
+
+base:enemies:Rat:
+  en:
+    name: Rat
+    description: Very evasive.
+
+base:enemies:RiverSpirit:
+  en:
+    name: River Spirit
+    description: Naturally vents flux.

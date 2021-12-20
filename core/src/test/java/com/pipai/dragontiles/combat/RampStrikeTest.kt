@@ -1,6 +1,6 @@
 package com.pipai.dragontiles.combat
 
-import com.pipai.dragontiles.enemies.FlameTurtle
+import com.pipai.dragontiles.enemies.LargeTurtle
 import com.pipai.dragontiles.spells.CastParams
 import com.pipai.dragontiles.spells.baseDamage
 import com.pipai.dragontiles.spells.common.Invoke
@@ -12,7 +12,7 @@ import org.junit.Test
 class RampStrikeTest : CombatBackendTest(QueryHandler()) {
     @Test
     fun testRampStrike() {
-        val flameTurtle = FlameTurtle()
+        val flameTurtle = LargeTurtle()
         val runData = runDataFixture(mutableListOf(Invoke(), RampStrike()), mutableListOf())
         val combat = Combat(mutableListOf(flameTurtle))
 

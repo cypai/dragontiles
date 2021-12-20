@@ -1,8 +1,7 @@
 package com.pipai.dragontiles.combat
 
-import com.pipai.dragontiles.enemies.FlameTurtle
+import com.pipai.dragontiles.enemies.LargeTurtle
 import com.pipai.dragontiles.spells.CastParams
-import com.pipai.dragontiles.spells.PowerUpgrade
 import com.pipai.dragontiles.spells.RepeatUpgrade
 import com.pipai.dragontiles.spells.common.Invoke
 import kotlinx.coroutines.runBlocking
@@ -12,7 +11,7 @@ import org.junit.Test
 class RepeatUpgradeTest : CombatBackendTest(QueryHandler()) {
     @Test
     fun testPowerUpgrade() {
-        val flameTurtle = FlameTurtle()
+        val flameTurtle = LargeTurtle()
         val runData = runDataFixture(mutableListOf(Invoke()), mutableListOf())
         val combat = Combat(mutableListOf(flameTurtle))
 

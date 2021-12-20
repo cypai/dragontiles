@@ -1,7 +1,7 @@
 package com.pipai.dragontiles.combat
 
 import com.pipai.dragontiles.data.Element
-import com.pipai.dragontiles.enemies.FlameTurtle
+import com.pipai.dragontiles.enemies.LargeTurtle
 import com.pipai.dragontiles.spells.common.Invoke
 import com.pipai.dragontiles.status.BreakStatus
 import kotlinx.coroutines.runBlocking
@@ -11,7 +11,7 @@ import org.junit.Test
 class BreakTest : CombatBackendTest(QueryHandler()) {
     @Test
     fun testBreak() {
-        val flameTurtle = FlameTurtle()
+        val flameTurtle = LargeTurtle()
         val runData = runDataFixture(mutableListOf(Invoke()), mutableListOf())
         val combat = Combat(mutableListOf(flameTurtle))
 

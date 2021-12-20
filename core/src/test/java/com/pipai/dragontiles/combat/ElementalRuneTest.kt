@@ -3,7 +3,7 @@ package com.pipai.dragontiles.combat
 import com.pipai.dragontiles.data.Suit
 import com.pipai.dragontiles.data.Tile
 import com.pipai.dragontiles.data.TileInstance
-import com.pipai.dragontiles.enemies.FlameTurtle
+import com.pipai.dragontiles.enemies.LargeTurtle
 import com.pipai.dragontiles.spells.CastParams
 import com.pipai.dragontiles.spells.common.Invoke
 import com.pipai.dragontiles.spells.elementalist.ElementalRune
@@ -14,7 +14,7 @@ import org.junit.Test
 class ElementalRuneTest : CombatBackendTest(QueryHandler()) {
     @Test
     fun testElementalRune() {
-        val flameTurtle = FlameTurtle()
+        val flameTurtle = LargeTurtle()
         val runData = runDataFixture(mutableListOf(Invoke(), ElementalRune()), mutableListOf())
         val combat = Combat(mutableListOf(flameTurtle))
 

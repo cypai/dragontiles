@@ -3,7 +3,7 @@ package com.pipai.dragontiles.combat
 import com.pipai.dragontiles.data.StarType
 import com.pipai.dragontiles.data.Tile
 import com.pipai.dragontiles.data.TileInstance
-import com.pipai.dragontiles.enemies.FlameTurtle
+import com.pipai.dragontiles.enemies.LargeTurtle
 import com.pipai.dragontiles.spells.CastParams
 import com.pipai.dragontiles.spells.elementalist.Vent
 import kotlinx.coroutines.runBlocking
@@ -13,7 +13,7 @@ import org.junit.Test
 class VentTest : CombatBackendTest(QueryHandler()) {
     @Test
     fun testVent() {
-        val flameTurtle = FlameTurtle()
+        val flameTurtle = LargeTurtle()
         val runData = runDataFixture(mutableListOf(Vent()), mutableListOf())
         val combat = Combat(mutableListOf(flameTurtle))
 
