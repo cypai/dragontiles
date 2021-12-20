@@ -326,6 +326,11 @@ class CombatApi(
         eventBus.dispatch(EnemyChangeIntentEvent(enemy, intent))
     }
 
+    suspend fun dealAoeDamage(damage: Int) {
+        combat.enemies.filter { it.hp > 0 }
+            .forEach { dealDamageToEnemy(it, damage) }
+    }
+
     suspend fun dealDamageToEnemy(enemy: Enemy, damage: Int) {
         enemy.hp -= damage
         eventBus.dispatch(EnemyDamageEvent(enemy, damage))

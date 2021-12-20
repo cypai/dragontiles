@@ -31,7 +31,10 @@ class HeroSpells {
             Singularity(),
             Spark(),
             Blast(),
-            Explosion()
+            Explosion(),
+            Precipitate(),
+            BurnRune(),
+            FrostRune(),
         )
     }
 

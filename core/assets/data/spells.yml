@@ -113,6 +113,21 @@ base:spells:FeedbackLoop:
     name: FeedbackLoop
     description: Double your @Strength. @Exhaust.
 
+base:spells:BurnRune:
+  en:
+    name: Burn Rune
+    description: Deal @X @AOE damage for each @Burn in your hand at the end of your turn.
+
+base:spells:FrostRune:
+  en:
+    name: Frost Rune
+    description: Lose @X @Flux for each @Freeze in your hand at the end of your turn.
+
+base:spells:ThunderRune:
+  en:
+    name: Thunder Rune
+    description: For each @Shock consumed, recast the spell.
+
 base:spells:Fireball:
   en:
     name: Fireball
