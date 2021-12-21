@@ -1,8 +1,11 @@
 package com.pipai.dragontiles.dungeon
 
 import com.badlogic.gdx.math.Vector2
+import com.pipai.dragontiles.dungeonevents.DragonInquiryEvent
+import com.pipai.dragontiles.dungeonevents.DungeonEvent
 import com.pipai.dragontiles.enemies.*
 import com.pipai.dragontiles.utils.choose
+import com.pipai.dragontiles.utils.removeRandom
 import java.util.*
 
 abstract class Dungeon {
@@ -14,6 +17,7 @@ abstract class Dungeon {
     abstract val standardEncounters: MutableList<Encounter>
     abstract val eliteEncounters: MutableList<Encounter>
     abstract val bossEncounters: MutableList<Encounter>
+    abstract val dungeonEvents: MutableList<DungeonEvent>
 
     private val map: MutableList<List<MapNode>> = mutableListOf()
 
@@ -95,15 +99,15 @@ abstract class Dungeon {
     }
 
     open fun easyEncounter(runData: RunData): Encounter {
-        return easyEncounters.choose(runData.rng)
+        return easyEncounters.removeRandom(runData.rng)
     }
 
     open fun standardEncounter(runData: RunData): Encounter {
-        return standardEncounters.choose(runData.rng)
+        return standardEncounters.removeRandom(runData.rng)
     }
 
     open fun eliteEncounter(runData: RunData): Encounter {
-        return eliteEncounters.choose(runData.rng)
+        return eliteEncounters.removeRandom(runData.rng)
     }
 
     open fun bossEncounter(runData: RunData): Encounter {
@@ -119,21 +123,21 @@ enum class MapNodeType {
 
 class PlainsDungeon : Dungeon() {
     override val easyEncounters: MutableList<Encounter> = mutableListOf(
-//            Encounter(listOf(Pair(LargeTurtle(), Vector2(750f, 420f)))),
-//            Encounter(listOf(
-//                    Pair(Slime(), Vector2(740f, 430f)),
-//                    Pair(Slime(), Vector2(910f, 430f))
-//            )),
+            Encounter(listOf(Pair(LargeTurtle(), Vector2(750f, 420f)))),
+            Encounter(listOf(
+                    Pair(Slime(), Vector2(740f, 430f)),
+                    Pair(Slime(), Vector2(910f, 430f))
+            )),
 //            Encounter(listOf(
 //                Pair(KillerRabbit(), Vector2(740f, 430f)),
 //                Pair(KillerRabbit(), Vector2(1010f, 430f))
 //            )),
 //            Encounter(listOf(Pair(Bull(), Vector2(750f, 420f)))),
-            Encounter(listOf(
-                Pair(Rat(), Vector2(740f, 400f)),
-                Pair(Rat(), Vector2(1010f, 500f)),
-                Pair(Rat(), Vector2(1010f, 280f)),
-            )),
+//            Encounter(listOf(
+//                Pair(Rat(), Vector2(740f, 400f)),
+//                Pair(Rat(), Vector2(1010f, 500f)),
+//                Pair(Rat(), Vector2(1010f, 280f)),
+//            )),
 //            Encounter(listOf(
 //                    Pair(RiverSpirit(), Vector2(740f, 430f)),
 //                    Pair(Slime(), Vector2(1010f, 430f))
@@ -159,4 +163,8 @@ class PlainsDungeon : Dungeon() {
         )),
     )
     override val bossEncounters: MutableList<Encounter> = mutableListOf()
+
+    override val dungeonEvents: MutableList<DungeonEvent> = mutableListOf(
+        DragonInquiryEvent()
+    )
 }

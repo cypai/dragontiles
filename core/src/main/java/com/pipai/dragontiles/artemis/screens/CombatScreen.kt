@@ -56,7 +56,7 @@ class CombatScreen(game: DragonTilesGame, runData: RunData, encounter: Encounter
                 MouseXySystem(game.gameConfig),
                 TooltipSystem(game, frontStage),
                 FullScreenColorSystem(game),
-                RewardsSystem(game, runData, frontStage),
+                RewardsSystem(game, runData, frontStage, rewards),
                 MapUiSystem(game, backStage, runData),
 
                 InputProcessingSystem(),

@@ -10,17 +10,20 @@ import com.pipai.dragontiles.DragonTilesGame
 import com.pipai.dragontiles.artemis.systems.NoProcessingSystem
 import com.pipai.dragontiles.artemis.systems.combat.CombatControllerSystem
 import com.pipai.dragontiles.artemis.systems.rendering.FullScreenColorSystem
+import com.pipai.dragontiles.combat.CombatRewards
 import com.pipai.dragontiles.dungeon.GlobalApi
 import com.pipai.dragontiles.dungeon.RunData
 import com.pipai.dragontiles.gui.SpellCard
 import com.pipai.dragontiles.spells.Spell
+import com.pipai.dragontiles.utils.choose
 import com.pipai.dragontiles.utils.system
 import net.mostlyoriginal.api.event.common.EventSystem
 
 class RewardsSystem(
     private val game: DragonTilesGame,
     private val runData: RunData,
-    private val stage: Stage
+    private val stage: Stage,
+    private val rewards: CombatRewards,
 ) : NoProcessingSystem() {
 
     private val skin = game.skin
@@ -73,6 +76,13 @@ class RewardsSystem(
     }
 
     fun revealRewards() {
+        api.gainGold(rewards.gold)
+        if (rewards.randomRelic) {
+            api.gainRelic(runData.relicData.availableRelics.choose(runData.rng))
+        }
+        if (rewards.relic != null) {
+            api.gainRelic(rewards.relic)
+        }
         sFsc.fadeIn(10)
         stage.addActor(rewardsTable)
     }
