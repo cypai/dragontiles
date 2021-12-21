@@ -32,6 +32,7 @@ class HeroSpells {
             QuickInvoke(),
             MultiInvoke(),
             StrengthRune(),
+            PiercingStrike(),
             RampStrike(),
             Concentrate(),
             FeedbackLoop(),

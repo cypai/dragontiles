@@ -291,7 +291,13 @@ class CombatApi(
         return ((amount + flat) * scaling).toInt()
     }
 
-    suspend fun attack(enemy: Enemy, element: Element, amount: Int, asAttack: Boolean = true) {
+    suspend fun attack(
+        enemy: Enemy,
+        element: Element,
+        amount: Int,
+        asAttack: Boolean = true,
+        piercing: Boolean = false
+    ) {
         val damage = calculateDamageOnEnemy(enemy, element, amount)
         if (asAttack) {
             eventBus.dispatch(PlayerAttackEnemyEvent(enemy, element, amount))
@@ -299,7 +305,7 @@ class CombatApi(
         if (enemyHasStatus(enemy, Dodge::class)) {
             addStatusToEnemy(enemy, Dodge(-1))
         } else {
-            if (enemy.flux < enemy.fluxMax) {
+            if (!piercing && enemy.flux < enemy.fluxMax) {
                 dealFluxDamageToEnemy(enemy, damage)
             } else {
                 dealDamageToEnemy(enemy, damage)
@@ -384,12 +390,12 @@ class CombatApi(
         sortHand()
     }
 
-    suspend fun attackHero(enemy: Enemy, element: Element, amount: Int) {
+    suspend fun attackHero(enemy: Enemy, element: Element, amount: Int, piercing: Boolean = false) {
         if (heroHasStatus(Dodge::class)) {
             addStatusToHero(Dodge(-1))
         } else {
             val damage = calculateDamageOnHero(enemy, element, amount)
-            if (runData.hero.flux < runData.hero.fluxMax) {
+            if (!piercing && runData.hero.flux < runData.hero.fluxMax) {
                 dealFluxDamageToHero(damage)
             } else {
                 dealDamageToHero(damage)

@@ -18,6 +18,8 @@ import com.pipai.dragontiles.spells.common.Blast
 import com.pipai.dragontiles.spells.common.Bump
 import com.pipai.dragontiles.spells.common.Fetch
 import com.pipai.dragontiles.spells.elementalist.BurnRune
+import com.pipai.dragontiles.spells.elementalist.Fireball
+import com.pipai.dragontiles.spells.elementalist.PiercingStrike
 import com.pipai.dragontiles.spells.elementalist.QuickInvoke
 import java.util.*
 
@@ -51,7 +53,7 @@ class MainMenuUiSystem(
                     Hero(
                         "Elementalist", 60, 60, 0, 40, 17,
                         game.heroSpells.elementalistStarterDeck().toMutableList(), 6,
-                        mutableListOf(QuickInvoke(), Bump(), BurnRune()), 3,
+                        mutableListOf(PiercingStrike(), Fireball(), BurnRune()), 3,
                         game.heroSpells.elementalistStarterSorceries().toMutableList(),
                         mutableListOf(Transmuter()),
                         5

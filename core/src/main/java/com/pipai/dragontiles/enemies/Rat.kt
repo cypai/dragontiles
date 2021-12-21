@@ -10,8 +10,8 @@ class Rat : Enemy() {
     override val strId: String = "base:enemies:Rat"
     override val assetName: String = "rat.png"
 
-    override val hpMax: Int = 16
-    override val fluxMax: Int = 0
+    override val hpMax: Int = 2
+    override val fluxMax: Int = 20
 
     private var flag = false
 

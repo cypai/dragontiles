@@ -29,8 +29,8 @@ abstract class Dungeon {
                 1 -> {
                     repeat(3) {
                         //floor.add(MapNode(MapNodeType.TOWN, false, mutableListOf(0), mutableListOf()))
-                        //floor.add(MapNode(MapNodeType.COMBAT, false, mutableListOf(0), mutableListOf()))
-                        floor.add(MapNode(MapNodeType.ELITE, false, mutableListOf(0), mutableListOf()))
+                        floor.add(MapNode(MapNodeType.COMBAT, false, mutableListOf(0), mutableListOf()))
+                        //floor.add(MapNode(MapNodeType.ELITE, false, mutableListOf(0), mutableListOf()))
                     }
                 }
                 10 -> {
@@ -128,15 +128,15 @@ class PlainsDungeon : Dungeon() {
 //                Pair(KillerRabbit(), Vector2(1010f, 430f))
 //            )),
 //            Encounter(listOf(Pair(Bull(), Vector2(750f, 420f)))),
-//            Encounter(listOf(
-//                Pair(Rat(), Vector2(740f, 400f)),
-//                Pair(Rat(), Vector2(1010f, 500f)),
-//                Pair(Rat(), Vector2(1010f, 280f)),
-//            )),
             Encounter(listOf(
-                    Pair(RiverSpirit(), Vector2(740f, 430f)),
-                    Pair(Slime(), Vector2(1010f, 430f))
+                Pair(Rat(), Vector2(740f, 400f)),
+                Pair(Rat(), Vector2(1010f, 500f)),
+                Pair(Rat(), Vector2(1010f, 280f)),
             )),
+//            Encounter(listOf(
+//                    Pair(RiverSpirit(), Vector2(740f, 430f)),
+//                    Pair(Slime(), Vector2(1010f, 430f))
+//            )),
     )
     override val standardEncounters: MutableList<Encounter> = mutableListOf(
             Encounter(listOf(

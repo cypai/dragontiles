@@ -95,6 +95,12 @@ base:keywords:Chain:
     name: Chain
     description: Takes damage when attacked with the chained element.
 
+base:keywords:Piercing:
+  en:
+    key: "@Piercing"
+    name: Piercing
+    description: Hits through Flux.
+
 base:keywords:Strength:
   en:
     key: "@Strength"
