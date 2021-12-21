@@ -202,6 +202,8 @@ class DeckDisplayUiSystem(
             val spellCard = SpellCard(game, spell, null, game.skin, null)
             spellCard.data[SECTION] = section.ordinal
             cell = table.add(spellCard)
+                .prefWidth(SpellCard.cardWidth)
+                .prefHeight(SpellCard.cardHeight)
                 .pad(10f)
             spellCard.addClickCallback { _, _ -> onClick(spell, section) }
             if (enableSwapDnd) {
