@@ -1,9 +1,7 @@
 package com.pipai.dragontiles.data
 
 import com.pipai.dragontiles.dungeon.RunData
-import com.pipai.dragontiles.sorceries.CommonSorcery
-import com.pipai.dragontiles.sorceries.Eyes
-import com.pipai.dragontiles.sorceries.Sorcery
+import com.pipai.dragontiles.sorceries.*
 import com.pipai.dragontiles.spells.Rarity
 import com.pipai.dragontiles.spells.Spell
 import com.pipai.dragontiles.spells.common.*
@@ -32,7 +30,8 @@ class HeroSpells {
     fun elementalistStarterSorceries(): List<Sorcery> {
         return listOf(
             Eyes(),
-            CommonSorcery(),
+            Chow(),
+            Pong(),
         )
     }
 
