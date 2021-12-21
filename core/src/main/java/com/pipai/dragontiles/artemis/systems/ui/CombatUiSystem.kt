@@ -463,8 +463,9 @@ class CombatUiSystem(
         spellComponentList.setFullCastOptions(fch)
         spellComponentList.height = min(spellComponentList.prefHeight, SpellCard.cardHeight)
         val position = layout.optionListTlPosition
-        spellComponentList.x = position.x
+        spellComponentList.x = position.x - SpellCard.cardWidth
         spellComponentList.y = position.y - spellComponentList.height
+        spellComponentList.width = spellComponentList.prefWidth
 
         frontStage.addActor(spellComponentList)
         frontStage.keyboardFocus = spellComponentList

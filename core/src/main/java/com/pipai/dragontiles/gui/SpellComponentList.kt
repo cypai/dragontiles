@@ -80,6 +80,7 @@ class SpellComponentList(
                 }
                 table.add(hGroup)
                     .height(hGroup.prefHeight)
+                    .padRight(2f)
                 table.row()
             }
         table.validate()
