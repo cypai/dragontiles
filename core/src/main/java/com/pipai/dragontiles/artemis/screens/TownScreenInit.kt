@@ -42,7 +42,6 @@ class TownScreenInit(
         val spellShop = SpellShop(
             game.heroSpells.generateRewards(runData, 3).map { pricedSpell(it) }.toMutableList(),
             mutableListOf(),
-            pricedSpell(game.heroSpells.cantrips().choose(runData.rng)),
             pricedSpell(game.heroSpells.colorlessSpells().choose(runData.rng)),
         )
         val itemShop = ItemShop(mutableListOf())

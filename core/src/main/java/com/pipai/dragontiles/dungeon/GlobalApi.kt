@@ -2,15 +2,20 @@ package com.pipai.dragontiles.dungeon
 
 import com.pipai.dragontiles.artemis.events.GoldChangeEvent
 import com.pipai.dragontiles.artemis.events.ReplaceSpellQueryEvent
+import com.pipai.dragontiles.sorceries.Sorcery
 import com.pipai.dragontiles.spells.Spell
 import net.mostlyoriginal.api.event.common.EventSystem
 
 open class GlobalApi(private val runData: RunData, private val sEvent: EventSystem) {
     fun addSpellToDeck(spell: Spell) {
-        if (runData.hero.spells.size < runData.hero.spellsSize) {
-            runData.hero.spells.add(spell)
+        if (spell is Sorcery) {
+            runData.hero.sorceries.add(spell)
         } else {
-            addSpellToSideboard(spell)
+            if (runData.hero.spells.size < runData.hero.spellsSize) {
+                runData.hero.spells.add(spell)
+            } else {
+                addSpellToSideboard(spell)
+            }
         }
     }
 

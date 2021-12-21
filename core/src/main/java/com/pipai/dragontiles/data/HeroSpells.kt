@@ -24,8 +24,6 @@ class HeroSpells {
     fun elementalistStarterSorceries(): List<Sorcery> {
         return listOf(
             Eyes(),
-            Chow(),
-            Pong(),
         )
     }
 
@@ -50,20 +48,17 @@ class HeroSpells {
         )
     }
 
-    fun cantrips(): List<Spell> {
+    fun colorlessSpells(): List<Spell> {
         return listOf(
+            Singularity(),
+            Fetch(),
             Ground(),
             Mulligan(),
             Reserve(),
             Bump(),
             Nudge(),
-        )
-    }
-
-    fun colorlessSpells(): List<Spell> {
-        return listOf(
-            Singularity(),
-            Fetch()
+            Chow(),
+            Pong(),
         )
     }
 

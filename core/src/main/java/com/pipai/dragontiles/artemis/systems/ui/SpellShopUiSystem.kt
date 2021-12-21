@@ -40,9 +40,6 @@ class SpellShopUiSystem(
     override fun initialize() {
         api = GlobalApi(runData, sEvent)
         val spellShop = runData.town!!.spellShop
-        if (spellShop.cantrip != null) {
-            createSpell(spellShop.cantrip!!, SpellCard.cardWidth * 1, SpellCard.cardHeight * 2)
-        }
         spellShop.classSpells.forEachIndexed { i, ps ->
             createSpell(ps, SpellCard.cardWidth * 3 + i * SpellCard.cardWidth * 2, SpellCard.cardHeight * 2)
         }
