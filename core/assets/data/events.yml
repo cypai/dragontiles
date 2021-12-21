@@ -88,9 +88,12 @@ base:events:FreeRelic:
     en:
       text: |
         Wow, a free relic!
-  use:
+  take:
     en:
       text: Receive a random relic.
+  takeMain:
+    en:
+      text: This bodes well for the run.
   skip:
     en:
       text: Do nothing.

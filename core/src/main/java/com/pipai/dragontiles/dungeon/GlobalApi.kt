@@ -37,6 +37,7 @@ open class GlobalApi(private val runData: RunData, private val sEvent: EventSyst
     fun gainRelicImmediate(relic: Relic) {
         runData.hero.relics.add(relic)
         runData.relicData.availableRelics.remove(relic)
+        relic.onPickup(this)
         sEvent.dispatch(TopRowUiUpdateEvent())
     }
 
