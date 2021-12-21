@@ -176,7 +176,7 @@ class MapUiSystem(
                     )
                 }
                 MapNodeType.EVENT -> {
-                    game.screen = EventScreen(game, runData, DragonInquiryEvent())
+                    game.screen = EventScreen(game, runData, runData.dungeon.dungeonEvent(runData))
                 }
                 MapNodeType.TOWN -> {
                     game.screen = TownScreen(game, runData, true)

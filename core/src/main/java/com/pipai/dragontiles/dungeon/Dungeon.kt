@@ -3,6 +3,7 @@ package com.pipai.dragontiles.dungeon
 import com.badlogic.gdx.math.Vector2
 import com.pipai.dragontiles.dungeonevents.DragonInquiryEvent
 import com.pipai.dragontiles.dungeonevents.DungeonEvent
+import com.pipai.dragontiles.dungeonevents.ThornedBush
 import com.pipai.dragontiles.enemies.*
 import com.pipai.dragontiles.utils.choose
 import com.pipai.dragontiles.utils.removeRandom
@@ -33,8 +34,9 @@ abstract class Dungeon {
                 }
                 1 -> {
                     repeat(3) {
+                        floor.add(MapNode(MapNodeType.EVENT, false, mutableListOf(0), mutableListOf()))
                         //floor.add(MapNode(MapNodeType.TOWN, false, mutableListOf(0), mutableListOf()))
-                        floor.add(MapNode(MapNodeType.COMBAT, false, mutableListOf(0), mutableListOf()))
+                        //floor.add(MapNode(MapNodeType.COMBAT, false, mutableListOf(0), mutableListOf()))
                         //floor.add(MapNode(MapNodeType.ELITE, false, mutableListOf(0), mutableListOf()))
                     }
                 }
@@ -113,6 +115,11 @@ abstract class Dungeon {
     open fun bossEncounter(runData: RunData): Encounter {
         return bossEncounters.choose(runData.rng)
     }
+
+    open fun dungeonEvent(runData: RunData): DungeonEvent {
+        return dungeonEvents.removeRandom(runData.rng)
+    }
+
 }
 
 data class MapNode(val type: MapNodeType, val hidden: Boolean, val prev: MutableList<Int>, val next: MutableList<Int>)
@@ -165,6 +172,6 @@ class PlainsDungeon : Dungeon() {
     override val bossEncounters: MutableList<Encounter> = mutableListOf()
 
     override val dungeonEvents: MutableList<DungeonEvent> = mutableListOf(
-        DragonInquiryEvent()
+        ThornedBush(),
     )
 }

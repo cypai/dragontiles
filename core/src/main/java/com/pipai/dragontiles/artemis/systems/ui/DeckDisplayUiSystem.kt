@@ -251,7 +251,7 @@ class DeckDisplayUiSystem(
         active = true
         sFsc.fadeIn(10)
         stage.addActor(scrollPane)
-        scrollPane.toBack()
+        scrollPane.toFront()
         scrollPane.scrollY = 0f
     }
 

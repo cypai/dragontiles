@@ -46,6 +46,9 @@ class HeroSpells {
             Fireball(),
             IceShard(),
             ChainLightning(),
+            CommonSorcery(),
+            Chow(),
+            Pong(),
         )
     }
 

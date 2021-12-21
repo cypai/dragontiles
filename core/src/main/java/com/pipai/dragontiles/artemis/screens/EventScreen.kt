@@ -12,18 +12,17 @@ import com.pipai.dragontiles.DragonTilesGame
 import com.pipai.dragontiles.artemis.systems.ClickableSystem
 import com.pipai.dragontiles.artemis.systems.input.ExitInputProcessor
 import com.pipai.dragontiles.artemis.systems.input.InputProcessingSystem
+import com.pipai.dragontiles.artemis.systems.rendering.FullScreenColorSystem
 import com.pipai.dragontiles.artemis.systems.rendering.RenderingSystem
-import com.pipai.dragontiles.artemis.systems.ui.EventUiSystem
-import com.pipai.dragontiles.artemis.systems.ui.MapUiSystem
-import com.pipai.dragontiles.artemis.systems.ui.TooltipSystem
-import com.pipai.dragontiles.artemis.systems.ui.TopRowUiSystem
+import com.pipai.dragontiles.artemis.systems.ui.*
 import com.pipai.dragontiles.dungeon.RunData
 import com.pipai.dragontiles.dungeonevents.DungeonEvent
 import net.mostlyoriginal.api.event.common.EventSystem
 
 class EventScreen(game: DragonTilesGame, runData: RunData, event: DungeonEvent) : Screen {
 
-    private val stage = Stage(ScreenViewport(), game.spriteBatch)
+    private val backStage = Stage(ScreenViewport(), game.spriteBatch)
+    private val frontStage = Stage(ScreenViewport(), game.spriteBatch)
 
     val world: World
 
@@ -34,24 +33,28 @@ class EventScreen(game: DragonTilesGame, runData: RunData, event: DungeonEvent) 
                 EventSystem(),
                 ClickableSystem(game.gameConfig),
                 InputProcessingSystem(),
-                EventUiSystem(game, stage, runData, event),
-                MapUiSystem(game, stage, runData),
-                TooltipSystem(game, stage),
+                EventUiSystem(game, backStage, runData, event),
+                MapUiSystem(game, backStage, runData),
+                TooltipSystem(game, frontStage),
+                DeckDisplayUiSystem(game, runData, frontStage),
+                FullScreenColorSystem(game),
             )
             .with(
                 -1,
                 RenderingSystem(game),
-                TopRowUiSystem(game, runData, stage)
+                TopRowUiSystem(game, runData, frontStage)
             )
             .build()
 
         world = World(config)
 
         val inputProcessor = world.getSystem(InputProcessingSystem::class.java)
-        inputProcessor.addAlwaysOnProcessor(stage)
-        inputProcessor.addAlwaysOnProcessor(ExitInputProcessor())
+        inputProcessor.addAlwaysOnProcessor(frontStage)
+        inputProcessor.addAlwaysOnProcessor(backStage)
         inputProcessor.addAlwaysOnProcessor(world.getSystem(ClickableSystem::class.java))
         inputProcessor.addAlwaysOnProcessor(world.getSystem(TooltipSystem::class.java))
+        inputProcessor.addAlwaysOnProcessor(world.getSystem(DeckDisplayUiSystem::class.java))
+        inputProcessor.addAlwaysOnProcessor(ExitInputProcessor())
         inputProcessor.activateInput()
 
         StandardScreenInit(world).initialize()
@@ -61,10 +64,12 @@ class EventScreen(game: DragonTilesGame, runData: RunData, event: DungeonEvent) 
         Gdx.gl.glClearColor(0f, 0f, 0f, 1f)
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA)
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
-        stage.act()
-        stage.draw()
+        backStage.act()
+        backStage.draw()
         world.setDelta(delta)
         world.process()
+        frontStage.act()
+        frontStage.draw()
     }
 
     override fun resize(width: Int, height: Int) {
@@ -84,6 +89,7 @@ class EventScreen(game: DragonTilesGame, runData: RunData, event: DungeonEvent) 
 
     override fun dispose() {
         world.dispose()
-        stage.dispose()
+        backStage.dispose()
+        frontStage.dispose()
     }
 }

@@ -56,6 +56,9 @@ base:events:ThornedBush:
   dig:
     en:
       text: Dig in there to receive a random spell and sorcery. Lose 10% HP.
+  digMain:
+    en:
+      text: You scrape yourself a bit, but manage to recover some spells.
   skip:
     en:
       text: Do nothing.
