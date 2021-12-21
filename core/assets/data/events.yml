@@ -42,3 +42,172 @@ base:events:DragonInquiry:
   next:
     en:
       text: Next
+
+base:events:ThornedBush:
+  name:
+    en:
+      text: Thorned Bush
+  start:
+    en:
+      text: |
+        As you continue along the path, you find the remains of some spells in a thorny bush.
+
+        What do you do?
+  dig:
+    en:
+      text: Dig in there to receive a random spell and sorcery. Lose 10% HP.
+  skip:
+    en:
+      text: Do nothing.
+
+base:events:UnusedSeal:
+  name:
+    en:
+      text: UnusedSeal
+  start:
+    en:
+      text: |
+        You notice a seal on the ground. Probably from the last pilgrim who didn't make it all the way.
+
+        A closer inspection reveals that it still has some power left.
+  use:
+    en:
+      text: Receive a spell upgrade.
+  skip:
+    en:
+      text: Do nothing.
+
+base:events:FreeRelic:
+  name:
+    en:
+      text: Free Relic
+  start:
+    en:
+      text: |
+        Wow, a free relic!
+  use:
+    en:
+      text: Receive a random relic.
+  skip:
+    en:
+      text: Do nothing.
+
+base:events:ShinyInAHole:
+  name:
+    en:
+      text: Shiny In A Hole
+  start:
+    en:
+      text: |
+        A brief glimpse of something shining from a nearby hole grabs your attention.
+  check:
+    en:
+      text: Check. (Receive a random relic, -10% HP)
+  checkResult:
+    en:
+      text: Ouch! A snake apparently made the hole its home, but at least you got something out of it.
+  skip:
+    en:
+      text: Do nothing.
+
+base:events:Cleric:
+  name:
+    en:
+      text: Relic
+  start:
+    en:
+      text: |
+        You pass by a cleric offering his services.
+  heal:
+    en:
+      text: Heal for 1 Gold.
+  maxHp:
+    en:
+      text: Gain 5 Max HP for 2 Gold.
+  skip:
+    en:
+      text: Do nothing.
+
+base:events:RabbitSwarm:
+  name:
+    en:
+      text: Rabbit Swarm
+  start:
+    en:
+      text: |
+        A signpost reads:
+
+        WARNING!
+
+        Killer Rabbits have been seen by the river.
+  fight:
+    en:
+      text: Go fight the rabbits. (Receive a Relic.)
+  skip:
+    en:
+      text: Do nothing.
+
+base:events:StrangeScribe:
+  name:
+    en:
+      text: Strange Scribe
+  start:
+    en:
+      text: |
+        A scribe with unkempt hair is hawking his capabilities. He seems untrustworthy...
+  use:
+    en:
+      text: Use his services. (-1 Gold, transform a spell)
+  buy:
+    en:
+      text: Buy his spell. (-1 Gold, receive Mulligan)
+  skip:
+    en:
+      text: Do nothing.
+
+base:events:TeaHouseScene:
+  name:
+    en:
+      text: Tea House Scene
+  start:
+    en:
+      text: |
+        You enter the local tea house. Fragrant teas of all sorts are stacked on the shelves.
+
+        A few customers glance over at you, then go back to sipping their teas.
+  buy:
+    en:
+      text: Buy tea leaves. (-4 Gold, receive Tea Leaves)
+  solicit:
+    en:
+      text: Solicit for donations. (Fight)
+  solicitMain:
+    en:
+      text: |
+        The tipsy large man response by punching you in the face.
+  chill:
+    en:
+      text: Relax. +5 Max HP.
+  chillMain:
+    en:
+      text: |
+        The relaxing atmosphere invigorates you. You leave feeling like you are more aware of your surroundings.
+
+base:events:MartialArtsTournament:
+  name:
+    en:
+      text: Martial Arts Tournament
+  start:
+    en:
+      text: |
+        A sign advertising a Martial Arts Tournament is here. Apparently it's being held today.
+  enter:
+    en:
+      text: Enter the tournament. (Fight)
+  enterMain:
+    en:
+      text: |
+        It's your turn to fight. As you enter, you are surprised to see...
+  skip:
+    en:
+      text: Do nothing.
