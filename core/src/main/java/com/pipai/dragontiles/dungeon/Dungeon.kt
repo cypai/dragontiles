@@ -170,8 +170,8 @@ class PlainsDungeon : Dungeon() {
     override val bossEncounters: MutableList<Encounter> = mutableListOf()
 
     override val dungeonEvents: MutableList<DungeonEvent> = mutableListOf(
-//        ThornedBush(),
+        ThornedBush(),
 //        FreeRelic(),
-        UnusedSeal(),
+//        UnusedSeal(),
     )
 }

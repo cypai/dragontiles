@@ -55,7 +55,7 @@ base:events:ThornedBush:
         What do you do?
   dig:
     en:
-      text: Dig in there to receive a random spell and sorcery. Lose 10% HP.
+      text: Dig in there to receive a random spell and sorcery.
   digMain:
     en:
       text: You scrape yourself a bit, but manage to recover some spells.
@@ -111,7 +111,7 @@ base:events:ShinyInAHole:
         A brief glimpse of something shining from a nearby hole grabs your attention.
   check:
     en:
-      text: Check. (Receive a random relic, -10% HP)
+      text: Check. (Receive a random relic, -20% HP)
   checkResult:
     en:
       text: Ouch! A snake apparently made the hole its home, but at least you got something out of it.

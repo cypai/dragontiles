@@ -14,10 +14,12 @@ import com.pipai.dragontiles.dungeonevents.EventOption
 import com.pipai.dragontiles.utils.system
 import net.mostlyoriginal.api.event.common.EventSystem
 
-class EventUiSystem(private val game: DragonTilesGame,
-                    private val stage: Stage,
-                    private val runData: RunData,
-                    private val event: DungeonEvent) : BaseSystem() {
+class EventUiSystem(
+    private val game: DragonTilesGame,
+    private val stage: Stage,
+    private val runData: RunData,
+    private val event: DungeonEvent
+) : BaseSystem() {
 
     private val skin = game.skin
 
@@ -57,7 +59,12 @@ class EventUiSystem(private val game: DragonTilesGame,
     }
 
     fun addOption(text: String, option: EventOption) {
-        val label = Label(text, skin)
+        val actualText = if (option.additionalText(api).isBlank()) {
+            text
+        } else {
+            "$text (${option.additionalText(api)})"
+        }
+        val label = Label(actualText, skin)
         label.addListener(object : ClickListener() {
             override fun clicked(event: InputEvent?, x: Float, y: Float) {
                 option.onSelect(api)
@@ -75,19 +82,19 @@ class EventUiSystem(private val game: DragonTilesGame,
     fun rebuildTable() {
         rootTable.clearChildren()
         rootTable.add(mainTextLabel)
-                .prefHeight(game.gameConfig.resolution.height / 2f)
+            .prefHeight(game.gameConfig.resolution.height / 2f)
+            .prefWidth(game.gameConfig.resolution.width.toFloat())
+            .padLeft(16f)
+            .expand()
+            .center()
+        rootTable.row()
+        optionLabels.forEach {
+            rootTable.add(it)
+                .prefHeight(64f)
                 .prefWidth(game.gameConfig.resolution.width.toFloat())
                 .padLeft(16f)
                 .expand()
                 .center()
-        rootTable.row()
-        optionLabels.forEach {
-            rootTable.add(it)
-                    .prefHeight(64f)
-                    .prefWidth(game.gameConfig.resolution.width.toFloat())
-                    .padLeft(16f)
-                    .expand()
-                    .center()
             rootTable.row()
         }
     }

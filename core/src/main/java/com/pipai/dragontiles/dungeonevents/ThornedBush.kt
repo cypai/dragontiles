@@ -16,15 +16,19 @@ class ThornedBush : DungeonEvent() {
     private class DigOption : EventOption {
         override val id = "dig"
 
+        private fun hpLoss(api: EventApi): Int = (api.runData.hero.hpMax * 0.15f).toInt()
+
+        override fun additionalText(api: EventApi): String {
+            return "Lose ${hpLoss(api)} HP."
+        }
+
         override fun onSelect(api: EventApi) {
-            api.gainHpImmediate(-api.runData.hero.hpMax / 10)
+            api.gainHpImmediate(-hpLoss(api))
             val spell = api.game.heroSpells.elementalistSpells().filter { it.type != SpellType.SORCERY }
                 .choose(api.runData.rng)
-            println(spell)
             api.addSpellToDeck(spell)
             val sorcery = api.game.heroSpells.elementalistSpells().filter { it.type == SpellType.SORCERY }
                 .choose(api.runData.rng)
-            println(sorcery)
             api.addSpellToDeck(sorcery)
             api.changeToEventEnd("digMain")
         }
