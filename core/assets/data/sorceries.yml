@@ -12,3 +12,18 @@ base:sorceries:Chow:
   en:
     name: Chow
     description: Deal !d @Elemented damage.
+
+base:sorceries:CommonSorcery:
+  en:
+    name: Common Sorcery
+    description: Deal !d damage.
+
+base:sorceries:ForceOverload:
+  en:
+    name: Force Overload
+    description: Maximize @Flux for all enemies.
+
+base:sorceries:PhoenixRebirth:
+  en:
+    name: Phoenix's Rebirth
+    description: Vent all Flux. Deal !d Fire @Piercing damage. Heal HP equal to damage dealt.

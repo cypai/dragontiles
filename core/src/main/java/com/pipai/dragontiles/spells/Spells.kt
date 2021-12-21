@@ -5,6 +5,7 @@ import com.pipai.dragontiles.data.Element
 import com.pipai.dragontiles.data.Suit
 import com.pipai.dragontiles.data.Tile
 import com.pipai.dragontiles.data.TileInstance
+import com.pipai.dragontiles.sorceries.FullCastHand
 import com.pipai.dragontiles.utils.*
 import org.apache.commons.lang3.builder.ToStringBuilder
 import kotlin.reflect.full.createInstance
@@ -231,6 +232,9 @@ abstract class ComponentRequirement {
     abstract fun find(hand: List<TileInstance>): List<List<TileInstance>>
     abstract fun findGiven(hand: List<TileInstance>, given: List<TileInstance>): List<List<TileInstance>>
     abstract fun satisfied(slots: List<TileInstance>): Boolean
+    open fun satisfied(fullCastHand: FullCastHand): Boolean {
+        return fullCastHand.melds.any { satisfied(it.tiles) } || satisfied(fullCastHand.eye)
+    }
 }
 
 abstract class ManualComponentRequirement : ComponentRequirement() {
@@ -278,6 +282,10 @@ sealed class ReqAmount {
 
     class XAmount : ReqAmount() {
         override fun text(): String = "x"
+    }
+
+    class UnknownAmount : ReqAmount() {
+        override fun text(): String = "?"
     }
 }
 
@@ -339,6 +347,24 @@ class AnyCombo(slotAmount: Int, override var suitGroup: SuitGroup) : ManualCompo
         return slots.size == reqAmount.amount
                 && slots.all { it.tile.suit in suitGroup.allowedSuits }
     }
+}
+
+class PredicateRequirement(private val predicate: (List<TileInstance>) -> Boolean, override val description: String) :
+    ManualComponentRequirement() {
+
+    override val type = SetType.MISC
+    override val reqAmount = ReqAmount.UnknownAmount()
+    override var suitGroup = SuitGroup.ANY
+
+    override fun satisfied(slots: List<TileInstance>): Boolean {
+        return predicate.invoke(slots)
+    }
+}
+
+abstract class CustomRequirement : ManualComponentRequirement() {
+    override val type = SetType.MISC
+    override val reqAmount = ReqAmount.UnknownAmount()
+    override var suitGroup = SuitGroup.ANY
 }
 
 class Identical(slotAmount: Int, override var suitGroup: SuitGroup) : ComponentRequirement() {

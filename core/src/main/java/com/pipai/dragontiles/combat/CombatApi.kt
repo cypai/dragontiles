@@ -7,10 +7,10 @@ import com.pipai.dragontiles.data.TileStatus
 import com.pipai.dragontiles.dungeon.GlobalApi
 import com.pipai.dragontiles.dungeon.RunData
 import com.pipai.dragontiles.enemies.Enemy
-import com.pipai.dragontiles.spells.Rune
-import com.pipai.dragontiles.spells.Spell
-import com.pipai.dragontiles.spells.StandardSpell
-import com.pipai.dragontiles.spells.baseFluxGain
+import com.pipai.dragontiles.sorceries.FullCastHand
+import com.pipai.dragontiles.sorceries.MeldType
+import com.pipai.dragontiles.sorceries.Sorcery
+import com.pipai.dragontiles.spells.*
 import com.pipai.dragontiles.status.Dodge
 import com.pipai.dragontiles.status.Overloaded
 import com.pipai.dragontiles.status.Status
@@ -362,7 +362,8 @@ class CombatApi(
             when (tile.tileStatus) {
                 TileStatus.BURN -> dealDamageToHero(2)
                 TileStatus.VOLATILE -> dealFluxDamageToHero(spell.baseFluxGain())
-                else -> {}
+                else -> {
+                }
             }
         }
         sortHand()
@@ -548,6 +549,57 @@ class CombatApi(
         return queryTileOptions("Transform this tile", tile, options, 1, 1).first()
     }
 
+    suspend fun castSorceries(fullCastHand: FullCastHand, sorceries: List<Sorcery>) {
+        sorceries.forEach { sorcery ->
+            when (val req = sorcery.requirement) {
+                is Identical -> {
+                    when (req.reqAmount.amount) {
+                        2 -> {
+                            sorcery.fill(fullCastHand.eye)
+                            sorcery.onCast(fullCastHand, this)
+                        }
+                        3 -> {
+                            fullCastHand.melds.filter { meld -> meld.type == MeldType.IDENTICAL }
+                                .forEach { meld ->
+                                    sorcery.fill(meld.tiles)
+                                    sorcery.onCast(fullCastHand, this)
+                                }
+                        }
+                        else -> {
+                            req.find(combat.hand)
+                                .forEach { match ->
+                                    sorcery.fill(match)
+                                    sorcery.onCast(fullCastHand, this)
+                                }
+                        }
+                    }
+                }
+                is Sequential -> {
+                    when (req.reqAmount.amount) {
+                        3 -> {
+                            fullCastHand.melds.filter { meld -> meld.type == MeldType.SEQUENCE }
+                                .forEach { meld ->
+                                    sorcery.fill(meld.tiles)
+                                    sorcery.onCast(fullCastHand, this)
+                                }
+                        }
+                        9 -> {
+                            req.find(combat.hand).firstOrNull()?.let { match ->
+                                sorcery.fill(match)
+                                sorcery.onCast(fullCastHand, this)
+                            }
+                        }
+                    }
+                }
+                else -> {
+                    if (req.satisfied(fullCastHand)) {
+                        sorcery.fill(combat.hand)
+                        sorcery.onCast(fullCastHand, this)
+                    }
+                }
+            }
+        }
+    }
 }
 
 enum class DamageOrigin {
