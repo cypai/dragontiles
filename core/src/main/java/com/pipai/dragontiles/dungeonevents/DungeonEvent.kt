@@ -11,6 +11,8 @@ abstract class DungeonEvent {
         api.changeOptions(beginningOptions)
     }
 
+    open fun available(floorNumber: Int): Boolean = true
+
     open fun onEventStart(api: EventApi) {
     }
 

@@ -115,7 +115,9 @@ abstract class Dungeon {
     }
 
     open fun dungeonEvent(runData: RunData): DungeonEvent {
-        return dungeonEvents.removeRandom(runData.rng)
+        val event = dungeonEvents.filter { it.available(currentFloor) }.toList().choose(runData.rng)
+        dungeonEvents.remove(event)
+        return event
     }
 
 }
@@ -170,10 +172,10 @@ class PlainsDungeon : Dungeon() {
     override val bossEncounters: MutableList<Encounter> = mutableListOf()
 
     override val dungeonEvents: MutableList<DungeonEvent> = mutableListOf(
-//        ThornedBush(),
-//        FreeRelic(),
-//        UnusedSeal(),
-//        ShinyInAHole(),
+        ThornedBush(),
+        FreeRelic(),
+        UnusedSeal(),
+        ShinyInAHole(),
         RabbitSwarm(),
     )
 }

@@ -13,6 +13,10 @@ class RabbitSwarm : DungeonEvent() {
     override val beginningTextId = "start"
     override val beginningOptions: List<EventOption> = listOf(FightOption(), SkipOption())
 
+    override fun available(floorNumber: Int): Boolean {
+        return floorNumber > 5
+    }
+
     override fun onEventStart(api: EventApi) {
         api.allowMapAdvance()
     }
