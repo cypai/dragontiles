@@ -8,7 +8,7 @@ class Eyes : Sorcery() {
     override val requirement = Identical(2)
     override val rarity = Rarity.COMMON
     override val aspects: MutableList<SpellAspect> = mutableListOf(
-        AttackDamageAspect(4)
+        AttackDamageAspect(2)
     )
 
     override suspend fun onCast(hand: FullCastHand, api: CombatApi) {

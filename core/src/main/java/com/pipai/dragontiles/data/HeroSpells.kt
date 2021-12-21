@@ -13,17 +13,11 @@ class HeroSpells {
     fun elementalistStarterDeck(): List<Spell> {
         return listOf(
             QuickInvoke(),
-            Ground(),
+            Strike(),
+            Vent(),
+            ElementalRune(),
+            Break(),
             Bump(),
-            Nudge(),
-            Ground(),
-            Ground(),
-//            Invoke(),
-//            Strike(),
-//            Vent(),
-//            ElementalRune(),
-//            Break(),
-//            Fireball(),
         )
     }
 
