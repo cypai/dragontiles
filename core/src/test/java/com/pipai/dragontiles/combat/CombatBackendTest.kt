@@ -21,4 +21,9 @@ class QueryHandler {
     fun handleQuery(ev: QueryTilesEvent) {
         ev.continuation.resume(listOf())
     }
+
+    @Subscribe
+    fun handleSwap(ev: QuerySwapEvent) {
+        ev.continuation.resume(QuerySwapEvent.SwapData(listOf(), listOf()))
+    }
 }
