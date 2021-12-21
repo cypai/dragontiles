@@ -302,7 +302,7 @@ class CombatApi(
         if (asAttack) {
             eventBus.dispatch(PlayerAttackEnemyEvent(enemy, element, amount))
         }
-        if (enemyHasStatus(enemy, Dodge::class)) {
+        if (asAttack && enemyHasStatus(enemy, Dodge::class)) {
             addStatusToEnemy(enemy, Dodge(-1))
         } else {
             if (!piercing && enemy.flux < enemy.fluxMax) {
@@ -313,9 +313,9 @@ class CombatApi(
         }
     }
 
-    suspend fun aoeAttack(element: Element, amount: Int, asAttack: Boolean = true) {
+    suspend fun aoeAttack(element: Element, amount: Int, asAttack: Boolean = true, piercing: Boolean = false) {
         combat.enemies.filter { it.hp > 0 }
-            .forEach { attack(it, element, amount, asAttack) }
+            .forEach { attack(it, element, amount, asAttack, piercing) }
     }
 
     suspend fun dealFluxDamageToEnemy(enemy: Enemy, damage: Int) {
@@ -380,13 +380,6 @@ class CombatApi(
         combat.hand.clear()
         combat.discardPile.addAll(components)
         eventBus.dispatch(ComponentConsumeEvent(components))
-        sortHand()
-    }
-
-    suspend fun assign(components: List<TileInstance>, rune: Rune) {
-        combat.hand.removeAll(components)
-        val runeIndex = combat.spells.indexOf(rune)
-        combat.assigned[runeIndex]
         sortHand()
     }
 
