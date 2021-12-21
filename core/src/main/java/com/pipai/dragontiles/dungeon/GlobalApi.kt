@@ -10,7 +10,11 @@ import net.mostlyoriginal.api.event.common.EventSystem
 open class GlobalApi(private val runData: RunData, private val sEvent: EventSystem) {
     fun addSpellToDeck(spell: Spell) {
         if (spell is Sorcery) {
-            runData.hero.sorceries.add(spell)
+            if (runData.hero.sorceries.size < 9) {
+                runData.hero.sorceries.add(spell)
+            } else {
+                sEvent.dispatch(ReplaceSpellQueryEvent(spell))
+            }
         } else {
             if (runData.hero.spells.size < runData.hero.spellsSize) {
                 runData.hero.spells.add(spell)

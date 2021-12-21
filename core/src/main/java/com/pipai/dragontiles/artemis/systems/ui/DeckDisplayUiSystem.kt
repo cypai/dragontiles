@@ -16,6 +16,7 @@ import com.pipai.dragontiles.artemis.systems.rendering.FullScreenColorSystem
 import com.pipai.dragontiles.dungeon.GlobalApi
 import com.pipai.dragontiles.dungeon.RunData
 import com.pipai.dragontiles.gui.SpellCard
+import com.pipai.dragontiles.sorceries.Sorcery
 import com.pipai.dragontiles.spells.Spell
 import com.pipai.dragontiles.spells.SpellUpgrade
 import com.pipai.dragontiles.utils.getLogger
@@ -68,6 +69,10 @@ class DeckDisplayUiSystem(
             addSectionHeader("Sideboard Spells")
             addSpellsInSection(runData.hero.sideDeck, { _, _ -> }, enableSwapDnd, Section.SIDEBOARD)
         }
+        if (runData.hero.sorceries.isNotEmpty()) {
+            addSectionHeader("Sorceries")
+            addSpellsInSection(runData.hero.sorceries, { _, _ -> }, false, Section.SORCERIES)
+        }
     }
 
     @Subscribe
@@ -88,7 +93,7 @@ class DeckDisplayUiSystem(
         addSectionHeader("Starting Active Spells")
         addSpellsInSection(
             runData.hero.spells,
-            { clickedSpell, section -> replaceSpell(clickedSpell, spell, section) },
+            { clickedSpell, section -> if (spell !is Sorcery) replaceSpell(clickedSpell, spell, section) },
             false,
             Section.ACTIVE
         )
@@ -96,9 +101,18 @@ class DeckDisplayUiSystem(
             addSectionHeader("Sideboard Spells")
             addSpellsInSection(
                 runData.hero.sideDeck,
-                { clickedSpell, section -> replaceSpell(clickedSpell, spell, section) },
+                { clickedSpell, section -> if (spell !is Sorcery) replaceSpell(clickedSpell, spell, section) },
                 false,
                 Section.SIDEBOARD
+            )
+        }
+        if (runData.hero.sorceries.isNotEmpty()) {
+            addSectionHeader("Sorceries")
+            addSpellsInSection(
+                runData.hero.sorceries,
+                { clickedSpell, section -> if (spell is Sorcery) replaceSpell(clickedSpell, spell, section) },
+                false,
+                Section.SORCERIES
             )
         }
     }
@@ -124,6 +138,15 @@ class DeckDisplayUiSystem(
                 Section.SIDEBOARD
             )
         }
+        if (runData.hero.sorceries.isNotEmpty()) {
+            addSectionHeader("Sorceries")
+            addSpellsInSection(
+                runData.hero.sorceries,
+                { _, _ -> },
+                false,
+                Section.SORCERIES
+            )
+        }
     }
 
     private fun replaceSpell(originalSpell: Spell, newSpell: Spell, section: Section) {
@@ -135,6 +158,10 @@ class DeckDisplayUiSystem(
             Section.SIDEBOARD -> {
                 runData.hero.sideDeck.remove(originalSpell)
                 api.addSpellToSideboard(newSpell)
+            }
+            Section.SORCERIES -> {
+                runData.hero.sorceries.remove(originalSpell)
+                api.addSpellToDeck(newSpell)
             }
             else -> {
             }
