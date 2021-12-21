@@ -1,8 +1,6 @@
 package com.pipai.dragontiles.dungeonevents
 
 import com.pipai.dragontiles.spells.SpellType
-import com.pipai.dragontiles.spells.common.DragonRage
-import com.pipai.dragontiles.spells.common.DragonScale
 import com.pipai.dragontiles.utils.choose
 
 class ThornedBush : DungeonEvent() {
@@ -19,7 +17,7 @@ class ThornedBush : DungeonEvent() {
         override val id = "dig"
 
         override fun onSelect(api: EventApi) {
-            api.gainHp(-api.runData.hero.hpMax / 10)
+            api.gainHpImmediate(-api.runData.hero.hpMax / 10)
             val spell = api.game.heroSpells.elementalistSpells().filter { it.type != SpellType.SORCERY }
                 .choose(api.runData.rng)
             println(spell)

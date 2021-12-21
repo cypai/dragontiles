@@ -17,4 +17,5 @@ data class MapNodeClickEvent(val floorNum: Int, val index: Int) : Event
 class ShopClickEvent : Event
 
 data class ReplaceSpellQueryEvent(val spell: Spell) : Event
+class TopRowUiUpdateEvent : Event
 data class GoldChangeEvent(val amount: Int) : Event

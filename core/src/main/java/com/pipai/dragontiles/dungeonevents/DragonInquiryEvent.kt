@@ -35,7 +35,7 @@ class DragonInquiryEvent : DungeonEvent() {
         override val id = "wealth"
 
         override fun onSelect(api: EventApi) {
-            api.gainGold(5)
+            api.gainGoldImmediate(5)
             api.changeToEventEnd("wealthMain")
         }
     }

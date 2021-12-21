@@ -9,6 +9,6 @@ class Elixir : Relic() {
     override val rarity = Rarity.RARE
 
     override fun onPickup(api: GlobalApi) {
-        api.gainMaxFlux(7)
+        api.gainMaxFluxImmediate(7)
     }
 }

@@ -66,7 +66,7 @@ class SpellShopUiSystem(
     @Subscribe
     fun handleSpellCardClick(ev: PricedSpellClickEvent) {
         if (runData.hero.gold >= ev.pricedSpell.price) {
-            api.gainGold(-ev.pricedSpell.price)
+            api.gainGoldImmediate(-ev.pricedSpell.price)
             logger.info("Adding ${ev.pricedSpell.spell.strId} to deck at price ${ev.pricedSpell.price}")
             api.addSpellToDeck(ev.pricedSpell.spell)
             world.delete(ev.entityId)

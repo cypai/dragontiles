@@ -76,12 +76,12 @@ class RewardsSystem(
     }
 
     fun revealRewards() {
-        api.gainGold(rewards.gold)
+        api.gainGoldImmediate(rewards.gold)
         if (rewards.randomRelic) {
-            api.gainRelic(runData.relicData.availableRelics.choose(runData.rng))
+            api.gainRelicImmediate(runData.relicData.availableRelics.choose(runData.rng))
         }
         if (rewards.relic != null) {
-            api.gainRelic(rewards.relic)
+            api.gainRelicImmediate(rewards.relic)
         }
         sFsc.fadeIn(10)
         stage.addActor(rewardsTable)

@@ -9,6 +9,6 @@ class Cherry : Relic() {
     override val rarity = Rarity.COMMON
 
     override fun onPickup(api: GlobalApi) {
-        api.gainMaxHp(5)
+        api.gainMaxHpImmediate(5)
     }
 }

@@ -9,6 +9,6 @@ class Peach : Relic() {
     override val rarity = Rarity.UNCOMMON
 
     override fun onPickup(api: GlobalApi) {
-        api.gainMaxHp(9)
+        api.gainMaxHpImmediate(9)
     }
 }

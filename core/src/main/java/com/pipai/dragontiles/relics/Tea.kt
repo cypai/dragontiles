@@ -9,6 +9,6 @@ class Tea : Relic() {
     override val rarity = Rarity.UNCOMMON
 
     override fun onPickup(api: GlobalApi) {
-        api.gainMaxFlux(5)
+        api.gainMaxFluxImmediate(5)
     }
 }

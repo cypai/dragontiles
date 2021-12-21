@@ -9,6 +9,6 @@ class Coffee : Relic() {
     override val rarity = Rarity.COMMON
 
     override fun onPickup(api: GlobalApi) {
-        api.gainMaxFlux(3)
+        api.gainMaxFluxImmediate(3)
     }
 }

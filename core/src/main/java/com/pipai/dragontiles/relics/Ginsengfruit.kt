@@ -9,6 +9,6 @@ class Ginsengfruit : Relic() {
     override val rarity = Rarity.RARE
 
     override fun onPickup(api: GlobalApi) {
-        api.gainMaxHp(13)
+        api.gainMaxHpImmediate(13)
     }
 }
