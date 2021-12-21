@@ -46,13 +46,8 @@ class CombatEventBus(val sEvent: EventSystem) {
     suspend fun dispatch(ev: CombatEvent) {
         logger.info("Dispatch $ev")
         sEvent.dispatch(ev)
-        subscriptions[ev::class]?.forEach { it.func.callSuspend(it.obj, ev, api) }
-    }
-
-    suspend fun <T : CombatEvent> dispatchQuery(ev: T, continuation: Continuation<T>) {
-        sEvent.dispatch(ev)
-        subscriptions[ev::class]?.forEach { it.func.callSuspend(it.obj, ev, api) }
-        continuation.resume(ev)
+        // toList() called to avoid ConcurrentModificationException
+        subscriptions[ev::class]?.toList()?.forEach { it.func.callSuspend(it.obj, ev, api) }
     }
 
     private data class Subscription(val priority: Int, val obj: Any, val func: KFunction<*>)
