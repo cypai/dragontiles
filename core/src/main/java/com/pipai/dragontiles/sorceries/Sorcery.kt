@@ -27,12 +27,17 @@ fun findFullCastHand(hand: List<TileInstance>): List<FullCastHand> {
 }
 
 private fun dedupe(fcs: List<FullCastHand>): List<FullCastHand> {
-    val returnList = fcs.toMutableList()
-    val copy = fcs.toList()
-    copy.forEach { h ->
-        if (h in returnList) {
-            returnList.removeAll { it != h && it.uniqueIdentifier() == h.uniqueIdentifier() }
+    val returnList: MutableList<FullCastHand> = mutableListOf()
+    val ids: MutableSet<String> = mutableSetOf()
+    fcs.forEach {
+        val id = it.uniqueIdentifier().toString()
+        if (id !in ids) {
+            ids.add(id)
+            returnList.add(it)
         }
+    }
+    returnList.forEach {
+        println(it.uniqueIdentifier())
     }
     return returnList
 }
@@ -54,11 +59,29 @@ private fun findFullCastEyeIteration(hand: List<TileInstance>): List<FullCastHan
     eyes.map { eye ->
         val acceptableHands = findFullCastMeldIteration(hand.withoutAll(eye))
         fullCastHands.addAll(acceptableHands
-            .map { FullCastHand(it, eye) }
+            .map { f ->
+                FullCastHand(
+                    f.sortedWith(
+                        compareBy(
+                            { it.tiles.first().tile.suit.order },
+                            { it.tiles.first().tile.order() },
+                            { it.type })
+                    ), eye
+                )
+            }
         )
     }
     fullCastHands.addAll(findFullCastMeldIteration(hand)
-        .map { FullCastHand(it, listOf()) })
+        .map { f ->
+            FullCastHand(
+                f.sortedWith(
+                    compareBy(
+                        { it.tiles.first().tile.suit.order },
+                        { it.tiles.first().tile.order() },
+                        { it.type })
+                ), listOf()
+            )
+        })
     return fullCastHands
 }
 
@@ -87,8 +110,9 @@ private fun findFullCastMeldIteration(hand: List<TileInstance>): List<List<Meld>
 
 data class FullCastHand(val melds: List<Meld>, val eye: List<TileInstance>) {
     fun uniqueIdentifier(): List<Any> {
-        return melds.map { m -> Pair(m.tiles.first().tile, m.type) }
-            .sortedBy { it.first.order() }
+        return melds
+            .map { m -> Pair(m.tiles.first().tile, m.type) }
+            .sortedWith(compareBy({ it.first.suit.order }, { it.first.order() }, { it.second }))
             .with(eye.map { it.tile })
     }
 }

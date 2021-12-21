@@ -67,7 +67,7 @@ class FullCastTest {
     }
 
     @Test
-    fun testPartial() {
+    fun testPartial1() {
         val hand: MutableList<TileInstance> = mutableListOf()
         repeat(2) {
             hand.add(TileInstance(Tile.StarTile(StarType.STAR), TileStatus.NONE, nextId()))
@@ -80,13 +80,32 @@ class FullCastTest {
     }
 
     @Test
-    fun testPartialAlternative() {
+    fun testPartial2() {
         val hand: MutableList<TileInstance> = mutableListOf()
         (1..6).forEach { num ->
             hand.add(TileInstance(Tile.ElementalTile(Suit.FIRE, num), TileStatus.NONE, nextId()))
         }
         (1..3).forEach { num ->
             hand.add(TileInstance(Tile.ElementalTile(Suit.ICE, num), TileStatus.NONE, nextId()))
+        }
+        repeat(2) {
+            hand.add(TileInstance(Tile.StarTile(StarType.STAR), TileStatus.NONE, nextId()))
+        }
+        val fullCastHands = findFullCastHand(hand)
+        Assert.assertEquals(1, fullCastHands.size)
+    }
+
+    @Test
+    fun testPartial3() {
+        val hand: MutableList<TileInstance> = mutableListOf()
+        repeat(3) {
+            hand.add(TileInstance(Tile.ElementalTile(Suit.ICE, 3), TileStatus.NONE, nextId()))
+        }
+        (2..4).forEach { num ->
+            hand.add(TileInstance(Tile.ElementalTile(Suit.LIGHTNING, num), TileStatus.NONE, nextId()))
+        }
+        repeat(3) {
+            hand.add(TileInstance(Tile.ElementalTile(Suit.LIGHTNING, 5), TileStatus.NONE, nextId()))
         }
         repeat(2) {
             hand.add(TileInstance(Tile.StarTile(StarType.STAR), TileStatus.NONE, nextId()))

@@ -8,6 +8,11 @@ base:spells:Vent:
     name: Vent
     description: Lose !f @Flux.
 
+base:spells:Precipitate:
+  en:
+    name: Precipitate
+    description: Deal !d damage. Lose !f @Flux.
+
 base:spells:Blast:
   en:
     name: Blast
