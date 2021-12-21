@@ -13,6 +13,11 @@ base:relics:MortarAndPestle:
     name: Mortar and Pestle
     description: Gain a Potion after each battle.
 
+base:relics:RabbitsFoot:
+  en:
+    name: Rabbit's Foot
+    description: Start combat with 1 @Dodge.
+
 base:relics:NinjaScroll:
   en:
     name: Ninja Scroll
