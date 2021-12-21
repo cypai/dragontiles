@@ -9,6 +9,10 @@ class BatchAnimation : Animation(), AnimationObserver {
     private val animations: MutableList<Animation> = mutableListOf()
 
     override fun startAnimation() {
+        if (animations.isEmpty()) {
+            endAnimation()
+            return
+        }
         animations.forEach {
             logger.info("Start batch animation: $it")
             it.init(this.world, this.game)

@@ -369,6 +369,14 @@ class CombatApi(
         sortHand()
     }
 
+    suspend fun sorceryConsume() {
+        val components = combat.hand.toList()
+        combat.hand.clear()
+        combat.discardPile.addAll(components)
+        eventBus.dispatch(ComponentConsumeEvent(components))
+        sortHand()
+    }
+
     suspend fun assign(components: List<TileInstance>, rune: Rune) {
         combat.hand.removeAll(components)
         val runeIndex = combat.spells.indexOf(rune)
@@ -599,6 +607,7 @@ class CombatApi(
                 }
             }
         }
+        sorceryConsume()
     }
 }
 

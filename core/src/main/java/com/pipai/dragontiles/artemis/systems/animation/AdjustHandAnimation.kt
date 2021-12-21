@@ -21,6 +21,10 @@ class AdjustHandAnimation(private val tileLocations: List<Pair<TileInstance, Int
     private lateinit var sCombatUi: CombatUiSystem
 
     override fun startAnimation() {
+        if (tileLocations.isEmpty()) {
+            endAnimation()
+            return
+        }
         val activeTiles = sCombatUi.activeTiles()
         tileLocations.forEach { (tile, index) ->
             val entityId = sTileId.getEntityId(tile.id)

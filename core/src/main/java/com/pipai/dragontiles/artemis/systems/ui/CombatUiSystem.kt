@@ -483,7 +483,9 @@ class CombatUiSystem(
     }
 
     private fun selectFullCastHand(fullCastHand: FullCastHand) {
-        println(fullCastHand)
+        GlobalScope.launch {
+            sCombat.controller.api.castSorceries(fullCastHand, runData.hero.sorceries)
+        }
     }
 
     private fun selectComponents(components: List<TileInstance>) {
