@@ -31,4 +31,20 @@ open class GlobalApi(private val runData: RunData, private val sEvent: EventSyst
         runData.hero.gold += gold
         sEvent.dispatch(GoldChangeEvent(gold))
     }
+
+    fun gainHp(hp: Int) {
+        runData.hero.hp += hp
+        if (runData.hero.hp > runData.hero.hpMax) {
+            runData.hero.hp = runData.hero.hpMax
+        }
+    }
+
+    fun gainMaxHp(hp: Int) {
+        runData.hero.hpMax += hp
+        gainHp(hp)
+    }
+
+    fun gainMaxFlux(amount: Int) {
+        runData.hero.fluxMax += amount
+    }
 }

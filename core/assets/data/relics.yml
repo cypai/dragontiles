@@ -3,27 +3,67 @@ base:relics:Transmuter:
     name: Transmuter
     description: Transform the number of the first Elemental Tile you draw at turn start.
 
-base:relics:Buckler:
+base:relics:Bamboo:
   en:
-    name: Buckler
-    description: If you would take 5 or less damage, take 1 damage only instead.
+    name: Bamboo
+    description: +1 @Strength
 
-base:relics:PowerAmp:
+base:relics:MortarAndPestle:
   en:
-    name: Power Amp
-    description: +1 Strength
+    name: Mortar and Pestle
+    description: Gain a Potion after each battle.
 
-base:relics:Flamberge:
+base:relics:NinjaScroll:
   en:
-    name: Flamberge
-    description: Fire spells +3 Power
+    name: Ninja Scroll
+    description: Spell rewards have an additional spell to choose from.
 
-base:relics:SnowGlobe:
+base:relics:Gourd:
   en:
-    name: Snow Globe
-    description: Ice spells +3 Power
+    name: Gourd
+    description: Gain a potion slot.
 
-base:relics:TeslaCoil:
+base:relics:Cherry:
   en:
-    name: Tesla Coil
-    description: Lightning spells +3 Power
+    name: Cherry
+    description: +5 Max HP
+
+base:relics:Peach:
+  en:
+    name: Peach
+    description: +9 Max HP
+
+base:relics:Ginsengfruit:
+  en:
+    name: Ginsengfruit
+    description: +13 Max HP
+
+base:relics:Coffee:
+  en:
+    name: Coffee
+    description: +3 Max Flux
+
+base:relics:Tea:
+  en:
+    name: Tea
+    description: +5 Max Flux
+
+base:relics:Elixir:
+  en:
+    name: Elixir
+    description: +7 Max Flux
+
+base:relics:FireFlower:
+  en:
+    name: Fire Flower
+    description: Fire attacks deal +3 damage.
+
+base:relics:PerfectFreeze:
+  en:
+    name: Perfect Freeze
+    description: Ice attacks deal +3 damage.
+
+base:relics:LightningRod:
+  en:
+    name: Lightning Rod
+    description: Lightning attacks deal +3 damage.

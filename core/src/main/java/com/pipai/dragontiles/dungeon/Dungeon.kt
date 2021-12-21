@@ -8,6 +8,7 @@ import java.util.*
 abstract class Dungeon {
     var currentFloor: Int = 0
     var currentFloorIndex: Int = 0
+    var easyFights: Int = 0
 
     abstract val easyEncounters: MutableList<Encounter>
     abstract val standardEncounters: MutableList<Encounter>

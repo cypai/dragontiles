@@ -19,11 +19,12 @@ import com.pipai.dragontiles.artemis.systems.rendering.RenderingSystem
 import com.pipai.dragontiles.artemis.systems.rendering.FullScreenColorSystem
 import com.pipai.dragontiles.artemis.systems.ui.*
 import com.pipai.dragontiles.combat.Combat
+import com.pipai.dragontiles.combat.CombatRewards
 import com.pipai.dragontiles.dungeon.Encounter
 import com.pipai.dragontiles.dungeon.RunData
 import net.mostlyoriginal.api.event.common.EventSystem
 
-class CombatScreen(game: DragonTilesGame, runData: RunData, encounter: Encounter) : Screen {
+class CombatScreen(game: DragonTilesGame, runData: RunData, encounter: Encounter, rewards: CombatRewards) : Screen {
 
     private val backStage = Stage(ScreenViewport(), game.spriteBatch)
     private val frontStage = Stage(ScreenViewport(), game.spriteBatch)
@@ -31,7 +32,7 @@ class CombatScreen(game: DragonTilesGame, runData: RunData, encounter: Encounter
     val world: World
 
     init {
-        val combat = Combat(encounter.enemies.map { it.first })
+        val combat = Combat(encounter.enemies.map { it.first }, rewards)
         val config = WorldConfigurationBuilder()
             .with(
                 // Managers

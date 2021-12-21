@@ -13,6 +13,7 @@ import com.pipai.dragontiles.dungeon.PlainsDungeon
 import com.pipai.dragontiles.dungeon.RunData
 import com.pipai.dragontiles.dungeonevents.PlainsStartEvent
 import com.pipai.dragontiles.hero.Hero
+import com.pipai.dragontiles.relics.RelicData
 import com.pipai.dragontiles.relics.Transmuter
 import com.pipai.dragontiles.spells.common.Blast
 import com.pipai.dragontiles.spells.common.Bump
@@ -58,6 +59,7 @@ class MainMenuUiSystem(
                         mutableListOf(Transmuter()),
                         5
                     ),
+                    RelicData(RelicData.ALL_RELICS.toMutableList()),
                     PlainsDungeon(),
                     null
                 )

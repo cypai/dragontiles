@@ -15,6 +15,8 @@ import com.pipai.dragontiles.artemis.screens.CombatScreen
 import com.pipai.dragontiles.artemis.screens.EventScreen
 import com.pipai.dragontiles.artemis.screens.TownScreen
 import com.pipai.dragontiles.artemis.systems.NoProcessingSystem
+import com.pipai.dragontiles.combat.CombatRewards
+import com.pipai.dragontiles.combat.SpellRewardType
 import com.pipai.dragontiles.data.PricedSpell
 import com.pipai.dragontiles.data.SpellShop
 import com.pipai.dragontiles.data.Town
@@ -148,10 +150,30 @@ class MapUiSystem(
             runData.dungeon.currentFloorIndex = ev.index
             when (map[ev.floorNum][ev.index].type) {
                 MapNodeType.COMBAT -> {
-                    game.screen = CombatScreen(game, runData, runData.dungeon.easyEncounter(runData))
+                    if (runData.dungeon.easyFights < 2) {
+                        runData.dungeon.easyFights++
+                        game.screen = CombatScreen(
+                            game,
+                            runData,
+                            runData.dungeon.easyEncounter(runData),
+                            CombatRewards(SpellRewardType.STANDARD, 3, false, null)
+                        )
+                    } else {
+                        game.screen = CombatScreen(
+                            game,
+                            runData,
+                            runData.dungeon.standardEncounter(runData),
+                            CombatRewards(SpellRewardType.STANDARD, 3, false, null)
+                        )
+                    }
                 }
                 MapNodeType.ELITE -> {
-                    game.screen = CombatScreen(game, runData, runData.dungeon.eliteEncounter(runData))
+                    game.screen = CombatScreen(
+                        game,
+                        runData,
+                        runData.dungeon.eliteEncounter(runData),
+                        CombatRewards(SpellRewardType.ELITE, 5, true, null)
+                    )
                 }
                 MapNodeType.EVENT -> {
                     game.screen = EventScreen(game, runData, DragonInquiryEvent())
@@ -160,7 +182,12 @@ class MapUiSystem(
                     game.screen = TownScreen(game, runData, true)
                 }
                 else -> {
-                    game.screen = CombatScreen(game, runData, runData.dungeon.easyEncounter(runData))
+                    game.screen = CombatScreen(
+                        game,
+                        runData,
+                        runData.dungeon.standardEncounter(runData),
+                        CombatRewards(SpellRewardType.STANDARD, 3, false, null)
+                    )
                 }
             }
         }

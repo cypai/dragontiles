@@ -2,10 +2,12 @@ package com.pipai.dragontiles.relics
 
 import com.pipai.dragontiles.combat.*
 import com.pipai.dragontiles.data.*
+import com.pipai.dragontiles.spells.Rarity
 
 class Transmuter : Relic() {
     override val strId = "base:relics:Transmuter"
     override val assetName = "transmuter.png"
+    override val rarity = Rarity.RARE
 
     private var firstDraw: TileInstance? = null
 
