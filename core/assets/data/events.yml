@@ -35,7 +35,7 @@ base:events:DragonInquiry:
       text: Ah, a wise choice indeed.
   wealth:
     en:
-      text: "Wealth! (Gain 100 Gold)"
+      text: "Wealth! (Gain 5 Gold)"
   wealthMain:
     en:
       text: How boring. Though I cannot fault you for taking the easy choice.
