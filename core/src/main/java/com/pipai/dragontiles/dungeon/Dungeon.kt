@@ -1,10 +1,7 @@
 package com.pipai.dragontiles.dungeon
 
 import com.badlogic.gdx.math.Vector2
-import com.pipai.dragontiles.dungeonevents.DragonInquiryEvent
-import com.pipai.dragontiles.dungeonevents.DungeonEvent
-import com.pipai.dragontiles.dungeonevents.FreeRelic
-import com.pipai.dragontiles.dungeonevents.ThornedBush
+import com.pipai.dragontiles.dungeonevents.*
 import com.pipai.dragontiles.enemies.*
 import com.pipai.dragontiles.utils.choose
 import com.pipai.dragontiles.utils.removeRandom
@@ -174,6 +171,7 @@ class PlainsDungeon : Dungeon() {
 
     override val dungeonEvents: MutableList<DungeonEvent> = mutableListOf(
 //        ThornedBush(),
-        FreeRelic(),
+//        FreeRelic(),
+        UnusedSeal(),
     )
 }

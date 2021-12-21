@@ -3,11 +3,14 @@ package com.pipai.dragontiles.spells
 import com.pipai.dragontiles.utils.findAs
 
 interface SpellUpgrade {
+    val name: String
     fun canUpgrade(spell: Spell): Boolean
     fun onUpgrade(spell: Spell)
 }
 
 class PowerUpgrade : SpellUpgrade {
+    override val name: String = "Power Upgrade"
+
     override fun canUpgrade(spell: Spell): Boolean {
         return spell.aspects.any { it is AttackDamageAspect }
     }
@@ -18,6 +21,8 @@ class PowerUpgrade : SpellUpgrade {
 }
 
 class RepeatUpgrade : SpellUpgrade {
+    override val name: String = "Repeat Upgrade"
+
     override fun canUpgrade(spell: Spell): Boolean {
         return spell !is Rune
                 && spell.aspects.none { it is RepeatableAspect }
@@ -34,6 +39,8 @@ class RepeatUpgrade : SpellUpgrade {
 }
 
 class EfficiencyUpgrade : SpellUpgrade {
+    override val name: String = "Efficiency Upgrade"
+
     override fun canUpgrade(spell: Spell): Boolean {
         return spell.aspects.any { it is FluxGainAspect }
     }

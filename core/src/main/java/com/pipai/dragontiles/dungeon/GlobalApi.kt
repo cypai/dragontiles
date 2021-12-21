@@ -3,10 +3,12 @@ package com.pipai.dragontiles.dungeon
 import com.pipai.dragontiles.artemis.events.GoldChangeEvent
 import com.pipai.dragontiles.artemis.events.ReplaceSpellQueryEvent
 import com.pipai.dragontiles.artemis.events.TopRowUiUpdateEvent
+import com.pipai.dragontiles.artemis.events.UpgradeSpellQueryEvent
 import com.pipai.dragontiles.combat.GameOverEvent
 import com.pipai.dragontiles.relics.Relic
 import com.pipai.dragontiles.sorceries.Sorcery
 import com.pipai.dragontiles.spells.Spell
+import com.pipai.dragontiles.spells.SpellUpgrade
 import net.mostlyoriginal.api.event.common.EventSystem
 
 open class GlobalApi(private val runData: RunData, private val sEvent: EventSystem) {
@@ -32,6 +34,10 @@ open class GlobalApi(private val runData: RunData, private val sEvent: EventSyst
         } else {
             sEvent.dispatch(ReplaceSpellQueryEvent(spell))
         }
+    }
+
+    fun queryUpgradeSpell(upgrade: SpellUpgrade) {
+        sEvent.dispatch(UpgradeSpellQueryEvent(upgrade))
     }
 
     fun gainRelicImmediate(relic: Relic) {

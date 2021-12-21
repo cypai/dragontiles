@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop
 import com.pipai.dragontiles.DragonTilesGame
 import com.pipai.dragontiles.artemis.events.ReplaceSpellQueryEvent
+import com.pipai.dragontiles.artemis.events.UpgradeSpellQueryEvent
 import com.pipai.dragontiles.artemis.systems.NoProcessingSystem
 import com.pipai.dragontiles.artemis.systems.rendering.FullScreenColorSystem
 import com.pipai.dragontiles.dungeon.GlobalApi
@@ -117,15 +118,21 @@ class DeckDisplayUiSystem(
         }
     }
 
+    @Subscribe
+    fun handleUpgradeQuery(ev: UpgradeSpellQueryEvent) {
+        queryUpgrade(ev.upgrade)
+        activate()
+    }
+
     fun queryUpgrade(upgrade: SpellUpgrade) {
         table.clearChildren()
-        topLabel.setText("Choose a spell to upgrade")
+        topLabel.setText("Choose a spell to upgrade: ${upgrade.name}")
         table.add(topLabel).colspan(6)
         table.row()
         addSectionHeader("Starting Active Spells")
         addSpellsInSection(
             runData.hero.spells,
-            { clickedSpell, _ -> clickedSpell.upgrade(upgrade); deactivate() },
+            { clickedSpell, _ -> onSpellUpgradeClick(upgrade, clickedSpell) },
             false,
             Section.ACTIVE
         )
@@ -133,7 +140,7 @@ class DeckDisplayUiSystem(
             addSectionHeader("Sideboard Spells")
             addSpellsInSection(
                 runData.hero.sideDeck,
-                { clickedSpell, _ -> clickedSpell.upgrade(upgrade); deactivate() },
+                { clickedSpell, _ -> onSpellUpgradeClick(upgrade, clickedSpell) },
                 false,
                 Section.SIDEBOARD
             )
@@ -146,6 +153,13 @@ class DeckDisplayUiSystem(
                 false,
                 Section.SORCERIES
             )
+        }
+    }
+
+    private fun onSpellUpgradeClick(upgrade: SpellUpgrade, spell: Spell) {
+        if (upgrade.canUpgrade(spell)) {
+            spell.upgrade(upgrade)
+            deactivate()
         }
     }
 

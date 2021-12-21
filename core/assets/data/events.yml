@@ -76,6 +76,9 @@ base:events:UnusedSeal:
   use:
     en:
       text: Receive a spell upgrade.
+  useMain:
+    en:
+      text: That seems to be its last use.
   skip:
     en:
       text: Do nothing.
