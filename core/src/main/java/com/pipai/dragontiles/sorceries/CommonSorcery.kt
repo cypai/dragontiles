@@ -8,6 +8,8 @@ import com.pipai.dragontiles.spells.*
 class CommonSorcery : Sorcery() {
     override val strId = "base:sorceries:CommonSorcery"
     override val requirement = object : CustomRequirement() {
+        override val type: SetType = SetType.SEQUENTIAL
+        override var suitGroup: SuitGroup = SuitGroup.ELEMENTAL
         override val description: String = "All melds are sequences."
 
         override fun satisfied(slots: List<TileInstance>): Boolean {

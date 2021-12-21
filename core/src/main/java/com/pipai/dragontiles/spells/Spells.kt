@@ -349,22 +349,8 @@ class AnyCombo(slotAmount: Int, override var suitGroup: SuitGroup) : ManualCompo
     }
 }
 
-class PredicateRequirement(private val predicate: (List<TileInstance>) -> Boolean, override val description: String) :
-    ManualComponentRequirement() {
-
-    override val type = SetType.MISC
-    override val reqAmount = ReqAmount.UnknownAmount()
-    override var suitGroup = SuitGroup.ANY
-
-    override fun satisfied(slots: List<TileInstance>): Boolean {
-        return predicate.invoke(slots)
-    }
-}
-
 abstract class CustomRequirement : ManualComponentRequirement() {
-    override val type = SetType.MISC
     override val reqAmount = ReqAmount.UnknownAmount()
-    override var suitGroup = SuitGroup.ANY
 }
 
 class Identical(slotAmount: Int, override var suitGroup: SuitGroup) : ComponentRequirement() {
