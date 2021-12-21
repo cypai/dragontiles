@@ -17,7 +17,7 @@ data class PricedSpellClickEvent(val entityId: Int, val pricedSpell: PricedSpell
 data class MapNodeClickEvent(val floorNum: Int, val index: Int) : Event
 class ShopClickEvent : Event
 
+data class SpellGainedEvent(val spell: Spell) : Event
 data class ReplaceSpellQueryEvent(val spell: Spell) : Event
 data class UpgradeSpellQueryEvent(val upgrade: SpellUpgrade) : Event
 class TopRowUiUpdateEvent : Event
-data class GoldChangeEvent(val amount: Int) : Event

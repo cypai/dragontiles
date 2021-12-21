@@ -1,9 +1,6 @@
 package com.pipai.dragontiles.dungeon
 
-import com.pipai.dragontiles.artemis.events.GoldChangeEvent
-import com.pipai.dragontiles.artemis.events.ReplaceSpellQueryEvent
-import com.pipai.dragontiles.artemis.events.TopRowUiUpdateEvent
-import com.pipai.dragontiles.artemis.events.UpgradeSpellQueryEvent
+import com.pipai.dragontiles.artemis.events.*
 import com.pipai.dragontiles.combat.GameOverEvent
 import com.pipai.dragontiles.relics.Relic
 import com.pipai.dragontiles.sorceries.Sorcery
@@ -16,12 +13,14 @@ open class GlobalApi(private val runData: RunData, private val sEvent: EventSyst
         if (spell is Sorcery) {
             if (runData.hero.sorceries.size < 9) {
                 runData.hero.sorceries.add(spell)
+                sEvent.dispatch(SpellGainedEvent(spell))
             } else {
                 sEvent.dispatch(ReplaceSpellQueryEvent(spell))
             }
         } else {
             if (runData.hero.spells.size < runData.hero.spellsSize) {
                 runData.hero.spells.add(spell)
+                sEvent.dispatch(SpellGainedEvent(spell))
             } else {
                 addSpellToSideboard(spell)
             }
@@ -31,6 +30,7 @@ open class GlobalApi(private val runData: RunData, private val sEvent: EventSyst
     fun addSpellToSideboard(spell: Spell) {
         if (runData.hero.sideDeck.size < runData.hero.sideDeckSize) {
             runData.hero.sideDeck.add(spell)
+            sEvent.dispatch(SpellGainedEvent(spell))
         } else {
             sEvent.dispatch(ReplaceSpellQueryEvent(spell))
         }

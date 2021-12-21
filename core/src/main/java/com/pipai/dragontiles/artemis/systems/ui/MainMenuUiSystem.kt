@@ -54,7 +54,7 @@ class MainMenuUiSystem(
                     Hero(
                         "Elementalist", 60, 60, 0, 40, 17,
                         game.heroSpells.elementalistStarterDeck().toMutableList(), 6,
-                        mutableListOf(PiercingStrike(), Fireball(), BurnRune()), 3,
+                        mutableListOf(PiercingStrike()), 3,
                         game.heroSpells.elementalistStarterSorceries().toMutableList(),
                         mutableListOf(Transmuter()),
                         5

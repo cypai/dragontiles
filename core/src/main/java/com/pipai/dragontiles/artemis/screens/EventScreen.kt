@@ -10,6 +10,8 @@ import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.utils.viewport.ScreenViewport
 import com.pipai.dragontiles.DragonTilesGame
 import com.pipai.dragontiles.artemis.systems.ClickableSystem
+import com.pipai.dragontiles.artemis.systems.PathInterpolationSystem
+import com.pipai.dragontiles.artemis.systems.XyInterpolationSystem
 import com.pipai.dragontiles.artemis.systems.input.ExitInputProcessor
 import com.pipai.dragontiles.artemis.systems.input.InputProcessingSystem
 import com.pipai.dragontiles.artemis.systems.rendering.FullScreenColorSystem
@@ -38,6 +40,8 @@ class EventScreen(game: DragonTilesGame, runData: RunData, event: DungeonEvent) 
                 TooltipSystem(game, frontStage),
                 DeckDisplayUiSystem(game, runData, frontStage),
                 FullScreenColorSystem(game),
+                PathInterpolationSystem(),
+                XyInterpolationSystem(),
             )
             .with(
                 -1,
