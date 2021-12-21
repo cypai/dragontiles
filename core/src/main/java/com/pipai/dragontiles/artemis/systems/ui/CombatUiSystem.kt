@@ -85,18 +85,18 @@ class CombatUiSystem(
 
     val layout = CombatUiLayout(config, tileSkin, runData.hero.handSize)
 
-    private val leftSpellClosedCenter = Vector2(layout.cardWidth, -SpellCard.cardHeight / 2f)
-    private val leftSpellOpenCenter = Vector2(layout.cardWidth * 3, -SpellCard.cardHeight / 2f)
+    private val spellCardY = -SpellCard.cardHeight / 3f
+    private val leftSpellClosedCenter = Vector2(layout.cardWidth, spellCardY)
+    private val leftSpellOpenCenter = Vector2(layout.cardWidth * 3, spellCardY)
     private val leftSpellSwapCenter = Vector2(layout.cardWidth * 3, game.gameConfig.resolution.height.toFloat() / 2)
     private val rightSpellClosedCenter =
-        Vector2(game.gameConfig.resolution.width - layout.cardWidth * 2, -SpellCard.cardHeight / 2f)
+        Vector2(game.gameConfig.resolution.width - layout.cardWidth * 2, spellCardY)
     private val rightSpellOpenCenter =
-        Vector2(game.gameConfig.resolution.width - layout.cardWidth * 3, -SpellCard.cardHeight / 2f)
+        Vector2(game.gameConfig.resolution.width - layout.cardWidth * 3, spellCardY)
     private val rightSpellSwapCenter = Vector2(
         game.gameConfig.resolution.width - layout.cardWidth * 3,
         game.gameConfig.resolution.height.toFloat() / 2
     )
-    private val spellCardY = -SpellCard.cardHeight / 2f
 
     var overloaded = false
     private var selectedSpellNumber: Int? = null

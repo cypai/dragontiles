@@ -29,6 +29,7 @@ class SpellCard(
     private val fluxNumber = Label("", skin, "cardReq")
     private val nameLabel = Label("", skin, "tiny")
     private val numberLabel = Label("", skin, "tiny")
+    private val spellTypeLabel = Label("", skin, "tiny")
     private val descriptionLabel = Label("", skin, "tiny")
 
     private var zPrevious = 0
@@ -78,10 +79,17 @@ class SpellCard(
             .padRight(12f)
             .right()
         row()
+        add(spellTypeLabel)
+            .padLeft(8f)
+            .left()
+            .top()
+            .colspan(3)
+        row()
         add(descriptionLabel)
             .prefWidth(cardWidth)
             .prefHeight(cardHeight)
             .padLeft(8f)
+            .padRight(8f)
             .top()
             .colspan(3)
         row()
@@ -211,10 +219,12 @@ class SpellCard(
         val theSpell = spell
         if (theSpell == null) {
             nameLabel.setText("")
+            spellTypeLabel.setText("")
             descriptionLabel.setText("")
         } else {
             val spellLocalization = game.gameStrings.spellLocalization(theSpell.strId)
             nameLabel.setText(spellLocalization.name)
+            spellTypeLabel.setText(theSpell.type.toString())
             val description = spellLocalization.description
             val adjustedDescription = description.replace(regex) {
                 if (target == null && it.groupValues[2].isNotEmpty()) {
