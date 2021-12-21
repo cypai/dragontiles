@@ -36,6 +36,7 @@ import com.pipai.dragontiles.dungeon.RunData
 import com.pipai.dragontiles.gui.CombatUiLayout
 import com.pipai.dragontiles.gui.SpellCard
 import com.pipai.dragontiles.gui.SpellComponentList
+import com.pipai.dragontiles.sorceries.FullCastHand
 import com.pipai.dragontiles.sorceries.Sorcery
 import com.pipai.dragontiles.sorceries.findFullCastHand
 import com.pipai.dragontiles.spells.*
@@ -141,6 +142,7 @@ class CombatUiSystem(
         }
 
         spellComponentList.addClickCallback { selectComponents(it) }
+        spellComponentList.addSorceryClickCallback { selectFullCastHand(it) }
         queryTable.setFillParent(true)
         queryTable.add(queryLabel)
             .top()
@@ -478,6 +480,10 @@ class CombatUiSystem(
         val position = layout.optionListTlPosition
         spellComponentList.x = position.x
         spellComponentList.y = position.y - spellComponentList.height
+    }
+
+    private fun selectFullCastHand(fullCastHand: FullCastHand) {
+        println(fullCastHand)
     }
 
     private fun selectComponents(components: List<TileInstance>) {

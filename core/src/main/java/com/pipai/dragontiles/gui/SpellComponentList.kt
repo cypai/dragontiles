@@ -17,10 +17,13 @@ class SpellComponentList(
 
     var topText = ""
     private val options: MutableList<List<TileInstance>> = mutableListOf()
+    private val fullCastOptions: MutableList<FullCastHand> = mutableListOf()
     private val optionFilter: MutableList<TileInstance> = mutableListOf()
     private val rows: MutableMap<Int, List<TileInstance>> = mutableMapOf()
+    private val fcRows: MutableMap<Int, FullCastHand> = mutableMapOf()
 
     private val clickCallbacks: MutableList<(List<TileInstance>) -> Unit> = mutableListOf()
+    private val sorceryClickCallbacks: MutableList<(FullCastHand) -> Unit> = mutableListOf()
 
     init {
         table.background = skin.getDrawable("disabled")
@@ -29,14 +32,21 @@ class SpellComponentList(
         table.addListener(object : ClickListener() {
             override fun clicked(event: InputEvent?, x: Float, y: Float) {
                 val index = table.getRow(y)
-                if (index in rows) {
-                    clickCallbacks.forEach { it.invoke(rows[index]!!) }
+                if (fullCastOptions.isEmpty()) {
+                    if (index in rows) {
+                        clickCallbacks.forEach { it.invoke(rows[index]!!) }
+                    }
+                } else {
+                    if (index in fcRows) {
+                        sorceryClickCallbacks.forEach { it.invoke(fcRows[index]!!) }
+                    }
                 }
             }
         })
     }
 
     fun setOptions(options: List<List<TileInstance>>) {
+        fullCastOptions.clear()
         this.options.clear()
         this.options.addAll(options)
         optionFilter.clear()
@@ -44,14 +54,15 @@ class SpellComponentList(
     }
 
     fun setFullCastOptions(fullCastHands: List<FullCastHand>) {
+        fullCastOptions.clear()
         this.options.clear()
         fullCastHands.forEach { fch ->
             val hand: MutableList<TileInstance> = mutableListOf()
             fch.melds.forEach { hand.addAll(it.tiles) }
             hand.addAll(fch.eye)
             options.add(hand)
+            fullCastOptions.add(fch)
         }
-        this.options.addAll(options)
         optionFilter.clear()
         refreshOptions()
     }
@@ -69,9 +80,14 @@ class SpellComponentList(
         val topLabel = Label(topText, skin, "white")
         table.add(topLabel).colspan(2)
         table.row()
+        var fcIndex = 0
         options.filter { it.containsAll(optionFilter) }
             .forEachIndexed { index, option ->
                 rows[index + 1] = option.toList()
+                if (fullCastOptions.isNotEmpty()) {
+                    fcRows[index + 1] = fullCastOptions[fcIndex]
+                    fcIndex++
+                }
                 val label = Label((index + 1).toString(), skin, "white")
                 table.add(label)
                 val hGroup = HorizontalGroup()
@@ -92,4 +108,7 @@ class SpellComponentList(
         clickCallbacks.add(callback)
     }
 
+    fun addSorceryClickCallback(callback: (FullCastHand) -> Unit) {
+        sorceryClickCallbacks.add(callback)
+    }
 }
