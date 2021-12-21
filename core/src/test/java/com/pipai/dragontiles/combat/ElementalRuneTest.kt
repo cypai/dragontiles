@@ -3,6 +3,7 @@ package com.pipai.dragontiles.combat
 import com.pipai.dragontiles.data.Suit
 import com.pipai.dragontiles.data.Tile
 import com.pipai.dragontiles.data.TileInstance
+import com.pipai.dragontiles.data.TileStatus
 import com.pipai.dragontiles.enemies.LargeTurtle
 import com.pipai.dragontiles.spells.CastParams
 import com.pipai.dragontiles.spells.common.Invoke
@@ -24,9 +25,9 @@ class ElementalRuneTest : CombatBackendTest(QueryHandler()) {
 
         val hand = controller.api.combat.hand
         hand.clear()
-        hand.add(TileInstance(Tile.ElementalTile(Suit.FIRE, 1), 1))
-        hand.add(TileInstance(Tile.ElementalTile(Suit.FIRE, 1), 2))
-        hand.add(TileInstance(Tile.ElementalTile(Suit.FIRE, 1), 3))
+        hand.add(TileInstance(Tile.ElementalTile(Suit.FIRE, 1), TileStatus.NONE, 1))
+        hand.add(TileInstance(Tile.ElementalTile(Suit.FIRE, 1), TileStatus.NONE, 2))
+        hand.add(TileInstance(Tile.ElementalTile(Suit.FIRE, 1), TileStatus.NONE, 3))
 
         val invoke = controller.api.combat.spells[0] as Invoke
         val elementalRune = controller.api.combat.spells[1] as ElementalRune

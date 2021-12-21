@@ -36,6 +36,8 @@ import com.pipai.dragontiles.dungeon.RunData
 import com.pipai.dragontiles.gui.CombatUiLayout
 import com.pipai.dragontiles.gui.SpellCard
 import com.pipai.dragontiles.gui.SpellComponentList
+import com.pipai.dragontiles.sorceries.Sorcery
+import com.pipai.dragontiles.sorceries.findFullCastHand
 import com.pipai.dragontiles.spells.*
 import com.pipai.dragontiles.utils.*
 import kotlinx.coroutines.GlobalScope
@@ -60,6 +62,8 @@ class CombatUiSystem(
     private val spellEntityIds: MutableMap<Int, EntityId> = mutableMapOf()
     private val sideboard: MutableMap<Int, SpellCard> = mutableMapOf()
     private val sideboardEntityIds: MutableMap<Int, EntityId> = mutableMapOf()
+    private val sorceries: MutableMap<Int, SpellCard> = mutableMapOf()
+    private val sorceryEntityIds: MutableMap<Int, EntityId> = mutableMapOf()
     private val spellComponentList = SpellComponentList(skin, tileSkin)
 
     private var queryTilesEvent: QueryTilesEvent? = null
@@ -91,6 +95,7 @@ class CombatUiSystem(
         game.gameConfig.resolution.width - layout.cardWidth * 3,
         game.gameConfig.resolution.height.toFloat() / 2
     )
+    private val spellCardY = -SpellCard.cardHeight / 2f
 
     var overloaded = false
     private var selectedSpellNumber: Int? = null
@@ -183,20 +188,18 @@ class CombatUiSystem(
     private fun addSpellCard(number: Int, spell: Spell) {
         val spellCard = SpellCard(game, spell, number, game.skin, sCombat.controller.api)
         spellCard.addClickCallback(this::spellCardClickCallback)
-        spellCard.width = layout.cardWidth
-        spellCard.height = layout.cardHeight
         spellCard.x = layout.cardWidth * number
-        spellCard.y = -SpellCard.cardHeight / 2f
+        spellCard.y = spellCardY
         frontStage.addActor(spellCard)
         spells[number] = spellCard
 
         val id = world.create()
         spellEntityIds[number] = id
-        val cXy = mXy.create(id)
-        val cAnchor = mAnchor.create(id)
+        mXy.create(id)
+        mAnchor.create(id)
         spellCard.data[allowHoverMove] = 1
         spellCard.addHoverEnterCallback {
-            sTooltip.addKeywordsInString(game.gameStrings.spellLocalization(spell.id).description)
+            sTooltip.addKeywordsInString(game.gameStrings.spellLocalization(spell.strId).description)
             sTooltip.showTooltip()
             if (it.data[allowHoverMove] == 1) {
                 openActiveSpells()
@@ -211,10 +214,8 @@ class CombatUiSystem(
     private fun addSpellCardToSideboard(number: Int, spell: Spell) {
         val spellCard = SpellCard(game, spell, number, game.skin, sCombat.controller.api)
         spellCard.addClickCallback(this::spellCardClickCallback)
-        spellCard.width = layout.cardWidth
-        spellCard.height = layout.cardHeight
         spellCard.x = game.gameConfig.resolution.width - layout.cardWidth * 3 + number * layout.cardWidth * 0.8f
-        spellCard.y = -SpellCard.cardHeight / 2f
+        spellCard.y = spellCardY
         frontStage.addActor(spellCard)
         sideboard[number] = spellCard
 
@@ -224,12 +225,34 @@ class CombatUiSystem(
         mAnchor.create(id)
         spellCard.data[allowHoverMove] = 1
         spellCard.addHoverEnterCallback {
-            sTooltip.addKeywordsInString(game.gameStrings.spellLocalization(spell.id).description)
+            sTooltip.addKeywordsInString(game.gameStrings.spellLocalization(spell.strId).description)
             sTooltip.showTooltip()
             if (it.data[allowHoverMove] == 1) {
                 openSideboardSpells()
                 closeActiveSpells()
             }
+        }
+        spellCard.addHoverExitCallback {
+            sTooltip.hideTooltip()
+        }
+    }
+
+    private fun addSorcery(number: Int, sorcery: Sorcery) {
+        val spellCard = SpellCard(game, sorcery, number, game.skin, sCombat.controller.api)
+        spellCard.addClickCallback(this::spellCardClickCallback)
+        spellCard.x = layout.cardWidth * number
+        spellCard.y = -SpellCard.cardHeight * 2f
+        frontStage.addActor(spellCard)
+        sorceries[number] = spellCard
+
+        val id = world.create()
+        sorceryEntityIds[number] = id
+        mXy.create(id)
+        mAnchor.create(id)
+        spellCard.data[allowHoverMove] = 1
+        spellCard.addHoverEnterCallback {
+            sTooltip.addKeywordsInString(game.gameStrings.spellLocalization(sorcery.strId).description)
+            sTooltip.showTooltip()
         }
         spellCard.addHoverExitCallback {
             sTooltip.hideTooltip()
@@ -267,6 +290,15 @@ class CombatUiSystem(
         when (keycode) {
             Keys.ESCAPE -> {
                 return setStateBack()
+            }
+            Keys.SPACE -> {
+                when (stateMachine.currentState) {
+                    CombatUiState.ROOT -> {
+                        stateMachine.changeState(CombatUiState.SORCERY_MODE)
+                    }
+                    else -> {
+                    }
+                }
             }
             Keys.BACKSPACE -> {
                 when (stateMachine.currentState) {
@@ -400,6 +432,20 @@ class CombatUiSystem(
             }
         }
         setSpellComponentOptions(options)
+
+        frontStage.addActor(spellComponentList)
+        frontStage.keyboardFocus = spellComponentList
+        frontStage.scrollFocus = spellComponentList
+    }
+
+    private fun displayFullCastHands() {
+        spellComponentList.topText = "Available Hands"
+        val fch = findFullCastHand(sCombat.combat.hand)
+        spellComponentList.setFullCastOptions(fch)
+        spellComponentList.height = min(spellComponentList.prefHeight, SpellCard.cardHeight)
+        val position = layout.optionListTlPosition
+        spellComponentList.x = position.x
+        spellComponentList.y = position.y - spellComponentList.height
 
         frontStage.addActor(spellComponentList)
         frontStage.keyboardFocus = spellComponentList
@@ -906,6 +952,21 @@ class CombatUiSystem(
         return sideboard.values.find { it.getSpell() == spell }
     }
 
+    private fun resetSpellCard(spellCard: SpellCard) {
+        spellCard.target = null
+        spellCard.data[allowHoverMove] = 1
+        spellCard.update()
+        val spell = spellCard.getSpell()
+        if (spell != null && spell is PowerSpell && spell.powered) {
+            spellCard.makePowered()
+        }
+        if (spell == null || !spell.available() || overloaded) {
+            spellCard.disable()
+        } else {
+            spellCard.enable()
+        }
+    }
+
     enum class CombatUiState : State<CombatUiSystem> {
         ROOT {
             override fun enter(uiSystem: CombatUiSystem) {
@@ -915,26 +976,30 @@ class CombatUiSystem(
                 uiSystem.moveSpellsToAnchor()
                 uiSystem.selectedTiles.clear()
                 uiSystem.spells.forEach { (_, spellCard) ->
-                    resetSpellCard(uiSystem, spellCard)
+                    uiSystem.resetSpellCard(spellCard)
                 }
                 uiSystem.sideboard.forEach { (_, spellCard) ->
-                    resetSpellCard(uiSystem, spellCard)
+                    uiSystem.resetSpellCard(spellCard)
                 }
                 uiSystem.givenComponents.clear()
             }
 
-            private fun resetSpellCard(uiSystem: CombatUiSystem, spellCard: SpellCard) {
-                spellCard.target = null
-                spellCard.data[uiSystem.allowHoverMove] = 1
-                spellCard.update()
-                val spell = spellCard.getSpell()
-                if (spell != null && spell is PowerSpell && spell.powered) {
-                    spellCard.makePowered()
+        },
+        SORCERY_MODE {
+            override fun enter(uiSystem: CombatUiSystem) {
+                uiSystem.spells.forEach { (_, spellCard) -> spellCard.data[uiSystem.allowHoverMove] = 0 }
+                uiSystem.spellEntityIds.forEach { (_, eid) ->
+                    val cXy = uiSystem.mXy.get(eid)
+                    uiSystem.moveSpellToLocation(eid, Vector2(cXy.x, uiSystem.spellCardY - SpellCard.cardHeight))
                 }
-                if (spell == null || !spell.available() || uiSystem.overloaded) {
-                    spellCard.disable()
-                } else {
-                    spellCard.enable()
+                uiSystem.sideboard.forEach { (_, spellCard) -> spellCard.data[uiSystem.allowHoverMove] = 0 }
+                uiSystem.sideboardEntityIds.forEach { (_, eid) ->
+                    val cXy = uiSystem.mXy.get(eid)
+                    uiSystem.moveSpellToLocation(eid, Vector2(cXy.x, uiSystem.spellCardY - SpellCard.cardHeight))
+                }
+                uiSystem.sorceryEntityIds.forEach { (_, eid) ->
+                    val cXy = uiSystem.mXy.get(eid)
+                    uiSystem.moveSpellToLocation(eid, Vector2(cXy.x, uiSystem.spellCardY))
                 }
             }
         },

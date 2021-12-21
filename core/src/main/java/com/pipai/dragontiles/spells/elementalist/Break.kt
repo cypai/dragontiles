@@ -6,7 +6,7 @@ import com.pipai.dragontiles.status.BreakStatus
 import com.pipai.dragontiles.utils.findAsWhere
 
 class Break : StandardSpell() {
-    override val id: String = "base:spells:Break"
+    override val strId: String = "base:spells:Break"
     override val requirement: ComponentRequirement = Identical(3)
     override val type: SpellType = SpellType.EFFECT
     override val targetType: TargetType = TargetType.SINGLE_ENEMY

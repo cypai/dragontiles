@@ -8,7 +8,7 @@ import com.pipai.dragontiles.spells.*
 import com.pipai.dragontiles.utils.findAs
 
 class RampStrike : StandardSpell() {
-    override val id: String = "base:spells:RampStrike"
+    override val strId: String = "base:spells:RampStrike"
     override val requirement: ComponentRequirement = Sequential(3, SuitGroup.ELEMENTAL)
     override val type: SpellType = SpellType.ATTACK
     override val targetType: TargetType = TargetType.SINGLE

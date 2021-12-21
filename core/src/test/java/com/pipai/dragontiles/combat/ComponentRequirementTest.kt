@@ -13,9 +13,9 @@ class ComponentRequirementTest {
     fun testSingle() {
         val single = Single()
         val hand = mutableListOf(
-                TileInstance(Tile.ElementalTile(Suit.FIRE, 1), 0),
-                TileInstance(Tile.StarTile(StarType.STAR), 1),
-                TileInstance(Tile.LifeTile(LifeType.SOUL), 2)
+            TileInstance(Tile.ElementalTile(Suit.FIRE, 1), TileStatus.NONE, 0),
+            TileInstance(Tile.StarTile(StarType.STAR), TileStatus.NONE, 1),
+            TileInstance(Tile.LifeTile(LifeType.SOUL), TileStatus.NONE, 2)
         )
         val sets = single.find(hand)
         sets.forEach {
@@ -36,10 +36,10 @@ class ComponentRequirementTest {
     fun testIdentical3() {
         val identical = Identical(3)
         val hand = mutableListOf(
-                TileInstance(Tile.ElementalTile(Suit.FIRE, 1), 0),
-                TileInstance(Tile.StarTile(StarType.STAR), 1),
-                TileInstance(Tile.StarTile(StarType.STAR), 2),
-                TileInstance(Tile.StarTile(StarType.STAR), 3)
+            TileInstance(Tile.ElementalTile(Suit.FIRE, 1), TileStatus.NONE, 0),
+            TileInstance(Tile.StarTile(StarType.STAR), TileStatus.NONE, 1),
+            TileInstance(Tile.StarTile(StarType.STAR), TileStatus.NONE, 2),
+            TileInstance(Tile.StarTile(StarType.STAR), TileStatus.NONE, 3)
         )
         val sets = identical.find(hand)
         sets.forEach {
@@ -77,12 +77,12 @@ class ComponentRequirementTest {
     fun testSequential() {
         val sequential = Sequential(3)
         val hand = mutableListOf(
-                TileInstance(Tile.ElementalTile(Suit.FIRE, 1), 0),
-                TileInstance(Tile.ElementalTile(Suit.FIRE, 1), 1),
-                TileInstance(Tile.ElementalTile(Suit.FIRE, 2), 2),
-                TileInstance(Tile.ElementalTile(Suit.FIRE, 3), 3),
-                TileInstance(Tile.ElementalTile(Suit.FIRE, 9), 4),
-                TileInstance(Tile.StarTile(StarType.STAR), 5)
+            TileInstance(Tile.ElementalTile(Suit.FIRE, 1), TileStatus.NONE, 0),
+            TileInstance(Tile.ElementalTile(Suit.FIRE, 1), TileStatus.NONE, 1),
+            TileInstance(Tile.ElementalTile(Suit.FIRE, 2), TileStatus.NONE, 2),
+            TileInstance(Tile.ElementalTile(Suit.FIRE, 3), TileStatus.NONE, 3),
+            TileInstance(Tile.ElementalTile(Suit.FIRE, 9), TileStatus.NONE, 4),
+            TileInstance(Tile.StarTile(StarType.STAR), TileStatus.NONE, 5)
         )
         val sets = sequential.find(hand)
         Assert.assertEquals(2, sets.size)
@@ -130,9 +130,9 @@ class ComponentRequirementTest {
     fun testSequentialX2() {
         val sequential = SequentialX()
         val hand = mutableListOf(
-                TileInstance(Tile.ElementalTile(Suit.FIRE, 1), 0),
-                TileInstance(Tile.ElementalTile(Suit.FIRE, 2), 1),
-                TileInstance(Tile.StarTile(StarType.STAR), 2)
+            TileInstance(Tile.ElementalTile(Suit.FIRE, 1), TileStatus.NONE, 0),
+            TileInstance(Tile.ElementalTile(Suit.FIRE, 2), TileStatus.NONE, 1),
+            TileInstance(Tile.StarTile(StarType.STAR), TileStatus.NONE, 2)
         )
         val sets = sequential.find(hand)
         Assert.assertEquals(3, sets.size)

@@ -11,7 +11,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
 import com.badlogic.gdx.utils.Align
 import com.pipai.dragontiles.DragonTilesGame
-import com.pipai.dragontiles.artemis.systems.ui.TooltipSystem
 import com.pipai.dragontiles.combat.CombatApi
 import com.pipai.dragontiles.enemies.Enemy
 import com.pipai.dragontiles.spells.*
@@ -214,7 +213,7 @@ class SpellCard(
             nameLabel.setText("")
             descriptionLabel.setText("")
         } else {
-            val spellLocalization = game.gameStrings.spellLocalization(theSpell.id)
+            val spellLocalization = game.gameStrings.spellLocalization(theSpell.strId)
             nameLabel.setText(spellLocalization.name)
             val description = spellLocalization.description
             val adjustedDescription = description.replace(regex) {

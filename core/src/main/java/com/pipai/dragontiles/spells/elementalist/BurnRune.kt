@@ -8,7 +8,7 @@ import com.pipai.dragontiles.data.TileStatus
 import com.pipai.dragontiles.spells.*
 
 class BurnRune : Rune() {
-    override val id: String = "base:spells:BurnRune"
+    override val strId: String = "base:spells:BurnRune"
     override val rarity: Rarity = Rarity.UNCOMMON
     override val requirement: ComponentRequirement = IdenticalX(SuitGroup.FIRE)
     override val aspects: MutableList<SpellAspect> = mutableListOf()

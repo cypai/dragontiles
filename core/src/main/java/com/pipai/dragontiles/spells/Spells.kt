@@ -11,7 +11,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder
 import kotlin.reflect.full.createInstance
 
 abstract class Spell : DamageAdjustable {
-    abstract val id: String
+    abstract val strId: String
 
     abstract val requirement: ComponentRequirement
     abstract val type: SpellType
@@ -210,7 +210,7 @@ abstract class PowerSpell : Spell() {
 }
 
 enum class SpellType {
-    ATTACK, EFFECT, POWER, RUNE
+    ATTACK, EFFECT, POWER, RUNE, SORCERY
 }
 
 enum class TargetType {

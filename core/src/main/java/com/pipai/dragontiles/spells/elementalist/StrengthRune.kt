@@ -6,7 +6,7 @@ import com.pipai.dragontiles.data.Element
 import com.pipai.dragontiles.spells.*
 
 class StrengthRune : Rune() {
-    override val id: String = "base:spells:StrengthRune"
+    override val strId: String = "base:spells:StrengthRune"
     override val rarity: Rarity = Rarity.UNCOMMON
     override val requirement: ComponentRequirement = IdenticalX()
     override val aspects: MutableList<SpellAspect> = mutableListOf()

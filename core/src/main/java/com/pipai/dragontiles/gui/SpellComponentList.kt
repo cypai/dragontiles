@@ -6,6 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.*
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.pipai.dragontiles.data.TileInstance
 import com.pipai.dragontiles.data.TileSkin
+import com.pipai.dragontiles.sorceries.FullCastHand
 
 class SpellComponentList(
     private val skin: Skin,
@@ -37,6 +38,19 @@ class SpellComponentList(
 
     fun setOptions(options: List<List<TileInstance>>) {
         this.options.clear()
+        this.options.addAll(options)
+        optionFilter.clear()
+        refreshOptions()
+    }
+
+    fun setFullCastOptions(fullCastHands: List<FullCastHand>) {
+        this.options.clear()
+        fullCastHands.forEach { fch ->
+            val hand: MutableList<TileInstance> = mutableListOf()
+            fch.melds.forEach { hand.addAll(it.tiles) }
+            hand.addAll(fch.eye)
+            options.add(hand)
+        }
         this.options.addAll(options)
         optionFilter.clear()
         refreshOptions()

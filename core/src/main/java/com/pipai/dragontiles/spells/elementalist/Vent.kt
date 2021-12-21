@@ -5,7 +5,7 @@ import com.pipai.dragontiles.data.Tile
 import com.pipai.dragontiles.spells.*
 
 class Vent : StandardSpell() {
-    override val id: String = "base:spells:Vent"
+    override val strId: String = "base:spells:Vent"
     override val requirement: ComponentRequirement = AnyCombo(2, SuitGroup.ARCANE)
     override val type: SpellType = SpellType.EFFECT
     override val targetType: TargetType = TargetType.NONE

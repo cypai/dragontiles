@@ -6,7 +6,7 @@ import com.pipai.dragontiles.data.TileStatus
 import com.pipai.dragontiles.spells.*
 
 class ChainLightning : StandardSpell() {
-    override val id: String = "base:spells:ChainLightning"
+    override val strId: String = "base:spells:ChainLightning"
     override val requirement: ComponentRequirement = Sequential(3, SuitGroup.LIGHTNING)
     override val type: SpellType = SpellType.ATTACK
     override val targetType: TargetType = TargetType.AOE

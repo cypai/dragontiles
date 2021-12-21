@@ -5,7 +5,7 @@ import com.pipai.dragontiles.data.Tile
 import com.pipai.dragontiles.spells.*
 
 class Spark : StandardSpell() {
-    override val id: String = "base:spells:Spark"
+    override val strId: String = "base:spells:Spark"
     override val requirement: ComponentRequirement = SinglePredicate(
         { it.tile.let { t -> t is Tile.ElementalTile && t.number == 1 } },
         SuitGroup.ELEMENTAL

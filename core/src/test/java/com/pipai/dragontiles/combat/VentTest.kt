@@ -3,6 +3,7 @@ package com.pipai.dragontiles.combat
 import com.pipai.dragontiles.data.StarType
 import com.pipai.dragontiles.data.Tile
 import com.pipai.dragontiles.data.TileInstance
+import com.pipai.dragontiles.data.TileStatus
 import com.pipai.dragontiles.enemies.LargeTurtle
 import com.pipai.dragontiles.spells.CastParams
 import com.pipai.dragontiles.spells.elementalist.Vent
@@ -24,8 +25,8 @@ class VentTest : CombatBackendTest(QueryHandler()) {
 
         val hand = controller.api.combat.hand
         hand.clear()
-        hand.add(TileInstance(Tile.StarTile(StarType.EARTH), 1))
-        hand.add(TileInstance(Tile.StarTile(StarType.MOON), 2))
+        hand.add(TileInstance(Tile.StarTile(StarType.EARTH), TileStatus.NONE, 1))
+        hand.add(TileInstance(Tile.StarTile(StarType.MOON), TileStatus.NONE, 2))
 
         runBlocking { controller.api.dealFluxDamageToHero(12) }
 

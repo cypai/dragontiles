@@ -4,7 +4,7 @@ import com.pipai.dragontiles.combat.CombatApi
 import com.pipai.dragontiles.spells.*
 
 class QuickInvoke : StandardSpell() {
-    override val id: String = "base:spells:QuickInvoke"
+    override val strId: String = "base:spells:QuickInvoke"
     override val requirement: ComponentRequirement = Single()
     override val type: SpellType = SpellType.ATTACK
     override val targetType: TargetType = TargetType.SINGLE

@@ -6,7 +6,7 @@ import com.pipai.dragontiles.data.successor
 import com.pipai.dragontiles.spells.*
 
 class Bump : StandardSpell() {
-    override val id: String = "base:spells:Bump"
+    override val strId: String = "base:spells:Bump"
     override val requirement: ComponentRequirement = SinglePredicate({ it.tileStatus != TileStatus.FREEZE }, SuitGroup.ANY_NO_FUMBLE)
     override val type: SpellType = SpellType.EFFECT
     override val targetType: TargetType = TargetType.NONE

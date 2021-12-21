@@ -207,7 +207,7 @@ class DeckDisplayUiSystem(
                         val first = (payload!!.`object` as SpellCard)
                         val second = (this.actor as SpellCard)
                         if (first != second) {
-                            logger.info("Swapping ${first.getSpell()!!.id} and ${second.getSpell()!!.id}")
+                            logger.info("Swapping ${first.getSpell()!!.strId} and ${second.getSpell()!!.strId}")
                             if (Section.values()[first.data[SECTION]!!] == Section.ACTIVE) {
                                 if (first.data[SECTION] == second.data[SECTION]) {
                                     val index1 = runData.hero.spells.indexOf(first.getSpell())

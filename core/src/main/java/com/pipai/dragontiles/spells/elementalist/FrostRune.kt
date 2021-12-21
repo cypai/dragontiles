@@ -7,7 +7,7 @@ import com.pipai.dragontiles.spells.*
 import com.pipai.dragontiles.utils.findAs
 
 class FrostRune : Rune() {
-    override val id: String = "base:spells:FrostRune"
+    override val strId: String = "base:spells:FrostRune"
     override val rarity: Rarity = Rarity.UNCOMMON
     override val requirement: ComponentRequirement = IdenticalX(SuitGroup.ICE)
     override val aspects: MutableList<SpellAspect> = mutableListOf()
