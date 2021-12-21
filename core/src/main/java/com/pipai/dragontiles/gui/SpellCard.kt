@@ -14,6 +14,7 @@ import com.pipai.dragontiles.DragonTilesGame
 import com.pipai.dragontiles.combat.CombatApi
 import com.pipai.dragontiles.enemies.Enemy
 import com.pipai.dragontiles.spells.*
+import com.pipai.dragontiles.utils.upgradeAssetPath
 
 class SpellCard(
     private val game: DragonTilesGame,
@@ -31,6 +32,7 @@ class SpellCard(
     private val numberLabel = Label("", skin, "tiny")
     private val spellTypeLabel = Label("", skin, "tiny")
     private val descriptionLabel = Label("", skin, "tiny")
+    private val upgradeImages = listOf(Image(), Image(), Image())
 
     private var zPrevious = 0
 
@@ -85,11 +87,18 @@ class SpellCard(
         row()
         add(descriptionLabel)
             .prefWidth(cardWidth)
-            .prefHeight(cardHeight)
+            .prefHeight(cardHeight - 48f)
             .padLeft(8f)
             .padRight(8f)
             .top()
             .colspan(3)
+        row()
+        upgradeImages.forEach {
+            add(it)
+                .prefWidth(32f)
+                .prefHeight(32f)
+                .pad(8f)
+        }
         row()
 
         width = cardWidth
@@ -219,6 +228,7 @@ class SpellCard(
             nameLabel.setText("")
             spellTypeLabel.setText("")
             descriptionLabel.setText("")
+            upgradeImages.forEach { it.drawable = null }
         } else {
             val spellLocalization = game.gameStrings.spellLocalization(theSpell.strId)
             nameLabel.setText(spellLocalization.name)
@@ -237,6 +247,10 @@ class SpellCard(
                 }
             }.replace("[@\\[\\]]".toRegex(), "")
             descriptionLabel.setText(adjustedDescription)
+            theSpell.getUpgrades().zip(upgradeImages).forEach { (upgrade, img) ->
+                img.drawable =
+                    TextureRegionDrawable(game.assets.get(upgradeAssetPath(upgrade.assetName), Texture::class.java))
+            }
         }
     }
 }

@@ -4,12 +4,14 @@ import com.pipai.dragontiles.utils.findAs
 
 interface SpellUpgrade {
     val name: String
+    val assetName: String
     fun canUpgrade(spell: Spell): Boolean
     fun onUpgrade(spell: Spell)
 }
 
 class PowerUpgrade : SpellUpgrade {
     override val name: String = "Power Upgrade"
+    override val assetName: String = "power.png"
 
     override fun canUpgrade(spell: Spell): Boolean {
         return spell.aspects.any { it is AttackDamageAspect }
@@ -22,6 +24,7 @@ class PowerUpgrade : SpellUpgrade {
 
 class RepeatUpgrade : SpellUpgrade {
     override val name: String = "Repeat Upgrade"
+    override val assetName: String = "repeat.png"
 
     override fun canUpgrade(spell: Spell): Boolean {
         return spell !is Rune
@@ -40,6 +43,7 @@ class RepeatUpgrade : SpellUpgrade {
 
 class EfficiencyUpgrade : SpellUpgrade {
     override val name: String = "Efficiency Upgrade"
+    override val assetName: String = "efficiency.png"
 
     override fun canUpgrade(spell: Spell): Boolean {
         return spell.aspects.any { it is FluxGainAspect }
