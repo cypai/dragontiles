@@ -111,6 +111,7 @@ class DragonTilesGame(val gameConfig: GameConfig) : Game() {
         gameStrings.load(Gdx.files.internal("assets/data/keywords.yml").readString())
         gameStrings.load(Gdx.files.internal("assets/data/status.yml").readString())
         gameStrings.load(Gdx.files.internal("assets/data/spells.yml").readString())
+        gameStrings.load(Gdx.files.internal("assets/data/sorceries.yml").readString())
         gameStrings.load(Gdx.files.internal("assets/data/relics.yml").readString())
         gameStrings.load(Gdx.files.internal("assets/data/enemies.yml").readString())
         gameStrings.load(Gdx.files.internal("assets/data/tiles.yml").readString())

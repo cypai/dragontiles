@@ -115,6 +115,7 @@ class CombatUiSystem(
     private val mMouseFollow by mapper<MouseFollowComponent>()
     private val mDepth by mapper<DepthComponent>()
     private val mSprite by mapper<SpriteComponent>()
+    private val mActor by mapper<ActorComponent>()
     private val mTargetHighlight by mapper<TargetHighlightComponent>()
     private val mTile by mapper<TileComponent>()
     private val mMutualDestroy by mapper<MutualDestroyComponent>()
@@ -134,6 +135,9 @@ class CombatUiSystem(
         }
         runData.hero.sideDeck.forEachIndexed { index, spell ->
             addSpellCardToSideboard(index, spell)
+        }
+        runData.hero.sorceries.forEachIndexed { index, sorcery ->
+            addSorcery(index, sorcery)
         }
 
         spellComponentList.addClickCallback { selectComponents(it) }
@@ -221,8 +225,10 @@ class CombatUiSystem(
 
         val id = world.create()
         sideboardEntityIds[number] = id
-        mXy.create(id)
-        mAnchor.create(id)
+        val cXy = mXy.create(id)
+        cXy.setXy(spellCard.x, spellCard.y)
+        val cAnchor = mAnchor.create(id)
+        cAnchor.setXy(spellCard.x, spellCard.y)
         spellCard.data[allowHoverMove] = 1
         spellCard.addHoverEnterCallback {
             sTooltip.addKeywordsInString(game.gameStrings.spellLocalization(spell.strId).description)
@@ -241,16 +247,22 @@ class CombatUiSystem(
         val spellCard = SpellCard(game, sorcery, number, game.skin, sCombat.controller.api)
         spellCard.addClickCallback(this::spellCardClickCallback)
         spellCard.x = layout.cardWidth * number
-        spellCard.y = -SpellCard.cardHeight * 2f
+        spellCard.y = SpellCard.cardHeight * -3f
         frontStage.addActor(spellCard)
         sorceries[number] = spellCard
 
         val id = world.create()
         sorceryEntityIds[number] = id
-        mXy.create(id)
-        mAnchor.create(id)
+        val cXy = mXy.create(id)
+        cXy.setXy(spellCard.x, spellCard.y)
+        val cAnchor = mAnchor.create(id)
+        cAnchor.setXy(spellCard.x, spellCard.y)
+        mActor.create(id).actor = spellCard
         spellCard.data[allowHoverMove] = 1
         spellCard.addHoverEnterCallback {
+            if (sorcery.requirement.reqAmount.text() == "?") {
+                sTooltip.addText("Requirements", sorcery.requirement.description, false)
+            }
             sTooltip.addKeywordsInString(game.gameStrings.spellLocalization(sorcery.strId).description)
             sTooltip.showTooltip()
         }
@@ -295,6 +307,9 @@ class CombatUiSystem(
                 when (stateMachine.currentState) {
                     CombatUiState.ROOT -> {
                         stateMachine.changeState(CombatUiState.SORCERY_MODE)
+                    }
+                    CombatUiState.SORCERY_MODE -> {
+                        stateMachine.changeState(CombatUiState.ROOT)
                     }
                     else -> {
                     }
@@ -900,6 +915,9 @@ class CombatUiSystem(
             sAnchor.returnToAnchor(it)
         }
         sideboardEntityIds.values.forEach {
+            sAnchor.returnToAnchor(it)
+        }
+        sorceryEntityIds.values.forEach {
             sAnchor.returnToAnchor(it)
         }
     }

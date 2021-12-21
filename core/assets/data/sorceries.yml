@@ -1,22 +1,22 @@
 base:sorceries:Eyes:
   en:
     name: Eyes
-    description: Deal !d @Elemented damage.
+    description: Deal !d @AOE @Elemented damage.
 
 base:sorceries:Pong:
   en:
     name: Pong
-    description: Deal !d @Elemented damage.
+    description: Deal !d @AOE @Elemented damage.
 
 base:sorceries:Chow:
   en:
     name: Chow
-    description: Deal !d @Elemented damage.
+    description: Deal !d @AOE @Elemented damage.
 
 base:sorceries:CommonSorcery:
   en:
     name: Common Sorcery
-    description: Deal !d damage.
+    description: Deal !d @AOE damage.
 
 base:sorceries:ForceOverload:
   en:
