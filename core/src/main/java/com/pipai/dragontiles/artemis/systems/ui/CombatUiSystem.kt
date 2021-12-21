@@ -454,8 +454,12 @@ class CombatUiSystem(
     }
 
     private fun displayFullCastHands() {
-        spellComponentList.topText = "Available Hands"
         val fch = findFullCastHand(sCombat.combat.hand)
+        if (fch.isEmpty()) {
+            spellComponentList.topText = "None Available"
+        } else {
+            spellComponentList.topText = "Available Hands"
+        }
         spellComponentList.setFullCastOptions(fch)
         spellComponentList.height = min(spellComponentList.prefHeight, SpellCard.cardHeight)
         val position = layout.optionListTlPosition
@@ -1019,6 +1023,11 @@ class CombatUiSystem(
                     val cXy = uiSystem.mXy.get(eid)
                     uiSystem.moveSpellToLocation(eid, Vector2(cXy.x, uiSystem.spellCardY))
                 }
+                uiSystem.displayFullCastHands()
+            }
+
+            override fun exit(uiSystem: CombatUiSystem) {
+                uiSystem.spellComponentList.remove()
             }
         },
         COMPONENT_SELECTION {
