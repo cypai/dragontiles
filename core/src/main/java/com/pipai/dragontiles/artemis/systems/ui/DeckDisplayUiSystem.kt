@@ -99,10 +99,10 @@ class DeckDisplayUiSystem(
             spellsEnableSwapDnd,
             Section.ACTIVE
         )
-        if (runData.hero.sideDeck.isNotEmpty()) {
-            addSectionHeader("Sideboard Spells (Max ${runData.hero.sideDeckSize})")
+        if (runData.hero.sideboard.isNotEmpty()) {
+            addSectionHeader("Sideboard Spells (Max ${runData.hero.sideboardSize})")
             addSpellsInSection(
-                runData.hero.sideDeck.filter { spellFilter.invoke(it) },
+                runData.hero.sideboard.filter { spellFilter.invoke(it) },
                 sideboardOnClick,
                 sideboardEnableSwapDnd,
                 Section.SIDEBOARD
@@ -215,7 +215,7 @@ class DeckDisplayUiSystem(
                 api.addSpellToDeck(newSpell)
             }
             Section.SIDEBOARD -> {
-                runData.hero.sideDeck.remove(originalSpell)
+                runData.hero.sideboard.remove(originalSpell)
                 api.addSpellToSideboard(newSpell)
             }
             Section.SORCERIES -> {
@@ -253,7 +253,7 @@ class DeckDisplayUiSystem(
 
     private fun onSpellTransformClick(spell: Spell) {
         api.removeSpell(spell)
-        api.addSpellToDeck(game.heroSpells.getRandomClassSpells(runData, 1).first())
+        api.addSpellToDeck(runData.hero.heroClass.getRandomClassSpells(runData, 1).first())
         deactivate()
     }
 
@@ -333,20 +333,20 @@ class DeckDisplayUiSystem(
                                     runData.hero.spells[index2] = first.getSpell()!!
                                 } else {
                                     val index1 = runData.hero.spells.indexOf(first.getSpell())
-                                    val index2 = runData.hero.sideDeck.indexOf(second.getSpell())
+                                    val index2 = runData.hero.sideboard.indexOf(second.getSpell())
                                     runData.hero.spells[index1] = second.getSpell()!!
-                                    runData.hero.sideDeck[index2] = first.getSpell()!!
+                                    runData.hero.sideboard[index2] = first.getSpell()!!
                                 }
                             } else {
                                 if (first.data[SECTION] == second.data[SECTION]) {
-                                    val index1 = runData.hero.sideDeck.indexOf(first.getSpell())
-                                    val index2 = runData.hero.sideDeck.indexOf(second.getSpell())
-                                    runData.hero.sideDeck[index1] = second.getSpell()!!
-                                    runData.hero.sideDeck[index2] = first.getSpell()!!
+                                    val index1 = runData.hero.sideboard.indexOf(first.getSpell())
+                                    val index2 = runData.hero.sideboard.indexOf(second.getSpell())
+                                    runData.hero.sideboard[index1] = second.getSpell()!!
+                                    runData.hero.sideboard[index2] = first.getSpell()!!
                                 } else {
-                                    val index1 = runData.hero.sideDeck.indexOf(first.getSpell())
+                                    val index1 = runData.hero.sideboard.indexOf(first.getSpell())
                                     val index2 = runData.hero.spells.indexOf(second.getSpell())
-                                    runData.hero.sideDeck[index1] = second.getSpell()!!
+                                    runData.hero.sideboard[index1] = second.getSpell()!!
                                     runData.hero.spells[index2] = first.getSpell()!!
                                 }
                             }

@@ -8,7 +8,7 @@ class Mulligan : StandardSpell() {
     override val requirement: ComponentRequirement = Single()
     override val type: SpellType = SpellType.EFFECT
     override val targetType: TargetType = TargetType.NONE
-    override val rarity: Rarity = Rarity.COMMON
+    override val rarity: Rarity = Rarity.SPECIAL
     override val aspects: MutableList<SpellAspect> = mutableListOf(
         LimitedRepeatableAspect(2)
     )

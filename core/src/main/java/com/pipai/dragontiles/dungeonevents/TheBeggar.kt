@@ -39,7 +39,7 @@ class TheBeggar : DungeonEvent() {
 
         override fun onSelect(api: EventApi) {
             api.gainGoldImmediate(-3)
-            api.runData.hero.sideDeckSize++
+            api.runData.hero.sideboardSize++
             api.changeToEventEnd("offer3Main")
         }
     }

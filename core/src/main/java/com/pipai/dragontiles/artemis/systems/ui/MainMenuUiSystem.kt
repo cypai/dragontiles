@@ -9,16 +9,17 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.pipai.dragontiles.DragonTilesGame
 import com.pipai.dragontiles.artemis.screens.EventScreen
+import com.pipai.dragontiles.data.GameData
 import com.pipai.dragontiles.dungeon.PlainsDungeon
 import com.pipai.dragontiles.dungeon.RunData
 import com.pipai.dragontiles.dungeon.RunHistory
 import com.pipai.dragontiles.dungeonevents.PlainsStartEvent
+import com.pipai.dragontiles.hero.Elementalist
 import com.pipai.dragontiles.hero.Hero
 import com.pipai.dragontiles.relics.RelicData
 import com.pipai.dragontiles.relics.Transmuter
 import com.pipai.dragontiles.spells.elementalist.DualInvoke
 import com.pipai.dragontiles.spells.elementalist.Explosion
-import com.pipai.dragontiles.spells.elementalist.PiercingStrike
 import java.util.*
 
 class MainMenuUiSystem(
@@ -46,18 +47,12 @@ class MainMenuUiSystem(
 
         newGameLabel.addListener(object : ClickListener() {
             override fun clicked(event: InputEvent?, x: Float, y: Float) {
+                val hero = Elementalist().generateHero("Elementalist")
+
                 val runData = RunData(
                     Random(),
-                    Hero(
-                        "Elementalist", 60, 60, 0, 40, 17,
-                        game.heroSpells.elementalistStarterDeck().toMutableList(), 6,
-                        mutableListOf(DualInvoke(), Explosion()), 3,
-                        game.heroSpells.elementalistStarterSorceries().toMutableList(), 9,
-                        mutableListOf(Transmuter()),
-                        5,
-                        mutableListOf(),
-                    ),
-                    RelicData(RelicData.ALL_RELICS.toMutableList()),
+                    hero,
+                    RelicData(GameData.relics.toMutableList()),
                     PlainsDungeon(),
                     null,
                     RunHistory(0, mutableListOf()),

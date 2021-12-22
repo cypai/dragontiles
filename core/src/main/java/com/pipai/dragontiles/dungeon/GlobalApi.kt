@@ -12,7 +12,7 @@ import net.mostlyoriginal.api.event.common.EventSystem
 open class GlobalApi(private val runData: RunData, private val sEvent: EventSystem) {
     fun removeSpell(spell: Spell) {
         runData.hero.spells.remove(spell)
-        runData.hero.sideDeck.remove(spell)
+        runData.hero.sideboard.remove(spell)
         runData.hero.sorceries.remove(spell)
     }
 
@@ -35,8 +35,8 @@ open class GlobalApi(private val runData: RunData, private val sEvent: EventSyst
     }
 
     fun addSpellToSideboard(spell: Spell) {
-        if (runData.hero.sideDeck.size < runData.hero.sideDeckSize) {
-            runData.hero.sideDeck.add(spell)
+        if (runData.hero.sideboard.size < runData.hero.sideboardSize) {
+            runData.hero.sideboard.add(spell)
             sEvent.dispatch(SpellGainedEvent(spell))
         } else {
             sEvent.dispatch(ReplaceSpellQueryEvent(spell))

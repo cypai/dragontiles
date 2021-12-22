@@ -90,7 +90,7 @@ abstract class Spell : DamageAdjustable {
 }
 
 enum class Rarity {
-    COMMON, UNCOMMON, RARE
+    SPECIAL, COMMON, UNCOMMON, RARE
 }
 
 abstract class StandardSpell : Spell() {

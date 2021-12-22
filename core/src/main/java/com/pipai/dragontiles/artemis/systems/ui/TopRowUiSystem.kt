@@ -43,7 +43,7 @@ class TopRowUiSystem(
     override fun initialize() {
         rootTable.setFillParent(true)
         topRow.background = skin.getDrawable("frameDrawable")
-        topRow.add(Label("Elementalist", skin))
+        topRow.add(Label(runData.hero.name, skin))
             .width(260f)
             .pad(8f)
             .padLeft(16f)

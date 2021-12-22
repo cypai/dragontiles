@@ -40,9 +40,9 @@ class TownScreenInit(
 
     private fun initTown() {
         val spellShop = SpellShop(
-            game.heroSpells.getRandomClassSpells(runData, 3).map { pricedSpell(it) }.toMutableList(),
+            runData.hero.heroClass.getRandomClassSpells(runData, 3).map { pricedSpell(it) }.toMutableList(),
             mutableListOf(),
-            pricedSpell(game.heroSpells.colorlessSpells().choose(runData.rng)),
+            pricedSpell(GameData.colorlessSpells.filter { it.rarity != Rarity.SPECIAL }.choose(runData.rng)),
         )
         val itemShop = ItemShop(mutableListOf())
         val scribe = Scribe(mutableListOf())
@@ -54,6 +54,7 @@ class TownScreenInit(
             Rarity.COMMON -> 2
             Rarity.UNCOMMON -> 3
             Rarity.RARE -> 4
+            else -> 0
         }
         return PricedSpell(spell, price)
     }

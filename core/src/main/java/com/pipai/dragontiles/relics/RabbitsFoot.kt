@@ -9,7 +9,7 @@ import com.pipai.dragontiles.status.Dodge
 class RabbitsFoot : Relic() {
     override val strId = "base:relics:RabbitsFoot"
     override val assetName = "rabbit_foot.png"
-    override val rarity = Rarity.COMMON
+    override val rarity = Rarity.SPECIAL
 
     @CombatSubscribe
     suspend fun onTurnStart(ev: TurnStartEvent, api: CombatApi) {

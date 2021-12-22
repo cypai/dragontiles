@@ -18,7 +18,7 @@ class CombatController(
     fun initCombat() {
         eventBus.init(api)
         combat.spells.addAll(runData.hero.spells)
-        combat.sideDeck.addAll(runData.hero.sideDeck)
+        combat.sideDeck.addAll(runData.hero.sideboard)
         combat.enemies.forEach {
             it.preInit(api.nextId())
             combat.enemyStatus[it.id] = mutableListOf()

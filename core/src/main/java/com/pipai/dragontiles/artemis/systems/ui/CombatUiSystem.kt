@@ -134,7 +134,7 @@ class CombatUiSystem(
         runData.hero.spells.forEachIndexed { index, spell ->
             addSpellCard(index, spell)
         }
-        runData.hero.sideDeck.forEachIndexed { index, spell ->
+        runData.hero.sideboard.forEachIndexed { index, spell ->
             addSpellCardToSideboard(index, spell)
         }
         runData.hero.sorceries.forEachIndexed { index, sorcery ->

@@ -20,12 +20,12 @@ class ThornedBush : DungeonEvent() {
 
         override fun onSelect(api: EventApi) {
             api.gainHpImmediate(-hpLoss(api))
-            val spell = api.game.heroSpells.elementalistSpells().filter { it.type != SpellType.SORCERY }
+            val spell = api.runData.hero.heroClass.spells.filter { it.type != SpellType.SORCERY }
                 .choose(api.runData.rng)
-            api.addSpellToDeck(spell)
-            val sorcery = api.game.heroSpells.elementalistSpells().filter { it.type == SpellType.SORCERY }
+            api.addSpellToDeck(spell.newClone())
+            val sorcery = api.runData.hero.heroClass.spells.filter { it.type == SpellType.SORCERY }
                 .choose(api.runData.rng)
-            api.addSpellToDeck(sorcery)
+            api.addSpellToDeck(sorcery.newClone())
             api.changeToEventEnd("digMain")
         }
     }
