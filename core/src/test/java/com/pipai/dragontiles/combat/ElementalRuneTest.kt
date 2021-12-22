@@ -17,7 +17,7 @@ class ElementalRuneTest : CombatBackendTest(QueryHandler()) {
     fun testElementalRune() {
         val flameTurtle = LargeTurtle()
         val runData = runDataFixture(mutableListOf(Invoke(), ElementalRune()), mutableListOf())
-        val combat = Combat(mutableListOf(flameTurtle))
+        val combat = Combat(mutableListOf(flameTurtle), COMBAT_REWARDS_FIXTURE)
 
         val controller = CombatController(runData, combat, sEvent)
         controller.initCombat()

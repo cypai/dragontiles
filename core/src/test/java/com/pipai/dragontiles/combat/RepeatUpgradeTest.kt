@@ -13,7 +13,7 @@ class RepeatUpgradeTest : CombatBackendTest(QueryHandler()) {
     fun testPowerUpgrade() {
         val flameTurtle = LargeTurtle()
         val runData = runDataFixture(mutableListOf(Invoke()), mutableListOf())
-        val combat = Combat(mutableListOf(flameTurtle))
+        val combat = Combat(mutableListOf(flameTurtle), COMBAT_REWARDS_FIXTURE)
 
         val controller = CombatController(runData, combat, sEvent)
         controller.initCombat()

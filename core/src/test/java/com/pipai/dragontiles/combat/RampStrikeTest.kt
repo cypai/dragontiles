@@ -14,7 +14,7 @@ class RampStrikeTest : CombatBackendTest(QueryHandler()) {
     fun testRampStrike() {
         val flameTurtle = LargeTurtle()
         val runData = runDataFixture(mutableListOf(Invoke(), RampStrike()), mutableListOf())
-        val combat = Combat(mutableListOf(flameTurtle))
+        val combat = Combat(mutableListOf(flameTurtle), COMBAT_REWARDS_FIXTURE)
 
         val controller = CombatController(runData, combat, sEvent)
         controller.initCombat()
