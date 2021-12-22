@@ -1,6 +1,7 @@
 package com.pipai.dragontiles.artemis.systems.ui
 
 import com.badlogic.gdx.Input
+import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.InputEvent
@@ -15,7 +16,6 @@ import com.pipai.dragontiles.artemis.events.TopRowUiUpdateEvent
 import com.pipai.dragontiles.artemis.systems.NoProcessingSystem
 import com.pipai.dragontiles.dungeon.GlobalApi
 import com.pipai.dragontiles.dungeon.RunData
-import com.pipai.dragontiles.potions.Potion
 import com.pipai.dragontiles.potions.PotionType
 import com.pipai.dragontiles.utils.potionAssetPath
 import com.pipai.dragontiles.utils.relicAssetPath
@@ -104,6 +104,7 @@ class TopRowUiSystem(
                 potionImage.addListener(object : ClickListener() {
                     override fun clicked(event: InputEvent, x: Float, y: Float) {
                         if (isCombat) {
+                            potionImage.color = Color.GRAY
                             sEvent.dispatch(PotionUseEvent(potion))
                         } else {
                             if (potion.type == PotionType.UNIVERSAL) {

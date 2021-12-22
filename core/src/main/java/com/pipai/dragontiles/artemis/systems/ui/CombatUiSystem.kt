@@ -8,6 +8,7 @@ import com.badlogic.gdx.ai.fsm.DefaultStateMachine
 import com.badlogic.gdx.ai.fsm.State
 import com.badlogic.gdx.ai.msg.Telegram
 import com.badlogic.gdx.graphics.Color
+import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.Sprite
 import com.badlogic.gdx.math.Interpolation
 import com.badlogic.gdx.math.Vector2
@@ -36,6 +37,8 @@ import com.pipai.dragontiles.dungeon.RunData
 import com.pipai.dragontiles.gui.CombatUiLayout
 import com.pipai.dragontiles.gui.SpellCard
 import com.pipai.dragontiles.gui.SpellComponentList
+import com.pipai.dragontiles.potions.Potion
+import com.pipai.dragontiles.potions.PotionTargetType
 import com.pipai.dragontiles.sorceries.FullCastHand
 import com.pipai.dragontiles.sorceries.Sorcery
 import com.pipai.dragontiles.sorceries.findFullCastHand
@@ -43,6 +46,7 @@ import com.pipai.dragontiles.spells.*
 import com.pipai.dragontiles.utils.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import net.mostlyoriginal.api.event.common.EventSystem
 import net.mostlyoriginal.api.event.common.Subscribe
 import kotlin.coroutines.resume
@@ -101,6 +105,7 @@ class CombatUiSystem(
     var overloaded = false
     private var selectedSpellNumber: Int? = null
     private var mouseFollowEntityId: Int? = null
+    private var selectedPotion: Potion? = null
     private val givenComponents: MutableList<TileInstance> = mutableListOf()
 
     private val stateMachine = DefaultStateMachine<CombatUiSystem, CombatUiState>(this, CombatUiState.ROOT)
@@ -121,6 +126,7 @@ class CombatUiSystem(
     private val mTile by mapper<TileComponent>()
     private val mMutualDestroy by mapper<MutualDestroyComponent>()
 
+    private val sTop by system<TopRowUiSystem>()
     private val sFsTexture by system<FullScreenColorSystem>()
     private val sTileId by system<TileIdSystem>()
     private val sCombat by system<CombatControllerSystem>()
@@ -300,6 +306,10 @@ class CombatUiSystem(
                 stateMachine.changeState(CombatUiState.COMPONENT_SELECTION)
                 givenComponents.clear()
                 readjustHand()
+                true
+            }
+            CombatUiState.POTION_TARGET_SELECTION -> {
+                stateMachine.changeState(CombatUiState.ROOT)
                 true
             }
             else -> false
@@ -613,27 +623,39 @@ class CombatUiSystem(
     @Subscribe
     fun handleEnemyClick(ev: EnemyClickEvent) {
         if (ev.button == Input.Buttons.LEFT) {
-            val spell = getSelectedSpell()
-            if (spell is StandardSpell && stateMachine.currentState == CombatUiState.TARGET_SELECTION) {
+            when (stateMachine.currentState) {
+                CombatUiState.TARGET_SELECTION -> {
+                    val spell = getSelectedSpell()
+                    if (spell is StandardSpell) {
 
-                if (spell.targetType == TargetType.SINGLE_ENEMY
-                    || spell.targetType == TargetType.SINGLE
-                ) {
+                        if (spell.targetType == TargetType.SINGLE_ENEMY
+                            || spell.targetType == TargetType.SINGLE
+                        ) {
 
+                            sAnimation.pauseUiMode = true
+                            GlobalScope.launch {
+                                spell.cast(CastParams(listOf(mEnemy.get(ev.entityId).enemy.id)), sCombat.controller.api)
+                            }
+                        } else if (spell.targetType == TargetType.AOE) {
+                            sAnimation.pauseUiMode = true
+                            GlobalScope.launch {
+                                spell.cast(
+                                    CastParams(sCombat.combat.enemies
+                                        .filter { it.hp > 0 }
+                                        .map { it.id }
+                                        .toList()),
+                                    sCombat.controller.api)
+                            }
+                        }
+                    }
+                }
+                CombatUiState.POTION_TARGET_SELECTION -> {
                     sAnimation.pauseUiMode = true
                     GlobalScope.launch {
-                        spell.cast(CastParams(listOf(mEnemy.get(ev.entityId).enemy.id)), sCombat.controller.api)
+                        selectedPotion!!.useDuringCombat(mEnemy.get(ev.entityId).enemy.id, sCombat.controller.api)
                     }
-                } else if (spell.targetType == TargetType.AOE) {
-                    sAnimation.pauseUiMode = true
-                    GlobalScope.launch {
-                        spell.cast(
-                            CastParams(sCombat.combat.enemies
-                                .filter { it.hp > 0 }
-                                .map { it.id }
-                                .toList()),
-                            sCombat.controller.api)
-                    }
+                }
+                else -> {
                 }
             }
         }
@@ -1006,6 +1028,43 @@ class CombatUiSystem(
         spellCard.update()
     }
 
+    @Subscribe
+    fun handlePotionUse(ev: PotionUseEvent) {
+        if (stateMachine.currentState == CombatUiState.ROOT) {
+            when (ev.potion.targetType) {
+                PotionTargetType.NONE -> {
+                    runBlocking {
+                        ev.potion.useDuringCombat(null, sCombat.controller.api)
+                    }
+                }
+                PotionTargetType.ENEMY -> {
+                    selectedPotion = ev.potion
+                    stateMachine.changeState(CombatUiState.POTION_TARGET_SELECTION)
+                    val potionId = world.create()
+                    val cPotionXy = mXy.create(potionId)
+                    cPotionXy.setXy(layout.spellCastPosition)
+                    cPotionXy.x -= 100f
+                    val cPotionSprite = mSprite.create(potionId)
+                    cPotionSprite.sprite =
+                        Sprite(game.assets.get(potionAssetPath(ev.potion.assetName), Texture::class.java))
+                    cPotionSprite.sprite.setOriginCenter()
+
+                    val id = world.create()
+                    mouseFollowEntityId = id
+                    mXy.create(id)
+                    val cLine = mLine.create(id)
+                    cLine.color = Color.GRAY
+                    cLine.safeSetAnchor1(id, potionId, mMutualDestroy)
+                    cLine.anchor1Offset.set(SpellCard.cardWidth / 2f, SpellCard.cardHeight / 2f)
+                    cLine.anchor2 = id
+                    mMouseFollow.create(id)
+
+                    mMutualDestroy.create(id).ids.add(potionId)
+                }
+            }
+        }
+    }
+
     enum class CombatUiState : State<CombatUiSystem> {
         ROOT {
             override fun enter(uiSystem: CombatUiSystem) {
@@ -1087,6 +1146,15 @@ class CombatUiSystem(
                 uiSystem.world.delete(uiSystem.mouseFollowEntityId!!)
                 uiSystem.mouseFollowEntityId = null
                 uiSystem.removeHighlights()
+            }
+        },
+        POTION_TARGET_SELECTION {
+            override fun exit(uiSystem: CombatUiSystem) {
+                uiSystem.selectedPotion = null
+                uiSystem.world.delete(uiSystem.mouseFollowEntityId!!)
+                uiSystem.mouseFollowEntityId = null
+                uiSystem.removeHighlights()
+                uiSystem.sTop.updatePotions()
             }
         },
         QUERY_SWAP {
