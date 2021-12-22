@@ -448,6 +448,10 @@ class CombatApi(
         notifyStatusUpdated()
     }
 
+    suspend fun devInstantWin() {
+        aoeAttack(Element.NONE, 99999, asAttack = false, piercing = true)
+    }
+
     suspend fun addStatusToEnemy(enemy: Enemy, status: Status) {
         status.combatant = Combatant.EnemyCombatant(enemy)
         val enemyStatus = combat.enemyStatus[enemy.id]!!

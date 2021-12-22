@@ -321,6 +321,11 @@ class CombatUiSystem(
             Keys.ESCAPE -> {
                 return setStateBack()
             }
+            Keys.F12 -> {
+                GlobalScope.launch {
+                    sCombat.controller.api.devInstantWin()
+                }
+            }
             Keys.SPACE -> {
                 when (stateMachine.currentState) {
                     CombatUiState.ROOT -> {

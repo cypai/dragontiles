@@ -84,6 +84,7 @@ class CombatScreen(game: DragonTilesGame, runData: RunData, encounter: Encounter
         inputProcessor.addAlwaysOnProcessor(world.getSystem(CombatUiSystem::class.java))
         inputProcessor.addAlwaysOnProcessor(world.getSystem(DeckDisplayUiSystem::class.java))
         inputProcessor.addAlwaysOnProcessor(world.getSystem(TooltipSystem::class.java))
+        inputProcessor.addAlwaysOnProcessor(world.getSystem(RewardsSystem::class.java))
         inputProcessor.addAlwaysOnProcessor(frontStage)
         inputProcessor.addAlwaysOnProcessor(backStage)
         inputProcessor.addAlwaysOnProcessor(ExitInputProcessor())

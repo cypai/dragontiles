@@ -6,6 +6,7 @@ import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.InputEvent
 import com.badlogic.gdx.scenes.scene2d.Stage
+import com.badlogic.gdx.scenes.scene2d.Touchable
 import com.badlogic.gdx.scenes.scene2d.ui.Container
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Table
@@ -38,7 +39,7 @@ class EventUiSystem(
     private val rootTable = Table()
 
     private val mainTextLabel = Label("", skin)
-    private val optionLabels: MutableList<Label> = mutableListOf()
+    private val optionLabels: MutableList<Pair<EventOption, Label>> = mutableListOf()
 
     private val mXy by mapper<XYComponent>()
     private val mActor by mapper<ActorComponent>()
@@ -86,7 +87,7 @@ class EventUiSystem(
                 option.onSelect(api)
             }
         })
-        optionLabels.add(label)
+        optionLabels.add(Pair(option, label))
         rebuildTable()
     }
 
@@ -104,12 +105,15 @@ class EventUiSystem(
             .expand()
             .center()
         rootTable.row()
-        optionLabels.forEach { label ->
+        optionLabels.forEach { optionLabel ->
+            val option = optionLabel.first
+            val label = optionLabel.second
             label.setText("  " + label.text)
             val labelBox = Container(label)
                 .left()
+            labelBox.touchable = Touchable.enabled
             labelBox.background = skin.getDrawable("frameDrawable")
-            labelBox.addListener(object : ClickListener(){
+            labelBox.addListener(object : ClickListener() {
                 override fun enter(event: InputEvent?, x: Float, y: Float, pointer: Int, fromActor: Actor?) {
                     labelBox.background = skin.getDrawable("frameDrawableLight")
                 }
@@ -117,10 +121,14 @@ class EventUiSystem(
                 override fun exit(event: InputEvent?, x: Float, y: Float, pointer: Int, toActor: Actor?) {
                     labelBox.background = skin.getDrawable("frameDrawable")
                 }
+
+                override fun clicked(event: InputEvent?, x: Float, y: Float) {
+                    option.onSelect(api)
+                }
             })
             rootTable.add(labelBox)
                 .prefHeight(64f)
-                .prefWidth(game.gameConfig.resolution.width/2f)
+                .prefWidth(game.gameConfig.resolution.width / 2f)
                 .pad(16f)
                 .left()
                 .expand()
@@ -132,7 +140,10 @@ class EventUiSystem(
     fun onSpellGain(ev: SpellGainedEvent) {
         val id = world.create()
         val cXy = mXy.create(id)
-        cXy.setXy(game.gameConfig.resolution.width / 3f + runData.rng.nextFloat() * game.gameConfig.resolution.width / 3f, game.gameConfig.resolution.height / 4f)
+        cXy.setXy(
+            game.gameConfig.resolution.width / 3f + runData.rng.nextFloat() * game.gameConfig.resolution.width / 3f,
+            game.gameConfig.resolution.height / 4f
+        )
         val cActor = mActor.create(id)
         cActor.actor = SpellCard(game, ev.spell, null, game.skin, null)
         val cPath = mPath.create(id)
