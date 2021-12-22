@@ -21,7 +21,7 @@ base:spells:Blast:
 base:spells:Explosion:
   en:
     name: Explosion
-    description: Deal !d[2x@Numeric] @Elemented @AOE damage.
+    description: Deal !d[3x@Numeric] !dp @Elemented @AOE damage.
 
 base:spells:Strike:
   en:

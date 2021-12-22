@@ -238,7 +238,7 @@ class SpellCard(
                 description += " @Exhaust."
             }
             val adjustedDescription = description.replace(regex) {
-                if (target == null && it.groupValues[2].isNotEmpty()) {
+                val replacement = if (target == null && it.groupValues[2].isNotEmpty()) {
                     it.groupValues[2]
                 } else {
                     val castParams = CastParams(if (target == null) listOf() else listOf(target!!.id))
@@ -247,6 +247,15 @@ class SpellCard(
                     } else {
                         theSpell.dynamicValue(it.groupValues[1], api, castParams).toString()
                     }
+                }
+                if (it.groupValues[1] == "!dp") {
+                    if (replacement == "0") {
+                        ""
+                    } else {
+                        "+ $replacement"
+                    }
+                } else {
+                    replacement
                 }
             }.replace("[@\\[\\]]".toRegex(), "")
             descriptionLabel.setText(adjustedDescription)

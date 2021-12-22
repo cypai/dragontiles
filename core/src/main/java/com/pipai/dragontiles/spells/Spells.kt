@@ -41,9 +41,23 @@ abstract class Spell : DamageAdjustable {
 
     override fun queryScaledAdjustment(origin: DamageOrigin, target: DamageTarget, element: Element): Float = 1f
 
+    open fun dynamicBaseDamage(components: List<TileInstance>): Int {
+        return baseDamage()
+    }
+
     open fun dynamicValue(key: String, api: CombatApi, params: CastParams): Int {
         return when (key) {
             "!d" -> {
+                return if (params.targets.isEmpty()) {
+                    // TODO: Fix this
+                    api.calculateBaseDamage(Element.NONE, baseDamage())
+                } else {
+                    val target = api.getEnemy(params.targets.first())
+                    api.calculateDamageOnEnemy(target, elemental(components()), dynamicBaseDamage(components()))
+                }
+            }
+            "!dp" -> {
+                // Dynamic Plus: For cases where description looks like !d + PowerUpgrade
                 return if (params.targets.isEmpty()) {
                     // TODO: Fix this
                     api.calculateBaseDamage(Element.NONE, baseDamage())

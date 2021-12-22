@@ -1,6 +1,7 @@
 package com.pipai.dragontiles.spells.elementalist
 
 import com.pipai.dragontiles.combat.CombatApi
+import com.pipai.dragontiles.data.TileInstance
 import com.pipai.dragontiles.spells.*
 
 class Explosion : StandardSpell() {
@@ -15,10 +16,14 @@ class Explosion : StandardSpell() {
         PostExhaustAspect(),
     )
 
+    override fun dynamicBaseDamage(components: List<TileInstance>): Int {
+        return 3 * numeric(components)
+    }
+
     override suspend fun onCast(params: CastParams, api: CombatApi) {
         exhausted = true
         params.targets.forEach {
-            api.attack(api.getEnemy(it), elemental(components()), baseDamage() + numeric(components()))
+            api.attack(api.getEnemy(it), elemental(components()), baseDamage() + dynamicBaseDamage(components()))
         }
     }
 }
