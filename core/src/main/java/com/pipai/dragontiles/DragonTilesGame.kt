@@ -120,6 +120,7 @@ class DragonTilesGame(val gameConfig: GameConfig) : Game() {
         gameStrings.load(Gdx.files.internal("assets/data/enemies.yml").readString())
         gameStrings.load(Gdx.files.internal("assets/data/upgrades.yml").readString())
         gameStrings.load(Gdx.files.internal("assets/data/tiles.yml").readString())
+        gameStrings.load(Gdx.files.internal("assets/data/potions.yml").readString())
         gameStrings.loadEvent(Gdx.files.internal("assets/data/events.yml").readString())
 
         ToStringBuilder.setDefaultStyle(ToStringStyle.SHORT_PREFIX_STYLE)

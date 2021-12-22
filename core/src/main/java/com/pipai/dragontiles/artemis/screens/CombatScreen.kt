@@ -67,7 +67,7 @@ class CombatScreen(game: DragonTilesGame, runData: RunData, encounter: Encounter
                 -1,
                 CombatUiSystem(game, runData, backStage, frontStage),
                 DeckDisplayUiSystem(game, runData, frontStage),
-                TopRowUiSystem(game, runData, frontStage)
+                TopRowUiSystem(game, runData, frontStage, true),
             )
             .with(
                 -2,

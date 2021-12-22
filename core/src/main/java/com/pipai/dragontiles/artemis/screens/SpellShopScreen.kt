@@ -39,7 +39,7 @@ class SpellShopScreen(game: DragonTilesGame, runData: RunData) : Screen {
             )
             .with(
                 -1,
-                TopRowUiSystem(game, runData, stage),
+                TopRowUiSystem(game, runData, stage, false),
                 DeckDisplayUiSystem(game, runData, stage),
             )
             .with(

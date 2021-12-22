@@ -40,7 +40,7 @@ class TownScreen(game: DragonTilesGame, runData: RunData, init: Boolean) : Scree
             .with(
                 -1,
                 RenderingSystem(game),
-                TopRowUiSystem(game, runData, stage)
+                TopRowUiSystem(game, runData, stage, false)
             )
             .build()
 

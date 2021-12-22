@@ -99,8 +99,8 @@ class TooltipSystem(game: DragonTilesGame, var stage: Stage) : NoProcessingSyste
     }
 
     private fun updateTablePosition() {
-        table.x = mouseX
-        table.y = (mouseY - table.prefHeight).coerceAtLeast(0f)
+        table.x = mouseX + 16f
+        table.y = (mouseY - table.prefHeight - 16f).coerceAtLeast(0f)
     }
 
     override fun keyDown(keycode: Int) = false

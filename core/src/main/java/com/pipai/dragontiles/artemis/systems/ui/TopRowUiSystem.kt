@@ -1,5 +1,6 @@
 package com.pipai.dragontiles.artemis.systems.ui
 
+import com.badlogic.gdx.Input
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.InputEvent
@@ -9,19 +10,25 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.pipai.dragontiles.DragonTilesGame
+import com.pipai.dragontiles.artemis.events.PotionUseEvent
 import com.pipai.dragontiles.artemis.events.TopRowUiUpdateEvent
 import com.pipai.dragontiles.artemis.systems.NoProcessingSystem
+import com.pipai.dragontiles.dungeon.GlobalApi
 import com.pipai.dragontiles.dungeon.RunData
+import com.pipai.dragontiles.potions.Potion
+import com.pipai.dragontiles.potions.PotionType
 import com.pipai.dragontiles.utils.potionAssetPath
 import com.pipai.dragontiles.utils.relicAssetPath
 import com.pipai.dragontiles.utils.system
+import net.mostlyoriginal.api.event.common.EventSystem
 import net.mostlyoriginal.api.event.common.Subscribe
 import java.lang.Integer.min
 
 class TopRowUiSystem(
     private val game: DragonTilesGame,
     private val runData: RunData,
-    private val stage: Stage
+    private val stage: Stage,
+    var isCombat: Boolean,
 ) : NoProcessingSystem() {
 
     private val skin = game.skin
@@ -41,8 +48,12 @@ class TopRowUiSystem(
     private val potionTable = Table()
 
     private val sTooltip by system<TooltipSystem>()
+    private val sEvent by system<EventSystem>()
+
+    private lateinit var api: GlobalApi
 
     override fun initialize() {
+        api = GlobalApi(runData, sEvent)
         rootTable.setFillParent(true)
         topRow.background = skin.getDrawable("frameDrawable")
         topRow.add(Label(runData.hero.name, skin))
@@ -85,9 +96,36 @@ class TopRowUiSystem(
                     .prefWidth(48f)
                     .prefHeight(48f)
             } else {
-                potionTable.add(Image(game.assets.get(potionAssetPath(slot.potion!!.assetName), Texture::class.java)))
+                val potion = slot.potion!!
+                val potionImage = Image(game.assets.get(potionAssetPath(potion.assetName), Texture::class.java))
+                potionTable.add(potionImage)
                     .prefWidth(48f)
                     .prefHeight(48f)
+                potionImage.addListener(object : ClickListener() {
+                    override fun clicked(event: InputEvent, x: Float, y: Float) {
+                        if (isCombat) {
+                            sEvent.dispatch(PotionUseEvent(potion))
+                        } else {
+                            if (potion.type == PotionType.UNIVERSAL) {
+                                potion.useOutsideCombat(api)
+                            }
+                        }
+                    }
+
+                    override fun enter(event: InputEvent?, x: Float, y: Float, pointer: Int, fromActor: Actor?) {
+                        sTooltip.addNameDescLocalization(game.gameStrings.nameDescLocalization(potion.strId))
+                        sTooltip.showTooltip()
+                    }
+
+                    override fun exit(event: InputEvent?, x: Float, y: Float, pointer: Int, toActor: Actor?) {
+                        sTooltip.hideTooltip()
+                    }
+                })
+                potionImage.addListener(object : ClickListener(Input.Buttons.RIGHT) {
+                    override fun clicked(event: InputEvent?, x: Float, y: Float) {
+                        api.removePotion(slot.potion!!)
+                    }
+                })
             }
         }
     }

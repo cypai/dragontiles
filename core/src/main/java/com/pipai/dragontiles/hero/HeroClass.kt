@@ -1,6 +1,7 @@
 package com.pipai.dragontiles.hero
 
 import com.pipai.dragontiles.dungeon.RunData
+import com.pipai.dragontiles.potions.ExplosivePotion
 import com.pipai.dragontiles.potions.HealingPotion
 import com.pipai.dragontiles.relics.Relic
 import com.pipai.dragontiles.sorceries.Sorcery
@@ -38,8 +39,10 @@ interface HeroClass {
         hero.spells.addAll(starterDeck.filter { it !is Sorcery }.map { it.newClone() })
         hero.sorceries.addAll(starterDeck.filterIsInstance<Sorcery>().map { it.newClone() as Sorcery })
         repeat(potionSlotSize) {
-            hero.potionSlots.add(PotionSlot(if (it == potionSlotSize - 1) null else HealingPotion()))
+            hero.potionSlots.add(PotionSlot(null))
         }
+        hero.potionSlots[0].potion = ExplosivePotion()
+        hero.potionSlots[1].potion = HealingPotion()
         return hero
     }
 

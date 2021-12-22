@@ -46,7 +46,7 @@ class EventScreen(game: DragonTilesGame, runData: RunData, event: DungeonEvent) 
             .with(
                 -1,
                 RenderingSystem(game),
-                TopRowUiSystem(game, runData, frontStage)
+                TopRowUiSystem(game, runData, frontStage, false),
             )
             .build()
 
