@@ -11,7 +11,7 @@ class BattleWinAnimation : Animation() {
 
     override fun startAnimation() {
         sUi.disable()
-        sRewards.generateRewards()
+        sRewards.activateRewards()
         sMap.canAdvanceMap = true
         endAnimation()
     }

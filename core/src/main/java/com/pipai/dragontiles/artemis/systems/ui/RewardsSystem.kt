@@ -12,6 +12,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.pipai.dragontiles.DragonTilesGame
+import com.pipai.dragontiles.artemis.components.ActorComponent
+import com.pipai.dragontiles.artemis.components.TileComponent
+import com.pipai.dragontiles.artemis.components.XYComponent
 import com.pipai.dragontiles.artemis.systems.NoProcessingSystem
 import com.pipai.dragontiles.artemis.systems.combat.CombatControllerSystem
 import com.pipai.dragontiles.artemis.systems.rendering.FullScreenColorSystem
@@ -23,9 +26,7 @@ import com.pipai.dragontiles.gui.SpellCard
 import com.pipai.dragontiles.relics.Relic
 import com.pipai.dragontiles.spells.PostExhaustAspect
 import com.pipai.dragontiles.spells.Spell
-import com.pipai.dragontiles.utils.choose
-import com.pipai.dragontiles.utils.relicAssetPath
-import com.pipai.dragontiles.utils.system
+import com.pipai.dragontiles.utils.*
 import net.mostlyoriginal.api.event.common.EventSystem
 
 class RewardsSystem(
@@ -44,6 +45,8 @@ class RewardsSystem(
 
     private lateinit var api: GlobalApi
 
+    private var active = false
+    private var showing = false
     private var isOnSpellDraft = false
 
     override fun initialize() {
@@ -52,7 +55,10 @@ class RewardsSystem(
         stage.addActor(rootTable)
     }
 
-    fun generateRewards() {
+    fun activateRewards() {
+        world.fetch(allOf(TileComponent::class)).forEach { world.delete(it) }
+        active = true
+        showing = true
         actualRewards.add(Reward.SpellDraftReward(runData.hero.heroClass.getRandomClassSpells(runData, 3)))
         actualRewards.add(Reward.GoldReward(rewards.gold))
         if (rewards.randomRelic) {
@@ -207,6 +213,17 @@ class RewardsSystem(
                 if (isOnSpellDraft) {
                     buildAndShowRewardsTable()
                     return true
+                }
+            }
+            Input.Keys.M -> {
+                if (active) {
+                    if (showing) {
+                        showing = false
+                        rootTable.remove()
+                    } else {
+                        showing = true
+                        stage.addActor(rootTable)
+                    }
                 }
             }
         }
