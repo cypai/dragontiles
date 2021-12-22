@@ -55,12 +55,11 @@ class SpellCard(
     val data: MutableMap<String, Int> = mutableMapOf()
 
     init {
-        setSpell(spell) // Just to update border/req icons
         background = skin.getDrawable("frameDrawable")
         nameLabel.setAlignment(Align.left)
         numberLabel.setAlignment(Align.right)
         descriptionLabel.setAlignment(Align.topLeft)
-        descriptionLabel.setWrap(true)
+        descriptionLabel.wrap = true
         update()
 
         val reqStack = Stack()
@@ -161,19 +160,6 @@ class SpellCard(
 
     fun setSpell(spell: Spell?) {
         this.spell = spell
-        if (spell == null) {
-            reqBorder.drawable = null
-            reqImage.drawable = null
-            reqNumber.setText("")
-            fluxNumber.setText("")
-        } else {
-            reqBorder.drawable = borderDrawable(spell.requirement.type)
-            reqImage.drawable = reqSuitDrawable(spell.requirement.suitGroup)
-            reqNumber.setText("  " + spell.requirement.reqAmount.text())
-            if (spell.aspects.any { it is FluxGainAspect }) {
-                fluxNumber.setText(spell.baseFluxGain())
-            }
-        }
         update()
     }
 
@@ -223,18 +209,28 @@ class SpellCard(
     fun update() {
         numberLabel.setText(number?.toString() ?: "")
 
-        val theSpell = spell
-        if (theSpell == null) {
+        val spell = this.spell
+        if (spell == null || (spell is StandardSpell && spell.exhausted) || (spell is PowerSpell && spell.powered)) {
+            reqBorder.drawable = null
+            reqImage.drawable = null
+            reqNumber.setText("")
+            fluxNumber.setText("")
             nameLabel.setText("")
             spellTypeLabel.setText("")
             descriptionLabel.setText("")
             upgradeImages.forEach { it.drawable = null }
         } else {
-            val spellLocalization = game.gameStrings.spellLocalization(theSpell.strId)
+            reqBorder.drawable = borderDrawable(spell.requirement.type)
+            reqImage.drawable = reqSuitDrawable(spell.requirement.suitGroup)
+            reqNumber.setText("  " + spell.requirement.reqAmount.text())
+            if (spell.aspects.any { it is FluxGainAspect }) {
+                fluxNumber.setText(spell.baseFluxGain())
+            }
+            val spellLocalization = game.gameStrings.spellLocalization(spell.strId)
             nameLabel.setText(spellLocalization.name)
-            spellTypeLabel.setText(theSpell.type.toString())
+            spellTypeLabel.setText(spell.type.toString())
             var description = spellLocalization.description
-            if (theSpell.aspects.any { it is PostExhaustAspect }) {
+            if (spell.aspects.any { it is PostExhaustAspect }) {
                 description += " @Exhaust."
             }
             val adjustedDescription = description.replace(regex) {
@@ -243,9 +239,9 @@ class SpellCard(
                 } else {
                     val castParams = CastParams(if (target == null) listOf() else listOf(target!!.id))
                     if (api == null) {
-                        theSpell.baseDamage().toString()
+                        spell.baseDamage().toString()
                     } else {
-                        theSpell.dynamicValue(it.groupValues[1], api, castParams).toString()
+                        spell.dynamicValue(it.groupValues[1], api, castParams).toString()
                     }
                 }
                 if (it.groupValues[1] == "!dp") {
@@ -259,7 +255,7 @@ class SpellCard(
                 }
             }.replace("[@\\[\\]]".toRegex(), "")
             descriptionLabel.setText(adjustedDescription)
-            theSpell.getUpgrades().zip(upgradeImages).forEach { (upgrade, img) ->
+            spell.getUpgrades().zip(upgradeImages).forEach { (upgrade, img) ->
                 img.drawable =
                     TextureRegionDrawable(game.assets.get(upgradeAssetPath(upgrade.assetName), Texture::class.java))
             }

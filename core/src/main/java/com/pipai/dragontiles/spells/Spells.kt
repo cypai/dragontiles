@@ -219,7 +219,6 @@ abstract class PowerSpell : Spell() {
     }
 
     override fun turnReset() {
-        powered = false
         data.clear()
     }
 }

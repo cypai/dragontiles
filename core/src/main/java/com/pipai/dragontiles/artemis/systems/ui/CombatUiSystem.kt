@@ -992,7 +992,6 @@ class CombatUiSystem(
     private fun resetSpellCard(spellCard: SpellCard) {
         spellCard.target = null
         spellCard.data[allowHoverMove] = 1
-        spellCard.update()
         val spell = spellCard.getSpell()
         if (spell != null && spell is PowerSpell && spell.powered) {
             spellCard.makePowered()
@@ -1002,6 +1001,7 @@ class CombatUiSystem(
         } else {
             spellCard.enable()
         }
+        spellCard.update()
     }
 
     enum class CombatUiState : State<CombatUiSystem> {
