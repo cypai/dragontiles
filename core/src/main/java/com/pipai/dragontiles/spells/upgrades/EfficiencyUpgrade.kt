@@ -9,10 +9,14 @@ class EfficiencyUpgrade : SpellUpgrade {
     override val assetName: String = "efficiency.png"
 
     override fun canUpgrade(spell: Spell): Boolean {
-        return spell.aspects.any { it is FluxGainAspect }
+        return spell.aspects.any { it is FluxGainAspect && it.amount > 1 }
     }
 
     override fun onUpgrade(spell: Spell) {
-        spell.aspects.findAs(FluxGainAspect::class)!!.amount /= 2
+        val aspect = spell.aspects.findAs(FluxGainAspect::class)!!
+        aspect.amount /= 2
+        if (aspect.amount == 0) {
+            aspect.amount = 1
+        }
     }
 }
