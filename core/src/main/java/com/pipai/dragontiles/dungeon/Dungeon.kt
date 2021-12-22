@@ -32,9 +32,9 @@ abstract class Dungeon {
                 }
                 1 -> {
                     repeat(3) {
-                        floor.add(MapNode(MapNodeType.EVENT, false, mutableListOf(0), mutableListOf()))
+//                        floor.add(MapNode(MapNodeType.EVENT, false, mutableListOf(0), mutableListOf()))
                         //floor.add(MapNode(MapNodeType.TOWN, false, mutableListOf(0), mutableListOf()))
-                        //floor.add(MapNode(MapNodeType.COMBAT, false, mutableListOf(0), mutableListOf()))
+                        floor.add(MapNode(MapNodeType.COMBAT, false, mutableListOf(0), mutableListOf()))
                         //floor.add(MapNode(MapNodeType.ELITE, false, mutableListOf(0), mutableListOf()))
                     }
                 }
@@ -172,13 +172,13 @@ class PlainsDungeon : Dungeon() {
     override val bossEncounters: MutableList<Encounter> = mutableListOf()
 
     override val dungeonEvents: MutableList<DungeonEvent> = mutableListOf(
-//        ThornedBush(),
-//        FreeRelic(),
-//        UnusedSeal(),
-//        ShinyInAHole(),
-//        RabbitSwarm(),
-//        TheBeggar(),
+        ThornedBush(),
+        FreeRelic(),
+        UnusedSeal(),
+        ShinyInAHole(),
+        RabbitSwarm(),
+        TheBeggar(),
         StrangeLotus(),
-//        StrangeScribe(),
+        StrangeScribe(),
     )
 }

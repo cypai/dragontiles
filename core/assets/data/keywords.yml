@@ -69,7 +69,7 @@ base:keywords:Exhaust:
   en:
     key: "@Exhaust"
     name: Exhaust
-    description: After casting, Disable the spell for the rest of combat.
+    description: After casting, disable the spell for the rest of combat.
 
 base:keywords:ElementalTile:
   en:
@@ -112,9 +112,3 @@ base:keywords:Defense:
     key: "@Defense"
     name: Defense
     description: Damage taken via attacks decreased by 1 per point of Defense.
-
-base:keywords:Disable:
-  en:
-    key: "@Disable"
-    name: Disable
-    description: Spell cannot be played this turn.

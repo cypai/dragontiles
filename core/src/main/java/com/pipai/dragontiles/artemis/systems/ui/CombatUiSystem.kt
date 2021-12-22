@@ -206,6 +206,9 @@ class CombatUiSystem(
         spellCard.data[allowHoverMove] = 1
         spellCard.addHoverEnterCallback {
             sTooltip.addKeywordsInString(game.gameStrings.spellLocalization(spell.strId).description)
+            if (spell.aspects.any { a -> a is PostExhaustAspect }) {
+                sTooltip.addKeyword("@Exhaust")
+            }
             sTooltip.showTooltip()
             if (it.data[allowHoverMove] == 1) {
                 openActiveSpells()
@@ -234,6 +237,9 @@ class CombatUiSystem(
         spellCard.data[allowHoverMove] = 1
         spellCard.addHoverEnterCallback {
             sTooltip.addKeywordsInString(game.gameStrings.spellLocalization(spell.strId).description)
+            if (spell.aspects.any { a -> a is PostExhaustAspect }) {
+                sTooltip.addKeyword("@Exhaust")
+            }
             sTooltip.showTooltip()
             if (it.data[allowHoverMove] == 1) {
                 openSideboardSpells()
