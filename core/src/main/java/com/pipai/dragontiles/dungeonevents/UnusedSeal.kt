@@ -1,8 +1,8 @@
 package com.pipai.dragontiles.dungeonevents
 
-import com.pipai.dragontiles.spells.EfficiencyUpgrade
-import com.pipai.dragontiles.spells.PowerUpgrade
-import com.pipai.dragontiles.spells.RepeatUpgrade
+import com.pipai.dragontiles.spells.upgrades.EfficiencyUpgrade
+import com.pipai.dragontiles.spells.upgrades.PowerUpgrade
+import com.pipai.dragontiles.spells.upgrades.RepeatUpgrade
 import com.pipai.dragontiles.utils.choose
 
 class UnusedSeal : DungeonEvent() {

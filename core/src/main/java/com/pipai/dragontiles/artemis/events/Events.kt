@@ -3,7 +3,7 @@ package com.pipai.dragontiles.artemis.events
 import com.pipai.dragontiles.artemis.components.EnemyComponent
 import com.pipai.dragontiles.data.PricedSpell
 import com.pipai.dragontiles.spells.Spell
-import com.pipai.dragontiles.spells.SpellUpgrade
+import com.pipai.dragontiles.spells.upgrades.SpellUpgrade
 import net.mostlyoriginal.api.event.common.Event
 
 data class EnemyClickEvent(val entityId: Int, val button: Int) : Event

@@ -20,7 +20,7 @@ import com.pipai.dragontiles.dungeon.RunData
 import com.pipai.dragontiles.gui.SpellCard
 import com.pipai.dragontiles.sorceries.Sorcery
 import com.pipai.dragontiles.spells.Spell
-import com.pipai.dragontiles.spells.SpellUpgrade
+import com.pipai.dragontiles.spells.upgrades.SpellUpgrade
 import com.pipai.dragontiles.utils.getLogger
 import com.pipai.dragontiles.utils.system
 import net.mostlyoriginal.api.event.common.EventSystem

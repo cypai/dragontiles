@@ -5,7 +5,7 @@ import com.pipai.dragontiles.combat.GameOverEvent
 import com.pipai.dragontiles.relics.Relic
 import com.pipai.dragontiles.sorceries.Sorcery
 import com.pipai.dragontiles.spells.Spell
-import com.pipai.dragontiles.spells.SpellUpgrade
+import com.pipai.dragontiles.spells.upgrades.SpellUpgrade
 import net.mostlyoriginal.api.event.common.EventSystem
 
 open class GlobalApi(private val runData: RunData, private val sEvent: EventSystem) {

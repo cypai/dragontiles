@@ -1,6 +1,6 @@
 package com.pipai.dragontiles.dungeonevents
 
-import com.pipai.dragontiles.spells.PowerUpgrade
+import com.pipai.dragontiles.spells.upgrades.PowerUpgrade
 import com.pipai.dragontiles.utils.choose
 
 class StrangeLotus : DungeonEvent() {

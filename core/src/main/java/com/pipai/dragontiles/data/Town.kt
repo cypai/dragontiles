@@ -3,7 +3,7 @@ package com.pipai.dragontiles.data
 import com.pipai.dragontiles.dungeonevents.DungeonEvent
 import com.pipai.dragontiles.relics.Relic
 import com.pipai.dragontiles.spells.Spell
-import com.pipai.dragontiles.spells.SpellUpgrade
+import com.pipai.dragontiles.spells.upgrades.SpellUpgrade
 
 data class Town(
     var actions: Int,
