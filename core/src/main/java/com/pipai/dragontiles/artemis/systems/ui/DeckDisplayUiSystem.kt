@@ -61,12 +61,13 @@ class DeckDisplayUiSystem(
         api = GlobalApi(runData, sEvent)
     }
 
-    fun updateStandardDisplay(enableSwapDnd: Boolean) {
+    fun updateStandardDisplay(spellFilter: (Spell) -> kotlin.Boolean, enableSwapDnd: Boolean) {
         table.clearChildren()
         topLabel.setText("Current Spellbook")
         table.add(topLabel).colspan(6)
         table.row()
         addStandardDisplay(
+            spellFilter,
             { _, _ -> },
             enableSwapDnd,
             { _, _ -> },
@@ -76,6 +77,7 @@ class DeckDisplayUiSystem(
     }
 
     private fun addStandardDisplay(
+        spellFilter: (Spell) -> Boolean,
         spellsOnClick: (Spell, Section) -> Unit,
         spellsEnableSwapDnd: Boolean,
         sideboardOnClick: (Spell, Section) -> Unit,
@@ -83,14 +85,29 @@ class DeckDisplayUiSystem(
         sorceriesOnClick: (Spell, Section) -> Unit,
     ) {
         addSectionHeader("Starting Active Spells (Max ${runData.hero.spellsSize})")
-        addSpellsInSection(runData.hero.spells, spellsOnClick, spellsEnableSwapDnd, Section.ACTIVE)
+        addSpellsInSection(
+            runData.hero.spells.filter { spellFilter.invoke(it) },
+            spellsOnClick,
+            spellsEnableSwapDnd,
+            Section.ACTIVE
+        )
         if (runData.hero.sideDeck.isNotEmpty()) {
             addSectionHeader("Sideboard Spells (Max ${runData.hero.sideDeckSize})")
-            addSpellsInSection(runData.hero.sideDeck, sideboardOnClick, sideboardEnableSwapDnd, Section.SIDEBOARD)
+            addSpellsInSection(
+                runData.hero.sideDeck.filter { spellFilter.invoke(it) },
+                sideboardOnClick,
+                sideboardEnableSwapDnd,
+                Section.SIDEBOARD
+            )
         }
         if (runData.hero.sorceries.isNotEmpty()) {
             addSectionHeader("Sorceries (Max ${runData.hero.sorceriesSize})")
-            addSpellsInSection(runData.hero.sorceries, sorceriesOnClick, false, Section.SORCERIES)
+            addSpellsInSection(
+                runData.hero.sorceries.filter { spellFilter.invoke(it) },
+                sorceriesOnClick,
+                false,
+                Section.SORCERIES
+            )
         }
     }
 
@@ -110,6 +127,7 @@ class DeckDisplayUiSystem(
             .colspan(6)
         table.row()
         addStandardDisplay(
+            { if (spell is Sorcery) it is Sorcery else it !is Sorcery },
             { clickedSpell, section -> if (spell !is Sorcery) replaceSpell(clickedSpell, spell, section) },
             false,
             { clickedSpell, section -> if (spell !is Sorcery) replaceSpell(clickedSpell, spell, section) },
@@ -130,6 +148,7 @@ class DeckDisplayUiSystem(
         table.add(topLabel).colspan(6)
         table.row()
         addStandardDisplay(
+            { upgrade.canUpgrade(it) },
             { clickedSpell, _ -> onSpellUpgradeClick(upgrade, clickedSpell) },
             false,
             { clickedSpell, _ -> onSpellUpgradeClick(upgrade, clickedSpell) },
@@ -180,6 +199,7 @@ class DeckDisplayUiSystem(
         table.add(topLabel).colspan(6)
         table.row()
         addStandardDisplay(
+            { true },
             { clickedSpell, _ -> onSpellTransformClick(clickedSpell) },
             false,
             { clickedSpell, _ -> onSpellTransformClick(clickedSpell) },
@@ -236,7 +256,7 @@ class DeckDisplayUiSystem(
                         target: DragAndDrop.Target?
                     ) {
                         if (target == null) {
-                            updateStandardDisplay(enableSwapDnd)
+                            updateStandardDisplay({ true }, enableSwapDnd)
                         }
                     }
                 })
@@ -287,7 +307,7 @@ class DeckDisplayUiSystem(
                                     runData.hero.spells[index2] = first.getSpell()!!
                                 }
                             }
-                            updateStandardDisplay(enableSwapDnd)
+                            updateStandardDisplay({ true }, enableSwapDnd)
                         }
                     }
                 })
@@ -320,9 +340,11 @@ class DeckDisplayUiSystem(
         when (keycode) {
             Input.Keys.D -> {
                 if (active) {
-                    deactivate()
+                    if (!disableExit) {
+                        deactivate()
+                    }
                 } else {
-                    updateStandardDisplay(enableSwap)
+                    updateStandardDisplay({ true }, enableSwap)
                     activate()
                 }
                 return true
