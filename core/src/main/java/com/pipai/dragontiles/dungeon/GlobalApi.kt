@@ -9,7 +9,7 @@ import com.pipai.dragontiles.spells.Spell
 import com.pipai.dragontiles.spells.upgrades.SpellUpgrade
 import net.mostlyoriginal.api.event.common.EventSystem
 
-open class GlobalApi(private val runData: RunData, private val sEvent: EventSystem) {
+open class GlobalApi(val runData: RunData, private val sEvent: EventSystem) {
     fun removeSpell(spell: Spell) {
         runData.hero.spells.remove(spell)
         runData.hero.sideboard.remove(spell)

@@ -136,6 +136,10 @@ class TopRowUiSystem(
 
     @Subscribe
     fun handleTopRowUpdate(ev: TopRowUiUpdateEvent) {
+        update()
+    }
+
+    fun update() {
         goldLabel.setText("Gold: ${runData.hero.gold}")
         setHp(runData.hero.hp, runData.hero.hpMax)
         setFlux(runData.hero.flux, runData.hero.fluxMax)

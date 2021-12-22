@@ -26,4 +26,4 @@ base:potions:HastePotion:
 base:potions:HealingPotion:
   en:
     name: Healing Potion
-    description: Heal 10% HP.
+    description: Heal 20% HP.

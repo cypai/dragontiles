@@ -10,7 +10,7 @@ import com.pipai.dragontiles.dungeon.GlobalApi
 import com.pipai.dragontiles.dungeon.RunData
 import net.mostlyoriginal.api.event.common.EventSystem
 
-class EventApi(val game: DragonTilesGame, val runData: RunData, sEvent: EventSystem, val sUi: EventUiSystem, val event: EventLocalization)
+class EventApi(val game: DragonTilesGame, runData: RunData, sEvent: EventSystem, val sUi: EventUiSystem, val event: EventLocalization)
     : GlobalApi(runData, sEvent) {
 
     private fun keyText(id: String): String {

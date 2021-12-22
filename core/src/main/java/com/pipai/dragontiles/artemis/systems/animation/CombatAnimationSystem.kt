@@ -154,6 +154,11 @@ class CombatAnimationSystem(private val game: DragonTilesGame) : BaseSystem(), A
     }
 
     @Subscribe
+    fun handlePlayerHealEvent(ev: PlayerHealEvent) {
+        queueAnimation(PlayerHealAnimation(ev.amount))
+    }
+
+    @Subscribe
     fun handleComponentConsumeEvent(ev: ComponentConsumeEvent) {
         val batch = BatchAnimation()
         ev.components.forEach {

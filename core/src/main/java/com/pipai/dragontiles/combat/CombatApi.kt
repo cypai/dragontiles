@@ -21,7 +21,7 @@ import kotlin.coroutines.suspendCoroutine
 import kotlin.reflect.KClass
 
 class CombatApi(
-    val runData: RunData,
+    runData: RunData,
     val combat: Combat,
     private val eventBus: CombatEventBus
 ) : GlobalApi(runData, eventBus.sEvent) {
@@ -422,6 +422,14 @@ class CombatApi(
         eventBus.dispatch(PlayerDamageEvent(damage))
         if (runData.hero.hp <= 0) {
             eventBus.dispatch(GameOverEvent())
+        }
+    }
+
+    suspend fun healHero(amount: Int) {
+        runData.hero.hp += amount
+        if (runData.hero.hp > runData.hero.hpMax) {
+            runData.hero.hp = runData.hero.hpMax
+            eventBus.dispatch(PlayerHealEvent(amount))
         }
     }
 
