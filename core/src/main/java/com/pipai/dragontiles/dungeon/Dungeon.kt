@@ -24,6 +24,11 @@ abstract class Dungeon {
 
     fun generateMap(rng: Random) {
         var previousFloor: List<MapNode>? = null
+        var prevPrevFloor: List<MapNode>? = null
+        val elites = mutableListOf(0, 0, 0)
+        val combats = mutableListOf(0, 0, 0)
+        val events = mutableListOf(0, 0, 0)
+        val towns = mutableListOf(0, 0, 0)
         for (floorNum in 0..11) {
             val floor: MutableList<MapNode> = mutableListOf()
             when (floorNum) {
@@ -51,18 +56,40 @@ abstract class Dungeon {
                     floor.add(node)
                 }
                 else -> {
-                    repeat(3) {
-                        val allowedNodes = if (floorNum == 5) {
-                            listOf(MapNodeType.TOWN)
-                        } else {
-                            if (floorNum in listOf(4,6,8) && rng.nextBoolean()) {
-                                listOf(MapNodeType.ELITE)
-                            } else {
-                                listOf(MapNodeType.COMBAT, MapNodeType.EVENT)
-                            }
+                    repeat(3) { i ->
+                        val allowedNodes = mutableListOf(MapNodeType.COMBAT, MapNodeType.EVENT)
+                        if (floorNum > 3 && towns[i] == 0) {
+                            allowedNodes.add(MapNodeType.TOWN)
+                        }
+                        if (floorNum > 3 && elites[i] < 3 && previousFloor!![i].type != MapNodeType.ELITE) {
+                            allowedNodes.add(MapNodeType.ELITE)
+                        }
+                        if (floorNum >= 3 && prevPrevFloor!![i].type == previousFloor!![i].type) {
+                            allowedNodes.remove(previousFloor!![i].type)
+                        }
+                        if (floorNum == 6 && towns[i] == 0) {
+                            allowedNodes.clear()
+                            allowedNodes.add(MapNodeType.TOWN)
+                        }
+                        if (floorNum > 7 && combats[i] > 3) {
+                            allowedNodes.remove(MapNodeType.COMBAT)
+                        }
+                        if (floorNum > 7 && events[i] > 3) {
+                            allowedNodes.remove(MapNodeType.EVENT)
+                        }
+                        if (allowedNodes.contains(MapNodeType.ELITE) && floorNum == 9 && elites[i] == 0) {
+                            allowedNodes.clear()
+                            allowedNodes.add(MapNodeType.ELITE)
                         }
                         val node = randomNode(rng, allowedNodes)
                         floor.add(node)
+                        when (node.type) {
+                            MapNodeType.COMBAT -> combats[i]++
+                            MapNodeType.EVENT -> events[i]++
+                            MapNodeType.ELITE -> elites[i]++
+                            MapNodeType.TOWN -> towns[i]++
+                            else -> {}
+                        }
                     }
                     previousFloor!![0].next.add(0)
                     previousFloor[1].next.add(1)
@@ -89,6 +116,7 @@ abstract class Dungeon {
                 }
             }
             map.add(floor)
+            prevPrevFloor = previousFloor
             previousFloor = floor
         }
     }
@@ -130,11 +158,13 @@ enum class MapNodeType {
 
 class PlainsDungeon : Dungeon() {
     override val easyEncounters: MutableList<Encounter> = mutableListOf(
-            Encounter(listOf(Pair(LargeTurtle(), Vector2(750f, 420f)))),
-            Encounter(listOf(
-                    Pair(Slime(), Vector2(740f, 430f)),
-                    Pair(Slime(), Vector2(910f, 430f))
-            )),
+        Encounter(listOf(Pair(LargeTurtle(), Vector2(750f, 420f)))),
+        Encounter(
+            listOf(
+                Pair(Slime(), Vector2(740f, 430f)),
+                Pair(Slime(), Vector2(910f, 430f))
+            )
+        ),
 //            Encounter(listOf(
 //                Pair(KillerRabbit(), Vector2(740f, 430f)),
 //                Pair(KillerRabbit(), Vector2(1010f, 430f))
@@ -151,10 +181,12 @@ class PlainsDungeon : Dungeon() {
 //            )),
     )
     override val standardEncounters: MutableList<Encounter> = mutableListOf(
-            Encounter(listOf(
-                    Pair(LargeTurtle(), Vector2(650f, 420f)),
-                    Pair(Slime(), Vector2(1000f, 420f))
-            ))
+        Encounter(
+            listOf(
+                Pair(LargeTurtle(), Vector2(650f, 420f)),
+                Pair(Slime(), Vector2(1000f, 420f))
+            )
+        )
     )
     override val eliteEncounters: MutableList<Encounter> = mutableListOf(
 //        Encounter(listOf(
@@ -163,11 +195,13 @@ class PlainsDungeon : Dungeon() {
 //        Encounter(listOf(
 //            Pair(Minotaur(), Vector2(750f, 420f))
 //        )),
-        Encounter(listOf(
+        Encounter(
+            listOf(
                 Pair(FlameDragonHorse(), Vector2(740f, 400f)),
                 Pair(RiverDragonHorse(), Vector2(1010f, 500f)),
                 Pair(WhiteDragonHorse(), Vector2(1010f, 280f)),
-        )),
+            )
+        ),
     )
     override val bossEncounters: MutableList<Encounter> = mutableListOf()
 
