@@ -595,8 +595,10 @@ class CombatUiSystem(
     @Subscribe
     fun handleEnemyHoverEnter(ev: EnemyHoverEnterEvent) {
         getSelectedSpellCard()?.let {
-            it.target = ev.cEnemy.enemy
-            it.update()
+            if (stateMachine.currentState == CombatUiState.TARGET_SELECTION) {
+                it.target = ev.cEnemy.enemy
+                it.update()
+            }
         }
     }
 
