@@ -12,6 +12,7 @@ class Explosion : StandardSpell() {
     override val aspects: MutableList<SpellAspect> = mutableListOf(
         AttackDamageAspect(0),
         FluxGainAspect(5),
+        PostExhaustAspect(),
     )
 
     override suspend fun onCast(params: CastParams, api: CombatApi) {

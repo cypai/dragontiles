@@ -48,10 +48,10 @@ base:spells:ChainRune:
     name: Chain Rune
     description: After you cast an attack with the same element, inflict 1 @Elemented @Chain.
 
-base:spells:QuickInvoke:
+base:spells:DualInvoke:
   en:
-    name: Quick Invoke
-    description: Deal !d @Elemented damage. @Repeatable !r.
+    name: Dual Invoke
+    description: Deal !d @Elemented damage twice.
 
 base:spells:MultiInvoke:
   en:

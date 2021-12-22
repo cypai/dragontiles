@@ -16,13 +16,8 @@ import com.pipai.dragontiles.dungeonevents.PlainsStartEvent
 import com.pipai.dragontiles.hero.Hero
 import com.pipai.dragontiles.relics.RelicData
 import com.pipai.dragontiles.relics.Transmuter
-import com.pipai.dragontiles.spells.common.Blast
-import com.pipai.dragontiles.spells.common.Bump
-import com.pipai.dragontiles.spells.common.Fetch
-import com.pipai.dragontiles.spells.elementalist.BurnRune
-import com.pipai.dragontiles.spells.elementalist.Fireball
+import com.pipai.dragontiles.spells.elementalist.DualInvoke
 import com.pipai.dragontiles.spells.elementalist.PiercingStrike
-import com.pipai.dragontiles.spells.elementalist.QuickInvoke
 import java.util.*
 
 class MainMenuUiSystem(
@@ -55,7 +50,7 @@ class MainMenuUiSystem(
                     Hero(
                         "Elementalist", 60, 60, 0, 40, 17,
                         game.heroSpells.elementalistStarterDeck().toMutableList(), 6,
-                        mutableListOf(PiercingStrike()), 3,
+                        mutableListOf(DualInvoke()), 3,
                         game.heroSpells.elementalistStarterSorceries().toMutableList(), 9,
                         mutableListOf(Transmuter()),
                         5

@@ -29,7 +29,7 @@ class HeroSpells {
 
     fun elementalistSpells(): List<Spell> {
         return listOf(
-            QuickInvoke(),
+            DualInvoke(),
             MultiInvoke(),
             StrengthRune(),
             PiercingStrike(),
