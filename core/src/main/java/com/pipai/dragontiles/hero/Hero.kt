@@ -15,5 +15,6 @@ data class Hero(val name: String,
                 val sideDeck: MutableList<Spell>,
                 var sideDeckSize: Int,
                 val sorceries: MutableList<Sorcery>,
+                var sorceriesSize: Int,
                 val relics: MutableList<Relic>,
                 var gold: Int)
