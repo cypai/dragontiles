@@ -20,5 +20,7 @@ data class Hero(val heroClass: HeroClass,
                 var sorceriesSize: Int,
                 val relics: MutableList<Relic>,
                 var gold: Int,
-                val potions: MutableList<Potion>,
+                val potionSlots: MutableList<PotionSlot>,
 )
+
+data class PotionSlot(var potion: Potion?)

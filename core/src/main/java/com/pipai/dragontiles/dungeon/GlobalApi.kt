@@ -85,12 +85,12 @@ open class GlobalApi(private val runData: RunData, private val sEvent: EventSyst
     }
 
     fun gainPotion(potion: Potion) {
-        runData.hero.potions.add(potion)
+        runData.hero.potionSlots.first { it.potion == null }.potion = potion
         sEvent.dispatch(TopRowUiUpdateEvent())
     }
 
     fun removePotion(potion: Potion) {
-        runData.hero.potions.remove(potion)
+        runData.hero.potionSlots.first { it.potion == potion }.potion = null
         sEvent.dispatch(TopRowUiUpdateEvent())
     }
 }

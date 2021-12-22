@@ -55,5 +55,5 @@ class Elementalist : HeroClass {
     override val activeSpellSize: Int = 6
     override val sideboardSize: Int = 3
     override val sorceriesSize: Int = 9
-    override val potionSize: Int = 3
+    override val potionSlotSize: Int = 3
 }

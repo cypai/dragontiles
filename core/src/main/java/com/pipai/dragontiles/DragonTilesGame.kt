@@ -82,6 +82,8 @@ class DragonTilesGame(val gameConfig: GameConfig) : Game() {
             .forEach { assets.load(it.toString(), Texture::class.java) }
         File("assets/binassets/graphics/relics").listFiles()!!
             .forEach { assets.load(it.toString(), Texture::class.java) }
+        File("assets/binassets/graphics/potions").listFiles()!!
+            .forEach { assets.load(it.toString(), Texture::class.java) }
         assets.load("assets/binassets/graphics/tiles/tiles.png", Texture::class.java)
         assets.load("assets/binassets/graphics/heros/elementalist.png", Texture::class.java)
         File("assets/binassets/graphics/textures").listFiles()!!

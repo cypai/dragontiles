@@ -12,6 +12,7 @@ import com.pipai.dragontiles.DragonTilesGame
 import com.pipai.dragontiles.artemis.events.TopRowUiUpdateEvent
 import com.pipai.dragontiles.artemis.systems.NoProcessingSystem
 import com.pipai.dragontiles.dungeon.RunData
+import com.pipai.dragontiles.utils.potionAssetPath
 import com.pipai.dragontiles.utils.relicAssetPath
 import com.pipai.dragontiles.utils.system
 import net.mostlyoriginal.api.event.common.Subscribe
@@ -37,6 +38,7 @@ class TopRowUiSystem(
     private val hpLabel = Label("HP: $hp/$hpMax", skin)
     private val fluxLabel = Label("Flux: $flux/$fluxMax", skin)
     private val goldLabel = Label("Gold: $gold", skin)
+    private val potionTable = Table()
 
     private val sTooltip by system<TooltipSystem>()
 
@@ -55,7 +57,8 @@ class TopRowUiSystem(
             .width(160f)
         topRow.add(goldLabel)
             .width(120f)
-        topRow.add()
+        updatePotions()
+        topRow.add(potionTable)
             .expand()
 
         updateRelicRow()
@@ -72,6 +75,21 @@ class TopRowUiSystem(
             .expand()
         rootTable.row()
         stage.addActor(rootTable)
+    }
+
+    fun updatePotions() {
+        potionTable.clearChildren()
+        runData.hero.potionSlots.forEach { slot ->
+            if (slot.potion == null) {
+                potionTable.add(Image())
+                    .prefWidth(32f)
+                    .prefHeight(32f)
+            } else {
+                potionTable.add(Image(game.assets.get(potionAssetPath(slot.potion!!.assetName), Texture::class.java)))
+                    .prefWidth(32f)
+                    .prefHeight(32f)
+            }
+        }
     }
 
     fun updateRelicRow() {
@@ -121,6 +139,7 @@ class TopRowUiSystem(
         goldLabel.setText("Gold: ${runData.hero.gold}")
         setHp(runData.hero.hp, runData.hero.hpMax)
         setFlux(runData.hero.flux, runData.hero.fluxMax)
+        updatePotions()
         updateRelicRow()
     }
 }

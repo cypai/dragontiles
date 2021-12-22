@@ -1,7 +1,7 @@
 package com.pipai.dragontiles.hero
 
-import com.pipai.dragontiles.dungeon.GlobalApi
 import com.pipai.dragontiles.dungeon.RunData
+import com.pipai.dragontiles.potions.ExplosivePotion
 import com.pipai.dragontiles.relics.Relic
 import com.pipai.dragontiles.sorceries.Sorcery
 import com.pipai.dragontiles.spells.Rarity
@@ -23,7 +23,7 @@ interface HeroClass {
     val activeSpellSize: Int
     val sideboardSize: Int
     val sorceriesSize: Int
-    val potionSize: Int
+    val potionSlotSize: Int
 
     fun generateHero(name: String): Hero {
         val hero = Hero(
@@ -37,6 +37,9 @@ interface HeroClass {
         )
         hero.spells.addAll(starterDeck.filter { it !is Sorcery }.map { it.newClone() })
         hero.sorceries.addAll(starterDeck.filterIsInstance<Sorcery>().map { it.newClone() as Sorcery })
+        repeat(potionSlotSize) {
+            hero.potionSlots.add(PotionSlot(ExplosivePotion()))
+        }
         return hero
     }
 
