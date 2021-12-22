@@ -1,7 +1,7 @@
 package com.pipai.dragontiles.data
 
 enum class Suit(val order: Int) {
-    FUMBLE(0), FIRE(1), ICE(2), LIGHTNING(3), STAR(4), LIFE(5)
+    FUMBLE(0), FIRE(1), ICE(2), LIGHTNING(3), LIFE(4), STAR(5)
 }
 
 enum class Element(val isElemental: Boolean) {
