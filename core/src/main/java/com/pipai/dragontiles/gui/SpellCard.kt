@@ -233,7 +233,10 @@ class SpellCard(
             val spellLocalization = game.gameStrings.spellLocalization(theSpell.strId)
             nameLabel.setText(spellLocalization.name)
             spellTypeLabel.setText(theSpell.type.toString())
-            val description = spellLocalization.description
+            var description = spellLocalization.description
+            if (theSpell.aspects.any { it is PostExhaustAspect }) {
+                description += " @Exhaust."
+            }
             val adjustedDescription = description.replace(regex) {
                 if (target == null && it.groupValues[2].isNotEmpty()) {
                     it.groupValues[2]
