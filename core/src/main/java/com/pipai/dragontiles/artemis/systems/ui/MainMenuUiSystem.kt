@@ -54,7 +54,8 @@ class MainMenuUiSystem(
                         mutableListOf(DualInvoke(), Explosion()), 3,
                         game.heroSpells.elementalistStarterSorceries().toMutableList(), 9,
                         mutableListOf(Transmuter()),
-                        5
+                        5,
+                        mutableListOf(),
                     ),
                     RelicData(RelicData.ALL_RELICS.toMutableList()),
                     PlainsDungeon(),

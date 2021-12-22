@@ -2,6 +2,7 @@ package com.pipai.dragontiles.dungeon
 
 import com.pipai.dragontiles.artemis.events.*
 import com.pipai.dragontiles.combat.GameOverEvent
+import com.pipai.dragontiles.potions.Potion
 import com.pipai.dragontiles.relics.Relic
 import com.pipai.dragontiles.sorceries.Sorcery
 import com.pipai.dragontiles.spells.Spell
@@ -80,6 +81,16 @@ open class GlobalApi(private val runData: RunData, private val sEvent: EventSyst
 
     fun gainMaxFluxImmediate(amount: Int) {
         runData.hero.fluxMax += amount
+        sEvent.dispatch(TopRowUiUpdateEvent())
+    }
+
+    fun gainPotion(potion: Potion) {
+        runData.hero.potions.add(potion)
+        sEvent.dispatch(TopRowUiUpdateEvent())
+    }
+
+    fun removePotion(potion: Potion) {
+        runData.hero.potions.remove(potion)
         sEvent.dispatch(TopRowUiUpdateEvent())
     }
 }

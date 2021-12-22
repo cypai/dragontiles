@@ -1,0 +1,29 @@
+base:potions:ExplosivePotion:
+  en:
+    name: Explosive Potion
+    description: Deal 10 Nonelemental damage.
+
+base:potions:BlastPotion:
+  en:
+    name: Blast Potion
+    description: Deal 5 AOE Nonelemental damage.
+
+base:potions:VentingPotion:
+  en:
+    name: Venting Potion
+    description: Lose 10 Flux.
+
+base:potions:StrengthPotion:
+  en:
+    name: Strength Potion
+    description: Gain 2 Strength.
+
+base:potions:HastePotion:
+  en:
+    name: Haste Potion
+    description: Gain 1 Dodge.
+
+base:potions:HealingPotion:
+  en:
+    name: Healing Potion
+    description: Heal 10% HP.
