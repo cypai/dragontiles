@@ -5,7 +5,7 @@ import com.pipai.dragontiles.spells.Spell
 import com.pipai.dragontiles.utils.findAs
 
 class EfficiencyUpgrade : SpellUpgrade {
-    override val name: String = "Efficiency Upgrade"
+    override val strId: String = "base:upgrade:EfficiencyUpgrade"
     override val assetName: String = "efficiency.png"
 
     override fun canUpgrade(spell: Spell): Boolean {

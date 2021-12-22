@@ -157,8 +157,11 @@ class DeckDisplayUiSystem(
 
     fun queryUpgrade(useFilter: Boolean, upgrade: SpellUpgrade) {
         table.clearChildren()
-        topLabel.setText("Choose a spell to upgrade: ${upgrade.name}")
+        topLabel.setText("Choose a spell to upgrade:")
         table.add(topLabel).colspan(colspan)
+        table.row()
+        val localization = game.gameStrings.nameDescLocalization(upgrade.strId)
+        table.add(Label("${localization.name}: ${localization.description}", game.skin, "white")).colspan(colspan)
         table.row()
         if (useFilter) {
             queryFilterBtn.setText("  Show all  ")

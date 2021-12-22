@@ -1,0 +1,19 @@
+base:upgrades:PowerUpgrade:
+  en:
+    name: Power Upgrade
+    description: Attack damage +3.
+
+base:upgrades:SurgeUpgrade:
+  en:
+    name: Surge Upgrade
+    description: Attack damage +12. Exhaust.
+
+base:upgrades:EfficiencyUpgrade:
+  en:
+    name: Efficiency Upgrade
+    description: Halves flux requirement. Minimum of 1.
+
+base:upgrades:RepeatUpgrade:
+  en:
+    name: Repeat Upgrade
+    description: Adds 1 Repeatable.
