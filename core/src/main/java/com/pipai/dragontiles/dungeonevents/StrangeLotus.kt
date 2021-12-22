@@ -1,6 +1,6 @@
 package com.pipai.dragontiles.dungeonevents
 
-import com.pipai.dragontiles.spells.upgrades.PowerUpgrade
+import com.pipai.dragontiles.spells.upgrades.SurgeUpgrade
 import com.pipai.dragontiles.utils.choose
 
 class StrangeLotus : DungeonEvent() {
@@ -31,7 +31,7 @@ class StrangeLotus : DungeonEvent() {
         private fun hpLoss(api: EventApi): Int = (api.runData.hero.hpMax * 0.1f).toInt()
 
         override fun additionalText(api: EventApi): String {
-            return "Receive a Power Upgrade. Lose ${hpLoss(api)} HP."
+            return "Receive a Surge Upgrade. Lose ${hpLoss(api)} HP."
         }
 
         override fun onSelect(api: EventApi) {
@@ -45,7 +45,7 @@ class StrangeLotus : DungeonEvent() {
         override val id = "pokeResponse"
 
         override fun onSelect(api: EventApi) {
-            api.queryUpgradeSpell(PowerUpgrade())
+            api.queryUpgradeSpell(SurgeUpgrade())
             api.changeToEventEnd("pokeMain")
         }
     }

@@ -178,7 +178,7 @@ class PlainsDungeon : Dungeon() {
 //        ShinyInAHole(),
 //        RabbitSwarm(),
 //        TheBeggar(),
-//        StrangeLotus(),
-        StrangeScribe(),
+        StrangeLotus(),
+//        StrangeScribe(),
     )
 }
