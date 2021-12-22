@@ -81,13 +81,13 @@ class TopRowUiSystem(
         potionTable.clearChildren()
         runData.hero.potionSlots.forEach { slot ->
             if (slot.potion == null) {
-                potionTable.add(Image())
-                    .prefWidth(32f)
-                    .prefHeight(32f)
+                potionTable.add(Image(game.assets.get(potionAssetPath("empty.png"), Texture::class.java)))
+                    .prefWidth(48f)
+                    .prefHeight(48f)
             } else {
                 potionTable.add(Image(game.assets.get(potionAssetPath(slot.potion!!.assetName), Texture::class.java)))
-                    .prefWidth(32f)
-                    .prefHeight(32f)
+                    .prefWidth(48f)
+                    .prefHeight(48f)
             }
         }
     }
