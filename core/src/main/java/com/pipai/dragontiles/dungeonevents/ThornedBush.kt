@@ -9,10 +9,6 @@ class ThornedBush : DungeonEvent() {
     override val beginningTextId = "start"
     override val beginningOptions: List<EventOption> = listOf(DigOption(), SkipOption())
 
-    override fun onEventStart(api: EventApi) {
-        api.allowMapAdvance()
-    }
-
     private class DigOption : EventOption {
         override val id = "dig"
 

@@ -9,10 +9,6 @@ class DragonInquiryEvent : DungeonEvent() {
     override val beginningTextId = "start"
     override val beginningOptions: List<EventOption> = listOf(PowerOption(), WisdomOption(), WealthOption())
 
-    override fun onEventStart(api: EventApi) {
-        api.allowMapAdvance()
-    }
-
     private class PowerOption : EventOption {
         override val id = "power"
 

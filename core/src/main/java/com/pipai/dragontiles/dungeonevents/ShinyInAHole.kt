@@ -8,10 +8,6 @@ class ShinyInAHole : DungeonEvent() {
     override val beginningTextId = "start"
     override val beginningOptions: List<EventOption> = listOf(CheckOption(), SkipOption())
 
-    override fun onEventStart(api: EventApi) {
-        api.allowMapAdvance()
-    }
-
     private class CheckOption : EventOption {
         override val id = "check"
 

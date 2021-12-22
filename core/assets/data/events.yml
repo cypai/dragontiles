@@ -119,23 +119,45 @@ base:events:ShinyInAHole:
     en:
       text: Do nothing.
 
-base:events:Cleric:
+base:events:TheBeggar:
   name:
     en:
-      text: Relic
+      text: The Beggar
   start:
     en:
       text: |
-        You pass by a cleric offering his services.
-  heal:
+        An old beggar reaches out to you as you pass by on the path.
+
+        "Good sir, can you spare an old man a bit of coin?"
+  offer1:
     en:
-      text: Heal for 1 Gold.
-  maxHp:
+      text: Offer 1 Gold.
+  offer1Main:
     en:
-      text: Gain 5 Max HP for 2 Gold.
+      text: |
+        "Thank you, I have some knowledge of the healing qi arts.
+
+        "You bring honor to your house."
+  offer3:
+    en:
+      text: Offer 3 Gold. (Lose 3 Gold. Gain sideboard space.)
+  offer3Main:
+    en:
+      text: |
+        The beggar transforms and reveals himself as a Dragon!
+
+        "WELL DONE, MORTAL, YOU HAVE SUCCEEDED THIS TEST."
+
+        A blast of cleansing fire later, you emerge with an improved spellbook.
   skip:
     en:
       text: Do nothing.
+  skipMain:
+    en:
+      text: |
+        He glares and curses you.
+
+        "You may or may not succeed on your pilgrimage, but you have already lost your honor."
 
 base:events:RabbitSwarm:
   name:

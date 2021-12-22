@@ -11,6 +11,7 @@ import com.pipai.dragontiles.DragonTilesGame
 import com.pipai.dragontiles.artemis.screens.EventScreen
 import com.pipai.dragontiles.dungeon.PlainsDungeon
 import com.pipai.dragontiles.dungeon.RunData
+import com.pipai.dragontiles.dungeon.RunHistory
 import com.pipai.dragontiles.dungeonevents.PlainsStartEvent
 import com.pipai.dragontiles.hero.Hero
 import com.pipai.dragontiles.relics.RelicData
@@ -61,7 +62,8 @@ class MainMenuUiSystem(
                     ),
                     RelicData(RelicData.ALL_RELICS.toMutableList()),
                     PlainsDungeon(),
-                    null
+                    null,
+                    RunHistory(0, mutableListOf()),
                 )
                 runData.dungeon.generateMap(runData.rng)
                 game.screen = EventScreen(game, runData, PlainsStartEvent())

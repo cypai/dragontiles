@@ -8,10 +8,6 @@ class FreeRelic : DungeonEvent() {
     override val beginningTextId = "start"
     override val beginningOptions: List<EventOption> = listOf(TakeOption(), SkipOption())
 
-    override fun onEventStart(api: EventApi) {
-        api.allowMapAdvance()
-    }
-
     private class TakeOption : EventOption {
         override val id = "take"
 

@@ -11,10 +11,6 @@ class UnusedSeal : DungeonEvent() {
     override val beginningTextId = "start"
     override val beginningOptions: List<EventOption> = listOf(UseOption(), SkipOption())
 
-    override fun onEventStart(api: EventApi) {
-        api.allowMapAdvance()
-    }
-
     private class UseOption : EventOption {
         override val id = "use"
 

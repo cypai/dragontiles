@@ -17,10 +17,6 @@ class RabbitSwarm : DungeonEvent() {
         return floorNumber > 5
     }
 
-    override fun onEventStart(api: EventApi) {
-        api.allowMapAdvance()
-    }
-
     private class FightOption : EventOption {
         override val id = "fight"
 

@@ -20,6 +20,7 @@ abstract class DungeonEvent {
 
 interface EventOption {
     val id: String
+    fun available(api: EventApi): Boolean = true
     fun additionalText(api: EventApi): String = ""
     fun onSelect(api: EventApi)
 }
