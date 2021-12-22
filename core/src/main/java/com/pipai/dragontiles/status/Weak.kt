@@ -5,7 +5,7 @@ import com.pipai.dragontiles.data.Element
 
 class Weak(amount: Int, var skip: Boolean) : Status(amount) {
     override val strId = "base:status:Weak"
-    override val assetName = "assets/binassets/graphics/status/weak.png"
+    override val assetName = "weak.png"
     override val displayAmount = true
 
     override fun deepCopy(): Status {

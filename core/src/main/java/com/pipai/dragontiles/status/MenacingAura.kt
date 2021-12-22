@@ -7,7 +7,7 @@ import com.pipai.dragontiles.spells.SpellType
 
 class MenacingAura(amount: Int) : Status(amount) {
     override val strId = "base:status:MenacingAura"
-    override val assetName = "assets/binassets/graphics/status/menacing_aura.png"
+    override val assetName = "menacing_aura.png"
     override val displayAmount = true
 
     override fun deepCopy(): Status {

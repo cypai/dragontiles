@@ -9,10 +9,7 @@ import com.pipai.dragontiles.artemis.components.*
 import com.pipai.dragontiles.artemis.systems.NoProcessingSystem
 import com.pipai.dragontiles.artemis.systems.ui.TooltipSystem
 import com.pipai.dragontiles.status.Status
-import com.pipai.dragontiles.utils.allOf
-import com.pipai.dragontiles.utils.fetch
-import com.pipai.dragontiles.utils.mapper
-import com.pipai.dragontiles.utils.system
+import com.pipai.dragontiles.utils.*
 
 class StatusSystem(private val game: DragonTilesGame) : NoProcessingSystem() {
     private val mXy by mapper<XYComponent>()
@@ -63,7 +60,7 @@ class StatusSystem(private val game: DragonTilesGame) : NoProcessingSystem() {
         val cXy = mXy.create(eid)
         cXy.setXy(cTargetXy.x + 16f * index, cTargetXy.y - 44f)
         val cSprite = mSprite.create(eid)
-        cSprite.sprite = Sprite(game.assets.get(status.assetName, Texture::class.java))
+        cSprite.sprite = Sprite(game.assets.get(statusAssetPath(status.assetName), Texture::class.java))
         val cHover = mHoverable.create(eid)
         cHover.enterCallback = {
             cHover.recheck = true

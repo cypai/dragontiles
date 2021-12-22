@@ -6,7 +6,7 @@ import com.pipai.dragontiles.data.Element
 
 class Strength(amount: Int) : Status(amount) {
     override val strId = "base:status:Strength"
-    override val assetName = "assets/binassets/graphics/status/strength.png"
+    override val assetName = "strength.png"
     override val displayAmount = true
 
     override fun deepCopy(): Status {

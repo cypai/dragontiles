@@ -7,7 +7,7 @@ import com.pipai.dragontiles.combat.TurnStartEvent
 
 class Ventilation(amount: Int) : Status(amount) {
     override val strId = "base:status:Ventilation"
-    override val assetName = "assets/binassets/graphics/status/ventilation.png"
+    override val assetName = "ventilation.png"
     override val displayAmount = true
 
     override fun deepCopy(): Status {
