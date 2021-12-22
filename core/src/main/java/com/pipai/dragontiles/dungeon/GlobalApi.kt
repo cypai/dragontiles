@@ -9,6 +9,12 @@ import com.pipai.dragontiles.spells.SpellUpgrade
 import net.mostlyoriginal.api.event.common.EventSystem
 
 open class GlobalApi(private val runData: RunData, private val sEvent: EventSystem) {
+    fun removeSpell(spell: Spell) {
+        runData.hero.spells.remove(spell)
+        runData.hero.sideDeck.remove(spell)
+        runData.hero.sorceries.remove(spell)
+    }
+
     fun addSpellToDeck(spell: Spell) {
         if (spell is Sorcery) {
             if (runData.hero.sorceries.size < runData.hero.sorceriesSize) {
@@ -38,6 +44,10 @@ open class GlobalApi(private val runData: RunData, private val sEvent: EventSyst
 
     fun queryUpgradeSpell(upgrade: SpellUpgrade) {
         sEvent.dispatch(UpgradeSpellQueryEvent(upgrade))
+    }
+
+    fun queryTransformSpell() {
+        sEvent.dispatch(TransformSpellQueryEvent())
     }
 
     fun gainRelicImmediate(relic: Relic) {

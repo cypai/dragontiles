@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop
 import com.pipai.dragontiles.DragonTilesGame
 import com.pipai.dragontiles.artemis.events.ReplaceSpellQueryEvent
+import com.pipai.dragontiles.artemis.events.TransformSpellQueryEvent
 import com.pipai.dragontiles.artemis.events.UpgradeSpellQueryEvent
 import com.pipai.dragontiles.artemis.systems.NoProcessingSystem
 import com.pipai.dragontiles.artemis.systems.rendering.FullScreenColorSystem
@@ -166,6 +167,33 @@ class DeckDisplayUiSystem(
         deactivate()
     }
 
+    @Subscribe
+    fun handleTransformQuery(ev: TransformSpellQueryEvent) {
+        disableExit = true
+        queryTransform()
+        activate()
+    }
+
+    fun queryTransform() {
+        table.clearChildren()
+        topLabel.setText("Choose a spell to transform:")
+        table.add(topLabel).colspan(6)
+        table.row()
+        addStandardDisplay(
+            { clickedSpell, _ -> onSpellTransformClick(clickedSpell) },
+            false,
+            { clickedSpell, _ -> onSpellTransformClick(clickedSpell) },
+            false,
+            { _, _ -> },
+        )
+    }
+
+    private fun onSpellTransformClick(spell: Spell) {
+        api.removeSpell(spell)
+        api.addSpellToDeck(game.heroSpells.getRandomClassSpells(runData, 1).first())
+        deactivate()
+    }
+
     private fun addSectionHeader(text: String) {
         table.add(Label(text, game.skin, "white")).colspan(6)
         table.row()
@@ -283,6 +311,7 @@ class DeckDisplayUiSystem(
 
     fun deactivate() {
         active = false
+        disableExit = false
         sFsc.fadeOut(10)
         scrollPane.remove()
     }

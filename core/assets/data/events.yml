@@ -186,12 +186,15 @@ base:events:StrangeScribe:
     en:
       text: |
         A scribe with unkempt hair is hawking his capabilities. He seems untrustworthy...
-  use:
+  transform:
     en:
-      text: Use his services. (-1 Gold, transform a spell)
+      text: Ask him to rewrite a spell. (-1 Gold, transform a spell)
   buy:
     en:
-      text: Buy his spell. (-1 Gold, receive Mulligan)
+      text: Buy the spell he is advertising. (-1 Gold, receive Mulligan)
+  afterMain:
+    en:
+      text: You look at the new spell you just received. Was it worth it?
   skip:
     en:
       text: Do nothing.

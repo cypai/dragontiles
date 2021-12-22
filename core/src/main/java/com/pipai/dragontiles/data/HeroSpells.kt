@@ -66,7 +66,7 @@ class HeroSpells {
         )
     }
 
-    fun generateRewards(runData: RunData, amount: Int): List<Spell> {
+    fun getRandomClassSpells(runData: RunData, amount: Int): List<Spell> {
         val spells = elementalistSpells().shuffled().toMutableList()
         val rewards: MutableList<Spell> = mutableListOf()
         repeat(amount) {

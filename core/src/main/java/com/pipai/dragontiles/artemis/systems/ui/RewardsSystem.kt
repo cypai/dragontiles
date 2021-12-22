@@ -32,7 +32,7 @@ class RewardsSystem(
     private val rewardsTitle = Label("Rewards! Choose a spell.", skin, "white")
     private val skipBtn = TextButton("  Skip (+1 gold)  ", skin)
 
-    private val spellRewards: List<Spell> = game.heroSpells.generateRewards(runData, 3)
+    private val spellRewards: List<Spell> = game.heroSpells.getRandomClassSpells(runData, 3)
 
     private val sCombat by system<CombatControllerSystem>()
     private val sMap by system<MapUiSystem>()

@@ -20,4 +20,5 @@ class ShopClickEvent : Event
 data class SpellGainedEvent(val spell: Spell) : Event
 data class ReplaceSpellQueryEvent(val spell: Spell) : Event
 data class UpgradeSpellQueryEvent(val upgrade: SpellUpgrade) : Event
+class TransformSpellQueryEvent : Event
 class TopRowUiUpdateEvent : Event
