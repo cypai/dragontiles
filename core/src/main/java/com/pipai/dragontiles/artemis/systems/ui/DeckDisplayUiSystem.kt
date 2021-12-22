@@ -4,10 +4,8 @@ import com.badlogic.gdx.Input
 import com.badlogic.gdx.InputProcessor
 import com.badlogic.gdx.scenes.scene2d.InputEvent
 import com.badlogic.gdx.scenes.scene2d.Stage
-import com.badlogic.gdx.scenes.scene2d.ui.Cell
-import com.badlogic.gdx.scenes.scene2d.ui.Label
-import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane
-import com.badlogic.gdx.scenes.scene2d.ui.Table
+import com.badlogic.gdx.scenes.scene2d.ui.*
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop
 import com.pipai.dragontiles.DragonTilesGame
 import com.pipai.dragontiles.artemis.events.ReplaceSpellQueryEvent
@@ -54,17 +52,26 @@ class DeckDisplayUiSystem(
     private val scrollPane = ScrollPane(table)
     private val topLabel = Label("", game.skin, "white")
     private val dragAndDrop = DragAndDrop()
+    private val skipBtn = TextButton("  Skip  ", game.skin)
+    private val colspan = 6
 
     override fun initialize() {
         scrollPane.width = game.gameConfig.resolution.width.toFloat()
         scrollPane.height = game.gameConfig.resolution.height.toFloat() - 40f
         api = GlobalApi(runData, sEvent)
+
+        skipBtn.addListener(object : ClickListener() {
+            override fun clicked(event: InputEvent?, x: Float, y: Float) {
+                disableExit = false
+                deactivate()
+            }
+        })
     }
 
     fun updateStandardDisplay(spellFilter: (Spell) -> kotlin.Boolean, enableSwapDnd: Boolean) {
         table.clearChildren()
         topLabel.setText("Current Spellbook")
-        table.add(topLabel).colspan(6)
+        table.add(topLabel).colspan(colspan)
         table.row()
         addStandardDisplay(
             spellFilter,
@@ -113,18 +120,19 @@ class DeckDisplayUiSystem(
 
     @Subscribe
     fun handleReplaceQuery(ev: ReplaceSpellQueryEvent) {
+        disableExit = true
         queryReplace(ev.spell)
         activate()
     }
 
     fun queryReplace(spell: Spell) {
         table.clearChildren()
-        topLabel.setText("Not enough spell slots, choose a spell to replace (ESC to skip)")
-        table.add(topLabel).colspan(6)
+        topLabel.setText("Not enough spell slots, choose a spell to replace")
+        table.add(topLabel).colspan(colspan)
         table.row()
         addSectionHeader("New Spell")
         table.add(SpellCard(game, spell, null, game.skin, null))
-            .colspan(6)
+            .colspan(colspan)
         table.row()
         addStandardDisplay(
             { if (spell is Sorcery) it is Sorcery else it !is Sorcery },
@@ -134,18 +142,22 @@ class DeckDisplayUiSystem(
             false,
             { clickedSpell, section -> if (spell is Sorcery) replaceSpell(clickedSpell, spell, section) },
         )
+        table.add(skipBtn)
+            .colspan(colspan)
+        table.row()
     }
 
     @Subscribe
     fun handleUpgradeQuery(ev: UpgradeSpellQueryEvent) {
+        disableExit = true
         queryUpgrade(ev.upgrade)
         activate()
     }
 
     fun queryUpgrade(upgrade: SpellUpgrade) {
         table.clearChildren()
-        topLabel.setText("Choose a spell to upgrade (ESC to skip): ${upgrade.name}")
-        table.add(topLabel).colspan(6)
+        topLabel.setText("Choose a spell to upgrade: ${upgrade.name}")
+        table.add(topLabel).colspan(colspan)
         table.row()
         addStandardDisplay(
             { upgrade.canUpgrade(it) },
@@ -155,6 +167,9 @@ class DeckDisplayUiSystem(
             false,
             { _, _ -> },
         )
+        table.add(skipBtn)
+            .colspan(colspan)
+        table.row()
     }
 
     private fun onSpellUpgradeClick(upgrade: SpellUpgrade, spell: Spell) {
@@ -196,7 +211,7 @@ class DeckDisplayUiSystem(
     fun queryTransform() {
         table.clearChildren()
         topLabel.setText("Choose a spell to transform:")
-        table.add(topLabel).colspan(6)
+        table.add(topLabel).colspan(colspan)
         table.row()
         addStandardDisplay(
             { true },
@@ -215,7 +230,7 @@ class DeckDisplayUiSystem(
     }
 
     private fun addSectionHeader(text: String) {
-        table.add(Label(text, game.skin, "white")).colspan(6)
+        table.add(Label(text, game.skin, "white")).colspan(colspan)
         table.row()
     }
 
@@ -227,7 +242,7 @@ class DeckDisplayUiSystem(
     ) {
         var cell: Cell<SpellCard>? = null
         spells.forEachIndexed { i, spell ->
-            if (i % 6 == 0 && i != 0) {
+            if (i % colspan == 0 && i != 0) {
                 table.row()
             }
             val spellCard = SpellCard(game, spell, null, game.skin, null)
@@ -313,8 +328,8 @@ class DeckDisplayUiSystem(
                 })
             }
         }
-        if (cell != null && spells.size % 6 != 0) {
-            repeat(6 - spells.size % 6) {
+        if (cell != null && spells.size % colspan != 0) {
+            repeat(colspan - spells.size % colspan) {
                 table.add()
             }
         }
