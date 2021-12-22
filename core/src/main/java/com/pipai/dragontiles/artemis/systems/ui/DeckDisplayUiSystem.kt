@@ -52,6 +52,7 @@ class DeckDisplayUiSystem(
     private val scrollPane = ScrollPane(table)
     private val topLabel = Label("", game.skin, "white")
     private val dragAndDrop = DragAndDrop()
+    private val queryFilterBtn = TextButton("", game.skin)
     private val skipBtn = TextButton("  Skip  ", game.skin)
     private val colspan = 6
 
@@ -150,17 +151,41 @@ class DeckDisplayUiSystem(
     @Subscribe
     fun handleUpgradeQuery(ev: UpgradeSpellQueryEvent) {
         disableExit = true
-        queryUpgrade(ev.upgrade)
+        queryUpgrade(true, ev.upgrade)
         activate()
     }
 
-    fun queryUpgrade(upgrade: SpellUpgrade) {
+    fun queryUpgrade(useFilter: Boolean, upgrade: SpellUpgrade) {
         table.clearChildren()
         topLabel.setText("Choose a spell to upgrade: ${upgrade.name}")
         table.add(topLabel).colspan(colspan)
         table.row()
+        if (useFilter) {
+            queryFilterBtn.setText("  Show all  ")
+            queryFilterBtn.clearListeners()
+            queryFilterBtn.addListener(object : ClickListener() {
+                override fun clicked(event: InputEvent?, x: Float, y: Float) {
+                    queryUpgrade(false, upgrade)
+                }
+            })
+        } else {
+            queryFilterBtn.setText("  Show upgradable only  ")
+            queryFilterBtn.clearListeners()
+            queryFilterBtn.addListener(object : ClickListener() {
+                override fun clicked(event: InputEvent?, x: Float, y: Float) {
+                    queryUpgrade(true, upgrade)
+                }
+            })
+        }
+        table.add(queryFilterBtn)
+            .colspan(colspan)
+        table.row()
         addStandardDisplay(
-            { upgrade.canUpgrade(it) },
+            if (useFilter) {
+                { upgrade.canUpgrade(it) }
+            } else {
+                { true }
+            },
             { clickedSpell, _ -> onSpellUpgradeClick(upgrade, clickedSpell) },
             false,
             { clickedSpell, _ -> onSpellUpgradeClick(upgrade, clickedSpell) },
