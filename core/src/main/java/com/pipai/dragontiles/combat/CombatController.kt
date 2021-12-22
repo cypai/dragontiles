@@ -18,7 +18,7 @@ class CombatController(
     fun initCombat() {
         eventBus.init(api)
         combat.spells.addAll(runData.hero.spells)
-        combat.sideDeck.addAll(runData.hero.sideboard)
+        combat.sideboard.addAll(runData.hero.sideboard)
         combat.enemies.forEach {
             it.preInit(api.nextId())
             combat.enemyStatus[it.id] = mutableListOf()
@@ -31,7 +31,7 @@ class CombatController(
             it.combatReset()
             eventBus.register(it)
         }
-        combat.sideDeck.forEach {
+        combat.sideboard.forEach {
             it.combatReset()
             eventBus.register(it)
         }
@@ -99,7 +99,7 @@ class CombatController(
                 api.changeEnemyIntent(it, intent)
             }
         combat.spells.forEach { it.turnReset() }
-        combat.sideDeck.forEach { it.turnReset() }
+        combat.sideboard.forEach { it.turnReset() }
         api.swapQuery(1)
         api.drawToOpenPool(1)
         runTurn()

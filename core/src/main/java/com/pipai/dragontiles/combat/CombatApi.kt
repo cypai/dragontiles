@@ -202,7 +202,7 @@ class CombatApi(
     }
 
     suspend fun swapQuery(amount: Int) {
-        if (combat.sideDeck.isEmpty() || combat.sideDeck.none { it.swappableFromSideboard() }) {
+        if (combat.sideboard.isEmpty() || combat.sideboard.none { it.swappableFromSideboard() }) {
             return
         }
         val data: QuerySwapEvent.SwapData = suspendCoroutine {
@@ -225,11 +225,11 @@ class CombatApi(
         if (spellInHand.isNotEmpty()) {
             spellInHand.zip(spellOnSide).forEach {
                 val handIndex = combat.spells.indexOf(it.first)
-                val sideIndex = combat.sideDeck.indexOf(it.second)
+                val sideIndex = combat.sideboard.indexOf(it.second)
                 combat.spells.removeAt(handIndex)
                 combat.spells.add(handIndex, it.second)
-                combat.sideDeck.removeAt(sideIndex)
-                combat.sideDeck.add(sideIndex, it.first)
+                combat.sideboard.removeAt(sideIndex)
+                combat.sideboard.add(sideIndex, it.first)
             }
             eventBus.dispatch(SwapEvent(spellInHand, spellOnSide))
         }

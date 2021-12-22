@@ -24,9 +24,9 @@ abstract class Dungeon {
 
     fun generateMap(rng: Random) {
         var previousFloor: List<MapNode>? = null
-        for (i in 0..11) {
+        for (floorNum in 0..11) {
             val floor: MutableList<MapNode> = mutableListOf()
-            when (i) {
+            when (floorNum) {
                 0 -> {
                     floor.add(MapNode(MapNodeType.START, false, mutableListOf(), mutableListOf(0, 1, 2)))
                 }
@@ -52,10 +52,10 @@ abstract class Dungeon {
                 }
                 else -> {
                     repeat(3) {
-                        val allowedNodes = if (i == 5) {
+                        val allowedNodes = if (floorNum == 5) {
                             listOf(MapNodeType.TOWN)
                         } else {
-                            if (i in listOf(4,6,8) && rng.nextBoolean()) {
+                            if (floorNum in listOf(4,6,8) && rng.nextBoolean()) {
                                 listOf(MapNodeType.ELITE)
                             } else {
                                 listOf(MapNodeType.COMBAT, MapNodeType.EVENT)
