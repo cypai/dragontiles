@@ -95,14 +95,13 @@ class DeckDisplayUiSystem(
 
     @Subscribe
     fun handleReplaceQuery(ev: ReplaceSpellQueryEvent) {
-        disableExit = true
         queryReplace(ev.spell)
         activate()
     }
 
     fun queryReplace(spell: Spell) {
         table.clearChildren()
-        topLabel.setText("Not enough spell slots, choose a spell to replace")
+        topLabel.setText("Not enough spell slots, choose a spell to replace (ESC to skip)")
         table.add(topLabel).colspan(6)
         table.row()
         addSectionHeader("New Spell")
@@ -120,14 +119,13 @@ class DeckDisplayUiSystem(
 
     @Subscribe
     fun handleUpgradeQuery(ev: UpgradeSpellQueryEvent) {
-        disableExit = true
         queryUpgrade(ev.upgrade)
         activate()
     }
 
     fun queryUpgrade(upgrade: SpellUpgrade) {
         table.clearChildren()
-        topLabel.setText("Choose a spell to upgrade: ${upgrade.name}")
+        topLabel.setText("Choose a spell to upgrade (ESC to skip): ${upgrade.name}")
         table.add(topLabel).colspan(6)
         table.row()
         addStandardDisplay(

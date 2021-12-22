@@ -242,3 +242,45 @@ base:events:MartialArtsTournament:
   skip:
     en:
       text: Do nothing.
+
+base:events:StrangeLotus:
+  name:
+    en:
+      text: Strange Lotus
+  start:
+    en:
+      text: |
+        You notice a lotus throne nearby.
+  sit:
+    en:
+      text: Sit on the lotus throne.
+  sitMain:
+    en:
+      text: |
+        Thorned vines suddenly shoot out and trap you!
+
+        After a while, Guanyin appears.
+
+        "Apologies for getting caught on my lotus throne.
+        "The trap was meant for the rabbit youkai nearby, so have this relic as compensation."
+  poke:
+    en:
+      text: Poke it with a stick. (Receive a Power Upgrade.)
+  pokeMain:
+    en:
+      text: |
+        Thorned vines suddenly shoot out! You were swiped a bit, but fortunately you weren't sitting on it.
+
+        After a while, Guanyin appears.
+
+        "Apologies for leaving this trap out.
+        "The trap was meant for the rabbit youkai nearby, so let me upgrade something for you."
+  pokeResponse:
+    en:
+      text: Receive the upgrade.
+  skip:
+    en:
+      text: Do nothing.
+  skipMain:
+    en:
+      text: You walk by, feeling like you just avoided a trap.
