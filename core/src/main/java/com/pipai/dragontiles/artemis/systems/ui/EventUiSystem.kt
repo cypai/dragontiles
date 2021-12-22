@@ -3,8 +3,10 @@ package com.pipai.dragontiles.artemis.systems.ui
 import com.artemis.BaseSystem
 import com.badlogic.gdx.math.Interpolation
 import com.badlogic.gdx.math.Vector2
+import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.InputEvent
 import com.badlogic.gdx.scenes.scene2d.Stage
+import com.badlogic.gdx.scenes.scene2d.ui.Container
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
@@ -102,13 +104,26 @@ class EventUiSystem(
             .expand()
             .center()
         rootTable.row()
-        optionLabels.forEach {
-            rootTable.add(it)
+        optionLabels.forEach { label ->
+            label.setText("  " + label.text)
+            val labelBox = Container(label)
+                .left()
+            labelBox.background = skin.getDrawable("frameDrawable")
+            labelBox.addListener(object : ClickListener(){
+                override fun enter(event: InputEvent?, x: Float, y: Float, pointer: Int, fromActor: Actor?) {
+                    labelBox.background = skin.getDrawable("frameDrawableLight")
+                }
+
+                override fun exit(event: InputEvent?, x: Float, y: Float, pointer: Int, toActor: Actor?) {
+                    labelBox.background = skin.getDrawable("frameDrawable")
+                }
+            })
+            rootTable.add(labelBox)
                 .prefHeight(64f)
-                .prefWidth(game.gameConfig.resolution.width.toFloat())
-                .padLeft(16f)
+                .prefWidth(game.gameConfig.resolution.width/2f)
+                .pad(16f)
+                .left()
                 .expand()
-                .center()
             rootTable.row()
         }
     }
