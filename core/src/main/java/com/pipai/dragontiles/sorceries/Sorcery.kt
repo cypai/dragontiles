@@ -8,6 +8,9 @@ import com.pipai.dragontiles.utils.withoutAll
 
 abstract class Sorcery : Spell() {
     override val type = SpellType.SORCERY
+
+    override fun swappableFromSideboard(): Boolean = false
+
     override fun available(): Boolean {
         throw NotImplementedError()
     }

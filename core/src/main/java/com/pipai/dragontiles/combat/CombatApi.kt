@@ -202,6 +202,9 @@ class CombatApi(
     }
 
     suspend fun swapQuery(amount: Int) {
+        if (combat.sideDeck.isEmpty() || combat.sideDeck.none { it.swappableFromSideboard() }) {
+            return
+        }
         val data: QuerySwapEvent.SwapData = suspendCoroutine {
             runBlocking {
                 eventBus.dispatch(QuerySwapEvent(amount, it))

@@ -35,6 +35,8 @@ abstract class Spell : DamageAdjustable {
         upgrades.add(upgrade)
     }
 
+    abstract fun swappableFromSideboard(): Boolean
+
     abstract fun available(): Boolean
 
     override fun queryFlatAdjustment(origin: DamageOrigin, target: DamageTarget, element: Element): Int = 0
@@ -101,6 +103,8 @@ abstract class StandardSpell : Spell() {
     var repeated = 0
     var exhausted = false
 
+    override fun swappableFromSideboard(): Boolean = !exhausted
+
     override fun dynamicValue(key: String, api: CombatApi, params: CastParams): Int {
         return when (key) {
             "!r" -> (aspects.findAs(LimitedRepeatableAspect::class)?.max ?: 1) - repeated
@@ -150,6 +154,8 @@ abstract class Rune : Spell() {
     var active = false
     var canActivate = true
 
+    override fun swappableFromSideboard(): Boolean = true
+
     override fun available(): Boolean = active || (!active && canActivate)
 
     suspend fun activate(api: CombatApi) {
@@ -194,6 +200,8 @@ abstract class PowerSpell : Spell() {
     override val type: SpellType = SpellType.POWER
 
     var powered = false
+
+    override fun swappableFromSideboard(): Boolean = !powered
 
     override fun available(): Boolean = !powered
 
