@@ -228,7 +228,7 @@ class SpellCard(
             }
             val spellLocalization = game.gameStrings.spellLocalization(spell.strId)
             nameLabel.setText(spellLocalization.name)
-            spellTypeLabel.setText(spell.type.toString())
+            spellTypeLabel.setText("${spell.type} - ${spell.rarity}")
             var description = spellLocalization.description
             if (spell.aspects.any { it is PostExhaustAspect }) {
                 description += " @Exhaust."
