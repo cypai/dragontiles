@@ -55,7 +55,9 @@ class MainMenuUiSystem(
                     RelicData(GameData.relics.toMutableList()),
                     PlainsDungeon(),
                     null,
-                    RunHistory(0, mutableListOf()),
+                    0,
+                    GameData.BASE_POTION_CHANCE,
+                    RunHistory(mutableListOf()),
                 )
                 runData.dungeon.generateMap(runData.rng)
                 game.screen = EventScreen(game, runData, PlainsStartEvent())

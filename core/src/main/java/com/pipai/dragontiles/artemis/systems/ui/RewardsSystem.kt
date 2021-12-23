@@ -19,10 +19,12 @@ import com.pipai.dragontiles.artemis.systems.NoProcessingSystem
 import com.pipai.dragontiles.artemis.systems.combat.CombatControllerSystem
 import com.pipai.dragontiles.artemis.systems.rendering.FullScreenColorSystem
 import com.pipai.dragontiles.combat.CombatRewards
+import com.pipai.dragontiles.data.GameData
 import com.pipai.dragontiles.data.NameDescLocalization
 import com.pipai.dragontiles.dungeon.GlobalApi
 import com.pipai.dragontiles.dungeon.RunData
 import com.pipai.dragontiles.gui.SpellCard
+import com.pipai.dragontiles.potions.Potion
 import com.pipai.dragontiles.relics.Relic
 import com.pipai.dragontiles.spells.PostExhaustAspect
 import com.pipai.dragontiles.spells.Spell
@@ -53,20 +55,27 @@ class RewardsSystem(
         api = GlobalApi(runData, sEvent)
         rootTable.setFillParent(true)
         stage.addActor(rootTable)
-    }
 
-    fun activateRewards() {
-        world.fetch(allOf(TileComponent::class)).forEach { world.delete(it) }
-        active = true
-        showing = true
         actualRewards.add(Reward.SpellDraftReward(runData.hero.heroClass.getRandomClassSpells(runData, 3)))
         actualRewards.add(Reward.GoldReward(rewards.gold))
+        if (runData.rng.nextFloat() < rewards.potionChance) {
+            actualRewards.add(Reward.PotionReward(GameData.potions.choose(runData.rng)))
+            runData.potionChance = GameData.BASE_POTION_CHANCE
+        } else {
+            runData.potionChance += 0.1f
+        }
         if (rewards.randomRelic) {
             actualRewards.add(Reward.RelicReward(runData.relicData.availableRelics.choose(runData.rng)))
         }
         if (rewards.relic != null) {
             actualRewards.add(Reward.RelicReward(rewards.relic))
         }
+    }
+
+    fun activateRewards() {
+        world.fetch(allOf(TileComponent::class)).forEach { world.delete(it) }
+        active = true
+        showing = true
         buildAndShowRewardsTable()
     }
 
@@ -132,6 +141,14 @@ class RewardsSystem(
                         game.gameStrings.nameDescLocalization(reward.relic.strId).name
                     )
                 }
+                is Reward.PotionReward -> {
+                    rewardItemTable(
+                        { getPotion(reward) },
+                        Image(game.assets.get(potionAssetPath(reward.potion.assetName), Texture::class.java)),
+                        game.gameStrings.nameDescLocalization(reward.potion.strId),
+                        game.gameStrings.nameDescLocalization(reward.potion.strId).name
+                    )
+                }
                 is Reward.EmptyReward -> {
                     Table()
                 }
@@ -150,6 +167,13 @@ class RewardsSystem(
         actualRewards.removeAll { it is Reward.GoldReward }
         actualRewards.add(Reward.EmptyReward())
         api.gainGoldImmediate(rewards.gold)
+        buildAndShowRewardsTable()
+    }
+
+    private fun getPotion(potionReward: Reward.PotionReward) {
+        actualRewards.remove(potionReward)
+        actualRewards.add(Reward.EmptyReward())
+        api.gainPotion(potionReward.potion)
         buildAndShowRewardsTable()
     }
 
@@ -204,6 +228,7 @@ class RewardsSystem(
         data class SpellDraftReward(val spells: List<Spell>) : Reward()
         data class GoldReward(val amount: Int) : Reward()
         data class RelicReward(val relic: Relic) : Reward()
+        data class PotionReward(val potion: Potion) : Reward()
         class EmptyReward : Reward()
     }
 

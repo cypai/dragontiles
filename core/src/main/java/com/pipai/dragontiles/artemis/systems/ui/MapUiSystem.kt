@@ -156,23 +156,24 @@ class MapUiSystem(
                             game,
                             runData,
                             runData.dungeon.easyEncounter(runData),
-                            CombatRewards(SpellRewardType.STANDARD, 3, false, null)
+                            CombatRewards(SpellRewardType.STANDARD, 3, false, null, runData.potionChance)
                         )
                     } else {
                         game.screen = CombatScreen(
                             game,
                             runData,
                             runData.dungeon.standardEncounter(runData),
-                            CombatRewards(SpellRewardType.STANDARD, 3, false, null)
+                            CombatRewards(SpellRewardType.STANDARD, 3, false, null, runData.potionChance)
                         )
                     }
                 }
                 MapNodeType.ELITE -> {
+                    runData.potionChance += 0.1f
                     game.screen = CombatScreen(
                         game,
                         runData,
                         runData.dungeon.eliteEncounter(runData),
-                        CombatRewards(SpellRewardType.ELITE, 5, true, null)
+                        CombatRewards(SpellRewardType.ELITE, 5, true, null, runData.potionChance)
                     )
                 }
                 MapNodeType.EVENT -> {
@@ -186,7 +187,7 @@ class MapUiSystem(
                         game,
                         runData,
                         runData.dungeon.standardEncounter(runData),
-                        CombatRewards(SpellRewardType.STANDARD, 3, false, null)
+                        CombatRewards(SpellRewardType.STANDARD, 3, false, null, runData.potionChance)
                     )
                 }
             }

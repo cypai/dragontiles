@@ -28,7 +28,7 @@ class RabbitSwarm : DungeonEvent() {
                     Pair(KillerRabbit(), Vector2(1010f, 280f)),
                 )
             )
-            api.startCombat(encounter, CombatRewards(SpellRewardType.STANDARD, 3, false, RabbitsFoot()))
+            api.startCombat(encounter, CombatRewards(SpellRewardType.STANDARD, 3, false, RabbitsFoot(), api.runData.potionChance))
         }
     }
 

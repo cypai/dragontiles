@@ -1,5 +1,7 @@
 package com.pipai.dragontiles.data
 
+import com.pipai.dragontiles.potions.ExplosivePotion
+import com.pipai.dragontiles.potions.HealingPotion
 import com.pipai.dragontiles.relics.*
 import com.pipai.dragontiles.sorceries.Chow
 import com.pipai.dragontiles.sorceries.Pong
@@ -30,6 +32,13 @@ class GameData {
             Peach(),
             Tea(),
         )
+
+        val potions = listOf(
+            ExplosivePotion(),
+            HealingPotion(),
+        )
+
+        const val BASE_POTION_CHANCE = 0.2f
     }
 
 }

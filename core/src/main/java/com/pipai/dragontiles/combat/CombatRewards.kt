@@ -7,6 +7,7 @@ data class CombatRewards(
     val gold: Int,
     val randomRelic: Boolean,
     val relic: Relic?,
+    val potionChance: Float,
 )
 
 enum class SpellRewardType {

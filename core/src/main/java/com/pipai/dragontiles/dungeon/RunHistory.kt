@@ -5,11 +5,11 @@ import com.pipai.dragontiles.data.ItemShop
 import com.pipai.dragontiles.data.Scribe
 import com.pipai.dragontiles.data.SpellShop
 import com.pipai.dragontiles.dungeonevents.DungeonEvent
+import com.pipai.dragontiles.potions.Potion
 import com.pipai.dragontiles.relics.Relic
 import com.pipai.dragontiles.spells.Spell
 
 data class RunHistory(
-    var sideboardSpaceBought: Int,
     val history: MutableList<FloorHistory>,
 )
 
@@ -37,4 +37,6 @@ data class ChangeHistory(
     val spellsLost: MutableList<Spell>,
     val relicsGained: MutableList<Relic>,
     val relicsLost: MutableList<Relic>,
+    val potionsGained: MutableList<Potion>,
+    val potionsLost: MutableList<Potion>,
 )
