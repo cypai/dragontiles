@@ -24,6 +24,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.MultiDrawable
 import com.badlogic.gdx.scenes.scene2d.utils.OffsetDrawable
 import com.kotcrab.vis.ui.VisUI
 import com.pipai.dragontiles.artemis.screens.MainMenuScreen
+import com.pipai.dragontiles.data.GameData
+import com.pipai.dragontiles.data.GameDataInitializer
 import com.pipai.dragontiles.data.GameStrings
 import com.pipai.dragontiles.data.TileSkin
 import com.pipai.dragontiles.meta.GameOptions
@@ -65,6 +67,8 @@ class DragonTilesGame(val gameConfig: GameConfig) : Game() {
     lateinit var tileSkin: TileSkin
         private set
 
+    val gameData: GameData = GameData()
+
     lateinit var gameStrings: GameStrings
         private set
 
@@ -82,6 +86,8 @@ class DragonTilesGame(val gameConfig: GameConfig) : Game() {
     override fun create() {
         logger.info("Starting Dragon Tiles with the following config settings:")
         logger.info(gameConfig.resolution.toDebugString())
+
+        GameDataInitializer().init(gameData)
 
         if (saveFileHandle.exists()) {
             save = saveSerializer.deserialize(saveFileHandle.readString())

@@ -5,6 +5,7 @@ import com.pipai.dragontiles.hero.HeroClass
 import com.pipai.dragontiles.potions.Potion
 import com.pipai.dragontiles.relics.Relic
 import com.pipai.dragontiles.spells.Spell
+import com.pipai.dragontiles.spells.upgrades.SpellUpgrade
 
 class GameData {
 
@@ -15,12 +16,15 @@ class GameData {
     private val heroClasses: MutableMap<String, HeroClass> = mutableMapOf()
     private val dungeons: MutableMap<String, Dungeon> = mutableMapOf()
     private val spells: MutableMap<String, Spell> = mutableMapOf()
+    private val spellUpgrades: MutableMap<String, SpellUpgrade> = mutableMapOf()
     private val relics: MutableMap<String, Relic> = mutableMapOf()
     private val potions: MutableMap<String, Potion> = mutableMapOf()
 
+    fun allHeroClasses() = heroClasses.values
     fun getHeroClass(id: String) = heroClasses[id]
     fun getDungeon(id: String) = dungeons[id]
     fun getSpell(id: String) = spells[id]
+    fun getSpellUpgrade(id: String) = spellUpgrades[id]
     fun getRelic(id: String) = relics[id]
     fun getPotion(id: String) = potions[id]
 
@@ -34,6 +38,10 @@ class GameData {
 
     fun addSpell(spell: Spell) {
         spells[spell.id] = spell
+    }
+
+    fun addSpellUpgrade(spellUpgrade: SpellUpgrade) {
+        spellUpgrades[spellUpgrade.id] = spellUpgrade
     }
 
     fun addRelic(relic: Relic) {

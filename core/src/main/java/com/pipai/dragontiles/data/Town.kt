@@ -1,42 +1,30 @@
 package com.pipai.dragontiles.data
 
-import com.pipai.dragontiles.dungeonevents.DungeonEvent
-import com.pipai.dragontiles.relics.Relic
-import com.pipai.dragontiles.spells.Spell
-import com.pipai.dragontiles.spells.upgrades.SpellUpgrade
-import kotlinx.serialization.Serializable
-
-@Serializable
 data class Town(
     var actions: Int,
-    var dungeonEvent: DungeonEvent?,
+    val dungeonEventId: String?,
     val spellShop: SpellShop,
     val itemShop: ItemShop,
     val scribe: Scribe,
+    var solicited: Boolean = false,
+    var checkedEvent: Boolean = false,
+    var boughtSpell: Boolean = false,
+    var boughtItem: Boolean = false,
+    var boughtUpgrade: Boolean = false,
 )
 
-@Serializable
 data class SpellShop(
-    val classSpells: MutableList<PricedSpell>,
-    val sorceries: MutableList<PricedSpell>,
-    var colorlessSpell: PricedSpell?,
+    val classSpells: MutableList<PricedItem>,
+    val sorceries: MutableList<PricedItem>,
+    var colorlessSpell: PricedItem?,
 )
 
-@Serializable
 data class ItemShop(
-    val relics: MutableList<PricedRelic>,
+    val relics: MutableList<PricedItem>,
 )
 
-@Serializable
 data class Scribe(
-    val upgrades: MutableList<PricedUpgrade>,
+    val upgrades: MutableList<PricedItem>,
 )
 
-@Serializable
-data class PricedSpell(val spell: Spell, val price: Int)
-
-@Serializable
-data class PricedRelic(val relic: Relic, val price: Int)
-
-@Serializable
-data class PricedUpgrade(val upgrade: SpellUpgrade, val price: Int)
+data class PricedItem(override val id: String, val price: Int) : Localized

@@ -9,7 +9,15 @@ import kotlinx.serialization.Transient
 import org.apache.commons.lang3.builder.ToStringBuilder
 import kotlin.reflect.full.createInstance
 
-@Serializable
+data class SpellInstance(
+    override val id: String,
+    val upgrades: MutableList<SpellUpgradeInstance>,
+) : Localized
+
+data class SpellUpgradeInstance(
+    override val id: String,
+) : Localized
+
 abstract class Spell : Localized, DamageAdjustable {
     abstract val requirement: ComponentRequirement
     abstract val type: SpellType

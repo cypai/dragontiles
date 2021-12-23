@@ -7,7 +7,11 @@ data class DungeonMap(
     val map: List<List<MapNode>>,
     var currentFloor: Int = 0,
     var currentFloorIndex: Int = 0,
-)
+) {
+    fun getCurrentNode(): MapNode {
+        return map[currentFloor][currentFloorIndex]
+    }
+}
 
 fun generateMap(rng: Random): List<List<MapNode>> {
     val map: MutableList<List<MapNode>> = mutableListOf()

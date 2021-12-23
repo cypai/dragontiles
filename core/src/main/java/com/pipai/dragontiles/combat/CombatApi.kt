@@ -234,7 +234,7 @@ class CombatApi(
     fun calculateBaseDamage(element: Element, amount: Int): Int {
         var flat = 0
         var scaling = 1f
-        runData.hero.relics.forEach {
+        runData.hero.relicIds.forEach {
             flat += it.queryFlatAdjustment(DamageOrigin.SELF_ATTACK, DamageTarget.OPPONENT, element)
             scaling *= it.queryScaledAdjustment(DamageOrigin.SELF_ATTACK, DamageTarget.OPPONENT, element)
         }
@@ -252,7 +252,7 @@ class CombatApi(
     fun calculateDamageOnEnemy(enemy: Enemy, element: Element, amount: Int): Int {
         var flat = 0
         var scaling = 1f
-        runData.hero.relics.forEach {
+        runData.hero.relicIds.forEach {
             flat += it.queryFlatAdjustment(DamageOrigin.SELF_ATTACK, DamageTarget.OPPONENT, element)
             scaling *= it.queryScaledAdjustment(DamageOrigin.SELF_ATTACK, DamageTarget.OPPONENT, element)
         }
@@ -274,7 +274,7 @@ class CombatApi(
     fun calculateDamageOnHero(enemy: Enemy, element: Element, amount: Int): Int {
         var flat = 0
         var scaling = 1f
-        runData.hero.relics.forEach {
+        runData.hero.relicIds.forEach {
             flat += it.queryFlatAdjustment(DamageOrigin.OPPONENT_ATTACK, DamageTarget.SELF, element)
             scaling *= it.queryScaledAdjustment(DamageOrigin.OPPONENT_ATTACK, DamageTarget.SELF, element)
         }

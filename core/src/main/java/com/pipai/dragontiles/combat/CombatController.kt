@@ -1,6 +1,5 @@
 package com.pipai.dragontiles.combat
 
-import com.pipai.dragontiles.artemis.systems.ui.CombatUiSystem
 import com.pipai.dragontiles.data.*
 import com.pipai.dragontiles.dungeon.RunData
 import com.pipai.dragontiles.status.Overloaded
@@ -36,7 +35,7 @@ class CombatController(
             it.combatReset()
             eventBus.register(it)
         }
-        runData.hero.relics.forEach {
+        runData.hero.relicIds.forEach {
             eventBus.register(it)
         }
     }

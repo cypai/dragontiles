@@ -13,7 +13,6 @@ import com.pipai.dragontiles.spells.colorless.Strike
 import com.pipai.dragontiles.spells.elementalist.*
 import kotlinx.serialization.Serializable
 
-@Serializable
 class Elementalist : HeroClass {
     override val id: String = "base:hero:Elementalist"
     override val assetName: String = "elementalist.png"

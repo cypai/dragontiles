@@ -133,7 +133,7 @@ class TopRowUiSystem(
 
     fun updateRelicRow() {
         relicRow.clearChildren()
-        runData.hero.relics.forEach { relic ->
+        runData.hero.relicIds.forEach { relic ->
             val image = Image(game.assets.get(relicAssetPath(relic.assetName), Texture::class.java))
             image.addListener(object : ClickListener() {
                 override fun enter(event: InputEvent?, x: Float, y: Float, pointer: Int, fromActor: Actor?) {

@@ -1,16 +1,21 @@
 package com.pipai.dragontiles.hero
 
+import com.pipai.dragontiles.data.Hero
 import com.pipai.dragontiles.data.Localized
+import com.pipai.dragontiles.data.PotionSlot
 import com.pipai.dragontiles.dungeon.RunData
+import com.pipai.dragontiles.dungeon.Seed
 import com.pipai.dragontiles.potions.ExplosivePotion
 import com.pipai.dragontiles.potions.HealingPotion
 import com.pipai.dragontiles.relics.Relic
-import com.pipai.dragontiles.spells.Sorcery
 import com.pipai.dragontiles.spells.Rarity
+import com.pipai.dragontiles.spells.Sorcery
 import com.pipai.dragontiles.spells.Spell
+import com.pipai.dragontiles.spells.SpellInstance
 import com.pipai.dragontiles.utils.choose
+import kotlin.random.Random
 
-interface HeroClass : Localized{
+interface HeroClass : Localized {
     val assetName: String
 
     val startingRelic: Relic
@@ -28,35 +33,36 @@ interface HeroClass : Localized{
 
     fun generateHero(name: String): Hero {
         val hero = Hero(
-            this, name, hpMax, hpMax, 0, fluxMax, handSize,
+            id, name, hpMax, hpMax, 0, fluxMax, handSize,
             mutableListOf(), activeSpellSize,
             mutableListOf(), sideboardSize,
             mutableListOf(), sorceriesSize,
-            mutableListOf(startingRelic),
+            mutableListOf(startingRelic.id),
             startingGold,
             mutableListOf(),
         )
-        hero.spells.addAll(starterDeck.filter { it !is Sorcery }.map { it.newClone() })
-        hero.sorceries.addAll(starterDeck.filterIsInstance<Sorcery>().map { it.newClone() as Sorcery })
+        hero.spells.addAll(starterDeck.filter { it !is Sorcery }.map { SpellInstance(it.id, mutableListOf()) })
+        hero.sorceries.addAll(starterDeck.filterIsInstance<Sorcery>().map { SpellInstance(it.id, mutableListOf()) })
         repeat(potionSlotSize) {
             hero.potionSlots.add(PotionSlot(null))
         }
-        hero.potionSlots[0].potion = ExplosivePotion()
-        hero.potionSlots[1].potion = HealingPotion()
+        hero.potionSlots[0].potionId = ExplosivePotion().id
+        hero.potionSlots[1].potionId = HealingPotion().id
         return hero
     }
 
-    fun getRandomClassSpells(runData: RunData, amount: Int): List<Spell> {
+    fun getRandomClassSpells(seed: Seed, amount: Int): List<Spell> {
+        val rng = seed.rewardRng()
         val spells = spells.shuffled().toMutableList()
         val rewards: MutableList<Spell> = mutableListOf()
         repeat(amount) {
-            val rarityRoll = runData.rng.nextInt(20)
+            val rarityRoll = rng.nextInt(20)
             val rarity = when {
                 rarityRoll == 0 -> Rarity.RARE
                 rarityRoll < 6 -> Rarity.UNCOMMON
                 else -> Rarity.COMMON
             }
-            val spell = spells.firstOrNull { it.rarity == rarity } ?: spells.choose(runData.rng)
+            val spell = spells.firstOrNull { it.rarity == rarity } ?: spells.choose(rng)
             spells.remove(spell)
             rewards.add(spell)
         }

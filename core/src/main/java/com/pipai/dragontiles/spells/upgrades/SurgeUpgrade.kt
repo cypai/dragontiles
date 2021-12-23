@@ -6,7 +6,7 @@ import com.pipai.dragontiles.spells.Spell
 import com.pipai.dragontiles.utils.findAs
 
 class SurgeUpgrade : SpellUpgrade {
-    override val strId: String = "base:upgrades:SurgeUpgrade"
+    override val id: String = "base:upgrades:SurgeUpgrade"
     override val assetName: String = "power.png"
 
     override fun canUpgrade(spell: Spell): Boolean {

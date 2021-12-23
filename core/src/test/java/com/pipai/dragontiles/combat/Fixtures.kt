@@ -5,7 +5,7 @@ import com.pipai.dragontiles.dungeon.DungeonInitializer
 import com.pipai.dragontiles.dungeon.RunData
 import com.pipai.dragontiles.dungeon.RunHistory
 import com.pipai.dragontiles.hero.Elementalist
-import com.pipai.dragontiles.hero.Hero
+import com.pipai.dragontiles.data.Hero
 import com.pipai.dragontiles.relics.Relic
 import com.pipai.dragontiles.relics.RelicData
 import com.pipai.dragontiles.spells.Spell

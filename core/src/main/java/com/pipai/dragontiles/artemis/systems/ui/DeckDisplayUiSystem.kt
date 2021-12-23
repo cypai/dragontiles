@@ -160,7 +160,7 @@ class DeckDisplayUiSystem(
         topLabel.setText("Choose a spell to upgrade:")
         table.add(topLabel).colspan(colspan)
         table.row()
-        val localization = game.gameStrings.nameDescLocalization(upgrade.strId)
+        val localization = game.gameStrings.nameDescLocalization(upgrade.id)
         table.add(Label("${localization.name}: ${localization.description}", game.skin, "white")).colspan(colspan)
         table.row()
         if (useFilter) {

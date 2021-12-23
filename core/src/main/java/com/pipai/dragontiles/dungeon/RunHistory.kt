@@ -1,29 +1,43 @@
 package com.pipai.dragontiles.dungeon
 
-import com.pipai.dragontiles.combat.Combat
 import com.pipai.dragontiles.data.ItemShop
 import com.pipai.dragontiles.data.Scribe
 import com.pipai.dragontiles.data.SpellShop
-import com.pipai.dragontiles.dungeonevents.DungeonEvent
-import com.pipai.dragontiles.potions.Potion
-import com.pipai.dragontiles.relics.Relic
-import com.pipai.dragontiles.spells.Spell
-import kotlinx.serialization.Serializable
+import com.pipai.dragontiles.spells.SpellInstance
+import com.pipai.dragontiles.spells.SpellUpgradeInstance
 
-@Serializable
 data class RunHistory(
     val history: MutableList<FloorHistory>,
 )
 
-@Serializable
 sealed class FloorHistory {
-    data class CombatFloorHistory(val combat: Combat, val changeHistory: ChangeHistory)
-    data class EliteFloorHistory(val combat: Combat, val changeHistory: ChangeHistory)
-    data class EventFloorHistory(val event: DungeonEvent, val changeHistory: ChangeHistory)
+    data class CombatFloorHistory(
+        val dungeonId: String,
+        val floorNumber: Int,
+        val encounterId: String,
+        val changeHistory: ChangeHistory
+    )
+
+    data class EliteFloorHistory(
+        val dungeonId: String,
+        val floorNumber: Int,
+        val encounterId: String,
+        val changeHistory: ChangeHistory
+    )
+
+    data class EventFloorHistory(
+        val dungeonId: String,
+        val floorNumber: Int,
+        val eventId: String,
+        val changeHistory: ChangeHistory
+    )
+
     data class TownFloorHistory(
+        val dungeonId: String,
+        val floorNumber: Int,
         val innUsed: Boolean,
         val solicited: Boolean,
-        val event: DungeonEvent?,
+        val eventId: String?,
         val spellShop: SpellShop,
         val itemShop: ItemShop,
         val scribe: Scribe,
@@ -36,10 +50,11 @@ data class ChangeHistory(
     var hpMax: Int,
     var fluxMax: Int,
     var gold: Int,
-    val spellsGained: MutableList<Spell>,
-    val spellsLost: MutableList<Spell>,
-    val relicsGained: MutableList<Relic>,
-    val relicsLost: MutableList<Relic>,
-    val potionsGained: MutableList<Potion>,
-    val potionsLost: MutableList<Potion>,
+    val spellsGained: MutableList<SpellInstance>,
+    val spellsLost: MutableList<SpellInstance>,
+    val spellsUpgraded: MutableList<Pair<SpellInstance, SpellUpgradeInstance>>,
+    val relicsGained: MutableList<String>,
+    val relicsLost: MutableList<String>,
+    val potionsGained: MutableList<String>,
+    val potionsLost: MutableList<String>,
 )
