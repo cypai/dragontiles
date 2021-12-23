@@ -30,7 +30,7 @@ enum class ScreenResolution(val width: Int, val height: Int, val description: St
 
 private val DEFAULT_RESOLUTION = ScreenResolution.RES_1280_720
 
-class GameConfig(val configFile: FileHandle) {
+class GameConfig(private val configFile: FileHandle) {
 
     var resolution: ScreenResolution
 

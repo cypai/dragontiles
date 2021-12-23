@@ -26,6 +26,7 @@ import com.pipai.dragontiles.artemis.screens.MainMenuScreen
 import com.pipai.dragontiles.data.GameStrings
 import com.pipai.dragontiles.data.GameData
 import com.pipai.dragontiles.data.TileSkin
+import com.pipai.dragontiles.meta.SaveFile
 import com.pipai.dragontiles.utils.getLogger
 import org.apache.commons.lang3.builder.ToStringBuilder
 import org.apache.commons.lang3.builder.ToStringStyle
@@ -65,7 +66,8 @@ class DragonTilesGame(val gameConfig: GameConfig) : Game() {
     lateinit var gameStrings: GameStrings
         private set
 
-    val gameData = GameData()
+    lateinit var saveFile: SaveFile
+        private set
 
     override fun create() {
         logger.info("Starting Dragon Tiles with the following config settings:")
