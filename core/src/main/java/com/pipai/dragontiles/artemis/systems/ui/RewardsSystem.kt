@@ -13,12 +13,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.pipai.dragontiles.DragonTilesGame
-import com.pipai.dragontiles.artemis.components.ActorComponent
 import com.pipai.dragontiles.artemis.components.TileComponent
-import com.pipai.dragontiles.artemis.components.XYComponent
 import com.pipai.dragontiles.artemis.systems.NoProcessingSystem
-import com.pipai.dragontiles.artemis.systems.combat.CombatControllerSystem
-import com.pipai.dragontiles.artemis.systems.rendering.FullScreenColorSystem
 import com.pipai.dragontiles.combat.CombatRewards
 import com.pipai.dragontiles.data.GameData
 import com.pipai.dragontiles.data.NameDescLocalization

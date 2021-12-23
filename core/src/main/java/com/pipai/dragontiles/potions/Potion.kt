@@ -2,7 +2,9 @@ package com.pipai.dragontiles.potions
 
 import com.pipai.dragontiles.combat.CombatApi
 import com.pipai.dragontiles.dungeon.GlobalApi
+import kotlinx.serialization.Serializable
 
+@Serializable
 abstract class Potion {
     abstract val strId: String
     abstract val assetName: String

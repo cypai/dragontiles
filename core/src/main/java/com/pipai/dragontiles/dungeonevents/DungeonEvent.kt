@@ -1,5 +1,8 @@
 package com.pipai.dragontiles.dungeonevents
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 abstract class DungeonEvent {
 
     abstract val id: String

@@ -5,8 +5,10 @@ import com.pipai.dragontiles.dungeonevents.*
 import com.pipai.dragontiles.enemies.*
 import com.pipai.dragontiles.utils.choose
 import com.pipai.dragontiles.utils.removeRandom
+import kotlinx.serialization.Serializable
 import java.util.*
 
+@Serializable
 abstract class Dungeon {
     var currentFloor: Int = 0
     var currentFloorIndex: Int = 0
@@ -150,6 +152,7 @@ abstract class Dungeon {
 
 }
 
+@Serializable
 data class MapNode(val type: MapNodeType, val hidden: Boolean, val prev: MutableList<Int>, val next: MutableList<Int>)
 
 enum class MapNodeType {

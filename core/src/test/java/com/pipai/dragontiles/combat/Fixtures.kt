@@ -13,7 +13,7 @@ import java.util.*
 
 fun runDataFixture(spells: MutableList<Spell>, relics: MutableList<Relic>): RunData {
     return RunData(
-        Random(),
+        PlainsDungeon(),
         Hero(
             Elementalist(),
             "Elementalist",
@@ -33,11 +33,11 @@ fun runDataFixture(spells: MutableList<Spell>, relics: MutableList<Relic>): RunD
             mutableListOf()
         ),
         RelicData(mutableListOf()),
-        PlainsDungeon(),
         null,
         0,
         GameData.BASE_POTION_CHANCE,
         RunHistory(mutableListOf()),
+        Random(),
     )
 }
 

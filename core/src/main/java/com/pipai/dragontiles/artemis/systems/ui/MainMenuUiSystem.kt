@@ -15,11 +15,7 @@ import com.pipai.dragontiles.dungeon.RunData
 import com.pipai.dragontiles.dungeon.RunHistory
 import com.pipai.dragontiles.dungeonevents.PlainsStartEvent
 import com.pipai.dragontiles.hero.Elementalist
-import com.pipai.dragontiles.hero.Hero
 import com.pipai.dragontiles.relics.RelicData
-import com.pipai.dragontiles.relics.Transmuter
-import com.pipai.dragontiles.spells.elementalist.DualInvoke
-import com.pipai.dragontiles.spells.elementalist.Explosion
 import java.util.*
 
 class MainMenuUiSystem(
@@ -50,14 +46,14 @@ class MainMenuUiSystem(
                 val hero = Elementalist().generateHero("Elementalist")
 
                 val runData = RunData(
-                    Random(),
+                    PlainsDungeon(),
                     hero,
                     RelicData(GameData.relics.toMutableList()),
-                    PlainsDungeon(),
                     null,
                     0,
                     GameData.BASE_POTION_CHANCE,
                     RunHistory(mutableListOf()),
+                    Random(),
                 )
                 runData.dungeon.generateMap(runData.rng)
                 game.screen = EventScreen(game, runData, PlainsStartEvent())

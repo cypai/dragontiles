@@ -6,7 +6,9 @@ import com.pipai.dragontiles.combat.DamageTarget
 import com.pipai.dragontiles.data.Element
 import com.pipai.dragontiles.dungeon.GlobalApi
 import com.pipai.dragontiles.spells.Rarity
+import kotlinx.serialization.Serializable
 
+@Serializable
 abstract class Relic : DamageAdjustable {
     abstract val strId: String
     abstract val assetName: String

@@ -4,7 +4,9 @@ import com.pipai.dragontiles.combat.CombatApi
 import com.pipai.dragontiles.data.TileInstance
 import com.pipai.dragontiles.utils.with
 import com.pipai.dragontiles.utils.withoutAll
+import kotlinx.serialization.Serializable
 
+@Serializable
 abstract class Sorcery : Spell() {
     override val type = SpellType.SORCERY
 

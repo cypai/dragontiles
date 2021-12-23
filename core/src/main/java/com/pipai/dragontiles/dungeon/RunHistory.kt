@@ -8,11 +8,14 @@ import com.pipai.dragontiles.dungeonevents.DungeonEvent
 import com.pipai.dragontiles.potions.Potion
 import com.pipai.dragontiles.relics.Relic
 import com.pipai.dragontiles.spells.Spell
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class RunHistory(
     val history: MutableList<FloorHistory>,
 )
 
+@Serializable
 sealed class FloorHistory {
     data class CombatFloorHistory(val combat: Combat, val changeHistory: ChangeHistory)
     data class EliteFloorHistory(val combat: Combat, val changeHistory: ChangeHistory)

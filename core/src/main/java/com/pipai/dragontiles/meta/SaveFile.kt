@@ -17,6 +17,7 @@ data class SaveFile(
     }
 }
 
+@Serializable
 data class Save(
     var currentRun: RunData?,
     var honor: Int,

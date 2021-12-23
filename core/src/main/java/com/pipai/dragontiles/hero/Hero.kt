@@ -4,7 +4,9 @@ import com.pipai.dragontiles.potions.Potion
 import com.pipai.dragontiles.relics.Relic
 import com.pipai.dragontiles.spells.Sorcery
 import com.pipai.dragontiles.spells.Spell
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class Hero(val heroClass: HeroClass,
                 val name: String,
                 var hp: Int,
@@ -23,4 +25,5 @@ data class Hero(val heroClass: HeroClass,
                 val potionSlots: MutableList<PotionSlot>,
 )
 
+@Serializable
 data class PotionSlot(var potion: Potion?)

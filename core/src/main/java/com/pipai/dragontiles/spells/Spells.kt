@@ -7,9 +7,11 @@ import com.pipai.dragontiles.data.Tile
 import com.pipai.dragontiles.data.TileInstance
 import com.pipai.dragontiles.spells.upgrades.SpellUpgrade
 import com.pipai.dragontiles.utils.*
+import kotlinx.serialization.Serializable
 import org.apache.commons.lang3.builder.ToStringBuilder
 import kotlin.reflect.full.createInstance
 
+@Serializable
 abstract class Spell : DamageAdjustable {
     abstract val strId: String
 
