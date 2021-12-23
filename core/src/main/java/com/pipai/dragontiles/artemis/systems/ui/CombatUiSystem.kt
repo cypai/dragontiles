@@ -41,10 +41,8 @@ import com.pipai.dragontiles.spells.Sorcery
 import com.pipai.dragontiles.spells.findFullCastHand
 import com.pipai.dragontiles.spells.*
 import com.pipai.dragontiles.utils.*
-import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import net.mostlyoriginal.api.event.common.EventSystem
 import net.mostlyoriginal.api.event.common.Subscribe
 import kotlin.coroutines.resume
@@ -57,6 +55,7 @@ class CombatUiSystem(
     private val frontStage: Stage
 ) : BaseSystem(), InputProcessor {
 
+    private val scope = CoroutineScope(Dispatchers.Default)
     private val config = game.gameConfig
     private val skin = game.skin
     private val tileSkin = game.tileSkin
@@ -322,7 +321,7 @@ class CombatUiSystem(
                 return setStateBack()
             }
             Keys.F12 -> {
-                GlobalScope.launch {
+                scope.launch {
                     sCombat.controller.api.devInstantWin()
                 }
             }
@@ -343,7 +342,7 @@ class CombatUiSystem(
                     CombatUiState.ROOT -> {
                         stateMachine.changeState(CombatUiState.DISABLED)
                         sAnimation.pauseUiMode = true
-                        GlobalScope.launch {
+                        scope.launch {
                             sCombat.controller.endTurn()
                         }
                         return true
@@ -410,7 +409,7 @@ class CombatUiSystem(
                         Input.Buttons.RIGHT -> {
                             if (spell is Rune && spell.active) {
                                 sAnimation.pauseUiMode = true
-                                GlobalScope.launch {
+                                scope.launch {
                                     spell.deactivate(sCombat.controller.api)
                                 }
                             }
@@ -504,7 +503,7 @@ class CombatUiSystem(
     }
 
     private fun selectFullCastHand(fullCastHand: FullCastHand) {
-        GlobalScope.launch {
+        scope.launch {
             sCombat.controller.api.castSorceries(fullCastHand, runData.hero.sorceries)
         }
     }
@@ -535,7 +534,7 @@ class CombatUiSystem(
                     TargetType.NONE -> {
                         spell.fill(components)
                         sAnimation.pauseUiMode = true
-                        GlobalScope.launch {
+                        scope.launch {
                             spell.cast(CastParams(listOf()), sCombat.controller.api)
                         }
                     }
@@ -544,13 +543,13 @@ class CombatUiSystem(
             is Rune -> {
                 if (spell.active) {
                     sAnimation.pauseUiMode = true
-                    GlobalScope.launch {
+                    scope.launch {
                         spell.deactivate(sCombat.controller.api)
                     }
                 } else {
                     sAnimation.pauseUiMode = true
                     spell.fill(components)
-                    GlobalScope.launch {
+                    scope.launch {
                         spell.activate(sCombat.controller.api)
                     }
                 }
@@ -558,7 +557,7 @@ class CombatUiSystem(
             is PowerSpell -> {
                 spell.fill(components)
                 sAnimation.pauseUiMode = true
-                GlobalScope.launch {
+                scope.launch {
                     spell.cast(CastParams(listOf()), sCombat.controller.api)
                 }
             }
@@ -638,12 +637,12 @@ class CombatUiSystem(
                         ) {
 
                             sAnimation.pauseUiMode = true
-                            GlobalScope.launch {
+                            scope.launch {
                                 spell.cast(CastParams(listOf(mEnemy.get(ev.entityId).enemy.id)), sCombat.controller.api)
                             }
                         } else if (spell.targetType == TargetType.AOE) {
                             sAnimation.pauseUiMode = true
-                            GlobalScope.launch {
+                            scope.launch {
                                 spell.cast(
                                     CastParams(sCombat.combat.enemies
                                         .filter { it.hp > 0 }
@@ -656,7 +655,7 @@ class CombatUiSystem(
                 }
                 CombatUiState.POTION_TARGET_SELECTION -> {
                     sAnimation.pauseUiMode = true
-                    GlobalScope.launch {
+                    scope.launch {
                         selectedPotion!!.useDuringCombat(mEnemy.get(ev.entityId).enemy.id, sCombat.controller.api)
                     }
                 }
@@ -1233,6 +1232,10 @@ class CombatUiSystem(
 
         override fun update(uiSystem: CombatUiSystem) {
         }
+    }
+
+    override fun dispose() {
+        scope.cancel()
     }
 
 }

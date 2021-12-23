@@ -1,16 +1,19 @@
 package com.pipai.dragontiles.artemis.systems.combat
 
 import com.pipai.dragontiles.artemis.systems.ProcessOnceSystem
-import com.pipai.dragontiles.artemis.systems.ui.CombatUiSystem
 import com.pipai.dragontiles.combat.Combat
 import com.pipai.dragontiles.combat.CombatController
 import com.pipai.dragontiles.dungeon.RunData
 import com.pipai.dragontiles.utils.system
-import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import net.mostlyoriginal.api.event.common.EventSystem
 
 class CombatControllerSystem(val runData: RunData, val combat: Combat) : ProcessOnceSystem() {
+
+    private val scope = CoroutineScope(Dispatchers.Default)
 
     lateinit var controller: CombatController
         private set
@@ -22,9 +25,13 @@ class CombatControllerSystem(val runData: RunData, val combat: Combat) : Process
     }
 
     override fun processOnce() {
-        GlobalScope.launch {
+        scope.launch {
             controller.runTurn()
         }
+    }
+
+    override fun dispose() {
+        scope.cancel()
     }
 
 }
