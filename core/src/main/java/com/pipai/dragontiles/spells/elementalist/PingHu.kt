@@ -6,7 +6,7 @@ import com.pipai.dragontiles.data.TileInstance
 import com.pipai.dragontiles.spells.*
 
 class PingHu : Sorcery() {
-    override val strId = "base:sorceries:CommonSorcery"
+    override val strId = "base:sorceries:PingHu"
     override val rarity = Rarity.UNCOMMON
     override val requirement = object : CustomRequirement() {
         override val type: SetType = SetType.SEQUENTIAL

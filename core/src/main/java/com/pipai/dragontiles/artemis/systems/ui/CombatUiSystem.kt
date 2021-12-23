@@ -27,10 +27,7 @@ import com.pipai.dragontiles.artemis.systems.animation.CombatAnimationSystem
 import com.pipai.dragontiles.artemis.systems.combat.CombatControllerSystem
 import com.pipai.dragontiles.artemis.systems.combat.TileIdSystem
 import com.pipai.dragontiles.artemis.systems.rendering.FullScreenColorSystem
-import com.pipai.dragontiles.combat.HandAdjustedEvent
-import com.pipai.dragontiles.combat.QuerySwapEvent
-import com.pipai.dragontiles.combat.QueryTileOptionsEvent
-import com.pipai.dragontiles.combat.QueryTilesEvent
+import com.pipai.dragontiles.combat.*
 import com.pipai.dragontiles.data.Tile
 import com.pipai.dragontiles.data.TileInstance
 import com.pipai.dragontiles.dungeon.RunData
@@ -45,6 +42,7 @@ import com.pipai.dragontiles.spells.findFullCastHand
 import com.pipai.dragontiles.spells.*
 import com.pipai.dragontiles.utils.*
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import net.mostlyoriginal.api.event.common.EventSystem
@@ -73,7 +71,8 @@ class CombatUiSystem(
 
     private var queryTilesEvent: QueryTilesEvent? = null
     private var queryTileOptionsEvent: QueryTileOptionsEvent? = null
-    private var querySwapEvent: QuerySwapEvent? = null
+    private var querySwapAmount: Int = 0
+    private lateinit var swapChannel: Channel<SwapData>
 
     private val tilePrevXy: MutableMap<Int, Vector2> = mutableMapOf()
     private val selectedTiles: MutableList<Int> = mutableListOf()
@@ -137,6 +136,7 @@ class CombatUiSystem(
     private val sAnchor by system<AnchorSystem>()
 
     override fun initialize() {
+        swapChannel = sCombat.controller.api.swapChannel
         runData.hero.spells.forEachIndexed { index, spell ->
             addSpellCard(index, spell)
         }
@@ -426,7 +426,7 @@ class CombatUiSystem(
                         sAnchor.returnToAnchor(sideboardEntityIds[spellCard.number]!!)
                         swapSideboardSpells.remove(spellCard)
                     } else {
-                        if (swapSideboardSpells.size < querySwapEvent!!.amount) {
+                        if (swapSideboardSpells.size < querySwapAmount) {
                             spellCard.data[allowHoverMove] = 0
                             moveSpellToLocation(sideboardEntityIds[spellCard.number]!!, rightSpellSwapCenter)
                             swapSideboardSpells.add(spellCard)
@@ -438,7 +438,7 @@ class CombatUiSystem(
                         sAnchor.returnToAnchor(spellEntityIds[spellCard.number]!!)
                         swapActiveSpells.remove(spellCard)
                     } else {
-                        if (swapActiveSpells.size < querySwapEvent!!.amount) {
+                        if (swapActiveSpells.size < querySwapAmount) {
                             spellCard.data[allowHoverMove] = 0
                             moveSpellToLocation(spellEntityIds[spellCard.number]!!, leftSpellSwapCenter)
                             swapActiveSpells.add(spellCard)
@@ -807,9 +807,9 @@ class CombatUiSystem(
         }
     }
 
-    fun querySwap(event: QuerySwapEvent) {
-        querySwapEvent = event
-        queryLabel.setText("Select up to ${event.amount} spells to swap")
+    fun querySwap(amount: Int) {
+        querySwapAmount = amount
+        queryLabel.setText("Select up to $amount spells to swap")
         stateMachine.changeState(CombatUiState.QUERY_SWAP)
     }
 
@@ -820,11 +820,12 @@ class CombatUiSystem(
                 stateMachine.revertToPreviousState()
             }
             CombatUiState.QUERY_SWAP -> {
-                querySwapEvent!!.continuation.resume(
-                    QuerySwapEvent.SwapData(
+                runBlocking {
+                    swapChannel.send(SwapData(
                         swapActiveSpells.map { it.getSpell()!! },
-                        swapSideboardSpells.map { it.getSpell()!! })
-                )
+                        swapSideboardSpells.map { it.getSpell()!! }
+                    ))
+                }
                 swapActiveSpells.clear()
                 swapSideboardSpells.clear()
                 stateMachine.revertToPreviousState()
@@ -1073,7 +1074,6 @@ class CombatUiSystem(
     enum class CombatUiState : State<CombatUiSystem> {
         ROOT {
             override fun enter(uiSystem: CombatUiSystem) {
-                uiSystem.querySwapEvent = null
                 uiSystem.queryTileOptionsEvent = null
                 uiSystem.queryTilesEvent = null
                 uiSystem.moveSpellsToAnchor()

@@ -7,15 +7,13 @@ import com.pipai.dragontiles.data.TileStatus
 import com.pipai.dragontiles.dungeon.GlobalApi
 import com.pipai.dragontiles.dungeon.RunData
 import com.pipai.dragontiles.enemies.Enemy
-import com.pipai.dragontiles.spells.FullCastHand
-import com.pipai.dragontiles.spells.MeldType
-import com.pipai.dragontiles.spells.Sorcery
 import com.pipai.dragontiles.spells.*
 import com.pipai.dragontiles.status.Dodge
 import com.pipai.dragontiles.status.Overloaded
 import com.pipai.dragontiles.status.Status
 import com.pipai.dragontiles.utils.deepCopy
 import com.pipai.dragontiles.utils.getLogger
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.runBlocking
 import kotlin.coroutines.suspendCoroutine
 import kotlin.reflect.KClass
@@ -23,7 +21,7 @@ import kotlin.reflect.KClass
 class CombatApi(
     runData: RunData,
     val combat: Combat,
-    private val eventBus: CombatEventBus
+    private val eventBus: CombatEventBus,
 ) : GlobalApi(runData, eventBus.sEvent) {
 
     companion object {
@@ -32,6 +30,7 @@ class CombatApi(
 
     private val logger = getLogger()
     private var nextId = 0
+    val swapChannel = Channel<SwapData>()
 
     fun nextId(): Int {
         nextId += 1
@@ -205,11 +204,8 @@ class CombatApi(
         if (combat.sideboard.isEmpty() || combat.sideboard.none { it.swappableFromSideboard() }) {
             return
         }
-        val data: QuerySwapEvent.SwapData = suspendCoroutine {
-            runBlocking {
-                eventBus.dispatch(QuerySwapEvent(amount, it))
-            }
-        }
+        eventBus.dispatch(QuerySwapEvent(amount))
+        val data = swapChannel.receive()
         swap(data.spellInHand, data.spellOnSide)
     }
 

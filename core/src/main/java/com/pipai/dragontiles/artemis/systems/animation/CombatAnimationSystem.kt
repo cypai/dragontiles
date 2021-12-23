@@ -199,7 +199,7 @@ class CombatAnimationSystem(private val game: DragonTilesGame) : BaseSystem(), A
 
     @Subscribe
     fun handleSwapQuery(ev: QuerySwapEvent) {
-        queueAnimation(QuerySwapAnimation(ev))
+        queueAnimation(QuerySwapAnimation(ev.amount))
     }
 
     @Subscribe
