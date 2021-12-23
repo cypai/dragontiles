@@ -6,7 +6,7 @@ import com.pipai.dragontiles.data.TileStatus
 import com.pipai.dragontiles.spells.*
 
 class IceShard : StandardSpell() {
-    override val strId: String = "base:spells:IceShard"
+    override val id: String = "base:spells:IceShard"
     override val requirement: ComponentRequirement = Sequential(3, SuitGroup.ICE)
     override val type: SpellType = SpellType.ATTACK
     override val targetType: TargetType = TargetType.SINGLE

@@ -114,7 +114,7 @@ class TopRowUiSystem(
                     }
 
                     override fun enter(event: InputEvent?, x: Float, y: Float, pointer: Int, fromActor: Actor?) {
-                        sTooltip.addNameDescLocalization(game.gameStrings.nameDescLocalization(potion.strId))
+                        sTooltip.addNameDescLocalization(game.gameStrings.nameDescLocalization(potion.id))
                         sTooltip.showTooltip()
                     }
 
@@ -137,7 +137,7 @@ class TopRowUiSystem(
             val image = Image(game.assets.get(relicAssetPath(relic.assetName), Texture::class.java))
             image.addListener(object : ClickListener() {
                 override fun enter(event: InputEvent?, x: Float, y: Float, pointer: Int, fromActor: Actor?) {
-                    sTooltip.addNameDescLocalization(game.gameStrings.nameDescLocalization(relic.strId))
+                    sTooltip.addNameDescLocalization(game.gameStrings.nameDescLocalization(relic.id))
                     sTooltip.showTooltip()
                 }
 

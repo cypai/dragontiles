@@ -4,7 +4,7 @@ import com.pipai.dragontiles.combat.CombatApi
 import com.pipai.dragontiles.spells.*
 
 class Strike : StandardSpell() {
-    override val strId: String = "base:spells:Strike"
+    override val id: String = "base:spells:Strike"
     override val requirement: ComponentRequirement = Sequential(3, SuitGroup.ELEMENTAL)
     override val type: SpellType = SpellType.ATTACK
     override val targetType: TargetType = TargetType.SINGLE

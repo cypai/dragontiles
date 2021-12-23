@@ -49,26 +49,46 @@ class GameStrings {
         }
     }
 
+    fun nameLocalization(localized: Localized): NameLocalization {
+        val id = localized.id
+        val data = strings[id]?.get(language) ?: throw IllegalArgumentException("$id not found")
+        return NameLocalization(
+            data["name"] ?: throw IllegalStateException("$id name not found"),
+        )
+    }
+
+    fun nameDescLocalization(localized: Localized): NameDescLocalization {
+        val id = localized.id
+        val data = strings[id]?.get(language) ?: throw IllegalArgumentException("$id not found")
+        return NameDescLocalization(
+            data["name"] ?: throw IllegalStateException("$id name not found"),
+            data["description"] ?: throw IllegalStateException("$id description not found"),
+        )
+    }
+
     fun spellLocalization(id: String): SpellLocalization {
         val data = strings[id]?.get(language) ?: throw IllegalArgumentException("$id not found")
         return SpellLocalization(
-                data["name"] ?: throw IllegalStateException("$id name not found"),
-                data["description"] ?: throw IllegalStateException("$id description not found"))
+            data["name"] ?: throw IllegalStateException("$id name not found"),
+            data["description"] ?: throw IllegalStateException("$id description not found")
+        )
     }
 
     fun nameDescLocalization(id: String): NameDescLocalization {
         val data = strings[id]?.get(language) ?: throw IllegalArgumentException("$id not found")
         return NameDescLocalization(
-                data["name"] ?: throw IllegalStateException("$id name not found"),
-                data["description"] ?: throw IllegalStateException("$id description not found"))
+            data["name"] ?: throw IllegalStateException("$id name not found"),
+            data["description"] ?: throw IllegalStateException("$id description not found")
+        )
     }
 
     fun keywordLocalization(id: String): KeywordLocalization {
         val data = strings[id]?.get(language) ?: throw IllegalArgumentException("$id not found")
         return KeywordLocalization(
-                data["key"] ?: throw IllegalStateException("$id key not found"),
-                data["name"] ?: throw IllegalStateException("$id name not found"),
-                data["description"] ?: throw IllegalStateException("$id description not found"))
+            data["key"] ?: throw IllegalStateException("$id key not found"),
+            data["name"] ?: throw IllegalStateException("$id name not found"),
+            data["description"] ?: throw IllegalStateException("$id description not found")
+        )
     }
 
     fun keyword(key: String): KeywordLocalization? {
@@ -81,9 +101,9 @@ class GameStrings {
 
     fun findKeywords(str: String): List<String> {
         return keywordKeyRegex.findAll(str)
-                .filter { it.value in keywordIds[language]!! }
-                .map { it.value }
-                .toList()
+            .filter { it.value in keywordIds[language]!! }
+            .map { it.value }
+            .toList()
     }
 
     fun eventLocalization(id: String): EventLocalization {
@@ -94,6 +114,7 @@ class GameStrings {
     }
 }
 
+data class NameLocalization(val name: String)
 data class NameDescLocalization(val name: String, val description: String)
 data class SpellLocalization(val name: String, val description: String)
 data class KeywordLocalization(val key: String, val name: String, val description: String)

@@ -1,7 +1,7 @@
 package com.pipai.dragontiles.combat
 
 import com.pipai.dragontiles.data.GameData
-import com.pipai.dragontiles.dungeon.PlainsDungeon
+import com.pipai.dragontiles.dungeon.DungeonInitializer
 import com.pipai.dragontiles.dungeon.RunData
 import com.pipai.dragontiles.dungeon.RunHistory
 import com.pipai.dragontiles.hero.Elementalist
@@ -13,7 +13,7 @@ import java.util.*
 
 fun runDataFixture(spells: MutableList<Spell>, relics: MutableList<Relic>): RunData {
     return RunData(
-        PlainsDungeon(),
+        DungeonInitializer(),
         Hero(
             Elementalist(),
             "Elementalist",

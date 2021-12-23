@@ -1,11 +1,9 @@
 package com.pipai.dragontiles.dungeonevents
 
-import kotlinx.serialization.Serializable
+import com.pipai.dragontiles.data.Localized
 
-@Serializable
-abstract class DungeonEvent {
+abstract class DungeonEvent : Localized {
 
-    abstract val id: String
     abstract val beginningTextId: String
     abstract val beginningOptions: List<EventOption>
 

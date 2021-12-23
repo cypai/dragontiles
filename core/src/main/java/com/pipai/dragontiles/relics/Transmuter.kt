@@ -7,7 +7,7 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 
 class Transmuter : Relic() {
-    override val strId = "base:relics:Transmuter"
+    override val id = "base:relics:Transmuter"
     override val assetName = "transmuter.png"
     override val rarity = Rarity.RARE
 

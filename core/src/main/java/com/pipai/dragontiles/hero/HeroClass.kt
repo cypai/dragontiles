@@ -1,5 +1,6 @@
 package com.pipai.dragontiles.hero
 
+import com.pipai.dragontiles.data.Localized
 import com.pipai.dragontiles.dungeon.RunData
 import com.pipai.dragontiles.potions.ExplosivePotion
 import com.pipai.dragontiles.potions.HealingPotion
@@ -9,8 +10,7 @@ import com.pipai.dragontiles.spells.Rarity
 import com.pipai.dragontiles.spells.Spell
 import com.pipai.dragontiles.utils.choose
 
-interface HeroClass {
-    val strId: String
+interface HeroClass : Localized{
     val assetName: String
 
     val startingRelic: Relic

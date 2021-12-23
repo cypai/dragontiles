@@ -5,7 +5,7 @@ import com.pipai.dragontiles.spells.Rarity
 import kotlinx.serialization.Serializable
 
 class Tea : Relic() {
-    override val strId = "base:relics:Tea"
+    override val id = "base:relics:Tea"
     override val assetName = "tea.png"
     override val rarity = Rarity.UNCOMMON
 

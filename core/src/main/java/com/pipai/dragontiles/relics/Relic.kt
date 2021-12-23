@@ -4,14 +4,14 @@ import com.pipai.dragontiles.combat.DamageAdjustable
 import com.pipai.dragontiles.combat.DamageOrigin
 import com.pipai.dragontiles.combat.DamageTarget
 import com.pipai.dragontiles.data.Element
+import com.pipai.dragontiles.data.Localized
 import com.pipai.dragontiles.dungeon.GlobalApi
 import com.pipai.dragontiles.spells.Rarity
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 
 @Serializable
-abstract class Relic : DamageAdjustable {
-    abstract val strId: String
+abstract class Relic : Localized, DamageAdjustable {
     abstract val assetName: String
     abstract val rarity: Rarity
 

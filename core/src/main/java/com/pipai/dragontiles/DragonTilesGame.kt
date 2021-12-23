@@ -26,18 +26,10 @@ import com.kotcrab.vis.ui.VisUI
 import com.pipai.dragontiles.artemis.screens.MainMenuScreen
 import com.pipai.dragontiles.data.GameStrings
 import com.pipai.dragontiles.data.TileSkin
-import com.pipai.dragontiles.dungeon.Dungeon
-import com.pipai.dragontiles.dungeon.PlainsDungeon
 import com.pipai.dragontiles.meta.GameOptions
 import com.pipai.dragontiles.meta.Save
 import com.pipai.dragontiles.meta.SaveSerializer
 import com.pipai.dragontiles.utils.getLogger
-import kotlinx.serialization.decodeFromString
-import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
-import kotlinx.serialization.modules.SerializersModule
-import kotlinx.serialization.modules.polymorphic
-import kotlinx.serialization.modules.subclass
 import org.apache.commons.lang3.builder.ToStringBuilder
 import org.apache.commons.lang3.builder.ToStringStyle
 import java.io.File
@@ -84,7 +76,7 @@ class DragonTilesGame(val gameConfig: GameConfig) : Game() {
         private set
 
     fun writeSave() {
-        //saveFileHandle.writeString(saveSerializer.serialize(save), false)
+        saveFileHandle.writeString(saveSerializer.serialize(save), false)
     }
 
     override fun create() {

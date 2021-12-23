@@ -95,7 +95,7 @@ class RewardsSystem(
                 }
 
                 override fun enter(event: InputEvent?, x: Float, y: Float, pointer: Int, fromActor: Actor?) {
-                    sTooltip.addKeywordsInString(game.gameStrings.spellLocalization(spell.strId).description)
+                    sTooltip.addKeywordsInString(game.gameStrings.spellLocalization(spell.id).description)
                     if (spell.aspects.any { a -> a is PostExhaustAspect }) {
                         sTooltip.addKeyword("@Exhaust")
                     }
@@ -135,16 +135,16 @@ class RewardsSystem(
                     rewardItemTable(
                         { getRelic(reward.relic) },
                         Image(game.assets.get(relicAssetPath(reward.relic.assetName), Texture::class.java)),
-                        game.gameStrings.nameDescLocalization(reward.relic.strId),
-                        game.gameStrings.nameDescLocalization(reward.relic.strId).name
+                        game.gameStrings.nameDescLocalization(reward.relic.id),
+                        game.gameStrings.nameDescLocalization(reward.relic.id).name
                     )
                 }
                 is Reward.PotionReward -> {
                     rewardItemTable(
                         { getPotion(reward) },
                         Image(game.assets.get(potionAssetPath(reward.potion.assetName), Texture::class.java)),
-                        game.gameStrings.nameDescLocalization(reward.potion.strId),
-                        game.gameStrings.nameDescLocalization(reward.potion.strId).name
+                        game.gameStrings.nameDescLocalization(reward.potion.id),
+                        game.gameStrings.nameDescLocalization(reward.potion.id).name
                     )
                 }
                 is Reward.EmptyReward -> {

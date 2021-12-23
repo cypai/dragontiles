@@ -9,7 +9,7 @@ import com.pipai.dragontiles.status.Strength
 import com.pipai.dragontiles.utils.findAsWhere
 
 class DragonRage : StandardSpell() {
-    override val strId: String = "base:spells:DragonRage"
+    override val id: String = "base:spells:DragonRage"
     override val requirement: ComponentRequirement = Sequential(9, SuitGroup.ELEMENTAL)
     override val type: SpellType = SpellType.EFFECT
     override val targetType: TargetType = TargetType.NONE

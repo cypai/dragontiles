@@ -1,10 +1,7 @@
 package com.pipai.dragontiles.spells
 
 import com.pipai.dragontiles.combat.*
-import com.pipai.dragontiles.data.Element
-import com.pipai.dragontiles.data.Suit
-import com.pipai.dragontiles.data.Tile
-import com.pipai.dragontiles.data.TileInstance
+import com.pipai.dragontiles.data.*
 import com.pipai.dragontiles.spells.upgrades.SpellUpgrade
 import com.pipai.dragontiles.utils.*
 import kotlinx.serialization.Serializable
@@ -13,9 +10,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder
 import kotlin.reflect.full.createInstance
 
 @Serializable
-abstract class Spell : DamageAdjustable {
-    abstract val strId: String
-
+abstract class Spell : Localized, DamageAdjustable {
     abstract val requirement: ComponentRequirement
     abstract val type: SpellType
     abstract val rarity: Rarity

@@ -10,7 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.pipai.dragontiles.DragonTilesGame
 import com.pipai.dragontiles.artemis.screens.EventScreen
 import com.pipai.dragontiles.data.GameData
-import com.pipai.dragontiles.dungeon.PlainsDungeon
+import com.pipai.dragontiles.dungeon.DungeonInitializer
 import com.pipai.dragontiles.dungeon.RunData
 import com.pipai.dragontiles.dungeon.RunHistory
 import com.pipai.dragontiles.dungeonevents.PlainsStartEvent
@@ -53,7 +53,7 @@ class MainMenuUiSystem(
                 val hero = Elementalist().generateHero("Elementalist")
 
                 val runData = RunData(
-                    PlainsDungeon(),
+                    DungeonInitializer(),
                     hero,
                     RelicData(GameData.relics.toMutableList()),
                     null,
@@ -62,7 +62,7 @@ class MainMenuUiSystem(
                     RunHistory(mutableListOf()),
                     Random(),
                 )
-                runData.dungeon.generateMap(runData.rng)
+                runData.dungeonMap.generateMap(runData.rng)
                 game.save.currentRun = runData
                 game.writeSave()
                 game.screen = EventScreen(game, runData, PlainsStartEvent())

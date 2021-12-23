@@ -7,7 +7,7 @@ import java.util.*
 class DungeonTest {
     @Test
     fun testMapGeneration() {
-        val plainsDungeon = PlainsDungeon()
+        val plainsDungeon = DungeonInitializer()
         plainsDungeon.generateMap(Random())
         val map = plainsDungeon.getMap()
         map.forEachIndexed { index, floor ->

@@ -1,22 +1,17 @@
 package com.pipai.dragontiles.meta
 
-import kotlinx.serialization.decodeFromString
-import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
-import kotlinx.serialization.modules.SerializersModule
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import com.fasterxml.jackson.module.kotlin.readValue
 
 class SaveSerializer {
 
-    private val module = SerializersModule {
-    }
-
-    private val format = Json { serializersModule = module }
+    private val mapper = jacksonObjectMapper()
 
     fun serialize(save: Save): String {
-        return format.encodeToString(save)
+        return mapper.writeValueAsString(save)
     }
 
     fun deserialize(string: String): Save {
-        return format.decodeFromString(string)
+        return mapper.readValue(string)
     }
 }

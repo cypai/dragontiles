@@ -6,7 +6,7 @@ import com.pipai.dragontiles.dungeon.GlobalApi
 import com.pipai.dragontiles.utils.getLogger
 
 class HealingPotion : Potion() {
-    override val strId: String = "base:potions:HealingPotion"
+    override val id: String = "base:potions:HealingPotion"
     override val assetName: String = "healing_potion.png"
     override val type: PotionType = PotionType.UNIVERSAL
     override val targetType: PotionTargetType = PotionTargetType.NONE

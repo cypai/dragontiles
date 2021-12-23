@@ -8,7 +8,7 @@ import kotlinx.serialization.Serializable
 import kotlin.math.min
 
 class Singularity : StandardSpell() {
-    override val strId: String = "base:spells:Singularity"
+    override val id: String = "base:spells:Singularity"
     override val requirement: ComponentRequirement = Single(SuitGroup.ELEMENTAL)
     override val type: SpellType = SpellType.EFFECT
     override val targetType: TargetType = TargetType.NONE

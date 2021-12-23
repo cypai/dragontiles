@@ -226,7 +226,7 @@ class SpellCard(
             if (spell.aspects.any { it is FluxGainAspect }) {
                 fluxNumber.setText(spell.baseFluxGain())
             }
-            val spellLocalization = game.gameStrings.spellLocalization(spell.strId)
+            val spellLocalization = game.gameStrings.spellLocalization(spell.id)
             nameLabel.setText(spellLocalization.name)
             spellTypeLabel.setText("${spell.type} - ${spell.rarity}")
             var description = spellLocalization.description

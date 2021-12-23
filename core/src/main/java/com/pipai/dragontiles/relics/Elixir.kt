@@ -5,7 +5,7 @@ import com.pipai.dragontiles.spells.Rarity
 import kotlinx.serialization.Serializable
 
 class Elixir : Relic() {
-    override val strId = "base:relics:Elixir"
+    override val id = "base:relics:Elixir"
     override val assetName = "elixir.png"
     override val rarity = Rarity.RARE
 

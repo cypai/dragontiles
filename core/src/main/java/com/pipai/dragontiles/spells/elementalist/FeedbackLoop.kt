@@ -5,7 +5,7 @@ import com.pipai.dragontiles.spells.*
 import com.pipai.dragontiles.status.Strength
 
 class FeedbackLoop : StandardSpell() {
-    override val strId: String = "base:spells:FeedbackLoop"
+    override val id: String = "base:spells:FeedbackLoop"
     override val requirement: ComponentRequirement = Identical(3, SuitGroup.ARCANE)
     override val type: SpellType = SpellType.EFFECT
     override val targetType: TargetType = TargetType.NONE

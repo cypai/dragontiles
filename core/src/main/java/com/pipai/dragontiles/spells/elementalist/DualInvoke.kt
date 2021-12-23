@@ -4,7 +4,7 @@ import com.pipai.dragontiles.combat.CombatApi
 import com.pipai.dragontiles.spells.*
 
 class DualInvoke : StandardSpell() {
-    override val strId: String = "base:spells:DualInvoke"
+    override val id: String = "base:spells:DualInvoke"
     override val requirement: ComponentRequirement = Single()
     override val type: SpellType = SpellType.ATTACK
     override val targetType: TargetType = TargetType.SINGLE

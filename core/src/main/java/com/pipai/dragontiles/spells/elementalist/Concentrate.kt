@@ -6,7 +6,7 @@ import com.pipai.dragontiles.status.Strength
 import com.pipai.dragontiles.utils.findAsWhere
 
 class Concentrate : PowerSpell() {
-    override val strId: String = "base:spells:Concentrate"
+    override val id: String = "base:spells:Concentrate"
     override val requirement: ComponentRequirement = Identical(2, SuitGroup.ARCANE)
     override val rarity: Rarity = Rarity.UNCOMMON
     override val aspects: MutableList<SpellAspect> = mutableListOf(

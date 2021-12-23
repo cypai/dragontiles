@@ -8,7 +8,7 @@ import com.pipai.dragontiles.status.Strength
 import kotlinx.serialization.Serializable
 
 class Bamboo : Relic() {
-    override val strId = "base:relics:Bamboo"
+    override val id = "base:relics:Bamboo"
     override val assetName = "bamboo.png"
     override val rarity = Rarity.COMMON
 

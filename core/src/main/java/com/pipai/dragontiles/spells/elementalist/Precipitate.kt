@@ -4,7 +4,7 @@ import com.pipai.dragontiles.combat.CombatApi
 import com.pipai.dragontiles.spells.*
 
 class Precipitate : StandardSpell() {
-    override val strId: String = "base:spells:Precipitate"
+    override val id: String = "base:spells:Precipitate"
     override val requirement: ComponentRequirement = Single(SuitGroup.STAR)
     override val type: SpellType = SpellType.ATTACK
     override val targetType: TargetType = TargetType.SINGLE

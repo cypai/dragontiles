@@ -210,7 +210,7 @@ class CombatUiSystem(
         mAnchor.create(id)
         spellCard.data[allowHoverMove] = 1
         spellCard.addHoverEnterCallback {
-            sTooltip.addKeywordsInString(game.gameStrings.spellLocalization(spell.strId).description)
+            sTooltip.addKeywordsInString(game.gameStrings.spellLocalization(spell.id).description)
             if (spell.aspects.any { a -> a is PostExhaustAspect }) {
                 sTooltip.addKeyword("@Exhaust")
             }
@@ -241,7 +241,7 @@ class CombatUiSystem(
         cAnchor.setXy(spellCard.x, spellCard.y)
         spellCard.data[allowHoverMove] = 1
         spellCard.addHoverEnterCallback {
-            sTooltip.addKeywordsInString(game.gameStrings.spellLocalization(spell.strId).description)
+            sTooltip.addKeywordsInString(game.gameStrings.spellLocalization(spell.id).description)
             if (spell.aspects.any { a -> a is PostExhaustAspect }) {
                 sTooltip.addKeyword("@Exhaust")
             }
@@ -276,7 +276,7 @@ class CombatUiSystem(
             if (sorcery.requirement.reqAmount.text() == "?") {
                 sTooltip.addText("Requirements", sorcery.requirement.description, false)
             }
-            sTooltip.addKeywordsInString(game.gameStrings.spellLocalization(sorcery.strId).description)
+            sTooltip.addKeywordsInString(game.gameStrings.spellLocalization(sorcery.id).description)
             sTooltip.showTooltip()
         }
         spellCard.addHoverExitCallback {

@@ -5,7 +5,7 @@ import com.pipai.dragontiles.spells.Rarity
 import kotlinx.serialization.Serializable
 
 class Ginsengfruit : Relic() {
-    override val strId = "base:relics:Ginsengfruit"
+    override val id = "base:relics:Ginsengfruit"
     override val assetName = "ginsengfruit.png"
     override val rarity = Rarity.RARE
 

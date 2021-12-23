@@ -5,7 +5,7 @@ import com.pipai.dragontiles.spells.Rarity
 import kotlinx.serialization.Serializable
 
 class Coffee : Relic() {
-    override val strId = "base:relics:Coffee"
+    override val id = "base:relics:Coffee"
     override val assetName = "coffee.png"
     override val rarity = Rarity.COMMON
 

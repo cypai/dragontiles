@@ -52,7 +52,7 @@ class MapUiSystem(
         stage.addActor(table)
         val centerY = game.gameConfig.resolution.height.toFloat() / 2f
         val rightX = game.gameConfig.resolution.width.toFloat() - 64f
-        val map = runData.dungeon.getMap()
+        val map = runData.dungeonMap.getMap()
         var previousFloorIds: List<Int> = listOf()
         map.forEachIndexed { floorNum, floor ->
             val bottomY = centerY - floor.size * 64f / 2f
@@ -61,7 +61,7 @@ class MapUiSystem(
                 val id = world.create()
                 mXy.create(id).setXy(rightX - 64f * floorNum, bottomY + 64f * index)
                 mSprite.create(id).sprite =
-                    if (runData.dungeon.currentFloor == floorNum && runData.dungeon.currentFloorIndex == index) {
+                    if (runData.dungeonMap.currentFloor == floorNum && runData.dungeonMap.currentFloorIndex == index) {
                         Sprite(
                             game.assets.get(
                                 "assets/binassets/graphics/textures/lightning_circle.png",
@@ -137,28 +137,28 @@ class MapUiSystem(
 
     @Subscribe
     fun handleMapNodeClick(ev: MapNodeClickEvent) {
-        val map = runData.dungeon.getMap()
+        val map = runData.dungeonMap.getMap()
         if (canAdvanceMap
-            && runData.dungeon.currentFloor == ev.floorNum - 1
-            && map[runData.dungeon.currentFloor][runData.dungeon.currentFloorIndex].next.contains(ev.index)
+            && runData.dungeonMap.currentFloor == ev.floorNum - 1
+            && map[runData.dungeonMap.currentFloor][runData.dungeonMap.currentFloorIndex].next.contains(ev.index)
         ) {
-            runData.dungeon.currentFloor = ev.floorNum
-            runData.dungeon.currentFloorIndex = ev.index
+            runData.dungeonMap.currentFloor = ev.floorNum
+            runData.dungeonMap.currentFloorIndex = ev.index
             when (map[ev.floorNum][ev.index].type) {
                 MapNodeType.COMBAT -> {
-                    if (runData.dungeon.easyFights < 2) {
-                        runData.dungeon.easyFights++
+                    if (runData.dungeonMap.easyFights < 2) {
+                        runData.dungeonMap.easyFights++
                         game.screen = CombatScreen(
                             game,
                             runData,
-                            runData.dungeon.easyEncounter(runData),
+                            runData.dungeonMap.easyEncounter(runData),
                             CombatRewards(SpellRewardType.STANDARD, 3, false, null, runData.potionChance)
                         )
                     } else {
                         game.screen = CombatScreen(
                             game,
                             runData,
-                            runData.dungeon.standardEncounter(runData),
+                            runData.dungeonMap.standardEncounter(runData),
                             CombatRewards(SpellRewardType.STANDARD, 3, false, null, runData.potionChance)
                         )
                     }
@@ -168,12 +168,12 @@ class MapUiSystem(
                     game.screen = CombatScreen(
                         game,
                         runData,
-                        runData.dungeon.eliteEncounter(runData),
+                        runData.dungeonMap.eliteEncounter(runData),
                         CombatRewards(SpellRewardType.ELITE, 5, true, null, runData.potionChance)
                     )
                 }
                 MapNodeType.EVENT -> {
-                    game.screen = EventScreen(game, runData, runData.dungeon.dungeonEvent(runData))
+                    game.screen = EventScreen(game, runData, runData.dungeonMap.dungeonEvent(runData))
                 }
                 MapNodeType.TOWN -> {
                     game.screen = TownScreen(game, runData, true)
@@ -182,7 +182,7 @@ class MapUiSystem(
                     game.screen = CombatScreen(
                         game,
                         runData,
-                        runData.dungeon.standardEncounter(runData),
+                        runData.dungeonMap.standardEncounter(runData),
                         CombatRewards(SpellRewardType.STANDARD, 3, false, null, runData.potionChance)
                     )
                 }

@@ -7,7 +7,7 @@ import com.pipai.dragontiles.spells.Rarity
 import com.pipai.dragontiles.status.Dodge
 
 class RabbitsFoot : Relic() {
-    override val strId = "base:relics:RabbitsFoot"
+    override val id = "base:relics:RabbitsFoot"
     override val assetName = "rabbit_foot.png"
     override val rarity = Rarity.SPECIAL
 
