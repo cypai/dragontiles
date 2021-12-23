@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.Touchable
 import com.badlogic.gdx.scenes.scene2d.ui.Image
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Table
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.pipai.dragontiles.DragonTilesGame
 import com.pipai.dragontiles.artemis.components.ActorComponent
@@ -44,6 +45,7 @@ class RewardsSystem(
 
     private val sEvent by system<EventSystem>()
     private val sTooltip by system<TooltipSystem>()
+    private val sMap by system<MapUiSystem>()
 
     private lateinit var api: GlobalApi
 
@@ -161,6 +163,16 @@ class RewardsSystem(
                 .expand()
             rewardsTable.row()
         }
+        val openMapBtn = TextButton("  Open Map  ", skin)
+        openMapBtn.addListener(object : ClickListener() {
+            override fun clicked(event: InputEvent?, x: Float, y: Float) {
+                sMap.showMap()
+                handleMapActivation()
+            }
+        })
+        rewardsTable.add(openMapBtn)
+            .pad(32f)
+        rewardsTable.row()
     }
 
     private fun getGold() {
@@ -232,9 +244,24 @@ class RewardsSystem(
         class EmptyReward : Reward()
     }
 
+    private fun handleMapActivation() {
+        if (showing) {
+            showing = false
+            rootTable.remove()
+        } else {
+            showing = true
+            stage.addActor(rootTable)
+        }
+    }
+
     override fun keyDown(keycode: Int): Boolean {
         when (keycode) {
             Input.Keys.ESCAPE -> {
+                if (active && !showing && !isOnSpellDraft) {
+                    handleMapActivation()
+                    sMap.hideMap()
+                    return true
+                }
                 if (isOnSpellDraft) {
                     buildAndShowRewardsTable()
                     return true
@@ -242,13 +269,7 @@ class RewardsSystem(
             }
             Input.Keys.M -> {
                 if (active) {
-                    if (showing) {
-                        showing = false
-                        rootTable.remove()
-                    } else {
-                        showing = true
-                        stage.addActor(rootTable)
-                    }
+                    handleMapActivation()
                 }
             }
         }
