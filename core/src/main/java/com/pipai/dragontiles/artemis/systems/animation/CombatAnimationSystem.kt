@@ -49,12 +49,12 @@ class CombatAnimationSystem(private val game: DragonTilesGame) : BaseSystem(), A
     }
 
     @Subscribe
-    fun handleTurnStartEvent(ev: TurnStartEvent) {
+    fun handleTurnStartEvent(@Suppress("UNUSED_PARAMETER") ev: TurnStartEvent) {
         turnRunning = true
     }
 
     @Subscribe
-    fun handleTurnEndEvent(ev: TurnEndEvent) {
+    fun handleTurnEndEvent(@Suppress("UNUSED_PARAMETER") ev: TurnEndEvent) {
         turnRunning = false
     }
 
@@ -76,7 +76,7 @@ class CombatAnimationSystem(private val game: DragonTilesGame) : BaseSystem(), A
     }
 
     @Subscribe
-    fun handleHandAdjustedEvent(ev: HandAdjustedEvent) {
+    fun handleHandAdjustedEvent(@Suppress("UNUSED_PARAMETER") ev: HandAdjustedEvent) {
         adjustHand()
     }
 
@@ -109,7 +109,7 @@ class CombatAnimationSystem(private val game: DragonTilesGame) : BaseSystem(), A
     }
 
     @Subscribe
-    fun handleOpenDiscard(ev: OpenDiscardEvent) {
+    fun handleOpenDiscard(@Suppress("UNUSED_PARAMETER") ev: OpenDiscardEvent) {
         queueAnimation(AdjustOpenPoolAnimation(sCombat.combat.openPool, sUi.layout))
     }
 
@@ -213,22 +213,22 @@ class CombatAnimationSystem(private val game: DragonTilesGame) : BaseSystem(), A
     }
 
     @Subscribe
-    fun handleGameOver(ev: GameOverEvent) {
+    fun handleGameOver(@Suppress("UNUSED_PARAMETER") ev: GameOverEvent) {
         queueAnimation(GameOverAnimation())
     }
 
     @Subscribe
-    fun handleBattleWin(ev: BattleWinEvent) {
+    fun handleBattleWin(@Suppress("UNUSED_PARAMETER") ev: BattleWinEvent) {
         queueAnimation(BattleWinAnimation())
     }
 
     @Subscribe
-    fun handleRuneActivation(ev: RuneActivatedEvent) {
+    fun handleRuneActivation(@Suppress("UNUSED_PARAMETER") ev: RuneActivatedEvent) {
         adjustHand()
     }
 
     @Subscribe
-    fun handleRuneDeactivation(ev: RuneDeactivatedEvent) {
+    fun handleRuneDeactivation(@Suppress("UNUSED_PARAMETER") ev: RuneDeactivatedEvent) {
         adjustHand()
     }
 

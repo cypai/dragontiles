@@ -17,7 +17,7 @@ class GameStrings {
         map.forEach { (id, langs) ->
             val langMap: MutableMap<Language, Map<String, String>> = mutableMapOf()
             langs.forEach { (langStr, data) ->
-                val lang = Language.valueOf(langStr.toUpperCase())
+                val lang = Language.valueOf(langStr.uppercase())
                 langMap[lang] = data
                 if (keywordIdRegex.matches(id)) {
                     if (lang !in keywordIds) {
@@ -40,7 +40,7 @@ class GameStrings {
             eventMap.forEach { (eventKey, langData) ->
                 val parsedLangMap: MutableMap<Language, Map<String, String>> = mutableMapOf()
                 langData.forEach { (langStr, data) ->
-                    val lang = Language.valueOf(langStr.toUpperCase())
+                    val lang = Language.valueOf(langStr.uppercase())
                     parsedLangMap[lang] = data
                 }
                 parsedEventMap[eventKey] = parsedLangMap
