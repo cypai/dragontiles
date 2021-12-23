@@ -1,12 +1,13 @@
-package com.pipai.dragontiles.sorceries
+package com.pipai.dragontiles.spells.elementalist
 
 import com.pipai.dragontiles.combat.CombatApi
 import com.pipai.dragontiles.data.Element
 import com.pipai.dragontiles.data.TileInstance
 import com.pipai.dragontiles.spells.*
 
-class CommonSorcery : Sorcery() {
+class PingHu : Sorcery() {
     override val strId = "base:sorceries:CommonSorcery"
+    override val rarity = Rarity.UNCOMMON
     override val requirement = object : CustomRequirement() {
         override val type: SetType = SetType.SEQUENTIAL
         override var suitGroup: SuitGroup = SuitGroup.ELEMENTAL
@@ -20,7 +21,6 @@ class CommonSorcery : Sorcery() {
             return fullCastHand.melds.all { it.type == MeldType.IDENTICAL }
         }
     }
-    override val rarity = Rarity.COMMON
     override val aspects: MutableList<SpellAspect> = mutableListOf(
         AttackDamageAspect(10)
     )

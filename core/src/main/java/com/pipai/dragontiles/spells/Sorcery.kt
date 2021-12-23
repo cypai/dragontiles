@@ -1,8 +1,7 @@
-package com.pipai.dragontiles.sorceries
+package com.pipai.dragontiles.spells
 
 import com.pipai.dragontiles.combat.CombatApi
 import com.pipai.dragontiles.data.TileInstance
-import com.pipai.dragontiles.spells.*
 import com.pipai.dragontiles.utils.with
 import com.pipai.dragontiles.utils.withoutAll
 
@@ -74,7 +73,8 @@ private fun findFullCastEyeIteration(hand: List<TileInstance>): List<FullCastHan
             }
         )
     }
-    fullCastHands.addAll(findFullCastMeldIteration(hand)
+    fullCastHands.addAll(
+        findFullCastMeldIteration(hand)
         .map { f ->
             FullCastHand(
                 f.sortedWith(

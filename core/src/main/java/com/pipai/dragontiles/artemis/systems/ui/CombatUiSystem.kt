@@ -39,9 +39,9 @@ import com.pipai.dragontiles.gui.SpellCard
 import com.pipai.dragontiles.gui.SpellComponentList
 import com.pipai.dragontiles.potions.Potion
 import com.pipai.dragontiles.potions.PotionTargetType
-import com.pipai.dragontiles.sorceries.FullCastHand
-import com.pipai.dragontiles.sorceries.Sorcery
-import com.pipai.dragontiles.sorceries.findFullCastHand
+import com.pipai.dragontiles.spells.FullCastHand
+import com.pipai.dragontiles.spells.Sorcery
+import com.pipai.dragontiles.spells.findFullCastHand
 import com.pipai.dragontiles.spells.*
 import com.pipai.dragontiles.utils.*
 import kotlinx.coroutines.GlobalScope

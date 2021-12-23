@@ -13,9 +13,9 @@ base:sorceries:Chow:
     name: Chow
     description: Deal !d @AOE @Elemented damage.
 
-base:sorceries:CommonSorcery:
+base:sorceries:PingHu:
   en:
-    name: Common Sorcery
+    name: Ping Hu
     description: Deal !d @AOE damage.
 
 base:sorceries:ForceOverload:

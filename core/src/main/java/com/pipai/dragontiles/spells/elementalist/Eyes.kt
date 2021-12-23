@@ -1,14 +1,14 @@
-package com.pipai.dragontiles.sorceries
+package com.pipai.dragontiles.spells.elementalist
 
 import com.pipai.dragontiles.combat.CombatApi
 import com.pipai.dragontiles.spells.*
 
-class Chow : Sorcery() {
-    override val strId = "base:sorceries:Chow"
-    override val requirement = Sequential(3)
+class Eyes : Sorcery() {
+    override val strId = "base:sorceries:Eyes"
+    override val requirement = Identical(2)
     override val rarity = Rarity.COMMON
     override val aspects: MutableList<SpellAspect> = mutableListOf(
-        AttackDamageAspect(3)
+        AttackDamageAspect(2)
     )
 
     override suspend fun onCast(hand: FullCastHand, api: CombatApi) {

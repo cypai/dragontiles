@@ -4,7 +4,7 @@ import com.pipai.dragontiles.dungeon.RunData
 import com.pipai.dragontiles.potions.ExplosivePotion
 import com.pipai.dragontiles.potions.HealingPotion
 import com.pipai.dragontiles.relics.Relic
-import com.pipai.dragontiles.sorceries.Sorcery
+import com.pipai.dragontiles.spells.Sorcery
 import com.pipai.dragontiles.spells.Rarity
 import com.pipai.dragontiles.spells.Spell
 import com.pipai.dragontiles.utils.choose

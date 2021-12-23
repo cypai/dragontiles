@@ -6,7 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.*
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.pipai.dragontiles.data.TileInstance
 import com.pipai.dragontiles.data.TileSkin
-import com.pipai.dragontiles.sorceries.FullCastHand
+import com.pipai.dragontiles.spells.FullCastHand
 
 class SpellComponentList(
     private val skin: Skin,

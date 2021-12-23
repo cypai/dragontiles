@@ -2,7 +2,7 @@ package com.pipai.dragontiles.hero
 
 import com.pipai.dragontiles.potions.Potion
 import com.pipai.dragontiles.relics.Relic
-import com.pipai.dragontiles.sorceries.Sorcery
+import com.pipai.dragontiles.spells.Sorcery
 import com.pipai.dragontiles.spells.Spell
 
 data class Hero(val heroClass: HeroClass,

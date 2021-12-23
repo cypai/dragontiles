@@ -1,7 +1,7 @@
 package com.pipai.dragontiles.combat
 
 import com.pipai.dragontiles.data.*
-import com.pipai.dragontiles.sorceries.findFullCastHand
+import com.pipai.dragontiles.spells.findFullCastHand
 import org.junit.Assert
 import org.junit.Test
 

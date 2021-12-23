@@ -3,9 +3,9 @@ package com.pipai.dragontiles.data
 import com.pipai.dragontiles.potions.ExplosivePotion
 import com.pipai.dragontiles.potions.HealingPotion
 import com.pipai.dragontiles.relics.*
-import com.pipai.dragontiles.sorceries.Chow
-import com.pipai.dragontiles.sorceries.Pong
-import com.pipai.dragontiles.spells.common.*
+import com.pipai.dragontiles.spells.colorless.Chow
+import com.pipai.dragontiles.spells.colorless.Pong
+import com.pipai.dragontiles.spells.colorless.*
 import com.pipai.dragontiles.spells.elementalist.Singularity
 
 class GameData {

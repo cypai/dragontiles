@@ -6,7 +6,7 @@ import com.pipai.dragontiles.data.TileInstance
 import com.pipai.dragontiles.data.TileStatus
 import com.pipai.dragontiles.enemies.LargeTurtle
 import com.pipai.dragontiles.spells.CastParams
-import com.pipai.dragontiles.spells.common.Invoke
+import com.pipai.dragontiles.spells.colorless.Invoke
 import com.pipai.dragontiles.spells.elementalist.ElementalRune
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert

@@ -1,7 +1,7 @@
 package com.pipai.dragontiles.combat
 
 import com.pipai.dragontiles.enemies.LargeTurtle
-import com.pipai.dragontiles.spells.common.Invoke
+import com.pipai.dragontiles.spells.colorless.Invoke
 import com.pipai.dragontiles.spells.elementalist.RampStrike
 import com.pipai.dragontiles.status.Overloaded
 import kotlinx.coroutines.runBlocking

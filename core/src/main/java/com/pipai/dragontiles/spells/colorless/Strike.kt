@@ -1,16 +1,17 @@
-package com.pipai.dragontiles.spells.common
+package com.pipai.dragontiles.spells.colorless
 
 import com.pipai.dragontiles.combat.CombatApi
 import com.pipai.dragontiles.spells.*
 
-class Invoke : StandardSpell() {
-    override val strId: String = "base:spells:Invoke"
-    override val requirement: ComponentRequirement = Single()
+class Strike : StandardSpell() {
+    override val strId: String = "base:spells:Strike"
+    override val requirement: ComponentRequirement = Sequential(3, SuitGroup.ELEMENTAL)
     override val type: SpellType = SpellType.ATTACK
     override val targetType: TargetType = TargetType.SINGLE
     override val rarity: Rarity = Rarity.COMMON
     override val aspects: MutableList<SpellAspect> = mutableListOf(
-        AttackDamageAspect(2), FluxGainAspect(1)
+        AttackDamageAspect(7),
+        FluxGainAspect(2)
     )
 
     override suspend fun onCast(params: CastParams, api: CombatApi) {

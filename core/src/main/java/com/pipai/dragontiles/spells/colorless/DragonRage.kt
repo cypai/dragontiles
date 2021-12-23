@@ -1,4 +1,4 @@
-package com.pipai.dragontiles.spells.common
+package com.pipai.dragontiles.spells.colorless
 
 import com.pipai.dragontiles.combat.CombatApi
 import com.pipai.dragontiles.combat.CombatSubscribe

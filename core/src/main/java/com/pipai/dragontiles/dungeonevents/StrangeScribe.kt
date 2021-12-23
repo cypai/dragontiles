@@ -1,6 +1,6 @@
 package com.pipai.dragontiles.dungeonevents
 
-import com.pipai.dragontiles.spells.common.Mulligan
+import com.pipai.dragontiles.spells.colorless.Mulligan
 
 class StrangeScribe : DungeonEvent() {
 

@@ -2,14 +2,14 @@ package com.pipai.dragontiles.hero
 
 import com.pipai.dragontiles.relics.Relic
 import com.pipai.dragontiles.relics.Transmuter
-import com.pipai.dragontiles.sorceries.Chow
-import com.pipai.dragontiles.sorceries.CommonSorcery
-import com.pipai.dragontiles.sorceries.Eyes
-import com.pipai.dragontiles.sorceries.Pong
+import com.pipai.dragontiles.spells.colorless.Chow
+import com.pipai.dragontiles.spells.elementalist.PingHu
+import com.pipai.dragontiles.spells.elementalist.Eyes
+import com.pipai.dragontiles.spells.colorless.Pong
 import com.pipai.dragontiles.spells.Spell
-import com.pipai.dragontiles.spells.common.Blast
-import com.pipai.dragontiles.spells.common.Invoke
-import com.pipai.dragontiles.spells.common.Strike
+import com.pipai.dragontiles.spells.colorless.Blast
+import com.pipai.dragontiles.spells.colorless.Invoke
+import com.pipai.dragontiles.spells.colorless.Strike
 import com.pipai.dragontiles.spells.elementalist.*
 
 class Elementalist : HeroClass {
@@ -44,7 +44,7 @@ class Elementalist : HeroClass {
         Fireball(),
         IceShard(),
         ChainLightning(),
-        CommonSorcery(),
+        PingHu(),
         Chow(),
         Pong(),
     )

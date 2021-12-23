@@ -1,7 +1,7 @@
 package com.pipai.dragontiles.dungeonevents
 
-import com.pipai.dragontiles.spells.common.DragonRage
-import com.pipai.dragontiles.spells.common.DragonScale
+import com.pipai.dragontiles.spells.colorless.DragonRage
+import com.pipai.dragontiles.spells.colorless.DragonScale
 
 class DragonInquiryEvent : DungeonEvent() {
 
