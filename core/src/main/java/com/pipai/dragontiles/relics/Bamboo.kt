@@ -5,6 +5,7 @@ import com.pipai.dragontiles.combat.CombatSubscribe
 import com.pipai.dragontiles.combat.TurnStartEvent
 import com.pipai.dragontiles.spells.Rarity
 import com.pipai.dragontiles.status.Strength
+import kotlinx.serialization.Serializable
 
 class Bamboo : Relic() {
     override val strId = "base:relics:Bamboo"

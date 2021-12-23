@@ -8,6 +8,7 @@ import com.pipai.dragontiles.data.TileInstance
 import com.pipai.dragontiles.spells.upgrades.SpellUpgrade
 import com.pipai.dragontiles.utils.*
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
 import org.apache.commons.lang3.builder.ToStringBuilder
 import kotlin.reflect.full.createInstance
 
@@ -96,6 +97,7 @@ enum class Rarity {
     SPECIAL, COMMON, UNCOMMON, RARE
 }
 
+@Serializable
 abstract class StandardSpell : Spell() {
     private val logger = getLogger()
 

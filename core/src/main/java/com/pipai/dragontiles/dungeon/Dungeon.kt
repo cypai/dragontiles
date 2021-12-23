@@ -5,7 +5,9 @@ import com.pipai.dragontiles.dungeonevents.*
 import com.pipai.dragontiles.enemies.*
 import com.pipai.dragontiles.utils.choose
 import com.pipai.dragontiles.utils.removeRandom
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
 import java.util.*
 
 @Serializable
@@ -159,7 +161,10 @@ enum class MapNodeType {
     START, COMBAT, ELITE, BOSS, EVENT, TOWN;
 }
 
+@Serializable
+@SerialName("plains")
 class PlainsDungeon : Dungeon() {
+    @Transient
     override val easyEncounters: MutableList<Encounter> = mutableListOf(
         Encounter(listOf(Pair(LargeTurtle(), Vector2(750f, 420f)))),
         Encounter(
@@ -183,21 +188,49 @@ class PlainsDungeon : Dungeon() {
 //                    Pair(Slime(), Vector2(1010f, 430f))
 //            )),
     )
+
+    @Transient
     override val standardEncounters: MutableList<Encounter> = mutableListOf(
         Encounter(
             listOf(
                 Pair(LargeTurtle(), Vector2(650f, 420f)),
                 Pair(Slime(), Vector2(1000f, 420f))
+            ),
+        ),
+        Encounter(
+            listOf(
+                Pair(KillerRabbit(), Vector2(740f, 430f)),
+                Pair(KillerRabbit(), Vector2(1010f, 430f))
             )
-        )
+        ),
+        Encounter(listOf(Pair(Bull(), Vector2(750f, 420f)))),
+        Encounter(
+            listOf(
+                Pair(Rat(), Vector2(740f, 400f)),
+                Pair(Rat(), Vector2(1010f, 500f)),
+                Pair(Rat(), Vector2(1010f, 280f)),
+            )
+        ),
+        Encounter(
+            listOf(
+                Pair(RiverSpirit(), Vector2(740f, 430f)),
+                Pair(Slime(), Vector2(1010f, 430f))
+            )
+        ),
     )
+
+    @Transient
     override val eliteEncounters: MutableList<Encounter> = mutableListOf(
-//        Encounter(listOf(
-//            Pair(Yumi(), Vector2(750f, 420f))
-//        )),
-//        Encounter(listOf(
-//            Pair(Minotaur(), Vector2(750f, 420f))
-//        )),
+        Encounter(
+            listOf(
+                Pair(Yumi(), Vector2(750f, 420f))
+            )
+        ),
+        Encounter(
+            listOf(
+                Pair(Minotaur(), Vector2(750f, 420f))
+            )
+        ),
         Encounter(
             listOf(
                 Pair(FlameDragonHorse(), Vector2(740f, 400f)),
@@ -206,8 +239,11 @@ class PlainsDungeon : Dungeon() {
             )
         ),
     )
+
+    @Transient
     override val bossEncounters: MutableList<Encounter> = mutableListOf()
 
+    @Transient
     override val dungeonEvents: MutableList<DungeonEvent> = mutableListOf(
         ThornedBush(),
         FreeRelic(),

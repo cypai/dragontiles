@@ -4,6 +4,7 @@ import com.pipai.dragontiles.combat.CombatApi
 import com.pipai.dragontiles.data.Tile
 import com.pipai.dragontiles.data.TileStatus
 import com.pipai.dragontiles.spells.*
+import kotlinx.serialization.Serializable
 import kotlin.math.min
 
 class Singularity : StandardSpell() {

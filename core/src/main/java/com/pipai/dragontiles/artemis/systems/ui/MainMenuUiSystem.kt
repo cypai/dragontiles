@@ -63,6 +63,8 @@ class MainMenuUiSystem(
                     Random(),
                 )
                 runData.dungeon.generateMap(runData.rng)
+                game.save.currentRun = runData
+                game.writeSave()
                 game.screen = EventScreen(game, runData, PlainsStartEvent())
             }
         })

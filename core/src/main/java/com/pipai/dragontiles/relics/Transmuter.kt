@@ -3,6 +3,8 @@ package com.pipai.dragontiles.relics
 import com.pipai.dragontiles.combat.*
 import com.pipai.dragontiles.data.*
 import com.pipai.dragontiles.spells.Rarity
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
 
 class Transmuter : Relic() {
     override val strId = "base:relics:Transmuter"
@@ -14,8 +16,8 @@ class Transmuter : Relic() {
     @CombatSubscribe
     fun handleDraw(ev: DrawEvent, api: CombatApi) {
         firstDraw = ev.tiles
-                .map { it.first }
-                .firstOrNull { it.tile is Tile.ElementalTile }
+            .map { it.first }
+            .firstOrNull { it.tile is Tile.ElementalTile }
     }
 
     @CombatSubscribe
