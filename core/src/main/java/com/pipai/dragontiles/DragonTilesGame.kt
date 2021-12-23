@@ -4,6 +4,7 @@ import com.badlogic.gdx.Game
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Screen
 import com.badlogic.gdx.assets.AssetManager
+import com.badlogic.gdx.files.FileHandle
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.Pixmap
 import com.badlogic.gdx.graphics.Pixmap.Format
@@ -24,10 +25,13 @@ import com.badlogic.gdx.scenes.scene2d.utils.OffsetDrawable
 import com.kotcrab.vis.ui.VisUI
 import com.pipai.dragontiles.artemis.screens.MainMenuScreen
 import com.pipai.dragontiles.data.GameStrings
-import com.pipai.dragontiles.data.GameData
 import com.pipai.dragontiles.data.TileSkin
-import com.pipai.dragontiles.meta.SaveFile
+import com.pipai.dragontiles.meta.GameOptions
+import com.pipai.dragontiles.meta.Save
 import com.pipai.dragontiles.utils.getLogger
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 import org.apache.commons.lang3.builder.ToStringBuilder
 import org.apache.commons.lang3.builder.ToStringStyle
 import java.io.File
@@ -66,12 +70,26 @@ class DragonTilesGame(val gameConfig: GameConfig) : Game() {
     lateinit var gameStrings: GameStrings
         private set
 
-    lateinit var saveFile: SaveFile
+    private val saveFileHandle = FileHandle(File("save/save.json"))
+
+    lateinit var save: Save
         private set
+
+    fun writeSave() {
+        val str = Json.encodeToString(save)
+        saveFileHandle.writeString(str, false)
+    }
 
     override fun create() {
         logger.info("Starting Dragon Tiles with the following config settings:")
         logger.info(gameConfig.resolution.toDebugString())
+
+        if (saveFileHandle.exists()) {
+            save = Json.decodeFromString(saveFileHandle.readString())
+        } else {
+            save = Save(null, 0, GameOptions(mutableListOf()), true)
+            writeSave()
+        }
 
         spriteBatch = SpriteBatch(1000)
         shapeRenderer = ShapeRenderer()
@@ -266,10 +284,6 @@ class DragonTilesGame(val gameConfig: GameConfig) : Game() {
 
         val windowStyle = Window.WindowStyle(smallFont, Color.BLACK, frameDrawable)
         skin.add("default", windowStyle)
-    }
-
-    override fun render() {
-        super.render()
     }
 
     override fun dispose() {

@@ -28,6 +28,7 @@ class MainMenuUiSystem(
     private val rootTable = Table()
 
     private val newGameLabel = Label("New Game", skin)
+    private val tutorialLabel = Label("Tutorial", skin)
     private val quitLabel = Label("Quit", skin)
 
     override fun initialize() {
@@ -38,11 +39,17 @@ class MainMenuUiSystem(
         rootTable.add(newGameLabel)
             .padTop(64f)
         rootTable.row()
+        rootTable.add(tutorialLabel)
+        rootTable.row()
         rootTable.add(quitLabel)
         rootTable.row()
 
         newGameLabel.addListener(object : ClickListener() {
             override fun clicked(event: InputEvent?, x: Float, y: Float) {
+                if (game.save.requireTutorial) {
+                    game.save.requireTutorial = false
+                    // TODO: start tutorial
+                }
                 val hero = Elementalist().generateHero("Elementalist")
 
                 val runData = RunData(
@@ -57,6 +64,11 @@ class MainMenuUiSystem(
                 )
                 runData.dungeon.generateMap(runData.rng)
                 game.screen = EventScreen(game, runData, PlainsStartEvent())
+            }
+        })
+        tutorialLabel.addListener(object : ClickListener() {
+            override fun clicked(event: InputEvent?, x: Float, y: Float) {
+                // TODO: start tutorial
             }
         })
         quitLabel.addListener(object : ClickListener() {
