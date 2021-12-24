@@ -4,15 +4,28 @@ import com.artemis.World
 import com.pipai.dragontiles.DragonTilesGame
 import com.pipai.dragontiles.artemis.components.EndStrategy
 import com.pipai.dragontiles.artemis.components.TimerComponent
+import com.pipai.dragontiles.utils.getLogger
 
 abstract class Animation {
+    private val logger = getLogger()
     protected lateinit var world: World
     protected lateinit var game: DragonTilesGame
     private lateinit var observer: AnimationObserver
 
     fun init(world: World, game: DragonTilesGame) {
         this.world = world
-        world.inject(this)
+        var injected = false
+        var count = 0
+        while (!injected && count < 5) {
+            try {
+                world.inject(this)
+                injected = true
+            } catch (e: Exception) {
+                logger.error("Failed to inject, try again", e)
+                Thread.sleep(1)
+                count++
+            }
+        }
         this.game = game
     }
 
