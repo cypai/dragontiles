@@ -146,17 +146,17 @@ base:spells:InflictReactant:
 base:spells:Fireball:
   en:
     name: Fireball
-    description: Deal !d Fire damage. Inflict 1 @Pyro. @Burn a tile in your hand.
+    description: Deal !d Fire damage. Inflict 1 @Pyro. @Burn a random tile in your hand.
 
 base:spells:IceShard:
   en:
     name: Ice Shard
-    description: Deal !d Ice damage. Inflict 1 @Cryo. @Freeze a tile in your hand.
+    description: Deal !d Ice damage. Inflict 1 @Cryo. @Freeze a random tile in your hand.
 
 base:spells:ChainLightning:
   en:
     name: Chain Lightning
-    description: Deal !d Lightning damage and inflict 1 @Electro @AOE. @Shock a tile in your hand.
+    description: Deal !d Lightning damage and inflict 1 @Electro @AOE. @Shock a random tile in your hand.
 
 base:spells:Chillsink:
   en:
@@ -212,3 +212,8 @@ base:spells:DragonScale:
   en:
     name: Dragon Scale
     description: "@Power: Drawn Elemental Tiles transform to the @Component Element. @Exhaust."
+
+base:spells:Burn:
+  en:
+    name: Burn
+    description: Deal !d @Piercing Fire damage. @Burn a random tile in your hand.
