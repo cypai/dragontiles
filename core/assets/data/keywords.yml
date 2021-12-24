@@ -31,7 +31,6 @@ base:keywords:AOE:
 base:keywords:Components:
   en:
     key: "@Components"
-    alias: "@Component"
     name: Components
     description: The tiles used to activate the spell.
 

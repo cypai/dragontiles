@@ -18,6 +18,7 @@ class Spark : StandardSpell() {
         RepeatableAspect(),
         FluxGainAspect(1),
     )
+    override val additionalKeywords: List<String> = listOf("@Components")
 
     override suspend fun onCast(params: CastParams, api: CombatApi) {
         val target = api.getEnemy(params.targets.first())
