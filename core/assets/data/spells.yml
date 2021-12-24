@@ -111,7 +111,7 @@ base:spells:Singularity:
 base:spells:Break:
   en:
     name: Break
-    description: Inflict 3 @Elemented @Break.
+    description: Inflict 3 @Break.
 
 base:spells:Concentrate:
   en:
