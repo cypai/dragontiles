@@ -22,6 +22,7 @@ class RabbitSwarm : DungeonEvent() {
 
         override fun onSelect(api: EventApi) {
             val encounter = Encounter(
+                "base:dungeons:Plains:RabbitSwarm",
                 listOf(
                     Pair(KillerRabbit(), Vector2(740f, 400f)),
                     Pair(KillerRabbit(), Vector2(1010f, 500f)),

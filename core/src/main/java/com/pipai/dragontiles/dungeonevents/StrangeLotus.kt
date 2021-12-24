@@ -20,7 +20,8 @@ class StrangeLotus : DungeonEvent() {
 
         override fun onSelect(api: EventApi) {
             api.gainHpImmediate(-hpLoss(api))
-            api.gainRelicImmediate(api.runData.relicData.availableRelics.choose(api.runData.rng))
+            val relic = api.gameData.getRelic(api.runData.availableRelics.choose(api.runData.seed.relicRng()))
+            api.gainRelicImmediate(relic)
             api.changeToEventEnd("sitMain")
         }
     }

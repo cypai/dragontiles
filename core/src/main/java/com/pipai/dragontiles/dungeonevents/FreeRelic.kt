@@ -12,7 +12,8 @@ class FreeRelic : DungeonEvent() {
         override val id = "take"
 
         override fun onSelect(api: EventApi) {
-            api.gainRelicImmediate(api.runData.relicData.availableRelics.choose(api.runData.rng))
+            val relic = api.gameData.getRelic(api.runData.availableRelics.choose(api.runData.seed.relicRng()))
+            api.gainRelicImmediate(relic)
             api.changeToEventEnd("takeMain")
         }
     }

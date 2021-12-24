@@ -18,7 +18,7 @@ class Slime : Enemy() {
     private var attacks: Int = 0
 
     override suspend fun init(api: CombatApi) {
-        attacks = api.runData.rng.nextInt(2) - 1
+        attacks = api.runData.seed.miscRng().nextInt(2) - 1
     }
 
     override fun getIntent(): Intent {

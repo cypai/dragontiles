@@ -251,9 +251,9 @@ class DeckDisplayUiSystem(
             { true },
             { _, section, index -> onSpellTransformClick(section, index) },
             false,
-            { clickedSpell, section, index -> onSpellTransformClick(section, index) },
+            { _, section, index -> onSpellTransformClick(section, index) },
             false,
-            { clickedSpell, section, index -> onSpellTransformClick(section, index) },
+            { _, section, index -> onSpellTransformClick(section, index) },
         )
     }
 

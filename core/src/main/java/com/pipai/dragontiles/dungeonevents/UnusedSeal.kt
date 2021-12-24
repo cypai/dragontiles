@@ -15,7 +15,13 @@ class UnusedSeal : DungeonEvent() {
         override val id = "use"
 
         override fun onSelect(api: EventApi) {
-            api.queryUpgradeSpell(listOf(PowerUpgrade(), RepeatUpgrade(), EfficiencyUpgrade()).choose(api.runData.rng))
+            api.queryUpgradeSpell(
+                listOf(
+                    PowerUpgrade(),
+                    RepeatUpgrade(),
+                    EfficiencyUpgrade()
+                ).choose(api.runData.seed.miscRng())
+            )
             api.changeToEventEnd("useMain")
         }
     }
