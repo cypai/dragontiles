@@ -41,4 +41,4 @@ fun runDataFixture(spells: MutableList<Spell>, relics: MutableList<Relic>): RunD
     )
 }
 
-val COMBAT_REWARDS_FIXTURE = CombatRewards(SpellRewardType.STANDARD, 0, false, null, GameData.BASE_POTION_CHANCE)
+val COMBAT_REWARDS_FIXTURE = CombatRewardConfig(SpellRewardType.STANDARD, 0, false, null, GameData.BASE_POTION_CHANCE)

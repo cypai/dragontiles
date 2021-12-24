@@ -2,7 +2,7 @@ package com.pipai.dragontiles.combat
 
 import com.pipai.dragontiles.relics.Relic
 
-data class CombatRewards(
+data class CombatRewardConfig(
     val spellRewardType: SpellRewardType,
     val gold: Int,
     val randomRelic: Boolean,

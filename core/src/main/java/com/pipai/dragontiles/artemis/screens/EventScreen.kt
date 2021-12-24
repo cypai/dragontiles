@@ -29,6 +29,7 @@ class EventScreen(game: DragonTilesGame, runData: RunData, event: DungeonEvent) 
     val world: World
 
     init {
+        game.writeSave()
         val config = WorldConfigurationBuilder()
             .with(
                 TagManager(),

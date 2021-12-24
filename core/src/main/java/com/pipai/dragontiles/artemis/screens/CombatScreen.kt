@@ -15,16 +15,23 @@ import com.pipai.dragontiles.artemis.systems.animation.CombatAnimationSystem
 import com.pipai.dragontiles.artemis.systems.combat.*
 import com.pipai.dragontiles.artemis.systems.input.ExitInputProcessor
 import com.pipai.dragontiles.artemis.systems.input.InputProcessingSystem
-import com.pipai.dragontiles.artemis.systems.rendering.RenderingSystem
 import com.pipai.dragontiles.artemis.systems.rendering.FullScreenColorSystem
+import com.pipai.dragontiles.artemis.systems.rendering.RenderingSystem
 import com.pipai.dragontiles.artemis.systems.ui.*
 import com.pipai.dragontiles.combat.Combat
-import com.pipai.dragontiles.combat.CombatRewards
-import com.pipai.dragontiles.dungeon.Encounter
+import com.pipai.dragontiles.combat.CombatRewardConfig
+import com.pipai.dragontiles.data.RewardGenerator
 import com.pipai.dragontiles.data.RunData
+import com.pipai.dragontiles.dungeon.Encounter
 import net.mostlyoriginal.api.event.common.EventSystem
 
-class CombatScreen(game: DragonTilesGame, runData: RunData, encounter: Encounter, rewards: CombatRewards) : Screen {
+class CombatScreen(
+    game: DragonTilesGame,
+    runData: RunData,
+    encounter: Encounter,
+    rewardConfig: CombatRewardConfig?,
+    writeSave: Boolean,
+) : Screen {
 
     private val backStage = Stage(ScreenViewport(), game.spriteBatch)
     private val frontStage = Stage(ScreenViewport(), game.spriteBatch)
@@ -32,8 +39,15 @@ class CombatScreen(game: DragonTilesGame, runData: RunData, encounter: Encounter
     val world: World
 
     init {
-        val combat = Combat(encounter.enemies.map { it.first }, rewards)
+        val combat = Combat(encounter.enemies.map { it.first })
         combat.init(game.data, runData)
+        if (rewardConfig != null) {
+            RewardGenerator().generate(game.data, runData, rewardConfig)
+        }
+        if (writeSave) {
+            // False when loading a save or from a combat event
+            game.writeSave()
+        }
         val config = WorldConfigurationBuilder()
             .with(
                 // Managers
@@ -57,7 +71,7 @@ class CombatScreen(game: DragonTilesGame, runData: RunData, encounter: Encounter
                 MouseXySystem(game.gameConfig),
                 TooltipSystem(game, frontStage),
                 FullScreenColorSystem(game),
-                RewardsSystem(game, runData, frontStage, rewards),
+                RewardsSystem(game, runData, frontStage, writeSave),
                 MapUiSystem(game, backStage, runData),
 
                 InputProcessingSystem(),

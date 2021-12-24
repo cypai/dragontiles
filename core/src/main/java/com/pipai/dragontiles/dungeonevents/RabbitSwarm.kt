@@ -1,7 +1,7 @@
 package com.pipai.dragontiles.dungeonevents
 
 import com.badlogic.gdx.math.Vector2
-import com.pipai.dragontiles.combat.CombatRewards
+import com.pipai.dragontiles.combat.CombatRewardConfig
 import com.pipai.dragontiles.combat.SpellRewardType
 import com.pipai.dragontiles.dungeon.Encounter
 import com.pipai.dragontiles.enemies.KillerRabbit
@@ -29,7 +29,7 @@ class RabbitSwarm : DungeonEvent() {
                     Pair(KillerRabbit(), Vector2(1010f, 280f)),
                 )
             )
-            api.startCombat(encounter, CombatRewards(SpellRewardType.STANDARD, 3, false, RabbitsFoot(), api.runData.potionChance))
+            api.startCombat(encounter, CombatRewardConfig(SpellRewardType.STANDARD, 3, false, RabbitsFoot(), api.runData.potionChance))
         }
     }
 

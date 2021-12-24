@@ -15,10 +15,10 @@ import com.pipai.dragontiles.artemis.screens.CombatScreen
 import com.pipai.dragontiles.artemis.screens.EventScreen
 import com.pipai.dragontiles.artemis.screens.TownScreen
 import com.pipai.dragontiles.artemis.systems.NoProcessingSystem
-import com.pipai.dragontiles.combat.CombatRewards
+import com.pipai.dragontiles.combat.CombatRewardConfig
 import com.pipai.dragontiles.combat.SpellRewardType
-import com.pipai.dragontiles.dungeon.MapNodeType
 import com.pipai.dragontiles.data.RunData
+import com.pipai.dragontiles.dungeon.MapNodeType
 import com.pipai.dragontiles.utils.allOf
 import com.pipai.dragontiles.utils.choose
 import com.pipai.dragontiles.utils.fetch
@@ -158,11 +158,13 @@ class MapUiSystem(
                             .filter { it.id !in runData.dungeonMap.encounters }
                             .choose(rng)
                     }
+                    runData.combatWon = false
                     game.screen = CombatScreen(
                         game,
                         runData,
                         encounter,
-                        CombatRewards(SpellRewardType.STANDARD, 3, false, null, runData.potionChance)
+                        CombatRewardConfig(SpellRewardType.STANDARD, 3, false, null, runData.potionChance),
+                        true,
                     )
                 }
                 MapNodeType.ELITE -> {
@@ -170,11 +172,13 @@ class MapUiSystem(
                     val encounter = dungeon.eliteEncounters
                         .filter { it.id !in runData.dungeonMap.encounters }
                         .choose(rng)
+                    runData.combatWon = false
                     game.screen = CombatScreen(
                         game,
                         runData,
                         encounter,
-                        CombatRewards(SpellRewardType.ELITE, 5, true, null, runData.potionChance)
+                        CombatRewardConfig(SpellRewardType.ELITE, 5, true, null, runData.potionChance),
+                        true,
                     )
                 }
                 MapNodeType.EVENT -> {

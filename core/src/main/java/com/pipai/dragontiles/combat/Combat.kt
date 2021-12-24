@@ -1,6 +1,7 @@
 package com.pipai.dragontiles.combat
 
 import com.pipai.dragontiles.data.GameData
+import com.pipai.dragontiles.data.Reward
 import com.pipai.dragontiles.data.TileInstance
 import com.pipai.dragontiles.data.RunData
 import com.pipai.dragontiles.enemies.Enemy
@@ -9,7 +10,7 @@ import com.pipai.dragontiles.spells.Sorcery
 import com.pipai.dragontiles.spells.Spell
 import com.pipai.dragontiles.status.Status
 
-data class Combat(val enemies: List<Enemy>, val rewards: CombatRewards) {
+data class Combat(val enemies: List<Enemy>) {
 
     var turnNumber = 0
 

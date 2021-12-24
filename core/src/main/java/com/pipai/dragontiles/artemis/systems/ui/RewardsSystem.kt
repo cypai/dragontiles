@@ -15,15 +15,11 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.pipai.dragontiles.DragonTilesGame
 import com.pipai.dragontiles.artemis.components.TileComponent
 import com.pipai.dragontiles.artemis.systems.NoProcessingSystem
-import com.pipai.dragontiles.combat.CombatRewards
-import com.pipai.dragontiles.data.GameData
-import com.pipai.dragontiles.data.NameDescLocalization
-import com.pipai.dragontiles.data.GlobalApi
-import com.pipai.dragontiles.data.RunData
+import com.pipai.dragontiles.combat.CombatRewardConfig
+import com.pipai.dragontiles.data.*
 import com.pipai.dragontiles.gui.SpellCard
 import com.pipai.dragontiles.relics.RelicInstance
 import com.pipai.dragontiles.spells.PostExhaustAspect
-import com.pipai.dragontiles.spells.SpellInstance
 import com.pipai.dragontiles.utils.*
 import net.mostlyoriginal.api.event.common.EventSystem
 
@@ -31,11 +27,10 @@ class RewardsSystem(
     private val game: DragonTilesGame,
     private val runData: RunData,
     private val stage: Stage,
-    private val rewards: CombatRewards,
+    private val writeSave: Boolean,
 ) : NoProcessingSystem(), InputProcessor {
 
     private val skin = game.skin
-    private val actualRewards: MutableList<Reward> = mutableListOf()
     private val rootTable = Table()
 
     private val sEvent by system<EventSystem>()
@@ -53,25 +48,12 @@ class RewardsSystem(
         rootTable.setFillParent(true)
         stage.addActor(rootTable)
 
-        val heroClass = game.data.getHeroClass(runData.hero.heroClassId)
-        val rng = runData.seed.rewardRng()
-        actualRewards.add(Reward.SpellDraftReward(heroClass.getRandomClassSpells(runData.seed, 3).map { it.toInstance() }))
-        actualRewards.add(Reward.GoldReward(rewards.gold))
-        if (rng.nextFloat() < rewards.potionChance) {
-            actualRewards.add(Reward.PotionReward(game.data.allPotions().choose(rng).id))
-            runData.potionChance = GameData.BASE_POTION_CHANCE
-        } else {
-            runData.potionChance += 0.1f
-        }
-        if (rewards.randomRelic) {
-            actualRewards.add(Reward.RelicReward(RelicInstance(runData.availableRelics.choose(rng), 0)))
-        }
-        if (rewards.relic != null) {
-            actualRewards.add(Reward.RelicReward(rewards.relic.toInstance()))
-        }
     }
 
     fun activateRewards() {
+        if (writeSave) {
+            game.writeSave()
+        }
         world.fetch(allOf(TileComponent::class)).forEach { world.delete(it) }
         active = true
         showing = true
@@ -92,7 +74,7 @@ class RewardsSystem(
             spellCard.addListener(object : ClickListener() {
                 override fun clicked(event: InputEvent?, x: Float, y: Float) {
                     api.addSpellToDeck(spell)
-                    actualRewards.remove(spellDraftReward)
+                    runData.combatRewards.remove(spellDraftReward)
                     buildAndShowRewardsTable()
                 }
 
@@ -125,13 +107,13 @@ class RewardsSystem(
             .prefWidth(320f)
         rewardsTable.row()
 
-        actualRewards.forEach { reward ->
+        runData.combatRewards.forEach { reward ->
             val itemTable = when (reward) {
                 is Reward.SpellDraftReward -> {
                     rewardItemTable({ buildAndShowSpellDraftTable(reward) }, Image(), null, "Spell Draft")
                 }
                 is Reward.GoldReward -> {
-                    rewardItemTable(this::getGold, Image(), null, "${rewards.gold} Gold")
+                    rewardItemTable({ getGold(reward.amount) }, Image(), null, "${reward.amount} Gold")
                 }
                 is Reward.RelicReward -> {
                     val relic = game.data.getRelic(reward.relic.id)
@@ -175,23 +157,23 @@ class RewardsSystem(
         rewardsTable.row()
     }
 
-    private fun getGold() {
-        actualRewards.removeAll { it is Reward.GoldReward }
-        actualRewards.add(Reward.EmptyReward())
-        api.gainGoldImmediate(rewards.gold)
+    private fun getGold(amount: Int) {
+        runData.combatRewards.removeAll { it is Reward.GoldReward }
+        runData.combatRewards.add(Reward.EmptyReward())
+        api.gainGoldImmediate(amount)
         buildAndShowRewardsTable()
     }
 
     private fun getPotion(potionReward: Reward.PotionReward) {
-        actualRewards.remove(potionReward)
-        actualRewards.add(Reward.EmptyReward())
+        runData.combatRewards.remove(potionReward)
+        runData.combatRewards.add(Reward.EmptyReward())
         api.gainPotion(game.data.getPotion(potionReward.potion))
         buildAndShowRewardsTable()
     }
 
     private fun getRelic(relic: RelicInstance) {
-        actualRewards.removeAll { it is Reward.RelicReward && it.relic == relic }
-        actualRewards.add(Reward.EmptyReward())
+        runData.combatRewards.removeAll { it is Reward.RelicReward && it.relic == relic }
+        runData.combatRewards.add(Reward.EmptyReward())
         api.gainRelicImmediate(game.data.getRelic(relic.id))
         buildAndShowRewardsTable()
     }
@@ -234,14 +216,6 @@ class RewardsSystem(
             }
         })
         return table
-    }
-
-    sealed class Reward {
-        data class SpellDraftReward(val spells: List<SpellInstance>) : Reward()
-        data class GoldReward(val amount: Int) : Reward()
-        data class RelicReward(val relic: RelicInstance) : Reward()
-        data class PotionReward(val potion: String) : Reward()
-        class EmptyReward : Reward()
     }
 
     private fun handleMapActivation() {

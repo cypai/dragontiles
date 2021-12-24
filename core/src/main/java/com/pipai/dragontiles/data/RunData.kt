@@ -10,11 +10,14 @@ data class RunData(
     var town: Town?,
     var sideboardSpaceBought: Int,
     var potionChance: Float,
+    var combatWon: Boolean,
+    val combatRewards: MutableList<Reward>,
     val history: RunHistory,
     val seed: Seed,
 ) {
 
     fun adjustPostCombat(combat: Combat) {
+        combatWon = true
         hero.flux = 0
         // TODO: history here
     }

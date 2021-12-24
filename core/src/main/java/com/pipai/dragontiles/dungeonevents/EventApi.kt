@@ -3,7 +3,7 @@ package com.pipai.dragontiles.dungeonevents
 import com.pipai.dragontiles.DragonTilesGame
 import com.pipai.dragontiles.artemis.screens.CombatScreen
 import com.pipai.dragontiles.artemis.systems.ui.EventUiSystem
-import com.pipai.dragontiles.combat.CombatRewards
+import com.pipai.dragontiles.combat.CombatRewardConfig
 import com.pipai.dragontiles.data.EventLocalization
 import com.pipai.dragontiles.dungeon.Encounter
 import com.pipai.dragontiles.data.GlobalApi
@@ -46,8 +46,8 @@ class EventApi(val game: DragonTilesGame, runData: RunData, sEvent: EventSystem,
         sUi.showMap()
     }
 
-    fun startCombat(encounter: Encounter, rewards: CombatRewards) {
-        game.screen = CombatScreen(game, runData, encounter, rewards)
+    fun startCombat(encounter: Encounter, rewardConfig: CombatRewardConfig) {
+        game.screen = CombatScreen(game, runData, encounter, rewardConfig, false)
     }
 
 }

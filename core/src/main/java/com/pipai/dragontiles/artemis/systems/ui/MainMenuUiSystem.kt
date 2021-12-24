@@ -59,6 +59,8 @@ class MainMenuUiSystem(
                     null,
                     0,
                     GameData.BASE_POTION_CHANCE,
+                    false,
+                    mutableListOf(),
                     RunHistory(mutableListOf()),
                     seed,
                 )
