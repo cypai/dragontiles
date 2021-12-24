@@ -119,15 +119,16 @@ class TooltipSystem(private val game: DragonTilesGame, var stage: Stage) : NoPro
     }
 
     private fun updateTablePosition() {
+        val resolution = game.gameConfig.resolution
         if (fixX == null) {
-            table.x = (mouseX + 16f).coerceAtMost(game.gameConfig.resolution.width - table.prefWidth)
+            table.x = (mouseX + 16f).coerceAtMost(resolution.width - table.prefWidth)
         } else {
-            table.x = fixX!!.coerceAtMost(game.gameConfig.resolution.width - table.prefWidth)
+            table.x = fixX!!.coerceAtMost(resolution.width - table.prefWidth)
         }
         if (fixY == null) {
             table.y = (mouseY - table.prefHeight - 16f).coerceAtLeast(0f)
         } else {
-            table.y = fixY!!.coerceAtLeast(0f)
+            table.y = fixY!!.coerceAtMost(resolution.height - table.prefHeight).coerceAtLeast(0f)
         }
     }
 
