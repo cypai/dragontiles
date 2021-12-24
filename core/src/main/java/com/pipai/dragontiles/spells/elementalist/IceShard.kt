@@ -20,7 +20,8 @@ class IceShard : StandardSpell() {
         FluxGainAspect(2),
         StackableAspect(Cryo(1), 1),
     )
-    override val additionalKeywords: List<String> = listOf("@Reaction", "@Melt", "@Cryoshock")
+
+    override fun additionalKeywords(): List<String> = listOf("@Reaction", "@Melt", "@Cryoshock")
 
     override suspend fun onCast(params: CastParams, api: CombatApi) {
         val target = api.getEnemy(params.targets.first())

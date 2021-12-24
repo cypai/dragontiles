@@ -13,7 +13,8 @@ class InflictReactant : StandardSpell() {
     override val aspects: MutableList<SpellAspect> = mutableListOf(
         FluxGainAspect(1),
     )
-    override val additionalKeywords: List<String> = listOf("@Reactant", "@Reaction", "@Melt", "@Pyroblast", "@Cryoshock")
+
+    override fun additionalKeywords(): List<String> = listOf("@Reactant", "@Reaction", "@Melt", "@Pyroblast", "@Cryoshock")
 
     override fun flags(): List<CombatFlag> {
         val flag = reactantFlag(components())

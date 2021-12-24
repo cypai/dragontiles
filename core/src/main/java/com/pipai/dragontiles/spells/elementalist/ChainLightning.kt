@@ -19,7 +19,8 @@ class ChainLightning : StandardSpell() {
         FluxGainAspect(4),
         StackableAspect(Electro(1), 1),
     )
-    override val additionalKeywords: List<String> = listOf("@Reaction", "@Pyroblast", "@Cryoshock")
+
+    override fun additionalKeywords(): List<String> = listOf("@Reaction", "@Pyroblast", "@Cryoshock")
 
     override suspend fun onCast(params: CastParams, api: CombatApi) {
         api.aoeAttack(elemental(components()), baseDamage(), flags())

@@ -29,7 +29,6 @@ abstract class Spell : Localized, DamageAdjustable {
     abstract val aspects: MutableList<SpellAspect>
     open fun flags(): List<CombatFlag> = listOf()
     private val upgrades: MutableList<SpellUpgrade> = mutableListOf()
-    open val additionalKeywords: List<String> = listOf()
 
     protected val data: MutableMap<String, Int> = mutableMapOf()
 

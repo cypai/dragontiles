@@ -19,7 +19,8 @@ class Fireball : StandardSpell() {
         FluxGainAspect(3),
         StackableAspect(Pyro(1), 1),
     )
-    override val additionalKeywords: List<String> = listOf("@Reaction", "@Melt", "@Pyroblast")
+
+    override fun additionalKeywords(): List<String> = listOf("@Reaction", "@Melt", "@Pyroblast")
 
     override fun flags(): List<CombatFlag> {
         return listOf(CombatFlag.PYRO)

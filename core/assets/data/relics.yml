@@ -16,7 +16,7 @@ base:relics:MortarAndPestle:
 base:relics:RabbitsFoot:
   en:
     name: Rabbit's Foot
-    description: Start combat with 1 @Dodge.
+    description: Start combat with 1 Dodge.
 
 base:relics:NinjaScroll:
   en:

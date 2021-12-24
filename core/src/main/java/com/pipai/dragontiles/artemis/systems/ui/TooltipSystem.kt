@@ -7,6 +7,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.utils.Align
 import com.pipai.dragontiles.DragonTilesGame
 import com.pipai.dragontiles.artemis.systems.NoProcessingSystem
+import com.pipai.dragontiles.data.Keywords
+import com.pipai.dragontiles.data.Localized
 import com.pipai.dragontiles.data.NameDescLocalization
 import com.pipai.dragontiles.spells.PostExhaustAspect
 import com.pipai.dragontiles.spells.Spell
@@ -64,17 +66,25 @@ class TooltipSystem(private val game: DragonTilesGame, var stage: Stage) : NoPro
             .forEach { addKeyword(it) }
     }
 
+    fun addLocalized(localized: Localized) {
+        val data = gameStrings.nameDescLocalization(localized)
+        addNameDescLocalization(data)
+        localized.additionalKeywords().forEach { addKeyword(it) }
+        localized.additionalLocalized().forEach { addNameDescLocalization(game.gameStrings.nameDescLocalization(it)) }
+    }
+
     fun addSpell(spell: Spell) {
         if (spell.requirement.reqAmount.text() == "?") {
             addText("Requirements", spell.requirement.description, false)
         }
         addKeywordsInString(game.gameStrings.spellLocalization(spell.id).description)
-        spell.additionalKeywords.forEach { addKeyword(it) }
+        spell.additionalKeywords().forEach { addKeyword(it) }
+        spell.additionalLocalized().forEach { addNameDescLocalization(game.gameStrings.nameDescLocalization(it)) }
         if (spell.aspects.any { a -> a is PostExhaustAspect }) {
-            addKeyword("@Exhaust")
+            addKeyword(Keywords.EXHAUST)
         }
         if (spell.aspects.any { a -> a is TransformAspect }) {
-            addKeyword("@Transform")
+            addKeyword(Keywords.TRANSFORM)
         }
     }
 
