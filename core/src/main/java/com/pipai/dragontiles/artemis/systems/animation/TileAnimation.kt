@@ -40,6 +40,7 @@ abstract class TileAnimation(protected val layout: CombatUiLayout) : Animation()
             TileStatus.FREEZE -> cSprite.sprite.color = Color.SKY
             TileStatus.SHOCK -> cSprite.sprite.color = Color.YELLOW
             TileStatus.VOLATILE -> cSprite.sprite.color = Color.PINK
+            TileStatus.CURSE -> cSprite.sprite.color = Color.GRAY
             else -> {
             }
         }

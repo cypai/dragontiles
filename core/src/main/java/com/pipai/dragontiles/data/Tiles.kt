@@ -17,7 +17,7 @@ enum class LifeType(val order: Int) {
 }
 
 enum class TileStatus {
-    NONE, BURN, FREEZE, SHOCK, VOLATILE
+    NONE, BURN, FREEZE, SHOCK, VOLATILE, CURSE,
 }
 
 sealed class Tile {

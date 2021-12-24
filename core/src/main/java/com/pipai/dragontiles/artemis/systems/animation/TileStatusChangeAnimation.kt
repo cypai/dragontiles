@@ -24,6 +24,7 @@ class TileStatusChangeAnimation(private val ev: TileStatusChangeEvent) : Animati
                 TileStatus.FREEZE -> Color.SKY
                 TileStatus.SHOCK -> Color.YELLOW
                 TileStatus.VOLATILE -> Color.PINK
+                TileStatus.CURSE -> Color.GRAY
                 TileStatus.NONE -> Color.WHITE
             }
         }

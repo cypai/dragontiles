@@ -418,7 +418,8 @@ class CombatApi(
         components.forEach { tile ->
             when (tile.tileStatus) {
                 TileStatus.BURN -> dealDamageToHero(2)
-                TileStatus.VOLATILE -> dealFluxDamageToHero(spell.baseFluxGain())
+                TileStatus.VOLATILE -> dealFluxDamageToHero(2 * spell.baseFluxGain())
+                TileStatus.CURSE -> changeTemporaryMaxFlux(2 * spell.baseFluxGain())
                 else -> {
                 }
             }
@@ -462,7 +463,7 @@ class CombatApi(
         eventBus.dispatch(PlayerLoseFluxEvent(actualAmount))
     }
 
-    suspend fun gainTemporaryMaxFlux(amount: Int) {
+    suspend fun changeTemporaryMaxFlux(amount: Int) {
         runData.hero.tempFluxMax += amount
         eventBus.dispatch(PlayerTempMaxFluxChangeEvent(amount))
     }
