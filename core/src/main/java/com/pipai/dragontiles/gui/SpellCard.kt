@@ -238,11 +238,7 @@ class SpellCard(
                     it.groupValues[2]
                 } else {
                     val castParams = CastParams(if (target == null) listOf() else listOf(target!!.id))
-                    if (api == null) {
-                        spell.baseDamage().toString()
-                    } else {
-                        spell.dynamicValue(it.groupValues[1], api, castParams).toString()
-                    }
+                    spell.dynamicValue(it.groupValues[1], api, castParams).toString()
                 }
                 if (it.groupValues[1] == "!dp") {
                     if (replacement == "0") {

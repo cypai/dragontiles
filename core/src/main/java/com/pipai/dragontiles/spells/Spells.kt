@@ -63,25 +63,33 @@ abstract class Spell : Localized, DamageAdjustable {
         return baseDamage()
     }
 
-    open fun dynamicValue(key: String, api: CombatApi, params: CastParams): Int {
+    open fun dynamicValue(key: String, api: CombatApi?, params: CastParams): Int {
         return when (key) {
             "!d" -> {
-                return if (params.targets.isEmpty()) {
-                    // TODO: Fix this
-                    api.calculateBaseDamage(Element.NONE, baseDamage())
+                return if (api == null) {
+                    baseDamage()
                 } else {
-                    val target = api.getEnemy(params.targets.first())
-                    api.calculateDamageOnEnemy(target, elemental(components()), dynamicBaseDamage(components()))
+                    if (params.targets.isEmpty()) {
+                        // TODO: Fix this
+                        api.calculateBaseDamage(Element.NONE, baseDamage())
+                    } else {
+                        val target = api.getEnemy(params.targets.first())
+                        api.calculateDamageOnEnemy(target, elemental(components()), dynamicBaseDamage(components()))
+                    }
                 }
             }
             "!dp" -> {
                 // Dynamic Plus: For cases where description looks like !d + PowerUpgrade
-                return if (params.targets.isEmpty()) {
-                    // TODO: Fix this
-                    api.calculateBaseDamage(Element.NONE, baseDamage())
+                return if (api == null) {
+                    baseDamage()
                 } else {
-                    val target = api.getEnemy(params.targets.first())
-                    api.calculateDamageOnEnemy(target, elemental(components()), baseDamage())
+                    if (params.targets.isEmpty()) {
+                        // TODO: Fix this
+                        api.calculateBaseDamage(Element.NONE, baseDamage())
+                    } else {
+                        val target = api.getEnemy(params.targets.first())
+                        api.calculateDamageOnEnemy(target, elemental(components()), baseDamage())
+                    }
                 }
             }
             "!f" -> baseFluxLoss()
@@ -122,7 +130,7 @@ abstract class StandardSpell : Spell() {
 
     override fun swappableFromSideboard(): Boolean = !exhausted
 
-    override fun dynamicValue(key: String, api: CombatApi, params: CastParams): Int {
+    override fun dynamicValue(key: String, api: CombatApi?, params: CastParams): Int {
         return when (key) {
             "!r" -> (aspects.findAs(LimitedRepeatableAspect::class)?.max ?: 1) - repeated
             else -> super.dynamicValue(key, api, params)
