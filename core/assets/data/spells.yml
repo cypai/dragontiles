@@ -158,16 +158,6 @@ base:spells:ChainLightning:
     name: Chain Lightning
     description: Deal !d Lightning damage and inflict !s(1) @Electro @AOE. @Shock a random tile in your hand.
 
-base:spells:Chillsink:
-  en:
-    name: Chillsink
-    description: Remove all @Freeze from your hand. Lose !f @Flux for each unfrozen tile.
-
-base:spells:MassTransmute:
-  en:
-    name: Mass Transmute
-    description: Transform all @Elemented tiles in your hand to the element of the @Components.
-
 base:spells:ElementalRune:
   en:
     name: Elemental Rune
@@ -237,3 +227,19 @@ base:spells:ReturnToSender:
   en:
     name: Return To Sender
     description: Unplayable. Lose !f @Flux when swapped into the Sideboard.
+
+base:spells:Breakwave:
+  en:
+    name: Breakwave
+    description: Inflict !s(1) Break and !s(2) Weak @AOE.
+
+base:spells:Chillsink:
+  en:
+    name: Chillsink
+    description: Remove all @Freeze from your hand. Lose !f @Flux for each unfrozen tile.
+
+base:spells:MassTransmute:
+  en:
+    name: Mass Transmute
+    description: Transform all @Elemented tiles in your hand to the element of the @Components.
+

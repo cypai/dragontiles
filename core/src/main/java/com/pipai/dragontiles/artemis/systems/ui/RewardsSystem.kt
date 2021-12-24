@@ -16,11 +16,9 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.pipai.dragontiles.DragonTilesGame
 import com.pipai.dragontiles.artemis.components.TileComponent
 import com.pipai.dragontiles.artemis.systems.NoProcessingSystem
-import com.pipai.dragontiles.combat.CombatRewardConfig
 import com.pipai.dragontiles.data.*
 import com.pipai.dragontiles.gui.SpellCard
 import com.pipai.dragontiles.relics.RelicInstance
-import com.pipai.dragontiles.spells.PostExhaustAspect
 import com.pipai.dragontiles.utils.*
 import net.mostlyoriginal.api.event.common.EventSystem
 

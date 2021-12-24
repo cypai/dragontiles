@@ -60,7 +60,7 @@ class CombatApi(
             logger.error("Attempted to cast spell that would cause self-overload")
             return
         }
-        if (spell is StandardSpell && spell.aspects.any { it is PostExhaustAspect }) {
+        if (spell is StandardSpell && spell.aspects.any { it is ExhaustAspect }) {
             spell.exhausted = true
         }
         dealFluxDamageToHero(flux)

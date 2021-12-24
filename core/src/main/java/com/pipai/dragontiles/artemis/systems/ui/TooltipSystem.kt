@@ -85,7 +85,7 @@ class TooltipSystem(private val game: DragonTilesGame, var stage: Stage) : NoPro
         spell.additionalLocalized().forEach { addNameDescLocalization(game.gameStrings.nameDescLocalization(it)) }
         spell.aspects.filterIsInstance<StackableAspect>()
             .forEach { addLocalized(it.status) }
-        if (spell.aspects.any { a -> a is PostExhaustAspect }) {
+        if (spell.aspects.any { a -> a is ExhaustAspect }) {
             addKeyword(Keywords.EXHAUST)
         }
         if (spell.aspects.any { a -> a is TransformAspect }) {

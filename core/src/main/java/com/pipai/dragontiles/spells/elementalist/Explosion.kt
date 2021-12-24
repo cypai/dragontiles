@@ -13,7 +13,7 @@ class Explosion : StandardSpell() {
     override val aspects: MutableList<SpellAspect> = mutableListOf(
         AttackDamageAspect(0),
         FluxGainAspect(5),
-        PostExhaustAspect(),
+        ExhaustAspect(),
     )
 
     override fun dynamicBaseDamage(components: List<TileInstance>): Int {

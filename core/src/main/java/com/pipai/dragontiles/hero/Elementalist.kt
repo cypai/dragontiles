@@ -50,6 +50,9 @@ class Elementalist : HeroClass {
         ExpandAnomaly(),
         Riffle(),
         ReturnToSender(),
+        Chillsink(),
+        Breakwave(),
+        MassTransmute(),
     )
     override val hpMax: Int = 60
     override val fluxMax: Int = 40

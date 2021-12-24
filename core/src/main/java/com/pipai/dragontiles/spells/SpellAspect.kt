@@ -20,7 +20,7 @@ data class FluxLossAspect(var amount: Int) : SpellAspect
 
 data class TempMaxFluxGainAspect(var amount: Int) : SpellAspect
 
-class PostExhaustAspect : SpellAspect {
+class ExhaustAspect : SpellAspect {
     override fun adjustDescription(description: String): String {
         return "$description ${Keywords.EXHAUST}."
     }
