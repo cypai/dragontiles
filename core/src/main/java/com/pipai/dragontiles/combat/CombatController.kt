@@ -7,7 +7,7 @@ import kotlinx.coroutines.runBlocking
 import net.mostlyoriginal.api.event.common.EventSystem
 
 class CombatController(
-    gameData: GameData,
+    private val gameData: GameData,
     private val runData: RunData,
     private val combat: Combat,
     eventSystem: EventSystem,
@@ -18,6 +18,7 @@ class CombatController(
 
     fun init() {
         eventBus.init(api)
+        combat.init(gameData, runData)
         combat.enemies.forEach {
             it.preInit(api.nextId())
             combat.enemyStatus[it.id] = mutableListOf()

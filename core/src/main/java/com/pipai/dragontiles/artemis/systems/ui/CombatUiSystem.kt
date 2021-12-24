@@ -135,6 +135,7 @@ class CombatUiSystem(
 
     override fun initialize() {
         swapChannel = sCombat.controller.api.swapChannel
+        sCombat.controller.init()
         val combat = sCombat.combat
         combat.spells.forEachIndexed { index, spell ->
             addSpellCard(index, spell)

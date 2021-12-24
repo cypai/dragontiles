@@ -13,9 +13,10 @@ class BreakTest : CombatBackendTest(QueryHandler()) {
     fun testBreak() {
         val flameTurtle = LargeTurtle()
         val runData = runDataFixture(mutableListOf(Invoke()), mutableListOf())
-        val combat = Combat(mutableListOf(flameTurtle), COMBAT_REWARDS_FIXTURE)
+        val combat = Combat(mutableListOf(flameTurtle))
 
-        val controller = CombatController(runData, combat, sEvent)
+        val controller = CombatController(gameData, runData, combat, sEvent)
+        controller.init()
         controller.initCombat()
         runBlocking { controller.runTurn() }
 

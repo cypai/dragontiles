@@ -27,7 +27,6 @@ class CombatControllerSystem(val gameData: GameData, val runData: RunData, val c
 
     override fun processOnce() {
         scope.launch {
-            controller.init()
             if (runData.combatWon) {
                 controller.api.devInstantWin()
             } else {

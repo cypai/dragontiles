@@ -40,7 +40,6 @@ class CombatScreen(
 
     init {
         val combat = Combat(encounter.enemies.map { it.first })
-        combat.init(game.data, runData)
         if (rewardConfig != null) {
             RewardGenerator().generate(game.data, runData, rewardConfig)
         }
