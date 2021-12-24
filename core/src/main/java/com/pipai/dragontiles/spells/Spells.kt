@@ -268,24 +268,25 @@ data class CastParams(val targets: List<Int>)
 
 data class ComponentSlot(var tile: TileInstance?)
 
-abstract class ComponentRequirement {
-    abstract val description: String
-    abstract val type: SetType
-    abstract var suitGroup: SuitGroup
-    abstract val reqAmount: ReqAmount
-    open val manualOnly: Boolean = false
-    val componentSlots: MutableList<ComponentSlot> = mutableListOf()
+interface ComponentRequirement {
+    val description: String
+    val type: SetType
+    var suitGroup: SuitGroup
+    val reqAmount: ReqAmount
+    val manualOnly: Boolean
+    val componentSlots: MutableList<ComponentSlot>
 
-    abstract fun find(hand: List<TileInstance>): List<List<TileInstance>>
-    abstract fun findGiven(hand: List<TileInstance>, given: List<TileInstance>): List<List<TileInstance>>
-    abstract fun satisfied(slots: List<TileInstance>): Boolean
-    open fun satisfied(fullCastHand: FullCastHand): Boolean {
+    fun find(hand: List<TileInstance>): List<List<TileInstance>>
+    fun findGiven(hand: List<TileInstance>, given: List<TileInstance>): List<List<TileInstance>>
+    fun satisfied(slots: List<TileInstance>): Boolean
+    fun satisfied(fullCastHand: FullCastHand): Boolean {
         return fullCastHand.melds.any { satisfied(it.tiles) } || satisfied(fullCastHand.eye)
     }
 }
 
-abstract class ManualComponentRequirement : ComponentRequirement() {
+abstract class ManualComponentRequirement : ComponentRequirement {
     override val manualOnly = true
+    override val componentSlots: MutableList<ComponentSlot> = mutableListOf()
 
     override fun find(hand: List<TileInstance>): List<List<TileInstance>> {
         return listOf()
@@ -336,12 +337,14 @@ sealed class ReqAmount {
     }
 }
 
-open class Single(override var suitGroup: SuitGroup) : ComponentRequirement() {
+open class Single(override var suitGroup: SuitGroup) : ComponentRequirement {
     constructor() : this(SuitGroup.ANY)
 
     override var type = SetType.MISC
     override val reqAmount = ReqAmount.ImmutableNumeric(1)
     override val description = "A single tile"
+    override val componentSlots: MutableList<ComponentSlot> = mutableListOf()
+    override val manualOnly = false
 
     override fun find(hand: List<TileInstance>): List<List<TileInstance>> {
         return hand
@@ -400,12 +403,14 @@ abstract class CustomRequirement : ManualComponentRequirement() {
     override val reqAmount = ReqAmount.UnknownAmount()
 }
 
-class Identical(slotAmount: Int, override var suitGroup: SuitGroup) : ComponentRequirement() {
+class Identical(slotAmount: Int, override var suitGroup: SuitGroup) : ComponentRequirement {
     constructor(slotAmount: Int) : this(slotAmount, SuitGroup.ANY_NO_FUMBLE)
 
     override val type = SetType.IDENTICAL
     override val reqAmount = ReqAmount.Numeric(slotAmount)
     override val description = "A set of $slotAmount identical tiles"
+    override val componentSlots: MutableList<ComponentSlot> = mutableListOf()
+    override val manualOnly = false
 
     override fun find(hand: List<TileInstance>): List<List<TileInstance>> {
         val count: MutableMap<Tile, MutableList<TileInstance>> = mutableMapOf()
@@ -460,12 +465,14 @@ class Identical(slotAmount: Int, override var suitGroup: SuitGroup) : ComponentR
     }
 }
 
-class IdenticalX(override var suitGroup: SuitGroup) : ComponentRequirement() {
+class IdenticalX(override var suitGroup: SuitGroup) : ComponentRequirement {
     constructor() : this(SuitGroup.ANY_NO_FUMBLE)
 
     override val type = SetType.IDENTICAL
     override val reqAmount = ReqAmount.XAmount()
     override val description = "A variable set of identical tiles"
+    override val componentSlots: MutableList<ComponentSlot> = mutableListOf()
+    override val manualOnly = false
 
     override fun find(hand: List<TileInstance>): List<List<TileInstance>> {
         val sets: MutableList<List<TileInstance>> = mutableListOf()
@@ -510,12 +517,14 @@ class IdenticalX(override var suitGroup: SuitGroup) : ComponentRequirement() {
     }
 }
 
-class Sequential(slotAmount: Int, override var suitGroup: SuitGroup) : ComponentRequirement() {
+class Sequential(slotAmount: Int, override var suitGroup: SuitGroup) : ComponentRequirement {
     constructor(slotAmount: Int) : this(slotAmount, SuitGroup.ELEMENTAL)
 
     override val type = SetType.SEQUENTIAL
     override val reqAmount = ReqAmount.Numeric(slotAmount)
     override val description = "A set of $slotAmount sequential tiles"
+    override val componentSlots: MutableList<ComponentSlot> = mutableListOf()
+    override val manualOnly = false
 
     override fun find(hand: List<TileInstance>): List<List<TileInstance>> {
         val sequences: MutableMap<TileInstance, MutableList<TileInstance>> = hand
@@ -582,12 +591,14 @@ class Sequential(slotAmount: Int, override var suitGroup: SuitGroup) : Component
     }
 }
 
-class SequentialX(override var suitGroup: SuitGroup) : ComponentRequirement() {
+class SequentialX(override var suitGroup: SuitGroup) : ComponentRequirement {
     constructor() : this(SuitGroup.ELEMENTAL)
 
     override val type = SetType.SEQUENTIAL
     override val reqAmount = ReqAmount.XAmount()
     override val description = "A variable set of sequential tiles"
+    override val componentSlots: MutableList<ComponentSlot> = mutableListOf()
+    override val manualOnly = false
 
     override fun find(hand: List<TileInstance>): List<List<TileInstance>> {
         val sets: MutableList<List<TileInstance>> = mutableListOf()
@@ -641,5 +652,14 @@ class SequentialX(override var suitGroup: SuitGroup) : ComponentRequirement() {
     private fun sequential(tiles: List<Tile.ElementalTile>): Boolean {
         return tiles.windowed(2)
             .all { it[0].number == it[1].number - 1 }
+    }
+}
+
+class ForbidTransformFreeze(private val spell: Spell, private val compReq: ComponentRequirement) :
+    ComponentRequirement by compReq {
+
+    override fun satisfied(slots: List<TileInstance>): Boolean {
+        return compReq.satisfied(slots)
+                && (spell.aspects.none { it is TransformAspect } || slots.none { it.tileStatus == TileStatus.FREEZE })
     }
 }

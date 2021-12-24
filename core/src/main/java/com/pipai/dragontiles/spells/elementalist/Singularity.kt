@@ -9,12 +9,13 @@ import kotlin.math.min
 
 class Singularity : StandardSpell() {
     override val id: String = "base:spells:Singularity"
-    override val requirement: ComponentRequirement = Single(SuitGroup.ELEMENTAL)
+    override val requirement: ComponentRequirement = ForbidTransformFreeze(this, Single(SuitGroup.ELEMENTAL))
     override val type: SpellType = SpellType.EFFECT
     override val targetType: TargetType = TargetType.NONE
     override val rarity: Rarity = Rarity.UNCOMMON
     override val aspects: MutableList<SpellAspect> = mutableListOf(
         FluxGainAspect(2),
+        TransformAspect(),
     )
 
     override suspend fun onCast(params: CastParams, api: CombatApi) {
