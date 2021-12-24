@@ -1,3 +1,7 @@
 base:hero:Elementalist:
   en:
     name: Elementalist
+
+base:hero:Colorless:
+  en:
+    name: Colorless

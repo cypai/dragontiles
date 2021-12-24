@@ -13,7 +13,7 @@ import com.pipai.dragontiles.DragonTilesGame
 import com.pipai.dragontiles.artemis.systems.input.InputProcessingSystem
 import com.pipai.dragontiles.artemis.systems.rendering.FullScreenColorSystem
 import com.pipai.dragontiles.artemis.systems.rendering.RenderingSystem
-import com.pipai.dragontiles.artemis.systems.ui.SpellDisplayUiSystem
+import com.pipai.dragontiles.artemis.systems.ui.CardDatabaseUiSystem
 import com.pipai.dragontiles.artemis.systems.ui.TooltipSystem
 import net.mostlyoriginal.api.event.common.EventSystem
 
@@ -40,7 +40,7 @@ class CardDatabaseScreen(
             )
             .with(
                 -1,
-                SpellDisplayUiSystem(game, stage),
+                CardDatabaseUiSystem(game, stage),
             )
             .with(
                 -2,
@@ -51,7 +51,7 @@ class CardDatabaseScreen(
         world = World(config)
 
         val inputProcessor = world.getSystem(InputProcessingSystem::class.java)
-        inputProcessor.addAlwaysOnProcessor(world.getSystem(SpellDisplayUiSystem::class.java))
+        inputProcessor.addAlwaysOnProcessor(world.getSystem(CardDatabaseUiSystem::class.java))
         inputProcessor.addAlwaysOnProcessor(world.getSystem(TooltipSystem::class.java))
         inputProcessor.addAlwaysOnProcessor(stage)
         inputProcessor.activateInput()

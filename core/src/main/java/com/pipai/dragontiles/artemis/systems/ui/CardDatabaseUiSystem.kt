@@ -2,26 +2,29 @@ package com.pipai.dragontiles.artemis.systems.ui
 
 import com.badlogic.gdx.Input
 import com.badlogic.gdx.InputProcessor
+import com.badlogic.gdx.scenes.scene2d.InputEvent
 import com.badlogic.gdx.scenes.scene2d.Stage
-import com.badlogic.gdx.scenes.scene2d.ui.Cell
-import com.badlogic.gdx.scenes.scene2d.ui.Label
-import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane
-import com.badlogic.gdx.scenes.scene2d.ui.Table
+import com.badlogic.gdx.scenes.scene2d.ui.*
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.pipai.dragontiles.DragonTilesGame
 import com.pipai.dragontiles.artemis.screens.MainMenuScreen
 import com.pipai.dragontiles.artemis.systems.NoProcessingSystem
+import com.pipai.dragontiles.data.GameData
 import com.pipai.dragontiles.gui.SpellCard
+import com.pipai.dragontiles.hero.Elementalist
 import com.pipai.dragontiles.spells.Spell
-import com.pipai.dragontiles.utils.getLogger
 import com.pipai.dragontiles.utils.withAll
 
-class SpellDisplayUiSystem(
+class CardDatabaseUiSystem(
     private val game: DragonTilesGame,
     private val stage: Stage,
 ) : NoProcessingSystem(), InputProcessor {
 
-    private val table = Table()
-    private val scrollPane = ScrollPane(table)
+    private val topTable = Table()
+    private val spellsTable = Table()
+    private val scrollPane = ScrollPane(spellsTable)
+    private val elementalistButton = TextButton("  ${game.gameStrings.nameLocalization(Elementalist()).name}  ", game.skin)
+    private val colorlessButton = TextButton("  Colorless  ", game.skin)
     private val topLabel = Label("", game.skin, "white")
     private val colspan = 6
 
@@ -29,20 +32,55 @@ class SpellDisplayUiSystem(
         scrollPane.width = game.gameConfig.resolution.width.toFloat()
         scrollPane.height = game.gameConfig.resolution.height.toFloat() - 40f
 
-        scrollPane.setFillParent(true)
-        stage.addActor(scrollPane)
+        elementalistButton.addListener(object : ClickListener() {
+            override fun clicked(event: InputEvent?, x: Float, y: Float) {
+                updateStandardDisplay(Elementalist().id)
+            }
+        })
+        colorlessButton.addListener(object : ClickListener() {
+            override fun clicked(event: InputEvent?, x: Float, y: Float) {
+                updateColorlessDisplay()
+            }
+        })
 
-        updateStandardDisplay("base:hero:Elementalist")
+        topTable.setFillParent(true)
+        topTable.add(elementalistButton)
+            .pad(64f)
+            .top()
+        topTable.add(colorlessButton)
+            .pad(64f)
+            .top()
+        topTable.row()
+        topTable.add(scrollPane)
+            .colspan(2)
+        stage.addActor(topTable)
+
+        updateStandardDisplay(Elementalist().id)
     }
 
     fun updateStandardDisplay(heroClassId: String) {
-        table.clearChildren()
+        spellsTable.clearChildren()
         val heroClass = game.data.getHeroClass(heroClassId)
 
         topLabel.setText(game.gameStrings.nameLocalization(heroClass).name)
-        table.add(topLabel).colspan(colspan)
-        table.row()
+        spellsTable.add(topLabel).colspan(colspan)
+        spellsTable.row()
         val spells = heroClass.starterDeck.withAll(heroClass.spells)
+        val sortedSpells = spells.sortedWith(compareBy(
+            { it.rarity },
+            { it.type },
+            { game.gameStrings.nameLocalization(it).name }
+        ))
+        addSpellsInSection(sortedSpells)
+    }
+
+    fun updateColorlessDisplay() {
+        spellsTable.clearChildren()
+
+        topLabel.setText("Colorless")
+        spellsTable.add(topLabel).colspan(colspan)
+        spellsTable.row()
+        val spells = game.data.colorlessSpells()
         val sortedSpells = spells.sortedWith(compareBy(
             { it.rarity },
             { it.type },
@@ -57,20 +95,20 @@ class SpellDisplayUiSystem(
         var cell: Cell<SpellCard>? = null
         spells.forEachIndexed { i, spell ->
             if (i % colspan == 0 && i != 0) {
-                table.row()
+                spellsTable.row()
             }
             val spellCard = SpellCard(game, spell, i, game.skin, null)
-            cell = table.add(spellCard)
+            cell = spellsTable.add(spellCard)
                 .prefWidth(SpellCard.cardWidth)
                 .prefHeight(SpellCard.cardHeight)
                 .pad(10f)
         }
         if (cell != null && spells.size % colspan != 0) {
             repeat(colspan - spells.size % colspan) {
-                table.add()
+                spellsTable.add()
             }
         }
-        table.row()
+        spellsTable.row()
     }
 
     override fun keyDown(keycode: Int): Boolean {
