@@ -8,8 +8,11 @@ import com.badlogic.gdx.utils.Align
 import com.pipai.dragontiles.DragonTilesGame
 import com.pipai.dragontiles.artemis.systems.NoProcessingSystem
 import com.pipai.dragontiles.data.NameDescLocalization
+import com.pipai.dragontiles.spells.PostExhaustAspect
+import com.pipai.dragontiles.spells.Spell
+import com.pipai.dragontiles.spells.TransformAspect
 
-class TooltipSystem(game: DragonTilesGame, var stage: Stage) : NoProcessingSystem(), InputProcessor {
+class TooltipSystem(private val game: DragonTilesGame, var stage: Stage) : NoProcessingSystem(), InputProcessor {
 
     private val config = game.gameConfig
     private val gameStrings = game.gameStrings
@@ -21,6 +24,7 @@ class TooltipSystem(game: DragonTilesGame, var stage: Stage) : NoProcessingSyste
     private val textPairs: MutableList<Pair<String, String>> = mutableListOf()
 
     private var fixX: Float? = null
+    private var fixY: Float? = null
     private var mouseX: Float = 0f
     private var mouseY: Float = 0f
 
@@ -34,7 +38,7 @@ class TooltipSystem(game: DragonTilesGame, var stage: Stage) : NoProcessingSyste
             textPairs.add(Pair(header, text.replace("@", "")))
             if (recurse) {
                 gameStrings.findKeywords(text)
-                        .forEach { addKeyword(it) }
+                    .forEach { addKeyword(it) }
             }
         }
     }
@@ -46,14 +50,27 @@ class TooltipSystem(game: DragonTilesGame, var stage: Stage) : NoProcessingSyste
                 textPairs.add(Pair(data.name, data.description.replace("@", "")))
                 headerSet.add(keyword)
                 gameStrings.findKeywords(data.description)
-                        .forEach { addKeyword(it) }
+                    .forEach { addKeyword(it) }
             }
         }
     }
 
     fun addKeywordsInString(str: String) {
         gameStrings.findKeywords(str)
-                .forEach { addKeyword(it) }
+            .forEach { addKeyword(it) }
+    }
+
+    fun addSpell(spell: Spell) {
+        if (spell.requirement.reqAmount.text() == "?") {
+            addText("Requirements", spell.requirement.description, false)
+        }
+        addKeywordsInString(game.gameStrings.spellLocalization(spell.id).description)
+        if (spell.aspects.any { a -> a is PostExhaustAspect }) {
+            addKeyword("@Exhaust")
+        }
+        if (spell.aspects.any { a -> a is TransformAspect }) {
+            addKeyword("@Transform")
+        }
     }
 
     fun hideTooltip() {
@@ -63,8 +80,9 @@ class TooltipSystem(game: DragonTilesGame, var stage: Stage) : NoProcessingSyste
         table.remove()
     }
 
-    fun showTooltip(fixX: Float? = null) {
+    fun showTooltip(fixX: Float? = null, fixY: Float? = null) {
         this.fixX = fixX
+        this.fixY = fixY
         if (textPairs.isEmpty()) {
             return
         }
@@ -75,20 +93,20 @@ class TooltipSystem(game: DragonTilesGame, var stage: Stage) : NoProcessingSyste
             val header = Label(it.first, skin, "small")
             header.setAlignment(Align.topLeft)
             table.add(header)
-                    .width(160f)
-                    .padLeft(8f)
-                    .padRight(8f)
-                    .left()
+                .width(160f)
+                .padLeft(8f)
+                .padRight(8f)
+                .left()
             table.row()
             val label = Label(it.second, skin, "tiny")
             label.setAlignment(Align.topLeft)
             label.setWrap(true)
             table.add(label)
-                    .width(160f)
-                    .padLeft(8f)
-                    .padRight(8f)
-                    .padBottom(8f)
-                    .left()
+                .width(160f)
+                .padLeft(8f)
+                .padRight(8f)
+                .padBottom(8f)
+                .left()
             table.row()
         }
         table.validate()
@@ -101,11 +119,14 @@ class TooltipSystem(game: DragonTilesGame, var stage: Stage) : NoProcessingSyste
 
     private fun updateTablePosition() {
         if (fixX == null) {
-            table.x = mouseX + 16f
+            table.x = (mouseX + 16f).coerceAtMost(game.gameConfig.resolution.width - table.prefWidth)
+        } else {
+            table.x = fixX!!.coerceAtMost(game.gameConfig.resolution.width - table.prefWidth)
+        }
+        if (fixY == null) {
             table.y = (mouseY - table.prefHeight - 16f).coerceAtLeast(0f)
         } else {
-            table.x = fixX!!
-            table.y = (mouseY - table.prefHeight - 16f).coerceAtLeast(0f)
+            table.y = fixY!!.coerceAtLeast(0f)
         }
     }
 

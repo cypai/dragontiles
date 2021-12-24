@@ -3,6 +3,7 @@ package com.pipai.dragontiles.artemis.systems.ui
 import com.badlogic.gdx.Input
 import com.badlogic.gdx.InputProcessor
 import com.badlogic.gdx.graphics.Texture
+import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.InputEvent
 import com.badlogic.gdx.scenes.scene2d.Stage
@@ -79,11 +80,9 @@ class RewardsSystem(
                 }
 
                 override fun enter(event: InputEvent?, x: Float, y: Float, pointer: Int, fromActor: Actor?) {
-                    sTooltip.addKeywordsInString(game.gameStrings.spellLocalization(spell.id).description)
-                    if (spell.aspects.any { a -> a is PostExhaustAspect }) {
-                        sTooltip.addKeyword("@Exhaust")
-                    }
-                    sTooltip.showTooltip()
+                    sTooltip.addSpell(spell)
+                    val screenXy = spellCard.localToScreenCoordinates(Vector2(0f, 0f))
+                    sTooltip.showTooltip(screenXy.x + SpellCard.cardWidth + 16, game.gameConfig.resolution.height - screenXy.y)
                 }
 
                 override fun exit(event: InputEvent?, x: Float, y: Float, pointer: Int, toActor: Actor?) {

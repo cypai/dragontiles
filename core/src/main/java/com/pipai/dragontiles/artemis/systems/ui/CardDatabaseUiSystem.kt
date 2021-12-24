@@ -2,6 +2,8 @@ package com.pipai.dragontiles.artemis.systems.ui
 
 import com.badlogic.gdx.Input
 import com.badlogic.gdx.InputProcessor
+import com.badlogic.gdx.math.Vector2
+import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.InputEvent
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.ui.*
@@ -13,6 +15,7 @@ import com.pipai.dragontiles.data.GameData
 import com.pipai.dragontiles.gui.SpellCard
 import com.pipai.dragontiles.hero.Elementalist
 import com.pipai.dragontiles.spells.Spell
+import com.pipai.dragontiles.utils.system
 import com.pipai.dragontiles.utils.withAll
 
 class CardDatabaseUiSystem(
@@ -23,10 +26,13 @@ class CardDatabaseUiSystem(
     private val topTable = Table()
     private val spellsTable = Table()
     private val scrollPane = ScrollPane(spellsTable)
-    private val elementalistButton = TextButton("  ${game.gameStrings.nameLocalization(Elementalist()).name}  ", game.skin)
+    private val elementalistButton =
+        TextButton("  ${game.gameStrings.nameLocalization(Elementalist()).name}  ", game.skin)
     private val colorlessButton = TextButton("  Colorless  ", game.skin)
     private val topLabel = Label("", game.skin, "white")
     private val colspan = 6
+
+    private val sTooltip by system<TooltipSystem>()
 
     override fun initialize() {
         scrollPane.width = game.gameConfig.resolution.width.toFloat()
@@ -102,6 +108,17 @@ class CardDatabaseUiSystem(
                 .prefWidth(SpellCard.cardWidth)
                 .prefHeight(SpellCard.cardHeight)
                 .pad(10f)
+            spellCard.addListener(object : ClickListener() {
+                override fun enter(event: InputEvent?, x: Float, y: Float, pointer: Int, fromActor: Actor?) {
+                    sTooltip.addSpell(spell)
+                    val screenXy = spellCard.localToScreenCoordinates(Vector2(0f, 0f))
+                    sTooltip.showTooltip(screenXy.x + SpellCard.cardWidth + 16, game.gameConfig.resolution.height - screenXy.y)
+                }
+
+                override fun exit(event: InputEvent?, x: Float, y: Float, pointer: Int, toActor: Actor?) {
+                    sTooltip.hideTooltip()
+                }
+            })
         }
         if (cell != null && spells.size % colspan != 0) {
             repeat(colspan - spells.size % colspan) {

@@ -12,6 +12,7 @@ import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.Sprite
 import com.badlogic.gdx.math.Interpolation
 import com.badlogic.gdx.math.Vector2
+import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.InputEvent
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.ui.Label
@@ -210,25 +211,25 @@ class CombatUiSystem(
         mXy.create(id)
         mAnchor.create(id)
         spellCard.data[allowHoverMove] = 1
-        spellCard.addHoverEnterCallback {
-            it.width *= 1.1f
-            it.height *= 1.1f
-            it.toFront()
-            sTooltip.addKeywordsInString(game.gameStrings.spellLocalization(spell.id).description)
-            if (spell.aspects.any { a -> a is PostExhaustAspect }) {
-                sTooltip.addKeyword("@Exhaust")
+        spellCard.addListener(object : ClickListener() {
+            override fun enter(event: InputEvent?, x: Float, y: Float, pointer: Int, fromActor: Actor?) {
+                spellCard.width *= 1.1f
+                spellCard.height *= 1.1f
+                spellCard.toFront()
+                sTooltip.addSpell(spell)
+                sTooltip.showTooltip(spellCard.x + spellCard.width + 16, spellCard.y)
+                if (spellCard.data[allowHoverMove] == 1) {
+                    openActiveSpells()
+                    closeSideboardSpells()
+                }
             }
-            sTooltip.showTooltip(fixX = it.x + it.width + 16f)
-            if (it.data[allowHoverMove] == 1) {
-                openActiveSpells()
-                closeSideboardSpells()
+
+            override fun exit(event: InputEvent?, x: Float, y: Float, pointer: Int, toActor: Actor?) {
+                spellCard.width = SpellCard.cardWidth
+                spellCard.height = SpellCard.cardHeight
+                sTooltip.hideTooltip()
             }
-        }
-        spellCard.addHoverExitCallback {
-            it.width = SpellCard.cardWidth
-            it.height = SpellCard.cardHeight
-            sTooltip.hideTooltip()
-        }
+        })
     }
 
     private fun addSpellCardToSideboard(number: Int, spell: Spell) {
@@ -246,24 +247,25 @@ class CombatUiSystem(
         val cAnchor = mAnchor.create(id)
         cAnchor.setXy(spellCard.x, spellCard.y)
         spellCard.data[allowHoverMove] = 1
-        spellCard.addHoverEnterCallback {
-            it.width *= 1.1f
-            it.height *= 1.1f
-            sTooltip.addKeywordsInString(game.gameStrings.spellLocalization(spell.id).description)
-            if (spell.aspects.any { a -> a is PostExhaustAspect }) {
-                sTooltip.addKeyword("@Exhaust")
+        spellCard.addListener(object : ClickListener() {
+            override fun enter(event: InputEvent?, x: Float, y: Float, pointer: Int, fromActor: Actor?) {
+                spellCard.width *= 1.1f
+                spellCard.height *= 1.1f
+                spellCard.toFront()
+                sTooltip.addSpell(spell)
+                sTooltip.showTooltip(spellCard.x + spellCard.width + 16)
+                if (spellCard.data[allowHoverMove] == 1) {
+                    openSideboardSpells()
+                    closeActiveSpells()
+                }
             }
-            sTooltip.showTooltip(fixX = it.x + it.width + 16f)
-            if (it.data[allowHoverMove] == 1) {
-                openSideboardSpells()
-                closeActiveSpells()
+
+            override fun exit(event: InputEvent?, x: Float, y: Float, pointer: Int, toActor: Actor?) {
+                spellCard.width = SpellCard.cardWidth
+                spellCard.height = SpellCard.cardHeight
+                sTooltip.hideTooltip()
             }
-        }
-        spellCard.addHoverExitCallback {
-            it.width = SpellCard.cardWidth
-            it.height = SpellCard.cardHeight
-            sTooltip.hideTooltip()
-        }
+        })
     }
 
     private fun addSorcery(number: Int, sorcery: Sorcery) {
@@ -282,20 +284,20 @@ class CombatUiSystem(
         cAnchor.setXy(spellCard.x, spellCard.y)
         mActor.create(id).actor = spellCard
         spellCard.data[allowHoverMove] = 1
-        spellCard.addHoverEnterCallback {
-            it.width *= 1.1f
-            it.height *= 1.1f
-            if (sorcery.requirement.reqAmount.text() == "?") {
-                sTooltip.addText("Requirements", sorcery.requirement.description, false)
+        spellCard.addListener(object : ClickListener() {
+            override fun enter(event: InputEvent?, x: Float, y: Float, pointer: Int, fromActor: Actor?) {
+                spellCard.width *= 1.1f
+                spellCard.height *= 1.1f
+                sTooltip.addSpell(sorcery)
+                sTooltip.showTooltip(spellCard.x + spellCard.width + 16)
             }
-            sTooltip.addKeywordsInString(game.gameStrings.spellLocalization(sorcery.id).description)
-            sTooltip.showTooltip(fixX = it.x + it.width + 16f)
-        }
-        spellCard.addHoverExitCallback {
-            it.width = SpellCard.cardWidth
-            it.height = SpellCard.cardHeight
-            sTooltip.hideTooltip()
-        }
+
+            override fun exit(event: InputEvent?, x: Float, y: Float, pointer: Int, toActor: Actor?) {
+                spellCard.width = SpellCard.cardWidth
+                spellCard.height = SpellCard.cardHeight
+                sTooltip.hideTooltip()
+            }
+        })
     }
 
     fun disable() {
@@ -670,7 +672,10 @@ class CombatUiSystem(
                 CombatUiState.POTION_TARGET_SELECTION -> {
                     sAnimation.pauseUiMode = true
                     scope.launch {
-                        sCombat.controller.api.usePotionInCombat(mEnemy.get(ev.entityId).enemy.id, selectedPotionIndex!!)
+                        sCombat.controller.api.usePotionInCombat(
+                            mEnemy.get(ev.entityId).enemy.id,
+                            selectedPotionIndex!!
+                        )
                     }
                 }
                 else -> {
