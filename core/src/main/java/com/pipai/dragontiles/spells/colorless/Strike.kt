@@ -8,7 +8,7 @@ class Strike : StandardSpell() {
     override val requirement: ComponentRequirement = Sequential(3, SuitGroup.ELEMENTAL)
     override val type: SpellType = SpellType.ATTACK
     override val targetType: TargetType = TargetType.SINGLE
-    override val rarity: Rarity = Rarity.COMMON
+    override val rarity: Rarity = Rarity.STARTER
     override val aspects: MutableList<SpellAspect> = mutableListOf(
         AttackDamageAspect(7),
         FluxGainAspect(2)

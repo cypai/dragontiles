@@ -6,7 +6,7 @@ import com.pipai.dragontiles.spells.*
 class Eyes : Sorcery() {
     override val id = "base:sorceries:Eyes"
     override val requirement = Identical(2)
-    override val rarity = Rarity.COMMON
+    override val rarity = Rarity.STARTER
     override val aspects: MutableList<SpellAspect> = mutableListOf(
         AttackDamageAspect(2)
     )

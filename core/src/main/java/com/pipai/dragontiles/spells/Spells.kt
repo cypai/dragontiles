@@ -108,7 +108,7 @@ abstract class Spell : Localized, DamageAdjustable {
 }
 
 enum class Rarity {
-    SPECIAL, COMMON, UNCOMMON, RARE
+    STARTER, COMMON, UNCOMMON, RARE, SPECIAL
 }
 
 @Serializable

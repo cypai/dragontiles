@@ -9,7 +9,7 @@ class Vent : StandardSpell() {
     override val requirement: ComponentRequirement = AnyCombo(2, SuitGroup.ARCANE)
     override val type: SpellType = SpellType.EFFECT
     override val targetType: TargetType = TargetType.NONE
-    override val rarity: Rarity = Rarity.COMMON
+    override val rarity: Rarity = Rarity.STARTER
     override val aspects: MutableList<SpellAspect> = mutableListOf(
         FluxLossAspect(10)
     )

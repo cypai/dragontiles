@@ -1,4 +1,3 @@
-base:heros:Elementalist:
+base:hero:Elementalist:
   en:
     name: Elementalist
-    description: Attack damage +3.

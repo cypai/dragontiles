@@ -145,6 +145,7 @@ class DragonTilesGame(val gameConfig: GameConfig) : Game() {
         fontGenerator.dispose()
 
         gameStrings = GameStrings()
+        gameStrings.load(Gdx.files.internal("assets/data/heros.yml").readString())
         gameStrings.load(Gdx.files.internal("assets/data/keywords.yml").readString())
         gameStrings.load(Gdx.files.internal("assets/data/status.yml").readString())
         gameStrings.load(Gdx.files.internal("assets/data/spells.yml").readString())

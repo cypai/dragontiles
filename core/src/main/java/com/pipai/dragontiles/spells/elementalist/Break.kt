@@ -10,7 +10,7 @@ class Break : StandardSpell() {
     override val requirement: ComponentRequirement = Identical(3)
     override val type: SpellType = SpellType.EFFECT
     override val targetType: TargetType = TargetType.SINGLE_ENEMY
-    override val rarity: Rarity = Rarity.COMMON
+    override val rarity: Rarity = Rarity.STARTER
     override val aspects: MutableList<SpellAspect> = mutableListOf(
         StackableAspect(BreakStatus(3, false), 1),
         FluxGainAspect(2)
