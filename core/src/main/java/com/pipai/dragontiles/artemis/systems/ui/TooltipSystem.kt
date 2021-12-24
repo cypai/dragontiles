@@ -28,6 +28,10 @@ class TooltipSystem(private val game: DragonTilesGame, var stage: Stage) : NoPro
     private var mouseX: Float = 0f
     private var mouseY: Float = 0f
 
+    companion object {
+        const val WIDTH = 160f
+    }
+
     fun addNameDescLocalization(nameDescLocalization: NameDescLocalization) {
         addText(nameDescLocalization.name, nameDescLocalization.description, true)
     }
@@ -84,6 +88,9 @@ class TooltipSystem(private val game: DragonTilesGame, var stage: Stage) : NoPro
     fun showTooltip(fixX: Float? = null, fixY: Float? = null) {
         this.fixX = fixX
         this.fixY = fixY
+        if (fixX != null && fixX > game.gameConfig.resolution.width - WIDTH) {
+            this.fixX = fixX - WIDTH * 2.5f
+        }
         if (textPairs.isEmpty()) {
             return
         }
@@ -94,16 +101,16 @@ class TooltipSystem(private val game: DragonTilesGame, var stage: Stage) : NoPro
             val header = Label(it.first, skin, "small")
             header.setAlignment(Align.topLeft)
             table.add(header)
-                .width(160f)
+                .width(WIDTH)
                 .padLeft(8f)
                 .padRight(8f)
                 .left()
             table.row()
             val label = Label(it.second, skin, "tiny")
             label.setAlignment(Align.topLeft)
-            label.setWrap(true)
+            label.wrap = true
             table.add(label)
-                .width(160f)
+                .width(WIDTH)
                 .padLeft(8f)
                 .padRight(8f)
                 .padBottom(8f)
