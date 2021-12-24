@@ -18,13 +18,14 @@ import com.pipai.dragontiles.artemis.systems.ui.*
 import com.pipai.dragontiles.data.RunData
 import net.mostlyoriginal.api.event.common.EventSystem
 
-class TownScreen(game: DragonTilesGame, runData: RunData, init: Boolean) : Screen {
+class TownScreen(game: DragonTilesGame, runData: RunData) : Screen {
 
     private val stage = Stage(ScreenViewport(), game.spriteBatch)
 
     val world: World
 
     init {
+        game.writeSave()
         val config = WorldConfigurationBuilder()
             .with(
                 TagManager(),
@@ -55,7 +56,7 @@ class TownScreen(game: DragonTilesGame, runData: RunData, init: Boolean) : Scree
         inputProcessor.addAlwaysOnProcessor(ExitInputProcessor())
         inputProcessor.activateInput()
 
-        TownScreenInit(game, runData, world, init).initialize()
+        TownScreenInit(game, runData, world).initialize()
     }
 
     override fun render(delta: Float) {

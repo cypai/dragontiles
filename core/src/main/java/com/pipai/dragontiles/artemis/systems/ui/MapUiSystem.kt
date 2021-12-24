@@ -17,7 +17,7 @@ import com.pipai.dragontiles.artemis.screens.TownScreen
 import com.pipai.dragontiles.artemis.systems.NoProcessingSystem
 import com.pipai.dragontiles.combat.CombatRewardConfig
 import com.pipai.dragontiles.combat.SpellRewardType
-import com.pipai.dragontiles.data.RunData
+import com.pipai.dragontiles.data.*
 import com.pipai.dragontiles.dungeon.MapNodeType
 import com.pipai.dragontiles.utils.allOf
 import com.pipai.dragontiles.utils.choose
@@ -158,26 +158,41 @@ class MapUiSystem(
                             .filter { it.id !in runData.dungeonMap.encounters }
                             .choose(rng)
                     }
+                    runData.runHistory.history.add(
+                        FloorHistory.CombatFloorHistory(
+                            runData.dungeonMap.dungeonId,
+                            ev.floorNum,
+                            encounter.id,
+                            null
+                        )
+                    )
                     runData.combatWon = false
                     game.screen = CombatScreen(
                         game,
                         runData,
                         encounter,
-                        CombatRewardConfig(SpellRewardType.STANDARD, 3, false, null, runData.potionChance),
+                        CombatRewardConfig.standard(runData),
                         true,
                     )
                 }
                 MapNodeType.ELITE -> {
-                    runData.potionChance += 0.1f
                     val encounter = dungeon.eliteEncounters
                         .filter { it.id !in runData.dungeonMap.encounters }
                         .choose(rng)
+                    runData.runHistory.history.add(
+                        FloorHistory.EliteFloorHistory(
+                            runData.dungeonMap.dungeonId,
+                            ev.floorNum,
+                            encounter.id,
+                            null
+                        )
+                    )
                     runData.combatWon = false
                     game.screen = CombatScreen(
                         game,
                         runData,
                         encounter,
-                        CombatRewardConfig(SpellRewardType.ELITE, 5, true, null, runData.potionChance),
+                        CombatRewardConfig.elite(runData),
                         true,
                     )
                 }
@@ -185,10 +200,41 @@ class MapUiSystem(
                     val event = dungeon.dungeonEvents
                         .filter { it.id !in runData.dungeonMap.dungeonEvents }
                         .choose(rng)
+                    runData.runHistory.history.add(
+                        FloorHistory.EventFloorHistory(
+                            runData.dungeonMap.dungeonId,
+                            ev.floorNum,
+                            event.id,
+                            null
+                        )
+                    )
                     game.screen = EventScreen(game, runData, event)
                 }
                 MapNodeType.TOWN -> {
-                    game.screen = TownScreen(game, runData, true)
+                    TownGenerator().generate(game.data, runData)
+                    val town = runData.town!!
+                    runData.runHistory.history.add(
+                        FloorHistory.TownFloorHistory(
+                            runData.dungeonMap.dungeonId,
+                            ev.floorNum,
+                            false,
+                            false,
+                            town.dungeonEventId,
+                            SpellShop(
+                                town.spellShop.classSpells.toMutableList(),
+                                town.spellShop.sorceries.toMutableList(),
+                                town.spellShop.colorlessSpell?.copy()
+                            ),
+                            ItemShop(
+                                town.itemShop.relics.toMutableList()
+                            ),
+                            Scribe(
+                                town.scribe.upgrades.toMutableList()
+                            ),
+                            null
+                        )
+                    )
+                    game.screen = TownScreen(game, runData)
                 }
                 else -> {
                     throw NotImplementedError()

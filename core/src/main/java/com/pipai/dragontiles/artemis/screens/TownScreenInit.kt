@@ -24,7 +24,6 @@ class TownScreenInit(
     private val game: DragonTilesGame,
     private val runData: RunData,
     private val world: World,
-    private val init: Boolean
 ) {
 
     private lateinit var mCamera: ComponentMapper<OrthographicCameraComponent>
@@ -38,37 +37,12 @@ class TownScreenInit(
         world.inject(this)
     }
 
-    private fun initTown() {
-        val rng = runData.seed.rewardRng()
-        val heroClass = game.data.getHeroClass(runData.hero.heroClassId)
-        val spellShop = SpellShop(
-            heroClass.getRandomClassSpells(runData.seed, 3).map { pricedSpell(it) }.toMutableList(),
-            mutableListOf(),
-            pricedSpell(game.data.colorlessSpells().choose(rng)),
-        )
-        val itemShop = ItemShop(mutableListOf())
-        val scribe = Scribe(mutableListOf())
-        runData.town = Town(3, null, spellShop, itemShop, scribe)
-    }
-
-    private fun pricedSpell(spell: Spell): PricedItem {
-        val price = when (spell.rarity) {
-            Rarity.COMMON -> 2
-            Rarity.UNCOMMON -> 3
-            Rarity.RARE -> 4
-            else -> 0
-        }
-        return PricedItem(spell.id, price)
-    }
-
     fun initialize() {
-        if (init) {
-            initTown()
-        }
-
         val cameraId = world.create()
         mCamera.create(cameraId)
         sTags.register(Tags.CAMERA.toString(), cameraId)
+
+        // Draw actions left
 
         val innId = world.create()
         mXy.create(innId).setXy(80f, 200f)

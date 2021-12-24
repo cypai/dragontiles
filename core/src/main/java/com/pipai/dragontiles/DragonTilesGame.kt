@@ -94,6 +94,7 @@ class DragonTilesGame(val gameConfig: GameConfig) : Game() {
             try {
                 save = saveSerializer.deserialize(saveFileHandle.readString())
             } catch (e: Exception) {
+                logger.error("Error on load", e)
                 // TODO: Show user crash problem instead of nuking the save
                 save = Save(null, 0, GameOptions(mutableListOf()), true)
                 writeSave()

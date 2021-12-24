@@ -8,11 +8,12 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.pipai.dragontiles.DragonTilesGame
+import com.pipai.dragontiles.artemis.screens.CombatScreen
 import com.pipai.dragontiles.artemis.screens.EventScreen
-import com.pipai.dragontiles.data.GameData
-import com.pipai.dragontiles.data.RunData
-import com.pipai.dragontiles.data.RunHistory
-import com.pipai.dragontiles.data.Seed
+import com.pipai.dragontiles.artemis.screens.TownScreen
+import com.pipai.dragontiles.combat.CombatRewardConfig
+import com.pipai.dragontiles.combat.SpellRewardType
+import com.pipai.dragontiles.data.*
 import com.pipai.dragontiles.dungeon.*
 import com.pipai.dragontiles.dungeonevents.PlainsStartEvent
 import com.pipai.dragontiles.hero.Elementalist
@@ -27,28 +28,26 @@ class MainMenuUiSystem(
 
     private val rootTable = Table()
 
-    private val newGameLabel = Label("New Game", skin)
+    private val newGameLabel = Label("Start Run", skin)
+    private val continueLabel = Label("Continue", skin)
+    private val abandonLabel = Label("Abandon Run", skin)
     private val tutorialLabel = Label("Tutorial", skin)
+    private val historyLabel = Label("Run History", skin)
+    private val databaseLabel = Label("Database", skin)
+    private val optionsLabel = Label("Options", skin)
     private val quitLabel = Label("Quit", skin)
 
     override fun initialize() {
         rootTable.setFillParent(true)
         rootTable.background = game.skin.getDrawable("frameDrawable")
-        rootTable.add(Label("Dragontiles", skin))
-        rootTable.row()
-        rootTable.add(newGameLabel)
-            .padTop(64f)
-        rootTable.row()
-        rootTable.add(tutorialLabel)
-        rootTable.row()
-        rootTable.add(quitLabel)
-        rootTable.row()
+
+        regenerateTable(game.save.currentRun == null)
 
         newGameLabel.addListener(object : ClickListener() {
             override fun clicked(event: InputEvent?, x: Float, y: Float) {
                 if (game.save.requireTutorial) {
                     game.save.requireTutorial = false
-                    // TODO: start tutorial
+                    game.writeSave()
                 }
                 val seed = Seed()
 
@@ -61,17 +60,29 @@ class MainMenuUiSystem(
                     GameData.BASE_POTION_CHANCE,
                     false,
                     mutableListOf(),
-                    RunHistory(mutableListOf()),
+                    RunHistory(VictoryStatus.IN_PROGRESS, 0, mutableListOf()),
                     seed,
                 )
                 game.save.currentRun = runData
                 game.writeSave()
-                game.screen = EventScreen(game, runData, PlainsStartEvent())
+                game.screen = EventScreen(game, runData, game.data.getDungeon(runData.dungeonMap.dungeonId).startEvent)
+            }
+        })
+        continueLabel.addListener(object : ClickListener() {
+            override fun clicked(event: InputEvent?, x: Float, y: Float) {
+                loadRun()
+            }
+        })
+        abandonLabel.addListener(object : ClickListener() {
+            override fun clicked(event: InputEvent?, x: Float, y: Float) {
+                game.save.currentRun = null
+                game.writeSave()
             }
         })
         tutorialLabel.addListener(object : ClickListener() {
             override fun clicked(event: InputEvent?, x: Float, y: Float) {
-                // TODO: start tutorial
+                game.save.requireTutorial = false
+                game.writeSave()
             }
         })
         quitLabel.addListener(object : ClickListener() {
@@ -79,8 +90,81 @@ class MainMenuUiSystem(
                 Gdx.app.exit()
             }
         })
-
         stage.addActor(rootTable)
+    }
+
+    private fun regenerateTable(newGame: Boolean) {
+        rootTable.clearChildren()
+        rootTable.add(Label("Dragontiles", skin))
+        rootTable.row()
+        if (newGame) {
+            rootTable.add(newGameLabel)
+                .padTop(64f)
+            rootTable.row()
+        } else {
+            rootTable.add(continueLabel)
+                .padTop(64f)
+            rootTable.row()
+            rootTable.add(abandonLabel)
+            rootTable.row()
+        }
+        rootTable.add(tutorialLabel)
+        rootTable.row()
+        rootTable.add(historyLabel)
+        rootTable.row()
+        rootTable.add(databaseLabel)
+        rootTable.row()
+        rootTable.add(optionsLabel)
+        rootTable.row()
+        rootTable.add(quitLabel)
+        rootTable.row()
+    }
+
+    private fun loadRun() {
+        val runData = game.save.currentRun!!
+        val dungeon = game.data.getDungeon(runData.dungeonMap.dungeonId)
+        when (runData.dungeonMap.getCurrentNode().type) {
+            MapNodeType.COMBAT -> {
+                val floorConfig = runData.runHistory.history.last() as FloorHistory.CombatFloorHistory
+                game.screen = CombatScreen(
+                    game,
+                    runData,
+                    dungeon.getEncounter(floorConfig.encounterId)!!,
+                    CombatRewardConfig.standard(runData),
+                    false,
+                )
+            }
+            MapNodeType.ELITE -> {
+                val floorConfig = runData.runHistory.history.last() as FloorHistory.EliteFloorHistory
+                game.screen = CombatScreen(
+                    game,
+                    runData,
+                    dungeon.getEncounter(floorConfig.encounterId)!!,
+                    CombatRewardConfig.elite(runData),
+                    false,
+                )
+            }
+            MapNodeType.EVENT -> {
+                val floorConfig = runData.runHistory.history.last() as FloorHistory.EventFloorHistory
+                game.screen = EventScreen(
+                    game,
+                    runData,
+                    dungeon.dungeonEvents.first { it.id == floorConfig.eventId},
+                )
+            }
+            MapNodeType.TOWN -> {
+                game.screen = TownScreen(
+                    game,
+                    runData,
+                )
+            }
+            MapNodeType.START -> {
+                game.screen = EventScreen(game, runData, game.data.getDungeon(runData.dungeonMap.dungeonId).startEvent)
+            }
+            MapNodeType.BOSS -> {
+                // TODO
+            }
+        }
     }
 
     override fun processSystem() {

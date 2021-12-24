@@ -79,7 +79,7 @@ class SpellShopUiSystem(
 
     override fun keyDown(keycode: Int): Boolean {
         if (keycode == Input.Keys.ESCAPE) {
-            game.screen = TownScreen(game, runData, false)
+            game.screen = TownScreen(game, runData)
         }
         return false
     }

@@ -163,6 +163,7 @@ class GameDataInitializer {
                 StrangeLotus(),
                 StrangeScribe(),
             ),
+            PlainsStartEvent(),
         )
         gameData.addDungeon(dungeon)
     }

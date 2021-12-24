@@ -12,7 +12,7 @@ data class RunData(
     var potionChance: Float,
     var combatWon: Boolean,
     val combatRewards: MutableList<Reward>,
-    val history: RunHistory,
+    val runHistory: RunHistory,
     val seed: Seed,
 ) {
 

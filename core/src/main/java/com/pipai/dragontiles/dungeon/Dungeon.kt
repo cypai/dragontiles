@@ -10,4 +10,23 @@ data class Dungeon(
     val eliteEncounters: List<Encounter>,
     val bossEncounters: List<Encounter>,
     val dungeonEvents: List<DungeonEvent>,
-) : Localized
+    val startEvent: DungeonEvent,
+) : Localized {
+
+    fun getEncounter(id: String): Encounter? {
+        return when (id) {
+            in easyEncounters.map { it.id } -> {
+                easyEncounters.first { it.id == id }
+            }
+            in standardEncounters.map { it.id } -> {
+                standardEncounters.first { it.id == id }
+            }
+            in eliteEncounters.map { it.id } -> {
+                eliteEncounters.first { it.id == id }
+            }
+            else -> {
+                null
+            }
+        }
+    }
+}
