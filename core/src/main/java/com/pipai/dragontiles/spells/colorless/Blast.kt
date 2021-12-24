@@ -8,7 +8,7 @@ class Blast : StandardSpell() {
     override val requirement: ComponentRequirement = Identical(3)
     override val type: SpellType = SpellType.ATTACK
     override val targetType: TargetType = TargetType.AOE
-    override val rarity: Rarity = Rarity.UNCOMMON
+    override val rarity: Rarity = Rarity.COMMON
     override val aspects: MutableList<SpellAspect> = mutableListOf(
         AttackDamageAspect(8),
         FluxGainAspect(3)
