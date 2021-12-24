@@ -41,6 +41,7 @@ class TopRowUiSystem(
     private var hpMax = runData.hero.hpMax
     private var flux = runData.hero.flux
     private var fluxMax = runData.hero.fluxMax
+    private var tempFluxMax = runData.hero.tempFluxMax
     private var gold = runData.hero.gold
     private val hpLabel = Label("HP: $hp/$hpMax", skin)
     private val fluxLabel = Label("Flux: $flux/$fluxMax", skin)
@@ -164,13 +165,22 @@ class TopRowUiSystem(
     }
 
     fun setFluxRelative(amount: Int) {
-        setFlux(min(flux + amount, fluxMax), fluxMax)
+        setFlux(min(flux + amount, tempFluxMax), tempFluxMax, fluxMax)
     }
 
-    fun setFlux(flux: Int, fluxMax: Int) {
+    fun setTempMaxFluxRelative(amount: Int) {
+        setFlux(flux, tempFluxMax + amount, fluxMax)
+    }
+
+    fun setFlux(flux: Int, tempFluxMax: Int, fluxMax: Int) {
         this.flux = flux
+        this.tempFluxMax = tempFluxMax
         this.fluxMax = fluxMax
-        fluxLabel.setText("Flux: $flux/$fluxMax")
+        if (tempFluxMax == fluxMax) {
+            fluxLabel.setText("Flux: $flux/$fluxMax")
+        } else {
+            fluxLabel.setText("Flux: $flux/$tempFluxMax ($fluxMax)")
+        }
     }
 
     @Subscribe
@@ -181,7 +191,7 @@ class TopRowUiSystem(
     fun update() {
         goldLabel.setText("Gold: ${runData.hero.gold}")
         setHp(runData.hero.hp, runData.hero.hpMax)
-        setFlux(runData.hero.flux, runData.hero.fluxMax)
+        setFlux(runData.hero.flux, runData.hero.tempFluxMax, runData.hero.fluxMax)
         updatePotions()
         updateRelicRow()
     }

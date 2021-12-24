@@ -56,7 +56,7 @@ class CombatApi(
     suspend fun castSpell(spell: Spell) {
         eventBus.dispatch(SpellCastedEvent(spell))
         val flux = spell.baseFluxGain()
-        if (runData.hero.flux + flux >= runData.hero.fluxMax) {
+        if (runData.hero.flux + flux >= runData.hero.tempFluxMax) {
             logger.error("Attempted to cast spell that would cause self-overload")
             return
         }
@@ -439,7 +439,7 @@ class CombatApi(
             addStatusToHero(Dodge(-1))
         } else {
             val damage = calculateDamageOnHero(enemy, element, amount)
-            if (!piercing && runData.hero.flux < runData.hero.fluxMax) {
+            if (!piercing && runData.hero.flux < runData.hero.tempFluxMax) {
                 dealFluxDamageToHero(damage)
             } else {
                 dealDamageToHero(damage)
@@ -450,8 +450,8 @@ class CombatApi(
     suspend fun dealFluxDamageToHero(damage: Int) {
         runData.hero.flux += damage
         eventBus.dispatch(PlayerFluxDamageEvent(damage))
-        if (runData.hero.flux >= runData.hero.fluxMax) {
-            runData.hero.flux = runData.hero.fluxMax
+        if (runData.hero.flux >= runData.hero.tempFluxMax) {
+            runData.hero.flux = runData.hero.tempFluxMax
             addStatusToHero(Overloaded(2))
         }
     }
@@ -460,6 +460,11 @@ class CombatApi(
         val actualAmount = if (runData.hero.flux >= amount) amount else runData.hero.flux
         runData.hero.flux -= actualAmount
         eventBus.dispatch(PlayerLoseFluxEvent(actualAmount))
+    }
+
+    suspend fun gainTemporaryMaxFlux(amount: Int) {
+        runData.hero.tempFluxMax += amount
+        eventBus.dispatch(PlayerTempMaxFluxChangeEvent(amount))
     }
 
     suspend fun dealDamageToHero(damage: Int) {

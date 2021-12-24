@@ -149,6 +149,11 @@ class CombatAnimationSystem(private val game: DragonTilesGame) : BaseSystem(), A
     }
 
     @Subscribe
+    fun handlePlayerChangeTempMaxFluxEvent(ev: PlayerTempMaxFluxChangeEvent) {
+        queueAnimation(PlayerChangeTempMaxFluxAnimation(ev.amount))
+    }
+
+    @Subscribe
     fun handlePlayerDamageEvent(ev: PlayerDamageEvent) {
         queueAnimation(PlayerDamageAnimation(ev.amount))
     }

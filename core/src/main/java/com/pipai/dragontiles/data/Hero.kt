@@ -22,6 +22,7 @@ data class Hero(
     val relicIds: MutableList<RelicInstance>,
     var gold: Int,
     val potionSlots: MutableList<PotionSlot>,
+    var tempFluxMax: Int = fluxMax,
 ) {
 
     fun generateSpells(gameData: GameData): List<Spell> {

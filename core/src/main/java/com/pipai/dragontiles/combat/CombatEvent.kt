@@ -67,6 +67,8 @@ data class PlayerFluxDamageEvent(val amount: Int) : CombatEvent
 
 data class PlayerLoseFluxEvent(val amount: Int) : CombatEvent
 
+data class PlayerTempMaxFluxChangeEvent(val amount: Int) : CombatEvent
+
 data class PlayerHealEvent(val amount: Int) : CombatEvent
 
 data class PlayerDamageEvent(val amount: Int) : CombatEvent
