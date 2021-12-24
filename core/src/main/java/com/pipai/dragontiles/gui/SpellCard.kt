@@ -48,6 +48,8 @@ class SpellCard(
     private var enabled = true
     var powered = false
         private set
+    var flux: Int = 0
+    var fluxMax: Int = 0
 
     val data: MutableMap<String, Int> = mutableMapOf()
 
@@ -148,6 +150,7 @@ class SpellCard(
 
     fun enable() {
         enabled = true
+        reqNumber.style = game.skin.get("cardReq", Label.LabelStyle::class.java)
         if (!powered) {
             background = skin.getDrawable("frameDrawable")
         }
@@ -178,6 +181,12 @@ class SpellCard(
             }
             if (spell.aspects.any { it is FluxGainAspect }) {
                 fluxNumber.setText(spell.baseFluxGain())
+                if (spell.baseFluxGain() + flux >= fluxMax && fluxMax != 0) {
+                    disable()
+                    fluxNumber.style = game.skin.get("cardReqRed", Label.LabelStyle::class.java)
+                } else {
+                    fluxNumber.style = game.skin.get("cardReq", Label.LabelStyle::class.java)
+                }
             }
             val spellLocalization = game.gameStrings.spellLocalization(spell.id)
             nameLabel.setText(spellLocalization.name)

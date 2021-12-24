@@ -245,6 +245,7 @@ class DragonTilesGame(val gameConfig: GameConfig) : Game() {
         val blackDrawable = skin.newDrawable("white", Color.BLACK)
 
         skin.add("cardReq", LabelStyle(outlinedFont, Color.BLACK))
+        skin.add("cardReqRed", LabelStyle(outlinedFont, Color.RED))
         skin.add("default", LabelStyle(font, Color.BLACK))
         skin.add("small", LabelStyle(smallFont, Color.BLACK))
         skin.add("tiny", LabelStyle(tinyFont, Color.BLACK))

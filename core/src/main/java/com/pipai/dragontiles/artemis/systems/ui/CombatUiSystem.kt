@@ -1125,6 +1125,17 @@ class CombatUiSystem(
         }
     }
 
+    fun updateSpellCardFluxReq(flux: Int, fluxMax: Int) {
+        spells.values.forEach {
+            it.flux = flux
+            it.fluxMax = fluxMax
+        }
+        sideboard.values.forEach {
+            it.flux = flux
+            it.fluxMax = fluxMax
+        }
+    }
+
     enum class CombatUiState : State<CombatUiSystem> {
         ROOT {
             override fun enter(uiSystem: CombatUiSystem) {
