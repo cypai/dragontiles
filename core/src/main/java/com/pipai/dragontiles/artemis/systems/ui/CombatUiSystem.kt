@@ -830,10 +830,13 @@ class CombatUiSystem(
         stateMachine.changeState(CombatUiState.QUERY_OPTIONS)
     }
 
-    private fun setTileDepth(depth: Int) {
+    private fun setTileDepth(depth: Int, tiles: List<TileInstance>? = null) {
         world.fetch(allOf(TileComponent::class, DepthComponent::class, SpriteComponent::class)).forEach {
-            val cDepth = mDepth.get(it)
-            cDepth.depth = depth
+            val cTile = mTile.get(it)
+            if (tiles == null || cTile.tile in tiles) {
+                val cDepth = mDepth.get(it)
+                cDepth.depth = depth
+            }
         }
     }
 
@@ -1215,7 +1218,7 @@ class CombatUiSystem(
         },
         QUERY_TILES {
             override fun enter(uiSystem: CombatUiSystem) {
-                uiSystem.setTileDepth(-2)
+                uiSystem.setTileDepth(-2, uiSystem.queryTilesEvent!!.tiles)
                 uiSystem.moveActiveSpellsBack()
                 uiSystem.moveSideboardSpellsBack()
                 uiSystem.sFsTexture.fadeIn(10)
