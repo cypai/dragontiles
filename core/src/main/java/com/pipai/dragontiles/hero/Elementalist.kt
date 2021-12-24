@@ -11,7 +11,6 @@ import com.pipai.dragontiles.spells.colorless.Blast
 import com.pipai.dragontiles.spells.colorless.Invoke
 import com.pipai.dragontiles.spells.colorless.Strike
 import com.pipai.dragontiles.spells.elementalist.*
-import kotlinx.serialization.Serializable
 
 class Elementalist : HeroClass {
     override val id: String = "base:hero:Elementalist"
@@ -25,7 +24,7 @@ class Elementalist : HeroClass {
         Vent(),
         ElementalRune(),
         Break(),
-        InflictElement(),
+        InflictReactant(),
         Eyes(),
     )
     override val spells: List<Spell> = listOf(

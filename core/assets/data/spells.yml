@@ -138,10 +138,10 @@ base:spells:ThunderRune:
     name: Thunder Rune
     description: For each @Shock consumed, recast the spell.
 
-base:spells:InflictElement:
+base:spells:InflictReactant:
   en:
-    name: Inflict Element
-    description: Inflict 1 @ElementedReactant.
+    name: Inflict Reactant
+    description: Inflict 1 Elemented Reactant.
 
 base:spells:Fireball:
   en:

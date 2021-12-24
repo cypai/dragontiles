@@ -4,8 +4,8 @@ import com.pipai.dragontiles.combat.CombatApi
 import com.pipai.dragontiles.combat.CombatFlag
 import com.pipai.dragontiles.spells.*
 
-class InflictElement : StandardSpell() {
-    override val id: String = "base:spells:InflictElement"
+class InflictReactant : StandardSpell() {
+    override val id: String = "base:spells:InflictReactant"
     override val requirement: ComponentRequirement = Single(SuitGroup.ELEMENTAL)
     override val type: SpellType = SpellType.EFFECT
     override val targetType: TargetType = TargetType.SINGLE
@@ -13,7 +13,7 @@ class InflictElement : StandardSpell() {
     override val aspects: MutableList<SpellAspect> = mutableListOf(
         FluxGainAspect(1),
     )
-    override val additionalKeywords: List<String> = listOf("@Reaction", "@Melt", "@Pyroblast", "@Cryoshock")
+    override val additionalKeywords: List<String> = listOf("@Reactant", "@Reaction", "@Melt", "@Pyroblast", "@Cryoshock")
 
     override fun flags(): List<CombatFlag> {
         val flag = reactantFlag(components())

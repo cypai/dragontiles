@@ -113,10 +113,10 @@ base:keywords:Transform:
     name: Transform
     description: Cannot be done on tiles with @Freeze.
 
-base:keywords:ElementedReactant:
+base:keywords:Reactant:
   en:
-    key: "@ElementedReactant"
-    name: Elemented Reactant
+    key: "@Reactant"
+    name: Reactant
     description: "Pyro, Cryo, or Electro for Fire, Ice, or Lightning respectively."
 
 base:keywords:Reaction:
