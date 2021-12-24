@@ -3,6 +3,8 @@ package com.pipai.dragontiles.spells.elementalist
 import com.pipai.dragontiles.combat.CombatApi
 import com.pipai.dragontiles.combat.CombatFlag
 import com.pipai.dragontiles.spells.*
+import com.pipai.dragontiles.status.GenericStatus
+import com.pipai.dragontiles.utils.findAs
 
 class InflictReactant : StandardSpell() {
     override val id: String = "base:spells:InflictReactant"
@@ -11,6 +13,7 @@ class InflictReactant : StandardSpell() {
     override val targetType: TargetType = TargetType.SINGLE
     override val rarity: Rarity = Rarity.COMMON
     override val aspects: MutableList<SpellAspect> = mutableListOf(
+        StackableAspect(GenericStatus(1), 1),
         FluxGainAspect(1),
     )
 
@@ -27,6 +30,8 @@ class InflictReactant : StandardSpell() {
 
     override suspend fun onCast(params: CastParams, api: CombatApi) {
         val target = api.getEnemy(params.targets.first())
-        api.addStatusToEnemy(target, reactant(components())!!)
+        val reactant = reactant(components())!!
+        reactant.amount = aspects.findAs(StackableAspect::class)!!.status.amount
+        api.addStatusToEnemy(target, reactant)
     }
 }

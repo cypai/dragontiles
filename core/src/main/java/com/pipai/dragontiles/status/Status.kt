@@ -26,3 +26,12 @@ abstract class Status(var amount: Int) : Localized, DamageAdjustable, DeepCopyab
         flags: List<CombatFlag>
     ): Float = 1f
 }
+
+class GenericStatus(amount: Int) : Status(amount) {
+    override val id: String = "base:status:Generic"
+    override val assetName: String = ""
+    override val displayAmount: Boolean = false
+    override fun deepCopy(): Status {
+        return GenericStatus(amount)
+    }
+}
