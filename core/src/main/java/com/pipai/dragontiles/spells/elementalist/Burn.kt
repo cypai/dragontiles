@@ -15,6 +15,7 @@ class Burn : StandardSpell() {
     override val targetType: TargetType = TargetType.SINGLE
     override val rarity: Rarity = Rarity.COMMON
     override val aspects: MutableList<SpellAspect> = mutableListOf(
+        StackableAspect(Pyro(1), 1),
         AttackDamageAspect(2),
         FluxGainAspect(1),
     )
@@ -27,7 +28,6 @@ class Burn : StandardSpell() {
     override suspend fun onCast(params: CastParams, api: CombatApi) {
         val target = api.getEnemy(params.targets.first())
         api.attack(target, elemental(components()), baseDamage(), flags())
-        api.addStatusToEnemy(target, aspects.getStackableCopy(Pyro::class))
         api.inflictTileStatusOnHand(RandomTileStatusInflictStrategy(TileStatus.BURN, 1))
     }
 }

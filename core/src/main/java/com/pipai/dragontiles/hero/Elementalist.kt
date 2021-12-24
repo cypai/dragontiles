@@ -2,14 +2,10 @@ package com.pipai.dragontiles.hero
 
 import com.pipai.dragontiles.relics.Relic
 import com.pipai.dragontiles.relics.Transmuter
-import com.pipai.dragontiles.spells.colorless.Chow
-import com.pipai.dragontiles.spells.colorless.PingHu
 import com.pipai.dragontiles.spells.elementalist.Eyes
-import com.pipai.dragontiles.spells.colorless.Pong
 import com.pipai.dragontiles.spells.Spell
+import com.pipai.dragontiles.spells.colorless.*
 import com.pipai.dragontiles.spells.elementalist.Blast
-import com.pipai.dragontiles.spells.colorless.Invoke
-import com.pipai.dragontiles.spells.colorless.Strike
 import com.pipai.dragontiles.spells.elementalist.*
 
 class Elementalist : HeroClass {
@@ -22,9 +18,10 @@ class Elementalist : HeroClass {
         Invoke(),
         Strike(),
         Vent(),
-        ElementalRune(),
-        Break(),
+        Bump(),
+        Burn(),
         Eyes(),
+        ExpandAnomaly(),
     )
     override val spells: List<Spell> = listOf(
         Burn(),
@@ -49,6 +46,7 @@ class Elementalist : HeroClass {
         ChainLightning(),
         GreatPower(),
         TransmutationRune(),
+        ExpandAnomaly(),
     )
     override val hpMax: Int = 60
     override val fluxMax: Int = 40

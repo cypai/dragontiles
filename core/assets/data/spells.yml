@@ -227,3 +227,8 @@ base:spells:Transmutation:
   en:
     name: Transmutation
     description: Not deactivateable. Next turn, transform all Components into the Element of the first Component.
+
+base:spells:ExpandAnomaly:
+  en:
+    name: Expand Anomaly
+    description: Select a tile with @Burn, @Freeze, or @Shock in your hand. Copy its status to all other tiles of its suit.
