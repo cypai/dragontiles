@@ -1040,8 +1040,6 @@ class CombatUiSystem(
         activeIndexes.zip(sideboardIndexes).forEach { (activeIndex, sideboardIndex) ->
             val activeSpellCard = spells[activeIndex]!!
             val sideboardSpellCard = sideboard[sideboardIndex]!!
-            println(activeSpellCard.getSpell())
-            println(sideboardSpellCard.getSpell())
             val activeEntityId = spellEntityIds[activeIndex]!!
             val sideEntityId = sideboardEntityIds[sideboardIndex]!!
             spells[activeIndex] = sideboardSpellCard

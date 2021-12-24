@@ -40,9 +40,6 @@ private fun dedupe(fcs: List<FullCastHand>): List<FullCastHand> {
             returnList.add(it)
         }
     }
-    returnList.forEach {
-        println(it.uniqueIdentifier())
-    }
     return returnList
 }
 
