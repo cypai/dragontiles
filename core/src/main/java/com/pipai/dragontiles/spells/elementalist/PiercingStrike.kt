@@ -1,11 +1,7 @@
 package com.pipai.dragontiles.spells.elementalist
 
 import com.pipai.dragontiles.combat.CombatApi
-import com.pipai.dragontiles.combat.CombatSubscribe
-import com.pipai.dragontiles.combat.SpellCastedEvent
-import com.pipai.dragontiles.combat.TurnStartEvent
 import com.pipai.dragontiles.spells.*
-import com.pipai.dragontiles.utils.findAs
 
 class PiercingStrike : StandardSpell() {
     override val id: String = "base:spells:PiercingStrike"

@@ -433,7 +433,7 @@ class CombatUiSystem(
                             }
                         }
                         Input.Buttons.RIGHT -> {
-                            if (spell is Rune && spell.active) {
+                            if (spell is Rune && spell.active && spell.aspects.none { it is NotManuallyDeactivateable }) {
                                 sAnimation.pauseUiMode = true
                                 scope.launch {
                                     spell.deactivate(sCombat.controller.api)
@@ -735,7 +735,9 @@ class CombatUiSystem(
             givenComponents.remove(tile)
         } else {
             givenComponents.add(tile)
-            givenComponents.sortWith(compareBy({ it.tile.suit.order }, { it.tile.order() }))
+            if (getSelectedSpell().aspects.none { it is PreserveComponentOrder }) {
+                givenComponents.sortWith(compareBy({ it.tile.suit.order }, { it.tile.order() }))
+            }
         }
         val spell = getSelectedSpell()
         if (spell.requirement.manualOnly) {

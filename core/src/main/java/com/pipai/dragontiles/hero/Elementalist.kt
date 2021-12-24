@@ -48,6 +48,7 @@ class Elementalist : HeroClass {
         IceShard(),
         ChainLightning(),
         GreatPower(),
+        TransmutationRune(),
     )
     override val hpMax: Int = 60
     override val fluxMax: Int = 40

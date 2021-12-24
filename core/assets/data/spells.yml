@@ -222,3 +222,8 @@ base:spells:ColdHands:
   en:
     name: Cold Hands
     description: Inflict !s(1) Weak.
+
+base:spells:Transmutation:
+  en:
+    name: Transmutation
+    description: Not deactivateable. Next turn, transform all Components into the Element of the first Component.

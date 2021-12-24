@@ -40,3 +40,5 @@ data class LimitedRepeatableAspect(var max: Int) : SpellAspect {
 data class StackableAspect(val status: Status, val dynamicId: Int) : SpellAspect
 
 class TransformAspect : SpellAspect
+class NotManuallyDeactivateable : SpellAspect
+class PreserveComponentOrder : SpellAspect
