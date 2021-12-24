@@ -13,6 +13,7 @@ class MultiInvoke : StandardSpell() {
     override val aspects: MutableList<SpellAspect> = mutableListOf(
         AttackDamageAspect(1),
         FluxGainAspect(3),
+        XAspect(0),
     )
 
     override fun flags(): List<CombatFlag> {
@@ -21,8 +22,7 @@ class MultiInvoke : StandardSpell() {
 
     override suspend fun onCast(params: CastParams, api: CombatApi) {
         val target = api.getEnemy(params.targets.first())
-        val x = components().size
-        repeat(x) {
+        repeat(x()) {
             api.attack(target, elemental(components()), baseDamage(), flags())
         }
     }

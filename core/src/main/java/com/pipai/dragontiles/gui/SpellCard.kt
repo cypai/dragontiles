@@ -201,6 +201,14 @@ class SpellCard(
                             "+ $replacement"
                         }
                     }
+                    "!x" -> {
+                        val r = replacement.toInt()
+                        when {
+                            r == 0 -> "X"
+                            r < 0 -> "X$r"
+                            else -> "X+$r"
+                        }
+                    }
                     else -> {
                         replacement
                     }

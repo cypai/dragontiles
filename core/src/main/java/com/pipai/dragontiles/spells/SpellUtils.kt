@@ -61,6 +61,10 @@ fun Spell.baseSwap(): Int {
     return aspects.findAs(SwapAspect::class)?.amount ?: 0
 }
 
+fun Spell.x(): Int {
+    return aspects.findAs(XAspect::class)?.amount ?: 0
+}
+
 val anySet = setOf(Suit.FIRE, Suit.ICE, Suit.LIGHTNING, Suit.LIFE, Suit.STAR, Suit.FUMBLE)
 val anyNoFumbleSet = setOf(Suit.FIRE, Suit.ICE, Suit.LIGHTNING, Suit.LIFE, Suit.STAR)
 val elementalSet = setOf(Suit.FIRE, Suit.ICE, Suit.LIGHTNING)

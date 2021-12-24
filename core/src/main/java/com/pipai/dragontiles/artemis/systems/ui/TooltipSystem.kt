@@ -77,6 +77,9 @@ class TooltipSystem(private val game: DragonTilesGame, var stage: Stage) : NoPro
         if (spell.requirement.reqAmount.text() == "?") {
             addText("Requirements", spell.requirement.description, false)
         }
+        if (spell.aspects.any { it is XAspect }) {
+            addKeyword(Keywords.X)
+        }
         addKeywordsInString(game.gameStrings.spellLocalization(spell.id).description)
         spell.additionalKeywords().forEach { addKeyword(it) }
         spell.additionalLocalized().forEach { addNameDescLocalization(game.gameStrings.nameDescLocalization(it)) }
