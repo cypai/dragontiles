@@ -42,7 +42,7 @@ class SpellCard(
         val cardHeight = 216f
     }
 
-    private val regex = "(!\\w+)(\\[.+])?".toRegex()
+    private val keyRegex = "(!\\w+)(\\((\\w+)\\))?(\\[.+])?".toRegex()
 
     private val clickCallbacks: MutableList<(InputEvent, SpellCard) -> Unit> = mutableListOf()
     private val hoverEnterCallbacks: MutableList<(SpellCard) -> Unit> = mutableListOf()
@@ -240,21 +240,24 @@ class SpellCard(
             if (spell.aspects.any { it is LimitedRepeatableAspect }) {
                 description += " ${Keywords.REPEATABLE} !r."
             }
-            val adjustedDescription = description.replace(regex) {
-                val replacement = if (target == null && it.groupValues[2].isNotEmpty()) {
-                    it.groupValues[2]
+            val adjustedDescription = description.replace(keyRegex) {
+                val replacement = if (target == null && it.groupValues[4].isNotEmpty()) {
+                    it.groupValues[4]
                 } else {
                     val castParams = CastParams(if (target == null) listOf() else listOf(target!!.id))
-                    spell.dynamicValue(it.groupValues[1], api, castParams).toString()
+                    spell.dynamicValue(it.groupValues[1], it.groupValues[3], api, castParams).toString()
                 }
-                if (it.groupValues[1] == "!dp") {
-                    if (replacement == "0") {
-                        ""
-                    } else {
-                        "+ $replacement"
+                when (it.groupValues[1]) {
+                    "!dp" -> {
+                        if (replacement == "0") {
+                            ""
+                        } else {
+                            "+ $replacement"
+                        }
                     }
-                } else {
-                    replacement
+                    else -> {
+                        replacement
+                    }
                 }
             }.replace("[@\\[\\]]".toRegex(), "")
             descriptionLabel.setText(adjustedDescription)

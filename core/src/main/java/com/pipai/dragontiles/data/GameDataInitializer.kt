@@ -51,6 +51,8 @@ class GameDataInitializer {
         gameData.addSpell(GameData.COLORLESS, Ground())
         gameData.addSpell(GameData.COLORLESS, Reserve())
         gameData.addSpell(GameData.COLORLESS, Split())
+        gameData.addSpell(GameData.COLORLESS, DragonRage())
+        gameData.addSpell(GameData.COLORLESS, DragonScale())
     }
 
     private fun initSpellUpgrades(gameData: GameData) {

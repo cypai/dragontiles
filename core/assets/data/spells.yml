@@ -111,12 +111,12 @@ base:spells:Split:
 base:spells:Break:
   en:
     name: Break
-    description: Inflict 3 @Break.
+    description: Inflict !s(1) @Break.
 
 base:spells:Concentrate:
   en:
     name: Concentrate
-    description: Gain 2 @Strength.
+    description: Gain !s(1) @Strength.
 
 base:spells:FeedbackLoop:
   en:
@@ -141,27 +141,27 @@ base:spells:ThunderRune:
 base:spells:InflictReactant:
   en:
     name: Inflict Reactant
-    description: Inflict 1 Elemented Reactant.
+    description: Inflict !s(1) Elemented Reactant.
 
 base:spells:Fireball:
   en:
     name: Fireball
-    description: Deal !d Fire damage. Inflict 1 @Pyro. @Burn a random tile in your hand.
+    description: Deal !d Fire damage. Inflict !s(1) @Pyro. @Burn a random tile in your hand.
 
 base:spells:IceShard:
   en:
     name: Ice Shard
-    description: Deal !d Ice damage. Inflict 1 @Cryo. @Freeze a random tile in your hand.
+    description: Deal !d Ice damage. Inflict !s(1) @Cryo. @Freeze a random tile in your hand.
 
 base:spells:ChainLightning:
   en:
     name: Chain Lightning
-    description: Deal !d Lightning damage and inflict 1 @Electro @AOE. @Shock a random tile in your hand.
+    description: Deal !d Lightning damage and inflict !s(1) @Electro @AOE. @Shock a random tile in your hand.
 
 base:spells:Chillsink:
   en:
     name: Chillsink
-    description: Remove all @Freeze from your hand. Lose 3 @Flux for each unfrozen tile.
+    description: Remove all @Freeze from your hand. Lose !f @Flux for each unfrozen tile.
 
 base:spells:MassTransmute:
   en:
@@ -206,7 +206,7 @@ base:spells:AllForOne:
 base:spells:DragonRage:
   en:
     name: Dragon Rage
-    description: "@Power: Gain 2 Strength each time you play a Sequence."
+    description: "@Power: Gain !s(1) Strength each time you play a Sequence."
 
 base:spells:DragonScale:
   en:
@@ -221,4 +221,4 @@ base:spells:Burn:
 base:spells:ColdHands:
   en:
     name: Cold Hands
-    description: Inflict 2 Weak.
+    description: Inflict !s(1) Weak.

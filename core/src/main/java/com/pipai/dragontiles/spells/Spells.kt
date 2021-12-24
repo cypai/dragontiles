@@ -73,17 +73,17 @@ abstract class Spell : Localized, DamageAdjustable {
         return baseDamage()
     }
 
-    open fun dynamicValue(key: String, api: CombatApi?, params: CastParams): Int {
+    open fun dynamicValue(key: String, param: String?, api: CombatApi?, castParams: CastParams): Int {
         return when (key) {
             "!d" -> {
                 return if (api == null) {
                     baseDamage()
                 } else {
-                    if (params.targets.isEmpty()) {
+                    if (castParams.targets.isEmpty()) {
                         // TODO: Fix this
                         api.calculateBaseDamage(Element.NONE, baseDamage())
                     } else {
-                        val target = api.getEnemy(params.targets.first())
+                        val target = api.getEnemy(castParams.targets.first())
                         api.calculateDamageOnEnemy(target, elemental(components()), dynamicBaseDamage(components()), flags())
                     }
                 }
@@ -93,16 +93,20 @@ abstract class Spell : Localized, DamageAdjustable {
                 return if (api == null) {
                     baseDamage()
                 } else {
-                    if (params.targets.isEmpty()) {
+                    if (castParams.targets.isEmpty()) {
                         // TODO: Fix this
                         api.calculateBaseDamage(Element.NONE, baseDamage())
                     } else {
-                        val target = api.getEnemy(params.targets.first())
+                        val target = api.getEnemy(castParams.targets.first())
                         api.calculateDamageOnEnemy(target, elemental(components()), baseDamage(), flags())
                     }
                 }
             }
             "!f" -> baseFluxLoss()
+            "!s" -> {
+                aspects.filterIsInstance(StackableAspect::class.java)
+                    .firstOrNull { it.dynamicId.toString() == param }?.status?.amount ?: 0
+            }
             else -> data[key] ?: 0
         }
     }
@@ -140,10 +144,10 @@ abstract class StandardSpell : Spell() {
 
     override fun swappableFromSideboard(): Boolean = !exhausted
 
-    override fun dynamicValue(key: String, api: CombatApi?, params: CastParams): Int {
+    override fun dynamicValue(key: String, param: String?, api: CombatApi?, castParams: CastParams): Int {
         return when (key) {
             "!r" -> (aspects.findAs(LimitedRepeatableAspect::class)?.max ?: 1) - repeated
-            else -> super.dynamicValue(key, api, params)
+            else -> super.dynamicValue(key, param, api, castParams)
         }
     }
 

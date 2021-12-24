@@ -64,7 +64,7 @@ class StatusSystem(private val game: DragonTilesGame) : NoProcessingSystem() {
         val cHover = mHoverable.create(eid)
         cHover.enterCallback = {
             cHover.recheck = true
-            sTooltip.addNameDescLocalization(game.gameStrings.nameDescLocalization(status.id))
+            sTooltip.addNameDescLocalization(game.gameStrings.nameDescLocalization(status.id), allowBlank = true)
             sTooltip.showTooltip()
         }
         cHover.exitCallback = { sTooltip.hideTooltip() }

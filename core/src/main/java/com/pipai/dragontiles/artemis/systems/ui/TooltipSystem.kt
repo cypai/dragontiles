@@ -32,8 +32,10 @@ class TooltipSystem(private val game: DragonTilesGame, var stage: Stage) : NoPro
         const val WIDTH = 160f
     }
 
-    fun addNameDescLocalization(nameDescLocalization: NameDescLocalization) {
-        addText(nameDescLocalization.name, nameDescLocalization.description, true)
+    fun addNameDescLocalization(nameDescLocalization: NameDescLocalization, allowBlank: Boolean = false) {
+        if (allowBlank || nameDescLocalization.description.isNotBlank()) {
+            addText(nameDescLocalization.name, nameDescLocalization.description, true)
+        }
     }
 
     fun addText(header: String, text: String, recurse: Boolean) {

@@ -14,7 +14,7 @@ class DragonScale : StandardSpell() {
     override val requirement: ComponentRequirement = Sequential(9, SuitGroup.ELEMENTAL)
     override val type: SpellType = SpellType.EFFECT
     override val targetType: TargetType = TargetType.NONE
-    override val rarity: Rarity = Rarity.COMMON
+    override val rarity: Rarity = Rarity.SPECIAL
     override val aspects: MutableList<SpellAspect> = mutableListOf()
 
     override suspend fun onCast(params: CastParams, api: CombatApi) {
