@@ -176,7 +176,7 @@ base:spells:ElementalRune:
 base:spells:StrengthRune:
   en:
     name: Strength Rune
-    description: Increases Strength by !x.
+    description: Increases Strength by !xsleft(1)!x!xsright(1).
 
 base:spells:HasteRune:
   en:

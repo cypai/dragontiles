@@ -7,7 +7,7 @@ import com.pipai.dragontiles.utils.findAs
 
 class SurgeUpgrade : SpellUpgrade {
     override val id: String = "base:upgrades:SurgeUpgrade"
-    override val assetName: String = "power.png"
+    override val assetName: String = "surge.png"
 
     override fun canUpgrade(spell: Spell): Boolean {
         return spell.aspects.any { it is AttackDamageAspect }

@@ -39,8 +39,8 @@ interface HeroClass : Localized {
             startingGold,
             mutableListOf(),
         )
-        hero.spells.addAll(starterDeck.filter { it !is Sorcery }.map { SpellInstance(it.id, mutableListOf()) })
-        hero.sorceries.addAll(starterDeck.filterIsInstance<Sorcery>().map { SpellInstance(it.id, mutableListOf()) })
+        hero.spells.addAll(starterDeck.filter { it !is Sorcery }.map { it.toInstance() })
+        hero.sorceries.addAll(starterDeck.filterIsInstance<Sorcery>().map { it.toInstance() })
         repeat(potionSlotSize) {
             hero.potionSlots.add(PotionSlot(null))
         }

@@ -11,9 +11,7 @@ import com.pipai.dragontiles.potions.HealingPotion
 import com.pipai.dragontiles.relics.*
 import com.pipai.dragontiles.spells.colorless.*
 import com.pipai.dragontiles.spells.elementalist.Split
-import com.pipai.dragontiles.spells.upgrades.EfficiencyUpgrade
-import com.pipai.dragontiles.spells.upgrades.PowerUpgrade
-import com.pipai.dragontiles.spells.upgrades.SurgeUpgrade
+import com.pipai.dragontiles.spells.upgrades.*
 
 class GameDataInitializer {
 
@@ -63,6 +61,8 @@ class GameDataInitializer {
         gameData.addSpellUpgrade(PowerUpgrade())
         gameData.addSpellUpgrade(SurgeUpgrade())
         gameData.addSpellUpgrade(EfficiencyUpgrade())
+        gameData.addSpellUpgrade(DoublestackUpgrade())
+        gameData.addSpellUpgrade(XUpgrade())
     }
 
     private fun initHeroSpells(gameData: GameData, heroClassId: String) {

@@ -209,6 +209,18 @@ class SpellCard(
                             else -> "X+$r"
                         }
                     }
+                    "!xsleft" -> {
+                        when (val r = replacement.toInt()) {
+                            1 -> ""
+                            else -> "$r("
+                        }
+                    }
+                    "!xsright" -> {
+                        when (replacement.toInt()) {
+                            1 -> ""
+                            else -> ")"
+                        }
+                    }
                     else -> {
                         replacement
                     }

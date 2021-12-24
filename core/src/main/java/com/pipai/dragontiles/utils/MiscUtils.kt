@@ -74,6 +74,11 @@ inline fun <T : Any, reified U : T> List<T>.findAsWhere(klass: KClass<U>, predic
     }
 }
 
+inline fun <reified T : Status> List<SpellAspect>.getStackableAmount(klass: KClass<T>): Int {
+    val stackable = this.findAsWhere(StackableAspect::class) { it.status is T }
+    return stackable?.status?.amount ?: 0
+}
+
 inline fun <reified T : Status> List<SpellAspect>.getStackableCopy(klass: KClass<T>): T {
     val stackable = this.findAsWhere(StackableAspect::class) { it.status is T }!!
     return stackable.status.deepCopy() as T

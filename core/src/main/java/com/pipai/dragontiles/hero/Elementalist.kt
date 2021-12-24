@@ -7,6 +7,8 @@ import com.pipai.dragontiles.spells.Spell
 import com.pipai.dragontiles.spells.colorless.*
 import com.pipai.dragontiles.spells.elementalist.Blast
 import com.pipai.dragontiles.spells.elementalist.*
+import com.pipai.dragontiles.spells.upgrades.DoublestackUpgrade
+import com.pipai.dragontiles.spells.upgrades.XUpgrade
 
 class Elementalist : HeroClass {
     override val id: String = "base:hero:Elementalist"

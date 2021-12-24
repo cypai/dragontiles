@@ -46,7 +46,7 @@ data class SwapAspect(var amount: Int) : SpellAspect {
 
 data class StackableAspect(val status: Status, val dynamicId: Int) : SpellAspect
 
-data class XAspect(val amount: Int) : SpellAspect
+data class XAspect(var amount: Int) : SpellAspect
 
 class TransformAspect : SpellAspect
 class NotManuallyDeactivateable : SpellAspect

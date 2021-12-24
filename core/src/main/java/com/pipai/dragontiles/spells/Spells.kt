@@ -60,7 +60,12 @@ abstract class Spell : Localized, DamageAdjustable {
 
     abstract fun available(): Boolean
 
-    override fun queryFlatAdjustment(origin: Combatant?, target: Combatant?, element: Element, flags: List<CombatFlag>): Int = 0
+    override fun queryFlatAdjustment(
+        origin: Combatant?,
+        target: Combatant?,
+        element: Element,
+        flags: List<CombatFlag>
+    ): Int = 0
 
     override fun queryScaledAdjustment(
         origin: Combatant?,
@@ -84,7 +89,12 @@ abstract class Spell : Localized, DamageAdjustable {
                         api.calculateBaseDamage(Element.NONE, baseDamage())
                     } else {
                         val target = api.getEnemy(castParams.targets.first())
-                        api.calculateDamageOnEnemy(target, elemental(components()), dynamicBaseDamage(components()), flags())
+                        api.calculateDamageOnEnemy(
+                            target,
+                            elemental(components()),
+                            dynamicBaseDamage(components()),
+                            flags()
+                        )
                     }
                 }
             }
@@ -108,7 +118,15 @@ abstract class Spell : Localized, DamageAdjustable {
                     .firstOrNull { it.dynamicId.toString() == param }?.status?.amount ?: 0
             }
             "!swap" -> baseSwap()
-            "!x" -> x()
+            "!x" -> aspects.findAs(XAspect::class)?.amount ?: 0
+            "!xsleft" -> {
+                aspects.filterIsInstance(StackableAspect::class.java)
+                    .firstOrNull { it.dynamicId.toString() == param }?.status?.amount ?: 1
+            }
+            "!xsright" -> {
+                aspects.filterIsInstance(StackableAspect::class.java)
+                    .firstOrNull { it.dynamicId.toString() == param }?.status?.amount ?: 1
+            }
             else -> data[key] ?: 0
         }
     }
@@ -135,7 +153,6 @@ enum class Rarity {
     STARTER, COMMON, UNCOMMON, RARE, SPECIAL
 }
 
-@Serializable
 abstract class StandardSpell : Spell() {
     private val logger = getLogger()
 
@@ -335,9 +352,11 @@ class UnplayableRequirement : ComponentRequirement {
     override fun find(hand: List<TileInstance>): List<List<TileInstance>> {
         throw NotImplementedError()
     }
+
     override fun findGiven(hand: List<TileInstance>, given: List<TileInstance>): List<List<TileInstance>> {
         throw NotImplementedError()
     }
+
     override fun satisfied(slots: List<TileInstance>): Boolean {
         throw NotImplementedError()
     }
