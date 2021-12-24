@@ -1,9 +1,6 @@
 package com.pipai.dragontiles.combat
 
-import com.pipai.dragontiles.data.Element
-import com.pipai.dragontiles.data.Tile
-import com.pipai.dragontiles.data.TileInstance
-import com.pipai.dragontiles.data.TileStatus
+import com.pipai.dragontiles.data.*
 import com.pipai.dragontiles.dungeon.GlobalApi
 import com.pipai.dragontiles.dungeon.RunData
 import com.pipai.dragontiles.enemies.Enemy
@@ -19,16 +16,18 @@ import kotlin.coroutines.suspendCoroutine
 import kotlin.reflect.KClass
 
 class CombatApi(
+    gameData: GameData,
     runData: RunData,
     val combat: Combat,
     private val eventBus: CombatEventBus,
-) : GlobalApi(runData, eventBus.sEvent) {
+) : GlobalApi(gameData, runData, eventBus.sEvent) {
 
     companion object {
         const val OPEN_POOL_SIZE = 9
     }
 
     private val logger = getLogger()
+    private val rng = runData.seed.miscRng()
     private var nextId = 0
     val swapChannel = Channel<SwapData>()
 
@@ -112,7 +111,7 @@ class CombatApi(
     }
 
     suspend fun inflictTileStatusOnHand(strategy: TileStatusInflictStrategy) {
-        setTileStatus(strategy.select(combat.hand, runData.rng), strategy.tileStatus)
+        setTileStatus(strategy.select(combat.hand, rng), strategy.tileStatus)
     }
 
     suspend fun transformTile(tileInstance: TileInstance, tile: Tile, sortHand: Boolean) {
@@ -234,7 +233,7 @@ class CombatApi(
     fun calculateBaseDamage(element: Element, amount: Int): Int {
         var flat = 0
         var scaling = 1f
-        runData.hero.relicIds.forEach {
+        combat.relics.forEach {
             flat += it.queryFlatAdjustment(DamageOrigin.SELF_ATTACK, DamageTarget.OPPONENT, element)
             scaling *= it.queryScaledAdjustment(DamageOrigin.SELF_ATTACK, DamageTarget.OPPONENT, element)
         }
@@ -252,7 +251,7 @@ class CombatApi(
     fun calculateDamageOnEnemy(enemy: Enemy, element: Element, amount: Int): Int {
         var flat = 0
         var scaling = 1f
-        runData.hero.relicIds.forEach {
+        combat.relics.forEach {
             flat += it.queryFlatAdjustment(DamageOrigin.SELF_ATTACK, DamageTarget.OPPONENT, element)
             scaling *= it.queryScaledAdjustment(DamageOrigin.SELF_ATTACK, DamageTarget.OPPONENT, element)
         }
@@ -274,7 +273,7 @@ class CombatApi(
     fun calculateDamageOnHero(enemy: Enemy, element: Element, amount: Int): Int {
         var flat = 0
         var scaling = 1f
-        runData.hero.relicIds.forEach {
+        combat.relics.forEach {
             flat += it.queryFlatAdjustment(DamageOrigin.OPPONENT_ATTACK, DamageTarget.SELF, element)
             scaling *= it.queryScaledAdjustment(DamageOrigin.OPPONENT_ATTACK, DamageTarget.SELF, element)
         }
@@ -570,8 +569,8 @@ class CombatApi(
         return queryTileOptions("Transform this tile", tile, options, 1, 1).first()
     }
 
-    suspend fun castSorceries(fullCastHand: FullCastHand, sorceries: List<Sorcery>) {
-        sorceries.forEach { sorcery ->
+    suspend fun castSorceries(fullCastHand: FullCastHand) {
+        combat.sorceries.forEach { sorcery ->
             when (val req = sorcery.requirement) {
                 is Identical -> {
                     when (req.reqAmount.amount) {
@@ -621,6 +620,13 @@ class CombatApi(
             }
         }
         sorceryConsume()
+    }
+
+    suspend fun usePotionInCombat(target: Int?, index: Int) {
+        val potionSlot = runData.hero.potionSlots[index]
+        val potion = gameData.getPotion(potionSlot.potionId!!)
+        potionSlot.potionId = null
+        potion.onCombatUse(target, this)
     }
 }
 

@@ -10,12 +10,10 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.pipai.dragontiles.DragonTilesGame
 import com.pipai.dragontiles.artemis.screens.EventScreen
 import com.pipai.dragontiles.data.GameData
-import com.pipai.dragontiles.dungeon.DungeonInitializer
-import com.pipai.dragontiles.dungeon.RunData
-import com.pipai.dragontiles.dungeon.RunHistory
+import com.pipai.dragontiles.dungeon.*
 import com.pipai.dragontiles.dungeonevents.PlainsStartEvent
 import com.pipai.dragontiles.hero.Elementalist
-import com.pipai.dragontiles.relics.RelicData
+import com.pipai.dragontiles.spells.Rarity
 import java.util.*
 
 class MainMenuUiSystem(
@@ -50,19 +48,18 @@ class MainMenuUiSystem(
                     game.save.requireTutorial = false
                     // TODO: start tutorial
                 }
-                val hero = Elementalist().generateHero("Elementalist")
+                val seed = Seed()
 
                 val runData = RunData(
-                    DungeonInitializer(),
-                    hero,
-                    RelicData(GameData.relics.toMutableList()),
+                    Elementalist().generateHero("Elementalist"),
+                    DungeonMap("base:dungeons:Plains", DungeonMap.generateMap(seed)),
+                    game.data.allRelics().filter { it.rarity != Rarity.SPECIAL }.map { it.id }.toMutableList(),
                     null,
                     0,
                     GameData.BASE_POTION_CHANCE,
                     RunHistory(mutableListOf()),
-                    Random(),
+                    seed,
                 )
-                runData.dungeonMap.generateMap(runData.rng)
                 game.save.currentRun = runData
                 game.writeSave()
                 game.screen = EventScreen(game, runData, PlainsStartEvent())

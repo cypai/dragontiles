@@ -2,6 +2,8 @@ package com.pipai.dragontiles.combat
 
 import com.pipai.dragontiles.data.TileInstance
 import com.pipai.dragontiles.enemies.Enemy
+import com.pipai.dragontiles.relics.Relic
+import com.pipai.dragontiles.spells.Sorcery
 import com.pipai.dragontiles.spells.Spell
 import com.pipai.dragontiles.status.Status
 
@@ -11,6 +13,8 @@ data class Combat(val enemies: List<Enemy>, val rewards: CombatRewards) {
 
     val spells: MutableList<Spell> = mutableListOf()
     val sideboard: MutableList<Spell> = mutableListOf()
+    val sorceries: MutableList<Sorcery> = mutableListOf()
+    val relics: MutableList<Relic> = mutableListOf()
 
     val hand: MutableList<TileInstance> = mutableListOf()
     val drawPile: MutableList<TileInstance> = mutableListOf()

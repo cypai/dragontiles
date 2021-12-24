@@ -10,6 +10,7 @@ class Transmuter : Relic() {
     override val id = "base:relics:Transmuter"
     override val assetName = "transmuter.png"
     override val rarity = Rarity.RARE
+    override val showCounter: Boolean = false
 
     private var firstDraw: TileInstance? = null
 

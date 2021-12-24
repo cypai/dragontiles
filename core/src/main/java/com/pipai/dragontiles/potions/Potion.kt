@@ -10,18 +10,8 @@ abstract class Potion : Localized {
     abstract val type: PotionType
     abstract val targetType: PotionTargetType
 
-    fun useOutsideCombat(api: GlobalApi) {
-        onNonCombatUse(api)
-        api.removePotion(this)
-    }
-
-    suspend fun useDuringCombat(target: Int?, api: CombatApi) {
-        onCombatUse(target, api)
-        api.removePotion(this)
-    }
-
-    protected abstract fun onNonCombatUse(api: GlobalApi)
-    protected abstract suspend fun onCombatUse(target: Int?, api: CombatApi)
+    abstract fun onNonCombatUse(api: GlobalApi)
+    abstract suspend fun onCombatUse(target: Int?, api: CombatApi)
 }
 
 enum class PotionType {

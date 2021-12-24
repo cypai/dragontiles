@@ -16,10 +16,11 @@ data class RunData(
 )
 
 data class Seed(
-    val baseSeed: Long,
+    val baseSeed: Long = Random.Default.nextLong(),
     private var dungeonSeed: Long = baseSeed,
     private var relicSeed: Long = baseSeed,
     private var rewardSeed: Long = baseSeed,
+    private var miscSeed: Long = baseSeed,
 ) {
 
     fun dungeonRng(): Random {
@@ -35,5 +36,10 @@ data class Seed(
     fun rewardRng(): Random {
         rewardSeed++
         return Random(rewardSeed)
+    }
+
+    fun miscRng(): Random {
+        miscSeed++
+        return Random(miscSeed)
     }
 }

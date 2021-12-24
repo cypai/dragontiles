@@ -45,7 +45,7 @@ class CombatScreen(game: DragonTilesGame, runData: RunData, encounter: Encounter
                 TimerSystem(),
                 MutualDestroySystem(),
 
-                CombatControllerSystem(runData, combat),
+                CombatControllerSystem(game.data, runData, combat),
                 TileIdSystem(),
                 EnemyIntentSystem(),
                 HeroStatusSystem(),

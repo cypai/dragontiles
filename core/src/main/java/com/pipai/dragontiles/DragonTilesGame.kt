@@ -67,7 +67,7 @@ class DragonTilesGame(val gameConfig: GameConfig) : Game() {
     lateinit var tileSkin: TileSkin
         private set
 
-    val gameData: GameData = GameData()
+    val data: GameData = GameData()
 
     lateinit var gameStrings: GameStrings
         private set
@@ -87,7 +87,7 @@ class DragonTilesGame(val gameConfig: GameConfig) : Game() {
         logger.info("Starting Dragon Tiles with the following config settings:")
         logger.info(gameConfig.resolution.toDebugString())
 
-        GameDataInitializer().init(gameData)
+        GameDataInitializer().init(data)
 
         if (saveFileHandle.exists()) {
             save = saveSerializer.deserialize(saveFileHandle.readString())

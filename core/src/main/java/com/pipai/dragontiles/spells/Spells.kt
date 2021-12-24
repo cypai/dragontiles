@@ -33,11 +33,22 @@ abstract class Spell : Localized, DamageAdjustable {
         return clone
     }
 
+    fun toInstance(): SpellInstance {
+        return SpellInstance(id, upgrades.map { SpellUpgradeInstance(it.id) }.toMutableList())
+    }
+
     fun getUpgrades() = upgrades.toList()
 
     fun upgrade(upgrade: SpellUpgrade) {
         upgrade.onUpgrade(this)
         upgrades.add(upgrade)
+    }
+
+    fun withUpgrades(upgrades: List<SpellUpgrade>): Spell {
+        upgrades.forEach {
+            upgrade(it)
+        }
+        return this
     }
 
     abstract fun swappableFromSideboard(): Boolean

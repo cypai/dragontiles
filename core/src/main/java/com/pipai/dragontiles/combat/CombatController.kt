@@ -7,18 +7,21 @@ import kotlinx.coroutines.runBlocking
 import net.mostlyoriginal.api.event.common.EventSystem
 
 class CombatController(
+    private val gameData: GameData,
     private val runData: RunData,
     private val combat: Combat,
     eventSystem: EventSystem,
 ) {
 
     private val eventBus = CombatEventBus(eventSystem)
-    val api: CombatApi = CombatApi(runData, combat, eventBus)
+    val api: CombatApi = CombatApi(gameData, runData, combat, eventBus)
 
     fun initCombat() {
         eventBus.init(api)
-        combat.spells.addAll(runData.hero.spells)
-        combat.sideboard.addAll(runData.hero.sideboard)
+        combat.spells.addAll(runData.hero.generateSpells(gameData))
+        combat.sideboard.addAll(runData.hero.generateSideboard(gameData))
+        combat.sorceries.addAll(runData.hero.generateSorceries(gameData))
+        combat.relics.addAll(runData.hero.relicIds.map { gameData.getRelic(it.id).withCounter(it.counter) })
         combat.enemies.forEach {
             it.preInit(api.nextId())
             combat.enemyStatus[it.id] = mutableListOf()
@@ -35,7 +38,11 @@ class CombatController(
             it.combatReset()
             eventBus.register(it)
         }
-        runData.hero.relicIds.forEach {
+        combat.sorceries.forEach {
+            it.combatReset()
+            eventBus.register(it)
+        }
+        combat.relics.forEach {
             eventBus.register(it)
         }
     }
@@ -59,7 +66,7 @@ class CombatController(
             combat.drawPile.add(TileInstance(Tile.LifeTile(LifeType.MIND), TileStatus.NONE, api.nextId()))
             combat.drawPile.add(TileInstance(Tile.LifeTile(LifeType.SOUL), TileStatus.NONE, api.nextId()))
         }
-        combat.drawPile.shuffle(runData.rng)
+        combat.drawPile.shuffle(runData.seed.miscRng())
     }
 
     suspend fun runTurn() {

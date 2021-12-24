@@ -39,24 +39,26 @@ class TownScreenInit(
     }
 
     private fun initTown() {
+        val rng = runData.seed.rewardRng()
+        val heroClass = game.data.getHeroClass(runData.hero.heroClassId)
         val spellShop = SpellShop(
-            runData.hero.heroClass.getRandomClassSpells(runData, 3).map { pricedSpell(it) }.toMutableList(),
+            heroClass.getRandomClassSpells(runData.seed, 3).map { pricedSpell(it) }.toMutableList(),
             mutableListOf(),
-            pricedSpell(GameData.colorlessSpells.filter { it.rarity != Rarity.SPECIAL }.choose(runData.rng)),
+            pricedSpell(game.data.colorlessSpells().choose(rng)),
         )
         val itemShop = ItemShop(mutableListOf())
         val scribe = Scribe(mutableListOf())
         runData.town = Town(3, null, spellShop, itemShop, scribe)
     }
 
-    private fun pricedSpell(spell: Spell): PricedSpell {
+    private fun pricedSpell(spell: Spell): PricedItem {
         val price = when (spell.rarity) {
             Rarity.COMMON -> 2
             Rarity.UNCOMMON -> 3
             Rarity.RARE -> 4
             else -> 0
         }
-        return PricedSpell(spell, price)
+        return PricedItem(spell.id, price)
     }
 
     fun initialize() {

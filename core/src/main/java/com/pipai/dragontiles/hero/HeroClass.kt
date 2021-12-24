@@ -37,7 +37,7 @@ interface HeroClass : Localized {
             mutableListOf(), activeSpellSize,
             mutableListOf(), sideboardSize,
             mutableListOf(), sorceriesSize,
-            mutableListOf(startingRelic.id),
+            mutableListOf(startingRelic.toInstance()),
             startingGold,
             mutableListOf(),
         )

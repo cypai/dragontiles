@@ -34,7 +34,6 @@ import com.pipai.dragontiles.dungeon.RunData
 import com.pipai.dragontiles.gui.CombatUiLayout
 import com.pipai.dragontiles.gui.SpellCard
 import com.pipai.dragontiles.gui.SpellComponentList
-import com.pipai.dragontiles.potions.Potion
 import com.pipai.dragontiles.potions.PotionTargetType
 import com.pipai.dragontiles.spells.FullCastHand
 import com.pipai.dragontiles.spells.Sorcery
@@ -103,7 +102,7 @@ class CombatUiSystem(
     var overloaded = false
     private var selectedSpellNumber: Int? = null
     private var mouseFollowEntityId: Int? = null
-    private var selectedPotion: Potion? = null
+    private var selectedPotionIndex: Int? = null
     private val givenComponents: MutableList<TileInstance> = mutableListOf()
 
     private val stateMachine = DefaultStateMachine<CombatUiSystem, CombatUiState>(this, CombatUiState.ROOT)
@@ -136,13 +135,14 @@ class CombatUiSystem(
 
     override fun initialize() {
         swapChannel = sCombat.controller.api.swapChannel
-        runData.hero.spells.forEachIndexed { index, spell ->
+        val combat = sCombat.combat
+        combat.spells.forEachIndexed { index, spell ->
             addSpellCard(index, spell)
         }
-        runData.hero.sideboard.forEachIndexed { index, spell ->
+        combat.sideboard.forEachIndexed { index, spell ->
             addSpellCardToSideboard(index, spell)
         }
-        runData.hero.sorceries.forEachIndexed { index, sorcery ->
+        combat.sorceries.forEachIndexed { index, sorcery ->
             addSorcery(index, sorcery)
         }
 
@@ -504,7 +504,7 @@ class CombatUiSystem(
 
     private fun selectFullCastHand(fullCastHand: FullCastHand) {
         scope.launch {
-            sCombat.controller.api.castSorceries(fullCastHand, runData.hero.sorceries)
+            sCombat.controller.api.castSorceries(fullCastHand)
         }
     }
 
@@ -656,7 +656,7 @@ class CombatUiSystem(
                 CombatUiState.POTION_TARGET_SELECTION -> {
                     sAnimation.pauseUiMode = true
                     scope.launch {
-                        selectedPotion!!.useDuringCombat(mEnemy.get(ev.entityId).enemy.id, sCombat.controller.api)
+                        sCombat.controller.api.usePotionInCombat(mEnemy.get(ev.entityId).enemy.id, selectedPotionIndex!!)
                     }
                 }
                 else -> {
@@ -1036,14 +1036,15 @@ class CombatUiSystem(
     @Subscribe
     fun handlePotionUse(ev: PotionUseEvent) {
         if (stateMachine.currentState == CombatUiState.ROOT) {
-            when (ev.potion.targetType) {
+            val potion = game.data.getPotion(runData.hero.potionSlots[ev.potionSlotIndex].potionId!!)
+            when (potion.targetType) {
                 PotionTargetType.NONE -> {
                     runBlocking {
-                        ev.potion.useDuringCombat(null, sCombat.controller.api)
+                        sCombat.controller.api.usePotionInCombat(null, ev.potionSlotIndex)
                     }
                 }
                 PotionTargetType.ENEMY -> {
-                    selectedPotion = ev.potion
+                    selectedPotionIndex = ev.potionSlotIndex
                     stateMachine.changeState(CombatUiState.POTION_TARGET_SELECTION)
                     val potionId = world.create()
                     val cPotionXy = mXy.create(potionId)
@@ -1051,7 +1052,7 @@ class CombatUiSystem(
                     cPotionXy.x -= 100f
                     val cPotionSprite = mSprite.create(potionId)
                     cPotionSprite.sprite =
-                        Sprite(game.assets.get(potionAssetPath(ev.potion.assetName), Texture::class.java))
+                        Sprite(game.assets.get(potionAssetPath(potion.assetName), Texture::class.java))
                     cPotionSprite.sprite.setOriginCenter()
 
                     val id = world.create()
@@ -1154,7 +1155,7 @@ class CombatUiSystem(
         },
         POTION_TARGET_SELECTION {
             override fun exit(uiSystem: CombatUiSystem) {
-                uiSystem.selectedPotion = null
+                uiSystem.selectedPotionIndex = null
                 uiSystem.world.delete(uiSystem.mouseFollowEntityId!!)
                 uiSystem.mouseFollowEntityId = null
                 uiSystem.removeHighlights()

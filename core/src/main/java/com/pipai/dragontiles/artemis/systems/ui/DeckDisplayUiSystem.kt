@@ -59,7 +59,7 @@ class DeckDisplayUiSystem(
     override fun initialize() {
         scrollPane.width = game.gameConfig.resolution.width.toFloat()
         scrollPane.height = game.gameConfig.resolution.height.toFloat() - 40f
-        api = GlobalApi(runData, sEvent)
+        api = GlobalApi(game.data, runData, sEvent)
 
         skipBtn.addListener(object : ClickListener() {
             override fun clicked(event: InputEvent?, x: Float, y: Float) {
@@ -76,25 +76,25 @@ class DeckDisplayUiSystem(
         table.row()
         addStandardDisplay(
             spellFilter,
-            { _, _ -> },
+            { _, _, _ -> },
             enableSwapDnd,
-            { _, _ -> },
+            { _, _, _ -> },
             enableSwapDnd,
-            { _, _ -> },
+            { _, _, _ -> },
         )
     }
 
     private fun addStandardDisplay(
         spellFilter: (Spell) -> Boolean,
-        spellsOnClick: (Spell, Section) -> Unit,
+        spellsOnClick: (Spell, Section, Int) -> Unit,
         spellsEnableSwapDnd: Boolean,
-        sideboardOnClick: (Spell, Section) -> Unit,
+        sideboardOnClick: (Spell, Section, Int) -> Unit,
         sideboardEnableSwapDnd: Boolean,
-        sorceriesOnClick: (Spell, Section) -> Unit,
+        sorceriesOnClick: (Spell, Section, Int) -> Unit,
     ) {
         addSectionHeader("Starting Active Spells (Max ${runData.hero.spellsSize})")
         addSpellsInSection(
-            runData.hero.spells.filter { spellFilter.invoke(it) },
+            runData.hero.generateSpells(game.data).filter { spellFilter.invoke(it) },
             spellsOnClick,
             spellsEnableSwapDnd,
             Section.ACTIVE
@@ -102,7 +102,7 @@ class DeckDisplayUiSystem(
         if (runData.hero.sideboard.isNotEmpty()) {
             addSectionHeader("Sideboard Spells (Max ${runData.hero.sideboardSize})")
             addSpellsInSection(
-                runData.hero.sideboard.filter { spellFilter.invoke(it) },
+                runData.hero.generateSideboard(game.data).filter { spellFilter.invoke(it) },
                 sideboardOnClick,
                 sideboardEnableSwapDnd,
                 Section.SIDEBOARD
@@ -111,7 +111,7 @@ class DeckDisplayUiSystem(
         if (runData.hero.sorceries.isNotEmpty()) {
             addSectionHeader("Sorceries (Max ${runData.hero.sorceriesSize})")
             addSpellsInSection(
-                runData.hero.sorceries.filter { spellFilter.invoke(it) },
+                runData.hero.generateSorceries(game.data).filter { spellFilter.invoke(it) },
                 sorceriesOnClick,
                 false,
                 Section.SORCERIES
@@ -137,11 +137,11 @@ class DeckDisplayUiSystem(
         table.row()
         addStandardDisplay(
             { if (spell is Sorcery) it is Sorcery else it !is Sorcery },
-            { clickedSpell, section -> if (spell !is Sorcery) replaceSpell(clickedSpell, spell, section) },
+            { _, section, index -> if (spell !is Sorcery) replaceSpell(spell, section, index) },
             false,
-            { clickedSpell, section -> if (spell !is Sorcery) replaceSpell(clickedSpell, spell, section) },
+            { _, section, index -> if (spell !is Sorcery) replaceSpell(spell, section, index) },
             false,
-            { clickedSpell, section -> if (spell is Sorcery) replaceSpell(clickedSpell, spell, section) },
+            { _, section, index -> if (spell is Sorcery) replaceSpell(spell, section, index) },
         )
         table.add(skipBtn)
             .colspan(colspan)
@@ -189,37 +189,43 @@ class DeckDisplayUiSystem(
             } else {
                 { true }
             },
-            { clickedSpell, _ -> onSpellUpgradeClick(upgrade, clickedSpell) },
+            { clickedSpell, section, index -> onSpellUpgradeClick(upgrade, clickedSpell, index, section) },
             false,
-            { clickedSpell, _ -> onSpellUpgradeClick(upgrade, clickedSpell) },
+            { clickedSpell, section, index -> onSpellUpgradeClick(upgrade, clickedSpell, index, section) },
             false,
-            { _, _ -> },
+            { _, _, _ -> },
         )
         table.add(skipBtn)
             .colspan(colspan)
         table.row()
     }
 
-    private fun onSpellUpgradeClick(upgrade: SpellUpgrade, spell: Spell) {
+    private fun onSpellUpgradeClick(upgrade: SpellUpgrade, spell: Spell, index: Int, section: Section) {
         if (upgrade.canUpgrade(spell)) {
-            spell.upgrade(upgrade)
+            when (section) {
+                Section.ACTIVE -> api.upgradeSpellAtIndex(index, upgrade)
+                Section.SIDEBOARD -> api.upgradeSideboardAtIndex(index, upgrade)
+                Section.SORCERIES -> api.upgradeSorceryAtIndex(index, upgrade)
+                else -> {}
+            }
             disableExit = false
             deactivate()
         }
     }
 
-    private fun replaceSpell(originalSpell: Spell, newSpell: Spell, section: Section) {
+    private fun replaceSpell(newSpell: Spell, section: Section, index: Int) {
         when (section) {
             Section.ACTIVE -> {
-                runData.hero.spells.remove(originalSpell)
+                api.removeSpellAtIndex(index)
+                runData.hero.spells.removeAt(index)
                 api.addSpellToDeck(newSpell)
             }
             Section.SIDEBOARD -> {
-                runData.hero.sideboard.remove(originalSpell)
+                api.removeSideboardAtIndex(index)
                 api.addSpellToSideboard(newSpell)
             }
             Section.SORCERIES -> {
-                runData.hero.sorceries.remove(originalSpell)
+                api.removeSorceryAtIndex(index)
                 api.addSpellToDeck(newSpell)
             }
             else -> {
@@ -243,17 +249,23 @@ class DeckDisplayUiSystem(
         table.row()
         addStandardDisplay(
             { true },
-            { clickedSpell, _ -> onSpellTransformClick(clickedSpell) },
+            { _, section, index -> onSpellTransformClick(section, index) },
             false,
-            { clickedSpell, _ -> onSpellTransformClick(clickedSpell) },
+            { clickedSpell, section, index -> onSpellTransformClick(section, index) },
             false,
-            { _, _ -> },
+            { clickedSpell, section, index -> onSpellTransformClick(section, index) },
         )
     }
 
-    private fun onSpellTransformClick(spell: Spell) {
-        api.removeSpell(spell)
-        api.addSpellToDeck(runData.hero.heroClass.getRandomClassSpells(runData, 1).first())
+    private fun onSpellTransformClick(section: Section, index: Int) {
+        when (section) {
+            Section.ACTIVE -> api.removeSpellAtIndex(index)
+            Section.SIDEBOARD -> api.removeSideboardAtIndex(index)
+            Section.SORCERIES -> api.removeSorceryAtIndex(index)
+            else -> {}
+        }
+        val spell = game.data.getHeroClass(runData.hero.heroClassId).getRandomClassSpells(runData.seed, 1).first()
+        api.addSpellToDeck(spell)
         deactivate()
     }
 
@@ -264,7 +276,7 @@ class DeckDisplayUiSystem(
 
     private fun addSpellsInSection(
         spells: List<Spell>,
-        onClick: (Spell, Section) -> Unit,
+        onClick: (Spell, Section, Int) -> Unit,
         enableSwapDnd: Boolean,
         section: Section,
     ) {
@@ -273,13 +285,13 @@ class DeckDisplayUiSystem(
             if (i % colspan == 0 && i != 0) {
                 table.row()
             }
-            val spellCard = SpellCard(game, spell, null, game.skin, null)
+            val spellCard = SpellCard(game, spell, i, game.skin, null)
             spellCard.data[SECTION] = section.ordinal
             cell = table.add(spellCard)
                 .prefWidth(SpellCard.cardWidth)
                 .prefHeight(SpellCard.cardHeight)
                 .pad(10f)
-            spellCard.addClickCallback { _, _ -> onClick(spell, section) }
+            spellCard.addClickCallback { _, _ -> onClick(spell, section, i) }
             if (enableSwapDnd) {
                 dragAndDrop.setDragActorPosition(SpellCard.cardWidth / 2f, -SpellCard.cardHeight / 2f)
                 dragAndDrop.addSource(object : DragAndDrop.Source(spellCard) {
@@ -327,27 +339,19 @@ class DeckDisplayUiSystem(
                             logger.info("Swapping ${first.getSpell()!!.id} and ${second.getSpell()!!.id}")
                             if (Section.values()[first.data[SECTION]!!] == Section.ACTIVE) {
                                 if (first.data[SECTION] == second.data[SECTION]) {
-                                    val index1 = runData.hero.spells.indexOf(first.getSpell())
-                                    val index2 = runData.hero.spells.indexOf(second.getSpell())
-                                    runData.hero.spells[index1] = second.getSpell()!!
-                                    runData.hero.spells[index2] = first.getSpell()!!
+                                    runData.hero.spells[first.number!!] = second.getSpell()!!.toInstance()
+                                    runData.hero.spells[second.number!!] = first.getSpell()!!.toInstance()
                                 } else {
-                                    val index1 = runData.hero.spells.indexOf(first.getSpell())
-                                    val index2 = runData.hero.sideboard.indexOf(second.getSpell())
-                                    runData.hero.spells[index1] = second.getSpell()!!
-                                    runData.hero.sideboard[index2] = first.getSpell()!!
+                                    runData.hero.spells[first.number!!] = second.getSpell()!!.toInstance()
+                                    runData.hero.sideboard[second.number!!] = first.getSpell()!!.toInstance()
                                 }
                             } else {
                                 if (first.data[SECTION] == second.data[SECTION]) {
-                                    val index1 = runData.hero.sideboard.indexOf(first.getSpell())
-                                    val index2 = runData.hero.sideboard.indexOf(second.getSpell())
-                                    runData.hero.sideboard[index1] = second.getSpell()!!
-                                    runData.hero.sideboard[index2] = first.getSpell()!!
+                                    runData.hero.sideboard[first.number!!] = second.getSpell()!!.toInstance()
+                                    runData.hero.sideboard[second.number!!] = first.getSpell()!!.toInstance()
                                 } else {
-                                    val index1 = runData.hero.sideboard.indexOf(first.getSpell())
-                                    val index2 = runData.hero.spells.indexOf(second.getSpell())
-                                    runData.hero.sideboard[index1] = second.getSpell()!!
-                                    runData.hero.spells[index2] = first.getSpell()!!
+                                    runData.hero.sideboard[first.number!!] = second.getSpell()!!.toInstance()
+                                    runData.hero.spells[second.number!!] = first.getSpell()!!.toInstance()
                                 }
                             }
                             updateStandardDisplay({ true }, enableSwapDnd)

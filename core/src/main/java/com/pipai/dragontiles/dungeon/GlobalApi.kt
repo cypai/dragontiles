@@ -2,31 +2,64 @@ package com.pipai.dragontiles.dungeon
 
 import com.pipai.dragontiles.artemis.events.*
 import com.pipai.dragontiles.combat.GameOverEvent
+import com.pipai.dragontiles.data.GameData
 import com.pipai.dragontiles.potions.Potion
 import com.pipai.dragontiles.relics.Relic
+import com.pipai.dragontiles.relics.RelicInstance
 import com.pipai.dragontiles.spells.Sorcery
 import com.pipai.dragontiles.spells.Spell
+import com.pipai.dragontiles.spells.SpellUpgradeInstance
 import com.pipai.dragontiles.spells.upgrades.SpellUpgrade
 import net.mostlyoriginal.api.event.common.EventSystem
 
-open class GlobalApi(val runData: RunData, private val sEvent: EventSystem) {
-    fun removeSpell(spell: Spell) {
-        runData.hero.spells.remove(spell)
-        runData.hero.sideboard.remove(spell)
-        runData.hero.sorceries.remove(spell)
+open class GlobalApi(val gameData: GameData, val runData: RunData, private val sEvent: EventSystem) {
+    fun removeSpellAtIndex(index: Int) {
+        runData.hero.spells.removeAt(index)
+    }
+
+    fun removeSideboardAtIndex(index: Int) {
+        runData.hero.sideboard.removeAt(index)
+    }
+
+    fun removeSorceryAtIndex(index: Int) {
+        runData.hero.sorceries.removeAt(index)
+    }
+
+    fun upgradeSpellAtIndex(index: Int, upgrade: SpellUpgrade) {
+        val spellInstance = runData.hero.spells[index]
+        val spell = gameData.getSpell(spellInstance.id)
+        if (upgrade.canUpgrade(spell)) {
+            spellInstance.upgrades.add(SpellUpgradeInstance(upgrade.id))
+        }
+    }
+
+    fun upgradeSideboardAtIndex(index: Int, upgrade: SpellUpgrade) {
+        val spellInstance = runData.hero.sideboard[index]
+        val spell = gameData.getSpell(spellInstance.id)
+        if (upgrade.canUpgrade(spell)) {
+            spellInstance.upgrades.add(SpellUpgradeInstance(upgrade.id))
+        }
+    }
+
+    fun upgradeSorceryAtIndex(index: Int, upgrade: SpellUpgrade) {
+        val spellInstance = runData.hero.sorceries[index]
+        val spell = gameData.getSpell(spellInstance.id)
+        if (upgrade.canUpgrade(spell)) {
+            spellInstance.upgrades.add(SpellUpgradeInstance(upgrade.id))
+        }
     }
 
     fun addSpellToDeck(spell: Spell) {
         if (spell is Sorcery) {
             if (runData.hero.sorceries.size < runData.hero.sorceriesSize) {
-                runData.hero.sorceries.add(spell)
+                runData.hero.sorceries.add(spell.toInstance())
                 sEvent.dispatch(SpellGainedEvent(spell))
             } else {
                 sEvent.dispatch(ReplaceSpellQueryEvent(spell))
             }
         } else {
             if (runData.hero.spells.size < runData.hero.spellsSize) {
-                runData.hero.spells.add(spell)
+                runData.hero.spells.add(spell.toInstance())
                 sEvent.dispatch(SpellGainedEvent(spell))
             } else {
                 addSpellToSideboard(spell)
@@ -36,7 +69,7 @@ open class GlobalApi(val runData: RunData, private val sEvent: EventSystem) {
 
     fun addSpellToSideboard(spell: Spell) {
         if (runData.hero.sideboard.size < runData.hero.sideboardSize) {
-            runData.hero.sideboard.add(spell)
+            runData.hero.sideboard.add(spell.toInstance())
             sEvent.dispatch(SpellGainedEvent(spell))
         } else {
             sEvent.dispatch(ReplaceSpellQueryEvent(spell))
@@ -52,8 +85,8 @@ open class GlobalApi(val runData: RunData, private val sEvent: EventSystem) {
     }
 
     fun gainRelicImmediate(relic: Relic) {
-        runData.hero.relicIds.add(relic)
-        runData.relicData.availableRelics.remove(relic)
+        runData.hero.relicIds.add(RelicInstance(relic.id, 0))
+        runData.availableRelics.remove(relic.id)
         relic.onPickup(this)
         sEvent.dispatch(TopRowUiUpdateEvent())
     }
@@ -85,12 +118,19 @@ open class GlobalApi(val runData: RunData, private val sEvent: EventSystem) {
     }
 
     fun gainPotion(potion: Potion) {
-        runData.hero.potionSlots.first { it.potion == null }.potion = potion
+        runData.hero.potionSlots.first { it.potionId == null }.potionId = potion.id
         sEvent.dispatch(TopRowUiUpdateEvent())
     }
 
-    fun removePotion(potion: Potion) {
-        runData.hero.potionSlots.first { it.potion == potion }.potion = null
+    fun removePotionAtIndex(index: Int) {
+        runData.hero.potionSlots[index].potionId = null
         sEvent.dispatch(TopRowUiUpdateEvent())
+    }
+
+    fun usePotion(index: Int) {
+        val potionSlot = runData.hero.potionSlots[index]
+        val potion = gameData.getPotion(potionSlot.potionId!!)
+        potionSlot.potionId = null
+        potion.onNonCombatUse(this)
     }
 }

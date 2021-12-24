@@ -10,6 +10,7 @@ class RabbitsFoot : Relic() {
     override val id = "base:relics:RabbitsFoot"
     override val assetName = "rabbit_foot.png"
     override val rarity = Rarity.SPECIAL
+    override val showCounter: Boolean = false
 
     @CombatSubscribe
     suspend fun onTurnStart(ev: TurnStartEvent, api: CombatApi) {

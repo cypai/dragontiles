@@ -8,6 +8,7 @@ class Peach : Relic() {
     override val id = "base:relics:Peach"
     override val assetName = "peach.png"
     override val rarity = Rarity.UNCOMMON
+    override val showCounter: Boolean = false
 
     override fun onPickup(api: GlobalApi) {
         api.gainMaxHpImmediate(9)

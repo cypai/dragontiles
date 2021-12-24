@@ -1,5 +1,8 @@
 package com.pipai.dragontiles.data
 
+import com.pipai.dragontiles.relics.RelicInstance
+import com.pipai.dragontiles.spells.Sorcery
+import com.pipai.dragontiles.spells.Spell
 import com.pipai.dragontiles.spells.SpellInstance
 
 data class Hero(
@@ -16,9 +19,28 @@ data class Hero(
     var sideboardSize: Int,
     val sorceries: MutableList<SpellInstance>,
     var sorceriesSize: Int,
-    val relicIds: MutableList<String>,
+    val relicIds: MutableList<RelicInstance>,
     var gold: Int,
     val potionSlots: MutableList<PotionSlot>,
-)
+) {
+
+    fun generateSpells(gameData: GameData): List<Spell> {
+        return generateSpellImpl(spells, gameData)
+    }
+
+    fun generateSideboard(gameData: GameData): List<Spell> {
+        return generateSpellImpl(sideboard, gameData)
+    }
+
+    fun generateSorceries(gameData: GameData): List<Sorcery> {
+        return generateSpellImpl(sorceries, gameData).filterIsInstance<Sorcery>().toList()
+    }
+
+    private fun generateSpellImpl(spellList: List<SpellInstance>, gameData: GameData): List<Spell> {
+        return spellList.map { spell ->
+            gameData.getSpell(spell.id).withUpgrades(spell.upgrades.map { u -> gameData.getSpellUpgrade(u.id) })
+        }
+    }
+}
 
 data class PotionSlot(var potionId: String?)

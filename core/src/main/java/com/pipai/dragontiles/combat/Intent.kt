@@ -7,7 +7,7 @@ import com.pipai.dragontiles.data.TileStatus
 import com.pipai.dragontiles.enemies.Enemy
 import com.pipai.dragontiles.status.Status
 import com.pipai.dragontiles.utils.chooseAmount
-import java.util.*
+import kotlin.random.Random
 
 interface Intent {
     val enemy: Enemy

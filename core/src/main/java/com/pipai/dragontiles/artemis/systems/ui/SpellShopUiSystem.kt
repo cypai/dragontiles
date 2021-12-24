@@ -9,9 +9,9 @@ import com.pipai.dragontiles.artemis.components.ActorComponent
 import com.pipai.dragontiles.artemis.components.ClickableComponent
 import com.pipai.dragontiles.artemis.components.TextLabelComponent
 import com.pipai.dragontiles.artemis.components.XYComponent
-import com.pipai.dragontiles.artemis.events.PricedSpellClickEvent
+import com.pipai.dragontiles.artemis.events.PricedItemClickEvent
 import com.pipai.dragontiles.artemis.screens.TownScreen
-import com.pipai.dragontiles.data.PricedSpell
+import com.pipai.dragontiles.data.PricedItem
 import com.pipai.dragontiles.dungeon.GlobalApi
 import com.pipai.dragontiles.dungeon.RunData
 import com.pipai.dragontiles.gui.SpellCard
@@ -38,7 +38,7 @@ class SpellShopUiSystem(
     private val sEvent by system<EventSystem>()
 
     override fun initialize() {
-        api = GlobalApi(runData, sEvent)
+        api = GlobalApi(game.data, runData, sEvent)
         val spellShop = runData.town!!.spellShop
         spellShop.classSpells.forEachIndexed { i, ps ->
             createSpell(ps, SpellCard.cardWidth * 3 + i * SpellCard.cardWidth * 2, SpellCard.cardHeight * 2)
@@ -48,10 +48,10 @@ class SpellShopUiSystem(
         }
     }
 
-    private fun createSpell(ps: PricedSpell, x: Float, y: Float) {
+    private fun createSpell(ps: PricedItem, x: Float, y: Float) {
         val entityId = world.create()
         val cActor = mActor.create(entityId)
-        val spellCard = SpellCard(game, ps.spell, null, game.skin, null)
+        val spellCard = SpellCard(game, game.data.getSpell(ps.id), null, game.skin, null)
         cActor.actor = spellCard
         val cXy = mXy.create(entityId)
         cXy.setXy(x, y)
@@ -60,15 +60,16 @@ class SpellShopUiSystem(
         cText.color = Color.WHITE
         cText.text = "${ps.price} Gold"
         val cClickable = mClickable.create(entityId)
-        cClickable.eventGenerator = { PricedSpellClickEvent(entityId, ps) }
+        cClickable.eventGenerator = { PricedItemClickEvent(entityId, ps) }
     }
 
     @Subscribe
-    fun handleSpellCardClick(ev: PricedSpellClickEvent) {
-        if (runData.hero.gold >= ev.pricedSpell.price) {
-            api.gainGoldImmediate(-ev.pricedSpell.price)
-            logger.info("Adding ${ev.pricedSpell.spell.id} to deck at price ${ev.pricedSpell.price}")
-            api.addSpellToDeck(ev.pricedSpell.spell)
+    fun handleSpellCardClick(ev: PricedItemClickEvent) {
+        if (runData.hero.gold >= ev.pricedItem.price) {
+            api.gainGoldImmediate(-ev.pricedItem.price)
+            val spell = game.data.getSpell(ev.pricedItem.id)
+            logger.info("Adding ${spell.id} to deck at price ${ev.pricedItem.price}")
+            api.addSpellToDeck(spell)
             world.delete(ev.entityId)
         }
     }

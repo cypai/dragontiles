@@ -43,12 +43,12 @@ class GameDataInitializer {
 
     private fun initSpells(gameData: GameData) {
         gameData.allHeroClasses().forEach { initHeroSpells(gameData, it.id) }
-        gameData.addSpell(Bump())
-        gameData.addSpell(Nudge())
-        gameData.addSpell(Mulligan())
-        gameData.addSpell(Fetch())
-        gameData.addSpell(Ground())
-        gameData.addSpell(Reserve())
+        gameData.addSpell(GameData.COLORLESS, Bump())
+        gameData.addSpell(GameData.COLORLESS, Nudge())
+        gameData.addSpell(GameData.COLORLESS, Mulligan())
+        gameData.addSpell(GameData.COLORLESS, Fetch())
+        gameData.addSpell(GameData.COLORLESS, Ground())
+        gameData.addSpell(GameData.COLORLESS, Reserve())
     }
 
     private fun initSpellUpgrades(gameData: GameData) {
@@ -57,13 +57,13 @@ class GameDataInitializer {
         gameData.addSpellUpgrade(EfficiencyUpgrade())
     }
 
-    private fun initHeroSpells(gameData: GameData, id: String) {
-        val heroClass = gameData.getHeroClass(id)!!
+    private fun initHeroSpells(gameData: GameData, heroClassId: String) {
+        val heroClass = gameData.getHeroClass(heroClassId)
         heroClass.starterDeck.forEach {
-            gameData.addSpell(it)
+            gameData.addSpell(heroClassId, it)
         }
         heroClass.spells.forEach {
-            gameData.addSpell(it)
+            gameData.addSpell(heroClassId, it)
         }
     }
 

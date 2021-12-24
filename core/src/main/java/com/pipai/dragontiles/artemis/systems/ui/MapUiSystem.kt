@@ -20,6 +20,7 @@ import com.pipai.dragontiles.combat.SpellRewardType
 import com.pipai.dragontiles.dungeon.MapNodeType
 import com.pipai.dragontiles.dungeon.RunData
 import com.pipai.dragontiles.utils.allOf
+import com.pipai.dragontiles.utils.choose
 import com.pipai.dragontiles.utils.fetch
 import com.pipai.dragontiles.utils.mapper
 import net.mostlyoriginal.api.event.common.Subscribe
@@ -52,7 +53,7 @@ class MapUiSystem(
         stage.addActor(table)
         val centerY = game.gameConfig.resolution.height.toFloat() / 2f
         val rightX = game.gameConfig.resolution.width.toFloat() - 64f
-        val map = runData.dungeonMap.getMap()
+        val map = runData.dungeonMap.map
         var previousFloorIds: List<Int> = listOf()
         map.forEachIndexed { floorNum, floor ->
             val bottomY = centerY - floor.size * 64f / 2f
@@ -137,54 +138,56 @@ class MapUiSystem(
 
     @Subscribe
     fun handleMapNodeClick(ev: MapNodeClickEvent) {
-        val map = runData.dungeonMap.getMap()
+        val rng = runData.seed.miscRng()
+        val map = runData.dungeonMap.map
+        val dungeon = game.data.getDungeon(runData.dungeonMap.dungeonId)
         if (canAdvanceMap
             && runData.dungeonMap.currentFloor == ev.floorNum - 1
             && map[runData.dungeonMap.currentFloor][runData.dungeonMap.currentFloorIndex].next.contains(ev.index)
         ) {
-            runData.dungeonMap.currentFloor = ev.floorNum
-            runData.dungeonMap.currentFloorIndex = ev.index
-            when (map[ev.floorNum][ev.index].type) {
+            val node = runData.dungeonMap.changeNode(ev.floorNum, ev.index)
+            when (node.type) {
                 MapNodeType.COMBAT -> {
-                    if (runData.dungeonMap.easyFights < 2) {
+                    val encounter = if (runData.dungeonMap.easyFights < 2) {
                         runData.dungeonMap.easyFights++
-                        game.screen = CombatScreen(
-                            game,
-                            runData,
-                            runData.dungeonMap.easyEncounter(runData),
-                            CombatRewards(SpellRewardType.STANDARD, 3, false, null, runData.potionChance)
-                        )
+                        dungeon.easyEncounters
+                            .filter { it.id !in runData.dungeonMap.encounters }
+                            .choose(rng)
                     } else {
-                        game.screen = CombatScreen(
-                            game,
-                            runData,
-                            runData.dungeonMap.standardEncounter(runData),
-                            CombatRewards(SpellRewardType.STANDARD, 3, false, null, runData.potionChance)
-                        )
+                        dungeon.standardEncounters
+                            .filter { it.id !in runData.dungeonMap.encounters }
+                            .choose(rng)
                     }
-                }
-                MapNodeType.ELITE -> {
-                    runData.potionChance += 0.1f
                     game.screen = CombatScreen(
                         game,
                         runData,
-                        runData.dungeonMap.eliteEncounter(runData),
+                        encounter,
+                        CombatRewards(SpellRewardType.STANDARD, 3, false, null, runData.potionChance)
+                    )
+                }
+                MapNodeType.ELITE -> {
+                    runData.potionChance += 0.1f
+                    val encounter = dungeon.eliteEncounters
+                        .filter { it.id !in runData.dungeonMap.encounters }
+                        .choose(rng)
+                    game.screen = CombatScreen(
+                        game,
+                        runData,
+                        encounter,
                         CombatRewards(SpellRewardType.ELITE, 5, true, null, runData.potionChance)
                     )
                 }
                 MapNodeType.EVENT -> {
-                    game.screen = EventScreen(game, runData, runData.dungeonMap.dungeonEvent(runData))
+                    val event = dungeon.dungeonEvents
+                        .filter { it.id !in runData.dungeonMap.dungeonEvents }
+                        .choose(rng)
+                    game.screen = EventScreen(game, runData, event)
                 }
                 MapNodeType.TOWN -> {
                     game.screen = TownScreen(game, runData, true)
                 }
                 else -> {
-                    game.screen = CombatScreen(
-                        game,
-                        runData,
-                        runData.dungeonMap.standardEncounter(runData),
-                        CombatRewards(SpellRewardType.STANDARD, 3, false, null, runData.potionChance)
-                    )
+                    throw NotImplementedError()
                 }
             }
         }

@@ -11,6 +11,7 @@ class Bamboo : Relic() {
     override val id = "base:relics:Bamboo"
     override val assetName = "bamboo.png"
     override val rarity = Rarity.COMMON
+    override val showCounter: Boolean = false
 
     @CombatSubscribe
     suspend fun onTurnStart(ev: TurnStartEvent, api: CombatApi) {

@@ -53,7 +53,7 @@ class TopRowUiSystem(
     private lateinit var api: GlobalApi
 
     override fun initialize() {
-        api = GlobalApi(runData, sEvent)
+        api = GlobalApi(game.data, runData, sEvent)
         rootTable.setFillParent(true)
         topRow.background = skin.getDrawable("frameDrawable")
         topRow.add(Label(runData.hero.name, skin))
@@ -90,13 +90,13 @@ class TopRowUiSystem(
 
     fun updatePotions() {
         potionTable.clearChildren()
-        runData.hero.potionSlots.forEach { slot ->
-            if (slot.potion == null) {
+        runData.hero.potionSlots.forEachIndexed { i, slot ->
+            if (slot.potionId == null) {
                 potionTable.add(Image(game.assets.get(potionAssetPath("empty.png"), Texture::class.java)))
                     .prefWidth(48f)
                     .prefHeight(48f)
             } else {
-                val potion = slot.potion!!
+                val potion = game.data.getPotion(slot.potionId!!)
                 val potionImage = Image(game.assets.get(potionAssetPath(potion.assetName), Texture::class.java))
                 potionTable.add(potionImage)
                     .prefWidth(48f)
@@ -105,10 +105,10 @@ class TopRowUiSystem(
                     override fun clicked(event: InputEvent, x: Float, y: Float) {
                         if (isCombat) {
                             potionImage.color = Color.GRAY
-                            sEvent.dispatch(PotionUseEvent(potion))
+                            sEvent.dispatch(PotionUseEvent(i))
                         } else {
                             if (potion.type == PotionType.UNIVERSAL) {
-                                potion.useOutsideCombat(api)
+                                api.usePotion(i)
                             }
                         }
                     }
@@ -124,7 +124,7 @@ class TopRowUiSystem(
                 })
                 potionImage.addListener(object : ClickListener(Input.Buttons.RIGHT) {
                     override fun clicked(event: InputEvent?, x: Float, y: Float) {
-                        api.removePotion(slot.potion!!)
+                        api.removePotionAtIndex(i)
                     }
                 })
             }
@@ -134,7 +134,7 @@ class TopRowUiSystem(
     fun updateRelicRow() {
         relicRow.clearChildren()
         runData.hero.relicIds.forEach { relic ->
-            val image = Image(game.assets.get(relicAssetPath(relic.assetName), Texture::class.java))
+            val image = Image(game.assets.get(relicAssetPath(game.data.getRelic(relic.id).assetName), Texture::class.java))
             image.addListener(object : ClickListener() {
                 override fun enter(event: InputEvent?, x: Float, y: Float, pointer: Int, fromActor: Actor?) {
                     sTooltip.addNameDescLocalization(game.gameStrings.nameDescLocalization(relic.id))

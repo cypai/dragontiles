@@ -26,6 +26,7 @@ import com.pipai.dragontiles.utils.mapper
 import com.pipai.dragontiles.utils.system
 import net.mostlyoriginal.api.event.common.EventSystem
 import net.mostlyoriginal.api.event.common.Subscribe
+import kotlin.random.Random
 
 class EventUiSystem(
     private val game: DragonTilesGame,
@@ -141,7 +142,7 @@ class EventUiSystem(
         val id = world.create()
         val cXy = mXy.create(id)
         cXy.setXy(
-            game.gameConfig.resolution.width / 3f + runData.rng.nextFloat() * game.gameConfig.resolution.width / 3f,
+            game.gameConfig.resolution.width / 3f + Random.Default.nextFloat() * game.gameConfig.resolution.width / 3f,
             game.gameConfig.resolution.height / 4f
         )
         val cActor = mActor.create(id)
