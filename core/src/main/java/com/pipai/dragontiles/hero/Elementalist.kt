@@ -36,7 +36,6 @@ class Elementalist : HeroClass {
         InflictReactant(),
         Concentrate(),
         FeedbackLoop(),
-        Singularity(),
         Spark(),
         Blast(),
         Explosion(),

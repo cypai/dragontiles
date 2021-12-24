@@ -10,6 +10,7 @@ import com.pipai.dragontiles.potions.ExplosivePotion
 import com.pipai.dragontiles.potions.HealingPotion
 import com.pipai.dragontiles.relics.*
 import com.pipai.dragontiles.spells.colorless.*
+import com.pipai.dragontiles.spells.elementalist.Split
 import com.pipai.dragontiles.spells.upgrades.EfficiencyUpgrade
 import com.pipai.dragontiles.spells.upgrades.PowerUpgrade
 import com.pipai.dragontiles.spells.upgrades.SurgeUpgrade
@@ -49,6 +50,7 @@ class GameDataInitializer {
         gameData.addSpell(GameData.COLORLESS, Fetch())
         gameData.addSpell(GameData.COLORLESS, Ground())
         gameData.addSpell(GameData.COLORLESS, Reserve())
+        gameData.addSpell(GameData.COLORLESS, Split())
     }
 
     private fun initSpellUpgrades(gameData: GameData) {

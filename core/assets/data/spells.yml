@@ -103,10 +103,10 @@ base:spells:RampStrike:
     name: Ramp Strike
     description: Deal !d @Elemented damage. Increases damage by 1 per spells cast this turn.
 
-base:spells:Singularity:
+base:spells:Split:
   en:
-    name: Singularity
-    description: Split an @ElementalTile into at most 3 1s.
+    name: Split
+    description: Split the @Component into 2 halves.
 
 base:spells:Break:
   en:

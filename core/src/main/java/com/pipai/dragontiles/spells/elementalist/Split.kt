@@ -7,9 +7,12 @@ import com.pipai.dragontiles.spells.*
 import kotlinx.serialization.Serializable
 import kotlin.math.min
 
-class Singularity : StandardSpell() {
-    override val id: String = "base:spells:Singularity"
-    override val requirement: ComponentRequirement = ForbidTransformFreeze(this, Single(SuitGroup.ELEMENTAL))
+class Split : StandardSpell() {
+    override val id: String = "base:spells:Split"
+    override val requirement: ComponentRequirement = ForbidTransformFreeze(
+        this,
+        SinglePredicate({ (it.tile as Tile.ElementalTile).number > 1 }, SuitGroup.ELEMENTAL)
+    )
     override val type: SpellType = SpellType.EFFECT
     override val targetType: TargetType = TargetType.NONE
     override val rarity: Rarity = Rarity.UNCOMMON
@@ -22,10 +25,9 @@ class Singularity : StandardSpell() {
         val tileInstance = components().first()
         api.destroyTile(tileInstance)
         val tile = tileInstance.tile as Tile.ElementalTile
-        val amount = min(tile.number, 3)
         val newTiles: MutableList<Tile> = mutableListOf()
-        repeat(amount) {
-            newTiles.add(Tile.ElementalTile(tile.suit, 1))
+        repeat(2) {
+            newTiles.add(Tile.ElementalTile(tile.suit, tile.number / 2))
         }
         api.addTilesToHand(newTiles, TileStatus.NONE)
     }
