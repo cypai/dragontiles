@@ -12,7 +12,12 @@ import kotlin.reflect.full.createInstance
 data class SpellInstance(
     override val id: String,
     val upgrades: MutableList<SpellUpgradeInstance>,
-) : Localized
+) : Localized {
+
+    fun toSpell(gameData: GameData): Spell {
+        return gameData.getSpell(id).withUpgrades(upgrades.map { gameData.getSpellUpgrade(it.id) })
+    }
+}
 
 data class SpellUpgradeInstance(
     override val id: String,

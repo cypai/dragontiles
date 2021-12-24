@@ -17,3 +17,23 @@ base:upgrades:RepeatUpgrade:
   en:
     name: Repeat Upgrade
     description: Adds 1 Repeatable.
+
+base:upgrades:StackUpgrade:
+  en:
+    name: Stack Upgrade
+    description: Doubles status inflicted.
+
+base:upgrades:FetchUpgrade:
+  en:
+    name: Fetch Upgrade
+    description: Draw a tile into the Open Pool after cast.
+
+base:upgrades:HeatsinkUpgrade:
+  en:
+    name: Heatsink Upgrade
+    description: Burn Tile Components no longer deal damage.
+
+base:upgrades:AntifreezeUpgrade:
+  en:
+    name: Antifreeze Upgrade
+    description: Allows transformation of Freeze Tiles.

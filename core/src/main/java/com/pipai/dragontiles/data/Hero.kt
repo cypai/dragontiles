@@ -37,9 +37,7 @@ data class Hero(
     }
 
     private fun generateSpellImpl(spellList: List<SpellInstance>, gameData: GameData): List<Spell> {
-        return spellList.map { spell ->
-            gameData.getSpell(spell.id).withUpgrades(spell.upgrades.map { u -> gameData.getSpellUpgrade(u.id) })
-        }
+        return spellList.map { it.toSpell(gameData) }
     }
 }
 
