@@ -117,7 +117,7 @@ open class GlobalApi(val gameData: GameData, val runData: RunData, private val s
     }
 
     fun gainPotion(potion: Potion) {
-        runData.hero.potionSlots.first { it.potionId == null }.potionId = potion.id
+        runData.hero.potionSlots.firstOrNull { it.potionId == null }?.potionId = potion.id
         sEvent.dispatch(TopRowUiUpdateEvent())
     }
 

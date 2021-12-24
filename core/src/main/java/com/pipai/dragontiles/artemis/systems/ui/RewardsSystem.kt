@@ -165,10 +165,12 @@ class RewardsSystem(
     }
 
     private fun getPotion(potionReward: Reward.PotionReward) {
-        runData.combatRewards.remove(potionReward)
-        runData.combatRewards.add(Reward.EmptyReward())
-        api.gainPotion(game.data.getPotion(potionReward.potion))
-        buildAndShowRewardsTable()
+        if (runData.hero.potionSlots.any { it.potionId == null }) {
+            runData.combatRewards.remove(potionReward)
+            runData.combatRewards.add(Reward.EmptyReward())
+            api.gainPotion(game.data.getPotion(potionReward.potion))
+            buildAndShowRewardsTable()
+        }
     }
 
     private fun getRelic(relic: RelicInstance) {
