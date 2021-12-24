@@ -217,3 +217,8 @@ base:spells:Burn:
   en:
     name: Burn
     description: Deal !d @Piercing Fire damage. @Burn a random tile in your hand.
+
+base:spells:ColdHands:
+  en:
+    name: Cold Hands
+    description: Inflict 2 Weak.

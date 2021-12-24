@@ -28,6 +28,7 @@ class Elementalist : HeroClass {
     )
     override val spells: List<Spell> = listOf(
         Burn(),
+        ColdHands(),
         DualInvoke(),
         MultiInvoke(),
         StrengthRune(),

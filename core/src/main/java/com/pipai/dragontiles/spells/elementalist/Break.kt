@@ -16,8 +16,6 @@ class Break : StandardSpell() {
         FluxGainAspect(2)
     )
 
-    override fun additionalLocalized(): List<String> = listOf(BreakStatus(0, false).id)
-
     override suspend fun onCast(params: CastParams, api: CombatApi) {
         val stackable = aspects.findAsWhere(StackableAspect::class) { it.status is BreakStatus }!!
         api.addStatusToEnemy(api.getEnemy(params.targets.first()), stackable.status.deepCopy())

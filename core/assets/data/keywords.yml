@@ -88,12 +88,6 @@ base:keywords:Piercing:
     name: Piercing
     description: Hits through Flux.
 
-base:keywords:Strength:
-  en:
-    key: "@Strength"
-    name: Strength
-    description: Attack damage increased by 1 per point of Strength.
-
 base:keywords:Transform:
   en:
     key: "@Transform"
