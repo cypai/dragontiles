@@ -4,7 +4,7 @@ import com.pipai.dragontiles.combat.*
 import com.pipai.dragontiles.data.Element
 
 class Weak(amount: Int, var skip: Boolean) : Status(amount) {
-    override val strId = "base:status:Weak"
+    override val id = "base:status:Weak"
     override val assetName = "weak.png"
     override val displayAmount = true
 
@@ -12,8 +12,13 @@ class Weak(amount: Int, var skip: Boolean) : Status(amount) {
         return Weak(amount, skip)
     }
 
-    override fun queryScaledAdjustment(origin: DamageOrigin, target: DamageTarget, element: Element): Float {
-        return if (origin == DamageOrigin.SELF_ATTACK && target == DamageTarget.OPPONENT) {
+    override fun queryScaledAdjustment(
+        origin: Combatant?,
+        target: Combatant?,
+        element: Element,
+        flags: List<CombatFlag>
+    ): Float {
+        return if (origin == combatant) {
             0.7f
         } else {
             1f

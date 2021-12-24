@@ -1,11 +1,11 @@
 package com.pipai.dragontiles.status
 
-import com.pipai.dragontiles.combat.DamageOrigin
-import com.pipai.dragontiles.combat.DamageTarget
+import com.pipai.dragontiles.combat.CombatFlag
+import com.pipai.dragontiles.combat.Combatant
 import com.pipai.dragontiles.data.Element
 
 class Strength(amount: Int) : Status(amount) {
-    override val strId = "base:status:Strength"
+    override val id = "base:status:Strength"
     override val assetName = "strength.png"
     override val displayAmount = true
 
@@ -13,8 +13,8 @@ class Strength(amount: Int) : Status(amount) {
         return Strength(amount)
     }
 
-    override fun queryFlatAdjustment(origin: DamageOrigin, target: DamageTarget, element: Element): Int {
-        return if (origin == DamageOrigin.SELF_ATTACK && target == DamageTarget.OPPONENT) {
+    override fun queryFlatAdjustment(origin: Combatant?, target: Combatant?, element: Element, flags: List<CombatFlag>): Int {
+        return if (origin == combatant) {
             amount
         } else {
             0

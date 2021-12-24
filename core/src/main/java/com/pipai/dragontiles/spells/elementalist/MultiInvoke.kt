@@ -1,6 +1,7 @@
 package com.pipai.dragontiles.spells.elementalist
 
 import com.pipai.dragontiles.combat.CombatApi
+import com.pipai.dragontiles.combat.CombatFlag
 import com.pipai.dragontiles.spells.*
 
 class MultiInvoke : StandardSpell() {
@@ -14,11 +15,15 @@ class MultiInvoke : StandardSpell() {
         FluxGainAspect(3),
     )
 
+    override fun flags(): List<CombatFlag> {
+        return listOf(CombatFlag.INVOKE)
+    }
+
     override suspend fun onCast(params: CastParams, api: CombatApi) {
         val target = api.getEnemy(params.targets.first())
         val x = components().size
         repeat(x) {
-            api.attack(target, elemental(components()), baseDamage())
+            api.attack(target, elemental(components()), baseDamage(), flags())
         }
     }
 }

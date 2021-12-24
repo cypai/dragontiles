@@ -4,6 +4,9 @@ import com.pipai.dragontiles.combat.CombatApi
 import com.pipai.dragontiles.combat.RandomTileStatusInflictStrategy
 import com.pipai.dragontiles.data.TileStatus
 import com.pipai.dragontiles.spells.*
+import com.pipai.dragontiles.status.Electro
+import com.pipai.dragontiles.status.Pyro
+import com.pipai.dragontiles.utils.getStackableCopy
 
 class ChainLightning : StandardSpell() {
     override val id: String = "base:spells:ChainLightning"
@@ -14,11 +17,13 @@ class ChainLightning : StandardSpell() {
     override val aspects: MutableList<SpellAspect> = mutableListOf(
         AttackDamageAspect(14),
         FluxGainAspect(4),
+        StackableAspect(Electro(1), 1),
     )
+    override val additionalKeywords: List<String> = listOf("@Reaction", "@Pyroblast", "@Cryoshock")
 
     override suspend fun onCast(params: CastParams, api: CombatApi) {
-        val target = api.getEnemy(params.targets.first())
-        api.attack(target, elemental(components()), baseDamage())
+        api.aoeAttack(elemental(components()), baseDamage(), flags())
+        api.addAoeStatus(aspects.getStackableCopy(Electro::class))
         api.inflictTileStatusOnHand(RandomTileStatusInflictStrategy(TileStatus.SHOCK, 1))
     }
 }

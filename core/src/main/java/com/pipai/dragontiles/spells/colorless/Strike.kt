@@ -1,6 +1,7 @@
 package com.pipai.dragontiles.spells.colorless
 
 import com.pipai.dragontiles.combat.CombatApi
+import com.pipai.dragontiles.combat.CombatFlag
 import com.pipai.dragontiles.spells.*
 
 class Strike : StandardSpell() {
@@ -16,6 +17,6 @@ class Strike : StandardSpell() {
 
     override suspend fun onCast(params: CastParams, api: CombatApi) {
         val target = api.getEnemy(params.targets.first())
-        api.attack(target, elemental(components()), baseDamage())
+        api.attack(target, elemental(components()), baseDamage(), flags())
     }
 }

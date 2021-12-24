@@ -1,7 +1,7 @@
 package com.pipai.dragontiles.spells.elementalist
 
-import com.pipai.dragontiles.combat.DamageOrigin
-import com.pipai.dragontiles.combat.DamageTarget
+import com.pipai.dragontiles.combat.CombatFlag
+import com.pipai.dragontiles.combat.Combatant
 import com.pipai.dragontiles.data.Element
 import com.pipai.dragontiles.spells.*
 
@@ -11,11 +11,10 @@ class ElementalRune : Rune() {
     override val requirement: ComponentRequirement = Identical(2, SuitGroup.ELEMENTAL)
     override val aspects: MutableList<SpellAspect> = mutableListOf()
 
-    override fun queryFlatAdjustment(origin: DamageOrigin, target: DamageTarget, element: Element): Int {
+    override fun queryFlatAdjustment(origin: Combatant?, target: Combatant?, element: Element, flags: List<CombatFlag>): Int {
         val c = components()
         return if (active
-            && origin == DamageOrigin.SELF_ATTACK
-            && target == DamageTarget.OPPONENT
+            && origin == Combatant.HeroCombatant
             && element == elemental(c)
         ) {
             2

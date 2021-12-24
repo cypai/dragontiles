@@ -1,6 +1,11 @@
 package com.pipai.dragontiles.utils
 
 import com.badlogic.gdx.math.Vector2
+import com.pipai.dragontiles.spells.SpellAspect
+import com.pipai.dragontiles.spells.StackableAspect
+import com.pipai.dragontiles.status.BreakStatus
+import com.pipai.dragontiles.status.Status
+import java.lang.IllegalStateException
 import kotlin.reflect.KClass
 
 fun Vector2.withX(x: Float): Vector2 {
@@ -67,4 +72,9 @@ inline fun <T : Any, reified U : T> List<T>.findAsWhere(klass: KClass<U>, predic
     } else {
         null
     }
+}
+
+inline fun <reified T : Status> List<SpellAspect>.getStackableCopy(klass: KClass<T>): T {
+    val stackable = this.findAsWhere(StackableAspect::class) { it.status is T }!!
+    return stackable.status.deepCopy() as T
 }

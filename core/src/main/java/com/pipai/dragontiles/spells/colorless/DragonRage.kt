@@ -26,7 +26,7 @@ class DragonRage : StandardSpell() {
     class DragonRageStatus(amount: Int) : Status(amount) {
         override val displayAmount = true
         override val assetName = "assets/binassets/graphics/status/dragon_rage.png"
-        override val strId = "base:status:DragonRage"
+        override val id = "base:status:DragonRage"
 
         override fun deepCopy(): Status {
             return DragonRageStatus(amount)

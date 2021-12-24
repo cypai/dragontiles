@@ -138,20 +138,25 @@ base:spells:ThunderRune:
     name: Thunder Rune
     description: For each @Shock consumed, recast the spell.
 
+base:spells:InflictElement:
+  en:
+    name: Inflict Element
+    description: Inflict 1 @ElementedReactant.
+
 base:spells:Fireball:
   en:
     name: Fireball
-    description: Deal !d Fire damage. @Burn a tile in your hand.
+    description: Deal !d Fire damage. Inflict 1 @Pyro. @Burn a tile in your hand.
 
 base:spells:IceShard:
   en:
     name: Ice Shard
-    description: Deal !d Ice damage. Gain 2 @Shield. @Freeze a tile in your hand.
+    description: Deal !d Ice damage. Inflict 1 @Cryo. @Freeze a tile in your hand.
 
 base:spells:ChainLightning:
   en:
     name: Chain Lightning
-    description: Deal !d Lightning damage @AOE. @Shock a tile in your hand.
+    description: Deal !d Lightning damage and inflict 1 @Electro @AOE. @Shock a tile in your hand.
 
 base:spells:Chillsink:
   en:

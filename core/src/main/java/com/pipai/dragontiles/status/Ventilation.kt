@@ -6,7 +6,7 @@ import com.pipai.dragontiles.combat.Combatant
 import com.pipai.dragontiles.combat.TurnStartEvent
 
 class Ventilation(amount: Int) : Status(amount) {
-    override val strId = "base:status:Ventilation"
+    override val id = "base:status:Ventilation"
     override val assetName = "ventilation.png"
     override val displayAmount = true
 

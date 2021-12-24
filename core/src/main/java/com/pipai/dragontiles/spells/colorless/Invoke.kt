@@ -1,6 +1,7 @@
 package com.pipai.dragontiles.spells.colorless
 
 import com.pipai.dragontiles.combat.CombatApi
+import com.pipai.dragontiles.combat.CombatFlag
 import com.pipai.dragontiles.spells.*
 
 class Invoke : StandardSpell() {
@@ -13,8 +14,12 @@ class Invoke : StandardSpell() {
         AttackDamageAspect(2), FluxGainAspect(1)
     )
 
+    override fun flags(): List<CombatFlag> {
+        return listOf(CombatFlag.INVOKE)
+    }
+
     override suspend fun onCast(params: CastParams, api: CombatApi) {
         val target = api.getEnemy(params.targets.first())
-        api.attack(target, elemental(components()), baseDamage())
+        api.attack(target, elemental(components()), baseDamage(), flags())
     }
 }

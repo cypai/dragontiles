@@ -4,7 +4,7 @@ import com.pipai.dragontiles.combat.*
 import com.pipai.dragontiles.data.Element
 
 class BreakStatus(amount: Int, var skip: Boolean) : Status(amount) {
-    override val strId = "base:status:Break"
+    override val id = "base:status:Break"
     override val assetName = "break.png"
     override val displayAmount = true
 
@@ -12,8 +12,13 @@ class BreakStatus(amount: Int, var skip: Boolean) : Status(amount) {
         return BreakStatus(amount, skip)
     }
 
-    override fun queryScaledAdjustment(origin: DamageOrigin, target: DamageTarget, element: Element): Float {
-        return if (origin == DamageOrigin.OPPONENT_ATTACK) {
+    override fun queryScaledAdjustment(
+        origin: Combatant?,
+        target: Combatant?,
+        element: Element,
+        flags: List<CombatFlag>
+    ): Float {
+        return if (target == combatant) {
             1.5f
         } else {
             1f

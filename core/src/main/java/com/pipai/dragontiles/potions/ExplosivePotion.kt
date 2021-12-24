@@ -21,7 +21,7 @@ class ExplosivePotion : Potion() {
             logger.error("Attempted to use Explosive Potion without a target")
         } else {
             val enemy = api.getEnemy(target)
-            api.attack(enemy, Element.NONE, 10, asAttack = false)
+            api.attack(enemy, Element.NONE, 10, asAttack = false, flags = listOf())
         }
     }
 }

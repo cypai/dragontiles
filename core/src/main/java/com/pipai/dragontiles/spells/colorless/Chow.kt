@@ -12,6 +12,6 @@ class Chow : Sorcery() {
     )
 
     override suspend fun onCast(hand: FullCastHand, api: CombatApi) {
-        api.aoeAttack(elemental(components()), baseDamage(), false)
+        api.aoeAttack(elemental(components()), baseDamage(), flags(), asAttack = false)
     }
 }

@@ -6,7 +6,7 @@ import com.pipai.dragontiles.data.TileStatus
 import com.pipai.dragontiles.spells.SpellType
 
 class MenacingAura(amount: Int) : Status(amount) {
-    override val strId = "base:status:MenacingAura"
+    override val id = "base:status:MenacingAura"
     override val assetName = "menacing_aura.png"
     override val displayAmount = true
 

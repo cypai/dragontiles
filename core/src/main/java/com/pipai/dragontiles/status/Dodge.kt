@@ -1,7 +1,7 @@
 package com.pipai.dragontiles.status
 
 class Dodge(amount: Int) : Status(amount) {
-    override val strId = "base:status:Dodge"
+    override val id = "base:status:Dodge"
     override val assetName = "dodge.png"
     override val displayAmount = true
 

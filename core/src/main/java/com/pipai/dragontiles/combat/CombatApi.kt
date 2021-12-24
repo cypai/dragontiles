@@ -230,42 +230,65 @@ class CombatApi(
         }
     }
 
+    /**
+     * Only used for dynamic variables, NOT used in API to prevent double-counting.
+     */
     fun calculateBaseDamage(element: Element, amount: Int): Int {
         var flat = 0
         var scaling = 1f
         combat.relics.forEach {
-            flat += it.queryFlatAdjustment(DamageOrigin.SELF_ATTACK, DamageTarget.OPPONENT, element)
-            scaling *= it.queryScaledAdjustment(DamageOrigin.SELF_ATTACK, DamageTarget.OPPONENT, element)
+            flat += it.queryFlatAdjustment(Combatant.HeroCombatant, null, element, listOf())
+            scaling *= it.queryScaledAdjustment(Combatant.HeroCombatant, null, element, listOf())
         }
         combat.spells.forEach {
-            flat += it.queryFlatAdjustment(DamageOrigin.SELF_ATTACK, DamageTarget.OPPONENT, element)
-            scaling *= it.queryScaledAdjustment(DamageOrigin.SELF_ATTACK, DamageTarget.OPPONENT, element)
+            flat += it.queryFlatAdjustment(Combatant.HeroCombatant, null, element, listOf())
+            scaling *= it.queryScaledAdjustment(Combatant.HeroCombatant, null, element, listOf())
         }
         combat.heroStatus.forEach {
-            flat += it.queryFlatAdjustment(DamageOrigin.SELF_ATTACK, DamageTarget.OPPONENT, element)
-            scaling *= it.queryScaledAdjustment(DamageOrigin.SELF_ATTACK, DamageTarget.OPPONENT, element)
+            flat += it.queryFlatAdjustment(Combatant.HeroCombatant, null, element, listOf())
+            scaling *= it.queryScaledAdjustment(Combatant.HeroCombatant, null, element, listOf())
         }
         return ((amount + flat) * scaling).toInt()
     }
 
-    fun calculateDamageOnEnemy(enemy: Enemy, element: Element, amount: Int): Int {
+    fun calculateDamageOnEnemy(enemy: Enemy, element: Element, amount: Int, flags: List<CombatFlag>): Int {
         var flat = 0
         var scaling = 1f
         combat.relics.forEach {
-            flat += it.queryFlatAdjustment(DamageOrigin.SELF_ATTACK, DamageTarget.OPPONENT, element)
-            scaling *= it.queryScaledAdjustment(DamageOrigin.SELF_ATTACK, DamageTarget.OPPONENT, element)
+            flat += it.queryFlatAdjustment(Combatant.HeroCombatant, Combatant.EnemyCombatant(enemy), element, flags)
+            scaling *= it.queryScaledAdjustment(
+                Combatant.HeroCombatant,
+                Combatant.EnemyCombatant(enemy),
+                element,
+                flags
+            )
         }
         combat.spells.forEach {
-            flat += it.queryFlatAdjustment(DamageOrigin.SELF_ATTACK, DamageTarget.OPPONENT, element)
-            scaling *= it.queryScaledAdjustment(DamageOrigin.SELF_ATTACK, DamageTarget.OPPONENT, element)
+            flat += it.queryFlatAdjustment(Combatant.HeroCombatant, Combatant.EnemyCombatant(enemy), element, flags)
+            scaling *= it.queryScaledAdjustment(
+                Combatant.HeroCombatant,
+                Combatant.EnemyCombatant(enemy),
+                element,
+                flags
+            )
         }
         combat.heroStatus.forEach {
-            flat += it.queryFlatAdjustment(DamageOrigin.SELF_ATTACK, DamageTarget.OPPONENT, element)
-            scaling *= it.queryScaledAdjustment(DamageOrigin.SELF_ATTACK, DamageTarget.OPPONENT, element)
+            flat += it.queryFlatAdjustment(Combatant.HeroCombatant, Combatant.EnemyCombatant(enemy), element, flags)
+            scaling *= it.queryScaledAdjustment(
+                Combatant.HeroCombatant,
+                Combatant.EnemyCombatant(enemy),
+                element,
+                flags
+            )
         }
         combat.enemyStatus[enemy.id]!!.forEach {
-            flat += it.queryFlatAdjustment(DamageOrigin.OPPONENT_ATTACK, DamageTarget.SELF, element)
-            scaling *= it.queryScaledAdjustment(DamageOrigin.OPPONENT_ATTACK, DamageTarget.SELF, element)
+            flat += it.queryFlatAdjustment(Combatant.HeroCombatant, Combatant.EnemyCombatant(enemy), element, flags)
+            scaling *= it.queryScaledAdjustment(
+                Combatant.HeroCombatant,
+                Combatant.EnemyCombatant(enemy),
+                element,
+                flags
+            )
         }
         return ((amount + flat) * scaling).toInt()
     }
@@ -274,20 +297,40 @@ class CombatApi(
         var flat = 0
         var scaling = 1f
         combat.relics.forEach {
-            flat += it.queryFlatAdjustment(DamageOrigin.OPPONENT_ATTACK, DamageTarget.SELF, element)
-            scaling *= it.queryScaledAdjustment(DamageOrigin.OPPONENT_ATTACK, DamageTarget.SELF, element)
+            flat += it.queryFlatAdjustment(Combatant.EnemyCombatant(enemy), Combatant.HeroCombatant, element, listOf())
+            scaling *= it.queryScaledAdjustment(
+                Combatant.EnemyCombatant(enemy),
+                Combatant.HeroCombatant,
+                element,
+                listOf()
+            )
         }
         combat.spells.forEach {
-            flat += it.queryFlatAdjustment(DamageOrigin.OPPONENT_ATTACK, DamageTarget.SELF, element)
-            scaling *= it.queryScaledAdjustment(DamageOrigin.OPPONENT_ATTACK, DamageTarget.SELF, element)
+            flat += it.queryFlatAdjustment(Combatant.EnemyCombatant(enemy), Combatant.HeroCombatant, element, listOf())
+            scaling *= it.queryScaledAdjustment(
+                Combatant.EnemyCombatant(enemy),
+                Combatant.HeroCombatant,
+                element,
+                listOf()
+            )
         }
         combat.heroStatus.forEach {
-            flat += it.queryFlatAdjustment(DamageOrigin.OPPONENT_ATTACK, DamageTarget.SELF, element)
-            scaling *= it.queryScaledAdjustment(DamageOrigin.OPPONENT_ATTACK, DamageTarget.SELF, element)
+            flat += it.queryFlatAdjustment(Combatant.EnemyCombatant(enemy), Combatant.HeroCombatant, element, listOf())
+            scaling *= it.queryScaledAdjustment(
+                Combatant.EnemyCombatant(enemy),
+                Combatant.HeroCombatant,
+                element,
+                listOf()
+            )
         }
         combat.enemyStatus[enemy.id]!!.forEach {
-            flat += it.queryFlatAdjustment(DamageOrigin.SELF_ATTACK, DamageTarget.OPPONENT, element)
-            scaling *= it.queryScaledAdjustment(DamageOrigin.SELF_ATTACK, DamageTarget.OPPONENT, element)
+            flat += it.queryFlatAdjustment(Combatant.EnemyCombatant(enemy), Combatant.HeroCombatant, element, listOf())
+            scaling *= it.queryScaledAdjustment(
+                Combatant.EnemyCombatant(enemy),
+                Combatant.HeroCombatant,
+                element,
+                listOf()
+            )
         }
         return ((amount + flat) * scaling).toInt()
     }
@@ -296,10 +339,11 @@ class CombatApi(
         enemy: Enemy,
         element: Element,
         amount: Int,
+        flags: List<CombatFlag>,
         asAttack: Boolean = true,
         piercing: Boolean = false
     ) {
-        val damage = calculateDamageOnEnemy(enemy, element, amount)
+        val damage = calculateDamageOnEnemy(enemy, element, amount, flags)
         if (asAttack) {
             eventBus.dispatch(PlayerAttackEnemyEvent(enemy, element, amount))
         }
@@ -314,9 +358,15 @@ class CombatApi(
         }
     }
 
-    suspend fun aoeAttack(element: Element, amount: Int, asAttack: Boolean = true, piercing: Boolean = false) {
+    suspend fun aoeAttack(
+        element: Element,
+        amount: Int,
+        flags: List<CombatFlag>,
+        asAttack: Boolean = true,
+        piercing: Boolean = false
+    ) {
         combat.enemies.filter { it.hp > 0 }
-            .forEach { attack(it, element, amount, asAttack, piercing) }
+            .forEach { attack(it, element, amount, flags, asAttack, piercing) }
     }
 
     suspend fun dealFluxDamageToEnemy(enemy: Enemy, damage: Int) {
@@ -430,12 +480,14 @@ class CombatApi(
 
     suspend fun addStatusToHero(status: Status) {
         status.combatant = Combatant.HeroCombatant
-        val maybeStatus = combat.heroStatus.find { it.strId == status.strId }
+        val maybeStatus = combat.heroStatus.find { it.id == status.id }
         if (maybeStatus == null) {
             combat.heroStatus.add(status)
             eventBus.register(status)
+            status.onInflict(this)
         } else {
             maybeStatus.amount += status.amount
+            maybeStatus.onInflict(this)
             if (maybeStatus.amount == 0) {
                 removeHeroStatus(status::class)
             }
@@ -444,17 +496,23 @@ class CombatApi(
     }
 
     suspend fun devInstantWin() {
-        aoeAttack(Element.NONE, 99999, asAttack = false, piercing = true)
+        aoeAttack(Element.NONE, 99999, flags = listOf(), asAttack = false, piercing = true)
+    }
+
+    suspend fun addAoeStatus(status: Status) {
+        combat.enemies.filter { it.hp > 0 }
+            .forEach { addStatusToEnemy(it, status.deepCopy()) }
     }
 
     suspend fun addStatusToEnemy(enemy: Enemy, status: Status) {
         status.combatant = Combatant.EnemyCombatant(enemy)
         val enemyStatus = combat.enemyStatus[enemy.id]!!
-        val maybeStatus = enemyStatus.find { it.strId == status.strId }
+        val maybeStatus = enemyStatus.find { it.id == status.id }
         if (maybeStatus == null) {
             enemyStatus.add(status)
             eventBus.register(status)
             eventBus.dispatch(EnemyStatusChangeEvent(enemy, status, 0))
+            status.onInflict(this)
         } else {
             val previousAmount = maybeStatus.amount
             maybeStatus.amount += status.amount
@@ -463,6 +521,7 @@ class CombatApi(
                 removeEnemyStatus(enemy, status::class)
             } else {
                 eventBus.dispatch(EnemyStatusChangeEvent(enemy, maybeStatus, previousAmount))
+                maybeStatus.onInflict(this)
             }
         }
         notifyStatusUpdated()

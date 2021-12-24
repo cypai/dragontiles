@@ -20,6 +20,6 @@ class PiercingStrike : StandardSpell() {
 
     override suspend fun onCast(params: CastParams, api: CombatApi) {
         val target = api.getEnemy(params.targets.first())
-        api.attack(target, elemental(components()), baseDamage(), piercing = true)
+        api.attack(target, elemental(components()), baseDamage(), flags = flags(), piercing = true)
     }
 }

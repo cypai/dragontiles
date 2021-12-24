@@ -65,6 +65,7 @@ class TooltipSystem(private val game: DragonTilesGame, var stage: Stage) : NoPro
             addText("Requirements", spell.requirement.description, false)
         }
         addKeywordsInString(game.gameStrings.spellLocalization(spell.id).description)
+        spell.additionalKeywords.forEach { addKeyword(it) }
         if (spell.aspects.any { a -> a is PostExhaustAspect }) {
             addKeyword("@Exhaust")
         }

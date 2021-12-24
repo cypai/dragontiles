@@ -26,6 +26,6 @@ class PingHu : Sorcery() {
     )
 
     override suspend fun onCast(hand: FullCastHand, api: CombatApi) {
-        api.aoeAttack(Element.NONE, baseDamage(), false)
+        api.aoeAttack(Element.NONE, baseDamage(), flags(), asAttack = false)
     }
 }

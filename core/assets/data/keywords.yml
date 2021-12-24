@@ -112,3 +112,33 @@ base:keywords:Transform:
     key: "@Transform"
     name: Transform
     description: Cannot be done on tiles with @Freeze.
+
+base:keywords:ElementedReactant:
+  en:
+    key: "@ElementedReactant"
+    name: Elemented Reactant
+    description: "Pyro, Cryo, or Electro for Fire, Ice, or Lightning respectively."
+
+base:keywords:Reaction:
+  en:
+    key: "@Reaction"
+    name: Reaction
+    description: Happens when 2 of Pyro, Cryo, or Electro are on the same enemy. The reactants are consumed and cause an effect.
+
+base:keywords:Melt:
+  en:
+    key: "@Melt"
+    name: Melt
+    description: "Pyro and Cryo reaction. Attacks that cause this do 50% more damage."
+
+base:keywords:Pyroblast:
+  en:
+    key: "@Pyroblast"
+    name: Pyroblast
+    description: "Pyro and Electro reaction. Deals 10 @AOE Fire damage per stack."
+
+base:keywords:Cryoshock:
+  en:
+    key: "@Cryoshock"
+    name: Cryoshock
+    description: "Cryo and Electro reaction. Take @Piercing Lightning damage at the start of the turn equal to the amount of Cryoshock."

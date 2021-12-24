@@ -5,7 +5,6 @@ import com.pipai.dragontiles.data.*
 import com.pipai.dragontiles.spells.upgrades.SpellUpgrade
 import com.pipai.dragontiles.utils.*
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.Transient
 import org.apache.commons.lang3.builder.ToStringBuilder
 import kotlin.reflect.full.createInstance
 
@@ -28,7 +27,9 @@ abstract class Spell : Localized, DamageAdjustable {
     abstract val type: SpellType
     abstract val rarity: Rarity
     abstract val aspects: MutableList<SpellAspect>
+    open fun flags(): List<CombatFlag> = listOf()
     private val upgrades: MutableList<SpellUpgrade> = mutableListOf()
+    open val additionalKeywords: List<String> = listOf()
 
     protected val data: MutableMap<String, Int> = mutableMapOf()
 
@@ -60,9 +61,14 @@ abstract class Spell : Localized, DamageAdjustable {
 
     abstract fun available(): Boolean
 
-    override fun queryFlatAdjustment(origin: DamageOrigin, target: DamageTarget, element: Element): Int = 0
+    override fun queryFlatAdjustment(origin: Combatant?, target: Combatant?, element: Element, flags: List<CombatFlag>): Int = 0
 
-    override fun queryScaledAdjustment(origin: DamageOrigin, target: DamageTarget, element: Element): Float = 1f
+    override fun queryScaledAdjustment(
+        origin: Combatant?,
+        target: Combatant?,
+        element: Element,
+        flags: List<CombatFlag>
+    ): Float = 1f
 
     open fun dynamicBaseDamage(components: List<TileInstance>): Int {
         return baseDamage()
@@ -79,7 +85,7 @@ abstract class Spell : Localized, DamageAdjustable {
                         api.calculateBaseDamage(Element.NONE, baseDamage())
                     } else {
                         val target = api.getEnemy(params.targets.first())
-                        api.calculateDamageOnEnemy(target, elemental(components()), dynamicBaseDamage(components()))
+                        api.calculateDamageOnEnemy(target, elemental(components()), dynamicBaseDamage(components()), flags())
                     }
                 }
             }
@@ -93,7 +99,7 @@ abstract class Spell : Localized, DamageAdjustable {
                         api.calculateBaseDamage(Element.NONE, baseDamage())
                     } else {
                         val target = api.getEnemy(params.targets.first())
-                        api.calculateDamageOnEnemy(target, elemental(components()), baseDamage())
+                        api.calculateDamageOnEnemy(target, elemental(components()), baseDamage(), flags())
                     }
                 }
             }

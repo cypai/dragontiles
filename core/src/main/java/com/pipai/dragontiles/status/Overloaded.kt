@@ -6,7 +6,7 @@ import com.pipai.dragontiles.combat.Combatant
 import com.pipai.dragontiles.combat.EnemyTurnEndEvent
 
 class Overloaded(amount: Int) : Status(amount) {
-    override val strId = "base:status:Overloaded"
+    override val id = "base:status:Overloaded"
     override val assetName = "overloaded.png"
     override val displayAmount = true
 

@@ -6,7 +6,7 @@ import com.pipai.dragontiles.combat.Combatant
 import com.pipai.dragontiles.combat.EnemyTurnEndEvent
 
 class Ritual(amount: Int) : Status(amount) {
-    override val strId = "base:status:Ritual"
+    override val id = "base:status:Ritual"
     override val assetName = "ritual.png"
     override val displayAmount = true
 
