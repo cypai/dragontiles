@@ -14,6 +14,8 @@ class FeedbackLoop : StandardSpell() {
         FluxGainAspect(5),
     )
 
+    override fun additionalLocalized(): List<String> = listOf(Strength(0).id)
+
     override suspend fun onCast(params: CastParams, api: CombatApi) {
         api.addStatusToHero(Strength(api.heroStatusAmount(Strength::class)))
     }

@@ -116,12 +116,12 @@ base:spells:Break:
 base:spells:Concentrate:
   en:
     name: Concentrate
-    description: Gain !s(1) @Strength.
+    description: Gain !s(1) Strength.
 
 base:spells:FeedbackLoop:
   en:
     name: FeedbackLoop
-    description: Double your @Strength. @Exhaust.
+    description: Double your Strength. @Exhaust.
 
 base:spells:BurnRune:
   en:
@@ -181,7 +181,7 @@ base:spells:EnhanceRune:
 base:spells:StrengthRune:
   en:
     name: Strength Rune
-    description: Increases @Strength by @X.
+    description: Increases Strength by @X.
 
 base:spells:HasteRune:
   en:
@@ -206,12 +206,12 @@ base:spells:AllForOne:
 base:spells:DragonRage:
   en:
     name: Dragon Rage
-    description: "@Power: Gain !s(1) Strength each time you play a Sequence."
+    description: "Gain !s(1) Strength each time you play a Sequence."
 
 base:spells:DragonScale:
   en:
     name: Dragon Scale
-    description: "@Power: Drawn Elemental Tiles transform to the @Component Element. @Exhaust."
+    description: "Drawn Elemental Tiles transform to the @Component Element. @Exhaust."
 
 base:spells:Burn:
   en:

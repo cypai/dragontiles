@@ -18,6 +18,11 @@ base:sorceries:PingHu:
     name: Ping Hu
     description: Deal !d @AOE damage.
 
+base:sorceries:DuiDuiHu:
+  en:
+    name: Dui Dui Hu
+    description: Deal !d @AOE damage.
+
 base:sorceries:ForceOverload:
   en:
     name: Force Overload
@@ -27,3 +32,8 @@ base:sorceries:PhoenixRebirth:
   en:
     name: Phoenix's Rebirth
     description: Vent all Flux. Deal !d Fire @Piercing damage. Heal HP equal to damage dealt.
+
+base:sorceries:GreatPower:
+  en:
+    name: Great Power
+    description: Gain !s(1) Strength.

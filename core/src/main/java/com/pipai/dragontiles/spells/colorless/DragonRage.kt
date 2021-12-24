@@ -11,11 +11,11 @@ import com.pipai.dragontiles.utils.findAsWhere
 class DragonRage : StandardSpell() {
     override val id: String = "base:spells:DragonRage"
     override val requirement: ComponentRequirement = Sequential(9, SuitGroup.ELEMENTAL)
-    override val type: SpellType = SpellType.EFFECT
+    override val type: SpellType = SpellType.POWER
     override val targetType: TargetType = TargetType.NONE
     override val rarity: Rarity = Rarity.SPECIAL
     override val aspects: MutableList<SpellAspect> = mutableListOf(
-        StackableAspect(DragonRageStatus(2), 1)
+        StackableAspect(DragonRageStatus(1), 1)
     )
 
     override suspend fun onCast(params: CastParams, api: CombatApi) {

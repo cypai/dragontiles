@@ -12,7 +12,7 @@ import com.pipai.dragontiles.status.SimpleStatus
 class DragonScale : StandardSpell() {
     override val id: String = "base:spells:DragonScale"
     override val requirement: ComponentRequirement = Sequential(9, SuitGroup.ELEMENTAL)
-    override val type: SpellType = SpellType.EFFECT
+    override val type: SpellType = SpellType.POWER
     override val targetType: TargetType = TargetType.NONE
     override val rarity: Rarity = Rarity.SPECIAL
     override val aspects: MutableList<SpellAspect> = mutableListOf()

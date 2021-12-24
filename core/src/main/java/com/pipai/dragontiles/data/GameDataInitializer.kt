@@ -51,6 +51,10 @@ class GameDataInitializer {
         gameData.addSpell(GameData.COLORLESS, Ground())
         gameData.addSpell(GameData.COLORLESS, Reserve())
         gameData.addSpell(GameData.COLORLESS, Split())
+        gameData.addSpell(GameData.COLORLESS, Pong())
+        gameData.addSpell(GameData.COLORLESS, Chow())
+        gameData.addSpell(GameData.COLORLESS, PingHu())
+        gameData.addSpell(GameData.COLORLESS, DuiDuiHu())
         gameData.addSpell(GameData.COLORLESS, DragonRage())
         gameData.addSpell(GameData.COLORLESS, DragonScale())
     }
