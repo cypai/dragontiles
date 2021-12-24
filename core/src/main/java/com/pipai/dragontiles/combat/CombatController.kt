@@ -1,7 +1,7 @@
 package com.pipai.dragontiles.combat
 
 import com.pipai.dragontiles.data.*
-import com.pipai.dragontiles.dungeon.RunData
+import com.pipai.dragontiles.data.RunData
 import com.pipai.dragontiles.status.Overloaded
 import kotlinx.coroutines.runBlocking
 import net.mostlyoriginal.api.event.common.EventSystem

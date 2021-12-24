@@ -21,7 +21,7 @@ import com.pipai.dragontiles.artemis.systems.ui.*
 import com.pipai.dragontiles.combat.Combat
 import com.pipai.dragontiles.combat.CombatRewards
 import com.pipai.dragontiles.dungeon.Encounter
-import com.pipai.dragontiles.dungeon.RunData
+import com.pipai.dragontiles.data.RunData
 import net.mostlyoriginal.api.event.common.EventSystem
 
 class CombatScreen(game: DragonTilesGame, runData: RunData, encounter: Encounter, rewards: CombatRewards) : Screen {
@@ -33,6 +33,7 @@ class CombatScreen(game: DragonTilesGame, runData: RunData, encounter: Encounter
 
     init {
         val combat = Combat(encounter.enemies.map { it.first }, rewards)
+        combat.init(game.data, runData)
         val config = WorldConfigurationBuilder()
             .with(
                 // Managers

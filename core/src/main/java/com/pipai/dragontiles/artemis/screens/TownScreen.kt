@@ -15,7 +15,7 @@ import com.pipai.dragontiles.artemis.systems.input.InputProcessingSystem
 import com.pipai.dragontiles.artemis.systems.rendering.FullScreenColorSystem
 import com.pipai.dragontiles.artemis.systems.rendering.RenderingSystem
 import com.pipai.dragontiles.artemis.systems.ui.*
-import com.pipai.dragontiles.dungeon.RunData
+import com.pipai.dragontiles.data.RunData
 import net.mostlyoriginal.api.event.common.EventSystem
 
 class TownScreen(game: DragonTilesGame, runData: RunData, init: Boolean) : Screen {

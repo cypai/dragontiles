@@ -1,8 +1,8 @@
 package com.pipai.dragontiles.combat
 
 import com.pipai.dragontiles.data.*
-import com.pipai.dragontiles.dungeon.GlobalApi
-import com.pipai.dragontiles.dungeon.RunData
+import com.pipai.dragontiles.data.GlobalApi
+import com.pipai.dragontiles.data.RunData
 import com.pipai.dragontiles.enemies.Enemy
 import com.pipai.dragontiles.spells.*
 import com.pipai.dragontiles.status.Dodge

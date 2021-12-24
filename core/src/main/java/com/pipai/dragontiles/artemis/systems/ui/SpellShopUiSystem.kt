@@ -12,8 +12,8 @@ import com.pipai.dragontiles.artemis.components.XYComponent
 import com.pipai.dragontiles.artemis.events.PricedItemClickEvent
 import com.pipai.dragontiles.artemis.screens.TownScreen
 import com.pipai.dragontiles.data.PricedItem
-import com.pipai.dragontiles.dungeon.GlobalApi
-import com.pipai.dragontiles.dungeon.RunData
+import com.pipai.dragontiles.data.GlobalApi
+import com.pipai.dragontiles.data.RunData
 import com.pipai.dragontiles.gui.SpellCard
 import com.pipai.dragontiles.utils.getLogger
 import com.pipai.dragontiles.utils.mapper

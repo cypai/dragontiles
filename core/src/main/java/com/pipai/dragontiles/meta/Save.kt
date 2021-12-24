@@ -1,6 +1,6 @@
 package com.pipai.dragontiles.meta
 
-import com.pipai.dragontiles.dungeon.RunData
+import com.pipai.dragontiles.data.RunData
 
 data class Save(
     var currentRun: RunData?,

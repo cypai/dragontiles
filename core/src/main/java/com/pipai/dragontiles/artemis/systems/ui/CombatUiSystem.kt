@@ -30,7 +30,7 @@ import com.pipai.dragontiles.artemis.systems.rendering.FullScreenColorSystem
 import com.pipai.dragontiles.combat.*
 import com.pipai.dragontiles.data.Tile
 import com.pipai.dragontiles.data.TileInstance
-import com.pipai.dragontiles.dungeon.RunData
+import com.pipai.dragontiles.data.RunData
 import com.pipai.dragontiles.gui.CombatUiLayout
 import com.pipai.dragontiles.gui.SpellCard
 import com.pipai.dragontiles.gui.SpellComponentList

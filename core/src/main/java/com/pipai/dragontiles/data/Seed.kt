@@ -1,22 +1,9 @@
-package com.pipai.dragontiles.dungeon
+package com.pipai.dragontiles.data
 
-import com.pipai.dragontiles.data.Hero
-import com.pipai.dragontiles.data.Town
 import kotlin.random.Random
 
-data class RunData(
-    val hero: Hero,
-    var dungeonMap: DungeonMap,
-    val availableRelics: MutableList<String>,
-    var town: Town?,
-    var sideboardSpaceBought: Int,
-    var potionChance: Float,
-    val history: RunHistory,
-    val seed: Seed,
-)
-
 data class Seed(
-    val baseSeed: Long = Random.Default.nextLong(),
+    val baseSeed: Long = Random.nextLong(),
     private var dungeonSeed: Long = baseSeed,
     private var relicSeed: Long = baseSeed,
     private var rewardSeed: Long = baseSeed,

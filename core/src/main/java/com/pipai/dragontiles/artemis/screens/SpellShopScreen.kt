@@ -17,7 +17,7 @@ import com.pipai.dragontiles.artemis.systems.ui.DeckDisplayUiSystem
 import com.pipai.dragontiles.artemis.systems.ui.SpellShopUiSystem
 import com.pipai.dragontiles.artemis.systems.ui.TooltipSystem
 import com.pipai.dragontiles.artemis.systems.ui.TopRowUiSystem
-import com.pipai.dragontiles.dungeon.RunData
+import com.pipai.dragontiles.data.RunData
 import net.mostlyoriginal.api.event.common.EventSystem
 
 class SpellShopScreen(game: DragonTilesGame, runData: RunData) : Screen {

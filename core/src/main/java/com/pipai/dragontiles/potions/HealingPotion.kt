@@ -1,9 +1,7 @@
 package com.pipai.dragontiles.potions
 
 import com.pipai.dragontiles.combat.CombatApi
-import com.pipai.dragontiles.data.Element
-import com.pipai.dragontiles.dungeon.GlobalApi
-import com.pipai.dragontiles.utils.getLogger
+import com.pipai.dragontiles.data.GlobalApi
 
 class HealingPotion : Potion() {
     override val id: String = "base:potions:HealingPotion"

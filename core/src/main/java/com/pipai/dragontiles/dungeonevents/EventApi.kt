@@ -6,8 +6,8 @@ import com.pipai.dragontiles.artemis.systems.ui.EventUiSystem
 import com.pipai.dragontiles.combat.CombatRewards
 import com.pipai.dragontiles.data.EventLocalization
 import com.pipai.dragontiles.dungeon.Encounter
-import com.pipai.dragontiles.dungeon.GlobalApi
-import com.pipai.dragontiles.dungeon.RunData
+import com.pipai.dragontiles.data.GlobalApi
+import com.pipai.dragontiles.data.RunData
 import net.mostlyoriginal.api.event.common.EventSystem
 
 class EventApi(val game: DragonTilesGame, runData: RunData, sEvent: EventSystem, val sUi: EventUiSystem, val event: EventLocalization)

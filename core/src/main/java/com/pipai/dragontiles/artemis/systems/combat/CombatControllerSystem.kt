@@ -4,7 +4,7 @@ import com.pipai.dragontiles.artemis.systems.ProcessOnceSystem
 import com.pipai.dragontiles.combat.Combat
 import com.pipai.dragontiles.combat.CombatController
 import com.pipai.dragontiles.data.GameData
-import com.pipai.dragontiles.dungeon.RunData
+import com.pipai.dragontiles.data.RunData
 import com.pipai.dragontiles.utils.system
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

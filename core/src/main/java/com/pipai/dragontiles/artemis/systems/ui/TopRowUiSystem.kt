@@ -14,8 +14,8 @@ import com.pipai.dragontiles.DragonTilesGame
 import com.pipai.dragontiles.artemis.events.PotionUseEvent
 import com.pipai.dragontiles.artemis.events.TopRowUiUpdateEvent
 import com.pipai.dragontiles.artemis.systems.NoProcessingSystem
-import com.pipai.dragontiles.dungeon.GlobalApi
-import com.pipai.dragontiles.dungeon.RunData
+import com.pipai.dragontiles.data.GlobalApi
+import com.pipai.dragontiles.data.RunData
 import com.pipai.dragontiles.potions.PotionType
 import com.pipai.dragontiles.utils.potionAssetPath
 import com.pipai.dragontiles.utils.relicAssetPath

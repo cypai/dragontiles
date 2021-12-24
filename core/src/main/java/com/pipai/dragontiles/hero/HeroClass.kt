@@ -3,8 +3,7 @@ package com.pipai.dragontiles.hero
 import com.pipai.dragontiles.data.Hero
 import com.pipai.dragontiles.data.Localized
 import com.pipai.dragontiles.data.PotionSlot
-import com.pipai.dragontiles.dungeon.RunData
-import com.pipai.dragontiles.dungeon.Seed
+import com.pipai.dragontiles.data.Seed
 import com.pipai.dragontiles.potions.ExplosivePotion
 import com.pipai.dragontiles.potions.HealingPotion
 import com.pipai.dragontiles.relics.Relic
@@ -13,7 +12,6 @@ import com.pipai.dragontiles.spells.Sorcery
 import com.pipai.dragontiles.spells.Spell
 import com.pipai.dragontiles.spells.SpellInstance
 import com.pipai.dragontiles.utils.choose
-import kotlin.random.Random
 
 interface HeroClass : Localized {
     val assetName: String

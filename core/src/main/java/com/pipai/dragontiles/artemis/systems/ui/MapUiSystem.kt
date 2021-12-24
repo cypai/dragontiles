@@ -18,7 +18,7 @@ import com.pipai.dragontiles.artemis.systems.NoProcessingSystem
 import com.pipai.dragontiles.combat.CombatRewards
 import com.pipai.dragontiles.combat.SpellRewardType
 import com.pipai.dragontiles.dungeon.MapNodeType
-import com.pipai.dragontiles.dungeon.RunData
+import com.pipai.dragontiles.data.RunData
 import com.pipai.dragontiles.utils.allOf
 import com.pipai.dragontiles.utils.choose
 import com.pipai.dragontiles.utils.fetch

@@ -2,8 +2,8 @@ package com.pipai.dragontiles.combat
 
 import com.pipai.dragontiles.data.GameData
 import com.pipai.dragontiles.dungeon.DungeonInitializer
-import com.pipai.dragontiles.dungeon.RunData
-import com.pipai.dragontiles.dungeon.RunHistory
+import com.pipai.dragontiles.data.RunData
+import com.pipai.dragontiles.data.RunHistory
 import com.pipai.dragontiles.hero.Elementalist
 import com.pipai.dragontiles.data.Hero
 import com.pipai.dragontiles.relics.Relic

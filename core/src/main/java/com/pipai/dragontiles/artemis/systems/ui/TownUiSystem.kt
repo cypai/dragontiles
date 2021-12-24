@@ -4,7 +4,7 @@ import com.artemis.BaseSystem
 import com.pipai.dragontiles.DragonTilesGame
 import com.pipai.dragontiles.artemis.events.ShopClickEvent
 import com.pipai.dragontiles.artemis.screens.SpellShopScreen
-import com.pipai.dragontiles.dungeon.RunData
+import com.pipai.dragontiles.data.RunData
 import net.mostlyoriginal.api.event.common.Subscribe
 
 class TownUiSystem(

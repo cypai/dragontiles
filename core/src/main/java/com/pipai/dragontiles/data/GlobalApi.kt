@@ -1,8 +1,7 @@
-package com.pipai.dragontiles.dungeon
+package com.pipai.dragontiles.data
 
 import com.pipai.dragontiles.artemis.events.*
 import com.pipai.dragontiles.combat.GameOverEvent
-import com.pipai.dragontiles.data.GameData
 import com.pipai.dragontiles.potions.Potion
 import com.pipai.dragontiles.relics.Relic
 import com.pipai.dragontiles.relics.RelicInstance

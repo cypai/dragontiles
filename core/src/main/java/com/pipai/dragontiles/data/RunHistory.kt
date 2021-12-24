@@ -1,8 +1,5 @@
-package com.pipai.dragontiles.dungeon
+package com.pipai.dragontiles.data
 
-import com.pipai.dragontiles.data.ItemShop
-import com.pipai.dragontiles.data.Scribe
-import com.pipai.dragontiles.data.SpellShop
 import com.pipai.dragontiles.spells.SpellInstance
 import com.pipai.dragontiles.spells.SpellUpgradeInstance
 

@@ -1,6 +1,6 @@
 package com.pipai.dragontiles.dungeon
 
-import com.pipai.dragontiles.dungeonevents.DungeonEvent
+import com.pipai.dragontiles.data.Seed
 import com.pipai.dragontiles.utils.choose
 import kotlin.random.Random
 

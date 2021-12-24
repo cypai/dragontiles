@@ -13,8 +13,8 @@ import com.pipai.dragontiles.artemis.events.TransformSpellQueryEvent
 import com.pipai.dragontiles.artemis.events.UpgradeSpellQueryEvent
 import com.pipai.dragontiles.artemis.systems.NoProcessingSystem
 import com.pipai.dragontiles.artemis.systems.rendering.FullScreenColorSystem
-import com.pipai.dragontiles.dungeon.GlobalApi
-import com.pipai.dragontiles.dungeon.RunData
+import com.pipai.dragontiles.data.GlobalApi
+import com.pipai.dragontiles.data.RunData
 import com.pipai.dragontiles.gui.SpellCard
 import com.pipai.dragontiles.spells.Sorcery
 import com.pipai.dragontiles.spells.Spell

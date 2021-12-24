@@ -17,7 +17,7 @@ import com.pipai.dragontiles.artemis.components.EndStrategy
 import com.pipai.dragontiles.artemis.components.PathInterpolationComponent
 import com.pipai.dragontiles.artemis.components.XYComponent
 import com.pipai.dragontiles.artemis.events.SpellGainedEvent
-import com.pipai.dragontiles.dungeon.RunData
+import com.pipai.dragontiles.data.RunData
 import com.pipai.dragontiles.dungeonevents.DungeonEvent
 import com.pipai.dragontiles.dungeonevents.EventApi
 import com.pipai.dragontiles.dungeonevents.EventOption

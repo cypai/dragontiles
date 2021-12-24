@@ -17,7 +17,7 @@ import com.pipai.dragontiles.artemis.systems.input.InputProcessingSystem
 import com.pipai.dragontiles.artemis.systems.rendering.FullScreenColorSystem
 import com.pipai.dragontiles.artemis.systems.rendering.RenderingSystem
 import com.pipai.dragontiles.artemis.systems.ui.*
-import com.pipai.dragontiles.dungeon.RunData
+import com.pipai.dragontiles.data.RunData
 import com.pipai.dragontiles.dungeonevents.DungeonEvent
 import net.mostlyoriginal.api.event.common.EventSystem
 

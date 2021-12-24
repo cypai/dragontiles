@@ -14,7 +14,7 @@ import com.pipai.dragontiles.artemis.components.SpriteComponent
 import com.pipai.dragontiles.artemis.components.XYComponent
 import com.pipai.dragontiles.artemis.events.ShopClickEvent
 import com.pipai.dragontiles.data.*
-import com.pipai.dragontiles.dungeon.RunData
+import com.pipai.dragontiles.data.RunData
 import com.pipai.dragontiles.spells.Rarity
 import com.pipai.dragontiles.spells.Spell
 import com.pipai.dragontiles.utils.choose

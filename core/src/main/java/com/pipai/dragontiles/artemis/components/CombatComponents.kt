@@ -2,10 +2,9 @@ package com.pipai.dragontiles.artemis.components
 
 import com.artemis.Component
 import com.badlogic.gdx.Input.Keys
-import com.badlogic.gdx.graphics.g2d.Sprite
 import com.pipai.dragontiles.combat.Intent
 import com.pipai.dragontiles.data.TileInstance
-import com.pipai.dragontiles.dungeon.RunData
+import com.pipai.dragontiles.data.RunData
 import com.pipai.dragontiles.enemies.Enemy
 import com.pipai.dragontiles.status.Status
 

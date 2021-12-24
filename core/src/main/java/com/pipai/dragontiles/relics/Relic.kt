@@ -5,11 +5,8 @@ import com.pipai.dragontiles.combat.DamageOrigin
 import com.pipai.dragontiles.combat.DamageTarget
 import com.pipai.dragontiles.data.Element
 import com.pipai.dragontiles.data.Localized
-import com.pipai.dragontiles.dungeon.GlobalApi
+import com.pipai.dragontiles.data.GlobalApi
 import com.pipai.dragontiles.spells.Rarity
-import com.pipai.dragontiles.spells.Spell
-import kotlinx.serialization.Serializable
-import kotlinx.serialization.Transient
 import kotlin.reflect.full.createInstance
 
 abstract class Relic : Localized, DamageAdjustable {
