@@ -10,9 +10,7 @@ import com.pipai.dragontiles.artemis.systems.NoProcessingSystem
 import com.pipai.dragontiles.data.Keywords
 import com.pipai.dragontiles.data.Localized
 import com.pipai.dragontiles.data.NameDescLocalization
-import com.pipai.dragontiles.spells.PostExhaustAspect
-import com.pipai.dragontiles.spells.Spell
-import com.pipai.dragontiles.spells.TransformAspect
+import com.pipai.dragontiles.spells.*
 
 class TooltipSystem(private val game: DragonTilesGame, var stage: Stage) : NoProcessingSystem(), InputProcessor {
 
@@ -85,6 +83,9 @@ class TooltipSystem(private val game: DragonTilesGame, var stage: Stage) : NoPro
         }
         if (spell.aspects.any { a -> a is TransformAspect }) {
             addKeyword(Keywords.TRANSFORM)
+        }
+        if (spell.aspects.any { a -> a is RepeatableAspect || a is LimitedRepeatableAspect }) {
+            addKeyword(Keywords.REPEATABLE)
         }
     }
 

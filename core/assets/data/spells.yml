@@ -66,12 +66,12 @@ base:spells:Mulligan:
 base:spells:Spark:
   en:
     name: Spark
-    description: "Component must be a 1. Deal !d @Elemented damage. @Repeatable."
+    description: "Component must be a 1. Deal !d @Elemented damage."
 
 base:spells:Reserve:
   en:
     name: Reserve
-    description: "@OpenDiscard the @Component. @Repeatable !r."
+    description: "@OpenDiscard the @Component."
 
 base:spells:Fetch:
   en:
@@ -86,7 +86,7 @@ base:spells:PreFetch:
 base:spells:Ground:
   en:
     name: Ground
-    description: "@Repeatable !r."
+    description: ""
 
 base:spells:Bump:
   en:

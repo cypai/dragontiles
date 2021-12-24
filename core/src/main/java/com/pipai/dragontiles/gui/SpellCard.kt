@@ -232,7 +232,13 @@ class SpellCard(
             spellTypeLabel.setText("${spell.type} - ${spell.rarity}")
             var description = spellLocalization.description
             if (spell.aspects.any { it is PostExhaustAspect }) {
-                description += " ${Keywords.EXHAUST}"
+                description += " ${Keywords.EXHAUST}."
+            }
+            if (spell.aspects.any { it is RepeatableAspect }) {
+                description += " ${Keywords.REPEATABLE}."
+            }
+            if (spell.aspects.any { it is LimitedRepeatableAspect }) {
+                description += " ${Keywords.REPEATABLE} !r."
             }
             val adjustedDescription = description.replace(regex) {
                 val replacement = if (target == null && it.groupValues[2].isNotEmpty()) {
