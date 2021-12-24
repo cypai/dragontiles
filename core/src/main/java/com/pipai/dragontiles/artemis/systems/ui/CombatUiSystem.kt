@@ -203,7 +203,6 @@ class CombatUiSystem(
 
     private fun addSpellCard(number: Int, spell: Spell) {
         val spellCard = SpellCard(game, spell, number, game.skin, sCombat.controller.api)
-        spellCard.addClickCallback(this::spellCardClickCallback)
         spellCard.x = layout.cardWidth * number
         spellCard.y = spellCardY
         frontStage.addActor(spellCard)
@@ -214,14 +213,28 @@ class CombatUiSystem(
         mXy.create(id)
         mAnchor.create(id)
         spellCard.data[ALLOW_HOVER_MOVE] = 1
+        addActiveSpellCardListener(spellCard)
+    }
+
+    private fun addActiveSpellCardListener(spellCard: SpellCard) {
+        spellCard.addListener(object : ClickListener(Input.Buttons.RIGHT) {
+            override fun clicked(event: InputEvent?, x: Float, y: Float) {
+                spellCardClickCallback(event!!, spellCard)
+            }
+        })
+
         spellCard.addListener(object : ClickListener() {
+            override fun clicked(event: InputEvent?, x: Float, y: Float) {
+                spellCardClickCallback(event!!, spellCard)
+            }
+
             override fun enter(event: InputEvent?, x: Float, y: Float, pointer: Int, fromActor: Actor?) {
                 if (stateMachine.currentState == CombatUiState.ROOT) {
                     spellCard.width *= 1.1f
                     spellCard.height *= 1.1f
                     spellCard.toFront()
                 }
-                sTooltip.addSpell(spell)
+                sTooltip.addSpell(spellCard.getSpell()!!)
                 sTooltip.showTooltip(spellCard.x + spellCard.width + 16, spellCard.y)
                 if (spellCard.data[ALLOW_HOVER_MOVE] == 1) {
                     openActiveSpells()
@@ -239,7 +252,6 @@ class CombatUiSystem(
 
     private fun addSpellCardToSideboard(number: Int, spell: Spell) {
         val spellCard = SpellCard(game, spell, number, game.skin, sCombat.controller.api)
-        spellCard.addClickCallback(this::spellCardClickCallback)
         spellCard.x = game.gameConfig.resolution.width - layout.cardWidth * 3 + number * layout.cardWidth * 0.8f
         spellCard.y = spellCardY
         frontStage.addActor(spellCard)
@@ -252,14 +264,28 @@ class CombatUiSystem(
         val cAnchor = mAnchor.create(id)
         cAnchor.setXy(spellCard.x, spellCard.y)
         spellCard.data[ALLOW_HOVER_MOVE] = 1
+        addSideboardSpellCardListener(spellCard)
+    }
+
+    private fun addSideboardSpellCardListener(spellCard: SpellCard) {
+        spellCard.addListener(object : ClickListener(Input.Buttons.RIGHT) {
+            override fun clicked(event: InputEvent?, x: Float, y: Float) {
+                spellCardClickCallback(event!!, spellCard)
+            }
+        })
+
         spellCard.addListener(object : ClickListener() {
+            override fun clicked(event: InputEvent?, x: Float, y: Float) {
+                spellCardClickCallback(event!!, spellCard)
+            }
+
             override fun enter(event: InputEvent?, x: Float, y: Float, pointer: Int, fromActor: Actor?) {
                 if (stateMachine.currentState == CombatUiState.ROOT) {
                     spellCard.width *= 1.1f
                     spellCard.height *= 1.1f
                     spellCard.toFront()
                 }
-                sTooltip.addSpell(spell)
+                sTooltip.addSpell(spellCard.getSpell()!!)
                 sTooltip.showTooltip(spellCard.x + spellCard.width + 16)
                 if (spellCard.data[ALLOW_HOVER_MOVE] == 1) {
                     openSideboardSpells()
@@ -277,7 +303,11 @@ class CombatUiSystem(
 
     private fun addSorcery(number: Int, sorcery: Sorcery) {
         val spellCard = SpellCard(game, sorcery, number, game.skin, sCombat.controller.api)
-        spellCard.addClickCallback(this::spellCardClickCallback)
+        spellCard.addListener(object : ClickListener() {
+            override fun clicked(event: InputEvent?, x: Float, y: Float) {
+                spellCardClickCallback(event!!, spellCard)
+            }
+        })
         spellCard.x = layout.cardWidth * number
         spellCard.y = SpellCard.cardHeight * -3f
         frontStage.addActor(spellCard)
@@ -854,10 +884,12 @@ class CombatUiSystem(
             }
             CombatUiState.QUERY_SWAP -> {
                 runBlocking {
-                    swapChannel.send(SwapData(
-                        swapActiveSpells.map { it.getSpell()!! },
-                        swapSideboardSpells.map { it.getSpell()!! }
-                    ))
+                    swapChannel.send(
+                        SwapData(
+                            swapActiveSpells.map { it.number!! },
+                            swapSideboardSpells.map { it.number!! },
+                        )
+                    )
                 }
                 swapActiveSpells.clear()
                 swapSideboardSpells.clear()
@@ -1004,20 +1036,20 @@ class CombatUiSystem(
         }
     }
 
-    fun swapSpells(spellInHand: List<Spell>, spellOnSide: List<Spell>) {
-        spellInHand.zip(spellOnSide).forEach { (spell, sideSpell) ->
-            val activeSpellCard = findSpellCard(spell)!!
-            val sideboardSpellCard = findSideboardCard(sideSpell)!!
-            val activeNumber = activeSpellCard.number!!
-            val sideNumber = sideboardSpellCard.number!!
-            val activeEntityId = spellEntityIds[activeNumber]!!
-            val sideEntityId = sideboardEntityIds[sideNumber]!!
-            spells[activeNumber] = sideboardSpellCard
-            sideboardSpellCard.number = activeNumber
-            sideboard[sideNumber] = activeSpellCard
-            activeSpellCard.number = sideNumber
-            spellEntityIds[activeNumber] = sideEntityId
-            sideboardEntityIds[sideNumber] = activeEntityId
+    fun swapSpells(activeIndexes: List<Int>, sideboardIndexes: List<Int>) {
+        activeIndexes.zip(sideboardIndexes).forEach { (activeIndex, sideboardIndex) ->
+            val activeSpellCard = spells[activeIndex]!!
+            val sideboardSpellCard = sideboard[sideboardIndex]!!
+            println(activeSpellCard.getSpell())
+            println(sideboardSpellCard.getSpell())
+            val activeEntityId = spellEntityIds[activeIndex]!!
+            val sideEntityId = sideboardEntityIds[sideboardIndex]!!
+            spells[activeIndex] = sideboardSpellCard
+            sideboardSpellCard.number = activeIndex
+            sideboard[sideboardIndex] = activeSpellCard
+            activeSpellCard.number = sideboardIndex
+            spellEntityIds[activeIndex] = sideEntityId
+            sideboardEntityIds[sideboardIndex] = activeEntityId
             val activeAnchor = mAnchor.get(activeEntityId)
             val sideAnchor = mAnchor.get(sideEntityId)
             val tmpAnchor = activeAnchor.toVector2()
@@ -1025,20 +1057,10 @@ class CombatUiSystem(
             sideAnchor.setXy(tmpAnchor)
             activeSpellCard.data[ALLOW_HOVER_MOVE] = 1
             sideboardSpellCard.data[ALLOW_HOVER_MOVE] = 1
-            activeSpellCard.clearHoverCallbacks()
-            activeSpellCard.addHoverEnterCallback {
-                if (it.data[ALLOW_HOVER_MOVE] == 1) {
-                    openSideboardSpells()
-                    closeActiveSpells()
-                }
-            }
-            sideboardSpellCard.clearHoverCallbacks()
-            sideboardSpellCard.addHoverEnterCallback {
-                if (it.data[ALLOW_HOVER_MOVE] == 1) {
-                    openActiveSpells()
-                    closeSideboardSpells()
-                }
-            }
+            activeSpellCard.clearListeners()
+            addSideboardSpellCardListener(activeSpellCard)
+            sideboardSpellCard.clearListeners()
+            addActiveSpellCardListener(sideboardSpellCard)
         }
         openActiveSpells()
         closeSideboardSpells()
@@ -1198,6 +1220,7 @@ class CombatUiSystem(
         },
         QUERY_SWAP {
             override fun enter(uiSystem: CombatUiSystem) {
+                uiSystem.moveSpellsToAnchor()
                 uiSystem.spells.values.forEach {
                     val spell = it.getSpell()
                     if (spell !is Rune || !spell.active) {
@@ -1214,6 +1237,7 @@ class CombatUiSystem(
             override fun exit(uiSystem: CombatUiSystem) {
                 uiSystem.sFsTexture.fadeOut(10)
                 uiSystem.queryTable.remove()
+                uiSystem.moveSpellsToAnchor()
             }
         },
         QUERY_TILES {

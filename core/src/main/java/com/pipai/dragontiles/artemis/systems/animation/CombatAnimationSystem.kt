@@ -209,7 +209,7 @@ class CombatAnimationSystem(private val game: DragonTilesGame) : BaseSystem(), A
 
     @Subscribe
     fun handleSwap(ev: SwapEvent) {
-        queueAnimation(SwapAnimation(ev.spellInHand, ev.spellOnSide))
+        queueAnimation(SwapAnimation(ev))
     }
 
     @Subscribe

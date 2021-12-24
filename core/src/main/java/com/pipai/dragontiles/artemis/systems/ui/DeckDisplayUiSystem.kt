@@ -292,7 +292,11 @@ class DeckDisplayUiSystem(
                 .prefWidth(SpellCard.cardWidth)
                 .prefHeight(SpellCard.cardHeight)
                 .pad(10f)
-            spellCard.addClickCallback { _, _ -> onClick(spell, section, i) }
+            spellCard.addListener(object : ClickListener() {
+                override fun clicked(event: InputEvent?, x: Float, y: Float) {
+                    onClick(spell, section, i)
+                }
+            })
             if (enableSwapDnd) {
                 dragAndDrop.setDragActorPosition(SpellCard.cardWidth / 2f, -SpellCard.cardHeight / 2f)
                 dragAndDrop.addSource(object : DragAndDrop.Source(spellCard) {

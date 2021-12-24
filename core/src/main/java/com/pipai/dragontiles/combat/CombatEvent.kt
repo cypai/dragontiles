@@ -114,6 +114,6 @@ data class StatusOverviewAdjustedEvent(
 ) : CombatEvent
 
 data class QuerySwapEvent(val amount: Int) : CombatEvent
-data class SwapData(val spellInHand: List<Spell>, val spellOnSide: List<Spell>)
+data class SwapData(val activeIndexes: List<Int>, val sideboardIndexes: List<Int>)
 
-data class SwapEvent(val spellInHand: List<Spell>, val spellOnSide: List<Spell>) : CombatEvent
+data class SwapEvent(val activeIndexes: List<Int>, val sideboardIndexes: List<Int>) : CombatEvent

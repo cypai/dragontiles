@@ -44,10 +44,6 @@ class SpellCard(
 
     private val keyRegex = "(!\\w+)(\\((\\w+)\\))?(\\[.+])?".toRegex()
 
-    private val clickCallbacks: MutableList<(InputEvent, SpellCard) -> Unit> = mutableListOf()
-    private val hoverEnterCallbacks: MutableList<(SpellCard) -> Unit> = mutableListOf()
-    private val hoverExitCallbacks: MutableList<(SpellCard) -> Unit> = mutableListOf()
-
     var target: Enemy? = null
     private var enabled = true
     var powered = false
@@ -105,56 +101,6 @@ class SpellCard(
         height = cardHeight
 
         touchable = Touchable.enabled
-        addListener(object : ClickListener() {
-            override fun clicked(event: InputEvent?, x: Float, y: Float) {
-                if (enabled) {
-                    clickCallbacks.forEach { it.invoke(event!!, this@SpellCard) }
-                }
-            }
-
-            override fun enter(event: InputEvent?, x: Float, y: Float, pointer: Int, fromActor: Actor?) {
-                if (spell != null) {
-                    hoverEnterCallbacks.forEach { it.invoke(this@SpellCard) }
-//                    zPrevious = zIndex
-//                    toFront()
-//                    sToolTip.addText("Spell Components", spell!!.requirement.description, true)
-//                    sToolTip.addKeywordsInString(game.gameStrings.spellLocalization(spell!!.id).description)
-//                    sToolTip.showTooltip(stage)
-                }
-            }
-
-            override fun exit(event: InputEvent?, x: Float, y: Float, pointer: Int, toActor: Actor?) {
-                zIndex = zPrevious
-                if (spell != null) {
-                    hoverExitCallbacks.forEach { it.invoke(this@SpellCard) }
-                }
-//                sToolTip.hideTooltip()
-            }
-        })
-        addListener(object : ClickListener(Input.Buttons.RIGHT) {
-            override fun clicked(event: InputEvent?, x: Float, y: Float) {
-                if (enabled) {
-                    clickCallbacks.forEach { it.invoke(event!!, this@SpellCard) }
-                }
-            }
-        })
-    }
-
-    fun addClickCallback(callback: (InputEvent, SpellCard) -> Unit) {
-        clickCallbacks.add(callback)
-    }
-
-    fun addHoverEnterCallback(callback: (SpellCard) -> Unit) {
-        hoverEnterCallbacks.add(callback)
-    }
-
-    fun addHoverExitCallback(callback: (SpellCard) -> Unit) {
-        hoverExitCallbacks.add(callback)
-    }
-
-    fun clearHoverCallbacks() {
-        hoverEnterCallbacks.clear()
-        hoverExitCallbacks.clear()
     }
 
     fun getSpell() = spell
