@@ -107,6 +107,7 @@ abstract class Spell : Localized, DamageAdjustable {
                 aspects.filterIsInstance(StackableAspect::class.java)
                     .firstOrNull { it.dynamicId.toString() == param }?.status?.amount ?: 0
             }
+            "!swap" -> baseSwap()
             else -> data[key] ?: 0
         }
     }
@@ -164,6 +165,9 @@ abstract class StandardSpell : Spell() {
         }
         handleComponents(api)
         onCast(params, api)
+        if (baseSwap() > 0) {
+            api.swapQuery(baseSwap())
+        }
         api.castSpell(this) // After casting to have effects on spellcast resolve in the proper order
         repeated++
     }
@@ -251,9 +255,12 @@ abstract class PowerSpell : Spell() {
             logger.error("Attempted to cast without being ready. State: $this")
             return
         }
-        api.castSpell(this)
         handleComponents(api)
         onCast(params, api)
+        if (baseSwap() > 0) {
+            api.swapQuery(baseSwap())
+        }
+        api.castSpell(this)
         powered = true
     }
 

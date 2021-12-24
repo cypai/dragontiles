@@ -232,3 +232,8 @@ base:spells:ExpandAnomaly:
   en:
     name: Expand Anomaly
     description: Select a tile with @Burn, @Freeze, or @Shock in your hand. Copy its status to all other tiles of its suit.
+
+base:spells:Riffle:
+  en:
+    name: Riffle
+    description: ""

@@ -1,6 +1,7 @@
 package com.pipai.dragontiles.spells
 
 import com.pipai.dragontiles.combat.CombatApi
+import com.pipai.dragontiles.data.Keywords
 import com.pipai.dragontiles.status.Status
 
 interface SpellAspect {
@@ -21,19 +22,25 @@ data class TempMaxFluxGainAspect(var amount: Int) : SpellAspect
 
 class PostExhaustAspect : SpellAspect {
     override fun adjustDescription(description: String): String {
-        return "$description Exhaust."
+        return "$description ${Keywords.EXHAUST}."
     }
 }
 
 class RepeatableAspect : SpellAspect {
     override fun adjustDescription(description: String): String {
-        return "$description Repeatable."
+        return "$description ${Keywords.REPEATABLE}."
     }
 }
 
 data class LimitedRepeatableAspect(var max: Int) : SpellAspect {
     override fun adjustDescription(description: String): String {
-        return "$description Repeatable !r."
+        return "$description ${Keywords.REPEATABLE} !r."
+    }
+}
+
+data class SwapAspect(var amount: Int) : SpellAspect {
+    override fun adjustDescription(description: String): String {
+        return "$description ${Keywords.SWAP} !swap."
     }
 }
 
