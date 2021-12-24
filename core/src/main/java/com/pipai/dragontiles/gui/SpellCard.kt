@@ -37,8 +37,8 @@ class SpellCard(
     private var zPrevious = 0
 
     companion object {
-        val cardWidth = 140f
-        val cardHeight = 196f
+        val cardWidth = 154f
+        val cardHeight = 216f
     }
 
     private val regex = "(!\\w+)(\\[.+])?".toRegex()

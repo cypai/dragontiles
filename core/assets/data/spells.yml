@@ -166,7 +166,7 @@ base:spells:MassTransmute:
 base:spells:ElementalRune:
   en:
     name: Elemental Rune
-    description: Increases damage from same-Elemented attacks by 2.
+    description: Increases damage from same @Elemented attacks by 2.
 
 base:spells:EnhanceRune:
   en:

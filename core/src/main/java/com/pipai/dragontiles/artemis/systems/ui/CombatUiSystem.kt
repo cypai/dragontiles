@@ -210,17 +210,22 @@ class CombatUiSystem(
         mAnchor.create(id)
         spellCard.data[allowHoverMove] = 1
         spellCard.addHoverEnterCallback {
+            it.width *= 1.1f
+            it.height *= 1.1f
+            it.toFront()
             sTooltip.addKeywordsInString(game.gameStrings.spellLocalization(spell.id).description)
             if (spell.aspects.any { a -> a is PostExhaustAspect }) {
                 sTooltip.addKeyword("@Exhaust")
             }
-            sTooltip.showTooltip()
+            sTooltip.showTooltip(fixX = it.x + it.width + 16f)
             if (it.data[allowHoverMove] == 1) {
                 openActiveSpells()
                 closeSideboardSpells()
             }
         }
         spellCard.addHoverExitCallback {
+            it.width = SpellCard.cardWidth
+            it.height = SpellCard.cardHeight
             sTooltip.hideTooltip()
         }
     }
@@ -241,17 +246,21 @@ class CombatUiSystem(
         cAnchor.setXy(spellCard.x, spellCard.y)
         spellCard.data[allowHoverMove] = 1
         spellCard.addHoverEnterCallback {
+            it.width *= 1.1f
+            it.height *= 1.1f
             sTooltip.addKeywordsInString(game.gameStrings.spellLocalization(spell.id).description)
             if (spell.aspects.any { a -> a is PostExhaustAspect }) {
                 sTooltip.addKeyword("@Exhaust")
             }
-            sTooltip.showTooltip()
+            sTooltip.showTooltip(fixX = it.x + it.width + 16f)
             if (it.data[allowHoverMove] == 1) {
                 openSideboardSpells()
                 closeActiveSpells()
             }
         }
         spellCard.addHoverExitCallback {
+            it.width = SpellCard.cardWidth
+            it.height = SpellCard.cardHeight
             sTooltip.hideTooltip()
         }
     }
@@ -273,13 +282,17 @@ class CombatUiSystem(
         mActor.create(id).actor = spellCard
         spellCard.data[allowHoverMove] = 1
         spellCard.addHoverEnterCallback {
+            it.width *= 1.1f
+            it.height *= 1.1f
             if (sorcery.requirement.reqAmount.text() == "?") {
                 sTooltip.addText("Requirements", sorcery.requirement.description, false)
             }
             sTooltip.addKeywordsInString(game.gameStrings.spellLocalization(sorcery.id).description)
-            sTooltip.showTooltip()
+            sTooltip.showTooltip(fixX = it.x + it.width + 16f)
         }
         spellCard.addHoverExitCallback {
+            it.width = SpellCard.cardWidth
+            it.height = SpellCard.cardHeight
             sTooltip.hideTooltip()
         }
     }

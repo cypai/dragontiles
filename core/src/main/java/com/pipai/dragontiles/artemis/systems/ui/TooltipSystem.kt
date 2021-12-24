@@ -7,7 +7,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.utils.Align
 import com.pipai.dragontiles.DragonTilesGame
 import com.pipai.dragontiles.artemis.systems.NoProcessingSystem
-import com.pipai.dragontiles.data.KeywordLocalization
 import com.pipai.dragontiles.data.NameDescLocalization
 
 class TooltipSystem(game: DragonTilesGame, var stage: Stage) : NoProcessingSystem(), InputProcessor {
@@ -21,6 +20,7 @@ class TooltipSystem(game: DragonTilesGame, var stage: Stage) : NoProcessingSyste
     private val headerSet: MutableSet<String> = mutableSetOf()
     private val textPairs: MutableList<Pair<String, String>> = mutableListOf()
 
+    private var fixX: Float? = null
     private var mouseX: Float = 0f
     private var mouseY: Float = 0f
 
@@ -63,7 +63,8 @@ class TooltipSystem(game: DragonTilesGame, var stage: Stage) : NoProcessingSyste
         table.remove()
     }
 
-    fun showTooltip() {
+    fun showTooltip(fixX: Float? = null) {
+        this.fixX = fixX
         if (textPairs.isEmpty()) {
             return
         }
@@ -99,8 +100,13 @@ class TooltipSystem(game: DragonTilesGame, var stage: Stage) : NoProcessingSyste
     }
 
     private fun updateTablePosition() {
-        table.x = mouseX + 16f
-        table.y = (mouseY - table.prefHeight - 16f).coerceAtLeast(0f)
+        if (fixX == null) {
+            table.x = mouseX + 16f
+            table.y = (mouseY - table.prefHeight - 16f).coerceAtLeast(0f)
+        } else {
+            table.x = fixX!!
+            table.y = (mouseY - table.prefHeight - 16f).coerceAtLeast(0f)
+        }
     }
 
     override fun keyDown(keycode: Int) = false
