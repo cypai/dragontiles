@@ -184,7 +184,7 @@ class SpellCard(
             spellTypeLabel.setText("${spell.type} - ${spell.rarity}")
             var description = spellLocalization.description
             spell.aspects.forEach {
-                description = " ${it.adjustDescription(description)}"
+                description = it.adjustDescription(description)
             }
             val adjustedDescription = description.replace(keyRegex) {
                 val replacement = if (target == null && it.groupValues[4].isNotEmpty()) {
