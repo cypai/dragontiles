@@ -77,6 +77,7 @@ class MainMenuUiSystem(
             override fun clicked(event: InputEvent?, x: Float, y: Float) {
                 game.save.currentRun = null
                 game.writeSave()
+                regenerateTable(true)
             }
         })
         tutorialLabel.addListener(object : ClickListener() {
@@ -130,7 +131,7 @@ class MainMenuUiSystem(
                     game,
                     runData,
                     dungeon.getEncounter(floorConfig.encounterId)!!,
-                    CombatRewardConfig.standard(runData),
+                    null,
                     false,
                 )
             }
@@ -140,7 +141,7 @@ class MainMenuUiSystem(
                     game,
                     runData,
                     dungeon.getEncounter(floorConfig.encounterId)!!,
-                    CombatRewardConfig.elite(runData),
+                    null,
                     false,
                 )
             }

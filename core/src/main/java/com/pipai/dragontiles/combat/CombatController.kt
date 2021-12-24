@@ -16,7 +16,7 @@ class CombatController(
     private val eventBus = CombatEventBus(eventSystem)
     val api: CombatApi = CombatApi(gameData, runData, combat, eventBus)
 
-    fun initCombat() {
+    fun init() {
         eventBus.init(api)
         combat.enemies.forEach {
             it.preInit(api.nextId())
@@ -24,8 +24,6 @@ class CombatController(
             eventBus.register(it)
             runBlocking { it.init(api) }
         }
-        initDrawPile()
-        runBlocking { api.drawToOpenPool(CombatApi.OPEN_POOL_SIZE) }
         combat.spells.forEach {
             it.combatReset()
             eventBus.register(it)
@@ -41,6 +39,11 @@ class CombatController(
         combat.relics.forEach {
             eventBus.register(it)
         }
+    }
+
+    fun initCombat() {
+        initDrawPile()
+        runBlocking { api.drawToOpenPool(CombatApi.OPEN_POOL_SIZE) }
     }
 
     private fun initDrawPile() {

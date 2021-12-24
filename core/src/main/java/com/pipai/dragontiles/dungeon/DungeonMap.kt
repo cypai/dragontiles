@@ -1,5 +1,6 @@
 package com.pipai.dragontiles.dungeon
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import com.pipai.dragontiles.data.Seed
 import com.pipai.dragontiles.utils.choose
 import kotlin.random.Random
@@ -128,6 +129,7 @@ data class DungeonMap(
         return getCurrentNode()
     }
 
+    @JsonIgnore
     fun getCurrentNode(): MapNode {
         return map[currentFloor][currentFloorIndex]
     }

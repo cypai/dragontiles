@@ -1,5 +1,6 @@
 package com.pipai.dragontiles.data
 
+import com.fasterxml.jackson.annotation.JsonTypeInfo
 import com.pipai.dragontiles.spells.SpellInstance
 import com.pipai.dragontiles.spells.SpellUpgradeInstance
 
@@ -13,6 +14,7 @@ enum class VictoryStatus {
     IN_PROGRESS, ABANDONED, FAILED, VICTORY
 }
 
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME)
 sealed class FloorHistory {
     data class CombatFloorHistory(
         val dungeonId: String,

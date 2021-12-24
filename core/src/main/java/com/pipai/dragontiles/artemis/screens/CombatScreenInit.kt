@@ -49,7 +49,6 @@ class CombatScreenInit(
         mCamera.create(cameraId)
         sTags.register(Tags.CAMERA.toString(), cameraId)
 
-        sController.controller.initCombat()
         sDeckDisplay.enableSwap = false
 
         initHero()
