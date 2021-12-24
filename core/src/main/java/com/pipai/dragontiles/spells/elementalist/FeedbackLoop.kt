@@ -11,7 +11,7 @@ class FeedbackLoop : StandardSpell() {
     override val targetType: TargetType = TargetType.NONE
     override val rarity: Rarity = Rarity.RARE
     override val aspects: MutableList<SpellAspect> = mutableListOf(
-        FluxGainAspect(3),
+        FluxGainAspect(5),
     )
 
     override suspend fun onCast(params: CastParams, api: CombatApi) {
