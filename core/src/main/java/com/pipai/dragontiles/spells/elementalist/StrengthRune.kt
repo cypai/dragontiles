@@ -1,9 +1,8 @@
 package com.pipai.dragontiles.spells.elementalist
 
-import com.pipai.dragontiles.combat.DamageOrigin
-import com.pipai.dragontiles.combat.DamageTarget
-import com.pipai.dragontiles.data.Element
+import com.pipai.dragontiles.combat.CombatApi
 import com.pipai.dragontiles.spells.*
+import com.pipai.dragontiles.status.Strength
 
 class StrengthRune : Rune() {
     override val id: String = "base:spells:StrengthRune"
@@ -11,11 +10,11 @@ class StrengthRune : Rune() {
     override val requirement: ComponentRequirement = IdenticalX()
     override val aspects: MutableList<SpellAspect> = mutableListOf()
 
-    override fun queryFlatAdjustment(origin: DamageOrigin, target: DamageTarget, element: Element): Int {
-        return if (active && origin == DamageOrigin.SELF_ATTACK && target == DamageTarget.OPPONENT) {
-            components().size
-        } else {
-            0
-        }
+    override suspend fun onActivate(api: CombatApi) {
+        api.addStatusToHero(Strength(components().size))
+    }
+
+    override suspend fun onDeactivate(api: CombatApi) {
+        api.addStatusToHero(Strength(-components().size))
     }
 }

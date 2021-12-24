@@ -196,6 +196,7 @@ abstract class Rune : Spell() {
         active = true
         canActivate = false
         api.activateRune(this, components())
+        onActivate(api)
     }
 
     protected open suspend fun onActivate(api: CombatApi) {
@@ -208,6 +209,7 @@ abstract class Rune : Spell() {
         }
         active = false
         api.deactivateRune(this)
+        onDeactivate(api)
     }
 
     protected open suspend fun onDeactivate(api: CombatApi) {

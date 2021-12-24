@@ -176,7 +176,7 @@ base:spells:EnhanceRune:
 base:spells:StrengthRune:
   en:
     name: Strength Rune
-    description: Increases damage by @X.
+    description: Increases @Strength by @X.
 
 base:spells:HasteRune:
   en:
