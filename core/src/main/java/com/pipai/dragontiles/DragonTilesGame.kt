@@ -35,6 +35,7 @@ import com.pipai.dragontiles.utils.getLogger
 import org.apache.commons.lang3.builder.ToStringBuilder
 import org.apache.commons.lang3.builder.ToStringStyle
 import java.io.File
+import java.lang.Exception
 
 class DragonTilesGame(val gameConfig: GameConfig) : Game() {
 
@@ -90,7 +91,13 @@ class DragonTilesGame(val gameConfig: GameConfig) : Game() {
         GameDataInitializer().init(data)
 
         if (saveFileHandle.exists()) {
-            save = saveSerializer.deserialize(saveFileHandle.readString())
+            try {
+                save = saveSerializer.deserialize(saveFileHandle.readString())
+            } catch (e: Exception) {
+                // TODO: Show user crash problem instead of nuking the save
+                save = Save(null, 0, GameOptions(mutableListOf()), true)
+                writeSave()
+            }
         } else {
             save = Save(null, 0, GameOptions(mutableListOf()), true)
             writeSave()
