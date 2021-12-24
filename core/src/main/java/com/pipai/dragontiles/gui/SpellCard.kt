@@ -167,9 +167,15 @@ class SpellCard(
             descriptionLabel.setText("")
             upgradeImages.forEach { it.drawable = null }
         } else {
-            reqBorder.drawable = borderDrawable(spell.requirement.type)
-            reqImage.drawable = reqSuitDrawable(spell.requirement.suitGroup)
-            reqNumber.setText("  " + spell.requirement.reqAmount.text())
+            if (spell.requirement is UnplayableRequirement) {
+                reqBorder.drawable = null
+                reqImage.drawable = null
+                reqNumber.setText("")
+            } else {
+                reqBorder.drawable = borderDrawable(spell.requirement.type)
+                reqImage.drawable = reqSuitDrawable(spell.requirement.suitGroup)
+                reqNumber.setText("  " + spell.requirement.reqAmount.text())
+            }
             if (spell.aspects.any { it is FluxGainAspect }) {
                 fluxNumber.setText(spell.baseFluxGain())
             }

@@ -324,6 +324,24 @@ abstract class ManualComponentRequirement : ComponentRequirement {
     }
 }
 
+class UnplayableRequirement : ComponentRequirement {
+    override val componentSlots: MutableList<ComponentSlot> = mutableListOf()
+    override val manualOnly: Boolean = true
+    override val description: String = "Unplayable."
+    override val reqAmount: ReqAmount = ReqAmount.UnplayableAmount()
+    override var suitGroup: SuitGroup = SuitGroup.ANY
+    override val type: SetType = SetType.MISC
+    override fun find(hand: List<TileInstance>): List<List<TileInstance>> {
+        throw NotImplementedError()
+    }
+    override fun findGiven(hand: List<TileInstance>, given: List<TileInstance>): List<List<TileInstance>> {
+        throw NotImplementedError()
+    }
+    override fun satisfied(slots: List<TileInstance>): Boolean {
+        throw NotImplementedError()
+    }
+}
+
 enum class SetType {
     MISC, IDENTICAL, SEQUENTIAL
 }
@@ -357,6 +375,10 @@ sealed class ReqAmount {
 
     class UnknownAmount : ReqAmount() {
         override fun text(): String = "?"
+    }
+
+    class UnplayableAmount : ReqAmount() {
+        override fun text(): String = ""
     }
 }
 

@@ -237,3 +237,8 @@ base:spells:Riffle:
   en:
     name: Riffle
     description: ""
+
+base:spells:ReturnToSender:
+  en:
+    name: Return To Sender
+    description: Unplayable. Lose !f @Flux when swapped into the Sideboard.

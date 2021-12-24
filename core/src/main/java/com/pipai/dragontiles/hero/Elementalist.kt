@@ -21,7 +21,6 @@ class Elementalist : HeroClass {
         ElementalRune(),
         Break(),
         Eyes(),
-        Riffle(),
     )
     override val spells: List<Spell> = listOf(
         Burn(),
@@ -48,6 +47,7 @@ class Elementalist : HeroClass {
         TransmutationRune(),
         ExpandAnomaly(),
         Riffle(),
+        ReturnToSender(),
     )
     override val hpMax: Int = 60
     override val fluxMax: Int = 40

@@ -218,12 +218,16 @@ class CombatApi(
             return
         }
         if (activeIndexes.isNotEmpty()) {
+            val activeSpells = mutableListOf<Spell>()
+            val sideboardSpells = mutableListOf<Spell>()
             activeIndexes.zip(sideboardIndexes).forEach { (activeIndex, sideIndex) ->
                 val activeSpell = combat.spells[activeIndex]
+                activeSpells.add(activeSpell)
+                sideboardSpells.add(combat.sideboard[sideIndex])
                 combat.spells[activeIndex] = combat.sideboard[sideIndex]
                 combat.sideboard[sideIndex] = activeSpell
             }
-            eventBus.dispatch(SwapEvent(activeIndexes, sideboardIndexes))
+            eventBus.dispatch(SwapEvent(activeIndexes, sideboardIndexes, activeSpells, sideboardSpells))
         }
     }
 
