@@ -69,7 +69,8 @@ class DeckDisplayUiSystem(
         })
     }
 
-    fun updateStandardDisplay(spellFilter: (Spell) -> kotlin.Boolean, enableSwapDnd: Boolean) {
+    fun updateStandardDisplay(spellFilter: (Spell) -> Boolean, enableSwapDnd: Boolean) {
+        stage.scrollFocus = scrollPane
         table.clearChildren()
         topLabel.setText("Current Spellbook")
         table.add(topLabel).colspan(colspan)

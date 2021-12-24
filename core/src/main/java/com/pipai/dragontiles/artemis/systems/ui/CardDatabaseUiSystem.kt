@@ -61,6 +61,8 @@ class CardDatabaseUiSystem(
             .colspan(2)
         stage.addActor(topTable)
 
+        stage.scrollFocus = scrollPane
+
         updateStandardDisplay(Elementalist().id)
     }
 
