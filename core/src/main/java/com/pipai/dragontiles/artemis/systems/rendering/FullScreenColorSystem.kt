@@ -62,13 +62,15 @@ class FullScreenColorSystem(game: DragonTilesGame) : BaseSystem() {
         }
     }
 
-    fun fadeIn(time: Int) {
+    fun fadeIn(time: Int, color: Color = Color.BLACK) {
+        bgColor.set(color.r, color.b, color.g, 0f)
         t = 0f
         maxT = time.toFloat()
         state = State.FADE_IN
     }
 
-    fun fadeOut(time: Int) {
+    fun fadeOut(time: Int, color: Color = Color.BLACK) {
+        bgColor.set(color.r, color.b, color.g, 1f)
         t = 0f
         maxT = time.toFloat()
         state = State.FADE_OUT
