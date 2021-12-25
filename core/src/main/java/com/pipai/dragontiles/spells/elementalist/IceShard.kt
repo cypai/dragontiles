@@ -1,6 +1,7 @@
 package com.pipai.dragontiles.spells.elementalist
 
 import com.pipai.dragontiles.combat.CombatApi
+import com.pipai.dragontiles.combat.CombatFlag
 import com.pipai.dragontiles.combat.RandomTileStatusInflictStrategy
 import com.pipai.dragontiles.data.TileStatus
 import com.pipai.dragontiles.spells.*
@@ -8,6 +9,7 @@ import com.pipai.dragontiles.status.Cryo
 import com.pipai.dragontiles.status.Electro
 import com.pipai.dragontiles.status.Pyro
 import com.pipai.dragontiles.utils.getStackableCopy
+import com.pipai.dragontiles.utils.withAll
 
 class IceShard : StandardSpell() {
     override val id: String = "base:spells:IceShard"
@@ -20,6 +22,10 @@ class IceShard : StandardSpell() {
         FluxGainAspect(2),
         StackableAspect(Cryo(1), 1),
     )
+
+    override fun flags(): List<CombatFlag> {
+        return super.flags().withAll(listOf(CombatFlag.CRYO))
+    }
 
     override fun additionalKeywords(): List<String> = listOf("@Reaction", "@Melt", "@Cryoshock")
 

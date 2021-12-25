@@ -81,4 +81,9 @@ base:status:Electro:
 base:status:Cryoshock:
   en:
     name: Cryoshock
-    description: Take @Piercing Lightning damage at the start of its turn.
+    description: Take @Piercing Lightning damage at the start of its turn equal to the amount on all enemies.
+
+base:status:ReactionMastery:
+  en:
+    name: Reaction Mastery
+    description: All attacks now inflict a @Reactant.

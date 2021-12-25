@@ -26,6 +26,6 @@ class DuiDuiHu : Sorcery() {
     )
 
     override suspend fun onCast(hand: FullCastHand, api: CombatApi) {
-        api.aoeAttack(Element.NONE, baseDamage(), flags(), asAttack = false)
+        api.aoeAttack(Element.NONE, baseDamage(), flags())
     }
 }

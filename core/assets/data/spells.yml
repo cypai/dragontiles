@@ -243,3 +243,14 @@ base:spells:MassTransmute:
     name: Mass Transmute
     description: Transform all @Elemented tiles in your hand to the element of the @Components.
 
+base:spells:WindSwirl:
+  en:
+    name: Wind Swirl
+    description: Add all Reactants on the target to all other enemies.
+
+base:spells:ReactionMastery:
+  en:
+    name: Reaction Mastery
+    description: "@Elemented attacks now also apply a @Reactant."
+
+

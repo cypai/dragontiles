@@ -20,11 +20,11 @@ class BreakTest : CombatBackendTest(QueryHandler()) {
         controller.initCombat()
         runBlocking { controller.runTurn() }
 
-        Assert.assertEquals(2, controller.api.calculateDamageOnEnemy(flameTurtle, Element.FIRE, 2))
+        Assert.assertEquals(2, controller.api.calculateDamageOnEnemy(flameTurtle, Element.FIRE, 2, listOf()))
 
         runBlocking { controller.api.addStatusToEnemy(flameTurtle, BreakStatus(1, false)) }
 
-        Assert.assertEquals(3, controller.api.calculateDamageOnEnemy(flameTurtle, Element.FIRE, 2))
+        Assert.assertEquals(3, controller.api.calculateDamageOnEnemy(flameTurtle, Element.FIRE, 2, listOf()))
 
         Assert.assertEquals(1, controller.api.enemyStatusAmount(flameTurtle, BreakStatus::class))
 

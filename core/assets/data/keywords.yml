@@ -122,4 +122,4 @@ base:keywords:Cryoshock:
   en:
     key: "@Cryoshock"
     name: Cryoshock
-    description: "Cryo and Electro reaction. Take @Piercing Lightning damage at the start of the turn equal to the amount of Cryoshock."
+    description: "Cryo and Electro reaction. Take @Piercing Lightning damage at the start of the turn equal to the amount of Cryoshock on all enemies."

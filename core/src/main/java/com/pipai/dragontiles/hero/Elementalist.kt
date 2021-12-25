@@ -53,6 +53,8 @@ class Elementalist : HeroClass {
         Chillsink(),
         Breakwave(),
         MassTransmute(),
+        ReactionMastery(),
+        WindSwirl(),
     )
     override val hpMax: Int = 60
     override val fluxMax: Int = 40

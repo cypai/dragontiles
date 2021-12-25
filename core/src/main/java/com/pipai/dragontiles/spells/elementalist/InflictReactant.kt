@@ -5,6 +5,7 @@ import com.pipai.dragontiles.combat.CombatFlag
 import com.pipai.dragontiles.spells.*
 import com.pipai.dragontiles.status.GenericStatus
 import com.pipai.dragontiles.utils.findAs
+import com.pipai.dragontiles.utils.with
 
 class InflictReactant : StandardSpell() {
     override val id: String = "base:spells:InflictReactant"
@@ -17,14 +18,15 @@ class InflictReactant : StandardSpell() {
         FluxGainAspect(1),
     )
 
-    override fun additionalKeywords(): List<String> = listOf("@Reactant", "@Reaction", "@Melt", "@Pyroblast", "@Cryoshock")
+    override fun additionalKeywords(): List<String> =
+        listOf("@Reactant", "@Reaction", "@Melt", "@Pyroblast", "@Cryoshock")
 
     override fun flags(): List<CombatFlag> {
         val flag = reactantFlag(components())
         return if (flag == null) {
-            listOf()
+            super.flags()
         } else {
-            listOf(flag)
+            super.flags().with(flag)
         }
     }
 

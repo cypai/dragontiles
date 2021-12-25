@@ -7,6 +7,7 @@ import com.pipai.dragontiles.data.TileStatus
 import com.pipai.dragontiles.spells.*
 import com.pipai.dragontiles.status.Pyro
 import com.pipai.dragontiles.utils.getStackableCopy
+import com.pipai.dragontiles.utils.withAll
 
 class Fireball : StandardSpell() {
     override val id: String = "base:spells:Fireball"
@@ -23,9 +24,8 @@ class Fireball : StandardSpell() {
     override fun additionalKeywords(): List<String> = listOf("@Reaction", "@Melt", "@Pyroblast")
 
     override fun flags(): List<CombatFlag> {
-        return listOf(CombatFlag.PYRO)
+        return super.flags().withAll(listOf(CombatFlag.PYRO))
     }
-
 
     override suspend fun onCast(params: CastParams, api: CombatApi) {
         val target = api.getEnemy(params.targets.first())

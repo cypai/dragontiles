@@ -10,6 +10,7 @@ import com.pipai.dragontiles.status.Overloaded
 import com.pipai.dragontiles.status.Status
 import com.pipai.dragontiles.utils.deepCopy
 import com.pipai.dragontiles.utils.getLogger
+import com.pipai.dragontiles.utils.withAll
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.runBlocking
 import kotlin.coroutines.suspendCoroutine
@@ -237,15 +238,10 @@ class CombatApi(
     fun calculateBaseDamage(element: Element, amount: Int): Int {
         var flat = 0
         var scaling = 1f
-        combat.relics.forEach {
-            flat += it.queryFlatAdjustment(Combatant.HeroCombatant, null, element, listOf())
-            scaling *= it.queryScaledAdjustment(Combatant.HeroCombatant, null, element, listOf())
-        }
-        combat.spells.forEach {
-            flat += it.queryFlatAdjustment(Combatant.HeroCombatant, null, element, listOf())
-            scaling *= it.queryScaledAdjustment(Combatant.HeroCombatant, null, element, listOf())
-        }
-        combat.heroStatus.forEach {
+        val allQueryRespondents: List<DamageAdjustable> = combat.relics
+            .withAll(combat.spells)
+            .withAll(combat.heroStatus)
+        allQueryRespondents.forEach {
             flat += it.queryFlatAdjustment(Combatant.HeroCombatant, null, element, listOf())
             scaling *= it.queryScaledAdjustment(Combatant.HeroCombatant, null, element, listOf())
         }
@@ -255,40 +251,28 @@ class CombatApi(
     fun calculateDamageOnEnemy(enemy: Enemy, element: Element, amount: Int, flags: List<CombatFlag>): Int {
         var flat = 0
         var scaling = 1f
-        combat.relics.forEach {
-            flat += it.queryFlatAdjustment(Combatant.HeroCombatant, Combatant.EnemyCombatant(enemy), element, flags)
-            scaling *= it.queryScaledAdjustment(
-                Combatant.HeroCombatant,
-                Combatant.EnemyCombatant(enemy),
-                element,
-                flags
+        val allQueryRespondents: List<DamageAdjustable> = combat.relics
+            .withAll(combat.spells)
+            .withAll(combat.heroStatus)
+            .withAll(combat.enemyStatus[enemy.id]!!)
+        val allFlags: MutableList<CombatFlag> = mutableListOf()
+        allQueryRespondents.forEach {
+            allFlags.addAll(
+                it.queryForAdditionalFlags(
+                    Combatant.HeroCombatant,
+                    Combatant.EnemyCombatant(enemy),
+                    element,
+                    flags
+                )
             )
         }
-        combat.spells.forEach {
-            flat += it.queryFlatAdjustment(Combatant.HeroCombatant, Combatant.EnemyCombatant(enemy), element, flags)
+        allQueryRespondents.forEach {
+            flat += it.queryFlatAdjustment(Combatant.HeroCombatant, Combatant.EnemyCombatant(enemy), element, allFlags)
             scaling *= it.queryScaledAdjustment(
                 Combatant.HeroCombatant,
                 Combatant.EnemyCombatant(enemy),
                 element,
-                flags
-            )
-        }
-        combat.heroStatus.forEach {
-            flat += it.queryFlatAdjustment(Combatant.HeroCombatant, Combatant.EnemyCombatant(enemy), element, flags)
-            scaling *= it.queryScaledAdjustment(
-                Combatant.HeroCombatant,
-                Combatant.EnemyCombatant(enemy),
-                element,
-                flags
-            )
-        }
-        combat.enemyStatus[enemy.id]!!.forEach {
-            flat += it.queryFlatAdjustment(Combatant.HeroCombatant, Combatant.EnemyCombatant(enemy), element, flags)
-            scaling *= it.queryScaledAdjustment(
-                Combatant.HeroCombatant,
-                Combatant.EnemyCombatant(enemy),
-                element,
-                flags
+                allFlags
             )
         }
         return ((amount + flat) * scaling).toInt()
@@ -297,34 +281,11 @@ class CombatApi(
     fun calculateDamageOnHero(enemy: Enemy, element: Element, amount: Int): Int {
         var flat = 0
         var scaling = 1f
-        combat.relics.forEach {
-            flat += it.queryFlatAdjustment(Combatant.EnemyCombatant(enemy), Combatant.HeroCombatant, element, listOf())
-            scaling *= it.queryScaledAdjustment(
-                Combatant.EnemyCombatant(enemy),
-                Combatant.HeroCombatant,
-                element,
-                listOf()
-            )
-        }
-        combat.spells.forEach {
-            flat += it.queryFlatAdjustment(Combatant.EnemyCombatant(enemy), Combatant.HeroCombatant, element, listOf())
-            scaling *= it.queryScaledAdjustment(
-                Combatant.EnemyCombatant(enemy),
-                Combatant.HeroCombatant,
-                element,
-                listOf()
-            )
-        }
-        combat.heroStatus.forEach {
-            flat += it.queryFlatAdjustment(Combatant.EnemyCombatant(enemy), Combatant.HeroCombatant, element, listOf())
-            scaling *= it.queryScaledAdjustment(
-                Combatant.EnemyCombatant(enemy),
-                Combatant.HeroCombatant,
-                element,
-                listOf()
-            )
-        }
-        combat.enemyStatus[enemy.id]!!.forEach {
+        val allQueryRespondents: List<DamageAdjustable> = combat.relics
+            .withAll(combat.spells)
+            .withAll(combat.heroStatus)
+            .withAll(combat.enemyStatus[enemy.id]!!)
+        allQueryRespondents.forEach {
             flat += it.queryFlatAdjustment(Combatant.EnemyCombatant(enemy), Combatant.HeroCombatant, element, listOf())
             scaling *= it.queryScaledAdjustment(
                 Combatant.EnemyCombatant(enemy),
@@ -341,17 +302,16 @@ class CombatApi(
         element: Element,
         amount: Int,
         flags: List<CombatFlag>,
-        asAttack: Boolean = true,
-        piercing: Boolean = false
     ) {
         val damage = calculateDamageOnEnemy(enemy, element, amount, flags)
+        val asAttack = flags.contains(CombatFlag.ATTACK)
         if (asAttack) {
             eventBus.dispatch(PlayerAttackEnemyEvent(enemy, element, amount))
         }
         if (asAttack && enemyHasStatus(enemy, Dodge::class)) {
             addStatusToEnemy(enemy, Dodge(-1))
         } else {
-            if (!piercing && enemy.flux < enemy.fluxMax) {
+            if (!flags.contains(CombatFlag.PIERCING) && enemy.flux < enemy.fluxMax) {
                 dealFluxDamageToEnemy(enemy, damage)
             } else {
                 dealDamageToEnemy(enemy, damage)
@@ -363,11 +323,9 @@ class CombatApi(
         element: Element,
         amount: Int,
         flags: List<CombatFlag>,
-        asAttack: Boolean = true,
-        piercing: Boolean = false
     ) {
         combat.enemies.filter { it.hp > 0 }
-            .forEach { attack(it, element, amount, flags, asAttack, piercing) }
+            .forEach { attack(it, element, amount, flags) }
     }
 
     suspend fun dealFluxDamageToEnemy(enemy: Enemy, damage: Int) {
@@ -503,7 +461,7 @@ class CombatApi(
     }
 
     suspend fun devInstantWin() {
-        aoeAttack(Element.NONE, 99999, flags = listOf(), asAttack = false, piercing = true)
+        aoeAttack(Element.NONE, 99999, flags = listOf())
     }
 
     suspend fun addAoeStatus(status: Status) {

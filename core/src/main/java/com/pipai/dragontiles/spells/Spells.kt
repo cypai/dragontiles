@@ -4,7 +4,6 @@ import com.pipai.dragontiles.combat.*
 import com.pipai.dragontiles.data.*
 import com.pipai.dragontiles.spells.upgrades.SpellUpgrade
 import com.pipai.dragontiles.utils.*
-import kotlinx.serialization.Serializable
 import org.apache.commons.lang3.builder.ToStringBuilder
 import kotlin.reflect.full.createInstance
 
@@ -27,10 +26,15 @@ abstract class Spell : Localized, DamageAdjustable {
     abstract val type: SpellType
     abstract val rarity: Rarity
     abstract val aspects: MutableList<SpellAspect>
-    open fun flags(): List<CombatFlag> = listOf()
     private val upgrades: MutableList<SpellUpgrade> = mutableListOf()
 
     protected val data: MutableMap<String, Int> = mutableMapOf()
+
+    /**
+     * Comes with ATTACK by default if SpellType is ATTACK.
+     * Make sure to call super.flag() if overriding, or at least include it.
+     */
+    open fun flags(): List<CombatFlag> = if (type == SpellType.ATTACK) listOf(CombatFlag.ATTACK) else listOf()
 
     fun newClone(): Spell {
         val clone = this::class.createInstance()
@@ -376,28 +380,32 @@ enum class SuitGroup(val allowedSuits: Set<Suit>, val isElemental: Boolean) {
     ARCANE(arcaneSet, false),
     ANY_NO_FUMBLE(anyNoFumbleSet, false),
     ANY(anySet, false),
+    RAINBOW(elementalSet, true),
 }
 
 sealed class ReqAmount {
     abstract fun text(): String
+    abstract val showTooltip: Boolean
 
-    data class ImmutableNumeric(val amount: Int) : ReqAmount() {
+    data class ImmutableNumeric(val amount: Int, override val showTooltip: Boolean = false) : ReqAmount() {
         override fun text(): String = amount.toString()
     }
 
-    data class Numeric(var amount: Int) : ReqAmount() {
+    data class Numeric(var amount: Int, override val showTooltip: Boolean = false) : ReqAmount() {
         override fun text(): String = amount.toString()
     }
 
-    class XAmount : ReqAmount() {
+    data class XAmount(override val showTooltip: Boolean = false) : ReqAmount() {
         override fun text(): String = "x"
     }
 
     class UnknownAmount : ReqAmount() {
+        override val showTooltip: Boolean = true
         override fun text(): String = "?"
     }
 
     class UnplayableAmount : ReqAmount() {
+        override val showTooltip: Boolean = true
         override fun text(): String = ""
     }
 }
@@ -726,5 +734,49 @@ class ForbidTransformFreeze(private val spell: Spell, private val compReq: Compo
     override fun satisfied(slots: List<TileInstance>): Boolean {
         return compReq.satisfied(slots)
                 && (spell.aspects.none { it is TransformAspect } || slots.none { it.tileStatus == TileStatus.FREEZE })
+    }
+}
+
+class RainbowIdenticalSequence(private val sequenceSize: Int) : ComponentRequirement {
+    override val type = SetType.SEQUENTIAL
+    override var suitGroup: SuitGroup = SuitGroup.RAINBOW
+    override val reqAmount = ReqAmount.Numeric(sequenceSize, showTooltip = true)
+    override val description = "Identical Sequences in all three Elemental Suits."
+    override val componentSlots: MutableList<ComponentSlot> = mutableListOf()
+    override val manualOnly = false
+
+    override fun find(hand: List<TileInstance>): List<List<TileInstance>> {
+        val found = mutableListOf<List<TileInstance>>()
+        val sequences = Sequential(sequenceSize).find(hand)
+        sequences
+            .filter { it.first().tile.suit == Suit.FIRE }
+            .forEach { controlSequence ->
+                val ice = sequences.firstOrNull { other ->
+                    equivalentSequence(controlSequence, other) && other.first().tile.suit == Suit.ICE
+                }
+                val lightning = sequences.firstOrNull { other ->
+                    equivalentSequence(controlSequence, other) && other.first().tile.suit == Suit.LIGHTNING
+                }
+                if (ice != null && lightning != null) {
+                    found.add(controlSequence.withAll(ice).withAll(lightning))
+                }
+            }
+        return found
+    }
+
+    override fun findGiven(hand: List<TileInstance>, given: List<TileInstance>): List<List<TileInstance>> {
+        val fullHand = hand.withAll(given).toMutableList()
+        fullHand.sortWith(compareBy({ it.tile.suit.order }, { it.tile.order() }))
+        return find(fullHand).filter { it.containsAll(given) }
+    }
+
+    override fun satisfied(slots: List<TileInstance>): Boolean {
+        return slots.size == sequenceSize * 3 && find(slots).isNotEmpty()
+    }
+
+    private fun equivalentSequence(controlSequence: List<TileInstance>, other: List<TileInstance>): Boolean {
+        val controlTile = (controlSequence.first().tile as Tile.ElementalTile)
+        val otherTile = (other.first().tile as Tile.ElementalTile)
+        return controlTile.number == otherTile.number
     }
 }

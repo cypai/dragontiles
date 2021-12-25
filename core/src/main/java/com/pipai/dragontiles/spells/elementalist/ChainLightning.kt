@@ -1,12 +1,13 @@
 package com.pipai.dragontiles.spells.elementalist
 
 import com.pipai.dragontiles.combat.CombatApi
+import com.pipai.dragontiles.combat.CombatFlag
 import com.pipai.dragontiles.combat.RandomTileStatusInflictStrategy
 import com.pipai.dragontiles.data.TileStatus
 import com.pipai.dragontiles.spells.*
 import com.pipai.dragontiles.status.Electro
-import com.pipai.dragontiles.status.Pyro
 import com.pipai.dragontiles.utils.getStackableCopy
+import com.pipai.dragontiles.utils.withAll
 
 class ChainLightning : StandardSpell() {
     override val id: String = "base:spells:ChainLightning"
@@ -19,6 +20,10 @@ class ChainLightning : StandardSpell() {
         FluxGainAspect(4),
         StackableAspect(Electro(1), 1),
     )
+
+    override fun flags(): List<CombatFlag> {
+        return super.flags().withAll(listOf(CombatFlag.ELECTRO))
+    }
 
     override fun additionalKeywords(): List<String> = listOf("@Reaction", "@Pyroblast", "@Cryoshock")
 
