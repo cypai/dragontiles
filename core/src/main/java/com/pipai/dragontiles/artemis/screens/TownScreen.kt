@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.utils.viewport.ScreenViewport
 import com.pipai.dragontiles.DragonTilesGame
 import com.pipai.dragontiles.artemis.systems.ClickableSystem
+import com.pipai.dragontiles.artemis.systems.HoverableSystem
 import com.pipai.dragontiles.artemis.systems.MutualDestroySystem
 import com.pipai.dragontiles.artemis.systems.input.ExitInputProcessor
 import com.pipai.dragontiles.artemis.systems.input.InputProcessingSystem
@@ -55,6 +56,7 @@ class TownScreen(game: DragonTilesGame, runData: RunData) : Screen {
         inputProcessor.addAlwaysOnProcessor(world.getSystem(TownUiSystem::class.java))
         inputProcessor.addAlwaysOnProcessor(world.getSystem(DeckDisplayUiSystem::class.java))
         inputProcessor.addAlwaysOnProcessor(world.getSystem(ClickableSystem::class.java))
+        inputProcessor.addAlwaysOnProcessor(world.getSystem(HoverableSystem::class.java))
         inputProcessor.addAlwaysOnProcessor(world.getSystem(TooltipSystem::class.java))
         inputProcessor.addAlwaysOnProcessor(ExitInputProcessor())
         inputProcessor.activateInput()
