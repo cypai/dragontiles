@@ -40,7 +40,8 @@ class StrangeScribe : DungeonEvent() {
         override val id = "skip"
 
         override fun onSelect(api: EventApi) {
-            api.changeToEventEnd("skipMain")
+            api.allowMapAdvance()
+            api.showMap()
         }
     }
 }
