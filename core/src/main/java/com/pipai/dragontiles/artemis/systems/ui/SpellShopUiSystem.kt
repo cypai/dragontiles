@@ -49,15 +49,15 @@ class SpellShopUiSystem(
         val spellShop = town.spellShop
         spellShop.classSpells.forEachIndexed { i, ps ->
             if (i < 3) {
-                createSpell(ps, SpellCard.cardWidth * 3 + i * SpellCard.cardWidth * 2, SpellCard.cardHeight * 2)
+                createSpell(ps, SpellCard.cardWidth * 3 + i * SpellCard.cardWidth * 2, SpellCard.cardHeight * 2 - 48f)
             } else {
-                createSpell(ps, SpellCard.cardWidth * 3 + (i - 3) * SpellCard.cardWidth * 2, SpellCard.cardHeight / 2)
+                createSpell(ps, SpellCard.cardWidth * 3 + (i - 3) * SpellCard.cardWidth * 2, SpellCard.cardHeight / 2 - 24f)
             }
         }
         if (spellShop.colorlessSpell != null) {
-            createSpell(spellShop.colorlessSpell!!, SpellCard.cardWidth, SpellCard.cardHeight / 2)
+            createSpell(spellShop.colorlessSpell!!, SpellCard.cardWidth, SpellCard.cardHeight / 2 - 24f)
         }
-        sideboardSpace(SpellCard.cardWidth, SpellCard.cardHeight * 2)
+        sideboardSpace(SpellCard.cardWidth, SpellCard.cardHeight * 2 - 48f)
     }
 
     private fun sideboardSpace(x: Float, y: Float) {
@@ -152,13 +152,14 @@ class SpellShopUiSystem(
         spellCard.addListener(object : ClickListener() {
             override fun enter(event: InputEvent?, x: Float, y: Float, pointer: Int, fromActor: Actor?) {
                 sTooltip.addSpell(spell)
-                sTooltip.showTooltip(x + 16f + SpellCard.cardWidth)
+                sTooltip.showTooltip(spellCard.x + 16f + SpellCard.cardWidth)
             }
 
             override fun exit(event: InputEvent?, x: Float, y: Float, pointer: Int, toActor: Actor?) {
                 sTooltip.hideTooltip()
             }
         })
+        stage.addActor(spellCard)
     }
 
     @Subscribe
