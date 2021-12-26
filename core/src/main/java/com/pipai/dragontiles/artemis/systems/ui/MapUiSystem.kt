@@ -19,10 +19,7 @@ import com.pipai.dragontiles.combat.CombatRewardConfig
 import com.pipai.dragontiles.combat.SpellRewardType
 import com.pipai.dragontiles.data.*
 import com.pipai.dragontiles.dungeon.MapNodeType
-import com.pipai.dragontiles.utils.allOf
-import com.pipai.dragontiles.utils.choose
-import com.pipai.dragontiles.utils.fetch
-import com.pipai.dragontiles.utils.mapper
+import com.pipai.dragontiles.utils.*
 import net.mostlyoriginal.api.event.common.Subscribe
 
 class MapUiSystem(
@@ -34,9 +31,12 @@ class MapUiSystem(
     private val mXy by mapper<XYComponent>()
     private val mSprite by mapper<SpriteComponent>()
     private val mClickable by mapper<ClickableComponent>()
+    private val mHover by mapper<HoverableComponent>()
     private val mMapNode by mapper<MapNodeComponent>()
     private val mAnchoredLine by mapper<AnchoredLineComponent>()
     private val mMutualDestroy by mapper<MutualDestroyComponent>()
+
+    private val sTooltip by system<TooltipSystem>()
 
     private val table = Table()
 
@@ -61,58 +61,107 @@ class MapUiSystem(
             floor.forEachIndexed { index, node ->
                 val id = world.create()
                 mXy.create(id).setXy(rightX - 64f * floorNum, bottomY + 64f * index)
-                mSprite.create(id).sprite =
-                    if (runData.dungeonMap.currentFloor == floorNum && runData.dungeonMap.currentFloorIndex == index) {
+                val cHover = mHover.create(id)
+                if (runData.dungeonMap.currentFloor == floorNum && runData.dungeonMap.currentFloorIndex == index) {
+                    cHover.enterCallback = {
+                        sTooltip.addText("You are here", "", false)
+                        sTooltip.showTooltip()
+                    }
+                    cHover.exitCallback = {
+                        sTooltip.hideTooltip()
+                    }
+                    mSprite.create(id).sprite =
                         Sprite(
                             game.assets.get(
                                 "assets/binassets/graphics/textures/lightning_circle.png",
                                 Texture::class.java
                             )
                         )
-                    } else {
-                        when (node.type) {
-                            MapNodeType.COMBAT -> {
+                } else {
+                    when (node.type) {
+                        MapNodeType.COMBAT -> {
+                            cHover.enterCallback = {
+                                sTooltip.addText("Combat", "Rewards: Spell Draft, Gold, Potion (chance)", false)
+                                sTooltip.showTooltip()
+                            }
+                            cHover.exitCallback = {
+                                sTooltip.hideTooltip()
+                            }
+                            mSprite.create(id).sprite =
                                 Sprite(
                                     game.assets.get(
                                         "assets/binassets/graphics/textures/fire_circle.png",
                                         Texture::class.java
                                     )
                                 )
+                        }
+                        MapNodeType.ELITE -> {
+                            cHover.enterCallback = {
+                                sTooltip.addText("Elite", "Rewards: Spell Draft, Relic, Gold, Potion (chance)", false)
+                                sTooltip.showTooltip()
                             }
-                            MapNodeType.ELITE -> {
+                            cHover.exitCallback = {
+                                sTooltip.hideTooltip()
+                            }
+                            mSprite.create(id).sprite =
                                 Sprite(
                                     game.assets.get(
                                         "assets/binassets/graphics/textures/star_circle.png",
                                         Texture::class.java
                                     )
                                 )
+                        }
+                        MapNodeType.TOWN -> {
+                            cHover.enterCallback = {
+                                sTooltip.addText("Town", "Rest and buy stuff here!", false)
+                                sTooltip.showTooltip()
                             }
-                            MapNodeType.TOWN -> {
+                            cHover.exitCallback = {
+                                sTooltip.hideTooltip()
+                            }
+                            mSprite.create(id).sprite =
                                 Sprite(
                                     game.assets.get(
                                         "assets/binassets/graphics/textures/ice_circle.png",
                                         Texture::class.java
                                     )
                                 )
+                        }
+                        MapNodeType.BOSS -> {
+                            cHover.enterCallback = {
+                                sTooltip.addText("Boss", "???", false)
+                                sTooltip.showTooltip()
                             }
-                            MapNodeType.BOSS -> {
+                            cHover.exitCallback = {
+                                sTooltip.hideTooltip()
+                            }
+                            mSprite.create(id).sprite =
                                 Sprite(
                                     game.assets.get(
                                         "assets/binassets/graphics/textures/rainbow_circle.png",
                                         Texture::class.java
                                     )
                                 )
+                        }
+                        MapNodeType.EVENT -> {
+                            cHover.enterCallback = {
+                                sTooltip.addText("Event", "???", false)
+                                sTooltip.showTooltip()
                             }
-                            else -> {
+                            cHover.exitCallback = {
+                                sTooltip.hideTooltip()
+                            }
+                            mSprite.create(id).sprite =
                                 Sprite(
                                     game.assets.get(
                                         "assets/binassets/graphics/textures/any_circle.png",
                                         Texture::class.java
                                     )
                                 )
-                            }
                         }
+                        else -> {}
                     }
+                }
                 mClickable.create(id).eventGenerator = { MapNodeClickEvent(floorNum, index) }
                 mMapNode.create(id)
                 cuurentFloorIds.add(id)
