@@ -3,9 +3,11 @@ package com.pipai.dragontiles.potions
 import com.pipai.dragontiles.combat.CombatApi
 import com.pipai.dragontiles.data.Localized
 import com.pipai.dragontiles.data.GlobalApi
+import com.pipai.dragontiles.spells.Rarity
 
 abstract class Potion : Localized {
     abstract val assetName: String
+    abstract val rarity: Rarity
     abstract val type: PotionType
     abstract val targetType: PotionTargetType
 

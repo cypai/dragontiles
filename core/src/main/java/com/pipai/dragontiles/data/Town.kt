@@ -22,6 +22,7 @@ data class SpellShop(
 
 data class ItemShop(
     val relics: MutableList<PricedItem>,
+    val potions: MutableList<PricedItem>,
 )
 
 data class Scribe(
