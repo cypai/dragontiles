@@ -53,7 +53,7 @@ class Cryo(amount: Int) : Status(amount) {
         flags: List<CombatFlag>
     ): Float {
         return if (target == combatant && flags.any { it == CombatFlag.PYRO }) {
-            1.5f
+            2f
         } else {
             1f
         }

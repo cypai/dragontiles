@@ -110,7 +110,7 @@ base:keywords:Melt:
   en:
     key: "@Melt"
     name: Melt
-    description: "Pyro and Cryo reaction. Attacks that cause this do 50% more damage."
+    description: "Pyro and Cryo reaction. Attacks that cause this do double damage."
 
 base:keywords:Pyroblast:
   en:
