@@ -98,7 +98,7 @@ class MapUiSystem(
                             MapNodeType.BOSS -> {
                                 Sprite(
                                     game.assets.get(
-                                        "assets/binassets/graphics/textures/star_circle.png",
+                                        "assets/binassets/graphics/textures/rainbow_circle.png",
                                         Texture::class.java
                                     )
                                 )
