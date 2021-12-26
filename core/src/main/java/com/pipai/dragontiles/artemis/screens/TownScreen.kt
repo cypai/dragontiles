@@ -23,6 +23,7 @@ import net.mostlyoriginal.api.event.common.EventSystem
 class TownScreen(game: DragonTilesGame, runData: RunData) : Screen {
 
     private val stage = Stage(ScreenViewport(), game.spriteBatch)
+    private val frontStage = Stage(ScreenViewport(), game.spriteBatch)
 
     val world: World
 
@@ -33,18 +34,19 @@ class TownScreen(game: DragonTilesGame, runData: RunData) : Screen {
                 TagManager(),
                 EventSystem(),
                 ClickableSystem(game.gameConfig),
+                HoverableSystem(game.gameConfig),
                 InputProcessingSystem(),
                 DeckDisplayUiSystem(game, runData, stage),
                 MapUiSystem(game, stage, runData),
                 TownUiSystem(game, runData),
                 FullScreenColorSystem(game),
                 MutualDestroySystem(),
-                TooltipSystem(game, stage),
+                TooltipSystem(game, frontStage),
             )
             .with(
                 -1,
                 RenderingSystem(game),
-                TopRowUiSystem(game, runData, stage, false)
+                TopRowUiSystem(game, runData, frontStage, false)
             )
             .build()
 
@@ -52,6 +54,7 @@ class TownScreen(game: DragonTilesGame, runData: RunData) : Screen {
 
         val inputProcessor = world.getSystem(InputProcessingSystem::class.java)
         inputProcessor.addAlwaysOnProcessor(stage)
+        inputProcessor.addAlwaysOnProcessor(frontStage)
         inputProcessor.addAlwaysOnProcessor(world.getSystem(MapUiSystem::class.java))
         inputProcessor.addAlwaysOnProcessor(world.getSystem(TownUiSystem::class.java))
         inputProcessor.addAlwaysOnProcessor(world.getSystem(DeckDisplayUiSystem::class.java))
@@ -72,6 +75,8 @@ class TownScreen(game: DragonTilesGame, runData: RunData) : Screen {
         stage.draw()
         world.setDelta(delta)
         world.process()
+        frontStage.act()
+        frontStage.draw()
     }
 
     override fun resize(width: Int, height: Int) {

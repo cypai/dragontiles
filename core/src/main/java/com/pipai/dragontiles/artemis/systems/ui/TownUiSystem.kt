@@ -1,8 +1,6 @@
 package com.pipai.dragontiles.artemis.systems.ui
 
 import com.artemis.BaseSystem
-import com.artemis.ComponentMapper
-import com.artemis.managers.TagManager
 import com.badlogic.gdx.Input
 import com.badlogic.gdx.InputProcessor
 import com.badlogic.gdx.graphics.Color
@@ -11,7 +9,6 @@ import com.badlogic.gdx.graphics.g2d.Sprite
 import com.pipai.dragontiles.DragonTilesGame
 import com.pipai.dragontiles.artemis.EntityId
 import com.pipai.dragontiles.artemis.components.*
-import com.pipai.dragontiles.artemis.events.ShopClickEvent
 import com.pipai.dragontiles.artemis.screens.ItemShopScreen
 import com.pipai.dragontiles.artemis.screens.ScribeShopScreen
 import com.pipai.dragontiles.artemis.screens.SpellShopScreen
@@ -20,7 +17,6 @@ import com.pipai.dragontiles.data.RunData
 import com.pipai.dragontiles.utils.mapper
 import com.pipai.dragontiles.utils.system
 import net.mostlyoriginal.api.event.common.EventSystem
-import net.mostlyoriginal.api.event.common.Subscribe
 
 class TownUiSystem(
     private val game: DragonTilesGame,
@@ -65,17 +61,17 @@ class TownUiSystem(
         innSprite.height = 120f
         val innHover = mHoverable.create(innId)
         innHover.enterCallback = {
-            sTooltip.addText("Inn", "Heal 25% of your Max HP for 1 Gold.", false)
+            sTooltip.addText("Inn", "Heal 25% of your Max HP for 2 Gold.", false)
             sTooltip.showTooltip()
         }
         innHover.exitCallback = {
             sTooltip.hideTooltip()
         }
-        if (town.actions > 0 && runData.hero.gold > 0) {
+        if (town.actions > 0 && runData.hero.gold > 1) {
             mClickable.create(innId).callback = {
                 town.actions--
                 val api = GlobalApi(game.data, runData, sEvent)
-                api.gainGoldImmediate(-1)
+                api.gainGoldImmediate(-2)
                 api.gainHpImmediate((runData.hero.hpMax * 0.25f).toInt())
                 recreateTown()
             }
@@ -92,6 +88,18 @@ class TownUiSystem(
             mClickable.create(spellShopId).callback = {
                 game.screen = SpellShopScreen(game, runData)
             }
+            val spellShopHover = mHoverable.create(spellShopId)
+            spellShopHover.enterCallback = {
+                sTooltip.addText(
+                    "Spell Shop",
+                    "Browsing is free, but buying takes 1 action. After buying, you may buy more as a free action from the same shop.",
+                    false
+                )
+                sTooltip.showTooltip()
+            }
+            spellShopHover.exitCallback = {
+                sTooltip.hideTooltip()
+            }
         } else {
             spellShopSprite.sprite.color = Color.GRAY
         }
@@ -105,6 +113,18 @@ class TownUiSystem(
             mClickable.create(itemShopId).callback = {
                 game.screen = ItemShopScreen(game, runData)
             }
+            val itemShopHover = mHoverable.create(itemShopId)
+            itemShopHover.enterCallback = {
+                sTooltip.addText(
+                    "Item Shop",
+                    "Browsing is free, but buying takes 1 action. After buying, you may buy more as a free action from the same shop.",
+                    false
+                )
+                sTooltip.showTooltip()
+            }
+            itemShopHover.exitCallback = {
+                sTooltip.hideTooltip()
+            }
         } else {
             itemShopSprite.sprite.color = Color.GRAY
         }
@@ -117,6 +137,18 @@ class TownUiSystem(
         if (town.actions > 0 || town.boughtUpgrade) {
             mClickable.create(scribeId).callback = {
                 game.screen = ScribeShopScreen(game, runData)
+            }
+            val scribeHover = mHoverable.create(scribeId)
+            scribeHover.enterCallback = {
+                sTooltip.addText(
+                    "Upgrades Shop",
+                    "Browsing is free, but buying takes 1 action. After buying, you may buy more as a free action from the same shop",
+                    false
+                )
+                sTooltip.showTooltip()
+            }
+            scribeHover.exitCallback = {
+                sTooltip.hideTooltip()
             }
         } else {
             scribeSprite.sprite.color = Color.GRAY
