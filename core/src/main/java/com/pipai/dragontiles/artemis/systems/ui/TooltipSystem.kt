@@ -77,6 +77,9 @@ class TooltipSystem(private val game: DragonTilesGame, var stage: Stage) : NoPro
         if (spell.requirement.showTooltip) {
             addText("Requirements", spell.requirement.description, false)
         }
+        if (spell is StandardSpell && spell.shockTurns > 0) {
+            addText("Shocked", "Cannot be played for ${spell.shockTurns} turns.", false)
+        }
         if (spell.aspects.any { it is XAspect }) {
             addKeyword(Keywords.X)
         }

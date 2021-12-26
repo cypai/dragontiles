@@ -20,7 +20,7 @@ base:keywords:Shock:
   en:
     key: "@Shock"
     name: Shock
-    description: "@Disable the spell if used as a @Component."
+    description: "Disable the spell for 2 turns if used as a @Component."
 
 base:keywords:Volatile:
   en:
