@@ -21,7 +21,7 @@ class Elementalist : HeroClass {
         Strike(),
         Vent(),
         ElementalRune(),
-        ChainLightning(),
+        Break(),
         Eyes(),
     )
     override val spells: List<Spell> = listOf(
@@ -37,6 +37,7 @@ class Elementalist : HeroClass {
         Concentrate(),
         FeedbackLoop(),
         Spark(),
+        Splash(),
         Blast(),
         Explosion(),
         Precipitate(),
@@ -55,6 +56,7 @@ class Elementalist : HeroClass {
         MassTransmute(),
         ReactionMastery(),
         WindSwirl(),
+        SummonPhoenix(),
     )
     override val hpMax: Int = 60
     override val fluxMax: Int = 40

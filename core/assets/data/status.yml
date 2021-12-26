@@ -87,3 +87,18 @@ base:status:ReactionMastery:
   en:
     name: Reaction Mastery
     description: All attacks now inflict a @Reactant.
+
+base:status:PyroPhoenix:
+  en:
+    name: Pyro Phoenix
+    description: Inflicts 10 Pyro to all enemies at the start of your turn.
+
+base:status:CryoPhoenix:
+  en:
+    name: Cryo Phoenix
+    description: Inflicts 10 Cryo to all enemies at the start of your turn.
+
+base:status:ElectroPhoenix:
+  en:
+    name: Electro Phoenix
+    description: Inflicts 10 Electro to all enemies at the start of your turn.
