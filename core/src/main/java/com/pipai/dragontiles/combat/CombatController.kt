@@ -2,6 +2,7 @@ package com.pipai.dragontiles.combat
 
 import com.pipai.dragontiles.data.*
 import com.pipai.dragontiles.data.RunData
+import com.pipai.dragontiles.spells.StandardSpell
 import com.pipai.dragontiles.status.Overloaded
 import kotlinx.coroutines.runBlocking
 import net.mostlyoriginal.api.event.common.EventSystem
@@ -105,8 +106,18 @@ class CombatController(
                 }
                 api.changeEnemyIntent(it, intent)
             }
-        combat.spells.forEach { it.turnReset() }
-        combat.sideboard.forEach { it.turnReset() }
+        combat.spells.forEach {
+            if (it is StandardSpell && it.shockTurns > 0) {
+                it.shockTurns--
+            }
+            it.turnReset()
+        }
+        combat.sideboard.forEach {
+            if (it is StandardSpell && it.shockTurns > 0) {
+                it.shockTurns--
+            }
+            it.turnReset()
+        }
         api.swapQuery(1)
         api.drawToOpenPool(1)
         runTurn()
