@@ -14,10 +14,7 @@ import com.pipai.dragontiles.data.GlobalApi
 import com.pipai.dragontiles.data.PricedItem
 import com.pipai.dragontiles.data.RunData
 import com.pipai.dragontiles.gui.SpellCard
-import com.pipai.dragontiles.utils.mapper
-import com.pipai.dragontiles.utils.potionAssetPath
-import com.pipai.dragontiles.utils.relicAssetPath
-import com.pipai.dragontiles.utils.system
+import com.pipai.dragontiles.utils.*
 import net.mostlyoriginal.api.event.common.EventSystem
 
 class ItemShopUiSystem(
@@ -33,6 +30,7 @@ class ItemShopUiSystem(
     private val mText by mapper<TextLabelComponent>()
     private val mClickable by mapper<ClickableComponent>()
     private val mHoverableComponent by mapper<HoverableComponent>()
+    private val mPrice by mapper<PriceComponent>()
 
     private val sEvent by system<EventSystem>()
     private val sTooltip by system<TooltipSystem>()
@@ -50,6 +48,7 @@ class ItemShopUiSystem(
 
     private fun createRelic(ps: PricedItem, x: Float, y: Float) {
         val entityId = world.create()
+        mPrice.create(entityId).price = ps.price
         val cSprite = mSprite.create(entityId)
         cSprite.sprite = Sprite(game.assets.get(relicAssetPath(game.data.getRelic(ps.id).assetName), Texture::class.java))
         val cXy = mXy.create(entityId)
@@ -65,6 +64,7 @@ class ItemShopUiSystem(
         val cClickable = mClickable.create(entityId)
         cClickable.callback = {
             handleClickRelic(entityId, ps)
+            recalculatePriceColor()
         }
         val cHover = mHoverableComponent.create(entityId)
         cHover.enterCallback = {
@@ -78,6 +78,7 @@ class ItemShopUiSystem(
 
     private fun createPotion(ps: PricedItem, x: Float, y: Float) {
         val entityId = world.create()
+        mPrice.create(entityId).price = ps.price
         val cSprite = mSprite.create(entityId)
         cSprite.sprite = Sprite(game.assets.get(potionAssetPath(game.data.getPotion(ps.id).assetName), Texture::class.java))
         val cXy = mXy.create(entityId)
@@ -93,6 +94,7 @@ class ItemShopUiSystem(
         val cClickable = mClickable.create(entityId)
         cClickable.callback = {
             handleClickPotion(entityId, ps)
+            recalculatePriceColor()
         }
         val cHover = mHoverableComponent.create(entityId)
         cHover.enterCallback = {
@@ -102,6 +104,16 @@ class ItemShopUiSystem(
         cHover.exitCallback = {
             sTooltip.hideTooltip()
         }
+    }
+
+    private fun recalculatePriceColor() {
+        world.fetch(allOf(PriceComponent::class, TextLabelComponent::class))
+            .forEach {
+                val cPrice = mPrice.get(it)
+                if (cPrice.price > runData.hero.gold) {
+                    mText.get(it).color = Color.RED
+                }
+            }
     }
 
     private fun handleClickRelic(entityId: EntityId, ps: PricedItem) {

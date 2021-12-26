@@ -28,3 +28,5 @@ class AnchoredLineComponent : Component() {
 class MouseFollowComponent : Component()
 
 class MapNodeComponent : Component()
+
+data class PriceComponent(var price: Int = 0) : Component()

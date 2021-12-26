@@ -12,19 +12,14 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.badlogic.gdx.utils.Align
 import com.pipai.dragontiles.DragonTilesGame
-import com.pipai.dragontiles.artemis.components.ActorComponent
-import com.pipai.dragontiles.artemis.components.ClickableComponent
-import com.pipai.dragontiles.artemis.components.TextLabelComponent
-import com.pipai.dragontiles.artemis.components.XYComponent
+import com.pipai.dragontiles.artemis.components.*
 import com.pipai.dragontiles.artemis.events.PricedItemClickEvent
 import com.pipai.dragontiles.artemis.screens.TownScreen
 import com.pipai.dragontiles.data.PricedItem
 import com.pipai.dragontiles.data.GlobalApi
 import com.pipai.dragontiles.data.RunData
 import com.pipai.dragontiles.gui.SpellCard
-import com.pipai.dragontiles.utils.getLogger
-import com.pipai.dragontiles.utils.mapper
-import com.pipai.dragontiles.utils.system
+import com.pipai.dragontiles.utils.*
 import net.mostlyoriginal.api.event.common.EventSystem
 import net.mostlyoriginal.api.event.common.Subscribe
 
@@ -43,6 +38,7 @@ class SpellShopUiSystem(
     private val mActor by mapper<ActorComponent>()
     private val mText by mapper<TextLabelComponent>()
     private val mClickable by mapper<ClickableComponent>()
+    private val mPrice by mapper<PriceComponent>()
 
     private val sEvent by system<EventSystem>()
 
@@ -96,6 +92,7 @@ class SpellShopUiSystem(
                 cText.color = Color.RED
             }
             cText.text = "$price Gold"
+            mPrice.create(entityId).price = price
 
             table.touchable = Touchable.enabled
             table.addListener(object : ClickListener() {
@@ -103,6 +100,7 @@ class SpellShopUiSystem(
                     if (runData.hero.gold >= price) {
                         table.remove()
                         api.gainGoldImmediate(-price)
+                        recalculatePriceColor()
                         runData.hero.sideboardSize++
                         runData.sideboardSpaceBought++
                         town.boughtSpell = true
@@ -120,8 +118,19 @@ class SpellShopUiSystem(
         stage.addActor(table)
     }
 
+    private fun recalculatePriceColor() {
+        world.fetch(allOf(PriceComponent::class, TextLabelComponent::class))
+            .forEach {
+                val cPrice = mPrice.get(it)
+                if (cPrice.price > runData.hero.gold) {
+                    mText.get(it).color = Color.RED
+                }
+            }
+    }
+
     private fun createSpell(ps: PricedItem, x: Float, y: Float) {
         val entityId = world.create()
+        mPrice.create(entityId).price = ps.price
         val cActor = mActor.create(entityId)
         val spellCard = SpellCard(game, game.data.getSpell(ps.id), null, game.skin, null)
         cActor.actor = spellCard
@@ -143,6 +152,7 @@ class SpellShopUiSystem(
     fun handleSpellCardClick(ev: PricedItemClickEvent) {
         if (runData.hero.gold >= ev.pricedItem.price) {
             api.gainGoldImmediate(-ev.pricedItem.price)
+            recalculatePriceColor()
             val spell = game.data.getSpell(ev.pricedItem.id)
             logger.info("Adding ${spell.id} to deck at price ${ev.pricedItem.price}")
             api.addSpellToDeck(spell)

@@ -16,10 +16,7 @@ import com.pipai.dragontiles.data.GlobalApi
 import com.pipai.dragontiles.data.PricedItem
 import com.pipai.dragontiles.data.RunData
 import com.pipai.dragontiles.gui.SpellCard
-import com.pipai.dragontiles.utils.getLogger
-import com.pipai.dragontiles.utils.mapper
-import com.pipai.dragontiles.utils.system
-import com.pipai.dragontiles.utils.upgradeAssetPath
+import com.pipai.dragontiles.utils.*
 import net.mostlyoriginal.api.event.common.EventSystem
 import net.mostlyoriginal.api.event.common.Subscribe
 
@@ -36,6 +33,7 @@ class ScribeShopUiSystem(
     private val mText by mapper<TextLabelComponent>()
     private val mClickable by mapper<ClickableComponent>()
     private val mHoverableComponent by mapper<HoverableComponent>()
+    private val mPrice by mapper<PriceComponent>()
 
     private val sEvent by system<EventSystem>()
     private val sTooltip by system<TooltipSystem>()
@@ -54,6 +52,7 @@ class ScribeShopUiSystem(
 
     private fun createUpgrade(ps: PricedItem, x: Float, y: Float) {
         val entityId = world.create()
+        mPrice.create(entityId).price = ps.price
         val cSprite = mSprite.create(entityId)
         cSprite.sprite = Sprite(game.assets.get(upgradeAssetPath(game.data.getSpellUpgrade(ps.id).assetName), Texture::class.java))
         val cXy = mXy.create(entityId)
@@ -82,6 +81,7 @@ class ScribeShopUiSystem(
     fun handleClick(ev: PricedItemClickEvent) {
         if (runData.hero.gold >= ev.pricedItem.price) {
             api.gainGoldImmediate(-ev.pricedItem.price)
+            recalculatePriceColor()
             sEvent.dispatch(UpgradeSpellQueryEvent(game.data.getSpellUpgrade(ev.pricedItem.id)))
             world.delete(ev.entityId)
             town.boughtUpgrade = true
@@ -89,6 +89,16 @@ class ScribeShopUiSystem(
                 town.actions--
             }
         }
+    }
+
+    private fun recalculatePriceColor() {
+        world.fetch(allOf(PriceComponent::class, TextLabelComponent::class))
+            .forEach {
+                val cPrice = mPrice.get(it)
+                if (cPrice.price > runData.hero.gold) {
+                    mText.get(it).color = Color.RED
+                }
+            }
     }
 
     override fun processSystem() {
