@@ -16,6 +16,9 @@ class ReactionMastery : PowerSpell() {
         FluxGainAspect(9),
     )
 
+    override fun additionalKeywords(): List<String> =
+        listOf("@Reaction", "@Melt", "@Pyroblast", "@Cryoshock")
+
     override suspend fun onCast(params: CastParams, api: CombatApi) {
         api.addStatusToHero(ReactionMasteryImpl())
     }
