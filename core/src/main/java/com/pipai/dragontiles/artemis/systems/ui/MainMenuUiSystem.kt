@@ -55,7 +55,7 @@ class MainMenuUiSystem(
                 val runData = RunData(
                     Elementalist().generateHero("Elementalist"),
                     DungeonMap("base:dungeons:Plains", DungeonMap.generateMap(seed)),
-                    game.data.allRelics().filter { it.rarity != Rarity.SPECIAL }.map { it.id }.toMutableList(),
+                    game.data.allRelics().filter { it.rarity != Rarity.SPECIAL && it.rarity != Rarity.STARTER }.map { it.id }.toMutableList(),
                     null,
                     0,
                     GameData.BASE_POTION_CHANCE,
