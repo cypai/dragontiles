@@ -188,7 +188,7 @@ class DragonTilesGame(val gameConfig: GameConfig) : Game() {
         skin.add("disabled", disabledDrawable, Drawable::class.java)
         val poweredDrawable = skin.newDrawable("white", Color(1f, 1f, 1f, 0.8f))
         skin.add("powered", poweredDrawable, Drawable::class.java)
-        val shockedDrawable = skin.newDrawable("white", Color(1f, 1f, 0f, 0.8f))
+        val shockedDrawable = skin.newDrawable("white", Color(0.2f, 0.2f, 0f, 0.8f))
         skin.add("shocked", shockedDrawable, Drawable::class.java)
 
         val frameTexture = Texture(Gdx.files.local("assets/binassets/graphics/textures/frame.png"))

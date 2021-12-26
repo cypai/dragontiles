@@ -24,6 +24,7 @@ import com.pipai.dragontiles.artemis.EntityId
 import com.pipai.dragontiles.artemis.components.*
 import com.pipai.dragontiles.artemis.events.*
 import com.pipai.dragontiles.artemis.systems.AnchorSystem
+import com.pipai.dragontiles.artemis.systems.PathInterpolationSystem
 import com.pipai.dragontiles.artemis.systems.animation.CombatAnimationSystem
 import com.pipai.dragontiles.artemis.systems.combat.CombatControllerSystem
 import com.pipai.dragontiles.artemis.systems.combat.TileIdSystem
@@ -128,6 +129,7 @@ class CombatUiSystem(
     private val mMutualDestroy by mapper<MutualDestroyComponent>()
 
     private val sTop by system<TopRowUiSystem>()
+    private val sPath by system<PathInterpolationSystem>()
     private val sFsTexture by system<FullScreenColorSystem>()
     private val sTileId by system<TileIdSystem>()
     private val sCombat by system<CombatControllerSystem>()
@@ -452,7 +454,7 @@ class CombatUiSystem(
     private fun spellCardClickCallback(event: InputEvent, spellCard: SpellCard) {
         when (stateMachine.currentState) {
             CombatUiState.ROOT -> {
-                if (!spellCard.powered && spells.values.contains(spellCard)) {
+                if (!spellCard.powered && !spellCard.shocked && spells.values.contains(spellCard)) {
                     val spell = spellCard.getSpell()
                     when (event.button) {
                         Input.Buttons.LEFT -> {
@@ -483,7 +485,7 @@ class CombatUiSystem(
                     } else {
                         if (swapSideboardSpells.size < querySwapAmount) {
                             spellCard.data[ALLOW_HOVER_MOVE] = 0
-                            moveSpellToLocation(sideboardEntityIds[spellCard.number]!!, rightSpellSwapCenter)
+                            sPath.moveToLocation(sideboardEntityIds[spellCard.number]!!, rightSpellSwapCenter)
                             swapSideboardSpells.add(spellCard)
                         }
                     }
@@ -495,7 +497,7 @@ class CombatUiSystem(
                     } else {
                         if (swapActiveSpells.size < querySwapAmount) {
                             spellCard.data[ALLOW_HOVER_MOVE] = 0
-                            moveSpellToLocation(spellEntityIds[spellCard.number]!!, leftSpellSwapCenter)
+                            sPath.moveToLocation(spellEntityIds[spellCard.number]!!, leftSpellSwapCenter)
                             swapActiveSpells.add(spellCard)
                         }
                     }
@@ -504,12 +506,6 @@ class CombatUiSystem(
             else -> {
             }
         }
-    }
-
-    fun moveSpellToLocation(id: EntityId, location: Vector2) {
-        val cXy = mXy.get(id)
-        val cPath = mPath.create(id)
-        cPath.setPath(cXy.toVector2(), location, 0.25f, Interpolation.exp10Out, EndStrategy.REMOVE)
     }
 
     private fun displaySpellComponents(spellCard: SpellCard) {
@@ -1161,16 +1157,16 @@ class CombatUiSystem(
                 uiSystem.spells.forEach { (_, spellCard) -> spellCard.data[ALLOW_HOVER_MOVE] = 0 }
                 uiSystem.spellEntityIds.forEach { (_, eid) ->
                     val cXy = uiSystem.mXy.get(eid)
-                    uiSystem.moveSpellToLocation(eid, Vector2(cXy.x, uiSystem.spellCardY - SpellCard.cardHeight))
+                    uiSystem.sPath.moveToLocation(eid, Vector2(cXy.x, uiSystem.spellCardY - SpellCard.cardHeight))
                 }
                 uiSystem.sideboard.forEach { (_, spellCard) -> spellCard.data[ALLOW_HOVER_MOVE] = 0 }
                 uiSystem.sideboardEntityIds.forEach { (_, eid) ->
                     val cXy = uiSystem.mXy.get(eid)
-                    uiSystem.moveSpellToLocation(eid, Vector2(cXy.x, uiSystem.spellCardY - SpellCard.cardHeight))
+                    uiSystem.sPath.moveToLocation(eid, Vector2(cXy.x, uiSystem.spellCardY - SpellCard.cardHeight))
                 }
                 uiSystem.sorceryEntityIds.forEach { (_, eid) ->
                     val cXy = uiSystem.mXy.get(eid)
-                    uiSystem.moveSpellToLocation(eid, Vector2(cXy.x, uiSystem.spellCardY))
+                    uiSystem.sPath.moveToLocation(eid, Vector2(cXy.x, uiSystem.spellCardY))
                 }
                 uiSystem.displayFullCastHands()
             }
@@ -1183,7 +1179,7 @@ class CombatUiSystem(
             override fun enter(uiSystem: CombatUiSystem) {
                 uiSystem.spells.forEach { (number, spellCard) ->
                     if (number == uiSystem.selectedSpellNumber) {
-                        uiSystem.moveSpellToLocation(
+                        uiSystem.sPath.moveToLocation(
                             uiSystem.spellCardEntityId(number)!!,
                             uiSystem.layout.spellCastPosition
                         )

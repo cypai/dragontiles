@@ -144,6 +144,9 @@ class SpellCard(
         if (!powered) {
             background = skin.getDrawable("frameDrawableDark")
         }
+        if (shocked) {
+            background = skin.getDrawable("frameDrawableShocked")
+        }
     }
 
     fun shock() {

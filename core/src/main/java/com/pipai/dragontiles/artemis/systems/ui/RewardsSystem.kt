@@ -15,7 +15,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.pipai.dragontiles.DragonTilesGame
 import com.pipai.dragontiles.artemis.components.TileComponent
+import com.pipai.dragontiles.artemis.components.XYComponent
 import com.pipai.dragontiles.artemis.systems.NoProcessingSystem
+import com.pipai.dragontiles.artemis.systems.PathInterpolationSystem
 import com.pipai.dragontiles.data.*
 import com.pipai.dragontiles.gui.SpellCard
 import com.pipai.dragontiles.relics.RelicInstance
@@ -35,6 +37,7 @@ class RewardsSystem(
     private val sEvent by system<EventSystem>()
     private val sTooltip by system<TooltipSystem>()
     private val sMap by system<MapUiSystem>()
+    private val sPath by system<PathInterpolationSystem>()
 
     private lateinit var api: GlobalApi
 
@@ -46,14 +49,15 @@ class RewardsSystem(
         api = GlobalApi(game.data, runData, sEvent)
         rootTable.setFillParent(true)
         stage.addActor(rootTable)
-
     }
 
     fun activateRewards() {
         if (writeSave) {
             game.writeSave()
         }
-        world.fetch(allOf(TileComponent::class)).forEach { world.delete(it) }
+        world.fetch(allOf(XYComponent::class, TileComponent::class)).forEach {
+            sPath.moveToLocation(it, game.gameConfig.resolution.width / 2f, -100f)
+        }
         active = true
         showing = true
         buildAndShowRewardsTable()
@@ -80,7 +84,10 @@ class RewardsSystem(
                 override fun enter(event: InputEvent?, x: Float, y: Float, pointer: Int, fromActor: Actor?) {
                     sTooltip.addSpell(spell)
                     val screenXy = spellCard.localToScreenCoordinates(Vector2(0f, 0f))
-                    sTooltip.showTooltip(screenXy.x + SpellCard.cardWidth + 16, game.gameConfig.resolution.height - screenXy.y)
+                    sTooltip.showTooltip(
+                        screenXy.x + SpellCard.cardWidth + 16,
+                        game.gameConfig.resolution.height - screenXy.y
+                    )
                 }
 
                 override fun exit(event: InputEvent?, x: Float, y: Float, pointer: Int, toActor: Actor?) {

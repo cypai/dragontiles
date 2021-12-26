@@ -14,6 +14,7 @@ class CombatAnimationSystem(private val game: DragonTilesGame) : BaseSystem(), A
     private val logger = getLogger()
 
     var pauseUiMode = false
+    var wonBattle = false
     private var animating = false
     private val animationQueue: MutableList<Animation> = mutableListOf()
     private var turnRunning = false
