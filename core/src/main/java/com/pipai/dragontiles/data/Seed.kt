@@ -4,10 +4,10 @@ import kotlin.random.Random
 
 data class Seed(
     val baseSeed: Long = Random.nextLong(),
-    private var dungeonSeed: Long = baseSeed,
-    private var relicSeed: Long = baseSeed,
-    private var rewardSeed: Long = baseSeed,
-    private var miscSeed: Long = baseSeed,
+    var dungeonSeed: Long = baseSeed,
+    var relicSeed: Long = baseSeed,
+    var rewardSeed: Long = baseSeed,
+    var miscSeed: Long = baseSeed,
 ) {
 
     fun dungeonRng(): Random {
