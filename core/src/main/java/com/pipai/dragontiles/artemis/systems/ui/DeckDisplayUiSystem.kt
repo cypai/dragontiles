@@ -100,8 +100,8 @@ class DeckDisplayUiSystem(
             spellsEnableSwapDnd,
             Section.ACTIVE
         )
+        addSectionHeader("Sideboard Spells (Max ${runData.hero.sideboardSize})")
         if (runData.hero.sideboard.isNotEmpty()) {
-            addSectionHeader("Sideboard Spells (Max ${runData.hero.sideboardSize})")
             addSpellsInSection(
                 runData.hero.generateSideboard(game.data).filter { spellFilter.invoke(it) },
                 sideboardOnClick,

@@ -9,6 +9,7 @@ data class Town(
     var solicited: Boolean = false,
     var checkedEvent: Boolean = false,
     var boughtSpell: Boolean = false,
+    var boughtSideboard: Boolean = false,
     var boughtItem: Boolean = false,
     var boughtUpgrade: Boolean = false,
 )
