@@ -12,6 +12,7 @@ class DuiDuiHu : Sorcery() {
         override val type: SetType = SetType.IDENTICAL
         override var suitGroup: SuitGroup = SuitGroup.ANY_NO_FUMBLE
         override val description: String = "All melds are identical."
+        override val showTooltip: Boolean = true
 
         override fun satisfied(slots: List<TileInstance>): Boolean {
             throw NotImplementedError()

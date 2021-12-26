@@ -21,7 +21,7 @@ class Elementalist : HeroClass {
         Strike(),
         Vent(),
         ElementalRune(),
-        Bump(),
+        Break(),
         Eyes(),
     )
     override val spells: List<Spell> = listOf(

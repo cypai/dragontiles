@@ -74,7 +74,7 @@ class TooltipSystem(private val game: DragonTilesGame, var stage: Stage) : NoPro
     }
 
     fun addSpell(spell: Spell) {
-        if (spell.requirement.reqAmount.text() == "?") {
+        if (spell.requirement.showTooltip) {
             addText("Requirements", spell.requirement.description, false)
         }
         if (spell.aspects.any { it is XAspect }) {

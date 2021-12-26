@@ -320,6 +320,7 @@ interface ComponentRequirement {
     val reqAmount: ReqAmount
     val manualOnly: Boolean
     val componentSlots: MutableList<ComponentSlot>
+    val showTooltip: Boolean
 
     fun find(hand: List<TileInstance>): List<List<TileInstance>>
     fun findGiven(hand: List<TileInstance>, given: List<TileInstance>): List<List<TileInstance>>
@@ -353,6 +354,7 @@ class UnplayableRequirement : ComponentRequirement {
     override val reqAmount: ReqAmount = ReqAmount.UnplayableAmount()
     override var suitGroup: SuitGroup = SuitGroup.ANY
     override val type: SetType = SetType.MISC
+    override val showTooltip: Boolean = false
     override fun find(hand: List<TileInstance>): List<List<TileInstance>> {
         throw NotImplementedError()
     }
@@ -385,27 +387,24 @@ enum class SuitGroup(val allowedSuits: Set<Suit>, val isElemental: Boolean) {
 
 sealed class ReqAmount {
     abstract fun text(): String
-    abstract val showTooltip: Boolean
 
-    data class ImmutableNumeric(val amount: Int, override val showTooltip: Boolean = false) : ReqAmount() {
+    data class ImmutableNumeric(val amount: Int) : ReqAmount() {
         override fun text(): String = amount.toString()
     }
 
-    data class Numeric(var amount: Int, override val showTooltip: Boolean = false) : ReqAmount() {
+    data class Numeric(var amount: Int) : ReqAmount() {
         override fun text(): String = amount.toString()
     }
 
-    data class XAmount(override val showTooltip: Boolean = false) : ReqAmount() {
+    class XAmount : ReqAmount() {
         override fun text(): String = "x"
     }
 
     class UnknownAmount : ReqAmount() {
-        override val showTooltip: Boolean = true
         override fun text(): String = "?"
     }
 
     class UnplayableAmount : ReqAmount() {
-        override val showTooltip: Boolean = true
         override fun text(): String = ""
     }
 }
@@ -418,6 +417,7 @@ open class Single(override var suitGroup: SuitGroup) : ComponentRequirement {
     override val description = "A single tile"
     override val componentSlots: MutableList<ComponentSlot> = mutableListOf()
     override val manualOnly = false
+    override val showTooltip: Boolean = false
 
     override fun find(hand: List<TileInstance>): List<List<TileInstance>> {
         return hand
@@ -465,6 +465,7 @@ class AnyCombo(slotAmount: Int, override var suitGroup: SuitGroup) : ManualCompo
     override val type = SetType.MISC
     override val reqAmount = ReqAmount.Numeric(slotAmount)
     override val description = "Any $slotAmount tiles"
+    override val showTooltip: Boolean = false
 
     override fun satisfied(slots: List<TileInstance>): Boolean {
         return slots.size == reqAmount.amount
@@ -484,6 +485,7 @@ class Identical(slotAmount: Int, override var suitGroup: SuitGroup) : ComponentR
     override val description = "A set of $slotAmount identical tiles"
     override val componentSlots: MutableList<ComponentSlot> = mutableListOf()
     override val manualOnly = false
+    override val showTooltip: Boolean = false
 
     override fun find(hand: List<TileInstance>): List<List<TileInstance>> {
         val count: MutableMap<Tile, MutableList<TileInstance>> = mutableMapOf()
@@ -546,6 +548,7 @@ class IdenticalX(override var suitGroup: SuitGroup) : ComponentRequirement {
     override val description = "A variable set of identical tiles"
     override val componentSlots: MutableList<ComponentSlot> = mutableListOf()
     override val manualOnly = false
+    override val showTooltip: Boolean = false
 
     override fun find(hand: List<TileInstance>): List<List<TileInstance>> {
         val sets: MutableList<List<TileInstance>> = mutableListOf()
@@ -598,6 +601,7 @@ class Sequential(slotAmount: Int, override var suitGroup: SuitGroup) : Component
     override val description = "A set of $slotAmount sequential tiles"
     override val componentSlots: MutableList<ComponentSlot> = mutableListOf()
     override val manualOnly = false
+    override val showTooltip: Boolean = false
 
     override fun find(hand: List<TileInstance>): List<List<TileInstance>> {
         val sequences: MutableMap<TileInstance, MutableList<TileInstance>> = hand
@@ -672,6 +676,7 @@ class SequentialX(override var suitGroup: SuitGroup) : ComponentRequirement {
     override val description = "A variable set of sequential tiles"
     override val componentSlots: MutableList<ComponentSlot> = mutableListOf()
     override val manualOnly = false
+    override val showTooltip: Boolean = false
 
     override fun find(hand: List<TileInstance>): List<List<TileInstance>> {
         val sets: MutableList<List<TileInstance>> = mutableListOf()
@@ -740,10 +745,11 @@ class ForbidTransformFreeze(private val spell: Spell, private val compReq: Compo
 class RainbowIdenticalSequence(private val sequenceSize: Int) : ComponentRequirement {
     override val type = SetType.SEQUENTIAL
     override var suitGroup: SuitGroup = SuitGroup.RAINBOW
-    override val reqAmount = ReqAmount.Numeric(sequenceSize, showTooltip = true)
+    override val reqAmount = ReqAmount.Numeric(sequenceSize)
     override val description = "Identical Sequences in all three Elemental Suits."
     override val componentSlots: MutableList<ComponentSlot> = mutableListOf()
     override val manualOnly = false
+    override val showTooltip: Boolean = true
 
     override fun find(hand: List<TileInstance>): List<List<TileInstance>> {
         val found = mutableListOf<List<TileInstance>>()
