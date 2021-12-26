@@ -90,7 +90,11 @@ class SpellShopUiSystem(
             cXy.setXy(x, y)
             val cText = mText.create(entityId)
             cText.yOffset = -16f
-            cText.color = Color.WHITE
+            if (runData.hero.gold >= price) {
+                cText.color = Color.WHITE
+            } else {
+                cText.color = Color.RED
+            }
             cText.text = "$price Gold"
 
             table.touchable = Touchable.enabled
@@ -125,7 +129,11 @@ class SpellShopUiSystem(
         cXy.setXy(x, y)
         val cText = mText.create(entityId)
         cText.yOffset = -16f
-        cText.color = Color.WHITE
+        if (runData.hero.gold >= ps.price) {
+            cText.color = Color.WHITE
+        } else {
+            cText.color = Color.RED
+        }
         cText.text = "${ps.price} Gold"
         val cClickable = mClickable.create(entityId)
         cClickable.eventGenerator = { PricedItemClickEvent(entityId, ps) }
