@@ -17,7 +17,7 @@ class TownUiSystem(
 
     @Subscribe
     fun handleShopClick(ev: ShopClickEvent) {
-        game.screen = SpellShopScreen(game, runData)
+
     }
 
     override fun processSystem() {

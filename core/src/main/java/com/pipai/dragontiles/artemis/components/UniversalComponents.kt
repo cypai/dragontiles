@@ -121,7 +121,8 @@ class RadialSpriteComponent : Component() {
 }
 
 class ClickableComponent : Component() {
-    lateinit var eventGenerator: (Int) -> Event
+    var eventGenerator: ((Int) -> Event)? = null
+    var callback: (() -> Unit)? = null
 }
 
 class HoverableComponent : Component() {

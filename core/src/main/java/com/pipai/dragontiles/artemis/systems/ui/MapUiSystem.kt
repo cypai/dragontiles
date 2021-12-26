@@ -226,7 +226,8 @@ class MapUiSystem(
                                 town.spellShop.colorlessSpell?.copy()
                             ),
                             ItemShop(
-                                town.itemShop.relics.toMutableList()
+                                town.itemShop.relics.toMutableList(),
+                                town.itemShop.potions.toMutableList()
                             ),
                             Scribe(
                                 town.scribe.upgrades.toMutableList()

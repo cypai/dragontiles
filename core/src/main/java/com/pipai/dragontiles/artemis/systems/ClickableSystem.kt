@@ -29,14 +29,22 @@ class ClickableSystem(private val config: GameConfig) : NoProcessingSystem(), In
                 .forEach {
                     val hover = mSprite.get(it).sprite.boundingRectangle.contains(mouseX, mouseY)
                     if (hover) {
-                        sEvent.dispatch(mClickable.get(it).eventGenerator.invoke(button))
+                        val cClick = mClickable.get(it)
+                        cClick.callback?.invoke()
+                        if (cClick.eventGenerator != null) {
+                            sEvent.dispatch(cClick.eventGenerator?.invoke(button))
+                        }
                     }
                 }
         world.fetch(allOf(ClickableComponent::class, ActorComponent::class))
             .forEach {
                 val hover = mActor.get(it).actor.boundingRectangle().contains(mouseX, mouseY)
                 if (hover) {
-                    sEvent.dispatch(mClickable.get(it).eventGenerator.invoke(button))
+                    val cClick = mClickable.get(it)
+                    cClick.callback?.invoke()
+                    if (cClick.eventGenerator != null) {
+                        sEvent.dispatch(cClick.eventGenerator?.invoke(button))
+                    }
                 }
             }
         world.fetch(allOf(ClickableComponent::class, XYComponent::class, RadialSpriteComponent::class))
@@ -46,7 +54,11 @@ class ClickableSystem(private val config: GameConfig) : NoProcessingSystem(), In
                     val bounds = CollisionBounds.CollisionBoundingBox(0f, 0f, cRadial.sprite.width(), cRadial.sprite.height())
                     val hover = CollisionUtils.withinBounds(mouseX, mouseY, cXy.x, cXy.y, bounds)
                     if (hover) {
-                        sEvent.dispatch(mClickable.get(it).eventGenerator.invoke(button))
+                        val cClick = mClickable.get(it)
+                        cClick.callback?.invoke()
+                        if (cClick.eventGenerator != null) {
+                            sEvent.dispatch(cClick.eventGenerator?.invoke(button))
+                        }
                     }
                 }
         return false

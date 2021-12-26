@@ -10,37 +10,41 @@ import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.utils.viewport.ScreenViewport
 import com.pipai.dragontiles.DragonTilesGame
 import com.pipai.dragontiles.artemis.systems.ClickableSystem
-import com.pipai.dragontiles.artemis.systems.input.ExitInputProcessor
 import com.pipai.dragontiles.artemis.systems.input.InputProcessingSystem
 import com.pipai.dragontiles.artemis.systems.rendering.FullScreenColorSystem
 import com.pipai.dragontiles.artemis.systems.rendering.RenderingSystem
-import com.pipai.dragontiles.artemis.systems.ui.*
+import com.pipai.dragontiles.artemis.systems.ui.DeckDisplayUiSystem
+import com.pipai.dragontiles.artemis.systems.ui.ItemShopUiSystem
+import com.pipai.dragontiles.artemis.systems.ui.TooltipSystem
+import com.pipai.dragontiles.artemis.systems.ui.TopRowUiSystem
 import com.pipai.dragontiles.data.RunData
 import net.mostlyoriginal.api.event.common.EventSystem
 
-class TownScreen(game: DragonTilesGame, runData: RunData) : Screen {
+class ItemShopScreen(game: DragonTilesGame, runData: RunData) : Screen {
 
     private val stage = Stage(ScreenViewport(), game.spriteBatch)
 
     val world: World
 
     init {
-        game.writeSave()
         val config = WorldConfigurationBuilder()
             .with(
                 TagManager(),
                 EventSystem(),
                 ClickableSystem(game.gameConfig),
                 InputProcessingSystem(),
-                DeckDisplayUiSystem(game, runData, stage),
-                MapUiSystem(game, stage, runData),
+                ItemShopUiSystem(game, runData),
                 FullScreenColorSystem(game),
                 TooltipSystem(game, stage),
             )
             .with(
                 -1,
-                RenderingSystem(game),
-                TopRowUiSystem(game, runData, stage, false)
+                TopRowUiSystem(game, runData, stage, false),
+                DeckDisplayUiSystem(game, runData, stage),
+            )
+            .with(
+                -2,
+                RenderingSystem(game)
             )
             .build()
 
@@ -48,14 +52,13 @@ class TownScreen(game: DragonTilesGame, runData: RunData) : Screen {
 
         val inputProcessor = world.getSystem(InputProcessingSystem::class.java)
         inputProcessor.addAlwaysOnProcessor(stage)
-        inputProcessor.addAlwaysOnProcessor(world.getSystem(MapUiSystem::class.java))
         inputProcessor.addAlwaysOnProcessor(world.getSystem(DeckDisplayUiSystem::class.java))
+        inputProcessor.addAlwaysOnProcessor(world.getSystem(ItemShopUiSystem::class.java))
         inputProcessor.addAlwaysOnProcessor(world.getSystem(ClickableSystem::class.java))
         inputProcessor.addAlwaysOnProcessor(world.getSystem(TooltipSystem::class.java))
-        inputProcessor.addAlwaysOnProcessor(ExitInputProcessor())
         inputProcessor.activateInput()
 
-        TownScreenInit(game, runData, world).initialize()
+        StandardScreenInit(world).initialize()
     }
 
     override fun render(delta: Float) {

@@ -1,0 +1,117 @@
+package com.pipai.dragontiles.artemis.systems.ui
+
+import com.artemis.BaseSystem
+import com.badlogic.gdx.Input
+import com.badlogic.gdx.InputProcessor
+import com.badlogic.gdx.graphics.Color
+import com.badlogic.gdx.graphics.Texture
+import com.badlogic.gdx.graphics.g2d.Sprite
+import com.badlogic.gdx.scenes.scene2d.Stage
+import com.pipai.dragontiles.DragonTilesGame
+import com.pipai.dragontiles.artemis.components.*
+import com.pipai.dragontiles.artemis.events.PricedItemClickEvent
+import com.pipai.dragontiles.artemis.events.UpgradeSpellQueryEvent
+import com.pipai.dragontiles.artemis.screens.TownScreen
+import com.pipai.dragontiles.data.GlobalApi
+import com.pipai.dragontiles.data.PricedItem
+import com.pipai.dragontiles.data.RunData
+import com.pipai.dragontiles.gui.SpellCard
+import com.pipai.dragontiles.utils.getLogger
+import com.pipai.dragontiles.utils.mapper
+import com.pipai.dragontiles.utils.system
+import com.pipai.dragontiles.utils.upgradeAssetPath
+import net.mostlyoriginal.api.event.common.EventSystem
+import net.mostlyoriginal.api.event.common.Subscribe
+
+class ScribeShopUiSystem(
+    private val game: DragonTilesGame,
+    private val runData: RunData,
+) : BaseSystem(), InputProcessor {
+
+    private lateinit var api: GlobalApi
+    private val town = runData.town!!
+
+    private val mXy by mapper<XYComponent>()
+    private val mSprite by mapper<SpriteComponent>()
+    private val mText by mapper<TextLabelComponent>()
+    private val mClickable by mapper<ClickableComponent>()
+    private val mHoverableComponent by mapper<HoverableComponent>()
+
+    private val sEvent by system<EventSystem>()
+    private val sTooltip by system<TooltipSystem>()
+
+    override fun initialize() {
+        api = GlobalApi(game.data, runData, sEvent)
+        val scribeShop = town.scribe
+        scribeShop.upgrades.forEachIndexed { i, ps ->
+            if (i < 3) {
+                createUpgrade(ps, SpellCard.cardWidth * 2 + i * SpellCard.cardWidth * 2, SpellCard.cardHeight * 2)
+            } else {
+                createUpgrade(ps, SpellCard.cardWidth * 2 + (i - 3) * SpellCard.cardWidth * 2, SpellCard.cardHeight / 2)
+            }
+        }
+    }
+
+    private fun createUpgrade(ps: PricedItem, x: Float, y: Float) {
+        val entityId = world.create()
+        val cSprite = mSprite.create(entityId)
+        cSprite.sprite = Sprite(game.assets.get(upgradeAssetPath(game.data.getSpellUpgrade(ps.id).assetName), Texture::class.java))
+        val cXy = mXy.create(entityId)
+        cXy.setXy(x, y)
+        val cText = mText.create(entityId)
+        cText.yOffset = -16f
+        if (runData.hero.gold >= ps.price) {
+            cText.color = Color.WHITE
+        } else {
+            cText.color = Color.RED
+        }
+        cText.text = "${ps.price} Gold"
+        val cClickable = mClickable.create(entityId)
+        cClickable.eventGenerator = { PricedItemClickEvent(entityId, ps) }
+        val cHover = mHoverableComponent.create(entityId)
+        cHover.enterCallback = {
+            sTooltip.addLocalized(game.data.getSpellUpgrade(ps.id))
+            sTooltip.showTooltip()
+        }
+        cHover.exitCallback = {
+            sTooltip.hideTooltip()
+        }
+    }
+
+    @Subscribe
+    fun handleClick(ev: PricedItemClickEvent) {
+        if (runData.hero.gold >= ev.pricedItem.price) {
+            api.gainGoldImmediate(-ev.pricedItem.price)
+            sEvent.dispatch(UpgradeSpellQueryEvent(game.data.getSpellUpgrade(ev.pricedItem.id)))
+            world.delete(ev.entityId)
+            town.boughtUpgrade = true
+            if (!town.boughtUpgrade) {
+                town.actions--
+            }
+        }
+    }
+
+    override fun processSystem() {
+    }
+
+    override fun keyDown(keycode: Int): Boolean {
+        if (keycode == Input.Keys.ESCAPE) {
+            game.screen = TownScreen(game, runData)
+        }
+        return false
+    }
+
+    override fun keyUp(keycode: Int) = false
+
+    override fun keyTyped(character: Char) = false
+
+    override fun touchDown(screenX: Int, screenY: Int, pointer: Int, button: Int) = false
+
+    override fun touchUp(screenX: Int, screenY: Int, pointer: Int, button: Int) = false
+
+    override fun touchDragged(screenX: Int, screenY: Int, pointer: Int) = false
+
+    override fun mouseMoved(screenX: Int, screenY: Int) = false
+
+    override fun scrolled(amountX: Float, amountY: Float) = false
+}
