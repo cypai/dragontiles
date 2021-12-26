@@ -27,3 +27,38 @@ base:potions:HealingPotion:
   en:
     name: Healing Potion
     description: Heal 20% HP.
+
+base:potions:SwapPotion:
+  en:
+    name: Swap Potion
+    description: Swap 1.
+
+base:potions:WeakPotion:
+  en:
+    name: Weak Potion
+    description: Inflict 3 Weak.
+
+base:potions:FireCrystal:
+  en:
+    name: Fire Crystal
+    description: Choose a Fire tile to put in your hand.
+
+base:potions:IceCrystal:
+  en:
+    name: Ice Crystal
+    description: Choose an Ice tile to put in your hand.
+
+base:potions:LightningCrystal:
+  en:
+    name: Lightning Crystal
+    description: Choose a Lightning tile to put in your hand.
+
+base:potions:LifeCrystal:
+  en:
+    name: Life Crystal
+    description: Choose a Life tile to put in your hand.
+
+base:potions:StarCrystal:
+  en:
+    name: Star Crystal
+    description: Choose a Star tile to put in your hand.
