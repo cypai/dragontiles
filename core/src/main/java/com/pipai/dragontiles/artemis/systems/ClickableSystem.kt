@@ -1,6 +1,7 @@
 package com.pipai.dragontiles.artemis.systems
 
 import com.badlogic.gdx.InputProcessor
+import com.badlogic.gdx.math.Rectangle
 import com.pipai.dragontiles.GameConfig
 import com.pipai.dragontiles.artemis.components.*
 import com.pipai.dragontiles.utils.*
@@ -27,7 +28,13 @@ class ClickableSystem(private val config: GameConfig) : NoProcessingSystem(), In
         val mouseY = config.resolution.height - screenY.toFloat()
         world.fetch(allOf(ClickableComponent::class, SpriteComponent::class))
                 .forEach {
-                    val hover = mSprite.get(it).sprite.boundingRectangle.contains(mouseX, mouseY)
+                    val cSprite = mSprite.get(it)
+                    val hover = if (cSprite.width == 0f) {
+                        cSprite.sprite.boundingRectangle.contains(mouseX, mouseY)
+                    } else {
+                        val cXy = mXy.get(it)
+                        Rectangle(cXy.x, cXy.y, cSprite.width, cSprite.height).contains(mouseX, mouseY)
+                    }
                     if (hover) {
                         val cClick = mClickable.get(it)
                         cClick.callback?.invoke()

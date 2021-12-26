@@ -1,6 +1,7 @@
 package com.pipai.dragontiles.artemis.systems
 
 import com.badlogic.gdx.InputProcessor
+import com.badlogic.gdx.math.Rectangle
 import com.pipai.dragontiles.GameConfig
 import com.pipai.dragontiles.artemis.components.*
 import com.pipai.dragontiles.utils.*
@@ -31,10 +32,16 @@ class HoverableSystem(private val config: GameConfig) : NoProcessingSystem(), In
     override fun mouseMoved(screenX: Int, screenY: Int): Boolean {
         val mouseX = screenX.toFloat()
         val mouseY = config.resolution.height - screenY.toFloat()
-        world.fetch(allOf(HoverableComponent::class, SpriteComponent::class))
+        world.fetch(allOf(XYComponent::class, HoverableComponent::class, SpriteComponent::class))
                 .forEach {
                     val cHover = mHoverable.get(it)
-                    val hover = mSprite.get(it).sprite.boundingRectangle.contains(mouseX, mouseY)
+                    val cSprite = mSprite.get(it)
+                    val hover = if (cSprite.width == 0f) {
+                        cSprite.sprite.boundingRectangle.contains(mouseX, mouseY)
+                    } else {
+                        val cXy = mXy.get(it)
+                        Rectangle(cXy.x, cXy.y, cSprite.width, cSprite.height).contains(mouseX, mouseY)
+                    }
                     updateHover(cHover, hover)
                 }
         world.fetch(allOf(HoverableComponent::class, ActorComponent::class))
