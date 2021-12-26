@@ -82,6 +82,7 @@ class CombatUiSystem(
 
     companion object {
         private const val ALLOW_HOVER_MOVE = "allowHoverMove"
+        private const val ENLARGED = "enlarged"
     }
 
     private val spacing = 16f
@@ -232,8 +233,11 @@ class CombatUiSystem(
 
             override fun enter(event: InputEvent?, x: Float, y: Float, pointer: Int, fromActor: Actor?) {
                 if (stateMachine.currentState == CombatUiState.ROOT) {
-                    spellCard.width *= 1.1f
-                    spellCard.height *= 1.1f
+                    if (spellCard.data.getOrDefault(ENLARGED, 0) == 0) {
+                        spellCard.width *= 1.1f
+                        spellCard.height *= 1.1f
+                        spellCard.data[ENLARGED] = 1
+                    }
                     spellCard.toFront()
                 }
                 sTooltip.addSpell(spellCard.getSpell()!!)
@@ -245,6 +249,7 @@ class CombatUiSystem(
             }
 
             override fun exit(event: InputEvent?, x: Float, y: Float, pointer: Int, toActor: Actor?) {
+                spellCard.data[ENLARGED] = 0
                 spellCard.width = SpellCard.cardWidth
                 spellCard.height = SpellCard.cardHeight
                 sTooltip.hideTooltip()
