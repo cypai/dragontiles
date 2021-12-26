@@ -1,14 +1,11 @@
 package com.pipai.dragontiles.spells.upgrades
 
-import com.pipai.dragontiles.spells.LimitedRepeatableAspect
-import com.pipai.dragontiles.spells.RepeatableAspect
-import com.pipai.dragontiles.spells.Rune
-import com.pipai.dragontiles.spells.Spell
+import com.pipai.dragontiles.spells.*
 import com.pipai.dragontiles.utils.findAs
 
 class RepeatUpgrade : SpellUpgrade {
     override val id: String = "base:upgrades:RepeatUpgrade"
-    override val price: Int = 4
+    override val rarity: Rarity = Rarity.UNCOMMON
     override val assetName: String = "repeat.png"
 
     override fun canUpgrade(spell: Spell): Boolean {

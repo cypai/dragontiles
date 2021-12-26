@@ -4,6 +4,7 @@ import com.pipai.dragontiles.potions.Potion
 import com.pipai.dragontiles.relics.Relic
 import com.pipai.dragontiles.spells.Rarity
 import com.pipai.dragontiles.spells.Spell
+import com.pipai.dragontiles.spells.upgrades.SpellUpgrade
 import com.pipai.dragontiles.utils.choose
 
 class TownGenerator {
@@ -29,16 +30,16 @@ class TownGenerator {
         val scribe = Scribe(mutableListOf())
         repeat(6) {
             val upgrade = gameData.allSpellUpgrades().choose(rng)
-            scribe.upgrades.add(PricedItem(upgrade.id, upgrade.price))
+            scribe.upgrades.add(pricedUpgrade(upgrade))
         }
         runData.town = Town(3, null, spellShop, itemShop, scribe)
     }
 
     private fun pricedSpell(spell: Spell): PricedItem {
         val price = when (spell.rarity) {
-            Rarity.COMMON -> 2
-            Rarity.UNCOMMON -> 3
-            Rarity.RARE -> 4
+            Rarity.COMMON -> 3
+            Rarity.UNCOMMON -> 5
+            Rarity.RARE -> 7
             else -> 0
         }
         return PricedItem(spell.id, price)
@@ -46,9 +47,9 @@ class TownGenerator {
 
     private fun pricedRelic(relic: Relic): PricedItem {
         val price = when (relic.rarity) {
-            Rarity.COMMON -> 3
-            Rarity.UNCOMMON -> 4
-            Rarity.RARE -> 5
+            Rarity.COMMON -> 6
+            Rarity.UNCOMMON -> 9
+            Rarity.RARE -> 12
             else -> 0
         }
         return PricedItem(relic.id, price)
@@ -56,11 +57,21 @@ class TownGenerator {
 
     private fun pricedPotion(potion: Potion): PricedItem {
         val price = when (potion.rarity) {
-            Rarity.COMMON -> 1
-            Rarity.UNCOMMON -> 2
-            Rarity.RARE -> 3
-            else -> 3
+            Rarity.COMMON -> 3
+            Rarity.UNCOMMON -> 4
+            Rarity.RARE -> 5
+            else -> 4
         }
         return PricedItem(potion.id, price)
+    }
+
+    private fun pricedUpgrade(upgrade: SpellUpgrade): PricedItem {
+        val price = when (upgrade.rarity) {
+            Rarity.COMMON -> 5
+            Rarity.UNCOMMON -> 8
+            Rarity.RARE -> 11
+            else -> 4
+        }
+        return PricedItem(upgrade.id, price)
     }
 }
