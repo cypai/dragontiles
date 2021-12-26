@@ -14,7 +14,7 @@ class PlainsDungeon {
                     Encounter(
                         "base:dungeons:Plains:LargeTurtle",
                         listOf(
-                            Pair(LargeTurtle(), Vector2(750f, 420f))
+                            Pair(LargeTurtle(), Vector2(750f, 400f))
                         )
                     ),
                     Encounter(
@@ -30,8 +30,8 @@ class PlainsDungeon {
                     Encounter(
                         "base:dungeons:Plains:TurtleAndSlime",
                         listOf(
-                            Pair(LargeTurtle(), Vector2(650f, 420f)),
-                            Pair(Slime(), Vector2(1000f, 420f))
+                            Pair(LargeTurtle(), Vector2(650f, 400f)),
+                            Pair(Slime(), Vector2(1000f, 400f))
                         ),
                     ),
                     Encounter(
@@ -43,7 +43,7 @@ class PlainsDungeon {
                     ),
                     Encounter(
                         "base:dungeons:Plains:Bull",
-                        listOf(Pair(Bull(), Vector2(750f, 420f)))
+                        listOf(Pair(Bull(), Vector2(750f, 400f)))
                     ),
                     Encounter(
                         "base:dungeons:Plains:Rats",
@@ -72,7 +72,7 @@ class PlainsDungeon {
                     Encounter(
                         "base:dungeons:Plains:Minotaur",
                         listOf(
-                            Pair(Minotaur(), Vector2(750f, 420f))
+                            Pair(Minotaur(), Vector2(750f, 400f))
                         )
                     ),
                     Encounter(
@@ -89,7 +89,7 @@ class PlainsDungeon {
                     Encounter(
                         "base:dungeons:Plains:ShaWujin",
                         listOf(
-                            Pair(ShaWujin(), Vector2(750f, 420f))
+                            Pair(ShaWujin(), Vector2(750f, 400f))
                         )
                     ),
                 ),

@@ -257,7 +257,7 @@ class MapUiSystem(
                 }
                 MapNodeType.EVENT -> {
                     val event = dungeon.dungeonEvents
-                        .filter { it.id !in runData.dungeonMap.dungeonEvents }
+                        .filter { it.id !in runData.dungeonMap.dungeonEvents && it.available(ev.floorNum) }
                         .choose(rng)
                     runData.runHistory.history.add(
                         FloorHistory.EventFloorHistory(
