@@ -8,6 +8,7 @@ import com.pipai.dragontiles.utils.findAs
 
 class RepeatUpgrade : SpellUpgrade {
     override val id: String = "base:upgrades:RepeatUpgrade"
+    override val price: Int = 4
     override val assetName: String = "repeat.png"
 
     override fun canUpgrade(spell: Spell): Boolean {

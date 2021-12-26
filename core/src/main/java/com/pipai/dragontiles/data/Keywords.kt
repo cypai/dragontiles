@@ -7,5 +7,6 @@ class Keywords  {
         const val EXHAUST = "@Exhaust"
         const val TRANSFORM = "@Transform"
         const val SWAP = "@Swap"
+        const val FETCH = "@Fetch"
     }
 }

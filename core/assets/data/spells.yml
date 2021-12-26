@@ -76,7 +76,7 @@ base:spells:Reserve:
 base:spells:Fetch:
   en:
     name: Fetch
-    description: Fill the Open Pool.
+    description: ""
 
 base:spells:PreFetch:
   en:

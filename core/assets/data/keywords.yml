@@ -94,6 +94,12 @@ base:keywords:Transform:
     name: Transform
     description: Cannot be done on tiles with @Freeze.
 
+base:keywords:Fetch:
+  en:
+    key: "@Fetch"
+    name: Fetch
+    description: Draw tiles into the Open Pool. If no number, fills the Open Pool to maximum.
+
 base:keywords:Reactant:
   en:
     key: "@Reactant"

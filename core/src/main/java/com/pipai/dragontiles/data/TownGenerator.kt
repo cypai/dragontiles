@@ -29,4 +29,6 @@ class TownGenerator {
         return PricedItem(spell.id, price)
     }
 
+
+
 }

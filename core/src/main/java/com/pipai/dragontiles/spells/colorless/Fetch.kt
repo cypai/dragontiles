@@ -10,6 +10,7 @@ class Fetch : StandardSpell() {
     override val targetType: TargetType = TargetType.NONE
     override val rarity: Rarity = Rarity.UNCOMMON
     override val aspects: MutableList<SpellAspect> = mutableListOf(
+        FetchAspect(null),
         FluxGainAspect(1),
     )
 

@@ -5,7 +5,8 @@ import com.pipai.dragontiles.spells.TransformAspect
 
 class AntifreezeUpgrade : SpellUpgrade {
     override val id: String = "base:upgrades:AntifreezeUpgrade"
-    override val assetName: String = "power.png"
+    override val price: Int = 3
+    override val assetName: String = "antifreeze.png"
 
     override fun canUpgrade(spell: Spell): Boolean {
         return spell.aspects.any { it is TransformAspect }

@@ -7,6 +7,7 @@ import com.pipai.dragontiles.utils.findAs
 
 class SurgeUpgrade : SpellUpgrade {
     override val id: String = "base:upgrades:SurgeUpgrade"
+    override val price: Int = 3
     override val assetName: String = "surge.png"
 
     override fun canUpgrade(spell: Spell): Boolean {
@@ -15,7 +16,7 @@ class SurgeUpgrade : SpellUpgrade {
 
     override fun onUpgrade(spell: Spell) {
         spell.aspects.findAs(AttackDamageAspect::class)!!.amount += 12
-        if (spell.aspects.none { it is ExhaustAspect }) {
+        if (spell.aspects.none { it is ExhaustAspect } && spell.getUpgrades().none { it is EternalUpgrade }) {
             spell.aspects.add(ExhaustAspect())
         }
     }

@@ -44,6 +44,16 @@ data class SwapAspect(var amount: Int) : SpellAspect {
     }
 }
 
+data class FetchAspect(var amount: Int?) : SpellAspect {
+    override fun adjustDescription(description: String): String {
+        return if (amount == null) {
+            "$description ${Keywords.FETCH}"
+        } else {
+            "$description ${Keywords.FETCH} !fetch"
+        }
+    }
+}
+
 data class StackableAspect(val status: Status, val dynamicId: Int) : SpellAspect
 
 data class XAspect(var amount: Int) : SpellAspect
@@ -51,3 +61,5 @@ data class XAspect(var amount: Int) : SpellAspect
 class TransformAspect : SpellAspect
 class NotManuallyDeactivateable : SpellAspect
 class PreserveComponentOrder : SpellAspect
+class Heatsink : SpellAspect
+class Groundwire : SpellAspect

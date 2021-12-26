@@ -6,6 +6,7 @@ import com.pipai.dragontiles.utils.findAs
 
 class XUpgrade : SpellUpgrade {
     override val id: String = "base:upgrades:XUpgrade"
+    override val price: Int = 5
     override val assetName: String = "x.png"
 
     override fun canUpgrade(spell: Spell): Boolean {

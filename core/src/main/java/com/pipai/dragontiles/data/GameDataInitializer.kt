@@ -61,6 +61,11 @@ class GameDataInitializer {
         gameData.addSpellUpgrade(PowerUpgrade())
         gameData.addSpellUpgrade(SurgeUpgrade())
         gameData.addSpellUpgrade(EfficiencyUpgrade())
+        gameData.addSpellUpgrade(HeatsinkUpgrade())
+        gameData.addSpellUpgrade(AntifreezeUpgrade())
+        gameData.addSpellUpgrade(GroundwireUpgrade())
+        gameData.addSpellUpgrade(RepeatUpgrade())
+        gameData.addSpellUpgrade(EternalUpgrade())
         gameData.addSpellUpgrade(DoublestackUpgrade())
         gameData.addSpellUpgrade(XUpgrade())
     }
