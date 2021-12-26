@@ -246,6 +246,7 @@ class MapUiSystem(
                     )
                 }
                 MapNodeType.BOSS -> {
+                    runData.combatWon = false
                     game.screen = CombatScreen(
                         game,
                         runData,
