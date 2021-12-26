@@ -252,5 +252,3 @@ base:spells:ReactionMastery:
   en:
     name: Reaction Mastery
     description: "@Elemented attacks now also apply a @Reactant."
-
-

@@ -37,3 +37,8 @@ base:sorceries:GreatPower:
   en:
     name: Great Power
     description: Gain !s(1) Strength.
+
+base:sorceries:SummonPhoenix:
+  en:
+    name: Summon Phoenix
+    description: Summons a Phoenix which inflicts 10 Elemented Reactants @AOE at the start of your turn. Exhaust.
