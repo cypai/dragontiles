@@ -23,7 +23,7 @@ class TownGenerator {
             itemShop.relics.add(pricedRelic(gameData.getRelic(relic)))
         }
         repeat(3) {
-            val potion = gameData.allPotions().choose(rng)
+            val potion = RewardGenerator().choosePotion(gameData, rng)
             itemShop.potions.add(pricedPotion(potion))
         }
         val scribe = Scribe(mutableListOf())
