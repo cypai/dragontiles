@@ -112,6 +112,7 @@ open class GlobalApi(val gameData: GameData, val runData: RunData, private val s
     }
 
     fun gainMaxFluxImmediate(amount: Int) {
+        runData.hero.tempFluxMax += amount
         runData.hero.fluxMax += amount
         sEvent.dispatch(TopRowUiUpdateEvent())
     }
