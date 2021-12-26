@@ -173,7 +173,13 @@ class MainMenuUiSystem(
                 game.screen = EventScreen(game, runData, game.data.getDungeon(runData.dungeonMap.dungeonId).startEvent)
             }
             MapNodeType.BOSS -> {
-                // TODO
+                game.screen = CombatScreen(
+                    game,
+                    runData,
+                    dungeon.getEncounter(runData.dungeonMap.bossId)!!,
+                    null,
+                    false,
+                )
             }
         }
     }
