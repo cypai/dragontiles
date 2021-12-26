@@ -52,3 +52,9 @@ base:enemies:WhiteDragonHorse:
   en:
     name: White Dragon Horse
     description: Volatile.
+
+base:enemies:ShaWujin:
+  en:
+    name: Sha Wujin
+    description: ???
+
