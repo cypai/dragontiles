@@ -200,11 +200,11 @@ class MapUiSystem(
                     val encounter = if (runData.dungeonMap.easyFights < 2) {
                         runData.dungeonMap.easyFights++
                         dungeon.easyEncounters
-                            .filter { it.id !in runData.dungeonMap.encounters }
+                            .filter { it.id !in runData.runHistory.allEncounters() }
                             .choose(rng)
                     } else {
                         dungeon.standardEncounters
-                            .filter { it.id !in runData.dungeonMap.encounters }
+                            .filter { it.id !in runData.runHistory.allEncounters() }
                             .choose(rng)
                     }
                     runData.runHistory.history.add(

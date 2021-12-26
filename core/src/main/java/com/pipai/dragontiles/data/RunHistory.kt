@@ -1,14 +1,23 @@
 package com.pipai.dragontiles.data
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo
+import com.pipai.dragontiles.dungeon.Encounter
 import com.pipai.dragontiles.spells.SpellInstance
 import com.pipai.dragontiles.spells.SpellUpgradeInstance
+import com.pipai.dragontiles.utils.withAll
 
 data class RunHistory(
     val victoryStatus: VictoryStatus,
     val trial: Int,
     val history: MutableList<FloorHistory>,
-)
+) {
+
+    fun allEncounters(): List<String> {
+        return history.filterIsInstance<FloorHistory.CombatFloorHistory>()
+            .map { it.encounterId }
+            .withAll(history.filterIsInstance<FloorHistory.EliteFloorHistory>().map { it.encounterId })
+    }
+}
 
 enum class VictoryStatus {
     IN_PROGRESS, ABANDONED, FAILED, VICTORY
