@@ -3,6 +3,7 @@ package com.pipai.dragontiles.spells.upgrades
 import com.pipai.dragontiles.spells.AttackDamageAspect
 import com.pipai.dragontiles.spells.ExhaustAspect
 import com.pipai.dragontiles.spells.Spell
+import com.pipai.dragontiles.spells.StandardSpell
 import com.pipai.dragontiles.utils.findAs
 
 class SurgeUpgrade : SpellUpgrade {
@@ -11,7 +12,7 @@ class SurgeUpgrade : SpellUpgrade {
     override val assetName: String = "surge.png"
 
     override fun canUpgrade(spell: Spell): Boolean {
-        return spell.aspects.any { it is AttackDamageAspect }
+        return spell is StandardSpell && spell.aspects.any { it is AttackDamageAspect }
     }
 
     override fun onUpgrade(spell: Spell) {
