@@ -13,11 +13,7 @@ import com.pipai.dragontiles.artemis.components.OrthographicCameraComponent
 import com.pipai.dragontiles.artemis.components.SpriteComponent
 import com.pipai.dragontiles.artemis.components.XYComponent
 import com.pipai.dragontiles.artemis.events.ShopClickEvent
-import com.pipai.dragontiles.data.*
 import com.pipai.dragontiles.data.RunData
-import com.pipai.dragontiles.spells.Rarity
-import com.pipai.dragontiles.spells.Spell
-import com.pipai.dragontiles.utils.choose
 
 @Wire
 class TownScreenInit(
@@ -45,23 +41,32 @@ class TownScreenInit(
         // Draw actions left
 
         val innId = world.create()
-        mXy.create(innId).setXy(80f, 200f)
-        mSprite.create(innId).sprite =
+        mXy.create(innId).setXy(80f, 20f)
+        val innSprite = mSprite.create(innId)
+        innSprite.sprite =
             Sprite(game.assets.get("assets/binassets/graphics/textures/inn.png", Texture::class.java))
+        innSprite.width = 120f
+        innSprite.height = 120f
 
-        val shopId = world.create()
-        mXy.create(shopId).setXy(400f, 200f)
-        mSprite.create(shopId).sprite =
+        val spellShopId = world.create()
+        mXy.create(spellShopId).setXy(80f, 200f)
+        mSprite.create(spellShopId).sprite =
+            Sprite(game.assets.get("assets/binassets/graphics/textures/spell_shop.png", Texture::class.java))
+        mClickable.create(spellShopId).eventGenerator = { ShopClickEvent() }
+
+        val itemShopId = world.create()
+        mXy.create(itemShopId).setXy(400f, 200f)
+        mSprite.create(itemShopId).sprite =
             Sprite(game.assets.get("assets/binassets/graphics/textures/shop.png", Texture::class.java))
-        mClickable.create(shopId).eventGenerator = { ShopClickEvent() }
+        mClickable.create(itemShopId).eventGenerator = { ShopClickEvent() }
 
         val scribeId = world.create()
         mXy.create(scribeId).setXy(720f, 200f)
         mSprite.create(scribeId).sprite =
-            Sprite(game.assets.get("assets/binassets/graphics/textures/scribe.png", Texture::class.java))
+            Sprite(game.assets.get("assets/binassets/graphics/textures/upgrade_shop.png", Texture::class.java))
 
         val solicitId = world.create()
-        mXy.create(solicitId).setXy(80f, 20f)
+        mXy.create(solicitId).setXy(480f, 20f)
         mSprite.create(solicitId).sprite =
             Sprite(game.assets.get("assets/binassets/graphics/textures/solicit.png", Texture::class.java))
     }

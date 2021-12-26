@@ -33,8 +33,8 @@ data class DungeonMap(
                     1 -> {
                         repeat(3) {
 //                        floor.add(MapNode(MapNodeType.EVENT, false, mutableListOf(0), mutableListOf()))
-                            //floor.add(MapNode(MapNodeType.TOWN, false, mutableListOf(0), mutableListOf()))
-                            floor.add(MapNode(MapNodeType.COMBAT, false, mutableListOf(0), mutableListOf()))
+                            floor.add(MapNode(MapNodeType.TOWN, false, mutableListOf(0), mutableListOf()))
+//                            floor.add(MapNode(MapNodeType.COMBAT, false, mutableListOf(0), mutableListOf()))
                             //floor.add(MapNode(MapNodeType.ELITE, false, mutableListOf(0), mutableListOf()))
                         }
                     }
