@@ -10,7 +10,7 @@ import com.pipai.dragontiles.spells.upgrades.SpellUpgrade
 class GameData {
 
     companion object {
-        const val BASE_POTION_CHANCE = 0.2f
+        const val BASE_POTION_CHANCE = 0.4f
         const val COLORLESS = "base:hero:colorless"
     }
 

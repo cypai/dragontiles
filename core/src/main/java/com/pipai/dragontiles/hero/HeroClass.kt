@@ -44,8 +44,6 @@ interface HeroClass : Localized {
         repeat(potionSlotSize) {
             hero.potionSlots.add(PotionSlot(null))
         }
-        hero.potionSlots[0].potionId = ExplosivePotion().id
-        hero.potionSlots[1].potionId = HealingPotion().id
         return hero
     }
 
