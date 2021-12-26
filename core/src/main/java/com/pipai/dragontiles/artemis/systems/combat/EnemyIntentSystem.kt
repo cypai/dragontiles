@@ -65,7 +65,8 @@ class EnemyIntentSystem() : NoProcessingSystem() {
         val cTextLabel = mTextLabel.get(entityId)
         when (intent) {
             is AttackIntent -> {
-                val attackPower = sCombat.controller.api.calculateDamageOnHero(enemy, intent.element, intent.attackPower)
+                val attackPower =
+                    sCombat.controller.api.calculateDamageOnHero(enemy, intent.element, intent.attackPower)
                 cTextLabel.color = elementColor(intent.element)
                 cTextLabel.text = "Attack $attackPower"
             }
@@ -74,11 +75,21 @@ class EnemyIntentSystem() : NoProcessingSystem() {
                     cTextLabel.color = Color.WHITE
                     cTextLabel.text = "Buffing"
                 } else {
-                    val attackPower = sCombat.controller.api.calculateDamageOnHero(enemy,
+                    val attackPower = sCombat.controller.api.calculateDamageOnHero(
+                        enemy,
                         intent.attackIntent.element,
-                        intent.attackIntent.attackPower)
+                        intent.attackIntent.attackPower
+                    )
                     cTextLabel.color = elementColor(intent.attackIntent.element)
                     cTextLabel.text = "Buffing, Attack $attackPower"
+                }
+            }
+            is VentIntent -> {
+                cTextLabel.color = Color.VIOLET
+                if (intent.status == null) {
+                    cTextLabel.text = "Venting ${intent.amount}"
+                } else {
+                    cTextLabel.text = "Buffing, Venting ${intent.amount}"
                 }
             }
             is DebuffIntent -> {
@@ -86,9 +97,11 @@ class EnemyIntentSystem() : NoProcessingSystem() {
                     cTextLabel.color = Color.WHITE
                     cTextLabel.text = "Debuffing"
                 } else {
-                    val attackPower = sCombat.controller.api.calculateDamageOnHero(enemy,
+                    val attackPower = sCombat.controller.api.calculateDamageOnHero(
+                        enemy,
                         intent.attackIntent.element,
-                        intent.attackIntent.attackPower)
+                        intent.attackIntent.attackPower
+                    )
                     cTextLabel.color = elementColor(intent.attackIntent.element)
                     cTextLabel.text = "Debuffing, Attack $attackPower"
                 }
@@ -100,7 +113,11 @@ class EnemyIntentSystem() : NoProcessingSystem() {
             is FumbleIntent -> {
                 when (val innerIntent = intent.intent) {
                     is AttackIntent -> {
-                        val attackPower = sCombat.controller.api.calculateDamageOnHero(enemy, innerIntent.element, innerIntent.attackPower)
+                        val attackPower = sCombat.controller.api.calculateDamageOnHero(
+                            enemy,
+                            innerIntent.element,
+                            innerIntent.attackPower
+                        )
                         cTextLabel.color = elementColor(innerIntent.element)
                         cTextLabel.text = "Debuffing, Attack $attackPower"
                     }

@@ -4,7 +4,6 @@ import com.pipai.dragontiles.combat.*
 import com.pipai.dragontiles.data.Element
 import com.pipai.dragontiles.status.MenacingAura
 import com.pipai.dragontiles.status.Overloaded
-import com.pipai.dragontiles.status.Strength
 
 class Yumi : Enemy() {
 
@@ -17,7 +16,7 @@ class Yumi : Enemy() {
     private var turns: Int = 1
     private var hasOverloaded = false
 
-    override fun getIntent(): Intent {
+    override fun getIntent(api: CombatApi): Intent {
         return if (hasOverloaded || turns > 3) {
             BuffIntent(this, MenacingAura(1), AttackIntent(this, 20, 1, false, Element.NONE))
         } else {
@@ -26,7 +25,7 @@ class Yumi : Enemy() {
     }
 
     override fun nextIntent(api: CombatApi): Intent {
-        return getIntent()
+        return getIntent(api)
     }
 
     @CombatSubscribe

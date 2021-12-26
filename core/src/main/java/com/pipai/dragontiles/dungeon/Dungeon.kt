@@ -24,6 +24,9 @@ data class Dungeon(
             in eliteEncounters.map { it.id } -> {
                 eliteEncounters.first { it.id == id }
             }
+            in bossEncounters.map { it.id } -> {
+                eliteEncounters.first { it.id == id }
+            }
             else -> {
                 null
             }

@@ -19,6 +19,7 @@ import com.pipai.dragontiles.dungeon.*
 import com.pipai.dragontiles.dungeonevents.PlainsStartEvent
 import com.pipai.dragontiles.hero.Elementalist
 import com.pipai.dragontiles.spells.Rarity
+import com.pipai.dragontiles.utils.choose
 
 class MainMenuUiSystem(
     private val game: DragonTilesGame,
@@ -52,9 +53,12 @@ class MainMenuUiSystem(
                 }
                 val seed = Seed()
 
+                val dungeonId = "base:dungeons:Plains"
+                val map = DungeonMap.generateMap(seed)
+                val boss = game.data.getDungeon(dungeonId).bossEncounters.choose(seed.dungeonRng())
                 val runData = RunData(
                     Elementalist().generateHero("Elementalist"),
-                    DungeonMap("base:dungeons:Plains", DungeonMap.generateMap(seed)),
+                    DungeonMap(dungeonId, map, boss.id),
                     game.data.allRelics().filter { it.rarity != Rarity.SPECIAL && it.rarity != Rarity.STARTER }.map { it.id }.toMutableList(),
                     null,
                     0,

@@ -14,16 +14,27 @@ class RiverDragonHorse : Enemy() {
 
     private var flag = true
 
-    override fun getIntent(): Intent {
+    override fun getIntent(api: CombatApi): Intent {
         return if (flag) {
             AttackIntent(this, 10, 1, false, Element.ICE)
         } else {
-            DebuffIntent(this, null, null, listOf(RandomTileStatusInflictStrategy(TileStatus.FREEZE, 3)))
+            DebuffIntent(
+                this,
+                null,
+                null,
+                listOf(
+                    RandomTileStatusInflictStrategy(
+                        TileStatus.FREEZE,
+                        3,
+                        TileStatusInflictStrategy.NotEnoughStrategy.SKIP
+                    )
+                )
+            )
         }
     }
 
     override fun nextIntent(api: CombatApi): Intent {
         flag = !flag
-        return getIntent()
+        return getIntent(api)
     }
 }

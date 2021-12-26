@@ -79,7 +79,7 @@ class CombatController(
             // Normally intents are changed after endTurn(), this inits the intents and avoids messing with Stunned
             combat.enemies
                 .forEach {
-                    api.changeEnemyIntent(it, it.getIntent())
+                    api.changeEnemyIntent(it, it.getIntent(api))
                 }
         }
         api.draw(runData.hero.handSize - combat.hand.size - combat.assigned.values.map { it.size }.sum())

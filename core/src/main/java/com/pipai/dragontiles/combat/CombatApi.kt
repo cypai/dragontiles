@@ -8,9 +8,7 @@ import com.pipai.dragontiles.spells.*
 import com.pipai.dragontiles.status.Dodge
 import com.pipai.dragontiles.status.Overloaded
 import com.pipai.dragontiles.status.Status
-import com.pipai.dragontiles.utils.deepCopy
-import com.pipai.dragontiles.utils.getLogger
-import com.pipai.dragontiles.utils.withAll
+import com.pipai.dragontiles.utils.*
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.runBlocking
 import kotlin.coroutines.suspendCoroutine
@@ -112,7 +110,17 @@ class CombatApi(
     }
 
     suspend fun inflictTileStatusOnHand(strategy: TileStatusInflictStrategy) {
-        setTileStatus(strategy.select(combat.hand, rng), strategy.tileStatus)
+        val selected = strategy.select(combat.hand, rng).toMutableList()
+        if (selected.size < strategy.amount) {
+            when (strategy.notEnoughStrategy) {
+                TileStatusInflictStrategy.NotEnoughStrategy.RANDOM -> {
+                    selected.addAll(combat.hand.withoutAll(selected).chooseAmount(strategy.amount - selected.size, rng))
+                }
+                else -> {
+                }
+            }
+        }
+        setTileStatus(selected, strategy.tileStatus)
     }
 
     suspend fun transformTile(tileInstance: TileInstance, tile: Tile, sortHand: Boolean) {

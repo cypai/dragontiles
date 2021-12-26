@@ -21,7 +21,7 @@ class Slime : Enemy() {
         attacks = api.runData.seed.miscRng().nextInt(2) - 1
     }
 
-    override fun getIntent(): Intent {
+    override fun getIntent(api: CombatApi): Intent {
         return when (attacks % 4) {
             0 -> DebuffIntent(this, BreakStatus(2, true), null, listOf())
             else -> AttackIntent(this, 8, 1, false, Element.ICE)
@@ -30,6 +30,6 @@ class Slime : Enemy() {
 
     override fun nextIntent(api: CombatApi): Intent {
         attacks++
-        return getIntent()
+        return getIntent(api)
     }
 }

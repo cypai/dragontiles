@@ -17,7 +17,7 @@ class LargeTurtle : Enemy() {
 
     private var intents = 0
 
-    override fun getIntent(): Intent {
+    override fun getIntent(api: CombatApi): Intent {
         return when (intents) {
             0 -> AttackIntent(this, 12, 1, false, Element.NONE)
             1 -> AttackIntent(this, 12, 1, false, Element.NONE)
@@ -28,6 +28,6 @@ class LargeTurtle : Enemy() {
     override fun nextIntent(api: CombatApi): Intent {
         intents++
         if (intents > 2) intents = 0
-        return getIntent()
+        return getIntent(api)
     }
 }

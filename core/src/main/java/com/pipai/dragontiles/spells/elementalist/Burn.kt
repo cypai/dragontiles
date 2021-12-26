@@ -3,6 +3,7 @@ package com.pipai.dragontiles.spells.elementalist
 import com.pipai.dragontiles.combat.CombatApi
 import com.pipai.dragontiles.combat.CombatFlag
 import com.pipai.dragontiles.combat.RandomTileStatusInflictStrategy
+import com.pipai.dragontiles.combat.TileStatusInflictStrategy
 import com.pipai.dragontiles.data.TileStatus
 import com.pipai.dragontiles.spells.*
 import com.pipai.dragontiles.status.Pyro
@@ -27,6 +28,6 @@ class Burn : StandardSpell() {
     override suspend fun onCast(params: CastParams, api: CombatApi) {
         val target = api.getEnemy(params.targets.first())
         api.attack(target, elemental(components()), baseDamage(), flags())
-        api.inflictTileStatusOnHand(RandomTileStatusInflictStrategy(TileStatus.BURN, 1))
+        api.inflictTileStatusOnHand(RandomTileStatusInflictStrategy(TileStatus.BURN, 1, TileStatusInflictStrategy.NotEnoughStrategy.RANDOM))
     }
 }

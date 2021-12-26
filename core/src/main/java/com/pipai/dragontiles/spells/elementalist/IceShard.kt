@@ -3,6 +3,7 @@ package com.pipai.dragontiles.spells.elementalist
 import com.pipai.dragontiles.combat.CombatApi
 import com.pipai.dragontiles.combat.CombatFlag
 import com.pipai.dragontiles.combat.RandomTileStatusInflictStrategy
+import com.pipai.dragontiles.combat.TileStatusInflictStrategy
 import com.pipai.dragontiles.data.TileStatus
 import com.pipai.dragontiles.spells.*
 import com.pipai.dragontiles.status.Cryo
@@ -33,6 +34,12 @@ class IceShard : StandardSpell() {
         val target = api.getEnemy(params.targets.first())
         api.attack(target, elemental(components()), baseDamage(), flags())
         api.addStatusToEnemy(target, aspects.getStackableCopy(Cryo::class))
-        api.inflictTileStatusOnHand(RandomTileStatusInflictStrategy(TileStatus.FREEZE, 1))
+        api.inflictTileStatusOnHand(
+            RandomTileStatusInflictStrategy(
+                TileStatus.FREEZE,
+                1,
+                TileStatusInflictStrategy.NotEnoughStrategy.RANDOM
+            )
+        )
     }
 }

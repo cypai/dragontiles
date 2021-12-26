@@ -3,7 +3,6 @@ package com.pipai.dragontiles.enemies
 import com.pipai.dragontiles.combat.*
 import com.pipai.dragontiles.data.Element
 import com.pipai.dragontiles.status.BreakStatus
-import com.pipai.dragontiles.status.Strength
 
 class Minotaur : Enemy() {
 
@@ -15,7 +14,7 @@ class Minotaur : Enemy() {
 
     private var intents = 0
 
-    override fun getIntent(): Intent {
+    override fun getIntent(api: CombatApi): Intent {
         return when (intents) {
             0 -> DebuffIntent(this, BreakStatus(3, true), null, listOf())
             1 -> AttackIntent(this, 20, 1, false, Element.NONE)
@@ -26,6 +25,6 @@ class Minotaur : Enemy() {
     override fun nextIntent(api: CombatApi): Intent {
         intents++
         if (intents > 2) intents = 0
-        return getIntent()
+        return getIntent(api)
     }
 }

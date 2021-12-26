@@ -129,7 +129,7 @@ class MapUiSystem(
                         }
                         MapNodeType.BOSS -> {
                             cHover.enterCallback = {
-                                sTooltip.addText("Boss", "???", false)
+                                sTooltip.addNameDescLocalization(game.gameStrings.nameDescLocalization(runData.dungeonMap.bossId))
                                 sTooltip.showTooltip()
                             }
                             cHover.exitCallback = {
@@ -242,6 +242,15 @@ class MapUiSystem(
                         runData,
                         encounter,
                         CombatRewardConfig.elite(runData),
+                        true,
+                    )
+                }
+                MapNodeType.BOSS -> {
+                    game.screen = CombatScreen(
+                        game,
+                        runData,
+                        game.data.getDungeon(runData.dungeonMap.dungeonId).getEncounter(runData.dungeonMap.bossId)!!,
+                        CombatRewardConfig.boss(runData),
                         true,
                     )
                 }

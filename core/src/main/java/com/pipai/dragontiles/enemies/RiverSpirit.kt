@@ -23,7 +23,7 @@ class RiverSpirit : Enemy() {
         api.addStatusToEnemy(this, Ventilation(3))
     }
 
-    override fun getIntent(): Intent {
+    override fun getIntent(api: CombatApi): Intent {
         return if (enraged) {
             FumbleIntent(this, 1, AttackIntent(this, 1, 3, false, Element.ICE))
         } else {
@@ -40,6 +40,6 @@ class RiverSpirit : Enemy() {
 
     override fun nextIntent(api: CombatApi): Intent {
         flag = !flag
-        return getIntent()
+        return getIntent(api)
     }
 }

@@ -19,7 +19,7 @@ class Rat : Enemy() {
         flag = api.runData.seed.miscRng().nextBoolean()
     }
 
-    override fun getIntent(): Intent {
+    override fun getIntent(api: CombatApi): Intent {
         return if (flag) {
             DebuffIntent(this, Weak(1, true), AttackIntent(this, 8, 1, false, Element.ICE), listOf())
         } else {
@@ -29,6 +29,6 @@ class Rat : Enemy() {
 
     override fun nextIntent(api: CombatApi): Intent {
         flag = !flag
-        return getIntent()
+        return getIntent(api)
     }
 }

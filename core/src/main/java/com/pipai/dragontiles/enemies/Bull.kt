@@ -15,7 +15,7 @@ class Bull : Enemy() {
 
     private var hasOverloaded = false
 
-    override fun getIntent(): Intent {
+    override fun getIntent(api: CombatApi): Intent {
         return if (hasOverloaded) {
             AttackIntent(this, 10, 1, false, Element.NONE)
         } else {
@@ -24,7 +24,7 @@ class Bull : Enemy() {
     }
 
     override fun nextIntent(api: CombatApi): Intent {
-        return getIntent()
+        return getIntent(api)
     }
 
     @CombatSubscribe

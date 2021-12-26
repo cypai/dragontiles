@@ -18,7 +18,11 @@ data class CombatRewardConfig(
         }
 
         fun elite(runData: RunData): CombatRewardConfig {
-            return CombatRewardConfig(SpellRewardType.ELITE, 5, false, null, runData.potionChance + 0.2f)
+            return CombatRewardConfig(SpellRewardType.ELITE, 5, true, null, runData.potionChance + 0.2f)
+        }
+
+        fun boss(runData: RunData): CombatRewardConfig {
+            return CombatRewardConfig(SpellRewardType.BOSS, 5, true, null, runData.potionChance + 0.2f)
         }
     }
 }

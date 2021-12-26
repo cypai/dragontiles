@@ -8,6 +8,7 @@ import kotlin.random.Random
 data class DungeonMap(
     val dungeonId: String,
     val map: List<List<MapNode>>,
+    val bossId: String,
     val encounters: MutableList<String> = mutableListOf(),
     val dungeonEvents: MutableList<String> = mutableListOf(),
     var currentFloor: Int = 0,

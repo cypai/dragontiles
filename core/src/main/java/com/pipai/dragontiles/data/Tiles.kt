@@ -52,6 +52,20 @@ val lifeTiles = LifeType.values().map { Tile.LifeTile(it) }
 
 data class TileInstance(val tile: Tile, var tileStatus: TileStatus, val id: Int)
 
+fun terminal(tile: Tile, hand: List<Tile>): Boolean {
+    if (hand.count { it == tile } > 1) {
+        return false
+    }
+    return when (tile) {
+        is Tile.ElementalTile -> {
+            hand.none { (tile.number < 9 && it == successor(tile)) && (tile.number > 1 && it == predecessor(tile)) }
+        }
+        else -> {
+            true
+        }
+    }
+}
+
 fun successor(tile: Tile): Tile {
     return when (tile) {
         is Tile.ElementalTile -> Tile.ElementalTile(tile.suit, if (tile.number == 9) 1 else (tile.number + 1))

@@ -102,3 +102,8 @@ base:status:ElectroPhoenix:
   en:
     name: Electro Phoenix
     description: Inflicts 10 Electro to all enemies at the start of your turn.
+
+base:status:Sandstorm:
+  en:
+    name: Sandstorm
+    description: At the end of the turn, put Fumble Tiles in your hand.

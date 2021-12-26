@@ -22,7 +22,7 @@ abstract class Enemy {
     open suspend fun init(api: CombatApi) {
     }
 
-    abstract fun getIntent(): Intent
+    abstract fun getIntent(api: CombatApi): Intent
 
     abstract fun nextIntent(api: CombatApi): Intent
 }

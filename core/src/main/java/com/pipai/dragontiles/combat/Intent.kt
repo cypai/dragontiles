@@ -1,9 +1,6 @@
 package com.pipai.dragontiles.combat
 
-import com.pipai.dragontiles.data.Element
-import com.pipai.dragontiles.data.Tile
-import com.pipai.dragontiles.data.TileInstance
-import com.pipai.dragontiles.data.TileStatus
+import com.pipai.dragontiles.data.*
 import com.pipai.dragontiles.enemies.Enemy
 import com.pipai.dragontiles.status.Status
 import com.pipai.dragontiles.utils.chooseAmount
@@ -60,6 +57,18 @@ data class BuffIntent(
     }
 }
 
+data class VentIntent(
+    override val enemy: Enemy, val amount: Int, val status: Status?
+) : Intent {
+
+    override val type: IntentType = IntentType.VENT
+
+    override suspend fun execute(api: CombatApi) {
+        api.enemyLoseFlux(enemy, amount)
+        status?.let { api.addStatusToEnemy(enemy, it) }
+    }
+}
+
 data class DebuffIntent(
     override val enemy: Enemy,
     val status: Status?,
@@ -81,17 +90,40 @@ data class DebuffIntent(
 interface TileStatusInflictStrategy {
     val tileStatus: TileStatus
     val amount: Int
+    val notEnoughStrategy: NotEnoughStrategy
     fun select(hand: List<TileInstance>, rng: Random): List<TileInstance>
+
+    enum class NotEnoughStrategy {
+        SKIP, RANDOM,
+    }
 }
 
 data class RandomTileStatusInflictStrategy(
     override val tileStatus: TileStatus,
-    override val amount: Int
+    override val amount: Int,
+    override val notEnoughStrategy: TileStatusInflictStrategy.NotEnoughStrategy
 ) : TileStatusInflictStrategy {
 
     override fun select(hand: List<TileInstance>, rng: Random): List<TileInstance> {
         return hand
             .filter { it.tileStatus == TileStatus.NONE }
+            .chooseAmount(amount, rng)
+    }
+}
+
+data class TerminalTileStatusInflictStrategy(
+    override val tileStatus: TileStatus,
+    override val amount: Int,
+    override val notEnoughStrategy: TileStatusInflictStrategy.NotEnoughStrategy
+) : TileStatusInflictStrategy {
+
+    override fun select(hand: List<TileInstance>, rng: Random): List<TileInstance> {
+        return hand
+            .filter { t ->
+                t.tileStatus == TileStatus.NONE
+                        && t.tile !is Tile.FumbleTile
+                        && terminal(t.tile, hand.map { it.tile })
+            }
             .chooseAmount(amount, rng)
     }
 }

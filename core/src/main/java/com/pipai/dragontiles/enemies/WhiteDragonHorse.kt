@@ -14,9 +14,20 @@ class WhiteDragonHorse : Enemy() {
 
     private var flag = true
 
-    override fun getIntent(): Intent {
+    override fun getIntent(api: CombatApi): Intent {
         return if (flag) {
-            DebuffIntent(this, null, null, listOf(RandomTileStatusInflictStrategy(TileStatus.VOLATILE, 3)))
+            DebuffIntent(
+                this,
+                null,
+                null,
+                listOf(
+                    RandomTileStatusInflictStrategy(
+                        TileStatus.VOLATILE,
+                        3,
+                        TileStatusInflictStrategy.NotEnoughStrategy.SKIP
+                    )
+                )
+            )
         } else {
             AttackIntent(this, 10, 1, false, Element.NONE)
         }
@@ -24,6 +35,6 @@ class WhiteDragonHorse : Enemy() {
 
     override fun nextIntent(api: CombatApi): Intent {
         flag = !flag
-        return getIntent()
+        return getIntent(api)
     }
 }

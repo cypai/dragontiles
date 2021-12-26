@@ -17,7 +17,7 @@ class KillerRabbit : Enemy() {
 
     private var intents = 0
 
-    override fun getIntent(): Intent {
+    override fun getIntent(api: CombatApi): Intent {
         return when (intents) {
             0 -> BuffIntent(this, MenacingAura(1), null)
             else -> AttackIntent(this, 13, 1, false, Element.NONE)
@@ -26,6 +26,6 @@ class KillerRabbit : Enemy() {
 
     override fun nextIntent(api: CombatApi): Intent {
         intents++
-        return getIntent()
+        return getIntent(api)
     }
 }
