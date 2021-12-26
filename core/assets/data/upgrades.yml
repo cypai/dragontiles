@@ -18,11 +18,6 @@ base:upgrades:RepeatUpgrade:
     name: Repeat Upgrade
     description: Adds 1 Repeatable.
 
-base:upgrades:StackUpgrade:
-  en:
-    name: Stack Upgrade
-    description: Doubles status inflicted.
-
 base:upgrades:FetchUpgrade:
   en:
     name: Fetch Upgrade
@@ -31,9 +26,29 @@ base:upgrades:FetchUpgrade:
 base:upgrades:HeatsinkUpgrade:
   en:
     name: Heatsink Upgrade
-    description: Burn Tile Components no longer deal damage.
+    description: Immunity to @Burn.
+
+base:upgrades:GroundwireUpgrade:
+  en:
+    name: Groundwire Upgrade
+    description: Immunity to @Shock.
 
 base:upgrades:AntifreezeUpgrade:
   en:
     name: Antifreeze Upgrade
     description: Allows transformation of Freeze Tiles.
+
+base:upgrades:DoublestackUpgrade:
+  en:
+    name: Doublestack Upgrade
+    description: Double all effect stacks.
+
+base:upgrades:XUpgrade:
+  en:
+    name: X Upgrade
+    description: X+1
+
+base:upgrades:EternalUpgrade:
+  en:
+    name: Eternal Upgrade
+    description: Can no longer Exhaust.

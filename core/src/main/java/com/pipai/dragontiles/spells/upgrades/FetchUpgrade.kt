@@ -4,7 +4,7 @@ import com.pipai.dragontiles.spells.*
 import com.pipai.dragontiles.utils.findAs
 
 class FetchUpgrade : SpellUpgrade {
-    override val id: String = "base:upgrade:FetchUpgrade"
+    override val id: String = "base:upgrades:FetchUpgrade"
     override val price: Int = 3
     override val assetName: String = "fetch.png"
 

@@ -68,6 +68,7 @@ class GameDataInitializer {
         gameData.addSpellUpgrade(EternalUpgrade())
         gameData.addSpellUpgrade(DoublestackUpgrade())
         gameData.addSpellUpgrade(XUpgrade())
+        gameData.addSpellUpgrade(FetchUpgrade())
     }
 
     private fun initHeroSpells(gameData: GameData, heroClassId: String) {

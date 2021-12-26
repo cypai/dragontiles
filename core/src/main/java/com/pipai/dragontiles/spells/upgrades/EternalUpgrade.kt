@@ -6,7 +6,7 @@ import com.pipai.dragontiles.spells.Spell
 import com.pipai.dragontiles.utils.findAs
 
 class EternalUpgrade : SpellUpgrade {
-    override val id: String = "base:upgrade:EternalUpgrade"
+    override val id: String = "base:upgrades:EternalUpgrade"
     override val price: Int = 4
     override val assetName: String = "eternal.png"
 
