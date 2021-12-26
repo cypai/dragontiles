@@ -6,8 +6,7 @@ import com.pipai.dragontiles.dungeon.Encounter
 import com.pipai.dragontiles.dungeonevents.*
 import com.pipai.dragontiles.enemies.*
 import com.pipai.dragontiles.hero.Elementalist
-import com.pipai.dragontiles.potions.ExplosivePotion
-import com.pipai.dragontiles.potions.HealingPotion
+import com.pipai.dragontiles.potions.*
 import com.pipai.dragontiles.relics.*
 import com.pipai.dragontiles.spells.colorless.*
 import com.pipai.dragontiles.spells.elementalist.Split
@@ -84,7 +83,11 @@ class GameDataInitializer {
 
     private fun initPotions(gameData: GameData) {
         gameData.addPotion(ExplosivePotion())
+        gameData.addPotion(BlastPotion())
         gameData.addPotion(HealingPotion())
+        gameData.addPotion(StrengthPotion())
+        gameData.addPotion(VentingPotion())
+        gameData.addPotion(HastePotion())
     }
 
     private fun initPlainsDungeon(gameData: GameData) {
