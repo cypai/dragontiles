@@ -4,6 +4,7 @@ import com.artemis.BaseSystem
 import com.badlogic.gdx.Input
 import com.badlogic.gdx.InputProcessor
 import com.badlogic.gdx.graphics.Color
+import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.InputEvent
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.Touchable
@@ -41,6 +42,7 @@ class SpellShopUiSystem(
     private val mPrice by mapper<PriceComponent>()
 
     private val sEvent by system<EventSystem>()
+    private val sTooltip by system<TooltipSystem>()
 
     override fun initialize() {
         api = GlobalApi(game.data, runData, sEvent)
@@ -132,7 +134,8 @@ class SpellShopUiSystem(
         val entityId = world.create()
         mPrice.create(entityId).price = ps.price
         val cActor = mActor.create(entityId)
-        val spellCard = SpellCard(game, game.data.getSpell(ps.id), null, game.skin, null)
+        val spell = game.data.getSpell(ps.id)
+        val spellCard = SpellCard(game, spell, null, game.skin, null)
         cActor.actor = spellCard
         val cXy = mXy.create(entityId)
         cXy.setXy(x, y)
@@ -146,6 +149,16 @@ class SpellShopUiSystem(
         cText.text = "${ps.price} Gold"
         val cClickable = mClickable.create(entityId)
         cClickable.eventGenerator = { PricedItemClickEvent(entityId, ps) }
+        spellCard.addListener(object : ClickListener() {
+            override fun enter(event: InputEvent?, x: Float, y: Float, pointer: Int, fromActor: Actor?) {
+                sTooltip.addSpell(spell)
+                sTooltip.showTooltip(x + 16f + SpellCard.cardWidth)
+            }
+
+            override fun exit(event: InputEvent?, x: Float, y: Float, pointer: Int, toActor: Actor?) {
+                sTooltip.hideTooltip()
+            }
+        })
     }
 
     @Subscribe

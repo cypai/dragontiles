@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.utils.viewport.ScreenViewport
 import com.pipai.dragontiles.DragonTilesGame
 import com.pipai.dragontiles.artemis.systems.ClickableSystem
+import com.pipai.dragontiles.artemis.systems.HoverableSystem
 import com.pipai.dragontiles.artemis.systems.input.InputProcessingSystem
 import com.pipai.dragontiles.artemis.systems.rendering.FullScreenColorSystem
 import com.pipai.dragontiles.artemis.systems.rendering.RenderingSystem
@@ -32,6 +33,7 @@ class SpellShopScreen(game: DragonTilesGame, runData: RunData) : Screen {
                 TagManager(),
                 EventSystem(),
                 ClickableSystem(game.gameConfig),
+                HoverableSystem(game.gameConfig),
                 InputProcessingSystem(),
                 SpellShopUiSystem(game, stage, runData),
                 FullScreenColorSystem(game),
@@ -55,6 +57,7 @@ class SpellShopScreen(game: DragonTilesGame, runData: RunData) : Screen {
         inputProcessor.addAlwaysOnProcessor(world.getSystem(DeckDisplayUiSystem::class.java))
         inputProcessor.addAlwaysOnProcessor(world.getSystem(SpellShopUiSystem::class.java))
         inputProcessor.addAlwaysOnProcessor(world.getSystem(ClickableSystem::class.java))
+        inputProcessor.addAlwaysOnProcessor(world.getSystem(HoverableSystem::class.java))
         inputProcessor.addAlwaysOnProcessor(world.getSystem(TooltipSystem::class.java))
         inputProcessor.activateInput()
 
