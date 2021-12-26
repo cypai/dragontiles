@@ -48,6 +48,8 @@ class SpellCard(
     private var enabled = true
     var powered = false
         private set
+    var shocked = false
+        private set
     var flux: Int = 0
     var fluxMax: Int = 0
 
@@ -144,6 +146,12 @@ class SpellCard(
         }
     }
 
+    fun shock() {
+        enabled = false
+        shocked = true
+        background = skin.getDrawable("frameDrawableShocked")
+    }
+
     fun makePowered() {
         powered = true
         background = skin.getDrawable("frameDrawableLight")
@@ -151,6 +159,7 @@ class SpellCard(
 
     fun enable() {
         enabled = true
+        shocked = false
         reqNumber.style = game.skin.get("cardReq", Label.LabelStyle::class.java)
         if (!powered) {
             background = skin.getDrawable("frameDrawable")

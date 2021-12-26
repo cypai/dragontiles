@@ -377,6 +377,7 @@ class CombatApi(
         components.forEach { tile ->
             when (tile.tileStatus) {
                 TileStatus.BURN -> dealDamageToHero(2)
+                TileStatus.SHOCK -> shockSpell(spell)
                 TileStatus.VOLATILE -> dealFluxDamageToHero(2 * spell.baseFluxGain())
                 TileStatus.CURSE -> changeTemporaryMaxFlux(2 * spell.baseFluxGain())
                 else -> {
@@ -384,6 +385,13 @@ class CombatApi(
             }
         }
         sortHand()
+    }
+
+    suspend fun shockSpell(spell: Spell) {
+        if (spell is StandardSpell) {
+            spell.shockTurns = 2
+            eventBus.dispatch(SpellShockedEvent(spell))
+        }
     }
 
     suspend fun sorceryConsume() {

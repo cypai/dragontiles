@@ -83,6 +83,8 @@ data class RuneDeactivatedEvent(val rune: Rune) : CombatEvent
 
 data class SpellExhaustedEvent(val spell: StandardSpell) : CombatEvent
 
+data class SpellShockedEvent(val spell: StandardSpell) : CombatEvent
+
 class GameOverEvent : CombatEvent
 
 data class QueryTilesEvent(

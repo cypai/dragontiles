@@ -1079,6 +1079,9 @@ class CombatUiSystem(
         if (spell != null && spell is PowerSpell && spell.powered) {
             spellCard.makePowered()
         }
+        if (spell != null && spell is StandardSpell && spell.shockTurns > 0) {
+            spellCard.shock()
+        }
         if (spell == null || !spell.available() || overloaded) {
             spellCard.disable()
         } else {

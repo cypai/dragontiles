@@ -163,6 +163,7 @@ abstract class StandardSpell : Spell() {
     abstract val targetType: TargetType
 
     var repeated = 0
+    var shockTurns = 0
     var exhausted = false
 
     override fun swappableFromSideboard(): Boolean = !exhausted
@@ -177,7 +178,7 @@ abstract class StandardSpell : Spell() {
     override fun available(): Boolean {
         val repeatOk = aspects.findAs(RepeatableAspect::class) != null
                 || repeated < aspects.findAs(LimitedRepeatableAspect::class)?.max ?: 1
-        return !exhausted && repeatOk
+        return !exhausted && shockTurns == 0 && repeatOk
     }
 
     suspend fun cast(params: CastParams, api: CombatApi) {
