@@ -84,10 +84,10 @@ class ScribeShopUiSystem(
             recalculatePriceColor()
             sEvent.dispatch(UpgradeSpellQueryEvent(game.data.getSpellUpgrade(ev.pricedItem.id)))
             world.delete(ev.entityId)
-            town.boughtUpgrade = true
             if (!town.boughtUpgrade) {
                 town.actions--
             }
+            town.boughtUpgrade = true
         }
     }
 

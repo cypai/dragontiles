@@ -121,7 +121,6 @@ class ItemShopUiSystem(
             api.gainGoldImmediate(-ps.price)
             api.gainRelicImmediate(game.data.getRelic(ps.id))
             world.delete(entityId)
-            town.boughtItem = true
             handleBuy()
         }
     }
@@ -131,7 +130,6 @@ class ItemShopUiSystem(
             api.gainGoldImmediate(-ps.price)
             api.gainPotion(game.data.getPotion(ps.id))
             world.delete(entityId)
-            town.boughtItem = true
             handleBuy()
         }
     }
@@ -140,6 +138,7 @@ class ItemShopUiSystem(
         if (!town.boughtItem) {
             town.actions--
         }
+        town.boughtItem = true
     }
 
     override fun processSystem() {

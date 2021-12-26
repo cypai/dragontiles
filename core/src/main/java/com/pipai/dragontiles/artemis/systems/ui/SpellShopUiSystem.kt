@@ -103,11 +103,11 @@ class SpellShopUiSystem(
                         recalculatePriceColor()
                         runData.hero.sideboardSize++
                         runData.sideboardSpaceBought++
-                        town.boughtSpell = true
-                        town.boughtSideboard = true
                         if (!town.boughtSpell) {
                             town.actions--
                         }
+                        town.boughtSpell = true
+                        town.boughtSideboard = true
                         label.setText("Sold Out")
 
                         world.delete(entityId)
