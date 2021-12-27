@@ -165,7 +165,7 @@ class TopRowUiSystem(
     }
 
     fun setFluxRelative(amount: Int) {
-        setFlux(min(flux + amount, tempFluxMax), tempFluxMax, fluxMax)
+        setFlux(min(flux + amount, tempFluxMax).coerceAtLeast(0), tempFluxMax, fluxMax)
     }
 
     fun setTempMaxFluxRelative(amount: Int) {
