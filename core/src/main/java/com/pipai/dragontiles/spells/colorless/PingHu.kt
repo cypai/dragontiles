@@ -12,6 +12,7 @@ class PingHu : Sorcery() {
         override val type: SetType = SetType.SEQUENTIAL
         override var suitGroup: SuitGroup = SuitGroup.ELEMENTAL
         override val description: String = "All melds are sequences."
+        override val showTooltip: Boolean = true
 
         override fun satisfied(slots: List<TileInstance>): Boolean {
             throw NotImplementedError()
