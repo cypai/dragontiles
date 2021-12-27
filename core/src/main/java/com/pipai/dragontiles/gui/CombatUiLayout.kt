@@ -33,5 +33,5 @@ data class CombatUiLayout(val config: GameConfig, val tileSkin: TileSkin, val ma
         return start
     }
 
-    val optionListTlPosition = Vector2(config.resolution.width / 3f, spellCastPosition.y + cardHeight)
+    val optionListTlPosition = Vector2(config.resolution.width / 4f, spellCastPosition.y + cardHeight)
 }

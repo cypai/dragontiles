@@ -22,4 +22,4 @@ data class ReplaceSpellQueryEvent(val spell: Spell) : Event
 data class UpgradeSpellQueryEvent(val upgrade: SpellUpgrade) : Event
 class TransformSpellQueryEvent : Event
 class TopRowUiUpdateEvent : Event
-data class PotionUseEvent(val potionSlotIndex: Int) : Event
+data class PotionUseUiEvent(val potionSlotIndex: Int) : Event

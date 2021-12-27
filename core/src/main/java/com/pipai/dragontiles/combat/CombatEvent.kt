@@ -5,6 +5,7 @@ import com.pipai.dragontiles.data.Tile
 import com.pipai.dragontiles.data.TileInstance
 import com.pipai.dragontiles.data.TileStatus
 import com.pipai.dragontiles.enemies.Enemy
+import com.pipai.dragontiles.potions.Potion
 import com.pipai.dragontiles.spells.Rune
 import com.pipai.dragontiles.spells.Spell
 import com.pipai.dragontiles.spells.StandardSpell
@@ -84,6 +85,8 @@ data class RuneDeactivatedEvent(val rune: Rune) : CombatEvent
 data class SpellExhaustedEvent(val spell: StandardSpell) : CombatEvent
 
 data class SpellShockedEvent(val spell: StandardSpell) : CombatEvent
+
+data class PotionUseEvent(val potion: Potion) : CombatEvent
 
 class GameOverEvent : CombatEvent
 

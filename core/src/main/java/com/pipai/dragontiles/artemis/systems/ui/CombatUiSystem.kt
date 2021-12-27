@@ -542,7 +542,7 @@ class CombatUiSystem(
         spellComponentList.setFullCastOptions(fch)
         spellComponentList.height = min(spellComponentList.prefHeight, SpellCard.cardHeight)
         val position = layout.optionListTlPosition
-        spellComponentList.x = position.x - SpellCard.cardWidth
+        spellComponentList.x = position.x
         spellComponentList.y = position.y - spellComponentList.height
         spellComponentList.width = spellComponentList.prefWidth
 
@@ -554,6 +554,7 @@ class CombatUiSystem(
     private fun setSpellComponentOptions(options: List<List<TileInstance>>) {
         spellComponentList.setOptions(options)
         spellComponentList.height = min(spellComponentList.prefHeight, SpellCard.cardHeight)
+        spellComponentList.width = spellComponentList.prefWidth
         val position = layout.optionListTlPosition
         spellComponentList.x = position.x
         spellComponentList.y = position.y - spellComponentList.height
@@ -884,7 +885,7 @@ class CombatUiSystem(
                 stateMachine.revertToPreviousState()
             }
             CombatUiState.QUERY_SWAP -> {
-                runBlocking {
+                scope.launch {
                     swapChannel.send(
                         SwapData(
                             swapActiveSpells.map { it.number!! },
@@ -1092,12 +1093,12 @@ class CombatUiSystem(
     }
 
     @Subscribe
-    fun handlePotionUse(ev: PotionUseEvent) {
+    fun handlePotionUse(ev: PotionUseUiEvent) {
         if (stateMachine.currentState == CombatUiState.ROOT) {
             val potion = game.data.getPotion(runData.hero.potionSlots[ev.potionSlotIndex].potionId!!)
             when (potion.targetType) {
                 PotionTargetType.NONE -> {
-                    runBlocking {
+                    scope.launch {
                         sCombat.controller.api.usePotionInCombat(null, ev.potionSlotIndex)
                     }
                 }

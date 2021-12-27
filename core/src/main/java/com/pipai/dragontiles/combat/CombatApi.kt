@@ -1,8 +1,7 @@
 package com.pipai.dragontiles.combat
 
+import com.pipai.dragontiles.artemis.events.PotionUseUiEvent
 import com.pipai.dragontiles.data.*
-import com.pipai.dragontiles.data.GlobalApi
-import com.pipai.dragontiles.data.RunData
 import com.pipai.dragontiles.enemies.Enemy
 import com.pipai.dragontiles.spells.*
 import com.pipai.dragontiles.status.Dodge
@@ -667,13 +666,6 @@ class CombatApi(
         val potion = gameData.getPotion(potionSlot.potionId!!)
         potionSlot.potionId = null
         potion.onCombatUse(target, this)
+        eventBus.dispatch(PotionUseEvent(potion))
     }
-}
-
-enum class DamageOrigin {
-    SELF_ATTACK, SELF_MISC, OPPONENT_ATTACK, OPPONENT_MISC
-}
-
-enum class DamageTarget {
-    SELF, OPPONENT
 }

@@ -11,7 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.pipai.dragontiles.DragonTilesGame
-import com.pipai.dragontiles.artemis.events.PotionUseEvent
+import com.pipai.dragontiles.artemis.events.PotionUseUiEvent
 import com.pipai.dragontiles.artemis.events.TopRowUiUpdateEvent
 import com.pipai.dragontiles.artemis.systems.NoProcessingSystem
 import com.pipai.dragontiles.data.GlobalApi
@@ -106,7 +106,7 @@ class TopRowUiSystem(
                     override fun clicked(event: InputEvent, x: Float, y: Float) {
                         if (isCombat) {
                             potionImage.color = Color.GRAY
-                            sEvent.dispatch(PotionUseEvent(i))
+                            sEvent.dispatch(PotionUseUiEvent(i))
                         } else {
                             if (potion.type == PotionType.UNIVERSAL) {
                                 api.usePotion(i)

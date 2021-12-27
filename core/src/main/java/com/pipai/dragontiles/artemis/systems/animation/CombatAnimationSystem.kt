@@ -2,11 +2,14 @@ package com.pipai.dragontiles.artemis.systems.animation
 
 import com.artemis.BaseSystem
 import com.pipai.dragontiles.DragonTilesGame
+import com.pipai.dragontiles.artemis.events.TopRowUiUpdateEvent
 import com.pipai.dragontiles.artemis.systems.combat.CombatControllerSystem
 import com.pipai.dragontiles.artemis.systems.ui.CombatUiSystem
+import com.pipai.dragontiles.artemis.systems.ui.TopRowUiSystem
 import com.pipai.dragontiles.combat.*
 import com.pipai.dragontiles.utils.getLogger
 import com.pipai.dragontiles.utils.system
+import net.mostlyoriginal.api.event.common.EventSystem
 import net.mostlyoriginal.api.event.common.Subscribe
 
 class CombatAnimationSystem(private val game: DragonTilesGame) : BaseSystem(), AnimationObserver {
@@ -14,11 +17,11 @@ class CombatAnimationSystem(private val game: DragonTilesGame) : BaseSystem(), A
     private val logger = getLogger()
 
     var pauseUiMode = false
-    var wonBattle = false
     private var animating = false
     private val animationQueue: MutableList<Animation> = mutableListOf()
     private var turnRunning = false
 
+    private val sEvent by system<EventSystem>()
     private val sUi by system<CombatUiSystem>()
     private val sCombat by system<CombatControllerSystem>()
 
@@ -219,6 +222,11 @@ class CombatAnimationSystem(private val game: DragonTilesGame) : BaseSystem(), A
     }
 
     @Subscribe
+    fun handlePotionUse(ev: PotionUseEvent) {
+        sEvent.dispatch(TopRowUiUpdateEvent())
+    }
+
+    @Subscribe
     fun handleGameOver(@Suppress("UNUSED_PARAMETER") ev: GameOverEvent) {
         queueAnimation(GameOverAnimation())
     }
@@ -237,5 +245,4 @@ class CombatAnimationSystem(private val game: DragonTilesGame) : BaseSystem(), A
     fun handleRuneDeactivation(@Suppress("UNUSED_PARAMETER") ev: RuneDeactivatedEvent) {
         adjustHand()
     }
-
 }
