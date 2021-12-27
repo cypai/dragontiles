@@ -141,6 +141,10 @@ class CombatUiSystem(
     private val sAnchor by system<AnchorSystem>()
 
     override fun initialize() {
+        val bgTable = Table()
+        bgTable.background = skin.newDrawable("plains")
+        bgTable.setFillParent(true)
+        backStage.addActor(bgTable)
         swapChannel = sCombat.controller.api.swapChannel
         sCombat.controller.init()
         val combat = sCombat.combat

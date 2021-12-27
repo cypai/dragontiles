@@ -4,6 +4,7 @@ import com.artemis.BaseSystem
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.scenes.scene2d.Stage
+import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.pipai.dragontiles.DragonTilesGame
 import com.pipai.dragontiles.artemis.components.*
 import com.pipai.dragontiles.artemis.systems.combat.CombatControllerSystem
@@ -84,6 +85,10 @@ class RenderingSystem(
                     TextLabelSize.SMALL -> game.smallFont
                     TextLabelSize.TINY -> game.tinyFont
                 }
+//                val label = Label(cTextLabel.text, game.skin, "white")
+//                label.x = cXy.x
+//                label.y = cXy.y
+//                label.draw(batch, 1f)
                 font.color = cTextLabel.color
                 font.draw(batch, cTextLabel.text, cXy.x + cTextLabel.xOffset, cXy.y + cTextLabel.yOffset)
             }

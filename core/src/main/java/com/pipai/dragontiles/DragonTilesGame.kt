@@ -32,6 +32,7 @@ import com.pipai.dragontiles.meta.GameOptions
 import com.pipai.dragontiles.meta.Save
 import com.pipai.dragontiles.meta.SaveSerializer
 import com.pipai.dragontiles.utils.getLogger
+import com.pipai.dragontiles.utils.withBg
 import org.apache.commons.lang3.builder.ToStringBuilder
 import org.apache.commons.lang3.builder.ToStringStyle
 import java.io.File
@@ -109,6 +110,9 @@ class DragonTilesGame(val gameConfig: GameConfig) : Game() {
         shapeRenderer.setAutoShapeType(true)
 
         assets = AssetManager()
+        File("assets/binassets/graphics/bgs").listFiles()!!
+            .filter { it.toString().endsWith("png") }
+            .forEach { println(it); assets.load(it.toString(), Texture::class.java) }
         File("assets/binassets/graphics/status").listFiles()!!
             .forEach { assets.load(it.toString(), Texture::class.java) }
         File("assets/binassets/graphics/upgrades").listFiles()!!
@@ -169,6 +173,8 @@ class DragonTilesGame(val gameConfig: GameConfig) : Game() {
         VisUI.load()
 
         skin = Skin()
+
+        skin.add("plains", assets.get("assets/binassets/graphics/bgs/plains.png"))
 
         val card = Texture(Gdx.files.local("assets/binassets/graphics/textures/card.png"))
         skin.add("card", card)
@@ -260,7 +266,7 @@ class DragonTilesGame(val gameConfig: GameConfig) : Game() {
         skin.add("default", LabelStyle(font, Color.BLACK))
         skin.add("small", LabelStyle(smallFont, Color.BLACK))
         skin.add("tiny", LabelStyle(tinyFont, Color.BLACK))
-        skin.add("white", LabelStyle(font, Color.WHITE))
+        skin.add("white", LabelStyle(font, Color.WHITE).withBg(disabledDrawable))
         val devLabelStyle = LabelStyle(font, Color.BLACK)
         devLabelStyle.background = whiteDrawable
         skin.add("dev", devLabelStyle)
