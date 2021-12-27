@@ -267,6 +267,8 @@ class DragonTilesGame(val gameConfig: GameConfig) : Game() {
         skin.add("small", LabelStyle(smallFont, Color.BLACK))
         skin.add("tiny", LabelStyle(tinyFont, Color.BLACK))
         skin.add("white", LabelStyle(font, Color.WHITE).withBg(disabledDrawable))
+        skin.add("whiteSmall", LabelStyle(smallFont, Color.WHITE).withBg(disabledDrawable))
+        skin.add("whiteTiny", LabelStyle(tinyFont, Color.WHITE).withBg(disabledDrawable))
         val devLabelStyle = LabelStyle(font, Color.BLACK)
         devLabelStyle.background = whiteDrawable
         skin.add("dev", devLabelStyle)

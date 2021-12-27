@@ -80,17 +80,22 @@ class RenderingSystem(
             .forEach {
                 val cXy = mXy.get(it)
                 val cTextLabel = mTextLabel.get(it)
-                val font = when (cTextLabel.size) {
-                    TextLabelSize.NORMAL -> game.font
-                    TextLabelSize.SMALL -> game.smallFont
-                    TextLabelSize.TINY -> game.tinyFont
+//                val font = when (cTextLabel.size) {
+//                    TextLabelSize.NORMAL -> game.font
+//                    TextLabelSize.SMALL -> game.smallFont
+//                    TextLabelSize.TINY -> game.tinyFont
+//                }
+                val styleName = when (cTextLabel.size) {
+                    TextLabelSize.NORMAL -> "white"
+                    TextLabelSize.SMALL -> "whiteSmall"
+                    TextLabelSize.TINY -> "whiteTiny"
                 }
-//                val label = Label(cTextLabel.text, game.skin, "white")
-//                label.x = cXy.x
-//                label.y = cXy.y
-//                label.draw(batch, 1f)
-                font.color = cTextLabel.color
-                font.draw(batch, cTextLabel.text, cXy.x + cTextLabel.xOffset, cXy.y + cTextLabel.yOffset)
+                val label = Label(" ${cTextLabel.text} ", game.skin, styleName)
+                label.x = cXy.x + cTextLabel.xOffset
+                label.y = cXy.y + cTextLabel.yOffset - label.prefHeight
+                label.draw(batch, 1f)
+//                font.color = cTextLabel.color
+//                font.draw(batch, cTextLabel.text, cXy.x + cTextLabel.xOffset, cXy.y + cTextLabel.yOffset)
             }
         batch.end()
 
