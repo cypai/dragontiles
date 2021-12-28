@@ -22,34 +22,58 @@ data class TempMaxFluxGainAspect(var amount: Int) : SpellAspect
 
 class ExhaustAspect : SpellAspect {
     override fun adjustDescription(description: String): String {
-        return "$description ${Keywords.EXHAUST}."
+        return if (description.isEmpty()) {
+            Keywords.EXHAUST
+        } else {
+            "$description ${Keywords.EXHAUST}"
+        }
     }
 }
 
 class RepeatableAspect : SpellAspect {
     override fun adjustDescription(description: String): String {
-        return "$description ${Keywords.REPEATABLE}."
+        return if (description.isEmpty()) {
+            Keywords.REPEATABLE
+        } else {
+            "$description ${Keywords.REPEATABLE}."
+        }
     }
 }
 
 data class LimitedRepeatableAspect(var max: Int) : SpellAspect {
     override fun adjustDescription(description: String): String {
-        return "$description ${Keywords.REPEATABLE} !r."
+        return if (description.isEmpty()) {
+            "${Keywords.REPEATABLE} !r."
+        } else {
+            "$description ${Keywords.REPEATABLE} !r."
+        }
     }
 }
 
 data class SwapAspect(var amount: Int) : SpellAspect {
     override fun adjustDescription(description: String): String {
-        return "$description ${Keywords.SWAP} !swap."
+        return if (description.isEmpty()) {
+            "${Keywords.SWAP} !swap."
+        } else {
+            "$description ${Keywords.SWAP} !swap."
+        }
     }
 }
 
 data class FetchAspect(var amount: Int?) : SpellAspect {
     override fun adjustDescription(description: String): String {
         return if (amount == null) {
-            "$description ${Keywords.FETCH}"
+            if (description.isEmpty()) {
+                Keywords.FETCH
+            } else {
+                "$description ${Keywords.FETCH}"
+            }
         } else {
-            "$description ${Keywords.FETCH} !fetch"
+            if (description.isEmpty()) {
+                "${Keywords.FETCH} !fetch"
+            } else {
+                "$description ${Keywords.FETCH} !fetch"
+            }
         }
     }
 }

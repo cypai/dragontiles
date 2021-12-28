@@ -120,7 +120,7 @@ base:spells:Concentrate:
 
 base:spells:FeedbackLoop:
   en:
-    name: FeedbackLoop
+    name: Feedback Loop
     description: Double your Strength. @Exhaust.
 
 base:spells:BurnRune:
