@@ -90,3 +90,7 @@ fun Label.LabelStyle.withBg(drawable: Drawable): Label.LabelStyle{
     this.background  = drawable
     return this
 }
+
+fun String.firstCapOnly(): String {
+    return this.lowercase().replaceFirstChar { it.uppercase() }
+}

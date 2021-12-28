@@ -112,7 +112,7 @@ class DragonTilesGame(val gameConfig: GameConfig) : Game() {
         assets = AssetManager()
         File("assets/binassets/graphics/bgs").listFiles()!!
             .filter { it.toString().endsWith("png") }
-            .forEach { println(it); assets.load(it.toString(), Texture::class.java) }
+            .forEach { assets.load(it.toString(), Texture::class.java) }
         File("assets/binassets/graphics/status").listFiles()!!
             .forEach { assets.load(it.toString(), Texture::class.java) }
         File("assets/binassets/graphics/upgrades").listFiles()!!
@@ -131,9 +131,9 @@ class DragonTilesGame(val gameConfig: GameConfig) : Game() {
         tileSkin = TileSkin(assets.get("assets/binassets/graphics/tiles/tiles.png", Texture::class.java))
 
         val fontGenerator =
-            FreeTypeFontGenerator(Gdx.files.internal("assets/binassets/graphics/fonts/SourceSansPro-Regular.ttf"))
+            FreeTypeFontGenerator(Gdx.files.internal("assets/binassets/fonts/Comme-Regular.ttf"))
         val outlinedFontGenerator =
-            FreeTypeFontGenerator(Gdx.files.internal("assets/binassets/graphics/fonts/C_BOX.TTF"))
+            FreeTypeFontGenerator(Gdx.files.internal("assets/binassets/fonts/Comme-Heavy.ttf"))
         val fontParameter = FreeTypeFontParameter()
         fontParameter.size = 18
         outlinedFont = outlinedFontGenerator.generateFont(fontParameter)
@@ -253,6 +253,10 @@ class DragonTilesGame(val gameConfig: GameConfig) : Game() {
             )
         )
         skin.add("flatFrameDrawable", flatFrameDrawable, Drawable::class.java)
+
+        val glowFrameTexture = Texture(Gdx.files.local("assets/binassets/graphics/textures/glow_frame.png"))
+        val glowFramePatch = NinePatch(glowFrameTexture, 5, 5, 5, 5)
+        skin.add("glowFrameTexture", glowFrameTexture)
 
         val transparencyBgTexture = Texture(Gdx.files.local("assets/binassets/graphics/textures/transparencyBg.png"))
         skin.add("transparencyBg", transparencyBgTexture)

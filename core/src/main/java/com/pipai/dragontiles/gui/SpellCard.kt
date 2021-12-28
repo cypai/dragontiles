@@ -1,20 +1,16 @@
 package com.pipai.dragontiles.gui
 
-import com.badlogic.gdx.Input
 import com.badlogic.gdx.graphics.Texture
-import com.badlogic.gdx.scenes.scene2d.Actor
-import com.badlogic.gdx.scenes.scene2d.InputEvent
 import com.badlogic.gdx.scenes.scene2d.Touchable
 import com.badlogic.gdx.scenes.scene2d.ui.*
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
 import com.badlogic.gdx.utils.Align
 import com.pipai.dragontiles.DragonTilesGame
 import com.pipai.dragontiles.combat.CombatApi
-import com.pipai.dragontiles.data.Keywords
 import com.pipai.dragontiles.enemies.Enemy
 import com.pipai.dragontiles.spells.*
+import com.pipai.dragontiles.utils.firstCapOnly
 import com.pipai.dragontiles.utils.upgradeAssetPath
 
 class SpellCard(
@@ -25,15 +21,21 @@ class SpellCard(
     private val api: CombatApi?
 ) : Table(skin) {
 
+    private val backTable = Table()
+    private val cardTable = Table()
+    private val frontTable = Table()
     private val reqBorder = Image()
     private val reqImage = Image()
     private val reqNumber = Label("", skin, "cardReq")
+    private val fluxImage = Image()
     private val fluxNumber = Label("", skin, "cardReq")
     private val nameLabel = Label("", skin, "tiny")
     private val numberLabel = Label("", skin, "tiny")
     private val spellTypeLabel = Label("", skin, "tiny")
     private val descriptionLabel = Label("", skin, "tiny")
     private val upgradeImages = listOf(Image(), Image(), Image())
+
+    private val reqSize = 28f
 
     private var zPrevious = 0
 
@@ -56,54 +58,75 @@ class SpellCard(
     val data: MutableMap<String, Int> = mutableMapOf()
 
     init {
-        background = skin.getDrawable("frameDrawable")
         nameLabel.setAlignment(Align.left)
+        reqNumber.setAlignment(Align.center)
+        fluxNumber.setAlignment(Align.center)
         numberLabel.setAlignment(Align.right)
         descriptionLabel.setAlignment(Align.topLeft)
         descriptionLabel.wrap = true
+
         update()
+
+        val cardContainer = Container(cardTable)
+            .pad(8f)
+
+        val topLevelStack = Stack()
+        topLevelStack.add(backTable)
+        topLevelStack.add(cardContainer)
+        topLevelStack.add(frontTable)
+        add(topLevelStack)
 
         val reqStack = Stack()
         reqStack.add(reqImage)
         reqStack.add(reqBorder)
         reqStack.add(reqNumber)
-        add(reqStack)
-            .prefWidth(32f)
-            .prefHeight(32f)
-            .pad(4f)
-            .left()
-        add(nameLabel)
-            .left()
-            .expandX()
-        add(fluxNumber)
-            .padRight(12f)
-            .right()
-        row()
-        add(spellTypeLabel)
-            .padLeft(8f)
+        frontTable.add(reqStack)
+            .prefWidth(reqSize)
+            .prefHeight(reqSize)
             .left()
             .top()
-            .colspan(3)
-        row()
-        add(descriptionLabel)
+        frontTable.add()
+            .expand()
+            .top()
+        val fluxStack = Stack()
+        fluxStack.add(fluxImage)
+        fluxStack.add(fluxNumber)
+        frontTable.add(fluxStack)
+            .prefWidth(reqSize)
+            .prefHeight(reqSize)
+            .right()
+            .top()
+
+        cardTable.background = skin.getDrawable("frameDrawable")
+        cardTable.add(nameLabel)
+            .padTop(8f)
+            .center()
+            .expandX()
+        cardTable.row()
+        cardTable.add(spellTypeLabel)
+            .padLeft(6f)
+            .left()
+            .top()
+        cardTable.row()
+        cardTable.add(descriptionLabel)
             .prefWidth(cardWidth)
             .prefHeight(cardHeight - 48f)
-            .padLeft(8f)
+            .padLeft(6f)
             .padRight(8f)
             .top()
-            .colspan(3)
-        row()
+        cardTable.row()
+        val upgradeRow = Table()
         upgradeImages.forEach {
-            add(it)
+            upgradeRow.add(it)
                 .prefWidth(32f)
                 .prefHeight(32f)
-                .pad(8f)
+                .pad(6f)
         }
-        row()
+        cardTable.add(upgradeRow)
+        cardTable.row()
 
         width = cardWidth
         height = cardHeight
-
         touchable = Touchable.enabled
     }
 
@@ -142,22 +165,22 @@ class SpellCard(
     fun disable() {
         enabled = false
         if (!powered) {
-            background = skin.getDrawable("frameDrawableDark")
+            cardTable.background = skin.getDrawable("frameDrawableDark")
         }
         if (shocked) {
-            background = skin.getDrawable("frameDrawableShocked")
+            cardTable.background = skin.getDrawable("frameDrawableShocked")
         }
     }
 
     fun shock() {
         enabled = false
         shocked = true
-        background = skin.getDrawable("frameDrawableShocked")
+        cardTable.background = skin.getDrawable("frameDrawableShocked")
     }
 
     fun makePowered() {
         powered = true
-        background = skin.getDrawable("frameDrawableLight")
+        cardTable.background = skin.getDrawable("frameDrawableLight")
     }
 
     fun enable() {
@@ -165,7 +188,7 @@ class SpellCard(
         shocked = false
         reqNumber.style = game.skin.get("cardReq", Label.LabelStyle::class.java)
         if (!powered) {
-            background = skin.getDrawable("frameDrawable")
+            cardTable.background = skin.getDrawable("frameDrawable")
         }
     }
 
@@ -177,6 +200,7 @@ class SpellCard(
             reqBorder.drawable = null
             reqImage.drawable = null
             reqNumber.setText("")
+            fluxImage.drawable = null
             fluxNumber.setText("")
             nameLabel.setText("")
             spellTypeLabel.setText("")
@@ -190,9 +214,15 @@ class SpellCard(
             } else {
                 reqBorder.drawable = borderDrawable(spell.requirement.type)
                 reqImage.drawable = reqSuitDrawable(spell.requirement.suitGroup)
-                reqNumber.setText("  " + spell.requirement.reqAmount.text())
+                reqNumber.setText(spell.requirement.reqAmount.text())
             }
             if (spell.aspects.any { it is FluxGainAspect }) {
+                fluxImage.drawable = TextureRegionDrawable(
+                    game.assets.get(
+                        "assets/binassets/graphics/textures/flux_square.png",
+                        Texture::class.java
+                    )
+                )
                 fluxNumber.setText(spell.baseFluxGain())
                 if (spell.baseFluxGain() + flux >= fluxMax && fluxMax != 0) {
                     disable()
@@ -200,10 +230,21 @@ class SpellCard(
                 } else {
                     fluxNumber.style = game.skin.get("cardReq", Label.LabelStyle::class.java)
                 }
+            } else {
+                fluxImage.drawable = null
             }
             val spellLocalization = game.gameStrings.spellLocalization(spell.id)
             nameLabel.setText(spellLocalization.name)
-            spellTypeLabel.setText("${spell.type} - ${spell.rarity}")
+            if (nameLabel.prefWidth > cardWidth - 2 * reqSize) {
+                nameLabel.setFontScale(0.95f)
+            } else {
+                nameLabel.setFontScale(1f)
+            }
+            spellTypeLabel.setText(
+                "${spell.type.toString().firstCapOnly()} - ${
+                    spell.rarity.toString().firstCapOnly()
+                }"
+            )
             var description = spellLocalization.description
             spell.aspects.forEach {
                 description = it.adjustDescription(description)

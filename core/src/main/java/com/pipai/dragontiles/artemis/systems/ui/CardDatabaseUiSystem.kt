@@ -50,6 +50,7 @@ class CardDatabaseUiSystem(
         })
 
         topTable.setFillParent(true)
+        topTable.background = game.skin.getDrawable("plains")
         topTable.add(elementalistButton)
             .padTop(16f)
             .padLeft(64f)
@@ -115,7 +116,7 @@ class CardDatabaseUiSystem(
             cell = spellsTable.add(spellCard)
                 .prefWidth(SpellCard.cardWidth)
                 .prefHeight(SpellCard.cardHeight)
-                .pad(10f)
+                .pad(4f)
             spellCard.addListener(object : ClickListener() {
                 override fun enter(event: InputEvent?, x: Float, y: Float, pointer: Int, fromActor: Actor?) {
                     sTooltip.addSpell(spell)
