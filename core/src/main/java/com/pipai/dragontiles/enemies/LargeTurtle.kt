@@ -9,7 +9,7 @@ import com.pipai.dragontiles.status.Strength
 
 class LargeTurtle : Enemy() {
 
-    override val strId: String = "base:enemies:LargeTurtle"
+    override val id: String = "base:enemies:LargeTurtle"
     override val assetName: String = "flame_turtle.png"
 
     override val hpMax: Int = 10

@@ -7,7 +7,7 @@ import com.pipai.dragontiles.status.Overloaded
 
 class Yumi : Enemy() {
 
-    override val strId: String = "base:enemies:Yumi"
+    override val id: String = "base:enemies:Yumi"
     override val assetName: String = "rabbit_youkai.png"
 
     override val hpMax: Int = 40

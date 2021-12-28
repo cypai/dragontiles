@@ -1,6 +1,5 @@
 package com.pipai.dragontiles.combat
 
-import com.pipai.dragontiles.artemis.events.PotionUseUiEvent
 import com.pipai.dragontiles.data.*
 import com.pipai.dragontiles.enemies.Enemy
 import com.pipai.dragontiles.spells.*
@@ -48,7 +47,7 @@ class CombatApi(
     }
 
     fun getEnemy(id: Int): Enemy {
-        return combat.enemies.first { it.id == id }
+        return combat.enemies.first { it.enemyId == id }
     }
 
     suspend fun castSpell(spell: Spell) {
@@ -261,7 +260,7 @@ class CombatApi(
         val allQueryRespondents: List<DamageAdjustable> = combat.relics
             .withAll(combat.spells)
             .withAll(combat.heroStatus)
-            .withAll(combat.enemyStatus[enemy.id]!!)
+            .withAll(combat.enemyStatus[enemy.enemyId]!!)
         val allFlags: MutableList<CombatFlag> = mutableListOf()
         allQueryRespondents.forEach {
             allFlags.addAll(
@@ -291,7 +290,7 @@ class CombatApi(
         val allQueryRespondents: List<DamageAdjustable> = combat.relics
             .withAll(combat.spells)
             .withAll(combat.heroStatus)
-            .withAll(combat.enemyStatus[enemy.id]!!)
+            .withAll(combat.enemyStatus[enemy.enemyId]!!)
         allQueryRespondents.forEach {
             flat += it.queryFlatAdjustment(Combatant.EnemyCombatant(enemy), Combatant.HeroCombatant, element, listOf())
             scaling *= it.queryScaledAdjustment(
@@ -353,9 +352,9 @@ class CombatApi(
 
     suspend fun changeEnemyIntent(enemy: Enemy, intent: Intent?) {
         if (intent == null) {
-            combat.enemyIntent.remove(enemy.id)
+            combat.enemyIntent.remove(enemy.enemyId)
         } else {
-            combat.enemyIntent[enemy.id] = intent
+            combat.enemyIntent[enemy.enemyId] = intent
         }
         eventBus.dispatch(EnemyChangeIntentEvent(enemy, intent))
     }
@@ -364,8 +363,8 @@ class CombatApi(
         enemy.hp -= damage
         eventBus.dispatch(EnemyDamageEvent(enemy, damage))
         if (enemy.hp <= 0) {
-            combat.enemyIntent.remove(enemy.id)
-            val statuses = combat.enemyStatus[enemy.id]!!
+            combat.enemyIntent.remove(enemy.enemyId)
+            val statuses = combat.enemyStatus[enemy.enemyId]!!
             statuses.forEach { eventBus.unregister(it) }
             statuses.clear()
             eventBus.unregister(enemy)
@@ -486,7 +485,7 @@ class CombatApi(
 
     suspend fun addStatusToEnemy(enemy: Enemy, status: Status) {
         status.combatant = Combatant.EnemyCombatant(enemy)
-        val enemyStatus = combat.enemyStatus[enemy.id]!!
+        val enemyStatus = combat.enemyStatus[enemy.enemyId]!!
         val maybeStatus = enemyStatus.find { it.id == status.id }
         if (maybeStatus == null) {
             enemyStatus.add(status)
@@ -528,16 +527,16 @@ class CombatApi(
     }
 
     fun <T : Status> enemyStatusAmount(enemy: Enemy, statusType: KClass<T>): Int {
-        val status = combat.enemyStatus[enemy.id]!!.find { statusType.isInstance(it) }
+        val status = combat.enemyStatus[enemy.enemyId]!!.find { statusType.isInstance(it) }
         return status?.amount ?: 0
     }
 
     fun <T : Status> enemyHasStatus(enemy: Enemy, statusType: KClass<T>): Boolean {
-        return combat.enemyStatus[enemy.id]!!.any { statusType.isInstance(it) }
+        return combat.enemyStatus[enemy.enemyId]!!.any { statusType.isInstance(it) }
     }
 
     suspend fun <T : Status> removeEnemyStatus(enemy: Enemy, statusType: KClass<T>): Boolean {
-        val statusList = combat.enemyStatus[enemy.id]!!
+        val statusList = combat.enemyStatus[enemy.enemyId]!!
         val item = statusList.find { statusType.isInstance(it) }
         if (item != null) {
             item.amount = 0

@@ -7,7 +7,7 @@ import com.pipai.dragontiles.status.Strength
 
 class Bull : Enemy() {
 
-    override val strId: String = "base:enemies:Bull"
+    override val id: String = "base:enemies:Bull"
     override val assetName: String = "bull.png"
 
     override val hpMax: Int = 65

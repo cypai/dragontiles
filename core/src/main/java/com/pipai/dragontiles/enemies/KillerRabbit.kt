@@ -9,7 +9,7 @@ import com.pipai.dragontiles.status.MenacingAura
 
 class KillerRabbit : Enemy() {
 
-    override val strId: String = "base:enemies:KillerRabbit"
+    override val id: String = "base:enemies:KillerRabbit"
     override val assetName: String = "rabbit.png"
 
     override val hpMax: Int = 20

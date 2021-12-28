@@ -9,7 +9,7 @@ import com.pipai.dragontiles.status.BreakStatus
 
 class Slime : Enemy() {
 
-    override val strId: String = "base:enemies:Slime"
+    override val id: String = "base:enemies:Slime"
     override val assetName: String = "slime.png"
 
     override val hpMax: Int = 13

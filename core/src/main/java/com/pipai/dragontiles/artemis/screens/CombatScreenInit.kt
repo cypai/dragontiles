@@ -53,27 +53,6 @@ class CombatScreenInit(
 
         initHero()
 
-        encounter.enemies.forEach { (enemy, position) ->
-            val entityId = world.create()
-            val cXy = mXy.create(entityId)
-            cXy.setXy(position)
-
-            val cSprite = mSprite.create(entityId)
-            cSprite.sprite = Sprite(game.assets.get(enemyAssetPath(enemy.assetName), Texture::class.java))
-
-            val cEnemy = mEnemy.create(entityId)
-            cEnemy.setByEnemy(enemy)
-
-            val cTextLabel = mTextLabel.create(entityId)
-            cTextLabel.size = TextLabelSize.SMALL
-            cTextLabel.yOffset = -10f
-
-            val cHover = mHoverable.create(entityId)
-            cHover.enterEvent = EnemyHoverEnterEvent(cEnemy)
-            cHover.exitEvent = EnemyHoverExitEvent()
-
-            mClickable.create(entityId).eventGenerator = { EnemyClickEvent(entityId, it) }
-        }
     }
 
     private fun initHero() {

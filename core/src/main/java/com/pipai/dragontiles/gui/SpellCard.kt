@@ -253,7 +253,7 @@ class SpellCard(
                 val replacement = if (target == null && it.groupValues[4].isNotEmpty()) {
                     it.groupValues[4]
                 } else {
-                    val castParams = CastParams(if (target == null) listOf() else listOf(target!!.id))
+                    val castParams = CastParams(if (target == null) listOf() else listOf(target!!.enemyId))
                     spell.dynamicValue(it.groupValues[1], it.groupValues[3], api, castParams).toString()
                 }
                 when (it.groupValues[1]) {

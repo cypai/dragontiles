@@ -143,6 +143,7 @@ class TooltipSystem(private val game: DragonTilesGame, var stage: Stage) : NoPro
         table.width = table.prefWidth
         table.height = table.prefHeight
         stage.addActor(table)
+        table.toFront()
         updateTablePosition()
     }
 

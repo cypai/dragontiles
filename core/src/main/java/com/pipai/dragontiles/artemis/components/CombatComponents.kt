@@ -61,7 +61,7 @@ class EnemyComponent : Component() {
     var intent: Intent? = null
 
     fun setByEnemy(enemy: Enemy) {
-        strId = enemy.strId
+        strId = enemy.id
         hp = enemy.hp
         hpMax = enemy.hpMax
         flux = enemy.flux

@@ -699,7 +699,7 @@ class CombatUiSystem(
 
                             sAnimation.pauseUiMode = true
                             scope.launch {
-                                spell.cast(CastParams(listOf(mEnemy.get(ev.entityId).enemy.id)), sCombat.controller.api)
+                                spell.cast(CastParams(listOf(mEnemy.get(ev.entityId).enemy.enemyId)), sCombat.controller.api)
                             }
                         } else if (spell.targetType == TargetType.AOE) {
                             sAnimation.pauseUiMode = true
@@ -707,7 +707,7 @@ class CombatUiSystem(
                                 spell.cast(
                                     CastParams(sCombat.combat.enemies
                                         .filter { it.hp > 0 }
-                                        .map { it.id }
+                                        .map { it.enemyId }
                                         .toList()),
                                     sCombat.controller.api)
                             }
@@ -718,7 +718,7 @@ class CombatUiSystem(
                     sAnimation.pauseUiMode = true
                     scope.launch {
                         sCombat.controller.api.usePotionInCombat(
-                            mEnemy.get(ev.entityId).enemy.id,
+                            mEnemy.get(ev.entityId).enemy.enemyId,
                             selectedPotionIndex!!
                         )
                     }

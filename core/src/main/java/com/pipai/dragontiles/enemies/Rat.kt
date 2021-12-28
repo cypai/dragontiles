@@ -7,7 +7,7 @@ import com.pipai.dragontiles.status.Weak
 
 class Rat : Enemy() {
 
-    override val strId: String = "base:enemies:Rat"
+    override val id: String = "base:enemies:Rat"
     override val assetName: String = "rat.png"
 
     override val hpMax: Int = 2

@@ -6,7 +6,7 @@ import com.pipai.dragontiles.data.TileStatus
 
 class RiverDragonHorse : Enemy() {
 
-    override val strId: String = "base:enemies:RiverDragonHorse"
+    override val id: String = "base:enemies:RiverDragonHorse"
     override val assetName: String = "river_horse.png"
 
     override val hpMax: Int = 20

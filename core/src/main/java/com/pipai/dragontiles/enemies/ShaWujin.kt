@@ -9,7 +9,7 @@ import com.pipai.dragontiles.status.Strength
 
 class ShaWujin : Enemy() {
 
-    override val strId: String = "base:enemies:ShaWujin"
+    override val id: String = "base:enemies:ShaWujin"
     override val assetName: String = "shawujin.png"
 
     override val hpMax: Int = 200

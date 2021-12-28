@@ -40,7 +40,7 @@ class ElementalRuneTest : CombatBackendTest(QueryHandler()) {
         Assert.assertEquals(2, combat.assigned[1]?.size)
 
         invoke.fill(listOf(hand[0]))
-        runBlocking { invoke.cast(CastParams(listOf(flameTurtle.id)), controller.api) }
+        runBlocking { invoke.cast(CastParams(listOf(flameTurtle.enemyId)), controller.api) }
         Assert.assertEquals(4, flameTurtle.flux)
     }
 }

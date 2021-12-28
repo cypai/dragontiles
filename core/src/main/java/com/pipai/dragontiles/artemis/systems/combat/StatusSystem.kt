@@ -34,7 +34,7 @@ class StatusSystem(private val game: DragonTilesGame) : NoProcessingSystem() {
     }
 
     fun handleEnemyStatus(enemyId: BackendId, statuses: List<Status>) {
-        world.fetch(allOf(EnemyComponent::class)).find { mEnemy.get(it).enemy.id == enemyId }?.let { enemyEntityId ->
+        world.fetch(allOf(EnemyComponent::class)).find { mEnemy.get(it).enemy.enemyId == enemyId }?.let { enemyEntityId ->
             val cEnemyXy = mXy.get(enemyEntityId)
             if (enemyEntityId !in enemyStatuses) {
                 enemyStatuses[enemyEntityId] = mutableListOf()

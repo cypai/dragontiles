@@ -22,7 +22,7 @@ class CombatController(
         combat.init(gameData, runData)
         combat.enemies.forEach {
             it.preInit(api.nextId())
-            combat.enemyStatus[it.id] = mutableListOf()
+            combat.enemyStatus[it.enemyId] = mutableListOf()
             eventBus.register(it)
             runBlocking { it.init(api) }
         }
@@ -92,7 +92,7 @@ class CombatController(
         combat.enemies
             .filter { it.hp > 0 }
             .forEach {
-                combat.enemyIntent[it.id]?.execute(api)
+                combat.enemyIntent[it.enemyId]?.execute(api)
                 api.changeEnemyIntent(it, null)
             }
         eventBus.dispatch(EnemyTurnEndEvent(combat.turnNumber))

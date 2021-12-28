@@ -26,13 +26,13 @@ class RepeatUpgradeTest : CombatBackendTest(QueryHandler()) {
 
         invoke.fill(listOf(controller.api.combat.hand.first()))
         Assert.assertTrue(invoke.available())
-        runBlocking { invoke.cast(CastParams(listOf(flameTurtle.id)), controller.api) }
+        runBlocking { invoke.cast(CastParams(listOf(flameTurtle.enemyId)), controller.api) }
         Assert.assertTrue(invoke.available())
         Assert.assertEquals(14, combat.hand.size)
         Assert.assertEquals(10, flameTurtle.hp)
         Assert.assertEquals(2, flameTurtle.flux)
 
-        runBlocking { invoke.cast(CastParams(listOf(flameTurtle.id)), controller.api) }
+        runBlocking { invoke.cast(CastParams(listOf(flameTurtle.enemyId)), controller.api) }
         Assert.assertFalse(invoke.available())
         Assert.assertEquals(14, combat.hand.size)
         Assert.assertEquals(10, flameTurtle.hp)

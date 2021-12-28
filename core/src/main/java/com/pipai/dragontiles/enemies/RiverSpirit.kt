@@ -8,7 +8,7 @@ import com.pipai.dragontiles.status.Ventilation
 
 class RiverSpirit : Enemy() {
 
-    override val strId: String = "base:enemies:RiverSpirit"
+    override val id: String = "base:enemies:RiverSpirit"
     override val assetName: String = "river_spirit.png"
 
     override val hpMax: Int = 50

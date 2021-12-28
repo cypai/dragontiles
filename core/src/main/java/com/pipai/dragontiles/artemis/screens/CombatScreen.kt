@@ -60,7 +60,7 @@ class CombatScreen(
 
                 CombatControllerSystem(game.data, runData, combat),
                 TileIdSystem(),
-                EnemyIntentSystem(),
+                CombatantStateSystem(game, frontStage, encounter),
                 HeroStatusSystem(),
                 EnemyStatusSystem(game),
                 StatusSystem(game),

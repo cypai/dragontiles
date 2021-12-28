@@ -6,7 +6,7 @@ import com.pipai.dragontiles.status.BreakStatus
 
 class Minotaur : Enemy() {
 
-    override val strId: String = "base:enemies:Minotaur"
+    override val id: String = "base:enemies:Minotaur"
     override val assetName: String = "minotaur.png"
 
     override val hpMax: Int = 80

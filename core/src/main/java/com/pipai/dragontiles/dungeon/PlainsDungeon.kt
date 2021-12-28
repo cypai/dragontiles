@@ -14,7 +14,7 @@ class PlainsDungeon {
                     Encounter(
                         "base:dungeons:Plains:LargeTurtle",
                         listOf(
-                            Pair(LargeTurtle(), Vector2(750f, 400f))
+                            Pair(LargeTurtle(), Vector2(750f, 350f))
                         )
                     ),
                     Encounter(

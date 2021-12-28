@@ -15,7 +15,7 @@ class EnemyDefeatAnimation(private val enemy: Enemy) : Animation() {
 
     override fun startAnimation() {
         world.fetch(allOf(EnemyComponent::class)).forEach {
-            if (enemy.id == mEnemy.get(it).enemy.id) {
+            if (enemy.enemyId == mEnemy.get(it).enemy.enemyId) {
                 sStatus.handleEnemyDefeat(it)
                 world.delete(it)
             }

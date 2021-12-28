@@ -6,7 +6,7 @@ import com.pipai.dragontiles.data.TileStatus
 
 class FlameDragonHorse : Enemy() {
 
-    override val strId: String = "base:enemies:FlameDragonHorse"
+    override val id: String = "base:enemies:FlameDragonHorse"
     override val assetName: String = "flame_horse.png"
 
     override val hpMax: Int = 20

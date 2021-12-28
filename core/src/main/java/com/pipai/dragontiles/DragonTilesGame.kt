@@ -64,6 +64,9 @@ class DragonTilesGame(val gameConfig: GameConfig) : Game() {
     lateinit var skin: Skin
         private set
 
+    lateinit var dtskin: Skin
+        private set
+
     lateinit var assets: AssetManager
         private set
 
@@ -112,11 +115,15 @@ class DragonTilesGame(val gameConfig: GameConfig) : Game() {
         shapeRenderer = ShapeRenderer()
         shapeRenderer.setAutoShapeType(true)
 
+        dtskin = Skin(Gdx.files.internal("assets/binassets/dt_skin.json"))
+
         assets = AssetManager()
         File("assets/binassets/audio/bgm").listFiles()!!
             .forEach { assets.load(it.toString(), Music::class.java) }
         File("assets/binassets/graphics/bgs").listFiles()!!
             .filter { it.toString().endsWith("png") }
+            .forEach { assets.load(it.toString(), Texture::class.java) }
+        File("assets/binassets/graphics/intents").listFiles()!!
             .forEach { assets.load(it.toString(), Texture::class.java) }
         File("assets/binassets/graphics/status").listFiles()!!
             .forEach { assets.load(it.toString(), Texture::class.java) }
@@ -275,9 +282,12 @@ class DragonTilesGame(val gameConfig: GameConfig) : Game() {
         skin.add("default", LabelStyle(font, Color.BLACK))
         skin.add("small", LabelStyle(smallFont, Color.BLACK))
         skin.add("tiny", LabelStyle(tinyFont, Color.BLACK))
-        skin.add("white", LabelStyle(font, Color.WHITE).withBg(disabledDrawable))
-        skin.add("whiteSmall", LabelStyle(smallFont, Color.WHITE).withBg(disabledDrawable))
-        skin.add("whiteTiny", LabelStyle(tinyFont, Color.WHITE).withBg(disabledDrawable))
+        skin.add("white", LabelStyle(font, Color.WHITE))
+        skin.add("whiteSmall", LabelStyle(smallFont, Color.WHITE))
+        skin.add("whiteTiny", LabelStyle(tinyFont, Color.WHITE))
+        skin.add("blackBg", LabelStyle(font, Color.WHITE).withBg(disabledDrawable))
+        skin.add("blackBgSmall", LabelStyle(smallFont, Color.WHITE).withBg(disabledDrawable))
+        skin.add("blackBgTiny", LabelStyle(tinyFont, Color.WHITE).withBg(disabledDrawable))
         val devLabelStyle = LabelStyle(font, Color.BLACK)
         devLabelStyle.background = whiteDrawable
         skin.add("dev", devLabelStyle)
