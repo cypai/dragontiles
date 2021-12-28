@@ -124,7 +124,6 @@ class CombatUiSystem(
     private val mMouseFollow by mapper<MouseFollowComponent>()
     private val mDepth by mapper<DepthComponent>()
     private val mSprite by mapper<SpriteComponent>()
-    private val mActor by mapper<ActorComponent>()
     private val mTargetHighlight by mapper<TargetHighlightComponent>()
     private val mTile by mapper<TileComponent>()
     private val mMutualDestroy by mapper<MutualDestroyComponent>()
@@ -331,7 +330,6 @@ class CombatUiSystem(
         cXy.setXy(spellCard.x, spellCard.y)
         val cAnchor = mAnchor.create(id)
         cAnchor.setXy(spellCard.x, spellCard.y)
-        mActor.create(id).actor = spellCard
         spellCard.data[ALLOW_HOVER_MOVE] = 1
         spellCard.addListener(object : ClickListener() {
             override fun enter(event: InputEvent?, x: Float, y: Float, pointer: Int, fromActor: Actor?) {
