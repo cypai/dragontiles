@@ -71,6 +71,7 @@ class CombatScreen(
                 FullScreenColorSystem(game),
                 RewardsSystem(game, runData, frontStage, writeSave),
                 MapUiSystem(game, backStage, runData),
+                PauseMenuSystem(game, frontStage),
 
                 InputProcessingSystem(),
                 HoverableSystem(game.gameConfig),
@@ -100,7 +101,7 @@ class CombatScreen(
         inputProcessor.addAlwaysOnProcessor(world.getSystem(TooltipSystem::class.java))
         inputProcessor.addAlwaysOnProcessor(frontStage)
         inputProcessor.addAlwaysOnProcessor(backStage)
-        inputProcessor.addAlwaysOnProcessor(ExitInputProcessor())
+        inputProcessor.addAlwaysOnProcessor(world.getSystem(PauseMenuSystem::class.java))
         inputProcessor.activateInput()
 
         CombatScreenInit(game, world, runData, encounter)

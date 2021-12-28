@@ -139,6 +139,7 @@ class CombatUiSystem(
     private val sEvent by system<EventSystem>()
     private val sMap by system<MapUiSystem>()
     private val sAnchor by system<AnchorSystem>()
+    private val sPause by system<PauseMenuSystem>()
 
     override fun initialize() {
         val bgTable = Table()
@@ -1159,6 +1160,11 @@ class CombatUiSystem(
                     uiSystem.resetSpellCard(spellCard)
                 }
                 uiSystem.givenComponents.clear()
+                uiSystem.sPause.enable()
+            }
+
+            override fun exit(uiSystem: CombatUiSystem) {
+                uiSystem.sPause.disable()
             }
 
         },
