@@ -53,6 +53,10 @@ class MainMenuUiSystem(
                 }
                 val seed = Seed()
 
+                game.music = game.assets.get("assets/binassets/audio/bgm/plains.mp3")
+                game.music!!.isLooping = true
+                game.music!!.play()
+
                 val dungeonId = "base:dungeons:Plains"
                 val map = DungeonMap.generateMap(seed)
                 val boss = game.data.getDungeon(dungeonId).bossEncounters.choose(seed.dungeonRng())
@@ -134,6 +138,9 @@ class MainMenuUiSystem(
     private fun loadRun() {
         val runData = game.save.currentRun!!
         val dungeon = game.data.getDungeon(runData.dungeonMap.dungeonId)
+        game.music = game.assets.get("assets/binassets/audio/bgm/plains.mp3")
+        game.music!!.isLooping = true
+        game.music!!.play()
         when (runData.dungeonMap.getCurrentNode().type) {
             MapNodeType.COMBAT -> {
                 val floorConfig = runData.runHistory.history.last() as FloorHistory.CombatFloorHistory

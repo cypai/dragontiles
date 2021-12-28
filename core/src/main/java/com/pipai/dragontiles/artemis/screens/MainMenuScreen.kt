@@ -20,6 +20,10 @@ class MainMenuScreen(game: DragonTilesGame) : Screen {
     val world: World
 
     init {
+        if (game.music != null) {
+            game.music!!.stop()
+            game.music = null
+        }
         val config = WorldConfigurationBuilder()
                 .with(
                         TagManager(),

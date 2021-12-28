@@ -4,6 +4,7 @@ import com.badlogic.gdx.Game
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Screen
 import com.badlogic.gdx.assets.AssetManager
+import com.badlogic.gdx.audio.Music
 import com.badlogic.gdx.files.FileHandle
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.Pixmap
@@ -81,6 +82,8 @@ class DragonTilesGame(val gameConfig: GameConfig) : Game() {
     lateinit var save: Save
         private set
 
+    var music: Music? = null
+
     fun writeSave() {
         saveFileHandle.writeString(saveSerializer.serialize(save), false)
     }
@@ -110,6 +113,8 @@ class DragonTilesGame(val gameConfig: GameConfig) : Game() {
         shapeRenderer.setAutoShapeType(true)
 
         assets = AssetManager()
+        File("assets/binassets/audio/bgm").listFiles()!!
+            .forEach { assets.load(it.toString(), Music::class.java) }
         File("assets/binassets/graphics/bgs").listFiles()!!
             .filter { it.toString().endsWith("png") }
             .forEach { assets.load(it.toString(), Texture::class.java) }
