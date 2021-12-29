@@ -4,6 +4,7 @@ import com.pipai.dragontiles.data.*
 import com.pipai.dragontiles.enemies.Enemy
 import com.pipai.dragontiles.spells.*
 import com.pipai.dragontiles.status.Dodge
+import com.pipai.dragontiles.status.Immunized
 import com.pipai.dragontiles.status.Overloaded
 import com.pipai.dragontiles.status.Status
 import com.pipai.dragontiles.utils.*
@@ -468,6 +469,10 @@ class CombatApi(
     }
 
     suspend fun addStatusToHero(status: Status) {
+        if (status.isDebuff && heroHasStatus(Immunized::class)) {
+            addStatusToHero(Immunized(-1))
+            return
+        }
         status.combatant = Combatant.HeroCombatant
         val maybeStatus = combat.heroStatus.find { it.id == status.id }
         if (maybeStatus == null) {
@@ -494,6 +499,10 @@ class CombatApi(
     }
 
     suspend fun addStatusToEnemy(enemy: Enemy, status: Status) {
+        if (status.isDebuff && enemyHasStatus(enemy, Immunized::class)) {
+            addStatusToEnemy(enemy, Immunized(-1))
+            return
+        }
         status.combatant = Combatant.EnemyCombatant(enemy)
         val enemyStatus = combat.enemyStatus[enemy.enemyId]!!
         val maybeStatus = enemyStatus.find { it.id == status.id }

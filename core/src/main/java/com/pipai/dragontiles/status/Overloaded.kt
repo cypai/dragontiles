@@ -9,7 +9,7 @@ class Overloaded(amount: Int) : Status(amount) {
     override val id = "base:status:Overloaded"
     override val assetName = "overloaded.png"
     override val displayAmount = true
-    override val isDebuff: Boolean = false // Avoid shenanigans with Immunity
+    override val isDebuff: Boolean = false // Avoid shenanigans with Immunized
 
     override fun deepCopy(): Status {
         return Overloaded(amount)

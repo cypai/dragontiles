@@ -267,3 +267,8 @@ base:spells:PhoenixFire:
   en:
     name: Phoenix Fire
     description: Deal !d Fire damage and inflict 1 Pyro on all enemies.
+
+base:spells:PhoenixTears:
+  en:
+    name: Phoenix Tears
+    description: Gain !s(1) Immunized.

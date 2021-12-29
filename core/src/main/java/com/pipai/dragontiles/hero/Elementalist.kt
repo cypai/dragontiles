@@ -59,6 +59,7 @@ class Elementalist : HeroClass {
         SummonPhoenix(),
         PhilosophersStone(),
         PhoenixFire(),
+        PhoenixTears(),
     )
     override val hpMax: Int = 60
     override val fluxMax: Int = 40

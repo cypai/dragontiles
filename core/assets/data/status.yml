@@ -23,6 +23,11 @@ base:status:Weak:
     name: Weak
     description: Deal 30% less damage.
 
+base:status:Immunized:
+  en:
+    name: Immunized
+    description: Negates a debuff.
+
 base:status:Ritual:
   en:
     name: Ritual
