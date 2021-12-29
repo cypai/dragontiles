@@ -97,6 +97,9 @@ class TooltipSystem(private val game: DragonTilesGame, var stage: Stage) : NoPro
         if (spell.aspects.any { a -> a is RepeatableAspect || a is LimitedRepeatableAspect }) {
             addKeyword(Keywords.REPEATABLE)
         }
+        if (spell.aspects.any { a -> a is FetchAspect }) {
+            addKeyword(Keywords.FETCH)
+        }
     }
 
     fun hideTooltip() {

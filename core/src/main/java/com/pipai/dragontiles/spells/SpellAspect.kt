@@ -64,9 +64,9 @@ data class FetchAspect(var amount: Int?) : SpellAspect {
     override fun adjustDescription(description: String): String {
         return if (amount == null) {
             if (description.isEmpty()) {
-                Keywords.FETCH
+                "${Keywords.FETCH}."
             } else {
-                "$description ${Keywords.FETCH}"
+                "$description ${Keywords.FETCH}."
             }
         } else {
             if (description.isEmpty()) {
