@@ -41,6 +41,8 @@ class PotionDatabaseUiSystem(
 
         stage.scrollFocus = scrollPane
 
+        potionsTable.background = game.skin.getDrawable("disabled")
+
         val potions = game.data.allPotions()
         addHeader("Common Potions")
         addPotions(potions.filter { it.rarity == Rarity.COMMON })

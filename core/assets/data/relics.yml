@@ -91,7 +91,7 @@ base:relics:Inkstone:
 base:relics:Nunchaku:
   en:
     name: Nunchaku
-    description: Fetch 1 after casting 5 attacks.
+    description: "@Fetch 1 after casting 5 attacks."
 
 base:relics:StockOption:
   en:

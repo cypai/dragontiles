@@ -41,6 +41,8 @@ class RelicDatabaseUiSystem(
 
         stage.scrollFocus = scrollPane
 
+        relicsTable.background = game.skin.getDrawable("disabled")
+
         val relics = game.data.allRelics()
         addHeader("Starter Relics")
         addRelics(relics.filter { it.rarity == Rarity.STARTER })

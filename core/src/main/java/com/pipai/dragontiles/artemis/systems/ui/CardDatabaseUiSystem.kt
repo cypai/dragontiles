@@ -51,6 +51,7 @@ class CardDatabaseUiSystem(
 
         topTable.setFillParent(true)
         topTable.background = game.skin.getDrawable("plains")
+        spellsTable.background = game.skin.getDrawable("disabled")
         topTable.add(elementalistButton)
             .padTop(16f)
             .padLeft(64f)
