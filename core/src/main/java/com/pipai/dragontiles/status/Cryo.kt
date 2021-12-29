@@ -9,6 +9,7 @@ class Cryo(amount: Int) : Status(amount) {
     override val id = "base:status:Cryo"
     override val assetName = "blue.png"
     override val displayAmount = true
+    override val isDebuff: Boolean = true
 
     override fun deepCopy(): Status {
         return Cryo(amount)

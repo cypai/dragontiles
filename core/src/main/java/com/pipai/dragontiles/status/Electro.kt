@@ -8,6 +8,7 @@ class Electro(amount: Int) : Status(amount) {
     override val id = "base:status:Electro"
     override val assetName = "yellow.png"
     override val displayAmount = true
+    override val isDebuff: Boolean = true
 
     override fun deepCopy(): Status {
         return Electro(amount)

@@ -8,6 +8,7 @@ class Strength(amount: Int) : Status(amount) {
     override val id = "base:status:Strength"
     override val assetName = "strength.png"
     override val displayAmount = true
+    override val isDebuff: Boolean = false
 
     override fun deepCopy(): Status {
         return Strength(amount)

@@ -12,6 +12,7 @@ abstract class Status(var amount: Int) : Localized, DamageAdjustable, DeepCopyab
 
     abstract val assetName: String
     abstract val displayAmount: Boolean
+    abstract val isDebuff: Boolean
 
     var combatant: Combatant? = null
 
@@ -31,6 +32,7 @@ class GenericStatus(amount: Int) : Status(amount) {
     override val id: String = "base:status:Generic"
     override val assetName: String = ""
     override val displayAmount: Boolean = false
+    override val isDebuff: Boolean = false
     override fun deepCopy(): Status {
         return GenericStatus(amount)
     }

@@ -10,6 +10,7 @@ class Sandstorm(amount: Int) : Status(amount) {
     override val id = "base:status:Sandstorm"
     override val assetName = "sandstorm.png"
     override val displayAmount = true
+    override val isDebuff: Boolean = false
 
     override fun deepCopy(): Status {
         return Sandstorm(amount)

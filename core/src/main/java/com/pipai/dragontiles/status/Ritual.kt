@@ -9,6 +9,7 @@ class Ritual(amount: Int) : Status(amount) {
     override val id = "base:status:Ritual"
     override val assetName = "ritual.png"
     override val displayAmount = true
+    override val isDebuff: Boolean = false
 
     override fun deepCopy(): Status {
         return Ritual(amount)

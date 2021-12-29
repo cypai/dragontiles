@@ -9,6 +9,7 @@ class Ventilation(amount: Int) : Status(amount) {
     override val id = "base:status:Ventilation"
     override val assetName = "ventilation.png"
     override val displayAmount = true
+    override val isDebuff: Boolean = false
 
     override fun deepCopy(): Status {
         return Ventilation(amount)

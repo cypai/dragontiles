@@ -7,6 +7,7 @@ class BreakStatus(amount: Int, var skip: Boolean) : Status(amount) {
     override val id = "base:status:Break"
     override val assetName = "break.png"
     override val displayAmount = true
+    override val isDebuff: Boolean = true
 
     override fun deepCopy(): Status {
         return BreakStatus(amount, skip)

@@ -7,6 +7,7 @@ class Weak(amount: Int, var skip: Boolean) : Status(amount) {
     override val id = "base:status:Weak"
     override val assetName = "weak.png"
     override val displayAmount = true
+    override val isDebuff: Boolean = true
 
     override fun deepCopy(): Status {
         return Weak(amount, skip)
