@@ -36,6 +36,10 @@ class MainMenuUiSystem(
     private val optionsLabel = Label("Options", skin)
     private val quitLabel = Label("Quit", skin)
 
+    private val spellDbLabel = Label("Spells Database", skin)
+    private val relicDbLabel = Label("Relics Database", skin)
+    private val potionDbLabel = Label("Potions Database", skin)
+
     override fun initialize() {
         rootTable.setFillParent(true)
         rootTable.background = game.skin.getDrawable("frameDrawable")
@@ -61,7 +65,8 @@ class MainMenuUiSystem(
                 val runData = RunData(
                     Elementalist().generateHero("Elementalist"),
                     DungeonMap(dungeonId, map, boss.id),
-                    game.data.allRelics().filter { it.rarity != Rarity.SPECIAL && it.rarity != Rarity.STARTER }.map { it.id }.toMutableList(),
+                    game.data.allRelics().filter { it.rarity != Rarity.SPECIAL && it.rarity != Rarity.STARTER }
+                        .map { it.id }.toMutableList(),
                     null,
                     0,
                     GameData.BASE_POTION_CHANCE,
@@ -95,7 +100,7 @@ class MainMenuUiSystem(
         })
         databaseLabel.addListener(object : ClickListener() {
             override fun clicked(event: InputEvent?, x: Float, y: Float) {
-                game.screen = CardDatabaseScreen(game)
+                generateDbTable()
             }
         })
         optionsLabel.addListener(object : ClickListener() {
@@ -106,6 +111,17 @@ class MainMenuUiSystem(
         quitLabel.addListener(object : ClickListener() {
             override fun clicked(event: InputEvent?, x: Float, y: Float) {
                 Gdx.app.exit()
+            }
+        })
+
+        spellDbLabel.addListener(object : ClickListener() {
+            override fun clicked(event: InputEvent?, x: Float, y: Float) {
+                game.screen = CardDatabaseScreen(game)
+            }
+        })
+        relicDbLabel.addListener(object : ClickListener() {
+            override fun clicked(event: InputEvent?, x: Float, y: Float) {
+                game.screen = RelicDatabaseScreen(game)
             }
         })
         stage.addActor(rootTable)
@@ -135,6 +151,26 @@ class MainMenuUiSystem(
         rootTable.add(optionsLabel)
         rootTable.row()
         rootTable.add(quitLabel)
+        rootTable.row()
+    }
+
+    private fun generateDbTable() {
+        rootTable.clearChildren()
+        rootTable.add(Label("Databases", skin))
+        rootTable.row()
+        rootTable.add(spellDbLabel)
+        rootTable.row()
+        rootTable.add(relicDbLabel)
+        rootTable.row()
+        rootTable.add(potionDbLabel)
+        rootTable.row()
+        val backLabel = Label("Back", game.skin)
+        backLabel.addListener(object : ClickListener() {
+            override fun clicked(event: InputEvent?, x: Float, y: Float) {
+                regenerateTable(game.save.currentRun == null)
+            }
+        })
+        rootTable.add(backLabel)
         rootTable.row()
     }
 
@@ -171,7 +207,7 @@ class MainMenuUiSystem(
                 game.screen = EventScreen(
                     game,
                     runData,
-                    dungeon.dungeonEvents.first { it.id == floorConfig.eventId},
+                    dungeon.dungeonEvents.first { it.id == floorConfig.eventId },
                 )
             }
             MapNodeType.TOWN -> {
