@@ -18,6 +18,8 @@ class PhoenixFire : StandardSpell() {
         StackableAspect(Pyro(1), 1),
     )
 
+    override fun additionalKeywords(): List<String> = listOf("@Reaction", "@Melt", "@Pyroblast")
+
     override fun flags(): List<CombatFlag> {
         return super.flags().withAll(listOf(CombatFlag.PYRO))
     }
