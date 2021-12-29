@@ -49,7 +49,7 @@ class DragonTilesGame(val gameConfig: GameConfig) : Game() {
     lateinit var shapeRenderer: ShapeRenderer
         private set
 
-    lateinit var outlinedFont: BitmapFont
+    lateinit var heavyFont: BitmapFont
         private set
 
     lateinit var font: BitmapFont
@@ -59,6 +59,15 @@ class DragonTilesGame(val gameConfig: GameConfig) : Game() {
         private set
 
     lateinit var tinyFont: BitmapFont
+        private set
+
+    lateinit var outlinedFont: BitmapFont
+        private set
+
+    lateinit var outlinedSmallFont: BitmapFont
+        private set
+
+    lateinit var outlinedTinyFont: BitmapFont
         private set
 
     lateinit var skin: Skin
@@ -144,12 +153,9 @@ class DragonTilesGame(val gameConfig: GameConfig) : Game() {
 
         val fontGenerator =
             FreeTypeFontGenerator(Gdx.files.internal("assets/binassets/fonts/Comme-Regular.ttf"))
-        val outlinedFontGenerator =
+        val heavyFontGenerator =
             FreeTypeFontGenerator(Gdx.files.internal("assets/binassets/fonts/Comme-Heavy.ttf"))
         val fontParameter = FreeTypeFontParameter()
-        fontParameter.size = 18
-        outlinedFont = outlinedFontGenerator.generateFont(fontParameter)
-
         fontParameter.size = 20
         font = fontGenerator.generateFont(fontParameter)
 
@@ -158,6 +164,21 @@ class DragonTilesGame(val gameConfig: GameConfig) : Game() {
 
         fontParameter.size = 13
         tinyFont = fontGenerator.generateFont(fontParameter)
+
+        fontParameter.borderWidth = 1f
+        fontParameter.size = 20
+        outlinedFont = fontGenerator.generateFont(fontParameter)
+
+        fontParameter.size = 16
+        outlinedSmallFont = fontGenerator.generateFont(fontParameter)
+
+        fontParameter.size = 13
+        outlinedTinyFont = fontGenerator.generateFont(fontParameter)
+
+        fontParameter.size = 18
+        fontParameter.borderWidth = 2f
+        heavyFont = heavyFontGenerator.generateFont(fontParameter)
+
         fontGenerator.dispose()
 
         gameStrings = GameStrings()
@@ -277,17 +298,14 @@ class DragonTilesGame(val gameConfig: GameConfig) : Game() {
         val grayDrawable = skin.newDrawable("white", Color.LIGHT_GRAY)
         val blackDrawable = skin.newDrawable("white", Color.BLACK)
 
-        skin.add("cardReq", LabelStyle(outlinedFont, Color.BLACK))
-        skin.add("cardReqRed", LabelStyle(outlinedFont, Color.RED))
+        skin.add("cardReq", LabelStyle(heavyFont, Color.WHITE))
+        skin.add("cardReqRed", LabelStyle(heavyFont, Color.RED))
         skin.add("default", LabelStyle(font, Color.BLACK))
         skin.add("small", LabelStyle(smallFont, Color.BLACK))
         skin.add("tiny", LabelStyle(tinyFont, Color.BLACK))
-        skin.add("white", LabelStyle(font, Color.WHITE))
-        skin.add("whiteSmall", LabelStyle(smallFont, Color.WHITE))
-        skin.add("whiteTiny", LabelStyle(tinyFont, Color.WHITE))
-        skin.add("blackBg", LabelStyle(font, Color.WHITE).withBg(disabledDrawable))
-        skin.add("blackBgSmall", LabelStyle(smallFont, Color.WHITE).withBg(disabledDrawable))
-        skin.add("blackBgTiny", LabelStyle(tinyFont, Color.WHITE).withBg(disabledDrawable))
+        skin.add("white", LabelStyle(outlinedFont, Color.WHITE))
+        skin.add("whiteSmall", LabelStyle(outlinedSmallFont, Color.WHITE))
+        skin.add("whiteTiny", LabelStyle(outlinedTinyFont, Color.WHITE))
         val devLabelStyle = LabelStyle(font, Color.BLACK)
         devLabelStyle.background = whiteDrawable
         skin.add("dev", devLabelStyle)

@@ -316,8 +316,8 @@ class CombatantStateSystem(
 
                 val intentTable = Table()
                 val numbersTable = Table()
-                val ventLabel = Label("", game.skin, "blackBgSmall")
-                val attackLabel = Label("", game.skin, "blackBgSmall")
+                val ventLabel = Label("", game.skin, "whiteSmall")
+                val attackLabel = Label("", game.skin, "whiteSmall")
                 ventLabel.setAlignment(Align.right)
                 attackLabel.setAlignment(Align.right)
                 numbersTable.add(ventLabel)
@@ -351,7 +351,7 @@ class CombatantStateSystem(
                 table.add(intentTable)
 
                 val stateTable = Table()
-                val nameLabel = Label("", game.skin, "blackBgTiny")
+                val nameLabel = Label("", game.skin, "whiteTiny")
                 nameLabel.setAlignment(Align.left)
                 stateTable.add(nameLabel)
                     .padTop(4f)
