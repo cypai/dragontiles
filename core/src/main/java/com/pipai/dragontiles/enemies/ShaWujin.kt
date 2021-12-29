@@ -12,11 +12,10 @@ class ShaWujin : Enemy() {
     override val id: String = "base:enemies:ShaWujin"
     override val assetName: String = "shawujin.png"
 
-    override val hpMax: Int = 200
+    override val hpMax: Int = 140
     override val fluxMax: Int = 60
 
     private var turns: Int = 0
-    private var hasOverloaded = false
 
     override suspend fun init(api: CombatApi) {
         api.addStatusToEnemy(this, Sandstorm(1))
@@ -49,12 +48,5 @@ class ShaWujin : Enemy() {
     override fun nextIntent(api: CombatApi): Intent {
         turns++
         return getIntent(api)
-    }
-
-    @CombatSubscribe
-    fun onOverload(ev: EnemyStatusChangeEvent, api: CombatApi) {
-        if (ev.enemy == this && ev.status is Overloaded) {
-            hasOverloaded = true
-        }
     }
 }
