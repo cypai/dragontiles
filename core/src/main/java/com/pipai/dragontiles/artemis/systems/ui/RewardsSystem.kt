@@ -38,6 +38,7 @@ class RewardsSystem(
     private val sTooltip by system<TooltipSystem>()
     private val sMap by system<MapUiSystem>()
     private val sPath by system<PathInterpolationSystem>()
+    private val sDeckUi by system<DeckDisplayUiSystem>()
 
     private lateinit var api: GlobalApi
 
@@ -170,7 +171,19 @@ class RewardsSystem(
                 .left()
                 .expand()
             rewardsTable.row()
+
         }
+        val reorganizeBtn = TextButton("  Reorganize Deck  ", skin)
+        reorganizeBtn.addListener(object : ClickListener() {
+            override fun clicked(event: InputEvent?, x: Float, y: Float) {
+                sDeckUi.activate()
+                handleOtherUiActivation()
+            }
+        })
+        rewardsTable.add(reorganizeBtn)
+            .pad(32f)
+        rewardsTable.row()
+
         val openMapBtn = TextButton("  Open Map  ", skin)
         openMapBtn.addListener(object : ClickListener() {
             override fun clicked(event: InputEvent?, x: Float, y: Float) {
