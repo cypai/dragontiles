@@ -84,6 +84,8 @@ class SpellComponentList(
             .top()
         val topLabel = Label(topText, skin, "white")
         table.add(topLabel)
+            .padLeft(2f)
+            .padRight(2f)
             .colspan(2)
             .top()
         table.row()

@@ -480,10 +480,13 @@ class CombatantStateSystem(
 
                 table.add(intentStack)
                     .size(48f)
+
                 val nameLabel = Label("", game.skin, "whiteSmall")
                 nameLabel.setAlignment(Align.center)
+                nameLabel.wrap = true
                 table.add(nameLabel)
-                    .expand()
+                    .width(width - 48f)
+                    .height(nameLabel.prefHeight)
                 table.row()
 
                 val stateTable = Table()
