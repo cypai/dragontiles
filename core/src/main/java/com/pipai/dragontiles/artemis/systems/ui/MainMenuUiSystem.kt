@@ -2,6 +2,8 @@ package com.pipai.dragontiles.artemis.systems.ui
 
 import com.artemis.BaseSystem
 import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.Input
+import com.badlogic.gdx.InputProcessor
 import com.badlogic.gdx.scenes.scene2d.InputEvent
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.ui.Label
@@ -22,11 +24,13 @@ class MainMenuUiSystem(
     private val game: DragonTilesGame,
     private val stage: Stage,
     private val startFromOptions: Boolean
-) : BaseSystem() {
+) : BaseSystem(), InputProcessor {
 
     private val skin = game.skin
 
     private val rootTable = Table()
+
+    private var dbMenu = false
 
     private val newGameLabel = Label("Start Run", skin)
     private val continueLabel = Label("Continue", skin)
@@ -138,6 +142,7 @@ class MainMenuUiSystem(
     }
 
     private fun regenerateTable(newGame: Boolean) {
+        dbMenu = false
         rootTable.clearChildren()
         rootTable.add(Label("Dragontiles", skin))
             .pad(32f)
@@ -166,6 +171,7 @@ class MainMenuUiSystem(
     }
 
     private fun generateDbTable() {
+        dbMenu = true
         rootTable.clearChildren()
         rootTable.add(Label("Databases", skin))
             .pad(32f)
@@ -246,4 +252,25 @@ class MainMenuUiSystem(
     override fun processSystem() {
     }
 
+    override fun keyDown(keycode: Int): Boolean {
+        if (keycode == Input.Keys.ESCAPE && dbMenu) {
+            regenerateTable(game.save.currentRun == null)
+            return true
+        }
+        return false
+    }
+
+    override fun keyUp(keycode: Int) = false
+
+    override fun keyTyped(character: Char) = false
+
+    override fun touchDown(screenX: Int, screenY: Int, pointer: Int, button: Int) = false
+
+    override fun touchUp(screenX: Int, screenY: Int, pointer: Int, button: Int) = false
+
+    override fun touchDragged(screenX: Int, screenY: Int, pointer: Int) = false
+
+    override fun mouseMoved(screenX: Int, screenY: Int) = false
+
+    override fun scrolled(amountX: Float, amountY: Float) = false
 }

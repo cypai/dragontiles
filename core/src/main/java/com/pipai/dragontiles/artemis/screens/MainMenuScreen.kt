@@ -25,16 +25,18 @@ class MainMenuScreen(game: DragonTilesGame, startFromOptions: Boolean = false) :
             game.music = null
         }
         val config = WorldConfigurationBuilder()
-                .with(
-                        TagManager(),
-                        InputProcessingSystem(),
-                        MainMenuUiSystem(game, stage, startFromOptions))
-                .build()
+            .with(
+                TagManager(),
+                InputProcessingSystem(),
+                MainMenuUiSystem(game, stage, startFromOptions)
+            )
+            .build()
 
         world = World(config)
 
         val inputProcessor = world.getSystem(InputProcessingSystem::class.java)
         inputProcessor.addAlwaysOnProcessor(stage)
+        inputProcessor.addAlwaysOnProcessor(world.getSystem(MainMenuUiSystem::class.java))
         inputProcessor.addAlwaysOnProcessor(ExitInputProcessor())
         inputProcessor.activateInput()
 
