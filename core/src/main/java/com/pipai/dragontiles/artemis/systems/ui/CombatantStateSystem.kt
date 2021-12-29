@@ -136,10 +136,10 @@ class CombatantStateSystem(
         cHero.hpMax = hpMax
         cHero.flux = flux.coerceAtLeast(0).coerceAtMost(cHero.fluxMax)
         cHero.fluxMax = fluxMax
-        heroHpLabel.setText("$hp/$hpMax")
-        heroHpBar.value = hp.toFloat() / hpMax.toFloat() * 100f
-        heroFluxLabel.setText("$flux/$fluxMax")
-        heroFluxBar.value = flux.toFloat() / fluxMax.toFloat() * 100f
+        heroHpLabel.setText("${cHero.hp}/$hpMax")
+        heroHpBar.value = cHero.hp.toFloat() / hpMax.toFloat() * 100f
+        heroFluxLabel.setText("${cHero.flux}/$fluxMax")
+        heroFluxBar.value = cHero.flux.toFloat() / fluxMax.toFloat() * 100f
     }
 
     fun enemyDefeated(enemy: Enemy) {
@@ -211,12 +211,12 @@ class CombatantStateSystem(
         val ui = enemyTables[entityId]!!
         cEnemy.hp = hp
         cEnemy.hpMax = hpMax
-        cEnemy.flux = flux
+        cEnemy.flux = flux.coerceAtLeast(0).coerceAtMost(fluxMax)
         cEnemy.fluxMax = fluxMax
-        ui.hpLabel.setText("$hp/$hpMax")
+        ui.hpLabel.setText("${cEnemy.hp}/$hpMax")
         ui.hpBar.value = hp.toFloat()
         if (ui.fluxLabel != null) {
-            ui.fluxLabel.setText("$flux/$fluxMax")
+            ui.fluxLabel.setText("${cEnemy.flux}/$fluxMax")
         }
         if (ui.fluxBar != null) {
             ui.fluxBar.value = flux.toFloat()
