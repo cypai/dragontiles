@@ -97,7 +97,9 @@ class DeckDisplayUiSystem(
     ) {
         addSectionHeader("Starting Active Spells (Max ${runData.hero.spellsSize})")
         addSpellsInSection(
-            runData.hero.generateSpells(game.data).filter { spellFilter.invoke(it) },
+            runData.hero.generateSpells(game.data)
+                .mapIndexed { index, spell -> IndexedSpell(spell, index) }
+                .filter { spellFilter.invoke(it.spell) },
             spellsOnClick,
             spellsEnableSwapDnd,
             Section.ACTIVE
@@ -105,7 +107,9 @@ class DeckDisplayUiSystem(
         addSectionHeader("Sideboard Spells (Max ${runData.hero.sideboardSize})")
         if (runData.hero.sideboard.isNotEmpty()) {
             addSpellsInSection(
-                runData.hero.generateSideboard(game.data).filter { spellFilter.invoke(it) },
+                runData.hero.generateSideboard(game.data)
+                    .mapIndexed { index, spell -> IndexedSpell(spell, index) }
+                    .filter { spellFilter.invoke(it.spell) },
                 sideboardOnClick,
                 sideboardEnableSwapDnd,
                 Section.SIDEBOARD
@@ -114,7 +118,9 @@ class DeckDisplayUiSystem(
         if (runData.hero.sorceries.isNotEmpty()) {
             addSectionHeader("Sorceries (Max ${runData.hero.sorceriesSize})")
             addSpellsInSection(
-                runData.hero.generateSorceries(game.data).filter { spellFilter.invoke(it) },
+                runData.hero.generateSorceries(game.data)
+                    .mapIndexed { index, spell -> IndexedSpell(spell, index) }
+                    .filter { spellFilter.invoke(it.spell) },
                 sorceriesOnClick,
                 false,
                 Section.SORCERIES
@@ -278,13 +284,14 @@ class DeckDisplayUiSystem(
     }
 
     private fun addSpellsInSection(
-        spells: List<Spell>,
+        spells: List<IndexedSpell>,
         onClick: (Spell, Section, Int) -> Unit,
         enableSwapDnd: Boolean,
         section: Section,
     ) {
         var cell: Cell<SpellCard>? = null
-        spells.forEachIndexed { i, spell ->
+        spells.forEachIndexed { i, indexedSpell ->
+            val spell = indexedSpell.spell
             if (i % colspan == 0 && i != 0) {
                 table.row()
             }
@@ -305,7 +312,7 @@ class DeckDisplayUiSystem(
                 }
 
                 override fun clicked(event: InputEvent?, x: Float, y: Float) {
-                    onClick(spell, section, i)
+                    onClick(spell, section, indexedSpell.index)
                 }
             })
             if (enableSwapDnd) {
@@ -398,6 +405,8 @@ class DeckDisplayUiSystem(
         sFsc.fadeOut(10)
         scrollPane.remove()
     }
+
+    private data class IndexedSpell(val spell: Spell, val index: Int)
 
     override fun keyDown(keycode: Int): Boolean {
         when (keycode) {
