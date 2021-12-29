@@ -15,7 +15,7 @@ class ShaWujin : Enemy() {
     override val hpMax: Int = 200
     override val fluxMax: Int = 60
 
-    private var turns: Int = 1
+    private var turns: Int = 0
     private var hasOverloaded = false
 
     override suspend fun init(api: CombatApi) {
