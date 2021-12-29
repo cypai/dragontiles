@@ -139,6 +139,7 @@ class CombatUiSystem(
     private val sMap by system<MapUiSystem>()
     private val sAnchor by system<AnchorSystem>()
     private val sPause by system<PauseMenuSystem>()
+    private val sHelp by system<ReqHelpSystem>()
 
     override fun initialize() {
         val bgTable = Table()
@@ -385,6 +386,15 @@ class CombatUiSystem(
         when (keycode) {
             Keys.ESCAPE -> {
                 return setStateBack()
+            }
+            Keys.F1 -> {
+                if (stateMachine.currentState == CombatUiState.ROOT) {
+                    if (sHelp.showing) {
+                        sHelp.hide()
+                    } else {
+                        sHelp.show()
+                    }
+                }
             }
             Keys.F12 -> {
                 scope.launch {

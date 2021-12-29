@@ -71,6 +71,7 @@ class CombatScreen(
                 RewardsSystem(game, runData, frontStage, runData.combatWon),
                 MapUiSystem(game, backStage, runData),
                 PauseMenuSystem(game, frontStage, runData),
+                ReqHelpSystem(game, frontStage),
 
                 InputProcessingSystem(),
                 HoverableSystem(game.gameConfig),
