@@ -33,6 +33,16 @@ class GameDataInitializer {
         gameData.addRelic(RabbitsFoot())
         gameData.addRelic(Tea())
         gameData.addRelic(Transmuter())
+        gameData.addRelic(Gourd())
+        gameData.addRelic(MortarAndPestle())
+        gameData.addRelic(FireFlower())
+        gameData.addRelic(PerfectFreeze())
+        gameData.addRelic(LightningRod())
+        gameData.addRelic(StoneEgg())
+        gameData.addRelic(Nunchaku())
+        gameData.addRelic(StockOption())
+        gameData.addRelic(Inkstone())
+        gameData.addRelic(YinYangOrb())
     }
 
     private fun initSpells(gameData: GameData) {

@@ -133,4 +133,11 @@ open class GlobalApi(val gameData: GameData, val runData: RunData, private val s
         potionSlot.potionId = null
         potion.onNonCombatUse(this)
     }
+
+    fun gainPotionSlots(amount: Int) {
+        repeat(amount) {
+            runData.hero.potionSlots.add(PotionSlot(null))
+        }
+        sEvent.dispatch(TopRowUiUpdateEvent())
+    }
 }

@@ -26,7 +26,7 @@ base:relics:NinjaScroll:
 base:relics:Gourd:
   en:
     name: Gourd
-    description: Gain a potion slot.
+    description: Gain 2 potion slots.
 
 base:relics:Cherry:
   en:
@@ -72,3 +72,28 @@ base:relics:LightningRod:
   en:
     name: Lightning Rod
     description: Lightning attacks deal +3 damage.
+
+base:relics:StoneEgg:
+  en:
+    name: Stone Egg
+    description: Non-elemental attacks deal +3 damage.
+
+base:relics:YinYangOrb:
+  en:
+    name: Yin Yang Orb
+    description: When you lose HP, you lose the same amount of Flux.
+
+base:relics:Inkstone:
+  en:
+    name: Inkstone
+    description: Swap 1 after consuming 14 tiles.
+
+base:relics:Nunchaku:
+  en:
+    name: Nunchaku
+    description: Fetch 1 after casting 5 attacks.
+
+base:relics:StockOption:
+  en:
+    name: Stock Option
+    description: Gain 1 Gold after combat. If you have 20 or more Gold, lose 15 Gold.
