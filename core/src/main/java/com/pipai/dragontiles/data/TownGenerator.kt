@@ -14,7 +14,6 @@ class TownGenerator {
         val heroClass = gameData.getHeroClass(runData.hero.heroClassId)
         val spellShop = SpellShop(
             heroClass.getRandomClassSpells(runData.seed, 6).map { pricedSpell(it) }.toMutableList(),
-            mutableListOf(),
             pricedSpell(gameData.colorlessSpells().filter { it.rarity != Rarity.SPECIAL }.choose(rng)),
         )
         val itemShop = ItemShop(mutableListOf(), mutableListOf())

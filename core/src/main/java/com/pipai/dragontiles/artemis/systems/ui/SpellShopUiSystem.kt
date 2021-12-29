@@ -51,7 +51,11 @@ class SpellShopUiSystem(
             if (i < 3) {
                 createSpell(ps, SpellCard.cardWidth * 3 + i * SpellCard.cardWidth * 2, SpellCard.cardHeight * 2 - 48f)
             } else {
-                createSpell(ps, SpellCard.cardWidth * 3 + (i - 3) * SpellCard.cardWidth * 2, SpellCard.cardHeight / 2 - 24f)
+                createSpell(
+                    ps,
+                    SpellCard.cardWidth * 3 + (i - 3) * SpellCard.cardWidth * 2,
+                    SpellCard.cardHeight / 2 - 24f
+                )
             }
         }
         if (spellShop.colorlessSpell != null) {
@@ -62,7 +66,7 @@ class SpellShopUiSystem(
 
     private fun sideboardSpace(x: Float, y: Float) {
         val table = Table()
-        table.background  = game.skin.getDrawable("frameDrawable")
+        table.background = game.skin.getDrawable("frameDrawable")
         val available = !town.boughtSideboard
         val text = if (available) {
             "Sideboard Space"
@@ -165,6 +169,11 @@ class SpellShopUiSystem(
     @Subscribe
     fun handleSpellCardClick(ev: PricedItemClickEvent) {
         if (runData.hero.gold >= ev.pricedItem.price) {
+            if (ev.pricedItem == town.spellShop.colorlessSpell) {
+                town.spellShop.colorlessSpell = null
+            } else {
+                town.spellShop.classSpells.remove(ev.pricedItem)
+            }
             api.gainGoldImmediate(-ev.pricedItem.price)
             recalculatePriceColor()
             val spell = game.data.getSpell(ev.pricedItem.id)

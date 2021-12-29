@@ -80,6 +80,7 @@ class ScribeShopUiSystem(
     @Subscribe
     fun handleClick(ev: PricedItemClickEvent) {
         if (runData.hero.gold >= ev.pricedItem.price) {
+            town.scribe.upgrades.remove(ev.pricedItem)
             api.gainGoldImmediate(-ev.pricedItem.price)
             recalculatePriceColor()
             sEvent.dispatch(UpgradeSpellQueryEvent(game.data.getSpellUpgrade(ev.pricedItem.id)))

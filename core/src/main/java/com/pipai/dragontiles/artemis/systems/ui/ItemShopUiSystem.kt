@@ -118,6 +118,7 @@ class ItemShopUiSystem(
 
     private fun handleClickRelic(entityId: EntityId, ps: PricedItem) {
         if (runData.hero.gold >= ps.price) {
+            town.itemShop.relics.remove(ps)
             api.gainGoldImmediate(-ps.price)
             api.gainRelicImmediate(game.data.getRelic(ps.id))
             world.delete(entityId)
@@ -127,6 +128,7 @@ class ItemShopUiSystem(
 
     private fun handleClickPotion(entityId: EntityId, ps: PricedItem) {
         if (runData.hero.gold >= ps.price) {
+            town.itemShop.potions.remove(ps)
             api.gainGoldImmediate(-ps.price)
             api.gainPotion(game.data.getPotion(ps.id))
             world.delete(entityId)

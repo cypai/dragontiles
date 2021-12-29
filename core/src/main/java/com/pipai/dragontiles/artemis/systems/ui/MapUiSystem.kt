@@ -16,7 +16,6 @@ import com.pipai.dragontiles.artemis.screens.EventScreen
 import com.pipai.dragontiles.artemis.screens.TownScreen
 import com.pipai.dragontiles.artemis.systems.NoProcessingSystem
 import com.pipai.dragontiles.combat.CombatRewardConfig
-import com.pipai.dragontiles.combat.SpellRewardType
 import com.pipai.dragontiles.data.*
 import com.pipai.dragontiles.dungeon.MapNodeType
 import com.pipai.dragontiles.utils.*
@@ -285,7 +284,6 @@ class MapUiSystem(
                             town.dungeonEventId,
                             SpellShop(
                                 town.spellShop.classSpells.toMutableList(),
-                                town.spellShop.sorceries.toMutableList(),
                                 town.spellShop.colorlessSpell?.copy()
                             ),
                             ItemShop(
