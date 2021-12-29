@@ -12,6 +12,10 @@ class HastePotion : Potion() {
     override val type: PotionType = PotionType.COMBAT_ONLY
     override val targetType: PotionTargetType = PotionTargetType.NONE
 
+    override fun additionalLocalized(): List<String> {
+        return listOf(Dodge(0).id)
+    }
+
     override fun onNonCombatUse(api: GlobalApi) {
         throw NotImplementedError()
     }
