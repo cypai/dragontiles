@@ -1,5 +1,6 @@
 package com.pipai.dragontiles.artemis.systems.ui
 
+import com.artemis.BaseSystem
 import com.artemis.EntitySubscription
 import com.artemis.utils.IntBag
 import com.badlogic.gdx.graphics.Texture
@@ -31,7 +32,7 @@ class CombatantStateSystem(
     private val game: DragonTilesGame,
     private val stage: Stage,
     private val encounter: Encounter
-) : NoProcessingSystem() {
+) : BaseSystem() {
 
     private val mXy by mapper<XYComponent>()
     private val mEnemy by mapper<EnemyComponent>()
@@ -44,6 +45,8 @@ class CombatantStateSystem(
 
     private val enemyEntityMap: MutableMap<Enemy, EntityId> = mutableMapOf()
     private val combatantTables: MutableMap<EntityId, CombatantUi> = mutableMapOf()
+
+    private var t = 0
 
     override fun initialize() {
         encounter.enemies.forEach { (enemy, position) ->
@@ -72,6 +75,32 @@ class CombatantStateSystem(
     fun enemyDefeated(enemy: Enemy) {
         val ui = combatantTables.remove(enemyEntityMap.remove(enemy))!!
         ui.table.remove()
+    }
+
+    override fun processSystem() {
+        t++
+        if (t > 60) {
+            t = 0
+            flipIntents()
+        }
+    }
+
+    private fun flipIntents() {
+        combatantTables.values.forEach { ui ->
+            if (ui.intent2.drawable == null) {
+                (ui.intent1.drawable as SpriteDrawable).sprite.setAlpha(1f)
+            } else {
+                val i1 = ui.intent1.drawable as SpriteDrawable
+                val i2 = ui.intent2.drawable as SpriteDrawable
+                if (i1.sprite.color.a > 0f) {
+                    i1.sprite.setAlpha(0f)
+                    i2.sprite.setAlpha(1f)
+                } else {
+                    i1.sprite.setAlpha(1f)
+                    i2.sprite.setAlpha(0f)
+                }
+            }
+        }
     }
 
     private fun createUi(enemy: Enemy, entityId: EntityId) {
@@ -142,7 +171,6 @@ class CombatantStateSystem(
                     } else {
                         updateAttackIntent(ui, intent.attackIntent)
                         updateBuffIntent(ui, true)
-                        updateDoubleIntent(ui)
                         updateTooltip(ui, "Aggressive", "This enemy is about to both attack and buff itself.")
                     }
                 }
@@ -153,7 +181,6 @@ class CombatantStateSystem(
                     } else {
                         updateVentIntent(ui, intent.amount, false)
                         updateBuffIntent(ui, true)
-                        updateDoubleIntent(ui)
                         updateTooltip(ui, "Defensive", "This enemy is about to vent flux and buff itself.")
                     }
                 }
@@ -164,7 +191,6 @@ class CombatantStateSystem(
                     } else {
                         updateAttackIntent(ui, intent.attackIntent)
                         updateDebuffIntent(ui, true)
-                        updateDoubleIntent(ui)
                         updateTooltip(ui, "Aggressive", "This enemy is about to attack and inflict a negative effect on you.")
                     }
                 }
@@ -224,13 +250,6 @@ class CombatantStateSystem(
                 sTooltip.hideTooltip()
             }
         })
-    }
-
-    private fun updateDoubleIntent(ui: CombatantUi) {
-        val i1 = ui.intent1.drawable as SpriteDrawable
-        val i2 = ui.intent2.drawable as SpriteDrawable
-        i1.sprite.setAlpha(0.6f)
-        i2.sprite.setAlpha(0.6f)
     }
 
     private fun updateAttackIntent(ui: CombatantUi, intent: AttackIntent) {
