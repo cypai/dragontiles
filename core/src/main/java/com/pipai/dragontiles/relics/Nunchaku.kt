@@ -16,9 +16,11 @@ class Nunchaku : Relic() {
     suspend fun onAttack(ev: SpellCastedEvent, api: CombatApi) {
         if (ev.spell.type == SpellType.ATTACK) {
             counter++
+            api.updateRelicCounter(this)
             if (counter >= 5) {
-                api.drawToOpenPool(1)
                 counter = 0
+                api.updateRelicCounter(this)
+                api.drawToOpenPool(1)
             }
         }
     }

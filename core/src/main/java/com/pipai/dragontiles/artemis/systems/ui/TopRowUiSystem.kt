@@ -6,10 +6,13 @@ import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.InputEvent
 import com.badlogic.gdx.scenes.scene2d.Stage
+import com.badlogic.gdx.scenes.scene2d.Touchable
 import com.badlogic.gdx.scenes.scene2d.ui.Image
 import com.badlogic.gdx.scenes.scene2d.ui.Label
+import com.badlogic.gdx.scenes.scene2d.ui.Stack
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
+import com.badlogic.gdx.utils.Align
 import com.pipai.dragontiles.DragonTilesGame
 import com.pipai.dragontiles.artemis.events.PotionUseUiEvent
 import com.pipai.dragontiles.artemis.events.TopRowUiUpdateEvent
@@ -134,9 +137,15 @@ class TopRowUiSystem(
 
     fun updateRelicRow() {
         relicRow.clearChildren()
-        runData.hero.relicIds.forEach { relic ->
-            val image = Image(game.assets.get(relicAssetPath(game.data.getRelic(relic.id).assetName), Texture::class.java))
-            image.addListener(object : ClickListener() {
+        runData.hero.relicIds.forEach { relicInstance ->
+            val relic = game.data.getRelic(relicInstance.id)
+            val counterLabel = Label(if (relic.showCounter) relicInstance.counter.toString() else "", skin, "white")
+            counterLabel.setAlignment(Align.bottomRight)
+            val image = Image(game.assets.get(relicAssetPath(relic.assetName), Texture::class.java))
+            val stack = Stack()
+            stack.add(image)
+            stack.add(counterLabel)
+            stack.addListener(object : ClickListener() {
                 override fun enter(event: InputEvent?, x: Float, y: Float, pointer: Int, fromActor: Actor?) {
                     sTooltip.addNameDescLocalization(game.gameStrings.nameDescLocalization(relic.id))
                     sTooltip.showTooltip()
@@ -146,7 +155,7 @@ class TopRowUiSystem(
                     sTooltip.hideTooltip()
                 }
             })
-            relicRow.add(image)
+            relicRow.add(stack)
                 .left()
                 .prefHeight(64f)
                 .prefWidth(64f)

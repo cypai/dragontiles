@@ -140,4 +140,13 @@ open class GlobalApi(val gameData: GameData, val runData: RunData, private val s
         }
         sEvent.dispatch(TopRowUiUpdateEvent())
     }
+
+    fun updateRelicCounter(relic: Relic) {
+        runData.hero.relicIds.first { it.id == relic.id }.counter = relic.counter
+        updateTopRow()
+    }
+
+    fun updateTopRow() {
+        sEvent.dispatch(TopRowUiUpdateEvent())
+    }
 }

@@ -14,9 +14,11 @@ class Inkstone : Relic() {
     @CombatSubscribe
     suspend fun onConsume(ev: ComponentConsumeEvent, api: CombatApi) {
         counter += ev.components.size
+        api.updateRelicCounter(this)
         if (counter >= 14) {
-            api.swapQuery(1)
             counter -= 14
+            api.updateRelicCounter(this)
+            api.swapQuery(1)
         }
     }
 }

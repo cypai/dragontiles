@@ -20,7 +20,7 @@ abstract class Relic : Localized, DamageAdjustable {
     }
 
     fun toInstance(): RelicInstance {
-        return RelicInstance(id, 0)
+        return RelicInstance(id, counter)
     }
 
     fun withCounter(counter: Int): Relic {
