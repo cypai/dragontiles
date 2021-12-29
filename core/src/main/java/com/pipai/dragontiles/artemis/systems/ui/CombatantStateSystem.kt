@@ -4,8 +4,12 @@ import com.artemis.EntitySubscription
 import com.artemis.utils.IntBag
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.Sprite
+import com.badlogic.gdx.scenes.scene2d.Actor
+import com.badlogic.gdx.scenes.scene2d.InputEvent
 import com.badlogic.gdx.scenes.scene2d.Stage
+import com.badlogic.gdx.scenes.scene2d.Touchable
 import com.badlogic.gdx.scenes.scene2d.ui.*
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable
 import com.badlogic.gdx.utils.Align
 import com.badlogic.gdx.utils.Scaling
@@ -36,6 +40,7 @@ class CombatantStateSystem(
     private val mClickable by mapper<ClickableComponent>()
 
     private val sCombat by system<CombatControllerSystem>()
+    private val sTooltip by system<TooltipSystem>()
 
     private val enemyEntityMap: MutableMap<Enemy, EntityId> = mutableMapOf()
     private val combatantTables: MutableMap<EntityId, CombatantUi> = mutableMapOf()
@@ -128,32 +133,39 @@ class CombatantStateSystem(
             when (intent) {
                 is AttackIntent -> {
                     updateAttackIntent(ui, intent)
+                    updateTooltip(ui, "Aggressive", "This enemy is about to attack.")
                 }
                 is BuffIntent -> {
                     if (intent.attackIntent == null) {
                         updateBuffIntent(ui, false)
+                        updateTooltip(ui, "Buffing", "This enemy is about to buff itself.")
                     } else {
                         updateAttackIntent(ui, intent.attackIntent)
                         updateBuffIntent(ui, true)
                         updateDoubleIntent(ui)
+                        updateTooltip(ui, "Aggressive", "This enemy is about to both attack and buff itself.")
                     }
                 }
                 is VentIntent -> {
                     if (intent.status == null) {
                         updateVentIntent(ui, intent.amount, false)
+                        updateTooltip(ui, "Defensive", "This enemy is about to vent flux.")
                     } else {
                         updateVentIntent(ui, intent.amount, false)
                         updateBuffIntent(ui, true)
                         updateDoubleIntent(ui)
+                        updateTooltip(ui, "Defensive", "This enemy is about to vent flux and buff itself.")
                     }
                 }
                 is DebuffIntent -> {
                     if (intent.attackIntent == null) {
                         updateDebuffIntent(ui, false)
+                        updateTooltip(ui, "Debuffing", "This enemy is about to inflict a negative effect on you.")
                     } else {
                         updateAttackIntent(ui, intent.attackIntent)
                         updateDebuffIntent(ui, true)
                         updateDoubleIntent(ui)
+                        updateTooltip(ui, "Aggressive", "This enemy is about to attack and inflict a negative effect on you.")
                     }
                 }
                 is StunnedIntent -> {
@@ -165,15 +177,23 @@ class CombatantStateSystem(
                             )
                         )
                     )
+                    updateTooltip(ui, "Stunned", "This enemy is stunned.")
                 }
                 is FumbleIntent -> {
                     when (val innerIntent = intent.intent) {
                         is AttackIntent -> {
                             updateAttackIntent(ui, innerIntent)
+                            updateDebuffIntent(ui, true)
+                            updateTooltip(ui, "Aggressive", "This enemy is about to attack and inflict a negative effect on you.")
                         }
                         is BuffIntent -> {
+                            updateDebuffIntent(ui, false)
+                            updateBuffIntent(ui, true)
+                            updateTooltip(ui, "Strategic", "This enemy is about to buff and inflict a negative effect on you.")
                         }
                         else -> {
+                            updateDebuffIntent(ui, false)
+                            updateTooltip(ui, "Debuffing", "This enemy is about to inflict a negative effect on you.")
                         }
                     }
                 }
@@ -186,9 +206,24 @@ class CombatantStateSystem(
                             )
                         )
                     )
+                    updateTooltip(ui, "Unknown", "This enemy is about to do something unusual.")
                 }
             }
         }
+    }
+
+    private fun updateTooltip(ui: CombatantUi, header: String, text: String) {
+        ui.table.clearListeners()
+        ui.table.addListener(object : ClickListener() {
+            override fun enter(event: InputEvent?, x: Float, y: Float, pointer: Int, fromActor: Actor?) {
+                sTooltip.addText(header, text, false)
+                sTooltip.showTooltip()
+            }
+
+            override fun exit(event: InputEvent?, x: Float, y: Float, pointer: Int, toActor: Actor?) {
+                sTooltip.hideTooltip()
+            }
+        })
     }
 
     private fun updateDoubleIntent(ui: CombatantUi) {
@@ -316,6 +351,7 @@ class CombatantStateSystem(
             fun create(game: DragonTilesGame, enemy: Enemy, width: Float): CombatantUi {
                 val table = Table()
                 table.background = game.skin.getDrawable("disabled")
+                table.touchable = Touchable.enabled
 
                 val numbersTable = Table()
                 val ventLabel = Label("", game.skin, "whiteSmall")
