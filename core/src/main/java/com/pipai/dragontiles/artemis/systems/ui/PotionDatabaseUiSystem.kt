@@ -11,19 +11,19 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.pipai.dragontiles.DragonTilesGame
 import com.pipai.dragontiles.artemis.screens.MainMenuScreen
 import com.pipai.dragontiles.artemis.systems.NoProcessingSystem
-import com.pipai.dragontiles.relics.Relic
+import com.pipai.dragontiles.potions.Potion
 import com.pipai.dragontiles.spells.Rarity
-import com.pipai.dragontiles.utils.relicAssetPath
+import com.pipai.dragontiles.utils.potionAssetPath
 import com.pipai.dragontiles.utils.system
 
-class RelicDatabaseUiSystem(
+class PotionDatabaseUiSystem(
     private val game: DragonTilesGame,
     private val stage: Stage,
 ) : NoProcessingSystem(), InputProcessor {
 
     private val topTable = Table()
-    private val relicsTable = Table()
-    private val scrollPane = ScrollPane(relicsTable)
+    private val potionsTable = Table()
+    private val scrollPane = ScrollPane(potionsTable)
     private val colspan = 12
 
     private val sTooltip by system<TooltipSystem>()
@@ -41,35 +41,31 @@ class RelicDatabaseUiSystem(
 
         stage.scrollFocus = scrollPane
 
-        val relics = game.data.allRelics()
-        addHeader("Starter Relics")
-        addRelics(relics.filter { it.rarity == Rarity.STARTER })
-        addHeader("Common Relics")
-        addRelics(relics.filter { it.rarity == Rarity.COMMON })
-        addHeader("Uncommon Relics")
-        addRelics(relics.filter { it.rarity == Rarity.UNCOMMON })
-        addHeader("Rare Relics")
-        addRelics(relics.filter { it.rarity == Rarity.RARE })
-        addHeader("Special Relics")
-        addRelics(relics.filter { it.rarity == Rarity.SPECIAL })
+        val potions = game.data.allPotions()
+        addHeader("Common Potions")
+        addPotions(potions.filter { it.rarity == Rarity.COMMON })
+        addHeader("Uncommon Potions")
+        addPotions(potions.filter { it.rarity == Rarity.UNCOMMON })
+        addHeader("Rare Potions")
+        addPotions(potions.filter { it.rarity == Rarity.RARE })
     }
 
     private fun addHeader(text: String) {
-        relicsTable.add(Label(text, game.skin, "white"))
+        potionsTable.add(Label(text, game.skin, "white"))
             .colspan(colspan)
-        relicsTable.row()
+        potionsTable.row()
     }
 
-    private fun addRelics(relics: List<Relic>) {
+    private fun addPotions(potions: List<Potion>) {
         var cell: Cell<Image>? = null
-        relics.forEachIndexed { i, relic ->
+        potions.forEachIndexed { i, potion ->
             if (i > 0 && i % colspan == 0) {
-                relicsTable.row()
+                potionsTable.row()
             }
-            val image = Image(game.assets.get(relicAssetPath(relic.assetName), Texture::class.java))
+            val image = Image(game.assets.get(potionAssetPath(potion.assetName), Texture::class.java))
             image.addListener(object : ClickListener() {
                 override fun enter(event: InputEvent?, x: Float, y: Float, pointer: Int, fromActor: Actor?) {
-                    sTooltip.addLocalized(relic)
+                    sTooltip.addLocalized(potion)
                     sTooltip.showTooltip()
                 }
 
@@ -77,15 +73,15 @@ class RelicDatabaseUiSystem(
                     sTooltip.hideTooltip()
                 }
             })
-            cell = relicsTable.add(image)
+            cell = potionsTable.add(image)
                 .size(64f)
         }
-        if (cell != null && relics.size % colspan != 0) {
-            repeat(colspan - relics.size % colspan) {
-                relicsTable.add()
+        if (cell != null && potions.size % colspan != 0) {
+            repeat(colspan - potions.size % colspan) {
+                potionsTable.add()
             }
         }
-        relicsTable.row()
+        potionsTable.row()
     }
 
     override fun keyDown(keycode: Int): Boolean {

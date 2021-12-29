@@ -2,6 +2,7 @@ package com.pipai.dragontiles.artemis.screens
 
 import com.artemis.World
 import com.artemis.WorldConfigurationBuilder
+import com.artemis.managers.GroupManager
 import com.artemis.managers.TagManager
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Screen
@@ -9,36 +10,54 @@ import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.utils.viewport.ScreenViewport
 import com.pipai.dragontiles.DragonTilesGame
-import com.pipai.dragontiles.artemis.systems.input.ExitInputProcessor
 import com.pipai.dragontiles.artemis.systems.input.InputProcessingSystem
-import com.pipai.dragontiles.artemis.systems.ui.MainMenuUiSystem
+import com.pipai.dragontiles.artemis.systems.rendering.FullScreenColorSystem
+import com.pipai.dragontiles.artemis.systems.rendering.RenderingSystem
+import com.pipai.dragontiles.artemis.systems.ui.PotionDatabaseUiSystem
+import com.pipai.dragontiles.artemis.systems.ui.TooltipSystem
+import net.mostlyoriginal.api.event.common.EventSystem
 
-class MainMenuScreen(game: DragonTilesGame, startFromOptions: Boolean = false) : Screen {
+class PotionDatabaseScreen(
+    game: DragonTilesGame,
+) : Screen {
 
     private val stage = Stage(ScreenViewport(), game.spriteBatch)
 
     val world: World
 
     init {
-        if (game.music != null) {
-            game.music!!.stop()
-            game.music = null
-        }
         val config = WorldConfigurationBuilder()
-                .with(
-                        TagManager(),
-                        InputProcessingSystem(),
-                        MainMenuUiSystem(game, stage, startFromOptions))
-                .build()
+            .with(
+                // Managers
+                TagManager(),
+                GroupManager(),
+                EventSystem(),
+
+                TooltipSystem(game, stage),
+                FullScreenColorSystem(game),
+
+                InputProcessingSystem(),
+            )
+            .with(
+                -1,
+                PotionDatabaseUiSystem(game, stage),
+            )
+            .with(
+                -2,
+                RenderingSystem(game)
+            )
+            .build()
 
         world = World(config)
 
         val inputProcessor = world.getSystem(InputProcessingSystem::class.java)
+        inputProcessor.addAlwaysOnProcessor(world.getSystem(PotionDatabaseUiSystem::class.java))
+        inputProcessor.addAlwaysOnProcessor(world.getSystem(TooltipSystem::class.java))
         inputProcessor.addAlwaysOnProcessor(stage)
-        inputProcessor.addAlwaysOnProcessor(ExitInputProcessor())
         inputProcessor.activateInput()
 
-        StandardScreenInit(world).initialize()
+        StandardScreenInit(world)
+            .initialize()
     }
 
     override fun render(delta: Float) {

@@ -20,7 +20,8 @@ import com.pipai.dragontiles.utils.choose
 
 class MainMenuUiSystem(
     private val game: DragonTilesGame,
-    private val stage: Stage
+    private val stage: Stage,
+    private val startFromOptions: Boolean
 ) : BaseSystem() {
 
     private val skin = game.skin
@@ -44,7 +45,11 @@ class MainMenuUiSystem(
         rootTable.setFillParent(true)
         rootTable.background = game.skin.getDrawable("frameDrawable")
 
-        regenerateTable(game.save.currentRun == null)
+        if (startFromOptions) {
+            generateDbTable()
+        } else {
+            regenerateTable(game.save.currentRun == null)
+        }
 
         newGameLabel.addListener(object : ClickListener() {
             override fun clicked(event: InputEvent?, x: Float, y: Float) {
@@ -124,12 +129,18 @@ class MainMenuUiSystem(
                 game.screen = RelicDatabaseScreen(game)
             }
         })
+        potionDbLabel.addListener(object : ClickListener() {
+            override fun clicked(event: InputEvent?, x: Float, y: Float) {
+                game.screen = PotionDatabaseScreen(game)
+            }
+        })
         stage.addActor(rootTable)
     }
 
     private fun regenerateTable(newGame: Boolean) {
         rootTable.clearChildren()
         rootTable.add(Label("Dragontiles", skin))
+            .pad(32f)
         rootTable.row()
         if (newGame) {
             rootTable.add(newGameLabel)
@@ -157,6 +168,7 @@ class MainMenuUiSystem(
     private fun generateDbTable() {
         rootTable.clearChildren()
         rootTable.add(Label("Databases", skin))
+            .pad(32f)
         rootTable.row()
         rootTable.add(spellDbLabel)
         rootTable.row()

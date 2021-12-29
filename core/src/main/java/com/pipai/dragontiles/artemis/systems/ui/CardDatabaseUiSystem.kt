@@ -140,7 +140,7 @@ class CardDatabaseUiSystem(
     override fun keyDown(keycode: Int): Boolean {
         when (keycode) {
             Input.Keys.ESCAPE -> {
-                game.screen = MainMenuScreen(game)
+                game.screen = MainMenuScreen(game, true)
                 return true
             }
         }
