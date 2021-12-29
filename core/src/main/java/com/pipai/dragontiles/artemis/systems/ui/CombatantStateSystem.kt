@@ -1,8 +1,6 @@
 package com.pipai.dragontiles.artemis.systems.ui
 
 import com.artemis.BaseSystem
-import com.artemis.EntitySubscription
-import com.artemis.utils.IntBag
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.Sprite
 import com.badlogic.gdx.scenes.scene2d.Actor
@@ -13,17 +11,16 @@ import com.badlogic.gdx.scenes.scene2d.ui.*
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable
 import com.badlogic.gdx.utils.Align
-import com.badlogic.gdx.utils.Scaling
 import com.pipai.dragontiles.DragonTilesGame
 import com.pipai.dragontiles.artemis.EntityId
 import com.pipai.dragontiles.artemis.components.*
 import com.pipai.dragontiles.artemis.events.EnemyClickEvent
 import com.pipai.dragontiles.artemis.events.EnemyHoverEnterEvent
 import com.pipai.dragontiles.artemis.events.EnemyHoverExitEvent
-import com.pipai.dragontiles.artemis.systems.NoProcessingSystem
 import com.pipai.dragontiles.artemis.systems.combat.CombatControllerSystem
 import com.pipai.dragontiles.combat.*
 import com.pipai.dragontiles.data.Element
+import com.pipai.dragontiles.data.RunData
 import com.pipai.dragontiles.dungeon.Encounter
 import com.pipai.dragontiles.enemies.Enemy
 import com.pipai.dragontiles.utils.*
@@ -31,10 +28,12 @@ import com.pipai.dragontiles.utils.*
 class CombatantStateSystem(
     private val game: DragonTilesGame,
     private val stage: Stage,
+    private val runData: RunData,
     private val encounter: Encounter
 ) : BaseSystem() {
 
     private val mXy by mapper<XYComponent>()
+    private val mHero by mapper<HeroComponent>()
     private val mEnemy by mapper<EnemyComponent>()
     private val mSprite by mapper<SpriteComponent>()
     private val mHoverable by mapper<HoverableComponent>()
@@ -43,12 +42,17 @@ class CombatantStateSystem(
     private val sCombat by system<CombatControllerSystem>()
     private val sTooltip by system<TooltipSystem>()
 
+    private val heroHpBar = ProgressBar(0f, 100f, 1f, false, game.dtskin, "hpbar")
+    private val heroHpLabel = Label("", game.skin, "whiteTiny")
+    private val heroFluxBar = ProgressBar(0f, 100f, 1f, false, game.dtskin, "fluxbar")
+    private val heroFluxLabel = Label("", game.skin, "whiteTiny")
     private val enemyEntityMap: MutableMap<Enemy, EntityId> = mutableMapOf()
-    private val combatantTables: MutableMap<EntityId, CombatantUi> = mutableMapOf()
+    private val enemyTables: MutableMap<EntityId, EnemyUi> = mutableMapOf()
 
     private var t = 0
 
     override fun initialize() {
+        initHero()
         encounter.enemies.forEach { (enemy, position) ->
             val entityId = world.create()
             val cXy = mXy.create(entityId)
@@ -72,8 +76,74 @@ class CombatantStateSystem(
         }
     }
 
+    private fun initHero() {
+        val entityId = world.create()
+        val cXy = mXy.create(entityId)
+        cXy.setXy(100f, 320f)
+        val cHero = mHero.create(entityId)
+        cHero.setByRunData(runData)
+        val cSprite = mSprite.create(entityId)
+        cSprite.sprite =
+            Sprite(game.assets.get("assets/binassets/graphics/heros/elementalist.png", Texture::class.java))
+
+        val stateTable = Table()
+        stateTable.background = game.skin.getDrawable("disabled")
+        heroHpBar.setAnimateDuration(0.25f)
+        heroHpLabel.setAlignment(Align.center)
+        val hpStack = Stack()
+        hpStack.add(heroHpBar)
+        hpStack.add(heroHpLabel)
+        heroFluxBar.setAnimateDuration(0.25f)
+        heroFluxLabel.setAlignment(Align.center)
+        val fluxStack = Stack()
+        fluxStack.add(heroFluxBar)
+        fluxStack.add(heroFluxLabel)
+        stateTable.add(fluxStack)
+            .width(cSprite.sprite.width)
+            .bottom()
+        stateTable.row()
+        stateTable.add(hpStack)
+            .bottom()
+            .width(cSprite.sprite.width)
+            .padBottom(2f)
+        stateTable.row()
+        updateHero(runData.hero.hp, runData.hero.hpMax, runData.hero.flux, runData.hero.fluxMax)
+        stateTable.x = cXy.x
+        stateTable.y = cXy.y + cSprite.sprite.height
+        stateTable.width = cSprite.sprite.width
+        stateTable.height = stateTable.prefHeight
+        stage.addActor(stateTable)
+    }
+
+    fun changeHeroHp(amount: Int) {
+        val cHero = mHero.get(world.fetch(allOf(HeroComponent::class)).first())
+        updateHero(cHero.hp + amount, cHero.hpMax, cHero.flux, cHero.fluxMax)
+    }
+
+    fun changeHeroFlux(amount: Int) {
+        val cHero = mHero.get(world.fetch(allOf(HeroComponent::class)).first())
+        updateHero(cHero.hp, cHero.hpMax, cHero.flux + amount, cHero.fluxMax)
+    }
+
+    fun changeHeroTempMaxFlux(amount: Int) {
+        val cHero = mHero.get(world.fetch(allOf(HeroComponent::class)).first())
+        updateHero(cHero.hp, cHero.hpMax, cHero.flux, cHero.fluxMax + amount)
+    }
+
+    fun updateHero(hp: Int, hpMax: Int, flux: Int, fluxMax: Int) {
+        val cHero = mHero.get(world.fetch(allOf(HeroComponent::class)).first())
+        cHero.hp = hp.coerceAtLeast(0).coerceAtMost(cHero.hpMax)
+        cHero.hpMax = hpMax
+        cHero.flux = flux.coerceAtLeast(0).coerceAtMost(cHero.fluxMax)
+        cHero.fluxMax = fluxMax
+        heroHpLabel.setText("$hp/$hpMax")
+        heroHpBar.value = hp.toFloat() / hpMax.toFloat() * 100f
+        heroFluxLabel.setText("$flux/$fluxMax")
+        heroFluxBar.value = flux.toFloat() / fluxMax.toFloat() * 100f
+    }
+
     fun enemyDefeated(enemy: Enemy) {
-        val ui = combatantTables.remove(enemyEntityMap.remove(enemy))!!
+        val ui = enemyTables.remove(enemyEntityMap.remove(enemy))!!
         ui.table.remove()
     }
 
@@ -86,9 +156,11 @@ class CombatantStateSystem(
     }
 
     private fun flipIntents() {
-        combatantTables.values.forEach { ui ->
+        enemyTables.values.forEach { ui ->
             if (ui.intent2.drawable == null) {
-                (ui.intent1.drawable as SpriteDrawable).sprite.setAlpha(1f)
+                if (ui.intent1.drawable != null) {
+                    (ui.intent1.drawable as SpriteDrawable).sprite.setAlpha(1f)
+                }
             } else {
                 val i1 = ui.intent1.drawable as SpriteDrawable
                 val i2 = ui.intent2.drawable as SpriteDrawable
@@ -107,10 +179,10 @@ class CombatantStateSystem(
         val cXy = mXy.get(entityId)
         val cSprite = mSprite.get(entityId)
         val cEnemy = mEnemy.get(entityId)
-        val ui = CombatantUi.create(game, enemy, cSprite.sprite.width)
+        val ui = EnemyUi.create(game, enemy, cSprite.sprite.width)
         ui.nameLabel.setText(game.gameStrings.nameLocalization(cEnemy.enemy).name)
 
-        combatantTables[entityId] = ui
+        enemyTables[entityId] = ui
         ui.table.x = cXy.x
         ui.table.y = cXy.y + cSprite.sprite.height
         stage.addActor(ui.table)
@@ -136,7 +208,7 @@ class CombatantStateSystem(
     fun updateEnemyStats(enemy: Enemy, hp: Int, hpMax: Int, flux: Int, fluxMax: Int) {
         val entityId = enemyEntityMap[enemy]!!
         val cEnemy = mEnemy.get(entityId)
-        val ui = combatantTables[entityId]!!
+        val ui = enemyTables[entityId]!!
         cEnemy.hp = hp
         cEnemy.hpMax = hpMax
         cEnemy.flux = flux
@@ -154,7 +226,7 @@ class CombatantStateSystem(
     fun updateIntent(enemy: Enemy, intent: Intent?) {
         val entityId = enemyEntityMap[enemy]!!
         val cEnemy = mEnemy.get(entityId)
-        val ui = combatantTables[entityId]!!
+        val ui = enemyTables[entityId]!!
         cEnemy.intent = intent
 
         clearIntent(ui)
@@ -191,7 +263,11 @@ class CombatantStateSystem(
                     } else {
                         updateAttackIntent(ui, intent.attackIntent)
                         updateDebuffIntent(ui, true)
-                        updateTooltip(ui, "Aggressive", "This enemy is about to attack and inflict a negative effect on you.")
+                        updateTooltip(
+                            ui,
+                            "Aggressive",
+                            "This enemy is about to attack and inflict a negative effect on you."
+                        )
                     }
                 }
                 is StunnedIntent -> {
@@ -210,12 +286,20 @@ class CombatantStateSystem(
                         is AttackIntent -> {
                             updateAttackIntent(ui, innerIntent)
                             updateDebuffIntent(ui, true)
-                            updateTooltip(ui, "Aggressive", "This enemy is about to attack and inflict a negative effect on you.")
+                            updateTooltip(
+                                ui,
+                                "Aggressive",
+                                "This enemy is about to attack and inflict a negative effect on you."
+                            )
                         }
                         is BuffIntent -> {
                             updateDebuffIntent(ui, false)
                             updateBuffIntent(ui, true)
-                            updateTooltip(ui, "Strategic", "This enemy is about to buff and inflict a negative effect on you.")
+                            updateTooltip(
+                                ui,
+                                "Strategic",
+                                "This enemy is about to buff and inflict a negative effect on you."
+                            )
                         }
                         else -> {
                             updateDebuffIntent(ui, false)
@@ -238,7 +322,7 @@ class CombatantStateSystem(
         }
     }
 
-    private fun updateTooltip(ui: CombatantUi, header: String, text: String) {
+    private fun updateTooltip(ui: EnemyUi, header: String, text: String) {
         ui.table.clearListeners()
         ui.table.addListener(object : ClickListener() {
             override fun enter(event: InputEvent?, x: Float, y: Float, pointer: Int, fromActor: Actor?) {
@@ -252,7 +336,7 @@ class CombatantStateSystem(
         })
     }
 
-    private fun updateAttackIntent(ui: CombatantUi, intent: AttackIntent) {
+    private fun updateAttackIntent(ui: EnemyUi, intent: AttackIntent) {
         val attackPower =
             sCombat.controller.api.calculateDamageOnHero(intent.enemy, intent.element, intent.attackPower)
         if (intent.multistrike == 1) {
@@ -298,7 +382,7 @@ class CombatantStateSystem(
         }
     }
 
-    private fun updateBuffIntent(ui: CombatantUi, isSecond: Boolean) {
+    private fun updateBuffIntent(ui: EnemyUi, isSecond: Boolean) {
         val image = if (isSecond) {
             ui.intent2
         } else {
@@ -314,7 +398,7 @@ class CombatantStateSystem(
         )
     }
 
-    private fun updateDebuffIntent(ui: CombatantUi, isSecond: Boolean) {
+    private fun updateDebuffIntent(ui: EnemyUi, isSecond: Boolean) {
         val image = if (isSecond) {
             ui.intent2
         } else {
@@ -330,7 +414,7 @@ class CombatantStateSystem(
         )
     }
 
-    private fun updateVentIntent(ui: CombatantUi, amount: Int, isSecond: Boolean) {
+    private fun updateVentIntent(ui: EnemyUi, amount: Int, isSecond: Boolean) {
         ui.ventLabel.setText("-$amount")
         val image = if (isSecond) {
             ui.intent2
@@ -347,14 +431,14 @@ class CombatantStateSystem(
         )
     }
 
-    private fun clearIntent(ui: CombatantUi) {
+    private fun clearIntent(ui: EnemyUi) {
         ui.attackLabel.setText("")
         ui.ventLabel.setText("")
         ui.intent1.drawable = null
         ui.intent2.drawable = null
     }
 
-    data class CombatantUi(
+    data class EnemyUi(
         val table: Table,
         val attackLabel: Label,
         val ventLabel: Label,
@@ -367,7 +451,7 @@ class CombatantStateSystem(
         val fluxLabel: Label?,
     ) {
         companion object {
-            fun create(game: DragonTilesGame, enemy: Enemy, width: Float): CombatantUi {
+            fun create(game: DragonTilesGame, enemy: Enemy, width: Float): EnemyUi {
                 val table = Table()
                 table.background = game.skin.getDrawable("disabled")
                 table.touchable = Touchable.enabled
@@ -436,7 +520,7 @@ class CombatantStateSystem(
                     .width(width)
                 table.width = width
                 table.height = table.prefHeight
-                return CombatantUi(
+                return EnemyUi(
                     table,
                     attackLabel,
                     ventLabel,

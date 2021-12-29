@@ -51,22 +51,5 @@ class CombatScreenInit(
 
         sDeckDisplay.enableSwap = false
 
-        initHero()
-
     }
-
-    private fun initHero() {
-        val entityId = world.create()
-        val cXy = mXy.create(entityId)
-        cXy.setXy(100f, 350f)
-        val cHero = mHero.create(entityId)
-        cHero.setByRunData(runData)
-        val cSprite = mSprite.create(entityId)
-        cSprite.sprite =
-            Sprite(game.assets.get("assets/binassets/graphics/heros/elementalist.png", Texture::class.java))
-        val cHeroText = mTextLabel.create(entityId)
-        cHeroText.size = TextLabelSize.SMALL
-        cHeroText.yOffset = -10f
-    }
-
 }
