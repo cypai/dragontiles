@@ -96,6 +96,28 @@ class RewardsSystem(
             })
             spellDraftTable.add(spellCard)
         }
+        spellDraftTable.row()
+
+        val skipButton = TextButton(" Skip (+1 Gold) ", skin)
+        skipButton.addListener(object : ClickListener() {
+            override fun clicked(event: InputEvent?, x: Float, y: Float) {
+                runData.combatRewards.remove(spellDraftReward)
+                api.gainGoldImmediate(1)
+                buildAndShowRewardsTable()
+            }
+        })
+        spellDraftTable.add(skipButton)
+            .colspan(spellDraftReward.spells.size)
+        spellDraftTable.row()
+
+        val backButton = TextButton(" Back ", skin)
+        backButton.addListener(object : ClickListener() {
+            override fun clicked(event: InputEvent?, x: Float, y: Float) {
+                buildAndShowRewardsTable()
+            }
+        })
+        spellDraftTable.add(backButton)
+            .colspan(spellDraftReward.spells.size)
     }
 
     private fun buildAndShowRewardsTable() {
