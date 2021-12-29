@@ -225,9 +225,13 @@ class MapUiSystem(
                     )
                 }
                 MapNodeType.ELITE -> {
-                    val encounter = dungeon.eliteEncounters
+                    val unencounteredElites = dungeon.eliteEncounters
                         .filter { it.id !in runData.dungeonMap.encounters }
-                        .choose(rng)
+                    val encounter = if (unencounteredElites.isEmpty()) {
+                        dungeon.eliteEncounters.choose(rng)
+                    } else {
+                        unencounteredElites.choose(rng)
+                    }
                     runData.runHistory.history.add(
                         FloorHistory.EliteFloorHistory(
                             runData.dungeonMap.dungeonId,
