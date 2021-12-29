@@ -16,6 +16,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.pipai.dragontiles.DragonTilesGame
 import com.pipai.dragontiles.artemis.components.TileComponent
 import com.pipai.dragontiles.artemis.components.XYComponent
+import com.pipai.dragontiles.artemis.events.DeckDisplayUiEvent
+import com.pipai.dragontiles.artemis.events.MapDisplayUiEvent
 import com.pipai.dragontiles.artemis.systems.NoProcessingSystem
 import com.pipai.dragontiles.artemis.systems.PathInterpolationSystem
 import com.pipai.dragontiles.data.*
@@ -23,6 +25,7 @@ import com.pipai.dragontiles.gui.SpellCard
 import com.pipai.dragontiles.relics.RelicInstance
 import com.pipai.dragontiles.utils.*
 import net.mostlyoriginal.api.event.common.EventSystem
+import net.mostlyoriginal.api.event.common.Subscribe
 
 class RewardsSystem(
     private val game: DragonTilesGame,
@@ -77,9 +80,9 @@ class RewardsSystem(
             spellCard.touchable = Touchable.enabled
             spellCard.addListener(object : ClickListener() {
                 override fun clicked(event: InputEvent?, x: Float, y: Float) {
-                    api.addSpellToDeck(spell)
                     runData.combatRewards.remove(spellDraftReward)
                     buildAndShowRewardsTable()
+                    api.addSpellToDeck(spell)
                 }
 
                 override fun enter(event: InputEvent?, x: Float, y: Float, pointer: Int, fromActor: Actor?) {
@@ -177,18 +180,16 @@ class RewardsSystem(
         reorganizeBtn.addListener(object : ClickListener() {
             override fun clicked(event: InputEvent?, x: Float, y: Float) {
                 sDeckUi.activate()
-                handleOtherUiActivation()
             }
         })
         rewardsTable.add(reorganizeBtn)
-            .pad(32f)
+            .padTop(32f)
         rewardsTable.row()
 
         val openMapBtn = TextButton("  Open Map  ", skin)
         openMapBtn.addListener(object : ClickListener() {
             override fun clicked(event: InputEvent?, x: Float, y: Float) {
                 sMap.showMap()
-                handleOtherUiActivation()
             }
         })
         rewardsTable.add(openMapBtn)
@@ -269,30 +270,58 @@ class RewardsSystem(
         }
     }
 
+    @Subscribe
+    fun handleMapUi(ev: MapDisplayUiEvent) {
+        if (active) {
+            if (ev.isNowShowing) {
+                showing = false
+                rootTable.remove()
+            } else {
+                showing = true
+                stage.addActor(rootTable)
+            }
+        }
+    }
+
+    @Subscribe
+    fun handleDeckUi(ev: DeckDisplayUiEvent) {
+        if (active) {
+            if (ev.isNowShowing) {
+                showing = false
+                rootTable.remove()
+            } else {
+                handleOtherUiActivation()
+            }
+        }
+    }
+
     override fun keyDown(keycode: Int): Boolean {
         when (keycode) {
             Input.Keys.ESCAPE -> {
-                if (active && !showing && !isOnSpellDraft) {
-                    handleOtherUiActivation()
-                    sMap.hideMap()
-                }
-                if (isOnSpellDraft) {
+                if (active && isOnSpellDraft) {
                     buildAndShowRewardsTable()
+                    return true
+                }
+                if (sMap.showing) {
+                    sMap.hideMap()
                     return true
                 }
             }
             Input.Keys.D -> {
-                if (active) {
-                    if (isOnSpellDraft) {
-                        return true
-                    } else {
-                        handleOtherUiActivation()
-                    }
+                if (active && isOnSpellDraft) {
+                    return true
                 }
             }
             Input.Keys.M -> {
                 if (active) {
-                    handleOtherUiActivation()
+                    if (!isOnSpellDraft && !sDeckUi.isShowing()) {
+                        if (sMap.showing) {
+                            sMap.hideMap()
+                        } else {
+                            sMap.showMap()
+                        }
+                    }
+                    return true
                 }
             }
         }

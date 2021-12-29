@@ -390,6 +390,9 @@ class CombatUiSystem(
     }
 
     override fun keyDown(keycode: Int): Boolean {
+        if (stateMachine.currentState == CombatUiState.DISABLED) {
+            return false
+        }
         when (keycode) {
             Keys.ESCAPE -> {
                 return setStateBack()

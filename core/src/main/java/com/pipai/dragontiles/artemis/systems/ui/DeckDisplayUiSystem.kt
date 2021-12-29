@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.*
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop
 import com.pipai.dragontiles.DragonTilesGame
+import com.pipai.dragontiles.artemis.events.DeckDisplayUiEvent
 import com.pipai.dragontiles.artemis.events.ReplaceSpellQueryEvent
 import com.pipai.dragontiles.artemis.events.TransformSpellQueryEvent
 import com.pipai.dragontiles.artemis.events.UpgradeSpellQueryEvent
@@ -70,6 +71,8 @@ class DeckDisplayUiSystem(
             }
         })
     }
+
+    fun isShowing() = active
 
     fun updateStandardDisplay(spellFilter: (Spell) -> Boolean, enableSwapDnd: Boolean) {
         stage.scrollFocus = scrollPane
@@ -398,6 +401,7 @@ class DeckDisplayUiSystem(
         stage.addActor(scrollPane)
         scrollPane.toFront()
         scrollPane.scrollY = 0f
+        sEvent.dispatch(DeckDisplayUiEvent(true))
     }
 
     fun deactivate() {
@@ -405,6 +409,7 @@ class DeckDisplayUiSystem(
         disableExit = false
         sFsc.fadeOut(10)
         scrollPane.remove()
+        sEvent.dispatch(DeckDisplayUiEvent(false))
     }
 
     private data class IndexedSpell(val spell: Spell, val index: Int)

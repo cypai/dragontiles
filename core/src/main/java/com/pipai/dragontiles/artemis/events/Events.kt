@@ -15,7 +15,8 @@ class EnemyHoverExitEvent : Event
 data class PricedItemClickEvent(val entityId: Int, val pricedItem: PricedItem) : Event
 
 data class MapNodeClickEvent(val floorNum: Int, val index: Int) : Event
-class ShopClickEvent : Event
+data class MapDisplayUiEvent(val isNowShowing: Boolean) : Event
+data class DeckDisplayUiEvent(val isNowShowing: Boolean) : Event
 
 data class SpellGainedEvent(val spell: Spell) : Event
 data class ReplaceSpellQueryEvent(val spell: Spell) : Event

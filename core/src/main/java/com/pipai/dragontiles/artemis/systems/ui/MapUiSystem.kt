@@ -10,6 +10,8 @@ import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.pipai.dragontiles.DragonTilesGame
 import com.pipai.dragontiles.artemis.components.*
+import com.pipai.dragontiles.artemis.events.DeckDisplayUiEvent
+import com.pipai.dragontiles.artemis.events.MapDisplayUiEvent
 import com.pipai.dragontiles.artemis.events.MapNodeClickEvent
 import com.pipai.dragontiles.artemis.screens.CombatScreen
 import com.pipai.dragontiles.artemis.screens.EventScreen
@@ -19,6 +21,7 @@ import com.pipai.dragontiles.combat.CombatRewardConfig
 import com.pipai.dragontiles.data.*
 import com.pipai.dragontiles.dungeon.MapNodeType
 import com.pipai.dragontiles.utils.*
+import net.mostlyoriginal.api.event.common.EventSystem
 import net.mostlyoriginal.api.event.common.Subscribe
 
 class MapUiSystem(
@@ -35,6 +38,7 @@ class MapUiSystem(
     private val mAnchoredLine by mapper<AnchoredLineComponent>()
     private val mMutualDestroy by mapper<MutualDestroyComponent>()
 
+    private val sEvent by system<EventSystem>()
     private val sTooltip by system<TooltipSystem>()
 
     private val table = Table()
@@ -45,6 +49,7 @@ class MapUiSystem(
 
     fun showMap() {
         showing = true
+        sEvent.dispatch(MapDisplayUiEvent(true))
         table.background = game.skin.getDrawable("frameDrawableDark")
         table.width = game.gameConfig.resolution.width.toFloat()
         table.height = game.gameConfig.resolution.height.toFloat() / 2f
@@ -179,6 +184,7 @@ class MapUiSystem(
     }
 
     fun hideMap() {
+        sEvent.dispatch(MapDisplayUiEvent(false))
         world.fetch(allOf(MapNodeComponent::class)).forEach { world.delete(it) }
         table.remove()
         showing = false
