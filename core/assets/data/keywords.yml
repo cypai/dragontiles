@@ -122,7 +122,7 @@ base:keywords:Pyroblast:
   en:
     key: "@Pyroblast"
     name: Pyroblast
-    description: "Pyro and Electro reaction. Deals 10 @AOE Fire damage per stack."
+    description: "Pyro and Electro reaction. Deals 5 @AOE Fire damage per stack."
 
 base:keywords:Cryoshock:
   en:

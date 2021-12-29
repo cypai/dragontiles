@@ -23,11 +23,11 @@ class Electro(amount: Int) : Status(amount) {
                         val theAmount = amount // cached because the api changes it
                         api.removeEnemyStatus(c.enemy, Electro::class)
                         api.addStatusToEnemy(c.enemy, Pyro(-theAmount))
-                        api.aoeAttack(Element.FIRE, 10 * theAmount, listOf())
+                        api.aoeAttack(Element.FIRE, 5 * theAmount, listOf())
                     } else {
                         api.removeEnemyStatus(c.enemy, Pyro::class)
                         api.addStatusToEnemy(c.enemy, Electro(-pyroAmount))
-                        api.aoeAttack(Element.FIRE, 10 * pyroAmount, listOf())
+                        api.aoeAttack(Element.FIRE, 5 * pyroAmount, listOf())
                     }
                 }
                 if (api.enemyHasStatus(c.enemy, Cryo::class)) {
