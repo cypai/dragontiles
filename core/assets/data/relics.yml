@@ -96,4 +96,4 @@ base:relics:Nunchaku:
 base:relics:StockOption:
   en:
     name: Stock Option
-    description: Gain 1 Gold after combat. If you have 20 or more Gold, lose 15 Gold.
+    description: Gain 2 Gold after combat. If you have 20 or more Gold, lose 15 Gold.
