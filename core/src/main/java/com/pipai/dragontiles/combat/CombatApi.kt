@@ -572,7 +572,7 @@ class CombatApi(
         minAmount: Int,
         maxAmount: Int
     ): List<TileInstance> {
-        return if (maxAmount == 0 || maxAmount < minAmount) {
+        val retval: List<TileInstance> = if (maxAmount == 0 || maxAmount < minAmount) {
             listOf()
         } else {
             suspendCoroutine {
@@ -581,6 +581,8 @@ class CombatApi(
                 }
             }
         }
+        sortHand()
+        return retval
     }
 
     suspend fun queryOpenPoolDraw() {

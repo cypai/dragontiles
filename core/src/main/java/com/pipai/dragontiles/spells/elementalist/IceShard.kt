@@ -34,12 +34,13 @@ class IceShard : StandardSpell() {
         val target = api.getEnemy(params.targets.first())
         api.attack(target, elemental(components()), baseDamage(), flags())
         api.addStatusToEnemy(target, aspects.getStackableCopy(Cryo::class))
-        api.inflictTileStatusOnHand(
-            RandomTileStatusInflictStrategy(
-                TileStatus.FREEZE,
-                1,
-                TileStatusInflictStrategy.NotEnoughStrategy.RANDOM
-            )
-        )
+        if (api.combat.hand.isNotEmpty()) {
+            if (api.combat.hand.size > 1) {
+                val tile = api.queryTiles("Pick a tile to freeze", api.combat.hand, 1, 1)
+                api.setTileStatus(tile, TileStatus.FREEZE)
+            } else {
+                api.setTileStatus(api.combat.hand, TileStatus.FREEZE)
+            }
+        }
     }
 }
