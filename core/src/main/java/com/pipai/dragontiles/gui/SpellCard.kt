@@ -121,8 +121,7 @@ class SpellCard(
         val upgradeRow = Table()
         upgradeImages.forEach {
             upgradeRow.add(it)
-                .prefWidth(32f)
-                .prefHeight(32f)
+                .size(32f)
                 .pad(6f)
         }
         cardTable.add(upgradeRow)
