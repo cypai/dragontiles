@@ -7,7 +7,7 @@ class Pyro(amount: Int) : Status(amount) {
     override val id = "base:status:Pyro"
     override val assetName = "red.png"
     override val displayAmount = true
-    override val isDebuff: Boolean = true
+    override fun isDebuff(): Boolean = true
 
     override fun deepCopy(): Status {
         return Pyro(amount)

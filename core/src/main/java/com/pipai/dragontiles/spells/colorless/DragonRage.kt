@@ -27,7 +27,7 @@ class DragonRage : StandardSpell() {
         override val displayAmount = true
         override val assetName = "dragon_rage.png"
         override val id = "base:status:DragonRage"
-        override val isDebuff: Boolean = false
+        override fun isDebuff(): Boolean = false
 
         override fun deepCopy(): Status {
             return DragonRageStatus(amount)

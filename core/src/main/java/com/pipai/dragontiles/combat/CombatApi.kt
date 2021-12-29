@@ -477,7 +477,7 @@ class CombatApi(
     }
 
     suspend fun addStatusToHero(status: Status) {
-        if (status.isDebuff && heroHasStatus(Immunized::class)) {
+        if (status.isDebuff() && heroHasStatus(Immunized::class)) {
             addStatusToHero(Immunized(-1))
             return
         }
@@ -511,7 +511,7 @@ class CombatApi(
     }
 
     suspend fun addStatusToEnemy(enemy: Enemy, status: Status) {
-        if (status.isDebuff && enemyHasStatus(enemy, Immunized::class)) {
+        if (status.isDebuff() && enemyHasStatus(enemy, Immunized::class)) {
             addStatusToEnemy(enemy, Immunized(-1))
             return
         }

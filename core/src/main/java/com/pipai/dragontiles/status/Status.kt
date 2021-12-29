@@ -12,14 +12,20 @@ abstract class Status(var amount: Int) : Localized, DamageAdjustable, DeepCopyab
 
     abstract val assetName: String
     abstract val displayAmount: Boolean
-    abstract val isDebuff: Boolean
+    abstract fun isDebuff(): Boolean
 
     var combatant: Combatant? = null
 
     open suspend fun onInflict(api: CombatApi) {
     }
 
-    override fun queryFlatAdjustment(origin: Combatant?, target: Combatant?, element: Element, flags: List<CombatFlag>): Int = 0
+    override fun queryFlatAdjustment(
+        origin: Combatant?,
+        target: Combatant?,
+        element: Element,
+        flags: List<CombatFlag>
+    ): Int = 0
+
     override fun queryScaledAdjustment(
         origin: Combatant?,
         target: Combatant?,
@@ -32,7 +38,7 @@ class GenericStatus(amount: Int) : Status(amount) {
     override val id: String = "base:status:Generic"
     override val assetName: String = ""
     override val displayAmount: Boolean = false
-    override val isDebuff: Boolean = false
+    override fun isDebuff(): Boolean = false
     override fun deepCopy(): Status {
         return GenericStatus(amount)
     }

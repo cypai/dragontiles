@@ -27,7 +27,7 @@ class ReactionMastery : PowerSpell() {
         override val assetName: String = "reaction_mastery.png"
         override val displayAmount: Boolean = false
         override val id: String = "base:status:ReactionMastery"
-        override val isDebuff: Boolean = false
+        override fun isDebuff(): Boolean = false
 
         override fun deepCopy(): Status {
             return ReactionMasteryImpl()

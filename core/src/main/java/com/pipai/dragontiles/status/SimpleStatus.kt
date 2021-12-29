@@ -5,7 +5,7 @@ import kotlin.reflect.full.createInstance
 abstract class SimpleStatus(
     override val id: String, override val assetName: String, override val displayAmount: Boolean, amount: Int
 ) : Status(amount) {
-    override val isDebuff: Boolean = false
+    override fun isDebuff(): Boolean = false
 
     override fun deepCopy(): Status {
         return this::class.createInstance()

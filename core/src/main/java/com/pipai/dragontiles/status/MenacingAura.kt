@@ -9,7 +9,7 @@ class MenacingAura(amount: Int) : Status(amount) {
     override val id = "base:status:MenacingAura"
     override val assetName = "menacing_aura.png"
     override val displayAmount = true
-    override val isDebuff: Boolean = false
+    override fun isDebuff(): Boolean = false
 
     override fun deepCopy(): Status {
         return MenacingAura(amount)
