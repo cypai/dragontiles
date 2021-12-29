@@ -47,6 +47,7 @@ class EventApi(val game: DragonTilesGame, runData: RunData, sEvent: EventSystem,
     }
 
     fun startCombat(encounter: Encounter, rewardConfig: CombatRewardConfig) {
+        runData.combatWon = false
         game.screen = CombatScreen(game, runData, encounter, rewardConfig, false)
     }
 
