@@ -361,6 +361,14 @@ class CombatApi(
         eventBus.dispatch(EnemyLoseFluxEvent(enemy, actualAmount))
     }
 
+    fun getEnemyIntent(enemy: Enemy): Intent? {
+        return if (enemyHasStatus(enemy, Overloaded::class)) {
+            StunnedIntent(enemy)
+        } else {
+            enemy.getIntent(this)
+        }
+    }
+
     suspend fun changeEnemyIntent(enemy: Enemy, intent: Intent?) {
         if (intent == null) {
             combat.enemyIntent.remove(enemy.enemyId)

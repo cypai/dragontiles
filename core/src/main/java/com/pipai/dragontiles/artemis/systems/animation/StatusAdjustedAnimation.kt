@@ -2,6 +2,7 @@ package com.pipai.dragontiles.artemis.systems.animation
 
 import com.pipai.dragontiles.artemis.systems.combat.StatusSystem
 import com.pipai.dragontiles.artemis.systems.ui.CombatUiSystem
+import com.pipai.dragontiles.artemis.systems.ui.CombatantStateSystem
 import com.pipai.dragontiles.combat.StatusOverviewAdjustedEvent
 import com.pipai.dragontiles.status.Overloaded
 
@@ -9,6 +10,7 @@ class StatusAdjustedAnimation(private val ev: StatusOverviewAdjustedEvent) : Ani
 
     private lateinit var sStatus: StatusSystem
     private lateinit var sUi: CombatUiSystem
+    private lateinit var sCombatantState: CombatantStateSystem
 
     override fun startAnimation() {
         sStatus.handleHeroStatus(ev.heroStatus)
@@ -16,6 +18,7 @@ class StatusAdjustedAnimation(private val ev: StatusOverviewAdjustedEvent) : Ani
         ev.enemyStatus.forEach { (enemyId, statuses) ->
             sStatus.handleEnemyStatus(enemyId, statuses)
         }
+        sCombatantState.updateAllIntents()
         endAnimation()
     }
 

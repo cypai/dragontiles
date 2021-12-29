@@ -223,6 +223,11 @@ class CombatantStateSystem(
         }
     }
 
+    fun updateAllIntents() {
+        sCombat.combat.enemies.filter { it.hp > 0 }
+            .forEach { updateIntent(it, sCombat.controller.api.getEnemyIntent(it)) }
+    }
+
     fun updateIntent(enemy: Enemy, intent: Intent?) {
         val entityId = enemyEntityMap[enemy]!!
         val cEnemy = mEnemy.get(entityId)
