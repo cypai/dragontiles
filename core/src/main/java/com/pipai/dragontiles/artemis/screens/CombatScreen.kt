@@ -13,7 +13,6 @@ import com.pipai.dragontiles.DragonTilesGame
 import com.pipai.dragontiles.artemis.systems.*
 import com.pipai.dragontiles.artemis.systems.animation.CombatAnimationSystem
 import com.pipai.dragontiles.artemis.systems.combat.*
-import com.pipai.dragontiles.artemis.systems.input.ExitInputProcessor
 import com.pipai.dragontiles.artemis.systems.input.InputProcessingSystem
 import com.pipai.dragontiles.artemis.systems.rendering.FullScreenColorSystem
 import com.pipai.dragontiles.artemis.systems.rendering.RenderingSystem
@@ -69,9 +68,9 @@ class CombatScreen(
                 MouseXySystem(game.gameConfig),
                 TooltipSystem(game, frontStage),
                 FullScreenColorSystem(game),
-                RewardsSystem(game, runData, frontStage, writeSave),
+                RewardsSystem(game, runData, frontStage, runData.combatWon),
                 MapUiSystem(game, backStage, runData),
-                PauseMenuSystem(game, frontStage),
+                PauseMenuSystem(game, frontStage, runData),
 
                 InputProcessingSystem(),
                 HoverableSystem(game.gameConfig),

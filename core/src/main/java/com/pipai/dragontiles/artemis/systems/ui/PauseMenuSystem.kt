@@ -11,9 +11,10 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.pipai.dragontiles.DragonTilesGame
 import com.pipai.dragontiles.artemis.screens.MainMenuScreen
 import com.pipai.dragontiles.artemis.systems.NoProcessingSystem
+import com.pipai.dragontiles.data.RunData
 import com.pipai.dragontiles.utils.system
 
-class PauseMenuSystem(private val game: DragonTilesGame, var stage: Stage) : NoProcessingSystem(), InputProcessor {
+class PauseMenuSystem(private val game: DragonTilesGame, var stage: Stage, private val runData: RunData) : NoProcessingSystem(), InputProcessor {
 
     private val skin = game.skin
 
@@ -55,7 +56,9 @@ class PauseMenuSystem(private val game: DragonTilesGame, var stage: Stage) : NoP
     private fun returnToUi() {
         table.remove()
         showing = false
-        sUi.enable()
+        if (!runData.combatWon) {
+            sUi.enable()
+        }
     }
 
     fun enable() {

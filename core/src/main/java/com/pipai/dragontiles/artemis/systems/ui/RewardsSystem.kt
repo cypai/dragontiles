@@ -28,7 +28,7 @@ class RewardsSystem(
     private val game: DragonTilesGame,
     private val runData: RunData,
     private val stage: Stage,
-    private val writeSave: Boolean,
+    private val startedBattleWon: Boolean,
 ) : NoProcessingSystem(), InputProcessor {
 
     private val skin = game.skin
@@ -52,7 +52,7 @@ class RewardsSystem(
     }
 
     fun activateRewards() {
-        if (writeSave) {
+        if (!startedBattleWon) {
             game.writeSave()
         }
         world.fetch(allOf(XYComponent::class, TileComponent::class)).forEach {
