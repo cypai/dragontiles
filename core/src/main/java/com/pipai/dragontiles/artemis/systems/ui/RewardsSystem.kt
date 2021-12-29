@@ -153,7 +153,7 @@ class RewardsSystem(
         openMapBtn.addListener(object : ClickListener() {
             override fun clicked(event: InputEvent?, x: Float, y: Float) {
                 sMap.showMap()
-                handleMapActivation()
+                handleOtherUiActivation()
             }
         })
         rewardsTable.add(openMapBtn)
@@ -224,7 +224,7 @@ class RewardsSystem(
         return table
     }
 
-    private fun handleMapActivation() {
+    private fun handleOtherUiActivation() {
         if (showing) {
             showing = false
             rootTable.remove()
@@ -238,18 +238,26 @@ class RewardsSystem(
         when (keycode) {
             Input.Keys.ESCAPE -> {
                 if (active && !showing && !isOnSpellDraft) {
-                    handleMapActivation()
+                    handleOtherUiActivation()
                     sMap.hideMap()
-                    return true
                 }
                 if (isOnSpellDraft) {
                     buildAndShowRewardsTable()
                     return true
                 }
             }
+            Input.Keys.D -> {
+                if (active) {
+                    if (isOnSpellDraft) {
+                        return true
+                    } else {
+                        handleOtherUiActivation()
+                    }
+                }
+            }
             Input.Keys.M -> {
                 if (active) {
-                    handleMapActivation()
+                    handleOtherUiActivation()
                 }
             }
         }

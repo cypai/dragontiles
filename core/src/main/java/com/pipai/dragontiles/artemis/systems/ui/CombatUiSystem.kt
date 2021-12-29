@@ -433,7 +433,7 @@ class CombatUiSystem(
             CombatUiState.ROOT -> {
                 selectSpell(keycode)
             }
-            else -> true
+            else -> !runData.combatWon
         }
     }
 
