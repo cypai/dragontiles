@@ -127,6 +127,7 @@ class CombatUiSystem(
     private val mTargetHighlight by mapper<TargetHighlightComponent>()
     private val mTile by mapper<TileComponent>()
     private val mMutualDestroy by mapper<MutualDestroyComponent>()
+    private val mHero by mapper<HeroComponent>()
 
     private val sTop by system<TopRowUiSystem>()
     private val sPath by system<PathInterpolationSystem>()
@@ -546,6 +547,7 @@ class CombatUiSystem(
     }
 
     private fun displayFullCastHands() {
+        val heroEntityId = world.fetch(allOf(HeroComponent::class)).first()
         val fch = findFullCastHand(sCombat.combat.hand)
         if (fch.isEmpty()) {
             spellComponentList.topText = "None Available"
@@ -553,10 +555,10 @@ class CombatUiSystem(
             spellComponentList.topText = "Available Hands"
         }
         spellComponentList.setFullCastOptions(fch)
-        spellComponentList.height = min(spellComponentList.prefHeight, SpellCard.cardHeight)
-        val position = layout.optionListTlPosition
-        spellComponentList.x = position.x
-        spellComponentList.y = position.y - spellComponentList.height
+        spellComponentList.height = spellComponentList.prefHeight.coerceAtLeast(SpellCard.cardHeight)
+        val position = mXy.get(heroEntityId)
+        spellComponentList.x = position.x + mSprite.get(heroEntityId).sprite.width + SpellCard.cardWidth
+        spellComponentList.y = position.y
         spellComponentList.width = spellComponentList.prefWidth
 
         frontStage.addActor(spellComponentList)
@@ -565,12 +567,13 @@ class CombatUiSystem(
     }
 
     private fun setSpellComponentOptions(options: List<List<TileInstance>>) {
+        val heroEntityId = world.fetch(allOf(HeroComponent::class)).first()
         spellComponentList.setOptions(options)
-        spellComponentList.height = min(spellComponentList.prefHeight, SpellCard.cardHeight)
+        spellComponentList.height = spellComponentList.prefHeight.coerceAtLeast(SpellCard.cardHeight)
         spellComponentList.width = spellComponentList.prefWidth
-        val position = layout.optionListTlPosition
-        spellComponentList.x = position.x
-        spellComponentList.y = position.y - spellComponentList.height
+        val position = mXy.get(heroEntityId)
+        spellComponentList.x = position.x + mSprite.get(heroEntityId).sprite.width + SpellCard.cardWidth
+        spellComponentList.y = position.y
     }
 
     private fun selectFullCastHand(fullCastHand: FullCastHand) {
@@ -1116,11 +1119,17 @@ class CombatUiSystem(
                     }
                 }
                 PotionTargetType.ENEMY -> {
+                    val heroEntityId = world.fetch(allOf(HeroComponent::class)).first()
+                    val cHeroXy = mXy.get(heroEntityId)
+                    val cHeroSprite = mSprite.get(heroEntityId)
+                    val position = cHeroXy.toVector2()
+                    position.x += cHeroSprite.sprite.width
+
                     selectedPotionIndex = ev.potionSlotIndex
                     stateMachine.changeState(CombatUiState.POTION_TARGET_SELECTION)
                     val potionId = world.create()
                     val cPotionXy = mXy.create(potionId)
-                    cPotionXy.setXy(layout.spellCastPosition)
+                    cPotionXy.setXy(position)
                     cPotionXy.x -= 100f
                     val cPotionSprite = mSprite.create(potionId)
                     cPotionSprite.sprite =
@@ -1203,9 +1212,14 @@ class CombatUiSystem(
             override fun enter(uiSystem: CombatUiSystem) {
                 uiSystem.spells.forEach { (number, spellCard) ->
                     if (number == uiSystem.selectedSpellNumber) {
+                        val heroEntityId = uiSystem.world.fetch(allOf(HeroComponent::class)).first()
+                        val cHeroXy = uiSystem.mXy.get(heroEntityId)
+                        val cHeroSprite = uiSystem.mSprite.get(heroEntityId)
+                        val position = cHeroXy.toVector2()
+                        position.x += cHeroSprite.sprite.width
                         uiSystem.sPath.moveToLocation(
                             uiSystem.spellCardEntityId(number)!!,
-                            uiSystem.layout.spellCastPosition
+                            position,
                         )
                         spellCard.enable()
                         uiSystem.displaySpellComponents(spellCard)

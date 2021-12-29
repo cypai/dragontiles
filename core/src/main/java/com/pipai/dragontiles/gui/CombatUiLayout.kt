@@ -11,10 +11,6 @@ data class CombatUiLayout(val config: GameConfig, val tileSkin: TileSkin, val ma
     val cardWidth = 140f
     val cardHeight = 196f
 
-    val spellCastPosition = Vector2(config.resolution.width / 2f - cardWidth / 2f, config.resolution.height / 2f)
-
-    fun spellStartPosition(number: Int) = Vector2(cardWidth * number, -cardHeight / 2f)
-
     val handCenter = Vector2(config.resolution.width / 2f, cardHeight)
     val handBlCorner = Vector2(handCenter.x - tileSkin.width * maxHandSize / 2f, handCenter.y - tileSkin.height / 2f)
 
@@ -32,6 +28,4 @@ data class CombatUiLayout(val config: GameConfig, val tileSkin: TileSkin, val ma
         start.x += number * tileSkin.width
         return start
     }
-
-    val optionListTlPosition = Vector2(config.resolution.width / 4f, spellCastPosition.y + cardHeight)
 }
