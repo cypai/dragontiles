@@ -1,7 +1,7 @@
 package com.pipai.dragontiles.meta
 
 data class GameOptions(
-    var musicVolume: Int,
-    var soundVolume: Int,
+    var musicVolume: Float,
+    var soundVolume: Float,
     val disabledKeywords: MutableList<String>,
 )

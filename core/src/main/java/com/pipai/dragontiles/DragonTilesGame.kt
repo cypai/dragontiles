@@ -112,11 +112,11 @@ class DragonTilesGame(val gameConfig: GameConfig) : Game() {
             } catch (e: Exception) {
                 logger.error("Error on load", e)
                 // TODO: Show user crash problem instead of nuking the save
-                save = Save(null, 0, GameOptions(100, 100, mutableListOf()), true)
+                save = Save(null, 0, GameOptions(1f, 1f, mutableListOf()), true)
                 writeSave()
             }
         } else {
-            save = Save(null, 0, GameOptions(100, 100, mutableListOf()), true)
+            save = Save(null, 0, GameOptions(1f, 1f, mutableListOf()), true)
             writeSave()
         }
 

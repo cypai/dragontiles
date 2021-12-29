@@ -4,6 +4,7 @@ import com.artemis.BaseSystem
 import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.InputEvent
 import com.badlogic.gdx.scenes.scene2d.Stage
+import com.badlogic.gdx.scenes.scene2d.Touchable
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar
 import com.badlogic.gdx.scenes.scene2d.ui.Table
@@ -31,8 +32,10 @@ class OptionsUiSystem(
         rootTable.setFillParent(true)
         rootTable.background = game.skin.getDrawable("frameDrawable")
 
-        musicVolumeBar.value = options.musicVolume.toFloat()
-        soundVolumeBar.value = options.soundVolume.toFloat()
+        musicVolumeBar.value = options.musicVolume * 100f
+        musicVolumeBar.touchable = Touchable.enabled
+        soundVolumeBar.value = options.soundVolume * 100f
+        soundVolumeBar.touchable = Touchable.enabled
 
         rootTable.add(Label("Music Volume", skin))
         rootTable.row()
@@ -45,15 +48,27 @@ class OptionsUiSystem(
         rootTable.add(backLabel)
         rootTable.row()
 
-        musicVolumeBar.addListener(object : ChangeListener() {
-            override fun changed(event: ChangeEvent?, actor: Actor?) {
-                options.musicVolume = musicVolumeBar.value.toInt()
+        musicVolumeBar.addListener(object : ClickListener() {
+            override fun touchDown(event: InputEvent?, x: Float, y: Float, pointer: Int, button: Int): Boolean {
+                musicVolumeBar.value = x / musicVolumeBar.width * 100f
+                options.musicVolume = musicVolumeBar.value / 100f
+                return true
+            }
+            override fun touchDragged(event: InputEvent?, x: Float, y: Float, pointer: Int) {
+                musicVolumeBar.value = x / musicVolumeBar.width * 100f
+                options.musicVolume = musicVolumeBar.value / 100f
             }
         })
 
-        soundVolumeBar.addListener(object : ChangeListener() {
-            override fun changed(event: ChangeEvent?, actor: Actor?) {
-                options.soundVolume = soundVolumeBar.value.toInt()
+        soundVolumeBar.addListener(object : ClickListener() {
+            override fun touchDown(event: InputEvent?, x: Float, y: Float, pointer: Int, button: Int): Boolean {
+                soundVolumeBar.value = x / soundVolumeBar.width * 100f
+                options.soundVolume = soundVolumeBar.value / 100f
+                return true
+            }
+            override fun touchDragged(event: InputEvent?, x: Float, y: Float, pointer: Int) {
+                soundVolumeBar.value = x / soundVolumeBar.width * 100f
+                options.soundVolume = soundVolumeBar.value / 100f
             }
         })
 

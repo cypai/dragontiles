@@ -52,6 +52,7 @@ class MainMenuUiSystem(
 
                 game.music = game.assets.get("assets/binassets/audio/bgm/plains.mp3")
                 game.music!!.isLooping = true
+                game.music!!.volume = game.save.options.musicVolume
                 game.music!!.play()
 
                 val dungeonId = "base:dungeons:Plains"
@@ -142,6 +143,7 @@ class MainMenuUiSystem(
         val dungeon = game.data.getDungeon(runData.dungeonMap.dungeonId)
         game.music = game.assets.get("assets/binassets/audio/bgm/plains.mp3")
         game.music!!.isLooping = true
+        game.music!!.volume = game.save.options.musicVolume
         game.music!!.play()
         when (runData.dungeonMap.getCurrentNode().type) {
             MapNodeType.COMBAT -> {
