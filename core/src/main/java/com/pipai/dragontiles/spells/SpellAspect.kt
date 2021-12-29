@@ -23,9 +23,9 @@ data class TempMaxFluxGainAspect(var amount: Int) : SpellAspect
 class ExhaustAspect : SpellAspect {
     override fun adjustDescription(description: String): String {
         return if (description.isEmpty()) {
-            Keywords.EXHAUST
+            "${Keywords.EXHAUST}."
         } else {
-            "$description ${Keywords.EXHAUST}"
+            "$description ${Keywords.EXHAUST}."
         }
     }
 }
@@ -33,7 +33,7 @@ class ExhaustAspect : SpellAspect {
 class RepeatableAspect : SpellAspect {
     override fun adjustDescription(description: String): String {
         return if (description.isEmpty()) {
-            Keywords.REPEATABLE
+            "${Keywords.REPEATABLE}."
         } else {
             "$description ${Keywords.REPEATABLE}."
         }
