@@ -36,7 +36,7 @@ class TownScreen(game: DragonTilesGame, runData: RunData) : Screen {
                 ClickableSystem(game.gameConfig),
                 HoverableSystem(game.gameConfig),
                 InputProcessingSystem(),
-                DeckDisplayUiSystem(game, runData, stage),
+                DeckDisplayUiSystem(game, runData, frontStage),
                 MapUiSystem(game, stage, runData),
                 TownUiSystem(game, runData),
                 FullScreenColorSystem(game),
@@ -97,5 +97,6 @@ class TownScreen(game: DragonTilesGame, runData: RunData) : Screen {
     override fun dispose() {
         world.dispose()
         stage.dispose()
+        frontStage.dispose()
     }
 }

@@ -24,6 +24,7 @@ import net.mostlyoriginal.api.event.common.EventSystem
 class SpellShopScreen(game: DragonTilesGame, runData: RunData) : Screen {
 
     private val stage = Stage(ScreenViewport(), game.spriteBatch)
+    private val frontStage = Stage(ScreenViewport(), game.spriteBatch)
 
     val world: World
 
@@ -37,12 +38,12 @@ class SpellShopScreen(game: DragonTilesGame, runData: RunData) : Screen {
                 InputProcessingSystem(),
                 SpellShopUiSystem(game, stage, runData),
                 FullScreenColorSystem(game),
-                TooltipSystem(game, stage),
+                TooltipSystem(game, frontStage),
             )
             .with(
                 -1,
-                TopRowUiSystem(game, runData, stage, false),
-                DeckDisplayUiSystem(game, runData, stage),
+                TopRowUiSystem(game, runData, frontStage, false),
+                DeckDisplayUiSystem(game, runData, frontStage),
             )
             .with(
                 -2,
@@ -53,6 +54,7 @@ class SpellShopScreen(game: DragonTilesGame, runData: RunData) : Screen {
         world = World(config)
 
         val inputProcessor = world.getSystem(InputProcessingSystem::class.java)
+        inputProcessor.addAlwaysOnProcessor(frontStage)
         inputProcessor.addAlwaysOnProcessor(stage)
         inputProcessor.addAlwaysOnProcessor(world.getSystem(DeckDisplayUiSystem::class.java))
         inputProcessor.addAlwaysOnProcessor(world.getSystem(SpellShopUiSystem::class.java))
@@ -68,10 +70,12 @@ class SpellShopScreen(game: DragonTilesGame, runData: RunData) : Screen {
         Gdx.gl.glClearColor(0f, 0f, 0f, 1f)
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA)
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
-        world.setDelta(delta)
-        world.process()
         stage.act()
         stage.draw()
+        world.setDelta(delta)
+        world.process()
+        frontStage.act()
+        frontStage.draw()
     }
 
     override fun resize(width: Int, height: Int) {
@@ -92,5 +96,6 @@ class SpellShopScreen(game: DragonTilesGame, runData: RunData) : Screen {
     override fun dispose() {
         world.dispose()
         stage.dispose()
+        frontStage.dispose()
     }
 }

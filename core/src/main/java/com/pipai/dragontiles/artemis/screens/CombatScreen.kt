@@ -138,5 +138,6 @@ class CombatScreen(
     override fun dispose() {
         world.dispose()
         backStage.dispose()
+        frontStage.dispose()
     }
 }

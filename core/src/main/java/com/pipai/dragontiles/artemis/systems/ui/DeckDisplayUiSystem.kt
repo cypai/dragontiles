@@ -2,6 +2,7 @@ package com.pipai.dragontiles.artemis.systems.ui
 
 import com.badlogic.gdx.Input
 import com.badlogic.gdx.InputProcessor
+import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.InputEvent
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.ui.*
@@ -42,6 +43,7 @@ class DeckDisplayUiSystem(
 
     private val sFsc by system<FullScreenColorSystem>()
     private val sEvent by system<EventSystem>()
+    private val sTooltip by system<TooltipSystem>()
 
     private lateinit var api: GlobalApi
     private var active = false
@@ -293,6 +295,15 @@ class DeckDisplayUiSystem(
                 .prefHeight(SpellCard.cardHeight)
                 .pad(10f)
             spellCard.addListener(object : ClickListener() {
+                override fun enter(event: InputEvent?, x: Float, y: Float, pointer: Int, fromActor: Actor?) {
+                    sTooltip.addSpell(spell)
+                    sTooltip.showTooltip()
+                }
+
+                override fun exit(event: InputEvent?, x: Float, y: Float, pointer: Int, toActor: Actor?) {
+                    sTooltip.hideTooltip()
+                }
+
                 override fun clicked(event: InputEvent?, x: Float, y: Float) {
                     onClick(spell, section, i)
                 }
