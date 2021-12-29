@@ -13,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.badlogic.gdx.utils.Align
 import com.pipai.dragontiles.DragonTilesGame
+import com.pipai.dragontiles.artemis.EntityId
 import com.pipai.dragontiles.artemis.components.*
 import com.pipai.dragontiles.artemis.events.PricedItemClickEvent
 import com.pipai.dragontiles.artemis.screens.TownScreen
@@ -151,8 +152,6 @@ class SpellShopUiSystem(
             cText.color = Color.RED
         }
         cText.text = "${ps.price} Gold"
-        val cClickable = mClickable.create(entityId)
-        cClickable.eventGenerator = { PricedItemClickEvent(entityId, ps) }
         spellCard.addListener(object : ClickListener() {
             override fun enter(event: InputEvent?, x: Float, y: Float, pointer: Int, fromActor: Actor?) {
                 sTooltip.addSpell(spell)
@@ -162,24 +161,27 @@ class SpellShopUiSystem(
             override fun exit(event: InputEvent?, x: Float, y: Float, pointer: Int, toActor: Actor?) {
                 sTooltip.hideTooltip()
             }
+
+            override fun clicked(event: InputEvent?, x: Float, y: Float) {
+                handleSpellCardClick(entityId, ps)
+            }
         })
         stage.addActor(spellCard)
     }
 
-    @Subscribe
-    fun handleSpellCardClick(ev: PricedItemClickEvent) {
-        if (runData.hero.gold >= ev.pricedItem.price) {
-            if (ev.pricedItem == town.spellShop.colorlessSpell) {
+    fun handleSpellCardClick(entityId: EntityId, ps: PricedItem) {
+        if (runData.hero.gold >= ps.price) {
+            if (ps == town.spellShop.colorlessSpell) {
                 town.spellShop.colorlessSpell = null
             } else {
-                town.spellShop.classSpells.remove(ev.pricedItem)
+                town.spellShop.classSpells.remove(ps)
             }
-            api.gainGoldImmediate(-ev.pricedItem.price)
+            api.gainGoldImmediate(-ps.price)
             recalculatePriceColor()
-            val spell = game.data.getSpell(ev.pricedItem.id)
-            logger.info("Adding ${spell.id} to deck at price ${ev.pricedItem.price}")
+            val spell = game.data.getSpell(ps.id)
+            logger.info("Adding ${spell.id} to deck at price ${ps.price}")
             api.addSpellToDeck(spell)
-            world.delete(ev.entityId)
+            world.delete(entityId)
             town.boughtSpell = true
             if (!town.boughtSpell) {
                 town.actions--
