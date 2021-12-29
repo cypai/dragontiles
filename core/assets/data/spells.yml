@@ -262,3 +262,8 @@ base:spells:PhilosophersStone:
   en:
     name: Philosopher's Stone
     description: Transform the @Component into a Life or Star tile of your choice.
+
+base:spells:PhoenixFire:
+  en:
+    name: Phoenix Fire
+    description: Deal !d Fire damage and inflict 1 Pyro on all enemies.
