@@ -6,7 +6,7 @@ import com.pipai.dragontiles.spells.*
 
 class Explosion : StandardSpell() {
     override val id: String = "base:spells:Explosion"
-    override val requirement: ComponentRequirement = Identical(3)
+    override val requirement: ComponentRequirement = Identical(3, SuitGroup.ELEMENTAL)
     override val type: SpellType = SpellType.ATTACK
     override val targetType: TargetType = TargetType.AOE
     override val rarity: Rarity = Rarity.UNCOMMON
