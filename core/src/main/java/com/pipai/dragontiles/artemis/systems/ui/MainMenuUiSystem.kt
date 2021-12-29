@@ -8,10 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.pipai.dragontiles.DragonTilesGame
-import com.pipai.dragontiles.artemis.screens.CardDatabaseScreen
-import com.pipai.dragontiles.artemis.screens.CombatScreen
-import com.pipai.dragontiles.artemis.screens.EventScreen
-import com.pipai.dragontiles.artemis.screens.TownScreen
+import com.pipai.dragontiles.artemis.screens.*
 import com.pipai.dragontiles.combat.CombatRewardConfig
 import com.pipai.dragontiles.combat.SpellRewardType
 import com.pipai.dragontiles.data.*
@@ -98,6 +95,11 @@ class MainMenuUiSystem(
         databaseLabel.addListener(object : ClickListener() {
             override fun clicked(event: InputEvent?, x: Float, y: Float) {
                 game.screen = CardDatabaseScreen(game)
+            }
+        })
+        optionsLabel.addListener(object : ClickListener() {
+            override fun clicked(event: InputEvent?, x: Float, y: Float) {
+                game.screen = OptionsScreen(game)
             }
         })
         quitLabel.addListener(object : ClickListener() {
