@@ -257,3 +257,8 @@ base:spells:Splash:
   en:
     name: Splash
     description: ""
+
+base:spells:PhilosophersStone:
+  en:
+    name: Philosopher's Stone
+    description: Transform the @Component into a Life or Star tile of your choice.
