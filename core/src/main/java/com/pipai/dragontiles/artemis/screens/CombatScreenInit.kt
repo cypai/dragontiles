@@ -58,7 +58,7 @@ class CombatScreenInit(
     private fun initHero() {
         val entityId = world.create()
         val cXy = mXy.create(entityId)
-        cXy.setXy(100f, 420f)
+        cXy.setXy(100f, 350f)
         val cHero = mHero.create(entityId)
         cHero.setByRunData(runData)
         val cSprite = mSprite.create(entityId)
