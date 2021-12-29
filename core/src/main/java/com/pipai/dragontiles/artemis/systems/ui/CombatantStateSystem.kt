@@ -64,6 +64,11 @@ class CombatantStateSystem(
         }
     }
 
+    fun enemyDefeated(enemy: Enemy) {
+        val ui = combatantTables.remove(enemyEntityMap.remove(enemy))!!
+        ui.table.remove()
+    }
+
     private fun createUi(entityId: EntityId) {
         val cXy = mXy.get(entityId)
         val cSprite = mSprite.get(entityId)
