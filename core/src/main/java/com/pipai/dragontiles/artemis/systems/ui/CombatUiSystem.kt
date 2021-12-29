@@ -540,7 +540,7 @@ class CombatUiSystem(
             spellComponentList.topText = "Manual Selection"
         } else {
             if (options.isEmpty()) {
-                spellComponentList.topText = "None available"
+                spellComponentList.topText = "None Available"
             } else {
                 spellComponentList.topText = "Viable"
             }
@@ -575,7 +575,7 @@ class CombatUiSystem(
     private fun setSpellComponentOptions(options: List<List<TileInstance>>) {
         val heroEntityId = world.fetch(allOf(HeroComponent::class)).first()
         spellComponentList.setOptions(options)
-        spellComponentList.height = spellComponentList.prefHeight.coerceAtLeast(SpellCard.cardHeight)
+        spellComponentList.height = SpellCard.cardHeight
         spellComponentList.width = spellComponentList.prefWidth
         val position = mXy.get(heroEntityId)
         spellComponentList.x = position.x + mSprite.get(heroEntityId).sprite.width + SpellCard.cardWidth
@@ -802,6 +802,13 @@ class CombatUiSystem(
             }
         } else {
             spellComponentList.filterOptions(givenComponents)
+            if (spellComponentList.optionSize() == 0) {
+                spellComponentList.topText = "None Available"
+            } else {
+                spellComponentList.topText = "Viable"
+            }
+            spellComponentList.refreshOptions()
+            spellComponentList.width = spellComponentList.prefWidth
         }
         if (spell is StandardSpell
             && spell.targetType != TargetType.NONE

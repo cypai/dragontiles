@@ -73,12 +73,19 @@ class SpellComponentList(
         refreshOptions()
     }
 
+    fun optionSize(): Int {
+        return options.filter { it.containsAll(optionFilter) }.size
+    }
+
     fun refreshOptions() {
         rows.clear()
         table.clearChildren()
         table.left()
+            .top()
         val topLabel = Label(topText, skin, "white")
-        table.add(topLabel).colspan(2)
+        table.add(topLabel)
+            .colspan(2)
+            .top()
         table.row()
         var fcIndex = 0
         options.filter { it.containsAll(optionFilter) }
@@ -90,11 +97,13 @@ class SpellComponentList(
                 }
                 val label = Label((index + 1).toString(), skin, "white")
                 table.add(label)
+                    .top()
                 val hGroup = HorizontalGroup()
                 option.forEach { tile ->
                     hGroup.addActor(Image(tileSkin.regionFor(tile.tile)))
                 }
                 table.add(hGroup)
+                    .top()
                     .height(hGroup.prefHeight)
                     .padRight(2f)
                 table.row()
