@@ -10,8 +10,8 @@ class Bull : Enemy() {
     override val id: String = "base:enemies:Bull"
     override val assetName: String = "bull.png"
 
-    override val hpMax: Int = 65
-    override val fluxMax: Int = 35
+    override val hpMax: Int = 55
+    override val fluxMax: Int = 40
 
     private var hasOverloaded = false
 
