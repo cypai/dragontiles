@@ -478,12 +478,16 @@ class CombatApi(
         if (maybeStatus == null) {
             combat.heroStatus.add(status)
             eventBus.register(status)
+            eventBus.dispatch(PlayerStatusChangeEvent(status, 0))
             status.onInflict(this)
         } else {
+            val previousAmount = maybeStatus.amount
             maybeStatus.amount += status.amount
-            maybeStatus.onInflict(this)
             if (maybeStatus.amount == 0) {
                 removeHeroStatus(status::class)
+            } else {
+                eventBus.dispatch(PlayerStatusChangeEvent(maybeStatus, previousAmount))
+                maybeStatus.onInflict(this)
             }
         }
         notifyStatusUpdated()
@@ -537,6 +541,9 @@ class CombatApi(
     suspend fun <T : Status> removeHeroStatus(statusType: KClass<T>): Boolean {
         val item = combat.heroStatus.find { statusType.isInstance(it) }
         if (item != null) {
+            val previousAmount = item.amount
+            item.amount = 0
+            eventBus.dispatch(PlayerStatusChangeEvent(item, previousAmount))
             combat.heroStatus.remove(item)
             eventBus.unregister(item)
             notifyStatusUpdated()
@@ -558,8 +565,9 @@ class CombatApi(
         val statusList = combat.enemyStatus[enemy.enemyId]!!
         val item = statusList.find { statusType.isInstance(it) }
         if (item != null) {
+            val previousAmount = item.amount
             item.amount = 0
-            eventBus.dispatch(EnemyStatusChangeEvent(enemy, item, item.amount))
+            eventBus.dispatch(EnemyStatusChangeEvent(enemy, item, previousAmount))
             statusList.remove(item)
             eventBus.unregister(item)
             notifyStatusUpdated()

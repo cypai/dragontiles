@@ -7,6 +7,7 @@ import com.pipai.dragontiles.artemis.systems.combat.CombatControllerSystem
 import com.pipai.dragontiles.artemis.systems.ui.CombatUiSystem
 import com.pipai.dragontiles.artemis.systems.ui.TopRowUiSystem
 import com.pipai.dragontiles.combat.*
+import com.pipai.dragontiles.status.Overloaded
 import com.pipai.dragontiles.utils.getLogger
 import com.pipai.dragontiles.utils.system
 import net.mostlyoriginal.api.event.common.EventSystem
@@ -224,6 +225,20 @@ class CombatAnimationSystem(private val game: DragonTilesGame) : BaseSystem(), A
     @Subscribe
     fun handlePotionUse(ev: PotionUseEvent) {
         sEvent.dispatch(TopRowUiUpdateEvent())
+    }
+
+    @Subscribe
+    fun handleStatusChange(ev: PlayerStatusChangeEvent) {
+        if (ev.status is Overloaded && ev.previousAmount == 0) {
+            queueAnimation(OverloadedAnimation())
+        }
+    }
+
+    @Subscribe
+    fun handleEnemyStatusChange(ev: EnemyStatusChangeEvent) {
+        if (ev.status is Overloaded && ev.previousAmount == 0) {
+            queueAnimation(OverloadedAnimation())
+        }
     }
 
     @Subscribe
