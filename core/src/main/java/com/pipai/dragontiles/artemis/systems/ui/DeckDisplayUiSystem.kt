@@ -142,6 +142,8 @@ class DeckDisplayUiSystem(
         table.row()
         addSectionHeader("New Spell")
         table.add(SpellCard(game, spell, null, game.skin, null))
+            .width(SpellCard.cardWidth)
+            .height(SpellCard.cardHeight)
             .colspan(colspan)
         table.row()
         addStandardDisplay(
@@ -226,7 +228,6 @@ class DeckDisplayUiSystem(
         when (section) {
             Section.ACTIVE -> {
                 api.removeSpellAtIndex(index)
-                runData.hero.spells.removeAt(index)
                 api.addSpellToDeck(newSpell)
             }
             Section.SIDEBOARD -> {
