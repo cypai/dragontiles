@@ -96,6 +96,7 @@ class GameDataInitializer {
         gameData.addPotion(VentingPotion())
         gameData.addPotion(HastePotion())
         gameData.addPotion(SwapPotion())
+        gameData.addPotion(FetchPotion())
         gameData.addPotion(FireCrystal())
         gameData.addPotion(IceCrystal())
         gameData.addPotion(LightningCrystal())

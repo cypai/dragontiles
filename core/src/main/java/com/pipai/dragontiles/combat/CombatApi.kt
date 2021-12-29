@@ -193,6 +193,16 @@ class CombatApi(
         eventBus.dispatch(HandAdjustedEvent(combat.hand.toList(), combat.assigned))
     }
 
+    suspend fun fetch() {
+        if (combat.openPool.size < OPEN_POOL_SIZE) {
+            drawToOpenPool(OPEN_POOL_SIZE - combat.openPool.size)
+        }
+    }
+
+    suspend fun fetch(amount: Int) {
+        drawToOpenPool(amount)
+    }
+
     suspend fun drawToOpenPool(amount: Int) {
         val drawnTiles: MutableList<Pair<TileInstance, Int>> = mutableListOf()
         repeat(amount) {

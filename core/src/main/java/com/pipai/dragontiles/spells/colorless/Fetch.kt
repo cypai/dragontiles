@@ -15,8 +15,6 @@ class Fetch : StandardSpell() {
     )
 
     override suspend fun onCast(params: CastParams, api: CombatApi) {
-        if (api.combat.openPool.size < CombatApi.OPEN_POOL_SIZE) {
-            api.drawToOpenPool(CombatApi.OPEN_POOL_SIZE - api.combat.openPool.size)
-        }
+        api.fetch()
     }
 }
