@@ -127,7 +127,7 @@ class CombatApi(
             logger.error("Attempted to transform a frozen tile")
             return
         }
-        val newTile = TileInstance(tile, TileStatus.NONE, nextId())
+        val newTile = TileInstance(tile, tileInstance.tileStatus, nextId())
         val index = combat.hand.indexOf(tileInstance)
         combat.hand.removeAt(index)
         combat.hand.add(index, newTile)

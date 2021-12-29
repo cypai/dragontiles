@@ -178,7 +178,7 @@ class CombatAnimationSystem(private val game: DragonTilesGame) : BaseSystem(), A
 
     @Subscribe
     fun handleTransformation(ev: TileTransformedEvent) {
-        queueAnimation(TileTransformAnimation(ev, game.tileSkin))
+        queueAnimation(TileTransformAnimation(ev, sUi.layout))
     }
 
     @Subscribe
