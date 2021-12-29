@@ -718,7 +718,10 @@ class CombatUiSystem(
 
                             sAnimation.pauseUiMode = true
                             scope.launch {
-                                spell.cast(CastParams(listOf(mEnemy.get(ev.entityId).enemy.enemyId)), sCombat.controller.api)
+                                spell.cast(
+                                    CastParams(listOf(mEnemy.get(ev.entityId).enemy.enemyId)),
+                                    sCombat.controller.api
+                                )
                             }
                         } else if (spell.targetType == TargetType.AOE) {
                             sAnimation.pauseUiMode = true
@@ -914,13 +917,12 @@ class CombatUiSystem(
                 stateMachine.revertToPreviousState()
             }
             CombatUiState.QUERY_SWAP -> {
+                val data = SwapData(
+                    swapActiveSpells.map { it.number!! },
+                    swapSideboardSpells.map { it.number!! },
+                )
                 scope.launch {
-                    swapChannel.send(
-                        SwapData(
-                            swapActiveSpells.map { it.number!! },
-                            swapSideboardSpells.map { it.number!! },
-                        )
-                    )
+                    swapChannel.send(data)
                 }
                 swapActiveSpells.clear()
                 swapSideboardSpells.clear()
@@ -1212,7 +1214,6 @@ class CombatUiSystem(
                 }
                 uiSystem.sorceryEntityIds.forEach { (_, eid) ->
                     val cXy = uiSystem.mXy.get(eid)
-                    println(eid)
                     uiSystem.sPath.moveToLocation(eid, Vector2(cXy.x, uiSystem.spellCardY))
                 }
                 uiSystem.displayFullCastHands()
