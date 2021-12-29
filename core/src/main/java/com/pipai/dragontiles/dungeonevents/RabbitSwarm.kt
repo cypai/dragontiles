@@ -5,6 +5,7 @@ import com.pipai.dragontiles.combat.CombatRewardConfig
 import com.pipai.dragontiles.combat.SpellRewardType
 import com.pipai.dragontiles.dungeon.Encounter
 import com.pipai.dragontiles.enemies.KillerRabbit
+import com.pipai.dragontiles.enemies.Rat
 import com.pipai.dragontiles.relics.RabbitsFoot
 
 class RabbitSwarm : DungeonEvent() {
@@ -24,9 +25,9 @@ class RabbitSwarm : DungeonEvent() {
             val encounter = Encounter(
                 "base:dungeons:Plains:RabbitSwarm",
                 listOf(
-                    Pair(KillerRabbit(), Vector2(740f, 400f)),
-                    Pair(KillerRabbit(), Vector2(1010f, 500f)),
-                    Pair(KillerRabbit(), Vector2(1010f, 280f)),
+                    Pair(KillerRabbit(), Vector2(700f, 320f)),
+                    Pair(KillerRabbit(), Vector2(900f, 320f)),
+                    Pair(KillerRabbit(), Vector2(1100f, 320f)),
                 )
             )
             api.startCombat(encounter, CombatRewardConfig(SpellRewardType.STANDARD, 3, false, RabbitsFoot(), api.runData.potionChance))
