@@ -25,17 +25,16 @@ class StatusSystem(private val game: DragonTilesGame) : NoProcessingSystem() {
     private val enemyStatuses: MutableMap<EntityId, MutableList<BackendId>> = mutableMapOf()
 
     fun handleHeroStatus(statuses: List<Status>) {
-        val cHeroXy = mXy.get(world.fetch(allOf(HeroComponent::class)).first())
+        val heroEntityId = world.fetch(allOf(HeroComponent::class)).first()
         heroStatuses.forEach { world.delete(it) }
         heroStatuses.clear()
         statuses.forEachIndexed { index, s ->
-            heroStatuses.add(createStatus(cHeroXy, index, s))
+            heroStatuses.add(createStatus(heroEntityId, index, s))
         }
     }
 
     fun handleEnemyStatus(enemyId: BackendId, statuses: List<Status>) {
         world.fetch(allOf(EnemyComponent::class)).find { mEnemy.get(it).enemy.enemyId == enemyId }?.let { enemyEntityId ->
-            val cEnemyXy = mXy.get(enemyEntityId)
             if (enemyEntityId !in enemyStatuses) {
                 enemyStatuses[enemyEntityId] = mutableListOf()
             }
@@ -43,7 +42,7 @@ class StatusSystem(private val game: DragonTilesGame) : NoProcessingSystem() {
             list.forEach { world.delete(it) }
             list.clear()
             statuses.forEachIndexed { index, s ->
-                list.add(createStatus(cEnemyXy, index, s))
+                list.add(createStatus(enemyEntityId, index, s))
             }
         }
     }
@@ -53,15 +52,17 @@ class StatusSystem(private val game: DragonTilesGame) : NoProcessingSystem() {
         enemyStatuses.remove(enemyId)
     }
 
-    private fun createStatus(cTargetXy: XYComponent, index: Int, status: Status): Int {
-        val eid = world.create()
-        val cStatus = mStatus.create(eid)
+    private fun createStatus(target: EntityId, index: Int, status: Status): Int {
+        val statusId = world.create()
+        val cStatus = mStatus.create(statusId)
         cStatus.setByStatus(status)
-        val cXy = mXy.create(eid)
-        cXy.setXy(cTargetXy.x + 16f * index, cTargetXy.y - 44f)
-        val cSprite = mSprite.create(eid)
+        val cTargetXy = mXy.get(target)
+        val cTargetSprite = mSprite.get(target)
+        val cXy = mXy.create(statusId)
+        cXy.setXy(cTargetXy.x + 16f * index, cTargetXy.y + cTargetSprite.sprite.height - 16f)
+        val cSprite = mSprite.create(statusId)
         cSprite.sprite = Sprite(game.assets.get(statusAssetPath(status.assetName), Texture::class.java))
-        val cHover = mHoverable.create(eid)
+        val cHover = mHoverable.create(statusId)
         cHover.enterCallback = {
             cHover.recheck = true
             sTooltip.addNameDescLocalization(game.gameStrings.nameDescLocalization(status.id), allowBlank = true)
@@ -70,10 +71,12 @@ class StatusSystem(private val game: DragonTilesGame) : NoProcessingSystem() {
         cHover.exitCallback = { sTooltip.hideTooltip() }
 
         if (status.displayAmount) {
-            val cText = mTextLabel.create(eid)
+            val cText = mTextLabel.create(statusId)
             cText.size = TextLabelSize.TINY
             cText.text = status.amount.toString()
+            cText.xOffset = 8f
+            cText.yOffset = 8f
         }
-        return eid
+        return statusId
     }
 }
