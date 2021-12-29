@@ -200,6 +200,12 @@ class CombatUiSystem(
             spellCard.x = cXy.x
             spellCard.y = cXy.y
         }
+        sorceryEntityIds.forEach { (number, id) ->
+            val cXy = mXy.get(id)
+            val spellCard = sorceries[number]!!
+            spellCard.x = cXy.x
+            spellCard.y = cXy.y
+        }
     }
 
     fun activeTiles(): List<TileInstance> {
@@ -1199,6 +1205,7 @@ class CombatUiSystem(
                 }
                 uiSystem.sorceryEntityIds.forEach { (_, eid) ->
                     val cXy = uiSystem.mXy.get(eid)
+                    println(eid)
                     uiSystem.sPath.moveToLocation(eid, Vector2(cXy.x, uiSystem.spellCardY))
                 }
                 uiSystem.displayFullCastHands()
