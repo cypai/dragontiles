@@ -59,7 +59,7 @@ class CombatantStateSystem(
             mClickable.create(entityId).eventGenerator = { EnemyClickEvent(entityId, it) }
 
             enemyEntityMap[enemy] = entityId
-            createUi(entityId)
+            createUi(enemy, entityId)
             updateEnemyStats(enemy, enemy.hpMax, enemy.hpMax, enemy.flux, enemy.fluxMax)
         }
     }
@@ -69,19 +69,16 @@ class CombatantStateSystem(
         ui.table.remove()
     }
 
-    private fun createUi(entityId: EntityId) {
+    private fun createUi(enemy: Enemy, entityId: EntityId) {
         val cXy = mXy.get(entityId)
         val cSprite = mSprite.get(entityId)
         val cEnemy = mEnemy.get(entityId)
-        val ui = CombatantUi.create(game, cSprite.sprite.width, cEnemy.fluxMax > 0)
+        val ui = CombatantUi.create(game, enemy, cSprite.sprite.width)
         ui.nameLabel.setText(game.gameStrings.nameLocalization(cEnemy.enemy).name)
 
         combatantTables[entityId] = ui
-        ui.table.background = game.skin.getDrawable("disabled")
         ui.table.x = cXy.x
         ui.table.y = cXy.y + cSprite.sprite.height
-        ui.table.width = cSprite.sprite.width
-        ui.table.height = ui.table.prefHeight
         stage.addActor(ui.table)
     }
 
@@ -111,12 +108,12 @@ class CombatantStateSystem(
         cEnemy.flux = flux
         cEnemy.fluxMax = fluxMax
         ui.hpLabel.setText("$hp/$hpMax")
-        ui.hpBar.value = hp.toFloat() / hpMax.toFloat()
+        ui.hpBar.value = hp.toFloat()
         if (ui.fluxLabel != null) {
             ui.fluxLabel.setText("$flux/$fluxMax")
         }
         if (ui.fluxBar != null) {
-            ui.fluxBar.value = flux.toFloat() / fluxMax.toFloat()
+            ui.fluxBar.value = flux.toFloat()
         }
     }
 
@@ -316,10 +313,10 @@ class CombatantStateSystem(
         val fluxLabel: Label?,
     ) {
         companion object {
-            fun create(game: DragonTilesGame, width: Float, includeFluxBar: Boolean): CombatantUi {
+            fun create(game: DragonTilesGame, enemy: Enemy, width: Float): CombatantUi {
                 val table = Table()
+                table.background = game.skin.getDrawable("disabled")
 
-                val intentTable = Table()
                 val numbersTable = Table()
                 val ventLabel = Label("", game.skin, "whiteSmall")
                 val attackLabel = Label("", game.skin, "whiteSmall")
@@ -329,98 +326,73 @@ class CombatantStateSystem(
                     .top()
                     .left()
                     .prefHeight(16f)
-                    .expand()
+                numbersTable.row()
                 numbersTable.add(attackLabel)
                     .bottom()
                     .left()
                     .prefHeight(16f)
-                    .expand()
-                numbersTable.row()
 
                 val intentStack = Stack()
                 val intent1 = Image()
-//                intent1.setScaling(Scaling.fit)
-//                intent1.align = Align.right
                 val intent2 = Image()
-//                intent2.setScaling(Scaling.fit)
-//                intent2.align = Align.right
                 intentStack.add(intent2)
                 intentStack.add(intent1)
+                intentStack.add(numbersTable)
 
-                intentTable.add(numbersTable)
-                    .left()
+                table.add(intentStack)
+                    .size(48f)
+                val nameLabel = Label("", game.skin, "whiteSmall")
+                nameLabel.setAlignment(Align.center)
+                table.add(nameLabel)
                     .expand()
-                intentTable.add(intentStack)
-                    .size(64f)
-                    .left()
-                table.add(intentTable)
+                table.row()
 
                 val stateTable = Table()
-                val nameLabel = Label("", game.skin, "whiteTiny")
-                nameLabel.setAlignment(Align.left)
-                stateTable.add(nameLabel)
-                    .padTop(4f)
-                    .padBottom(4f)
-                    .bottom()
-                    .expand()
-                stateTable.row()
-                val hpBar = ProgressBar(0f, 1f, 0.01f, false, game.dtskin, "hpbar")
+                stateTable.background = game.skin.getDrawable("disabled")
+                val hpBar = ProgressBar(0f, enemy.hpMax.toFloat(), 1f, false, game.dtskin, "hpbar")
+                hpBar.setAnimateDuration(0.25f)
                 val hpLabel = Label("", game.skin, "whiteTiny")
                 hpLabel.setAlignment(Align.center)
                 val hpStack = Stack()
                 hpStack.add(hpBar)
                 hpStack.add(hpLabel)
-                if (includeFluxBar) {
-                    val fluxBar = ProgressBar(0f, 1f, 0.01f, false, game.dtskin, "fluxbar")
-                    val fluxLabel = Label("", game.skin, "whiteTiny")
+                var fluxBar: ProgressBar? = null
+                var fluxLabel: Label? = null
+                if (enemy.fluxMax > 0) {
+                    fluxBar = ProgressBar(0f, enemy.fluxMax.toFloat(), 1f, false, game.dtskin, "fluxbar")
+                    fluxBar.setAnimateDuration(0.25f)
+                    fluxLabel = Label("", game.skin, "whiteTiny")
                     fluxLabel.setAlignment(Align.center)
                     val fluxStack = Stack()
                     fluxStack.add(fluxBar)
                     fluxStack.add(fluxLabel)
                     stateTable.add(fluxStack)
+                        .width(width)
                         .bottom()
                     stateTable.row()
-                    stateTable.add(hpStack)
-                        .bottom()
-                        .padBottom(2f)
-                    stateTable.row()
-                    table.add(stateTable)
-                        .prefWidth(width - 96f)
-                        .prefHeight(64f)
-                        .expand()
-                    return CombatantUi(
-                        table,
-                        attackLabel,
-                        ventLabel,
-                        intent1,
-                        intent2,
-                        nameLabel,
-                        hpBar,
-                        hpLabel,
-                        fluxBar,
-                        fluxLabel,
-                    )
-                } else {
-                    stateTable.add(hpStack)
-                        .bottom()
-                        .padBottom(4f)
-                    stateTable.row()
-                    table.add(stateTable)
-                        .left()
-                        .prefWidth(width - 96f)
-                    return CombatantUi(
-                        table,
-                        attackLabel,
-                        ventLabel,
-                        intent1,
-                        intent2,
-                        nameLabel,
-                        hpBar,
-                        hpLabel,
-                        null,
-                        null,
-                    )
                 }
+                stateTable.add(hpStack)
+                    .bottom()
+                    .width(width)
+                    .padBottom(2f)
+                stateTable.row()
+                table.add(stateTable)
+                    .colspan(2)
+                    .width(width)
+                table.width = width
+                table.height = table.prefHeight
+                return CombatantUi(
+                    table,
+                    attackLabel,
+                    ventLabel,
+                    intent1,
+                    intent2,
+                    nameLabel,
+                    hpBar,
+                    hpLabel,
+                    fluxBar,
+                    fluxLabel,
+                )
             }
         }
     }
