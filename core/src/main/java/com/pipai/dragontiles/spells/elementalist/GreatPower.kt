@@ -10,7 +10,7 @@ class GreatPower : Sorcery() {
     override val requirement = Identical(3)
     override val rarity = Rarity.UNCOMMON
     override val aspects: MutableList<SpellAspect> = mutableListOf(
-        StackableAspect(Strength(1), 1),
+        StackableAspect(Strength(2), 1),
     )
 
     override suspend fun onCast(hand: FullCastHand, api: CombatApi) {

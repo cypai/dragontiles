@@ -11,7 +11,7 @@ class FluxCapacitor : StandardSpell() {
     override val targetType: TargetType = TargetType.NONE
     override val rarity: Rarity = Rarity.UNCOMMON
     override val aspects: MutableList<SpellAspect> = mutableListOf(
-        TempMaxFluxGainAspect(10)
+        TempMaxFluxGainAspect(15)
     )
 
     override suspend fun onCast(params: CastParams, api: CombatApi) {
