@@ -16,7 +16,7 @@ class Spark : StandardSpell() {
     override val aspects: MutableList<SpellAspect> = mutableListOf(
         AttackDamageAspect(2),
         RepeatableAspect(),
-        FluxGainAspect(1),
+        FluxGainAspect(2),
     )
 
     override fun additionalKeywords(): List<String> = listOf("@Components")

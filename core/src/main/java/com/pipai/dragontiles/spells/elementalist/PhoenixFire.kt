@@ -14,7 +14,7 @@ class PhoenixFire : StandardSpell() {
     override val rarity: Rarity = Rarity.UNCOMMON
     override val aspects: MutableList<SpellAspect> = mutableListOf(
         AttackDamageAspect(16),
-        FluxGainAspect(5),
+        FluxGainAspect(9),
         StackableAspect(Pyro(1), 1),
     )
 

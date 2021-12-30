@@ -12,7 +12,7 @@ class Strike : StandardSpell() {
     override val rarity: Rarity = Rarity.STARTER
     override val aspects: MutableList<SpellAspect> = mutableListOf(
         AttackDamageAspect(7),
-        FluxGainAspect(2)
+        FluxGainAspect(5)
     )
 
     override suspend fun onCast(params: CastParams, api: CombatApi) {

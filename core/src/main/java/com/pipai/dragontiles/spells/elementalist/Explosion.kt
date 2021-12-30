@@ -12,7 +12,7 @@ class Explosion : StandardSpell() {
     override val rarity: Rarity = Rarity.UNCOMMON
     override val aspects: MutableList<SpellAspect> = mutableListOf(
         AttackDamageAspect(0),
-        FluxGainAspect(5),
+        FluxGainAspect(8),
         ExhaustAspect(),
     )
 

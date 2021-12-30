@@ -15,7 +15,7 @@ class InflictReactant : StandardSpell() {
     override val rarity: Rarity = Rarity.COMMON
     override val aspects: MutableList<SpellAspect> = mutableListOf(
         StackableAspect(GenericStatus(1), 1),
-        FluxGainAspect(1),
+        FluxGainAspect(2),
     )
 
     override fun additionalKeywords(): List<String> =

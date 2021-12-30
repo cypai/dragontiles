@@ -20,7 +20,7 @@ class IceShard : StandardSpell() {
     override val rarity: Rarity = Rarity.UNCOMMON
     override val aspects: MutableList<SpellAspect> = mutableListOf(
         AttackDamageAspect(13),
-        FluxGainAspect(2),
+        FluxGainAspect(7),
         StackableAspect(Cryo(1), 1),
     )
 

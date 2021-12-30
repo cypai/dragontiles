@@ -13,7 +13,7 @@ class DualStrike : StandardSpell() {
     override val rarity: Rarity = Rarity.COMMON
     override val aspects: MutableList<SpellAspect> = mutableListOf(
         AttackDamageAspect(5),
-        FluxGainAspect(2)
+        FluxGainAspect(6)
     )
 
     override suspend fun onCast(params: CastParams, api: CombatApi) {

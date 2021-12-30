@@ -13,7 +13,7 @@ class MultiInvoke : StandardSpell() {
     override val rarity: Rarity = Rarity.UNCOMMON
     override val aspects: MutableList<SpellAspect> = mutableListOf(
         AttackDamageAspect(1),
-        FluxGainAspect(3),
+        FluxGainAspect(5),
         XAspect(0),
     )
 
