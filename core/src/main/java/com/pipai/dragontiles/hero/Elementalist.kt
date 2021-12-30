@@ -28,7 +28,6 @@ class Elementalist : HeroClass {
         DualStrike(),
         MultiInvoke(),
         StrengthRune(),
-        PiercingStrike(),
         RampStrike(),
         FluxCapacitor(),
         InflictReactant(),
