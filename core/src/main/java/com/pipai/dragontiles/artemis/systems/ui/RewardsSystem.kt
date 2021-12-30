@@ -179,6 +179,7 @@ class RewardsSystem(
         val reorganizeBtn = TextButton("  Reorganize Deck  ", skin)
         reorganizeBtn.addListener(object : ClickListener() {
             override fun clicked(event: InputEvent?, x: Float, y: Float) {
+                sDeckUi.updateStandardDisplay({ true }, true)
                 sDeckUi.activate()
             }
         })

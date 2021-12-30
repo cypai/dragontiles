@@ -13,7 +13,7 @@ class ColdHands : StandardSpell() {
     override val targetType: TargetType = TargetType.SINGLE_ENEMY
     override val rarity: Rarity = Rarity.COMMON
     override val aspects: MutableList<SpellAspect> = mutableListOf(
-        StackableAspect(Weak(2, false), 1),
+        StackableAspect(Weak(3, false), 1),
         FluxGainAspect(1)
     )
 
