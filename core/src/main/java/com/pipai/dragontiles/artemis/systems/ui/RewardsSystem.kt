@@ -42,6 +42,7 @@ class RewardsSystem(
     private val sMap by system<MapUiSystem>()
     private val sPath by system<PathInterpolationSystem>()
     private val sDeckUi by system<DeckDisplayUiSystem>()
+    private val sUi by system<CombatUiSystem>()
 
     private lateinit var api: GlobalApi
 
@@ -62,6 +63,7 @@ class RewardsSystem(
         world.fetch(allOf(XYComponent::class, TileComponent::class)).forEach {
             sPath.moveToLocation(it, game.gameConfig.resolution.width / 2f, -100f)
         }
+        sUi.hideSpellCards()
         active = true
         showing = true
         buildAndShowRewardsTable()

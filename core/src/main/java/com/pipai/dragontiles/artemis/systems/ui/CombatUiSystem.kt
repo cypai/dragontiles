@@ -1181,6 +1181,19 @@ class CombatUiSystem(
         }
     }
 
+    fun hideSpellCards() {
+        spells.forEach { (_, spellCard) -> spellCard.data[ALLOW_HOVER_MOVE] = 0 }
+        spellEntityIds.forEach { (_, eid) ->
+            val cXy = mXy.get(eid)
+            sPath.moveToLocation(eid, Vector2(cXy.x, spellCardY - SpellCard.cardHeight))
+        }
+        sideboard.forEach { (_, spellCard) -> spellCard.data[ALLOW_HOVER_MOVE] = 0 }
+        sideboardEntityIds.forEach { (_, eid) ->
+            val cXy = mXy.get(eid)
+            sPath.moveToLocation(eid, Vector2(cXy.x, spellCardY - SpellCard.cardHeight))
+        }
+    }
+
     enum class CombatUiState : State<CombatUiSystem> {
         ROOT {
             override fun enter(uiSystem: CombatUiSystem) {
@@ -1205,16 +1218,7 @@ class CombatUiSystem(
         },
         SORCERY_MODE {
             override fun enter(uiSystem: CombatUiSystem) {
-                uiSystem.spells.forEach { (_, spellCard) -> spellCard.data[ALLOW_HOVER_MOVE] = 0 }
-                uiSystem.spellEntityIds.forEach { (_, eid) ->
-                    val cXy = uiSystem.mXy.get(eid)
-                    uiSystem.sPath.moveToLocation(eid, Vector2(cXy.x, uiSystem.spellCardY - SpellCard.cardHeight))
-                }
-                uiSystem.sideboard.forEach { (_, spellCard) -> spellCard.data[ALLOW_HOVER_MOVE] = 0 }
-                uiSystem.sideboardEntityIds.forEach { (_, eid) ->
-                    val cXy = uiSystem.mXy.get(eid)
-                    uiSystem.sPath.moveToLocation(eid, Vector2(cXy.x, uiSystem.spellCardY - SpellCard.cardHeight))
-                }
+                uiSystem.hideSpellCards()
                 uiSystem.sorceryEntityIds.forEach { (_, eid) ->
                     val cXy = uiSystem.mXy.get(eid)
                     uiSystem.sPath.moveToLocation(eid, Vector2(cXy.x, uiSystem.spellCardY))
