@@ -108,7 +108,9 @@ class DeckDisplayUiSystem(
             Section.ACTIVE
         )
         addSectionHeader("Sideboard Spells (Max ${runData.hero.sideboardSize})")
-        if (runData.hero.sideboard.isNotEmpty()) {
+        if (runData.hero.sideboard.isEmpty()) {
+            addSectionHeader("No spells in sideboard")
+        } else {
             addSpellsInSection(
                 runData.hero.generateSideboard(game.data)
                     .mapIndexed { index, spell -> IndexedSpell(spell, index) }
@@ -118,8 +120,10 @@ class DeckDisplayUiSystem(
                 Section.SIDEBOARD
             )
         }
-        if (runData.hero.sorceries.isNotEmpty()) {
-            addSectionHeader("Sorceries (Max ${runData.hero.sorceriesSize})")
+        addSectionHeader("Sorceries (Max ${runData.hero.sorceriesSize})")
+        if (runData.hero.sorceries.isEmpty()) {
+            addSectionHeader("No sorceries")
+        } else {
             addSpellsInSection(
                 runData.hero.generateSorceries(game.data)
                     .mapIndexed { index, spell -> IndexedSpell(spell, index) }
