@@ -25,7 +25,7 @@ data class DungeonMap(
             val combats = mutableListOf(0, 0, 0)
             val events = mutableListOf(0, 0, 0)
             val towns = mutableListOf(0, 0, 0)
-            for (floorNum in 0..11) {
+            for (floorNum in 0..10) {
                 val floor: MutableList<MapNode> = mutableListOf()
                 when (floorNum) {
                     0 -> {
@@ -39,13 +39,13 @@ data class DungeonMap(
                             //floor.add(MapNode(MapNodeType.ELITE, false, mutableListOf(0), mutableListOf()))
                         }
                     }
-                    10 -> {
+                    9 -> {
                         val node = MapNode(MapNodeType.TOWN, false, mutableListOf(), mutableListOf())
                         previousFloor!!.forEach { it.next.add(0) }
                         node.prev.addAll(previousFloor.indices)
                         floor.add(node)
                     }
-                    11 -> {
+                    10 -> {
                         val node = MapNode(MapNodeType.BOSS, false, mutableListOf(), mutableListOf())
                         previousFloor!!.forEach { it.next.add(0) }
                         node.prev.add(0)
