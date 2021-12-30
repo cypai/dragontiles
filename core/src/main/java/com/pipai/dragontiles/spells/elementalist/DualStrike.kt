@@ -5,20 +5,16 @@ import com.pipai.dragontiles.combat.CombatFlag
 import com.pipai.dragontiles.spells.*
 import com.pipai.dragontiles.utils.withAll
 
-class DualInvoke : StandardSpell() {
-    override val id: String = "base:spells:DualInvoke"
-    override val requirement: ComponentRequirement = Single()
+class DualStrike : StandardSpell() {
+    override val id: String = "base:spells:DualStrike"
+    override val requirement: ComponentRequirement = Sequential(3)
     override val type: SpellType = SpellType.ATTACK
     override val targetType: TargetType = TargetType.SINGLE
     override val rarity: Rarity = Rarity.COMMON
     override val aspects: MutableList<SpellAspect> = mutableListOf(
-        AttackDamageAspect(1),
+        AttackDamageAspect(5),
         FluxGainAspect(2)
     )
-
-    override fun flags(): List<CombatFlag> {
-        return super.flags().withAll(listOf(CombatFlag.INVOKE))
-    }
 
     override suspend fun onCast(params: CastParams, api: CombatApi) {
         val target = api.getEnemy(params.targets.first())

@@ -14,7 +14,7 @@ class RampStrike : StandardSpell() {
     override val targetType: TargetType = TargetType.SINGLE
     override val rarity: Rarity = Rarity.COMMON
     override val aspects: MutableList<SpellAspect> = mutableListOf(
-        AttackDamageAspect(3),
+        AttackDamageAspect(7),
         FluxGainAspect(2),
     )
 

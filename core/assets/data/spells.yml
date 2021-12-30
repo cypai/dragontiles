@@ -48,9 +48,9 @@ base:spells:ChainRune:
     name: Chain Rune
     description: After you cast an attack with the same element, inflict 1 @Elemented @Chain.
 
-base:spells:DualInvoke:
+base:spells:DualStrike:
   en:
-    name: Dual Invoke
+    name: Dual Strike
     description: Deal !d @Elemented damage twice.
 
 base:spells:MultiInvoke:
@@ -126,7 +126,7 @@ base:spells:FeedbackLoop:
 base:spells:BurnRune:
   en:
     name: Burn Rune
-    description: Deal !x @AOE Fire damage for each tilet with @Burn in your hand at the end of your turn.
+    description: Deal !x @AOE Fire damage for each tile with @Burn in your hand at the end of your turn.
 
 base:spells:FrostRune:
   en:
@@ -176,7 +176,7 @@ base:spells:HasteRune:
 base:spells:FluxCapacitor:
   en:
     name: Flux Capacitor
-    description: Gain 10 temporary Max @Flux.
+    description: Gain 10 Max @Flux this combat.
 
 base:spells:MeldPromotion:
   en:

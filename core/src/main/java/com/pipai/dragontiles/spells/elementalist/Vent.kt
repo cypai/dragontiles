@@ -11,7 +11,7 @@ class Vent : StandardSpell() {
     override val targetType: TargetType = TargetType.NONE
     override val rarity: Rarity = Rarity.STARTER
     override val aspects: MutableList<SpellAspect> = mutableListOf(
-        FluxLossAspect(10)
+        FluxLossAspect(7)
     )
 
     override suspend fun onCast(params: CastParams, api: CombatApi) {
