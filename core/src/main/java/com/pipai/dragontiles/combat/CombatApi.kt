@@ -403,8 +403,8 @@ class CombatApi(
             when (tile.tileStatus) {
                 TileStatus.BURN -> dealDamageToHero(2)
                 TileStatus.SHOCK -> shockSpell(spell)
-                TileStatus.VOLATILE -> dealFluxDamageToHero(2 * spell.baseFluxGain())
-                TileStatus.CURSE -> changeTemporaryMaxFlux(2 * spell.baseFluxGain())
+                TileStatus.VOLATILE -> dealFluxDamageToHero(spell.baseFluxGain())
+                TileStatus.CURSE -> changeTemporaryMaxFlux(spell.baseFluxGain())
                 else -> {
                 }
             }
