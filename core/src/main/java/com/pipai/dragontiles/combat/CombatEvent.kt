@@ -1,5 +1,6 @@
 package com.pipai.dragontiles.combat
 
+import com.pipai.dragontiles.artemis.systems.animation.Animation
 import com.pipai.dragontiles.data.Element
 import com.pipai.dragontiles.data.Tile
 import com.pipai.dragontiles.data.TileInstance
@@ -63,6 +64,8 @@ data class EnemyDamageEvent(val enemy: Enemy, val amount: Int) : CombatEvent
 data class EnemyDefeatedEvent(val enemy: Enemy) : CombatEvent
 
 class BattleWinEvent : CombatEvent
+
+data class AnimationEvent(val animation: Animation) : CombatEvent
 
 data class PlayerFluxDamageEvent(val amount: Int) : CombatEvent
 

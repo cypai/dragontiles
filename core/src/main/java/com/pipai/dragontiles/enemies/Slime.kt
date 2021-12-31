@@ -1,5 +1,6 @@
 package com.pipai.dragontiles.enemies
 
+import com.pipai.dragontiles.artemis.systems.animation.SpineAnimation
 import com.pipai.dragontiles.combat.AttackIntent
 import com.pipai.dragontiles.combat.CombatApi
 import com.pipai.dragontiles.combat.DebuffIntent
@@ -27,7 +28,7 @@ class Slime : Enemy() {
     override fun getIntent(api: CombatApi): Intent {
         return when (attacks % 4) {
             0 -> DebuffIntent(this, BreakStatus(2, true), null, listOf())
-            else -> AttackIntent(this, 8, 1, false, Element.ICE)
+            else -> AttackIntent(this, 8, 1, Element.ICE, SpineAnimation("Attack"))
         }
     }
 

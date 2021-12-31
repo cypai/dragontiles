@@ -23,12 +23,12 @@ class ShaWujin : Enemy() {
 
     override fun getIntent(api: CombatApi): Intent {
         if (api.heroHasStatus(Overloaded::class) && turns % 4 != 2) {
-            return AttackIntent(this, 15, 1, false, Element.ICE)
+            return AttackIntent(this, 15, 1, Element.ICE)
         }
         return when (turns % 4) {
             0 -> DebuffIntent(
                 this, null,
-                AttackIntent(this, 1, 3, false, Element.ICE),
+                AttackIntent(this, 1, 3, Element.ICE),
                 listOf(
                     TerminalTileStatusInflictStrategy(
                         TileStatus.FREEZE,
@@ -38,7 +38,7 @@ class ShaWujin : Enemy() {
                 )
             )
             1 -> BuffIntent(this, Strength(3), null)
-            2 -> AttackIntent(this, 30, 1, false, Element.ICE)
+            2 -> AttackIntent(this, 30, 1, Element.ICE)
             else -> VentIntent(
                 this, 20, Sandstorm(1)
             )

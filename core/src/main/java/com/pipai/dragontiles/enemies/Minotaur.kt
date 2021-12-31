@@ -17,12 +17,12 @@ class Minotaur : Enemy() {
 
     override fun getIntent(api: CombatApi): Intent {
         if (api.heroHasStatus(Overloaded::class)) {
-            AttackIntent(this, 20, 1, false, Element.NONE)
+            AttackIntent(this, 20, 1, Element.NONE)
         }
         return when (intents) {
             0 -> DebuffIntent(this, BreakStatus(2, true), null, listOf())
-            1 -> AttackIntent(this, 20, 1, false, Element.NONE)
-            else -> AttackIntent(this, 20, 1, false, Element.NONE)
+            1 -> AttackIntent(this, 20, 1, Element.NONE)
+            else -> AttackIntent(this, 20, 1, Element.NONE)
         }
     }
 

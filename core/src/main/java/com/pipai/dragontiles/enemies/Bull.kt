@@ -17,7 +17,7 @@ class Bull : Enemy() {
 
     override fun getIntent(api: CombatApi): Intent {
         return if (hasOverloaded) {
-            AttackIntent(this, 10, 1, false, Element.NONE)
+            AttackIntent(this, 10, 1, Element.NONE)
         } else {
             BuffIntent(this, Strength(4), null)
         }

@@ -1,6 +1,7 @@
 package com.pipai.dragontiles.artemis.systems.animation
 
 import com.artemis.World
+import com.badlogic.gdx.Gdx
 import com.pipai.dragontiles.DragonTilesGame
 import com.pipai.dragontiles.artemis.components.EndStrategy
 import com.pipai.dragontiles.artemis.components.TimerComponent

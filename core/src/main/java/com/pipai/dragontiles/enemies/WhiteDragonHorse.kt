@@ -29,7 +29,7 @@ class WhiteDragonHorse : Enemy() {
                 )
             )
         } else {
-            AttackIntent(this, 10, 1, false, Element.NONE)
+            AttackIntent(this, 10, 1, Element.NONE)
         }
     }
 

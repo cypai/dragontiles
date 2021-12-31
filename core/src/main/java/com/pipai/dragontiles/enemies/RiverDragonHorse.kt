@@ -16,7 +16,7 @@ class RiverDragonHorse : Enemy() {
 
     override fun getIntent(api: CombatApi): Intent {
         return if (flag) {
-            AttackIntent(this, 10, 1, false, Element.ICE)
+            AttackIntent(this, 10, 1, Element.ICE)
         } else {
             DebuffIntent(
                 this,

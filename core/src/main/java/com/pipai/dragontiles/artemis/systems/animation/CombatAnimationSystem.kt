@@ -260,4 +260,9 @@ class CombatAnimationSystem(private val game: DragonTilesGame) : BaseSystem(), A
     fun handleRuneDeactivation(@Suppress("UNUSED_PARAMETER") ev: RuneDeactivatedEvent) {
         adjustHand()
     }
+
+    @Subscribe
+    fun handleAnimation(ev: AnimationEvent) {
+        queueAnimation(ev.animation)
+    }
 }

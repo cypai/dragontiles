@@ -18,7 +18,7 @@ class Yumi : Enemy() {
 
     override fun getIntent(api: CombatApi): Intent {
         return if (hasOverloaded || turns > 3) {
-            BuffIntent(this, MenacingAura(1), AttackIntent(this, 20, 1, false, Element.NONE))
+            BuffIntent(this, MenacingAura(1), AttackIntent(this, 20, 1, Element.NONE))
         } else {
             FumbleIntent(this, 1, null)
         }

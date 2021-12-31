@@ -1,5 +1,6 @@
 package com.pipai.dragontiles.combat
 
+import com.pipai.dragontiles.artemis.systems.animation.EnemyAttackAnimation
 import com.pipai.dragontiles.data.*
 import com.pipai.dragontiles.enemies.Enemy
 import com.pipai.dragontiles.status.Status
@@ -17,14 +18,18 @@ enum class IntentType {
 }
 
 data class AttackIntent(
-    override val enemy: Enemy, val attackPower: Int, val multistrike: Int, val piercing: Boolean, val element: Element
+    override val enemy: Enemy,
+    val attackPower: Int,
+    val multistrike: Int,
+    val element: Element,
+    val animation: EnemyAttackAnimation = EnemyAttackAnimation.NO_DELAY
 ) : Intent {
 
     override val type: IntentType = IntentType.ATTACK
 
     override suspend fun execute(api: CombatApi) {
         repeat(multistrike) {
-            api.attackHero(enemy, element, attackPower)
+            api.attackHero(enemy, element, attackPower, animation, listOf())
         }
     }
 }

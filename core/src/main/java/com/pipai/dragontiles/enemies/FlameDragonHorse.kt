@@ -29,7 +29,7 @@ class FlameDragonHorse : Enemy() {
                 )
             )
         } else {
-            AttackIntent(this, 10, 1, false, Element.FIRE)
+            AttackIntent(this, 10, 1, Element.FIRE)
         }
     }
 

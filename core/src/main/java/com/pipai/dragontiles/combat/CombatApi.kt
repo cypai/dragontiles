@@ -1,5 +1,6 @@
 package com.pipai.dragontiles.combat
 
+import com.pipai.dragontiles.artemis.systems.animation.EnemyAttackAnimation
 import com.pipai.dragontiles.data.*
 import com.pipai.dragontiles.enemies.Enemy
 import com.pipai.dragontiles.spells.*
@@ -427,12 +428,21 @@ class CombatApi(
         sortHand()
     }
 
-    suspend fun attackHero(enemy: Enemy, element: Element, amount: Int, piercing: Boolean = false) {
+    suspend fun attackHero(
+        enemy: Enemy,
+        element: Element,
+        amount: Int,
+        animation: EnemyAttackAnimation,
+        flags: List<CombatFlag>,
+    ) {
+        animation.enemy = enemy
         if (heroHasStatus(Dodge::class)) {
             addStatusToHero(Dodge(-1))
         } else {
             val damage = calculateDamageOnHero(enemy, element, amount)
-            if (!piercing && runData.hero.flux < runData.hero.tempFluxMax) {
+            animation.damage = damage
+            eventBus.dispatch(AnimationEvent(animation))
+            if (flags.none { it == CombatFlag.PIERCING } && runData.hero.flux < runData.hero.tempFluxMax) {
                 dealFluxDamageToHero(damage)
             } else {
                 dealDamageToHero(damage)
