@@ -2,11 +2,14 @@ package com.pipai.dragontiles.enemies
 
 import com.pipai.dragontiles.combat.CombatApi
 import com.pipai.dragontiles.combat.Intent
+import com.pipai.dragontiles.data.AssetConfig
+import com.pipai.dragontiles.data.AssetType
 import com.pipai.dragontiles.data.Localized
 
 abstract class Enemy : Localized {
 
     abstract val assetName: String
+    open val assetConfig: AssetConfig = AssetConfig(AssetType.SPRITE, 0f, 0f)
 
     abstract val hpMax: Int
     var hp: Int = 0

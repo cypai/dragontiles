@@ -4,15 +4,15 @@ import com.badlogic.gdx.Game
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Screen
 import com.badlogic.gdx.assets.AssetManager
+import com.badlogic.gdx.assets.loaders.SkeletonDataLoader
+import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver
 import com.badlogic.gdx.audio.Music
 import com.badlogic.gdx.files.FileHandle
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.Pixmap
 import com.badlogic.gdx.graphics.Pixmap.Format
 import com.badlogic.gdx.graphics.Texture
-import com.badlogic.gdx.graphics.g2d.BitmapFont
-import com.badlogic.gdx.graphics.g2d.NinePatch
-import com.badlogic.gdx.graphics.g2d.SpriteBatch
+import com.badlogic.gdx.graphics.g2d.*
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
@@ -23,6 +23,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldStyle
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable
 import com.badlogic.gdx.scenes.scene2d.utils.MultiDrawable
 import com.badlogic.gdx.scenes.scene2d.utils.OffsetDrawable
+import com.esotericsoftware.spine.SkeletonData
+import com.esotericsoftware.spine.SkeletonRenderer
 import com.kotcrab.vis.ui.VisUI
 import com.pipai.dragontiles.artemis.screens.MainMenuScreen
 import com.pipai.dragontiles.data.GameData
@@ -43,10 +45,13 @@ class DragonTilesGame(val gameConfig: GameConfig) : Game() {
 
     private val logger = getLogger()
 
-    lateinit var spriteBatch: SpriteBatch
+    lateinit var spriteBatch: PolygonSpriteBatch
         private set
 
     lateinit var shapeRenderer: ShapeRenderer
+        private set
+
+    lateinit var skeletonRenderer: SkeletonRenderer
         private set
 
     lateinit var heavyFont: BitmapFont
@@ -120,7 +125,9 @@ class DragonTilesGame(val gameConfig: GameConfig) : Game() {
             writeSave()
         }
 
-        spriteBatch = SpriteBatch(1000)
+        spriteBatch = PolygonSpriteBatch()
+        skeletonRenderer = SkeletonRenderer()
+        skeletonRenderer.premultipliedAlpha = true
         shapeRenderer = ShapeRenderer()
         shapeRenderer.setAutoShapeType(true)
 
@@ -148,6 +155,18 @@ class DragonTilesGame(val gameConfig: GameConfig) : Game() {
             .forEach { assets.load(it.toString(), Texture::class.java) }
         File("assets/binassets/graphics/enemies").listFiles()!!
             .forEach { assets.load(it.toString(), Texture::class.java) }
+        assets.setLoader(SkeletonData::class.java, SkeletonDataLoader(InternalFileHandleResolver()))
+        File("assets/binassets/spine/").listFiles()!!
+            .forEach { dir ->
+                val name = dir.name
+                val atlasName = "assets/binassets/spine/$name/$name.atlas"
+                assets.load(atlasName, TextureAtlas::class.java)
+                assets.load(
+                    "assets/binassets/spine/$name/$name.json",
+                    SkeletonData::class.java,
+                    SkeletonDataLoader.SkeletonDataParameter(atlasName)
+                )
+            }
         assets.finishLoading()
         tileSkin = TileSkin(assets.get("assets/binassets/graphics/tiles/tiles.png", Texture::class.java))
 

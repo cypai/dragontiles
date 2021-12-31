@@ -8,6 +8,10 @@ import com.badlogic.gdx.graphics.g2d.Sprite
 import com.badlogic.gdx.math.Interpolation
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.scenes.scene2d.Actor
+import com.esotericsoftware.spine.AnimationState
+import com.esotericsoftware.spine.AnimationStateData
+import com.esotericsoftware.spine.Skeleton
+import com.esotericsoftware.spine.SkeletonData
 import com.pipai.dragontiles.misc.RadialSprite
 import net.mostlyoriginal.api.event.common.Event
 
@@ -110,6 +114,18 @@ class SpriteComponent : Component() {
     lateinit var sprite: Sprite
     var width = 0f
     var height = 0f
+}
+
+class SpineComponent : Component() {
+    lateinit var skeleton: Skeleton
+    lateinit var stateData: AnimationStateData
+    lateinit var state: AnimationState
+
+    fun load(skeletonData: SkeletonData) {
+        skeleton = Skeleton(skeletonData)
+        stateData = AnimationStateData(skeletonData)
+        state = AnimationState(stateData)
+    }
 }
 
 class ActorComponent : Component() {

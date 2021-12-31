@@ -19,11 +19,13 @@ import com.pipai.dragontiles.artemis.events.EnemyHoverEnterEvent
 import com.pipai.dragontiles.artemis.events.EnemyHoverExitEvent
 import com.pipai.dragontiles.artemis.systems.combat.CombatControllerSystem
 import com.pipai.dragontiles.combat.*
+import com.pipai.dragontiles.data.AssetType
 import com.pipai.dragontiles.data.Element
 import com.pipai.dragontiles.data.RunData
 import com.pipai.dragontiles.dungeon.Encounter
 import com.pipai.dragontiles.enemies.Enemy
 import com.pipai.dragontiles.utils.*
+import kotlin.math.abs
 
 class CombatantStateSystem(
     private val game: DragonTilesGame,
@@ -36,6 +38,7 @@ class CombatantStateSystem(
     private val mHero by mapper<HeroComponent>()
     private val mEnemy by mapper<EnemyComponent>()
     private val mSprite by mapper<SpriteComponent>()
+    private val mSpine by mapper<SpineComponent>()
     private val mHoverable by mapper<HoverableComponent>()
     private val mClickable by mapper<ClickableComponent>()
 
@@ -58,8 +61,18 @@ class CombatantStateSystem(
             val cXy = mXy.create(entityId)
             cXy.setXy(position)
 
-            val cSprite = mSprite.create(entityId)
-            cSprite.sprite = Sprite(game.assets.get(enemyAssetPath(enemy.assetName), Texture::class.java))
+            when (enemy.assetConfig.type) {
+                AssetType.SPRITE -> {
+                    val cSprite = mSprite.create(entityId)
+                    cSprite.sprite = Sprite(game.assets.get(enemyAssetPath(enemy.assetName), Texture::class.java))
+                }
+                AssetType.SPINE -> {
+                    val cSpine = mSpine.create(entityId)
+                    cSpine.load(game.assets.get(spineAssetPath(enemy.assetName)))
+                    cSpine.skeleton.setScale(enemy.assetConfig.scaleX, enemy.assetConfig.scaleY)
+                    cSpine.state.setAnimation(0, "Idle", true)
+                }
+            }
 
             val cEnemy = mEnemy.create(entityId)
             cEnemy.setByEnemy(enemy)
@@ -177,14 +190,27 @@ class CombatantStateSystem(
 
     private fun createUi(enemy: Enemy, entityId: EntityId) {
         val cXy = mXy.get(entityId)
-        val cSprite = mSprite.get(entityId)
         val cEnemy = mEnemy.get(entityId)
-        val ui = EnemyUi.create(game, enemy, cSprite.sprite.width)
+        val ui = when (enemy.assetConfig.type) {
+            AssetType.SPRITE -> {
+                val cSprite = mSprite.get(entityId)
+                val ui = EnemyUi.create(game, enemy, cSprite.sprite.width)
+                ui.table.x = cXy.x
+                ui.table.y = cXy.y + cSprite.sprite.height
+                ui
+            }
+            AssetType.SPINE -> {
+                val cSpine = mSpine.get(entityId)
+                val skeleton = cSpine.skeleton
+                val ui = EnemyUi.create(game, enemy, skeleton.data.width * abs(enemy.assetConfig.scaleX))
+                ui.table.x = cXy.x - skeleton.data.width * abs(enemy.assetConfig.scaleX) / 2f
+                ui.table.y = cXy.y + skeleton.data.height * enemy.assetConfig.scaleY
+                ui
+            }
+        }
         ui.nameLabel.setText(game.gameStrings.nameLocalization(cEnemy.enemy).name)
 
         enemyTables[entityId] = ui
-        ui.table.x = cXy.x
-        ui.table.y = cXy.y + cSprite.sprite.height
         stage.addActor(ui.table)
     }
 
