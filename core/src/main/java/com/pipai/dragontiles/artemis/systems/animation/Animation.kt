@@ -1,7 +1,6 @@
 package com.pipai.dragontiles.artemis.systems.animation
 
 import com.artemis.World
-import com.badlogic.gdx.Gdx
 import com.pipai.dragontiles.DragonTilesGame
 import com.pipai.dragontiles.artemis.components.EndStrategy
 import com.pipai.dragontiles.artemis.components.TimerComponent
@@ -11,6 +10,7 @@ abstract class Animation {
     private val logger = getLogger()
     protected lateinit var world: World
     protected lateinit var game: DragonTilesGame
+    private var endCalled = false
     private lateinit var observer: AnimationObserver
 
     fun init(world: World, game: DragonTilesGame) {
@@ -28,6 +28,7 @@ abstract class Animation {
             }
         }
         this.game = game
+        endCalled = false
     }
 
     fun initObserver(observer: AnimationObserver) {
@@ -41,12 +42,15 @@ abstract class Animation {
     }
 
     fun endAnimation(delay: Float) {
-        val id = world.create()
-        val cTimer = world.getMapper(TimerComponent::class.java).create(id)
-        cTimer.maxT = if (delay >= 0f) delay else 1f / 60f
-        cTimer.onEnd = EndStrategy.DESTROY
-        cTimer.onEndCallback = {
-            observer.notify(this)
+        if (!endCalled) {
+            endCalled = true
+            val id = world.create()
+            val cTimer = world.getMapper(TimerComponent::class.java).create(id)
+            cTimer.maxT = if (delay >= 0f) delay else 1f / 60f
+            cTimer.onEnd = EndStrategy.DESTROY
+            cTimer.onEndCallback = {
+                observer.notify(this)
+            }
         }
     }
 

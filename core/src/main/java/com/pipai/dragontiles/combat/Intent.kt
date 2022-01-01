@@ -1,6 +1,8 @@
 package com.pipai.dragontiles.combat
 
-import com.pipai.dragontiles.artemis.systems.animation.EnemyAttackAnimation
+import com.pipai.dragontiles.artemis.systems.animation.DefaultAttackAnimation
+import com.pipai.dragontiles.artemis.systems.animation.DelayAnimation
+import com.pipai.dragontiles.artemis.systems.animation.SpineAnimation
 import com.pipai.dragontiles.data.*
 import com.pipai.dragontiles.enemies.Enemy
 import com.pipai.dragontiles.status.Status
@@ -9,12 +11,18 @@ import kotlin.random.Random
 
 interface Intent {
     val enemy: Enemy
-    val type: IntentType
+    val displayData: Pair<IntentDisplayData, IntentDisplayData?>
     suspend fun execute(api: CombatApi)
 }
 
-enum class IntentType {
-    ATTACK, VENT, BUFF, DEBUFF, STUNNED
+sealed class IntentDisplayData {
+    data class AttackIntentDisplay(val attackPower: Int, val multistrike: Int, val element: Element) :
+        IntentDisplayData()
+
+    data class VentIntentDisplay(val amount: Int) : IntentDisplayData()
+    class BuffIntentDisplay : IntentDisplayData()
+    class DebuffIntentDisplay : IntentDisplayData()
+    class StunnedIntentDisplay : IntentDisplayData()
 }
 
 data class AttackIntent(
@@ -22,55 +30,47 @@ data class AttackIntent(
     val attackPower: Int,
     val multistrike: Int,
     val element: Element,
-    val animation: EnemyAttackAnimation = EnemyAttackAnimation.NO_DELAY
+    val animation: String? = null,
+    val animationEndEvent: String? = null,
 ) : Intent {
 
-    override val type: IntentType = IntentType.ATTACK
+    override val displayData = Pair(IntentDisplayData.AttackIntentDisplay(attackPower, multistrike, element), null)
 
     override suspend fun execute(api: CombatApi) {
-        repeat(multistrike) {
-            api.attackHero(enemy, element, attackPower, animation, listOf())
+        if (animation == null) {
+            api.animate(DefaultAttackAnimation(enemy))
+        } else {
+            api.animate(SpineAnimation(enemy, animation, animationEndEvent))
         }
+        repeat(multistrike) {
+            api.attackHero(enemy, element, attackPower, listOf())
+            api.animate(DelayAnimation(0.1f))
+        }
+        api.animate(DelayAnimation(0.9f))
     }
 }
 
-data class FumbleIntent(
-    override val enemy: Enemy, val amount: Int, val intent: Intent?
-) : Intent {
+data class StunnedIntent(override val enemy: Enemy) : Intent {
 
-    override val type: IntentType = intent?.type ?: IntentType.DEBUFF
+    override val displayData = Pair(IntentDisplayData.StunnedIntentDisplay(), null)
 
     override suspend fun execute(api: CombatApi) {
-        val tiles: MutableList<Tile> = mutableListOf()
-        repeat(amount) {
-            tiles.add(Tile.FumbleTile())
-        }
-        api.addTilesToHand(tiles, TileStatus.NONE)
-        intent?.execute(api)
     }
 }
 
 data class BuffIntent(
-    override val enemy: Enemy, val status: Status, val attackIntent: AttackIntent?
+    override val enemy: Enemy, val status: Status, val attackIntent: AttackIntent?,
 ) : Intent {
 
-    override val type: IntentType = IntentType.BUFF
+    override val displayData = if (attackIntent == null) {
+        Pair(IntentDisplayData.BuffIntentDisplay(), null)
+    } else {
+        Pair(attackIntent.displayData.first, IntentDisplayData.BuffIntentDisplay())
+    }
 
     override suspend fun execute(api: CombatApi) {
         attackIntent?.execute(api)
         api.addStatusToEnemy(enemy, status)
-    }
-}
-
-data class VentIntent(
-    override val enemy: Enemy, val amount: Int, val status: Status?
-) : Intent {
-
-    override val type: IntentType = IntentType.VENT
-
-    override suspend fun execute(api: CombatApi) {
-        api.enemyLoseFlux(enemy, amount)
-        status?.let { api.addStatusToEnemy(enemy, it) }
     }
 }
 
@@ -81,14 +81,58 @@ data class DebuffIntent(
     val inflictTileStatuses: List<TileStatusInflictStrategy>
 ) : Intent {
 
-    override val type: IntentType = IntentType.DEBUFF
+    override val displayData = if (attackIntent == null) {
+        Pair(IntentDisplayData.DebuffIntentDisplay(), null)
+    } else {
+        Pair(attackIntent.displayData.first, IntentDisplayData.DebuffIntentDisplay())
+    }
 
     override suspend fun execute(api: CombatApi) {
-        attackIntent?.execute(api)
+        if (attackIntent == null) {
+            api.animate(DefaultAttackAnimation(enemy))
+        } else {
+            attackIntent.execute(api)
+        }
         status?.let { api.addStatusToHero(status) }
         inflictTileStatuses.forEach { strategy ->
             api.inflictTileStatusOnHand(strategy)
         }
+    }
+}
+
+data class FumbleIntent(
+    override val enemy: Enemy, val amount: Int, val intent: Intent?
+) : Intent {
+
+    override val displayData = if (intent == null) {
+        Pair(IntentDisplayData.DebuffIntentDisplay(), null)
+    } else {
+        Pair(intent.displayData.first, IntentDisplayData.DebuffIntentDisplay())
+    }
+
+    override suspend fun execute(api: CombatApi) {
+        intent?.execute(api)
+        val tiles: MutableList<Tile> = mutableListOf()
+        repeat(amount) {
+            tiles.add(Tile.FumbleTile())
+        }
+        api.addTilesToHand(tiles, TileStatus.NONE)
+    }
+}
+
+data class VentIntent(
+    override val enemy: Enemy, val amount: Int, val status: Status?
+) : Intent {
+
+    override val displayData = if (status == null) {
+        Pair(IntentDisplayData.VentIntentDisplay(amount), null)
+    } else {
+        Pair(IntentDisplayData.VentIntentDisplay(amount), IntentDisplayData.BuffIntentDisplay())
+    }
+
+    override suspend fun execute(api: CombatApi) {
+        api.enemyLoseFlux(enemy, amount)
+        status?.let { api.addStatusToEnemy(enemy, it) }
     }
 }
 
@@ -130,13 +174,5 @@ data class TerminalTileStatusInflictStrategy(
                         && terminal(t.tile, hand.map { it.tile })
             }
             .chooseAmount(amount, rng)
-    }
-}
-
-data class StunnedIntent(override val enemy: Enemy) : Intent {
-
-    override val type: IntentType = IntentType.STUNNED
-
-    override suspend fun execute(api: CombatApi) {
     }
 }

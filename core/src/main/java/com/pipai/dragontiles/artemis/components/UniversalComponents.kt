@@ -81,7 +81,7 @@ class PathInterpolationComponent : Component() {
 }
 
 enum class EndStrategy {
-    REMOVE, DESTROY, RESTART
+    REMOVE, DESTROY, RESTART, REVERSE_THEN_REMOVE
 }
 
 class TimerComponent : Component() {

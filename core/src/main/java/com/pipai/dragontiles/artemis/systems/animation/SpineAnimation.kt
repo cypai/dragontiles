@@ -5,10 +5,11 @@ import com.esotericsoftware.spine.AnimationState
 import com.esotericsoftware.spine.Event
 import com.pipai.dragontiles.artemis.components.EnemyComponent
 import com.pipai.dragontiles.artemis.components.SpineComponent
+import com.pipai.dragontiles.enemies.Enemy
 import com.pipai.dragontiles.utils.allOf
 import com.pipai.dragontiles.utils.fetch
 
-class SpineAnimation(private val animation: String) : EnemyAttackAnimation() {
+class SpineAnimation(val enemy: Enemy, val animation: String, val endEvent: String?) : Animation() {
     private lateinit var mEnemy: ComponentMapper<EnemyComponent>
     private lateinit var mSpine: ComponentMapper<SpineComponent>
 
@@ -32,7 +33,9 @@ class SpineAnimation(private val animation: String) : EnemyAttackAnimation() {
             }
 
             override fun event(entry: AnimationState.TrackEntry?, event: Event?) {
-                println(event!!.data.name)
+                if (event!!.data.name == endEvent) {
+                    endAnimation()
+                }
             }
 
             override fun dispose(entry: AnimationState.TrackEntry?) {

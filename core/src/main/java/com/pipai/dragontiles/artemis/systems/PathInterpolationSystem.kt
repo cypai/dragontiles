@@ -29,6 +29,11 @@ class PathInterpolationSystem : IteratingSystem(allOf()) {
                     EndStrategy.REMOVE -> mPath.remove(entityId)
                     EndStrategy.DESTROY -> world.delete(entityId)
                     EndStrategy.RESTART -> cPath.endpointIndex = 0
+                    EndStrategy.REVERSE_THEN_REMOVE -> {
+                        cPath.endpoints.reverse()
+                        cPath.onEnd = EndStrategy.REMOVE
+                        cPath.endpointIndex = 0
+                    }
                 }
             }
         }

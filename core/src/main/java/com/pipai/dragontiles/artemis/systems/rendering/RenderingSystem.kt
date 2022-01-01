@@ -4,20 +4,12 @@ import com.artemis.BaseSystem
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.GL20
-import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.pipai.dragontiles.DragonTilesGame
 import com.pipai.dragontiles.artemis.components.*
-import com.pipai.dragontiles.artemis.systems.combat.CombatControllerSystem
-import com.pipai.dragontiles.combat.AttackIntent
-import com.pipai.dragontiles.combat.BuffIntent
-import com.pipai.dragontiles.combat.DebuffIntent
-import com.pipai.dragontiles.combat.StunnedIntent
-import com.pipai.dragontiles.data.Element
 import com.pipai.dragontiles.utils.allOf
 import com.pipai.dragontiles.utils.fetch
 import com.pipai.dragontiles.utils.mapper
-import com.pipai.dragontiles.utils.system
 
 class RenderingSystem(
     private val game: DragonTilesGame
@@ -59,7 +51,7 @@ class RenderingSystem(
                     } else {
                         cSpine.skeleton.x = cXy.x
                         cSpine.skeleton.y = cXy.y
-                        cSpine.state.update(Gdx.graphics.deltaTime)
+                        cSpine.state.update(world.delta)
                         cSpine.state.apply(cSpine.skeleton)
                         cSpine.skeleton.updateWorldTransform()
                         game.skeletonRenderer.draw(batch, cSpine.skeleton)

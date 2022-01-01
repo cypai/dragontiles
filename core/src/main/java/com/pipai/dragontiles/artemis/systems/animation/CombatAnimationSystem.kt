@@ -10,21 +10,31 @@ import com.pipai.dragontiles.combat.*
 import com.pipai.dragontiles.status.Overloaded
 import com.pipai.dragontiles.utils.getLogger
 import com.pipai.dragontiles.utils.system
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.channels.Channel
 import net.mostlyoriginal.api.event.common.EventSystem
 import net.mostlyoriginal.api.event.common.Subscribe
 
 class CombatAnimationSystem(private val game: DragonTilesGame) : BaseSystem(), AnimationObserver {
 
     private val logger = getLogger()
+    private val scope = CoroutineScope(Dispatchers.Default)
 
     var pauseUiMode = false
     private var animating = false
     private val animationQueue: MutableList<Animation> = mutableListOf()
     private var turnRunning = false
+    private lateinit var animationChannel: Channel<Animation>
 
     private val sEvent by system<EventSystem>()
     private val sUi by system<CombatUiSystem>()
     private val sCombat by system<CombatControllerSystem>()
+
+    override fun initialize() {
+        animationChannel = sCombat.controller.api.animationChannel
+    }
 
     override fun processSystem() {
         if (!animating && animationQueue.isNotEmpty()) {
@@ -264,5 +274,9 @@ class CombatAnimationSystem(private val game: DragonTilesGame) : BaseSystem(), A
     @Subscribe
     fun handleAnimation(ev: AnimationEvent) {
         queueAnimation(ev.animation)
+    }
+
+    override fun dispose() {
+        scope.cancel()
     }
 }
