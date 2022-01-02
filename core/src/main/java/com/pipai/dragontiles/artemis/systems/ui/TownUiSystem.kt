@@ -57,8 +57,7 @@ class TownUiSystem(
         val innSprite = mSprite.create(innId)
         innSprite.sprite =
             Sprite(game.assets.get("assets/binassets/graphics/textures/inn.png", Texture::class.java))
-        innSprite.width = 120f
-        innSprite.height = 120f
+        innSprite.setWidthHeight(120f, 120f)
         val innHover = mHoverable.create(innId)
         innHover.enterCallback = {
             sTooltip.addText("Inn", "Heal 25% of your Max HP for 2 Gold.", false)

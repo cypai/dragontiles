@@ -20,21 +20,33 @@ class RenderingSystem(
     private val mSprite by mapper<SpriteComponent>()
     private val mSpine by mapper<SpineComponent>()
     private val mActor by mapper<ActorComponent>()
+    private val mAlpha by mapper<AlphaInterpolationComponent>()
     private val mTextLabel by mapper<TextLabelComponent>()
     private val mLine by mapper<AnchoredLineComponent>()
-    private val mTargetHighlight by mapper<TargetHighlightComponent>()
 
     private val batch = game.spriteBatch
 
     override fun processSystem() {
         batch.color = Color.WHITE
+        batch.begin()
+        world.fetch(allOf(XYComponent::class, SpineComponent::class))
+            .forEach {
+                val cXy = mXy.get(it)
+                val cSpine = mSpine.get(it)
+                cSpine.skeleton.x = cXy.x
+                cSpine.skeleton.y = cXy.y
+                cSpine.state.update(world.delta)
+                cSpine.state.apply(cSpine.skeleton)
+                cSpine.skeleton.updateWorldTransform()
+                game.skeletonRenderer.draw(batch, cSpine.skeleton)
+            }
+        batch.end()
         batch.setBlendFunction(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA)
         batch.begin()
         world.fetch(
             allOf(XYComponent::class).one(
                 ActorComponent::class.java,
                 SpriteComponent::class.java,
-                SpineComponent::class.java,
             )
         )
             .sortedByDescending { mDepth.getSafe(it, null)?.depth ?: 0 }
@@ -42,34 +54,16 @@ class RenderingSystem(
                 val cXy = mXy.get(it)
                 val cSprite = mSprite.getSafe(it, null)
                 if (cSprite == null) {
-                    val cSpine = mSpine.getSafe(it, null)
-                    if (cSpine == null) {
-                        val cActor = mActor.get(it)
-                        cActor.actor.x = cXy.x
-                        cActor.actor.y = cXy.y
-                        cActor.actor.draw(batch, 1f)
-                    } else {
-                        cSpine.skeleton.x = cXy.x
-                        cSpine.skeleton.y = cXy.y
-                        cSpine.state.update(world.delta)
-                        cSpine.state.apply(cSpine.skeleton)
-                        cSpine.skeleton.updateWorldTransform()
-                        game.skeletonRenderer.draw(batch, cSpine.skeleton)
-                    }
+                    val cActor = mActor.get(it)
+                    cActor.actor.x = cXy.x
+                    cActor.actor.y = cXy.y
+                    cActor.actor.draw(batch, 1f)
                 } else {
                     val sprite = cSprite.sprite
                     sprite.x = cXy.x
                     sprite.y = cXy.y
-                    batch.color = sprite.color
-                    if (cSprite.width == 0f && cSprite.height == 0f) {
-                        sprite.draw(batch)
-                    } else {
-                        batch.draw(sprite, sprite.x, sprite.y, cSprite.width, cSprite.height)
-                    }
+                    sprite.draw(batch)
                 }
-            }
-        world.fetch(allOf(XYComponent::class, SpineComponent::class))
-            .forEach {
             }
 
         world.fetch(allOf(XYComponent::class, TextLabelComponent::class))
@@ -95,8 +89,7 @@ class RenderingSystem(
             }
         batch.end()
 
-
-        batch.setBlendFunction(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA)
+//        batch.setBlendFunction(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA)
 
         game.shapeRenderer.begin()
         world.fetch(allOf(AnchoredLineComponent::class))

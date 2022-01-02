@@ -16,6 +16,7 @@ class StatusSystem(private val game: DragonTilesGame) : NoProcessingSystem() {
     private val mEnemy by mapper<EnemyComponent>()
     private val mStatus by mapper<StatusComponent>()
     private val mSprite by mapper<SpriteComponent>()
+    private val mSpine by mapper<SpineComponent>()
     private val mTextLabel by mapper<TextLabelComponent>()
     private val mHoverable by mapper<HoverableComponent>()
 
@@ -34,17 +35,18 @@ class StatusSystem(private val game: DragonTilesGame) : NoProcessingSystem() {
     }
 
     fun handleEnemyStatus(enemyId: BackendId, statuses: List<Status>) {
-        world.fetch(allOf(EnemyComponent::class)).find { mEnemy.get(it).enemy.enemyId == enemyId }?.let { enemyEntityId ->
-            if (enemyEntityId !in enemyStatuses) {
-                enemyStatuses[enemyEntityId] = mutableListOf()
+        world.fetch(allOf(EnemyComponent::class)).find { mEnemy.get(it).enemy.enemyId == enemyId }
+            ?.let { enemyEntityId ->
+                if (enemyEntityId !in enemyStatuses) {
+                    enemyStatuses[enemyEntityId] = mutableListOf()
+                }
+                val list = enemyStatuses[enemyEntityId]!!
+                list.forEach { world.delete(it) }
+                list.clear()
+                statuses.forEachIndexed { index, s ->
+                    list.add(createStatus(enemyEntityId, index, s))
+                }
             }
-            val list = enemyStatuses[enemyEntityId]!!
-            list.forEach { world.delete(it) }
-            list.clear()
-            statuses.forEachIndexed { index, s ->
-                list.add(createStatus(enemyEntityId, index, s))
-            }
-        }
     }
 
     fun handleEnemyDefeat(enemyId: EntityId) {
@@ -57,9 +59,14 @@ class StatusSystem(private val game: DragonTilesGame) : NoProcessingSystem() {
         val cStatus = mStatus.create(statusId)
         cStatus.setByStatus(status)
         val cTargetXy = mXy.get(target)
-        val cTargetSprite = mSprite.get(target)
         val cXy = mXy.create(statusId)
-        cXy.setXy(cTargetXy.x + 16f * index, cTargetXy.y + cTargetSprite.sprite.height - 16f)
+        val cTargetSprite = mSprite.getSafe(target, null)
+        if (cTargetSprite == null) {
+            val cTargetSpine = mSpine.get(target)
+            cXy.setXy(cTargetXy.x + 16f * index, cTargetXy.y + cTargetSpine.skeleton.actualHeight() - 16f)
+        } else {
+            cXy.setXy(cTargetXy.x + 16f * index, cTargetXy.y + cTargetSprite.sprite.height - 16f)
+        }
         val cSprite = mSprite.create(statusId)
         cSprite.sprite = Sprite(game.assets.get(statusAssetPath(status.assetName), Texture::class.java))
         val cHover = mHoverable.create(statusId)

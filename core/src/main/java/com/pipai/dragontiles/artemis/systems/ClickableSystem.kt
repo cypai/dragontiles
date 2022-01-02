@@ -32,12 +32,7 @@ class ClickableSystem(private val config: GameConfig) : NoProcessingSystem(), In
         world.fetch(allOf(ClickableComponent::class, SpriteComponent::class))
             .forEach {
                 val cSprite = mSprite.get(it)
-                val hover = if (cSprite.width == 0f) {
-                    cSprite.sprite.boundingRectangle.contains(mouseX, mouseY)
-                } else {
-                    val cXy = mXy.get(it)
-                    Rectangle(cXy.x, cXy.y, cSprite.width, cSprite.height).contains(mouseX, mouseY)
-                }
+                val hover = cSprite.sprite.boundingRectangle.contains(mouseX, mouseY)
                 if (hover) {
                     val cClick = mClickable.get(it)
                     cClick.callback?.invoke()

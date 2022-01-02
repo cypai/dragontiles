@@ -1,6 +1,7 @@
 package com.pipai.dragontiles.combat
 
 import com.pipai.dragontiles.artemis.systems.animation.Animation
+import com.pipai.dragontiles.artemis.systems.animation.StatusInflictedAnimation
 import com.pipai.dragontiles.data.*
 import com.pipai.dragontiles.enemies.Enemy
 import com.pipai.dragontiles.spells.*
@@ -499,6 +500,8 @@ class CombatApi(
             eventBus.register(status)
             eventBus.dispatch(PlayerStatusChangeEvent(status, 0))
             status.onInflict(this)
+            notifyStatusUpdated()
+            animate(StatusInflictedAnimation(status))
         } else {
             val previousAmount = maybeStatus.amount
             maybeStatus.amount += status.amount
@@ -508,8 +511,8 @@ class CombatApi(
                 eventBus.dispatch(PlayerStatusChangeEvent(maybeStatus, previousAmount))
                 maybeStatus.onInflict(this)
             }
+            notifyStatusUpdated()
         }
-        notifyStatusUpdated()
     }
 
     suspend fun devInstantWin() {
@@ -534,6 +537,8 @@ class CombatApi(
             eventBus.register(status)
             eventBus.dispatch(EnemyStatusChangeEvent(enemy, status, 0))
             status.onInflict(this)
+            notifyStatusUpdated()
+            animate(StatusInflictedAnimation(status))
         } else {
             val previousAmount = maybeStatus.amount
             maybeStatus.amount += status.amount
@@ -544,8 +549,8 @@ class CombatApi(
                 eventBus.dispatch(EnemyStatusChangeEvent(enemy, maybeStatus, previousAmount))
                 maybeStatus.onInflict(this)
             }
+            notifyStatusUpdated()
         }
-        notifyStatusUpdated()
     }
 
     fun <T : Status> heroStatusAmount(statusType: KClass<T>): Int {

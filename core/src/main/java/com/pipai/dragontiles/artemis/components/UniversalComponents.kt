@@ -114,8 +114,10 @@ class DepthComponent : Component() {
 
 class SpriteComponent : Component() {
     lateinit var sprite: Sprite
-    var width = 0f
-    var height = 0f
+
+    fun setWidthHeight(width: Float, height: Float) {
+        sprite.setScale(width / sprite.width, height / sprite.height)
+    }
 }
 
 class SpineComponent : Component() {

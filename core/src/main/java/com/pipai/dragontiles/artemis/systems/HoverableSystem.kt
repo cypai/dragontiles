@@ -33,17 +33,12 @@ class HoverableSystem(private val config: GameConfig) : NoProcessingSystem(), In
         val mouseX = screenX.toFloat()
         val mouseY = config.resolution.height - screenY.toFloat()
         world.fetch(allOf(XYComponent::class, HoverableComponent::class, SpriteComponent::class))
-                .forEach {
-                    val cHover = mHoverable.get(it)
-                    val cSprite = mSprite.get(it)
-                    val hover = if (cSprite.width == 0f) {
-                        cSprite.sprite.boundingRectangle.contains(mouseX, mouseY)
-                    } else {
-                        val cXy = mXy.get(it)
-                        Rectangle(cXy.x, cXy.y, cSprite.width, cSprite.height).contains(mouseX, mouseY)
-                    }
-                    updateHover(cHover, hover)
-                }
+            .forEach {
+                val cHover = mHoverable.get(it)
+                val cSprite = mSprite.get(it)
+                val hover = cSprite.sprite.boundingRectangle.contains(mouseX, mouseY)
+                updateHover(cHover, hover)
+            }
         world.fetch(allOf(HoverableComponent::class, ActorComponent::class))
             .forEach {
                 val cHover = mHoverable.get(it)
@@ -51,14 +46,15 @@ class HoverableSystem(private val config: GameConfig) : NoProcessingSystem(), In
                 updateHover(cHover, hover)
             }
         world.fetch(allOf(HoverableComponent::class, XYComponent::class, RadialSpriteComponent::class))
-                .forEach {
-                    val cHover = mHoverable.get(it)
-                    val cRadial = mRadial.get(it)
-                    val cXy = mXy.get(it)
-                    val bounds = CollisionBounds.CollisionBoundingBox(0f, 0f, cRadial.sprite.width(), cRadial.sprite.height())
-                    val hover = CollisionUtils.withinBounds(mouseX, mouseY, cXy.x, cXy.y, bounds)
-                    updateHover(cHover, hover)
-                }
+            .forEach {
+                val cHover = mHoverable.get(it)
+                val cRadial = mRadial.get(it)
+                val cXy = mXy.get(it)
+                val bounds =
+                    CollisionBounds.CollisionBoundingBox(0f, 0f, cRadial.sprite.width(), cRadial.sprite.height())
+                val hover = CollisionUtils.withinBounds(mouseX, mouseY, cXy.x, cXy.y, bounds)
+                updateHover(cHover, hover)
+            }
 
         return false
     }

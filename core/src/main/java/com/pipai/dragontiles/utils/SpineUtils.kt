@@ -9,3 +9,6 @@ fun Skeleton.boundingRectangle(): Rectangle {
     val actualHeight = this.data.height * abs(this.scaleY)
     return Rectangle(this.x - actualWidth / 2f, this.y, actualWidth, actualHeight)
 }
+
+fun Skeleton.actualWidth(): Float = this.data.width * abs(this.scaleX)
+fun Skeleton.actualHeight(): Float = this.data.height * abs(this.scaleY)
