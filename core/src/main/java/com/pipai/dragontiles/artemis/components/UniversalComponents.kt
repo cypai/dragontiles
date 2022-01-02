@@ -136,6 +136,18 @@ class RadialSpriteComponent : Component() {
     lateinit var sprite: RadialSprite
 }
 
+class AlphaInterpolationComponent : Component() {
+    lateinit var interpolation: Interpolation
+    var t: Float = 0f
+    var maxT: Float = 0f
+
+    var onEndpoint: ((AlphaInterpolationComponent) -> Unit)? = null
+    var onEnd = EndStrategy.REMOVE
+
+    var startAlpha = 0f
+    var targetAlpha = 0f
+}
+
 class ClickableComponent : Component() {
     var eventGenerator: ((Int) -> Event)? = null
     var callback: (() -> Unit)? = null
