@@ -75,8 +75,9 @@ class PathInterpolationComponent : Component() {
         val start = endpoints[endpointIndex]
         val end = endpoints[endpointIndex + 1]
         return Vector2(
-                interpolation.apply(start.x, end.x, a),
-                interpolation.apply(start.y, end.y, a))
+            interpolation.apply(start.x, end.x, a),
+            interpolation.apply(start.y, end.y, a)
+        )
     }
 }
 
@@ -94,7 +95,8 @@ class TimerComponent : Component() {
 
 class OrthographicCameraComponent : Component() {
 
-    val camera: OrthographicCamera = OrthographicCamera(Gdx.graphics.getWidth().toFloat(), Gdx.graphics.getHeight().toFloat())
+    val camera: OrthographicCamera =
+        OrthographicCamera(Gdx.graphics.getWidth().toFloat(), Gdx.graphics.getHeight().toFloat())
 
     init {
         camera.setToOrtho(false, Gdx.graphics.getWidth().toFloat(), Gdx.graphics.getHeight().toFloat())
@@ -146,6 +148,15 @@ class AlphaInterpolationComponent : Component() {
 
     var startAlpha = 0f
     var targetAlpha = 0f
+
+    fun set(startAlpha: Float, targetAlpha: Float, maxT: Float, interpolation: Interpolation, onEnd: EndStrategy) {
+        this.interpolation = interpolation
+        t = 0f
+        this.maxT = maxT
+        this.onEnd = onEnd
+        this.startAlpha = startAlpha
+        this.targetAlpha = targetAlpha
+    }
 }
 
 class ClickableComponent : Component() {

@@ -54,6 +54,7 @@ class CombatScreen(
                 EventSystem(),
 
                 PathInterpolationSystem(),
+                AlphaInterpolationSystem(),
                 TimerSystem(),
                 MutualDestroySystem(),
 
