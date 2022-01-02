@@ -8,7 +8,7 @@ class OverloadedAnimation : Animation() {
     private lateinit var sFs: FullScreenColorSystem
 
     override fun startAnimation() {
-        sFs.fadeOut(30, Color.WHITE)
+        sFs.fadeOut(0.5f, Color.WHITE)
         endAnimation()
     }
 

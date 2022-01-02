@@ -1300,12 +1300,12 @@ class CombatUiSystem(
                 uiSystem.sideboard.values.forEach { it.enable() }
                 uiSystem.moveActiveSpellsFront()
                 uiSystem.moveSideboardSpellsFront()
-                uiSystem.sFsTexture.fadeIn(10)
+                uiSystem.sFsTexture.fadeIn(0.2f)
                 uiSystem.frontStage.addActor(uiSystem.queryTable)
             }
 
             override fun exit(uiSystem: CombatUiSystem) {
-                uiSystem.sFsTexture.fadeOut(10)
+                uiSystem.sFsTexture.fadeOut(0.2f)
                 uiSystem.queryTable.remove()
                 uiSystem.moveSpellsToAnchor()
             }
@@ -1315,12 +1315,12 @@ class CombatUiSystem(
                 uiSystem.setTileDepth(-2, uiSystem.queryTilesEvent!!.tiles)
                 uiSystem.moveActiveSpellsBack()
                 uiSystem.moveSideboardSpellsBack()
-                uiSystem.sFsTexture.fadeIn(10)
+                uiSystem.sFsTexture.fadeIn(0.2f)
                 uiSystem.frontStage.addActor(uiSystem.queryTable)
             }
 
             override fun exit(uiSystem: CombatUiSystem) {
-                uiSystem.sFsTexture.fadeOut(10)
+                uiSystem.sFsTexture.fadeOut(0.2f)
                 uiSystem.queryTable.remove()
                 uiSystem.setTileDepth(0)
             }
@@ -1329,12 +1329,12 @@ class CombatUiSystem(
             override fun enter(uiSystem: CombatUiSystem) {
                 uiSystem.moveActiveSpellsBack()
                 uiSystem.moveSideboardSpellsBack()
-                uiSystem.sFsTexture.fadeIn(10)
+                uiSystem.sFsTexture.fadeIn(0.2f)
                 uiSystem.frontStage.addActor(uiSystem.queryTable)
             }
 
             override fun exit(uiSystem: CombatUiSystem) {
-                uiSystem.sFsTexture.fadeOut(10)
+                uiSystem.sFsTexture.fadeOut(0.2f)
                 uiSystem.tileOptions.forEach { uiSystem.world.delete(it.key) }
                 uiSystem.tileOptions.clear()
                 uiSystem.queryTable.remove()

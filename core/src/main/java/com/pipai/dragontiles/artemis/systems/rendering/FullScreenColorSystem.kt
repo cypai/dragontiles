@@ -55,24 +55,24 @@ class FullScreenColorSystem(game: DragonTilesGame) : BaseSystem() {
         val cSprite = mSprite.get(fsId)
         cSprite.sprite.color = bgColor
         if (state != State.NONE) {
-            t++
+            t += world.delta
             if (t > maxT) {
                 state = State.NONE
             }
         }
     }
 
-    fun fadeIn(time: Int, color: Color = Color.BLACK) {
+    fun fadeIn(time: Float, color: Color = Color.BLACK) {
         bgColor.set(color.r, color.b, color.g, 0f)
         t = 0f
-        maxT = time.toFloat()
+        maxT = time
         state = State.FADE_IN
     }
 
-    fun fadeOut(time: Int, color: Color = Color.BLACK) {
+    fun fadeOut(time: Float, color: Color = Color.BLACK) {
         bgColor.set(color.r, color.b, color.g, 1f)
         t = 0f
-        maxT = time.toFloat()
+        maxT = time
         state = State.FADE_OUT
     }
 

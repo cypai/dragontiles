@@ -401,7 +401,7 @@ class DeckDisplayUiSystem(
 
     fun activate() {
         active = true
-        sFsc.fadeIn(10)
+        sFsc.fadeIn(0.2f)
         stage.addActor(scrollPane)
         scrollPane.toFront()
         scrollPane.scrollY = 0f
@@ -411,7 +411,7 @@ class DeckDisplayUiSystem(
     fun deactivate() {
         active = false
         disableExit = false
-        sFsc.fadeOut(10)
+        sFsc.fadeOut(0.2f)
         scrollPane.remove()
         sEvent.dispatch(DeckDisplayUiEvent(false))
     }
