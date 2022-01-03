@@ -1,7 +1,6 @@
 package com.pipai.dragontiles.artemis.systems.rendering
 
 import com.artemis.BaseSystem
-import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.scenes.scene2d.ui.Label
@@ -88,15 +87,17 @@ class RenderingSystem(
 //                font.draw(batch, cTextLabel.text, cXy.x + cTextLabel.xOffset, cXy.y + cTextLabel.yOffset)
             }
 
-
         world.fetch(allOf(XYComponent::class, ParticleEffectComponent::class))
             .forEach {
                 val cXy = mXy.get(it)
                 val cParticle = mParticle.get(it)
                 val effect = cParticle.effect
-                effect.setPosition(cXy.x, cXy.y)
+                effect.setPosition(cXy.x, cXy.y - 50f)
                 effect.update(world.delta)
-                effect.render(game.particleRenderer)
+                game.particleRenderer.render(effect)
+                if (effect.isComplete) {
+                    mParticle.remove(it)
+                }
             }
         batch.end()
 

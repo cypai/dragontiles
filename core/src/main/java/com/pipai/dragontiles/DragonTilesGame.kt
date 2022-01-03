@@ -134,7 +134,8 @@ class DragonTilesGame(val gameConfig: GameConfig) : Game() {
         spriteBatch = PolygonSpriteBatch()
         skeletonRenderer = SkeletonRenderer()
         skeletonRenderer.premultipliedAlpha = true
-        particleRenderer = SpriteBatchParticleRenderer(spriteBatch)
+        particleRenderer = SpriteBatchParticleRenderer()
+        particleRenderer.setBatch(spriteBatch)
         shapeRenderer = ShapeRenderer()
         shapeRenderer.setAutoShapeType(true)
 
