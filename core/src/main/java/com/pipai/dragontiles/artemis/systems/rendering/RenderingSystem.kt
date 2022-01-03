@@ -20,7 +20,7 @@ class RenderingSystem(
     private val mSprite by mapper<SpriteComponent>()
     private val mSpine by mapper<SpineComponent>()
     private val mActor by mapper<ActorComponent>()
-    private val mAlpha by mapper<AlphaInterpolationComponent>()
+    private val mParticle by mapper<ParticleEffectComponent>()
     private val mTextLabel by mapper<TextLabelComponent>()
     private val mLine by mapper<AnchoredLineComponent>()
 
@@ -86,6 +86,17 @@ class RenderingSystem(
                 label.draw(batch, 1f)
 //                font.color = cTextLabel.color
 //                font.draw(batch, cTextLabel.text, cXy.x + cTextLabel.xOffset, cXy.y + cTextLabel.yOffset)
+            }
+
+
+        world.fetch(allOf(XYComponent::class, ParticleEffectComponent::class))
+            .forEach {
+                val cXy = mXy.get(it)
+                val cParticle = mParticle.get(it)
+                val effect = cParticle.effect
+                effect.setPosition(cXy.x, cXy.y)
+                effect.update(world.delta)
+                effect.render(game.particleRenderer)
             }
         batch.end()
 

@@ -4,6 +4,7 @@ import com.badlogic.gdx.Game
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Screen
 import com.badlogic.gdx.assets.AssetManager
+import com.badlogic.gdx.assets.loaders.ParticleEffectDescriptorLoader
 import com.badlogic.gdx.assets.loaders.SkeletonDataLoader
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver
 import com.badlogic.gdx.audio.Music
@@ -36,6 +37,8 @@ import com.pipai.dragontiles.meta.Save
 import com.pipai.dragontiles.meta.SaveSerializer
 import com.pipai.dragontiles.utils.getLogger
 import com.pipai.dragontiles.utils.withBg
+import com.talosvfx.talos.runtime.ParticleEffectDescriptor
+import com.talosvfx.talos.runtime.render.SpriteBatchParticleRenderer
 import org.apache.commons.lang3.builder.ToStringBuilder
 import org.apache.commons.lang3.builder.ToStringStyle
 import java.io.File
@@ -52,6 +55,9 @@ class DragonTilesGame(val gameConfig: GameConfig) : Game() {
         private set
 
     lateinit var skeletonRenderer: SkeletonRenderer
+        private set
+
+    lateinit var particleRenderer: SpriteBatchParticleRenderer
         private set
 
     lateinit var heavyFont: BitmapFont
@@ -128,6 +134,7 @@ class DragonTilesGame(val gameConfig: GameConfig) : Game() {
         spriteBatch = PolygonSpriteBatch()
         skeletonRenderer = SkeletonRenderer()
         skeletonRenderer.premultipliedAlpha = true
+        particleRenderer = SpriteBatchParticleRenderer(spriteBatch)
         shapeRenderer = ShapeRenderer()
         shapeRenderer.setAutoShapeType(true)
 
@@ -155,6 +162,22 @@ class DragonTilesGame(val gameConfig: GameConfig) : Game() {
             .forEach { assets.load(it.toString(), Texture::class.java) }
         File("assets/binassets/graphics/enemies").listFiles()!!
             .forEach { assets.load(it.toString(), Texture::class.java) }
+        File("assets/binassets/graphics/atlas").listFiles()!!
+            .filter { it.toString().endsWith("atlas") }
+            .forEach { assets.load(it.toString(), TextureAtlas::class.java) }
+        assets.setLoader(
+            ParticleEffectDescriptor::class.java,
+            ParticleEffectDescriptorLoader(InternalFileHandleResolver())
+        )
+        File("assets/binassets/particles").listFiles()!!
+            .filter { it.toString().endsWith("p") }
+            .forEach {
+                assets.load(
+                    it.toString(),
+                    ParticleEffectDescriptor::class.java,
+                    ParticleEffectDescriptorLoader.ParticleEffectDescriptorParameter("assets/binassets/graphics/atlas/particles.atlas")
+                )
+            }
         assets.setLoader(SkeletonData::class.java, SkeletonDataLoader(InternalFileHandleResolver()))
         File("assets/binassets/spine/").listFiles()!!
             .forEach { dir ->

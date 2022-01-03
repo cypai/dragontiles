@@ -13,6 +13,7 @@ import com.esotericsoftware.spine.AnimationStateData
 import com.esotericsoftware.spine.Skeleton
 import com.esotericsoftware.spine.SkeletonData
 import com.pipai.dragontiles.misc.RadialSprite
+import com.talosvfx.talos.runtime.ParticleEffectInstance
 import net.mostlyoriginal.api.event.common.Event
 
 class XYComponent : Component() {
@@ -159,6 +160,10 @@ class AlphaInterpolationComponent : Component() {
         this.startAlpha = startAlpha
         this.targetAlpha = targetAlpha
     }
+}
+
+class ParticleEffectComponent : Component() {
+    lateinit var effect: ParticleEffectInstance
 }
 
 class ClickableComponent : Component() {
