@@ -11,6 +11,7 @@ import com.pipai.dragontiles.combat.CombatApi
 import com.pipai.dragontiles.enemies.Enemy
 import com.pipai.dragontiles.spells.*
 import com.pipai.dragontiles.utils.firstCapOnly
+import com.pipai.dragontiles.utils.su
 import com.pipai.dragontiles.utils.upgradeAssetPath
 
 class SpellCard(
@@ -35,13 +36,11 @@ class SpellCard(
     private val descriptionLabel = Label("", skin, "tiny")
     private val upgradeImages = listOf(Image(), Image(), Image())
 
-    private val reqSize = 28f
-
-    private var zPrevious = 0
+    private val reqSize = su(0.5f)
 
     companion object {
-        val cardWidth = 154f
-        val cardHeight = 216f
+        val cardWidth = su(2.5f)
+        val cardHeight = su(3.5f)
     }
 
     private val keyRegex = "(!\\w+)(\\((\\w+)\\))?(\\[.+])?".toRegex()
@@ -68,7 +67,7 @@ class SpellCard(
         update()
 
         val cardContainer = Container(cardTable)
-            .pad(8f)
+            .pad(su(0.2f))
 
         val topLevelStack = Stack()
         topLevelStack.add(backTable)
@@ -99,23 +98,23 @@ class SpellCard(
 
         cardTable.background = skin.getDrawable("frameDrawable")
         cardTable.add(nameLabel)
-            .padTop(16f)
-            .padBottom(4f)
+            .padTop(su(0.25f))
+            .padBottom(su(0.05f))
             .center()
             .expandX()
         cardTable.row()
         cardTable.add(spellTypeLabel)
-            .padTop(2f)
-            .padLeft(6f)
+            .padTop(su(0.05f))
+            .padLeft(su(0.1f))
             .left()
             .top()
         cardTable.row()
         cardTable.add(descriptionLabel)
             .prefWidth(cardWidth)
             .prefHeight(cardHeight - 48f)
-            .padTop(2f)
-            .padLeft(6f)
-            .padRight(8f)
+            .padTop(su(0.05f))
+            .padLeft(su(0.1f))
+            .padRight(su(0.1f))
             .top()
         cardTable.row()
         val upgradeRow = Table()
@@ -237,11 +236,6 @@ class SpellCard(
             }
             val spellLocalization = game.gameStrings.spellLocalization(spell.id)
             nameLabel.setText(spellLocalization.name)
-            if (nameLabel.prefWidth > cardWidth - 2 * reqSize) {
-                nameLabel.setFontScale(0.95f)
-            } else {
-                nameLabel.setFontScale(1f)
-            }
             spellTypeLabel.setText(
                 "${spell.type.toString().firstCapOnly()} - ${
                     spell.rarity.toString().firstCapOnly()

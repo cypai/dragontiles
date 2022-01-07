@@ -9,7 +9,7 @@ import com.pipai.dragontiles.data.Localized
 abstract class Enemy : Localized {
 
     abstract val assetName: String
-    open val assetConfig: AssetConfig = AssetConfig(AssetType.SPRITE, 0f, 0f)
+    open val assetConfig: AssetConfig = AssetConfig(AssetType.SPRITE, 0f)
 
     abstract val hpMax: Int
     var hp: Int = 0

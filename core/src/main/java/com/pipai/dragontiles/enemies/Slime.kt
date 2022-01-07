@@ -13,7 +13,7 @@ class Slime : Enemy() {
 
     override val id: String = "base:enemies:Slime"
     override val assetName: String = "slime"
-    override val assetConfig: AssetConfig = AssetConfig(AssetType.SPINE, -0.5f, 0.5f)
+    override val assetConfig: AssetConfig = AssetConfig(AssetType.SPINE, 2f)
 
     override val hpMax: Int = 13
     override val fluxMax: Int = 0

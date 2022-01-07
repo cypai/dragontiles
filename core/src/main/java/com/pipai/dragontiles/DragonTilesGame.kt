@@ -9,10 +9,8 @@ import com.badlogic.gdx.assets.loaders.SkeletonDataLoader
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver
 import com.badlogic.gdx.audio.Music
 import com.badlogic.gdx.files.FileHandle
-import com.badlogic.gdx.graphics.Color
-import com.badlogic.gdx.graphics.Pixmap
+import com.badlogic.gdx.graphics.*
 import com.badlogic.gdx.graphics.Pixmap.Format
-import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.*
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter
@@ -24,6 +22,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldStyle
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable
 import com.badlogic.gdx.scenes.scene2d.utils.MultiDrawable
 import com.badlogic.gdx.scenes.scene2d.utils.OffsetDrawable
+import com.badlogic.gdx.utils.viewport.ExtendViewport
+import com.badlogic.gdx.utils.viewport.Viewport
 import com.esotericsoftware.spine.SkeletonData
 import com.esotericsoftware.spine.SkeletonRenderer
 import com.kotcrab.vis.ui.VisUI
@@ -47,6 +47,16 @@ import java.lang.Exception
 class DragonTilesGame(val gameConfig: GameConfig) : Game() {
 
     private val logger = getLogger()
+
+    companion object {
+        const val WORLD_HEIGHT = 12f // 12 inches
+    }
+
+    lateinit var camera: Camera
+        private set
+
+    lateinit var viewport: Viewport
+        private set
 
     lateinit var spriteBatch: PolygonSpriteBatch
         private set
@@ -114,7 +124,8 @@ class DragonTilesGame(val gameConfig: GameConfig) : Game() {
     override fun create() {
         logger.info("Starting Dragon Tiles with the following config settings:")
         logger.info(gameConfig.resolution.toDebugString())
-
+        camera = OrthographicCamera()
+        viewport = ExtendViewport(WORLD_HEIGHT * gameConfig.resolution.aspectRatio, WORLD_HEIGHT, camera)
         GameDataInitializer().init(data)
 
         if (saveFileHandle.exists()) {
@@ -199,26 +210,29 @@ class DragonTilesGame(val gameConfig: GameConfig) : Game() {
         val heavyFontGenerator =
             FreeTypeFontGenerator(Gdx.files.internal("assets/binassets/fonts/Comme-Heavy.ttf"))
         val fontParameter = FreeTypeFontParameter()
-        fontParameter.size = 20
+        val largeSize = (gameConfig.resolution.height * 0.03f).toInt()
+        val smallSize = (gameConfig.resolution.height * 0.025f).toInt()
+        val tinySize = (gameConfig.resolution.height * 0.017f).toInt()
+        fontParameter.size = largeSize
         font = fontGenerator.generateFont(fontParameter)
 
-        fontParameter.size = 16
+        fontParameter.size = smallSize
         smallFont = fontGenerator.generateFont(fontParameter)
 
-        fontParameter.size = 13
+        fontParameter.size = tinySize
         tinyFont = fontGenerator.generateFont(fontParameter)
 
         fontParameter.borderWidth = 1f
-        fontParameter.size = 20
+        fontParameter.size = largeSize
         outlinedFont = fontGenerator.generateFont(fontParameter)
 
-        fontParameter.size = 16
+        fontParameter.size = smallSize
         outlinedSmallFont = fontGenerator.generateFont(fontParameter)
 
-        fontParameter.size = 13
+        fontParameter.size = tinySize
         outlinedTinyFont = fontGenerator.generateFont(fontParameter)
 
-        fontParameter.size = 18
+        fontParameter.size = largeSize
         fontParameter.borderWidth = 2f
         heavyFont = heavyFontGenerator.generateFont(fontParameter)
 
@@ -405,6 +419,10 @@ class DragonTilesGame(val gameConfig: GameConfig) : Game() {
         shapeRenderer.dispose()
         font.dispose()
         screen.dispose()
+    }
+
+    override fun resize(width: Int, height: Int) {
+        viewport.update(width, height, true)
     }
 
     override fun setScreen(screen: Screen) {

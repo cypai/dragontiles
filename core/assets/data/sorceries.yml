@@ -41,4 +41,4 @@ base:sorceries:GreatPower:
 base:sorceries:SummonPhoenix:
   en:
     name: Summon Phoenix
-    description: Summons a Phoenix which inflicts !s(1) Elemented Reactants to all enemies at the start of your turn.
+    description: Inflicts !s(1) Elemented Reactants to all enemies at the start of your turn.

@@ -1,8 +1,14 @@
 package com.pipai.dragontiles.utils
 
+import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable
+import com.badlogic.gdx.utils.viewport.ExtendViewport
+import com.badlogic.gdx.utils.viewport.FitViewport
+import com.badlogic.gdx.utils.viewport.Viewport
+import com.pipai.dragontiles.DragonTilesGame
 import com.pipai.dragontiles.spells.SpellAspect
 import com.pipai.dragontiles.spells.StackableAspect
 import com.pipai.dragontiles.status.BreakStatus
@@ -86,11 +92,19 @@ inline fun <reified T : Status> List<SpellAspect>.getStackableCopy(klass: KClass
     return stackable.status.deepCopy() as T
 }
 
-fun Label.LabelStyle.withBg(drawable: Drawable): Label.LabelStyle{
-    this.background  = drawable
+fun Label.LabelStyle.withBg(drawable: Drawable): Label.LabelStyle {
+    this.background = drawable
     return this
 }
 
 fun String.firstCapOnly(): String {
     return this.lowercase().replaceFirstChar { it.uppercase() }
+}
+
+fun DragonTilesGame.resetViewport() {
+    this.viewport.setWorldSize(gameConfig.resolution.aspectRatio * 10f, 10f)
+}
+
+fun su(worldUnits: Float): Float {
+    return worldUnits * Gdx.graphics.height.toFloat() / DragonTilesGame.WORLD_HEIGHT
 }

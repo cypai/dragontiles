@@ -69,7 +69,8 @@ class CombatantStateSystem(
                 AssetType.SPINE -> {
                     val cSpine = mSpine.create(entityId)
                     cSpine.load(game.assets.get(spineAssetPath(enemy.assetName)))
-                    cSpine.skeleton.setScale(enemy.assetConfig.scaleX, enemy.assetConfig.scaleY)
+                    val scale = enemy.assetConfig.width / cSpine.skeleton.data.width
+                    cSpine.skeleton.setScale(scale, scale)
                     cSpine.state.setAnimation(0, "Idle", true)
                 }
             }
@@ -202,9 +203,13 @@ class CombatantStateSystem(
             AssetType.SPINE -> {
                 val cSpine = mSpine.get(entityId)
                 val skeleton = cSpine.skeleton
-                val ui = EnemyUi.create(game, enemy, skeleton.data.width * abs(enemy.assetConfig.scaleX))
-                ui.table.x = cXy.x - skeleton.data.width * abs(enemy.assetConfig.scaleX) / 2f
-                ui.table.y = cXy.y + skeleton.data.height * enemy.assetConfig.scaleY
+                val scale = enemy.assetConfig.width / cSpine.skeleton.data.width
+                val ui = EnemyUi.create(game, enemy, enemy.assetConfig.width)
+                println("world: ${cXy.toVector2()}")
+                val screenXy = game.viewport.project(cXy.toVector2())
+                println("unprojected: $screenXy")
+                ui.table.x = screenXy.x //cXy.x - enemy.assetConfig.width / 2f
+                ui.table.y = screenXy.y //cXy.y + skeleton.data.height * scale
                 ui
             }
         }

@@ -27,6 +27,7 @@ class RenderingSystem(
 
     override fun processSystem() {
         batch.color = Color.WHITE
+        batch.projectionMatrix = game.camera.combined
         batch.begin()
         world.fetch(allOf(XYComponent::class, SpineComponent::class))
             .forEach {

@@ -12,14 +12,16 @@ import com.pipai.dragontiles.DragonTilesGame
 import com.pipai.dragontiles.artemis.systems.input.ExitInputProcessor
 import com.pipai.dragontiles.artemis.systems.input.InputProcessingSystem
 import com.pipai.dragontiles.artemis.systems.ui.MainMenuUiSystem
+import com.pipai.dragontiles.utils.resetViewport
 
-class MainMenuScreen(game: DragonTilesGame, startFromOptions: Boolean = false) : Screen {
+class MainMenuScreen(private val game: DragonTilesGame, startFromOptions: Boolean = false) : Screen {
 
     private val stage = Stage(ScreenViewport(), game.spriteBatch)
 
     val world: World
 
     init {
+        game.resetViewport()
         if (game.music != null) {
             game.music!!.stop()
             game.music = null
@@ -54,6 +56,8 @@ class MainMenuScreen(game: DragonTilesGame, startFromOptions: Boolean = false) :
     }
 
     override fun resize(width: Int, height: Int) {
+        game.viewport.update(width, height)
+        game.camera.position.set(game.camera.viewportWidth / 2f, game.camera.viewportHeight / 2f, 0f)
     }
 
     override fun pause() {

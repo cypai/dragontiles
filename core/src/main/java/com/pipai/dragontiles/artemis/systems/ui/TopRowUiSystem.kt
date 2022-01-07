@@ -6,7 +6,6 @@ import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.InputEvent
 import com.badlogic.gdx.scenes.scene2d.Stage
-import com.badlogic.gdx.scenes.scene2d.Touchable
 import com.badlogic.gdx.scenes.scene2d.ui.Image
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Stack
@@ -22,6 +21,7 @@ import com.pipai.dragontiles.data.RunData
 import com.pipai.dragontiles.potions.PotionType
 import com.pipai.dragontiles.utils.potionAssetPath
 import com.pipai.dragontiles.utils.relicAssetPath
+import com.pipai.dragontiles.utils.su
 import com.pipai.dragontiles.utils.system
 import net.mostlyoriginal.api.event.common.EventSystem
 import net.mostlyoriginal.api.event.common.Subscribe
@@ -35,7 +35,7 @@ class TopRowUiSystem(
 ) : NoProcessingSystem() {
 
     private val skin = game.skin
-    private val config = game.gameConfig
+    private val resolution = game.gameConfig.resolution
 
     private val rootTable = Table()
     private val topRow = Table()
@@ -51,27 +51,33 @@ class TopRowUiSystem(
     private val goldLabel = Label("Gold: $gold", skin)
     private val potionTable = Table()
 
+    private val topRowLabelWidth = su(2f)
+    private val spacing = su(0.5f)
+
     private val sTooltip by system<TooltipSystem>()
     private val sEvent by system<EventSystem>()
 
     private lateinit var api: GlobalApi
 
     override fun initialize() {
+        println(topRowLabelWidth)
+        println(spacing)
         api = GlobalApi(game.data, runData, sEvent)
         rootTable.setFillParent(true)
         topRow.background = skin.getDrawable("frameDrawable")
         topRow.add(Label(runData.hero.name, skin))
-            .width(260f)
-            .pad(8f)
-            .padLeft(16f)
+            .padLeft(spacing / 2f)
+            .space(spacing)
             .left()
-            .top()
         topRow.add(hpLabel)
-            .width(160f)
+            .space(spacing)
+            .width(topRowLabelWidth)
         topRow.add(fluxLabel)
-            .width(160f)
+            .space(spacing)
+            .width(topRowLabelWidth)
         topRow.add(goldLabel)
-            .width(120f)
+            .space(spacing)
+            .width(topRowLabelWidth)
         updatePotions()
         topRow.add(potionTable)
             .expand()
@@ -79,7 +85,8 @@ class TopRowUiSystem(
         updateRelicRow()
 
         rootTable.add(topRow)
-            .width(config.resolution.width.toFloat())
+            .width(resolution.width.toFloat())
+            .height(su(0.7f))
             .top()
             .left()
         rootTable.row()

@@ -11,6 +11,7 @@ import com.pipai.dragontiles.data.Keywords
 import com.pipai.dragontiles.data.Localized
 import com.pipai.dragontiles.data.NameDescLocalization
 import com.pipai.dragontiles.spells.*
+import com.pipai.dragontiles.utils.su
 
 class TooltipSystem(private val game: DragonTilesGame, var stage: Stage) : NoProcessingSystem(), InputProcessor {
 
@@ -29,7 +30,7 @@ class TooltipSystem(private val game: DragonTilesGame, var stage: Stage) : NoPro
     private var mouseY: Float = 0f
 
     companion object {
-        const val WIDTH = 160f
+        val WIDTH = su(3f)
     }
 
     fun addNameDescLocalization(nameDescLocalization: NameDescLocalization, allowBlank: Boolean = false) {
