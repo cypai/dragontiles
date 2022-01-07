@@ -205,11 +205,9 @@ class CombatantStateSystem(
                 val skeleton = cSpine.skeleton
                 val scale = enemy.assetConfig.width / cSpine.skeleton.data.width
                 val ui = EnemyUi.create(game, enemy, enemy.assetConfig.width)
-                println("world: ${cXy.toVector2()}")
                 val screenXy = game.viewport.project(cXy.toVector2())
-                println("unprojected: $screenXy")
-                ui.table.x = screenXy.x //cXy.x - enemy.assetConfig.width / 2f
-                ui.table.y = screenXy.y //cXy.y + skeleton.data.height * scale
+                ui.table.x = screenXy.x - su(enemy.assetConfig.width) / 2f
+                ui.table.y = screenXy.y + su(skeleton.data.height * scale)
                 ui
             }
         }
@@ -500,12 +498,12 @@ class CombatantStateSystem(
                 numbersTable.add(ventLabel)
                     .top()
                     .left()
-                    .prefHeight(16f)
+                    .prefHeight(su(0.3f))
                 numbersTable.row()
                 numbersTable.add(attackLabel)
                     .bottom()
                     .left()
-                    .prefHeight(16f)
+                    .prefHeight(su(0.3f))
 
                 val intentStack = Stack()
                 val intent1 = Image()
@@ -515,13 +513,13 @@ class CombatantStateSystem(
                 intentStack.add(numbersTable)
 
                 table.add(intentStack)
-                    .size(48f)
+                    .size(su(1f))
 
                 val nameLabel = Label("", game.skin, "whiteSmall")
                 nameLabel.setAlignment(Align.center)
                 nameLabel.wrap = true
                 table.add(nameLabel)
-                    .width(width - 48f)
+                    .width(su(width - 1f))
                     .height(nameLabel.prefHeight)
                 table.row()
 
@@ -545,19 +543,19 @@ class CombatantStateSystem(
                     fluxStack.add(fluxBar)
                     fluxStack.add(fluxLabel)
                     stateTable.add(fluxStack)
-                        .width(width)
+                        .width(su(width))
                         .bottom()
                     stateTable.row()
                 }
                 stateTable.add(hpStack)
                     .bottom()
-                    .width(width)
+                    .width(su(width))
                     .padBottom(2f)
                 stateTable.row()
                 table.add(stateTable)
                     .colspan(2)
-                    .width(width)
-                table.width = width
+                    .width(su(width))
+                table.width = su(width)
                 table.height = table.prefHeight
                 return EnemyUi(
                     table,
