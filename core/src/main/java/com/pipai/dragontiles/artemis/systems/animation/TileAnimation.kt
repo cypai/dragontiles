@@ -35,6 +35,8 @@ abstract class TileAnimation(protected val layout: CombatUiLayout) : Animation()
         cTile.tile = tile
         val cSprite = mSprite.create(entityId)
         cSprite.sprite = Sprite(layout.tileSkin.regionFor(tile.tile))
+        cSprite.width = layout.tileWidth
+        cSprite.height = layout.tileHeight
         when (tile.tileStatus) {
             TileStatus.BURN -> cSprite.sprite.color = Color.SCARLET
             TileStatus.FREEZE -> cSprite.sprite.color = Color.SKY

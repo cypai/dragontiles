@@ -25,7 +25,7 @@ import com.pipai.dragontiles.dungeon.Encounter
 import net.mostlyoriginal.api.event.common.EventSystem
 
 class CombatScreen(
-    game: DragonTilesGame,
+    private val game: DragonTilesGame,
     runData: RunData,
     encounter: Encounter,
     rewardConfig: CombatRewardConfig?,

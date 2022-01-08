@@ -37,7 +37,8 @@ class FullScreenColorSystem(game: DragonTilesGame) : BaseSystem() {
             cSprite.sprite = skin.getSprite("white")
             cSprite.sprite.color = bgColor
             val resolution = config.resolution
-            cSprite.setWidthHeight(resolution.width.toFloat() * 2, resolution.height.toFloat() * 2)
+            cSprite.width = DragonTilesGame.worldWidth()
+            cSprite.height = DragonTilesGame.WORLD_HEIGHT
             mDepth.create(fsId).depth = -1
             mXy.create(fsId)
         }

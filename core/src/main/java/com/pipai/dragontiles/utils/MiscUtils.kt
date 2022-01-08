@@ -105,6 +105,10 @@ fun DragonTilesGame.resetViewport() {
     this.viewport.setWorldSize(gameConfig.resolution.aspectRatio * 10f, 10f)
 }
 
+/**
+ * All scene2d configs should use this to do screen-resolution-independent configs.
+ * su is short for ScreenUnits (as opposed to WorldUnits)
+ */
 fun su(worldUnits: Float): Float {
     return worldUnits * Gdx.graphics.height.toFloat() / DragonTilesGame.WORLD_HEIGHT
 }

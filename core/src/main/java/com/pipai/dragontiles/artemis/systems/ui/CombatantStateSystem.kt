@@ -498,12 +498,12 @@ class CombatantStateSystem(
                 numbersTable.add(ventLabel)
                     .top()
                     .left()
-                    .prefHeight(su(0.3f))
+                    .prefHeight(su(0.2f))
                 numbersTable.row()
                 numbersTable.add(attackLabel)
                     .bottom()
                     .left()
-                    .prefHeight(su(0.3f))
+                    .prefHeight(su(0.2f))
 
                 val intentStack = Stack()
                 val intent1 = Image()
@@ -513,13 +513,13 @@ class CombatantStateSystem(
                 intentStack.add(numbersTable)
 
                 table.add(intentStack)
-                    .size(su(1f))
+                    .size(su(0.5f))
 
                 val nameLabel = Label("", game.skin, "whiteSmall")
                 nameLabel.setAlignment(Align.center)
                 nameLabel.wrap = true
                 table.add(nameLabel)
-                    .width(su(width - 1f))
+                    .width(su(width - 0.5f))
                     .height(nameLabel.prefHeight)
                 table.row()
 

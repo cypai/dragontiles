@@ -26,6 +26,7 @@ class RenderingSystem(
     private val batch = game.spriteBatch
 
     override fun processSystem() {
+        game.camera.update()
         batch.color = Color.WHITE
         batch.projectionMatrix = game.camera.combined
         batch.begin()
@@ -60,11 +61,13 @@ class RenderingSystem(
                     cActor.actor.draw(batch, 1f)
                 } else {
                     val sprite = cSprite.sprite
-                    sprite.x = cXy.x
-                    sprite.y = cXy.y
-                    sprite.draw(batch)
+                    if (sprite.color != batch.color) {
+                        batch.color = sprite.color
+                    }
+                    batch.draw(sprite, cXy.x, cXy.y, cSprite.width, cSprite.height)
                 }
             }
+        batch.color = Color.WHITE
 
         world.fetch(allOf(XYComponent::class, TextLabelComponent::class))
             .forEach {

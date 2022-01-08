@@ -36,11 +36,11 @@ class SpellCard(
     private val descriptionLabel = Label("", skin, "tiny")
     private val upgradeImages = listOf(Image(), Image(), Image())
 
-    private val reqSize = su(0.5f)
+    private val reqSize = su(0.4f)
 
     companion object {
-        val cardWidth = su(2.5f)
-        val cardHeight = su(3.5f)
+        val cardWidth = su(2f)
+        val cardHeight = su(2.8f)
     }
 
     private val keyRegex = "(!\\w+)(\\((\\w+)\\))?(\\[.+])?".toRegex()
@@ -67,7 +67,7 @@ class SpellCard(
         update()
 
         val cardContainer = Container(cardTable)
-            .pad(su(0.2f))
+            .pad(su(0.1f))
 
         val topLevelStack = Stack()
         topLevelStack.add(backTable)
@@ -98,14 +98,14 @@ class SpellCard(
 
         cardTable.background = skin.getDrawable("frameDrawable")
         cardTable.add(nameLabel)
-            .padTop(su(0.25f))
-            .padBottom(su(0.05f))
+            .padTop(su(0.21f))
+            .padBottom(su(0.04f))
             .center()
             .expandX()
         cardTable.row()
         cardTable.add(spellTypeLabel)
-            .padTop(su(0.05f))
-            .padLeft(su(0.1f))
+            .padTop(su(0.04f))
+            .padLeft(su(0.08f))
             .left()
             .top()
         cardTable.row()
@@ -113,7 +113,7 @@ class SpellCard(
             .prefWidth(cardWidth)
             .prefHeight(cardHeight - 48f)
             .padTop(su(0.05f))
-            .padLeft(su(0.1f))
+            .padLeft(su(0.08f))
             .padRight(su(0.1f))
             .top()
         cardTable.row()

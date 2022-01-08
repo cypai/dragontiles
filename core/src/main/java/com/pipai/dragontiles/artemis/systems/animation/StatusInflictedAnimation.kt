@@ -34,7 +34,6 @@ class StatusInflictedAnimation(private val status: Status) : Animation() {
         cSprite.sprite = Sprite(game.assets.get(statusAssetPath(status.assetName), Texture::class.java))
         val alpha = 0.5f
         cSprite.sprite.setAlpha(alpha)
-        cSprite.setWidthHeight(96f, 96f)
         val cAlpha = mAlpha.create(entityId)
         cAlpha.set(alpha, 0f, 0.5f, Interpolation.linear, EndStrategy.DESTROY)
         cAlpha.onEndpoint = { endAnimation() }

@@ -49,7 +49,8 @@ class DragonTilesGame(val gameConfig: GameConfig) : Game() {
     private val logger = getLogger()
 
     companion object {
-        const val WORLD_HEIGHT = 12f // 12 inches
+        const val WORLD_HEIGHT = 9f // 12 inches
+        fun worldWidth() = Gdx.graphics.width / (Gdx.graphics.height / WORLD_HEIGHT)
     }
 
     lateinit var camera: Camera
@@ -124,6 +125,7 @@ class DragonTilesGame(val gameConfig: GameConfig) : Game() {
     override fun create() {
         logger.info("Starting Dragon Tiles with the following config settings:")
         logger.info(gameConfig.resolution.toDebugString())
+        logger.info("World Units: ${worldWidth()} x $WORLD_HEIGHT")
         camera = OrthographicCamera()
         viewport = ExtendViewport(WORLD_HEIGHT * gameConfig.resolution.aspectRatio, WORLD_HEIGHT, camera)
         GameDataInitializer().init(data)

@@ -20,8 +20,8 @@ class PlainsDungeon {
                     Encounter(
                         "base:dungeons:Plains:SlimePair",
                         listOf(
-                            Pair(Slime(), Vector2(2f, 6f)),
-                            Pair(Slime(), Vector2(5f, 6f))
+                            Pair(Slime(), Vector2(2f, 4.5f)),
+                            Pair(Slime(), Vector2(5f, 4.5f))
                         )
                     ),
                 ),

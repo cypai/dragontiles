@@ -22,6 +22,9 @@ enum class ScreenResolution(val width: Int, val height: Int, val description: St
 
     val aspectRatio = width.toFloat() / height.toFloat()
 
+    fun worldHeight() = DragonTilesGame.WORLD_HEIGHT
+    fun worldWidth() = DragonTilesGame.worldWidth()
+
     fun toDebugString(): String {
         return "ScreenResolution[${width}x$height, $description]"
     }
