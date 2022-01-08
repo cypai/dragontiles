@@ -33,7 +33,7 @@ class SpellShopScreen(game: DragonTilesGame, runData: RunData) : Screen {
             .with(
                 TagManager(),
                 EventSystem(),
-                ClickableSystem(game.gameConfig),
+                ClickableSystem(game),
                 HoverableSystem(game.gameConfig),
                 InputProcessingSystem(),
                 SpellShopUiSystem(game, stage, runData),

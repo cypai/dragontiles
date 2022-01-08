@@ -76,7 +76,7 @@ class CombatScreen(
 
                 InputProcessingSystem(),
                 HoverableSystem(game.gameConfig),
-                ClickableSystem(game.gameConfig)
+                ClickableSystem(game)
             )
             .with(
                 -1,

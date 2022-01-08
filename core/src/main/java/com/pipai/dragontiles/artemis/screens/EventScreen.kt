@@ -34,7 +34,7 @@ class EventScreen(game: DragonTilesGame, runData: RunData, event: DungeonEvent) 
             .with(
                 TagManager(),
                 EventSystem(),
-                ClickableSystem(game.gameConfig),
+                ClickableSystem(game),
                 HoverableSystem(game.gameConfig),
                 InputProcessingSystem(),
                 EventUiSystem(game, backStage, runData, event),
