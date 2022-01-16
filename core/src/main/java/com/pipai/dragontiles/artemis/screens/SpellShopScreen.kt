@@ -34,7 +34,7 @@ class SpellShopScreen(game: DragonTilesGame, runData: RunData) : Screen {
                 TagManager(),
                 EventSystem(),
                 ClickableSystem(game),
-                HoverableSystem(game.gameConfig),
+                HoverableSystem(game),
                 InputProcessingSystem(),
                 SpellShopUiSystem(game, stage, runData),
                 FullScreenColorSystem(game),

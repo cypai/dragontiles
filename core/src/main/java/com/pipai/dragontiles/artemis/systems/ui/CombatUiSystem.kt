@@ -97,14 +97,14 @@ class CombatUiSystem(
     private val spellCardY = -SpellCard.cardHeight / 3f
     private val leftSpellClosedCenter = Vector2(SpellCard.cardWidth, spellCardY)
     private val leftSpellOpenCenter = Vector2(SpellCard.cardWidth * 3, spellCardY)
-    private val leftSpellSwapCenter = Vector2(SpellCard.cardWidth * 3, game.gameConfig.resolution.height.toFloat() / 2)
+    private val leftSpellSwapCenter = Vector2(SpellCard.cardWidth * 3, DragonTilesGame.WORLD_HEIGHT / 2)
     private val rightSpellClosedCenter =
-        Vector2(game.gameConfig.resolution.width - SpellCard.cardWidth * 2, spellCardY)
+        Vector2(DragonTilesGame.worldWidth() - SpellCard.cardWidth * 2, spellCardY)
     private val rightSpellOpenCenter =
-        Vector2(game.gameConfig.resolution.width - SpellCard.cardWidth * 3, spellCardY)
+        Vector2(DragonTilesGame.worldWidth() - SpellCard.cardWidth * 3, spellCardY)
     private val rightSpellSwapCenter = Vector2(
-        game.gameConfig.resolution.width - SpellCard.cardWidth * 3,
-        game.gameConfig.resolution.height.toFloat() / 2
+        DragonTilesGame.worldWidth() - SpellCard.cardWidth * 3,
+        DragonTilesGame.WORLD_HEIGHT / 2
     )
 
     var overloaded = false
@@ -129,7 +129,6 @@ class CombatUiSystem(
     private val mTargetHighlight by mapper<TargetHighlightComponent>()
     private val mTile by mapper<TileComponent>()
     private val mMutualDestroy by mapper<MutualDestroyComponent>()
-    private val mHero by mapper<HeroComponent>()
 
     private val sTop by system<TopRowUiSystem>()
     private val sPath by system<PathInterpolationSystem>()
@@ -583,8 +582,8 @@ class CombatUiSystem(
         spellComponentList.height = SpellCard.cardHeight
         spellComponentList.width = spellComponentList.prefWidth
         val position = mXy.get(heroEntityId)
-        spellComponentList.x = position.x + mSprite.get(heroEntityId).sprite.width + SpellCard.cardWidth
-        spellComponentList.y = position.y
+        spellComponentList.x = su(DragonTilesGame.worldWidth() / 2f) - spellComponentList.width / 2f
+        spellComponentList.y = su(position.y)
     }
 
     private fun selectFullCastHand(fullCastHand: FullCastHand) {
@@ -1241,12 +1240,9 @@ class CombatUiSystem(
                     if (number == uiSystem.selectedSpellNumber) {
                         val heroEntityId = uiSystem.world.fetch(allOf(HeroComponent::class)).first()
                         val cHeroXy = uiSystem.mXy.get(heroEntityId)
-                        val cHeroSprite = uiSystem.mSprite.get(heroEntityId)
-                        val position = cHeroXy.toVector2()
-                        position.x += cHeroSprite.sprite.width
                         uiSystem.sPath.moveToLocation(
                             uiSystem.spellCardEntityId(number)!!,
-                            position,
+                            Vector2(su(cHeroXy.x) - SpellCard.cardWidth, su(cHeroXy.y)),
                         )
                         spellCard.enable()
                         uiSystem.displaySpellComponents(spellCard)

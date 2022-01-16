@@ -100,12 +100,13 @@ class SpellComponentList(
                 val label = Label((index + 1).toString(), skin, "white")
                 table.add(label)
                     .top()
-                val hGroup = HorizontalGroup()
+                val hGroup = Table()
                 option.forEach { tile ->
-                    hGroup.addActor(Image(tileSkin.regionFor(tile.tile)))
+                    hGroup.add(Image(tileSkin.regionFor(tile.tile)))
                 }
                 table.add(hGroup)
                     .top()
+                    .width(hGroup.prefWidth)
                     .height(hGroup.prefHeight)
                     .padRight(2f)
                 table.row()

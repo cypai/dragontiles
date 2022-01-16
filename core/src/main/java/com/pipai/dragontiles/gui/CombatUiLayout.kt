@@ -20,7 +20,7 @@ data class CombatUiLayout(val config: GameConfig, val tileSkin: TileSkin, val ma
 
     fun openTilePosition(number: Int) = Vector2(openBlCorner.x + 0.4f * number, openBlCorner.y)
     fun handTilePosition(number: Int) = Vector2(handBlCorner.x + 0.4f * number, handBlCorner.y)
-    fun handActiveTilePosition(number: Int) = Vector2(0.4f * number, handBlCorner.y + tileHeight / 2f)
+    fun handActiveTilePosition(number: Int) = Vector2(handBlCorner.x + 0.4f * number, handBlCorner.y + tileHeight / 2f)
     fun handRuneTilePosition(tilesInHand: Int, assignedSizes: List<Int>, runeSetIndex: Int, number: Int): Vector2 {
         val start = handTilePosition(tilesInHand)
         start.x += tileWidth / 2f

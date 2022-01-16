@@ -30,7 +30,7 @@ class ScribeShopScreen(game: DragonTilesGame, runData: RunData) : Screen {
                 TagManager(),
                 EventSystem(),
                 ClickableSystem(game),
-                HoverableSystem(game.gameConfig),
+                HoverableSystem(game),
                 InputProcessingSystem(),
                 ScribeShopUiSystem(game, runData),
                 FullScreenColorSystem(game),

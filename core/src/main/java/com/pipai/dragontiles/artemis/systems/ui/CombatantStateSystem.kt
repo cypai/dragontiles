@@ -93,12 +93,14 @@ class CombatantStateSystem(
     private fun initHero() {
         val entityId = world.create()
         val cXy = mXy.create(entityId)
-        cXy.setXy(100f, 320f)
+        cXy.setXy(13f, 4.5f)
         val cHero = mHero.create(entityId)
         cHero.setByRunData(runData)
         val cSprite = mSprite.create(entityId)
         cSprite.sprite =
             Sprite(game.assets.get("assets/binassets/graphics/heros/elementalist.png", Texture::class.java))
+        cSprite.width = 2f
+        cSprite.height = 2.5f
 
         val stateTable = Table()
         stateTable.background = game.skin.getDrawable("disabled")
@@ -122,8 +124,8 @@ class CombatantStateSystem(
             .padBottom(2f)
         stateTable.row()
         updateHero(runData.hero.hp, runData.hero.hpMax, runData.hero.flux, runData.hero.fluxMax)
-        stateTable.x = cXy.x
-        stateTable.y = cXy.y + cSprite.sprite.height
+        stateTable.x = su(cXy.x)
+        stateTable.y = su(cXy.y + 2.5f)
         stateTable.width = cSprite.sprite.width
         stateTable.height = stateTable.prefHeight
         stage.addActor(stateTable)

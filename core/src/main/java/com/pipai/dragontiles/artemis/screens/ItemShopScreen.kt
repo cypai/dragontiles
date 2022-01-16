@@ -33,7 +33,7 @@ class ItemShopScreen(game: DragonTilesGame, runData: RunData) : Screen {
                 TagManager(),
                 EventSystem(),
                 ClickableSystem(game),
-                HoverableSystem(game.gameConfig),
+                HoverableSystem(game),
                 InputProcessingSystem(),
                 ItemShopUiSystem(game, runData),
                 FullScreenColorSystem(game),

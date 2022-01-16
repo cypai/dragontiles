@@ -3,9 +3,7 @@ package com.pipai.dragontiles.artemis.systems
 import com.badlogic.gdx.InputProcessor
 import com.badlogic.gdx.math.Rectangle
 import com.badlogic.gdx.math.Vector2
-import com.badlogic.gdx.utils.FloatArray
 import com.pipai.dragontiles.DragonTilesGame
-import com.pipai.dragontiles.GameConfig
 import com.pipai.dragontiles.artemis.components.*
 import com.pipai.dragontiles.utils.*
 import net.mostlyoriginal.api.event.common.EventSystem

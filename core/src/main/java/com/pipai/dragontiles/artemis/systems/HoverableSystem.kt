@@ -2,12 +2,13 @@ package com.pipai.dragontiles.artemis.systems
 
 import com.badlogic.gdx.InputProcessor
 import com.badlogic.gdx.math.Rectangle
-import com.pipai.dragontiles.GameConfig
+import com.badlogic.gdx.math.Vector2
+import com.pipai.dragontiles.DragonTilesGame
 import com.pipai.dragontiles.artemis.components.*
 import com.pipai.dragontiles.utils.*
 import net.mostlyoriginal.api.event.common.EventSystem
 
-class HoverableSystem(private val config: GameConfig) : NoProcessingSystem(), InputProcessor {
+class HoverableSystem(private val game: DragonTilesGame) : NoProcessingSystem(), InputProcessor {
 
     private val mHoverable by mapper<HoverableComponent>()
     private val mSprite by mapper<SpriteComponent>()
@@ -30,29 +31,19 @@ class HoverableSystem(private val config: GameConfig) : NoProcessingSystem(), In
     override fun touchDragged(screenX: Int, screenY: Int, pointer: Int) = false
 
     override fun mouseMoved(screenX: Int, screenY: Int): Boolean {
-        val mouseX = screenX.toFloat()
-        val mouseY = config.resolution.height - screenY.toFloat()
+        val mouseXy = game.viewport.unproject(Vector2(screenX.toFloat(), screenY.toFloat()))
         world.fetch(allOf(XYComponent::class, HoverableComponent::class, SpriteComponent::class))
             .forEach {
+                val cXy = mXy.get(it)
                 val cHover = mHoverable.get(it)
                 val cSprite = mSprite.get(it)
-                val hover = cSprite.sprite.boundingRectangle.contains(mouseX, mouseY)
+                val hover = Rectangle(cXy.x, cXy.y, cSprite.width, cSprite.height).contains(mouseXy)
                 updateHover(cHover, hover)
             }
         world.fetch(allOf(HoverableComponent::class, ActorComponent::class))
             .forEach {
                 val cHover = mHoverable.get(it)
-                val hover = mActor.get(it).actor.boundingRectangle().contains(mouseX, mouseY)
-                updateHover(cHover, hover)
-            }
-        world.fetch(allOf(HoverableComponent::class, XYComponent::class, RadialSpriteComponent::class))
-            .forEach {
-                val cHover = mHoverable.get(it)
-                val cRadial = mRadial.get(it)
-                val cXy = mXy.get(it)
-                val bounds =
-                    CollisionBounds.CollisionBoundingBox(0f, 0f, cRadial.sprite.width(), cRadial.sprite.height())
-                val hover = CollisionUtils.withinBounds(mouseX, mouseY, cXy.x, cXy.y, bounds)
+                val hover = mActor.get(it).actor.boundingRectangle().contains(mouseXy)
                 updateHover(cHover, hover)
             }
 

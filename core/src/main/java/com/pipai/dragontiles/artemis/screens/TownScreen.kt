@@ -34,7 +34,7 @@ class TownScreen(game: DragonTilesGame, runData: RunData) : Screen {
                 TagManager(),
                 EventSystem(),
                 ClickableSystem(game),
-                HoverableSystem(game.gameConfig),
+                HoverableSystem(game),
                 InputProcessingSystem(),
                 DeckDisplayUiSystem(game, runData, frontStage),
                 MapUiSystem(game, stage, runData),
