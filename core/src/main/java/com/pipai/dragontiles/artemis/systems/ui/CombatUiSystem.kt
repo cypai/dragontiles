@@ -97,14 +97,14 @@ class CombatUiSystem(
     private val spellCardY = -SpellCard.cardHeight / 3f
     private val leftSpellClosedCenter = Vector2(SpellCard.cardWidth, spellCardY)
     private val leftSpellOpenCenter = Vector2(SpellCard.cardWidth * 3, spellCardY)
-    private val leftSpellSwapCenter = Vector2(SpellCard.cardWidth * 3, DragonTilesGame.WORLD_HEIGHT / 2)
+    private val leftSpellSwapCenter = Vector2(SpellCard.cardWidth * 3, su(DragonTilesGame.WORLD_HEIGHT / 2))
     private val rightSpellClosedCenter =
-        Vector2(DragonTilesGame.worldWidth() - SpellCard.cardWidth * 2, spellCardY)
+        Vector2(su(DragonTilesGame.worldWidth()) - SpellCard.cardWidth * 1.5f, spellCardY)
     private val rightSpellOpenCenter =
-        Vector2(DragonTilesGame.worldWidth() - SpellCard.cardWidth * 3, spellCardY)
+        Vector2(su(DragonTilesGame.worldWidth()) - SpellCard.cardWidth * 3, spellCardY)
     private val rightSpellSwapCenter = Vector2(
-        DragonTilesGame.worldWidth() - SpellCard.cardWidth * 3,
-        DragonTilesGame.WORLD_HEIGHT / 2
+        su(DragonTilesGame.worldWidth()) - SpellCard.cardWidth * 3,
+        su(DragonTilesGame.WORLD_HEIGHT / 2)
     )
 
     var overloaded = false
@@ -272,7 +272,7 @@ class CombatUiSystem(
 
     private fun addSpellCardToSideboard(number: Int, spell: Spell) {
         val spellCard = SpellCard(game, spell, number, game.skin, sCombat.controller.api)
-        spellCard.x = game.gameConfig.resolution.width - SpellCard.cardWidth * 3 + number * SpellCard.cardWidth * 0.8f
+        spellCard.x = game.gameConfig.resolution.width - SpellCard.cardWidth * 2.5f + number * SpellCard.cardWidth * 0.8f
         spellCard.y = spellCardY
         frontStage.addActor(spellCard)
         sideboard[number] = spellCard
@@ -280,9 +280,7 @@ class CombatUiSystem(
         val id = world.create()
         sideboardEntityIds[number] = id
         val cXy = mXy.create(id)
-        cXy.setXy(spellCard.x, spellCard.y)
         val cAnchor = mAnchor.create(id)
-        cAnchor.setXy(spellCard.x, spellCard.y)
         spellCard.data[ALLOW_HOVER_MOVE] = 1
         addSideboardSpellCardListener(spellCard)
     }
