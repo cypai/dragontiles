@@ -166,7 +166,9 @@ class MapUiSystem(
                                     )
                                 )
                         }
-                        else -> {}
+                        else -> {
+                            mSprite.remove(id)
+                        }
                     }
                 }
                 mClickable.create(id).eventGenerator = { MapNodeClickEvent(floorNum, index) }

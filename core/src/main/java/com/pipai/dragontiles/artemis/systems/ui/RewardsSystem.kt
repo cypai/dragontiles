@@ -14,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.pipai.dragontiles.DragonTilesGame
+import com.pipai.dragontiles.artemis.components.HeroComponent
 import com.pipai.dragontiles.artemis.components.TileComponent
 import com.pipai.dragontiles.artemis.components.XYComponent
 import com.pipai.dragontiles.artemis.events.DeckDisplayUiEvent
@@ -62,6 +63,9 @@ class RewardsSystem(
         }
         world.fetch(allOf(XYComponent::class, TileComponent::class)).forEach {
             sPath.moveToLocation(it, game.gameConfig.resolution.width / 2f, -100f)
+        }
+        world.fetch(allOf(HeroComponent::class)).forEach {
+            world.delete(it)
         }
         sUi.hideSpellCards()
         active = true
