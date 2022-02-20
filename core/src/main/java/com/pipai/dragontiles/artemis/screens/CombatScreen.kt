@@ -66,7 +66,7 @@ class CombatScreen(
                 StatusSystem(game),
                 AnchorSystem(),
                 CombatAnimationSystem(game),
-                MouseXySystem(game.gameConfig),
+                MouseXySystem(game),
                 TooltipSystem(game, frontStage),
                 FullScreenColorSystem(game),
                 RewardsSystem(game, runData, frontStage, runData.combatWon),
