@@ -55,17 +55,20 @@ class MapUiSystem(
         table.height = game.gameConfig.resolution.height.toFloat() / 2f
         table.y = table.height / 2f
         stage.addActor(table)
-        val centerY = game.gameConfig.resolution.height.toFloat() / 2f
-        val rightX = game.gameConfig.resolution.width.toFloat() - 64f
+        val centerY = DragonTilesGame.WORLD_HEIGHT / 2f
+        val rightX = DragonTilesGame.worldWidth() - 1f
         val map = runData.dungeonMap.map
         var previousFloorIds: List<Int> = listOf()
         map.forEachIndexed { floorNum, floor ->
-            val bottomY = centerY - floor.size * 64f / 2f
+            val bottomY = centerY - floor.size / 2f
             val cuurentFloorIds: MutableList<Int> = mutableListOf()
             floor.forEachIndexed { index, node ->
                 val id = world.create()
-                mXy.create(id).setXy(rightX - 64f * floorNum, bottomY + 64f * index)
+                mXy.create(id).setXy(rightX - floorNum, bottomY + index)
                 val cHover = mHover.create(id)
+                val cSprite = mSprite.create(id)
+                cSprite.width = 0.6f
+                cSprite.height = 0.6f
                 if (runData.dungeonMap.currentFloor == floorNum && runData.dungeonMap.currentFloorIndex == index) {
                     cHover.enterCallback = {
                         sTooltip.addText("You are here", "", false)
@@ -74,7 +77,7 @@ class MapUiSystem(
                     cHover.exitCallback = {
                         sTooltip.hideTooltip()
                     }
-                    mSprite.create(id).sprite =
+                    cSprite.sprite =
                         Sprite(
                             game.assets.get(
                                 "assets/binassets/graphics/textures/lightning_circle.png",
@@ -91,7 +94,7 @@ class MapUiSystem(
                             cHover.exitCallback = {
                                 sTooltip.hideTooltip()
                             }
-                            mSprite.create(id).sprite =
+                            cSprite.sprite =
                                 Sprite(
                                     game.assets.get(
                                         "assets/binassets/graphics/textures/fire_circle.png",
@@ -107,7 +110,7 @@ class MapUiSystem(
                             cHover.exitCallback = {
                                 sTooltip.hideTooltip()
                             }
-                            mSprite.create(id).sprite =
+                            cSprite.sprite =
                                 Sprite(
                                     game.assets.get(
                                         "assets/binassets/graphics/textures/star_circle.png",
@@ -123,7 +126,7 @@ class MapUiSystem(
                             cHover.exitCallback = {
                                 sTooltip.hideTooltip()
                             }
-                            mSprite.create(id).sprite =
+                            cSprite.sprite =
                                 Sprite(
                                     game.assets.get(
                                         "assets/binassets/graphics/textures/ice_circle.png",
@@ -139,7 +142,7 @@ class MapUiSystem(
                             cHover.exitCallback = {
                                 sTooltip.hideTooltip()
                             }
-                            mSprite.create(id).sprite =
+                            cSprite.sprite =
                                 Sprite(
                                     game.assets.get(
                                         "assets/binassets/graphics/textures/rainbow_circle.png",
@@ -155,7 +158,7 @@ class MapUiSystem(
                             cHover.exitCallback = {
                                 sTooltip.hideTooltip()
                             }
-                            mSprite.create(id).sprite =
+                            cSprite.sprite =
                                 Sprite(
                                     game.assets.get(
                                         "assets/binassets/graphics/textures/any_circle.png",
@@ -174,8 +177,8 @@ class MapUiSystem(
                     val cAnchoredLine = mAnchoredLine.create(lineId)
                     cAnchoredLine.safeSetAnchor1(lineId, previousFloorIds[prevIndex], mMutualDestroy)
                     cAnchoredLine.safeSetAnchor2(lineId, id, mMutualDestroy)
-                    cAnchoredLine.anchor1Offset = Vector2(16f, 16f)
-                    cAnchoredLine.anchor2Offset = Vector2(16f, 16f)
+                    cAnchoredLine.anchor1Offset = Vector2(0.3f, 0.3f)
+                    cAnchoredLine.anchor2Offset = Vector2(0.3f, 0.3f)
                     cAnchoredLine.color = Color.WHITE
                 }
             }

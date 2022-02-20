@@ -107,6 +107,7 @@ class RenderingSystem(
 
 //        batch.setBlendFunction(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA)
 
+        game.shapeRenderer.projectionMatrix = game.camera.combined
         game.shapeRenderer.begin()
         world.fetch(allOf(AnchoredLineComponent::class))
             .forEach {
