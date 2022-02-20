@@ -94,17 +94,17 @@ class CombatUiSystem(
 
     val layout = CombatUiLayout(config, tileSkin, runData.hero.handSize)
 
-    private val spellCardY = -SpellCard.cardHeight / 3f
-    private val leftSpellClosedCenter = Vector2(SpellCard.cardWidth, spellCardY)
-    private val leftSpellOpenCenter = Vector2(SpellCard.cardWidth * 3, spellCardY)
-    private val leftSpellSwapCenter = Vector2(SpellCard.cardWidth * 3, su(DragonTilesGame.WORLD_HEIGHT / 2))
+    private val spellCardY = -SpellCard.cardWorldHeight / 3f
+    private val leftSpellClosedCenter = Vector2(SpellCard.cardWorldWidth, spellCardY)
+    private val leftSpellOpenCenter = Vector2(SpellCard.cardWorldWidth * 3, spellCardY)
+    private val leftSpellSwapCenter = Vector2(SpellCard.cardWorldWidth * 3, DragonTilesGame.WORLD_HEIGHT / 2)
     private val rightSpellClosedCenter =
-        Vector2(su(DragonTilesGame.worldWidth()) - SpellCard.cardWidth * 1.5f, spellCardY)
+        Vector2(DragonTilesGame.worldWidth() - SpellCard.cardWorldWidth * 1.5f, spellCardY)
     private val rightSpellOpenCenter =
-        Vector2(su(DragonTilesGame.worldWidth()) - SpellCard.cardWidth * 3, spellCardY)
+        Vector2(DragonTilesGame.worldWidth() - SpellCard.cardWorldWidth * 3, spellCardY)
     private val rightSpellSwapCenter = Vector2(
-        su(DragonTilesGame.worldWidth()) - SpellCard.cardWidth * 3,
-        su(DragonTilesGame.WORLD_HEIGHT / 2)
+        DragonTilesGame.worldWidth() - SpellCard.cardWorldWidth * 3,
+        DragonTilesGame.WORLD_HEIGHT / 2
     )
 
     var overloaded = false
@@ -192,20 +192,23 @@ class CombatUiSystem(
         spellEntityIds.forEach { (number, id) ->
             val cXy = mXy.get(id)
             val spellCard = spells[number]!!
-            spellCard.x = cXy.x
-            spellCard.y = cXy.y
+            val screenXy = game.viewport.project(Vector2(cXy.x, cXy.y))
+            spellCard.x = screenXy.x
+            spellCard.y = screenXy.y
         }
         sideboardEntityIds.forEach { (number, id) ->
             val cXy = mXy.get(id)
             val spellCard = sideboard[number]!!
-            spellCard.x = cXy.x
-            spellCard.y = cXy.y
+            val screenXy = game.viewport.project(Vector2(cXy.x, cXy.y))
+            spellCard.x = screenXy.x
+            spellCard.y = screenXy.y
         }
         sorceryEntityIds.forEach { (number, id) ->
             val cXy = mXy.get(id)
             val spellCard = sorceries[number]!!
-            spellCard.x = cXy.x
-            spellCard.y = cXy.y
+            val screenXy = game.viewport.project(Vector2(cXy.x, cXy.y))
+            spellCard.x = screenXy.x
+            spellCard.y = screenXy.y
         }
     }
 
@@ -219,14 +222,15 @@ class CombatUiSystem(
 
     private fun addSpellCard(number: Int, spell: Spell) {
         val spellCard = SpellCard(game, spell, number, game.skin, sCombat.controller.api)
-        spellCard.x = SpellCard.cardWidth * number
+        spellCard.x = SpellCard.cardWorldWidth * number
         spellCard.y = spellCardY
         frontStage.addActor(spellCard)
         spells[number] = spellCard
 
         val id = world.create()
         spellEntityIds[number] = id
-        mXy.create(id)
+        val cXy = mXy.create(id)
+        println(cXy.toVector2())
         mAnchor.create(id)
         spellCard.data[ALLOW_HOVER_MOVE] = 1
         addActiveSpellCardListener(spellCard)
@@ -272,7 +276,7 @@ class CombatUiSystem(
 
     private fun addSpellCardToSideboard(number: Int, spell: Spell) {
         val spellCard = SpellCard(game, spell, number, game.skin, sCombat.controller.api)
-        spellCard.x = game.gameConfig.resolution.width - SpellCard.cardWidth * 2.5f + number * SpellCard.cardWidth * 0.8f
+        spellCard.x = game.gameConfig.resolution.width - SpellCard.cardWorldWidth * 2.5f + number * SpellCard.cardWorldWidth * 0.8f
         spellCard.y = spellCardY
         frontStage.addActor(spellCard)
         sideboard[number] = spellCard
@@ -326,8 +330,8 @@ class CombatUiSystem(
                 spellCardClickCallback(event!!, spellCard)
             }
         })
-        spellCard.x = SpellCard.cardWidth * number
-        spellCard.y = SpellCard.cardHeight * -3f
+        spellCard.x = SpellCard.cardWorldWidth * number
+        spellCard.y = SpellCard.cardWorldHeight * -3f
         frontStage.addActor(spellCard)
         sorceries[number] = spellCard
 
@@ -987,7 +991,7 @@ class CombatUiSystem(
             if (spellCard.data[ALLOW_HOVER_MOVE] == 1) {
                 val entityId = spellEntityIds[number]!!
                 val cAnchor = mAnchor.get(entityId)
-                cAnchor.x = leftSpellOpenCenter.x + SpellCard.cardWidth * (number - spellEntityIds.size / 2)
+                cAnchor.x = leftSpellOpenCenter.x + SpellCard.cardWorldWidth * (number - spellEntityIds.size / 2)
                 cAnchor.y = leftSpellOpenCenter.y
                 sAnchor.returnToAnchor(entityId)
             }
@@ -999,7 +1003,7 @@ class CombatUiSystem(
             if (spellCard.data[ALLOW_HOVER_MOVE] == 1) {
                 val entityId = spellEntityIds[number]!!
                 val cAnchor = mAnchor.get(entityId)
-                cAnchor.x = leftSpellClosedCenter.x + SpellCard.cardWidth / 4 * (number - spellEntityIds.size / 2)
+                cAnchor.x = leftSpellClosedCenter.x + SpellCard.cardWorldWidth / 4 * (number - spellEntityIds.size / 2)
                 cAnchor.y = leftSpellClosedCenter.y
                 sAnchor.returnToAnchor(entityId)
                 spellCard.toFront()
@@ -1013,7 +1017,7 @@ class CombatUiSystem(
             if (spellCard.data[ALLOW_HOVER_MOVE] == 1) {
                 val entityId = sideboardEntityIds[number]!!
                 val cAnchor = mAnchor.get(entityId)
-                cAnchor.x = rightSpellOpenCenter.x + SpellCard.cardWidth * (number - sideboardEntityIds.size / 2)
+                cAnchor.x = rightSpellOpenCenter.x + SpellCard.cardWorldWidth * (number - sideboardEntityIds.size / 2)
                 cAnchor.y = rightSpellOpenCenter.y
                 sAnchor.returnToAnchor(entityId)
             }
@@ -1025,7 +1029,7 @@ class CombatUiSystem(
             if (spellCard.data[ALLOW_HOVER_MOVE] == 1) {
                 val entityId = sideboardEntityIds[number]!!
                 val cAnchor = mAnchor.get(entityId)
-                cAnchor.x = rightSpellClosedCenter.x + SpellCard.cardWidth / 4 * (number - sideboardEntityIds.size / 2)
+                cAnchor.x = rightSpellClosedCenter.x + SpellCard.cardWorldWidth / 4 * (number - sideboardEntityIds.size / 2)
                 cAnchor.y = rightSpellClosedCenter.y
                 sAnchor.returnToAnchor(entityId)
                 spellCard.toFront()
@@ -1162,7 +1166,7 @@ class CombatUiSystem(
                     val cLine = mLine.create(id)
                     cLine.color = Color.GRAY
                     cLine.safeSetAnchor1(id, potionId, mMutualDestroy)
-                    cLine.anchor1Offset.set(SpellCard.cardWidth / 2f, SpellCard.cardHeight / 2f)
+                    cLine.anchor1Offset.set(SpellCard.cardWorldWidth / 2f, SpellCard.cardWorldHeight / 2f)
                     cLine.anchor2 = id
                     mMouseFollow.create(id)
 
@@ -1187,12 +1191,12 @@ class CombatUiSystem(
         spells.forEach { (_, spellCard) -> spellCard.data[ALLOW_HOVER_MOVE] = 0 }
         spellEntityIds.forEach { (_, eid) ->
             val cXy = mXy.get(eid)
-            sPath.moveToLocation(eid, Vector2(cXy.x, spellCardY - SpellCard.cardHeight))
+            sPath.moveToLocation(eid, Vector2(cXy.x, spellCardY - SpellCard.cardWorldHeight))
         }
         sideboard.forEach { (_, spellCard) -> spellCard.data[ALLOW_HOVER_MOVE] = 0 }
         sideboardEntityIds.forEach { (_, eid) ->
             val cXy = mXy.get(eid)
-            sPath.moveToLocation(eid, Vector2(cXy.x, spellCardY - SpellCard.cardHeight))
+            sPath.moveToLocation(eid, Vector2(cXy.x, spellCardY - SpellCard.cardWorldHeight))
         }
     }
 
@@ -1240,7 +1244,7 @@ class CombatUiSystem(
                         val cHeroXy = uiSystem.mXy.get(heroEntityId)
                         uiSystem.sPath.moveToLocation(
                             uiSystem.spellCardEntityId(number)!!,
-                            Vector2(su(cHeroXy.x) - SpellCard.cardWidth, su(cHeroXy.y)),
+                            Vector2(cHeroXy.x - SpellCard.cardWorldWidth, cHeroXy.y),
                         )
                         spellCard.enable()
                         uiSystem.displaySpellComponents(spellCard)
@@ -1264,7 +1268,7 @@ class CombatUiSystem(
                 val cLine = uiSystem.mLine.create(id)
                 cLine.color = Color.GRAY
                 cLine.safeSetAnchor1(id, spellCardId, uiSystem.mMutualDestroy)
-                cLine.anchor1Offset.set(SpellCard.cardWidth / 2f, SpellCard.cardHeight / 2f)
+                cLine.anchor1Offset.set(SpellCard.cardWorldWidth / 2f, SpellCard.cardWorldHeight / 2f)
                 cLine.anchor2 = id
                 uiSystem.mMouseFollow.create(id)
                 uiSystem.highlightTargets()

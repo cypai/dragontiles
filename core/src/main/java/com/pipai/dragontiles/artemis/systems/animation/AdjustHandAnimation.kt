@@ -4,6 +4,7 @@ import com.artemis.ComponentMapper
 import com.badlogic.gdx.graphics.Color
 import com.pipai.dragontiles.artemis.components.AnchoredLineComponent
 import com.pipai.dragontiles.artemis.components.MutualDestroyComponent
+import com.pipai.dragontiles.artemis.components.XYComponent
 import com.pipai.dragontiles.artemis.systems.combat.TileIdSystem
 import com.pipai.dragontiles.artemis.systems.ui.CombatUiSystem
 import com.pipai.dragontiles.data.TileInstance
@@ -14,6 +15,7 @@ class AdjustHandAnimation(private val tileLocations: List<Pair<TileInstance, Int
                           private val assigned: MutableMap<Int, List<TileInstance>>,
                           layout: CombatUiLayout) : TileAnimation(layout) {
 
+    private lateinit var mXy: ComponentMapper<XYComponent>
     private lateinit var mLine: ComponentMapper<AnchoredLineComponent>
     private lateinit var mMutualDestroy: ComponentMapper<MutualDestroyComponent>
 
@@ -52,7 +54,7 @@ class AdjustHandAnimation(private val tileLocations: List<Pair<TileInstance, Int
                 cLine.color = Color.GRAY
                 val spellCardId = sCombatUi.spellCardEntityId(spellIndex)!!
                 cLine.safeSetAnchor1(entityId, spellCardId, mMutualDestroy)
-                cLine.anchor1Offset.set(SpellCard.cardWidth / 2f, SpellCard.cardHeight)
+                cLine.anchor1Offset.set(SpellCard.cardWorldWidth / 2f, SpellCard.cardWorldHeight)
                 cLine.anchor2 = entityId
                 moveTile(entityId, layout.handRuneTilePosition(tileLocations.size, assignedSizes, runeSetNumber, index), 0.3f) {
                     endAnimation()

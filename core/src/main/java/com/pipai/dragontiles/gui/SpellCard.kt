@@ -39,8 +39,10 @@ class SpellCard(
     private val reqSize = su(0.4f)
 
     companion object {
-        val cardWidth = su(2f)
-        val cardHeight = su(2.8f)
+        val cardWorldWidth = 2f
+        val cardWorldHeight = 2.8f
+        val cardWidth = su(cardWorldWidth)
+        val cardHeight = su(cardWorldHeight)
     }
 
     private val keyRegex = "(!\\w+)(\\((\\w+)\\))?(\\[.+])?".toRegex()
