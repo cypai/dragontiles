@@ -4,6 +4,8 @@ import com.pipai.dragontiles.combat.AttackIntent
 import com.pipai.dragontiles.combat.BuffIntent
 import com.pipai.dragontiles.combat.CombatApi
 import com.pipai.dragontiles.combat.Intent
+import com.pipai.dragontiles.data.AssetConfig
+import com.pipai.dragontiles.data.AssetType
 import com.pipai.dragontiles.data.Element
 import com.pipai.dragontiles.status.Strength
 
@@ -11,6 +13,7 @@ class LargeTurtle : Enemy() {
 
     override val id: String = "base:enemies:LargeTurtle"
     override val assetName: String = "flame_turtle.png"
+    override val assetConfig: AssetConfig = AssetConfig(AssetType.SPRITE, 2.5f)
 
     override val hpMax: Int = 10
     override val fluxMax: Int = 30

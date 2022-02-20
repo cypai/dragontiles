@@ -65,6 +65,8 @@ class CombatantStateSystem(
                 AssetType.SPRITE -> {
                     val cSprite = mSprite.create(entityId)
                     cSprite.sprite = Sprite(game.assets.get(enemyAssetPath(enemy.assetName), Texture::class.java))
+                    cSprite.width = enemy.assetConfig.width
+                    cSprite.height = enemy.assetConfig.width / cSprite.sprite.width * cSprite.sprite.height
                 }
                 AssetType.SPINE -> {
                     val cSpine = mSpine.create(entityId)
@@ -193,13 +195,14 @@ class CombatantStateSystem(
 
     private fun createUi(enemy: Enemy, entityId: EntityId) {
         val cXy = mXy.get(entityId)
+        val screenXy = game.viewport.project(cXy.toVector2())
         val cEnemy = mEnemy.get(entityId)
         val ui = when (enemy.assetConfig.type) {
             AssetType.SPRITE -> {
                 val cSprite = mSprite.get(entityId)
-                val ui = EnemyUi.create(game, enemy, cSprite.sprite.width)
-                ui.table.x = cXy.x
-                ui.table.y = cXy.y + cSprite.sprite.height
+                val ui = EnemyUi.create(game, enemy, cSprite.width)
+                ui.table.x = screenXy.x
+                ui.table.y = screenXy.y + su(cSprite.height)
                 ui
             }
             AssetType.SPINE -> {
@@ -207,7 +210,6 @@ class CombatantStateSystem(
                 val skeleton = cSpine.skeleton
                 val scale = enemy.assetConfig.width / cSpine.skeleton.data.width
                 val ui = EnemyUi.create(game, enemy, enemy.assetConfig.width)
-                val screenXy = game.viewport.project(cXy.toVector2())
                 ui.table.x = screenXy.x - su(enemy.assetConfig.width) / 2f
                 ui.table.y = screenXy.y + su(skeleton.data.height * scale)
                 ui
