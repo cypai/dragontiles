@@ -88,11 +88,7 @@ data class DebuffIntent(
     }
 
     override suspend fun execute(api: CombatApi) {
-        if (attackIntent == null) {
-            api.animate(DefaultAttackAnimation(enemy))
-        } else {
-            attackIntent.execute(api)
-        }
+        attackIntent?.execute(api)
         status?.let { api.addStatusToHero(status) }
         inflictTileStatuses.forEach { strategy ->
             api.inflictTileStatusOnHand(strategy)
