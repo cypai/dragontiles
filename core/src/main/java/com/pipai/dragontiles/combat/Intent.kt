@@ -1,8 +1,6 @@
 package com.pipai.dragontiles.combat
 
-import com.pipai.dragontiles.artemis.systems.animation.DefaultAttackAnimation
 import com.pipai.dragontiles.artemis.systems.animation.DelayAnimation
-import com.pipai.dragontiles.artemis.systems.animation.SpineAnimation
 import com.pipai.dragontiles.data.*
 import com.pipai.dragontiles.enemies.Enemy
 import com.pipai.dragontiles.status.Status
@@ -12,8 +10,11 @@ import kotlin.random.Random
 interface Intent {
     val enemy: Enemy
     val displayData: Pair<IntentDisplayData, IntentDisplayData?>
+    val animation: IntentAnimation?
     suspend fun execute(api: CombatApi)
 }
+
+data class IntentAnimation(val animation: String, val endEvent: String)
 
 sealed class IntentDisplayData {
     data class AttackIntentDisplay(val attackPower: Int, val multistrike: Int, val element: Element) :
@@ -30,18 +31,12 @@ data class AttackIntent(
     val attackPower: Int,
     val multistrike: Int,
     val element: Element,
-    val animation: String? = null,
-    val animationEndEvent: String? = null,
+    override val animation: IntentAnimation? = null
 ) : Intent {
 
     override val displayData = Pair(IntentDisplayData.AttackIntentDisplay(attackPower, multistrike, element), null)
 
     override suspend fun execute(api: CombatApi) {
-        if (animation == null) {
-            api.animate(DefaultAttackAnimation(enemy))
-        } else {
-            api.animate(SpineAnimation(enemy, animation, animationEndEvent))
-        }
         repeat(multistrike) {
             api.attackHero(enemy, element, attackPower, listOf())
             api.animate(DelayAnimation(0.1f))
@@ -50,7 +45,7 @@ data class AttackIntent(
     }
 }
 
-data class StunnedIntent(override val enemy: Enemy) : Intent {
+data class StunnedIntent(override val enemy: Enemy, override val animation: IntentAnimation? = null) : Intent {
 
     override val displayData = Pair(IntentDisplayData.StunnedIntentDisplay(), null)
 
@@ -59,7 +54,10 @@ data class StunnedIntent(override val enemy: Enemy) : Intent {
 }
 
 data class BuffIntent(
-    override val enemy: Enemy, val status: Status, val attackIntent: AttackIntent?,
+    override val enemy: Enemy,
+    val status: Status,
+    val attackIntent: AttackIntent?,
+    override val animation: IntentAnimation? = null,
 ) : Intent {
 
     override val displayData = if (attackIntent == null) {
@@ -78,7 +76,8 @@ data class DebuffIntent(
     override val enemy: Enemy,
     val status: Status?,
     val attackIntent: AttackIntent?,
-    val inflictTileStatuses: List<TileStatusInflictStrategy>
+    val inflictTileStatuses: List<TileStatusInflictStrategy>,
+    override val animation: IntentAnimation? = null,
 ) : Intent {
 
     override val displayData = if (attackIntent == null) {
@@ -97,7 +96,7 @@ data class DebuffIntent(
 }
 
 data class FumbleIntent(
-    override val enemy: Enemy, val amount: Int, val intent: Intent?
+    override val enemy: Enemy, val amount: Int, val intent: Intent?, override val animation: IntentAnimation? = null,
 ) : Intent {
 
     override val displayData = if (intent == null) {
@@ -117,7 +116,7 @@ data class FumbleIntent(
 }
 
 data class VentIntent(
-    override val enemy: Enemy, val amount: Int, val status: Status?
+    override val enemy: Enemy, val amount: Int, val status: Status?, override val animation: IntentAnimation? = null,
 ) : Intent {
 
     override val displayData = if (status == null) {

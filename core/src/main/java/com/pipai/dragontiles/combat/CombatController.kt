@@ -1,6 +1,7 @@
 package com.pipai.dragontiles.combat
 
 import com.pipai.dragontiles.artemis.systems.animation.DelayAnimation
+import com.pipai.dragontiles.artemis.systems.animation.SpineAnimation
 import com.pipai.dragontiles.data.*
 import com.pipai.dragontiles.data.RunData
 import com.pipai.dragontiles.spells.StandardSpell
@@ -93,7 +94,14 @@ class CombatController(
         combat.enemies
             .filter { it.hp > 0 }
             .forEach {
-                combat.enemyIntent[it.enemyId]?.execute(api)
+                val intent = combat.enemyIntent[it.enemyId]
+                val intentAnimation = intent?.animation
+                if (intentAnimation == null) {
+                    api.animate(DelayAnimation(1f))
+                } else {
+                    api.animate(SpineAnimation(intent.enemy, intentAnimation.animation, intentAnimation.endEvent))
+                }
+                intent?.execute(api)
                 api.changeEnemyIntent(it, null)
             }
         eventBus.dispatch(EnemyTurnEndEvent(combat.turnNumber))

@@ -22,7 +22,7 @@ class PlayerDamageAnimation(private val damage: Int) : Animation() {
 
         val entityId = world.fetch(allOf(HeroComponent::class)).first()
         val cParticle = mParticle.create(entityId)
-        cParticle.effect = game.assets.get(particleAssetPath("damage_red_flux.p"), ParticleEffectDescriptor::class.java)
+        cParticle.effect = game.assets.get(particleAssetPath("damage_red.p"), ParticleEffectDescriptor::class.java)
             .createEffectInstance()
 
         endAnimation()
