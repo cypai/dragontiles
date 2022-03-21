@@ -7,3 +7,4 @@ fun statusAssetPath(filename: String) = "assets/binassets/graphics/status/$filen
 fun upgradeAssetPath(filename: String) = "assets/binassets/graphics/upgrades/$filename"
 fun potionAssetPath(filename: String) = "assets/binassets/graphics/potions/$filename"
 fun intentAssetPath(filename: String) = "assets/binassets/graphics/intents/$filename"
+fun particleAssetPath(filename: String) = "assets/binassets/particles/$filename"

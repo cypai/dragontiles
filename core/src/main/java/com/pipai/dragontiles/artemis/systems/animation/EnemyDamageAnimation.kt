@@ -7,6 +7,7 @@ import com.pipai.dragontiles.artemis.systems.ui.CombatantStateSystem
 import com.pipai.dragontiles.enemies.Enemy
 import com.pipai.dragontiles.utils.allOf
 import com.pipai.dragontiles.utils.fetch
+import com.pipai.dragontiles.utils.particleAssetPath
 import com.talosvfx.talos.runtime.ParticleEffectDescriptor
 
 class EnemyDamageAnimation(private val enemy: Enemy, private val amount: Int) : Animation() {
@@ -20,7 +21,7 @@ class EnemyDamageAnimation(private val enemy: Enemy, private val amount: Int) : 
         sCombatantState.changeEnemyHp(enemy, -amount)
         val entityId = world.fetch(allOf(EnemyComponent::class)).first { mEnemy.get(it).enemy == enemy }
         val cParticle = mParticle.create(entityId)
-        cParticle.effect = game.assets.get("assets/binassets/particles/damage_red.p", ParticleEffectDescriptor::class.java)
+        cParticle.effect = game.assets.get(particleAssetPath("damage_red.p"), ParticleEffectDescriptor::class.java)
             .createEffectInstance()
         endAnimation()
     }
