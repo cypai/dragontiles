@@ -96,7 +96,7 @@ class RenderingSystem(
                 val cXy = mXy.get(it)
                 val cParticle = mParticle.get(it)
                 val effect = cParticle.effect
-                effect.setPosition(cXy.x, cXy.y - 50f)
+                effect.setPosition(cXy.x, cXy.y)
                 effect.update(world.delta)
                 game.particleRenderer.render(effect)
                 if (effect.isComplete) {
