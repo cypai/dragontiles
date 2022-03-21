@@ -24,7 +24,7 @@ class StrengthRune : Rune() {
     override suspend fun onDeactivate(api: CombatApi) {
         val amount = x() * aspects.getStackableAmount(Strength::class)
         if (amount > 0) {
-            api.addStatusToHero(Strength(amount))
+            api.addStatusToHero(Strength(-amount))
         }
     }
 }
