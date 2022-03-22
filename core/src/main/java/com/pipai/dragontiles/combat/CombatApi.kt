@@ -64,7 +64,7 @@ class CombatApi(
         if (spell is StandardSpell && spell.aspects.any { it is ExhaustAspect }) {
             spell.exhausted = true
         }
-        dealFluxDamageToHero(flux)
+        dealFluxDamageToHero(flux, false)
     }
 
     suspend fun activateRune(rune: Rune, components: List<TileInstance>) {
@@ -452,9 +452,9 @@ class CombatApi(
         }
     }
 
-    suspend fun dealFluxDamageToHero(damage: Int) {
+    suspend fun dealFluxDamageToHero(damage: Int, showParticleAnimation: Boolean = true) {
         runData.hero.flux += damage
-        eventBus.dispatch(PlayerFluxDamageEvent(damage))
+        eventBus.dispatch(PlayerFluxDamageEvent(damage, showParticleAnimation))
         if (runData.hero.flux >= runData.hero.tempFluxMax) {
             runData.hero.flux = runData.hero.tempFluxMax
             addStatusToHero(Overloaded(2))

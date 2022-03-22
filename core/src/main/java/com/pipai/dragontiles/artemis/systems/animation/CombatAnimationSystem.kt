@@ -155,7 +155,7 @@ class CombatAnimationSystem(private val game: DragonTilesGame) : BaseSystem(), A
 
     @Subscribe
     fun handlePlayerFluxDamageEvent(ev: PlayerFluxDamageEvent) {
-        queueAnimation(PlayerFluxDamageAnimation(ev.amount))
+        queueAnimation(PlayerFluxDamageAnimation(ev))
     }
 
     @Subscribe

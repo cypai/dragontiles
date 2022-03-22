@@ -67,7 +67,7 @@ class BattleWinEvent : CombatEvent
 
 data class AnimationEvent(val animation: Animation) : CombatEvent
 
-data class PlayerFluxDamageEvent(val amount: Int) : CombatEvent
+data class PlayerFluxDamageEvent(val amount: Int, val showParticleAnimation: Boolean) : CombatEvent
 
 data class PlayerLoseFluxEvent(val amount: Int) : CombatEvent
 
