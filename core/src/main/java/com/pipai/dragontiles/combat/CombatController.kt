@@ -97,7 +97,7 @@ class CombatController(
                 val intent = combat.enemyIntent[it.enemyId]
                 val intentAnimation = intent?.animation
                 if (intentAnimation == null) {
-                    api.animate(DelayAnimation(1f))
+                    api.animate(DelayAnimation(0.5f))
                 } else {
                     api.animate(SpineAnimation(intent.enemy, intentAnimation.animation, intentAnimation.endEvent))
                 }
