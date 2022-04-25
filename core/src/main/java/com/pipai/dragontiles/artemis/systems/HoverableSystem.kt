@@ -12,8 +12,8 @@ class HoverableSystem(private val game: DragonTilesGame) : NoProcessingSystem(),
 
     private val mHoverable by mapper<HoverableComponent>()
     private val mSprite by mapper<SpriteComponent>()
+    private val mSpine by mapper<SpineComponent>()
     private val mActor by mapper<ActorComponent>()
-    private val mRadial by mapper<RadialSpriteComponent>()
     private val mXy by mapper<XYComponent>()
 
     private val sEvent by system<EventSystem>()
@@ -38,6 +38,16 @@ class HoverableSystem(private val game: DragonTilesGame) : NoProcessingSystem(),
                 val cHover = mHoverable.get(it)
                 val cSprite = mSprite.get(it)
                 val hover = Rectangle(cXy.x, cXy.y, cSprite.width, cSprite.height).contains(mouseXy)
+                updateHover(cHover, hover)
+            }
+        world.fetch(allOf(XYComponent::class, HoverableComponent::class, SpineComponent::class))
+            .forEach {
+                val cXy = mXy.get(it)
+                val cHover = mHoverable.get(it)
+                val cSpine = mSpine.get(it)
+                val width = cSpine.skeleton.actualWidth()
+                val height = cSpine.skeleton.actualHeight()
+                val hover = Rectangle(cXy.x - width / 2f, cXy.y, width, height).contains(mouseXy)
                 updateHover(cHover, hover)
             }
         world.fetch(allOf(HoverableComponent::class, ActorComponent::class))
