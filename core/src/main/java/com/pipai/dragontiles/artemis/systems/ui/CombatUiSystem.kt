@@ -230,7 +230,6 @@ class CombatUiSystem(
         val id = world.create()
         spellEntityIds[number] = id
         val cXy = mXy.create(id)
-        println(cXy.toVector2())
         mAnchor.create(id)
         spellCard.data[ALLOW_HOVER_MOVE] = 1
         addActiveSpellCardListener(spellCard)

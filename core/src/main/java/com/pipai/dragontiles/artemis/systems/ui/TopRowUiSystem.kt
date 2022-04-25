@@ -60,8 +60,6 @@ class TopRowUiSystem(
     private lateinit var api: GlobalApi
 
     override fun initialize() {
-        println(topRowLabelWidth)
-        println(spacing)
         api = GlobalApi(game.data, runData, sEvent)
         rootTable.setFillParent(true)
         topRow.background = skin.getDrawable("frameDrawable")
