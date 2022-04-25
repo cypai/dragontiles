@@ -20,7 +20,7 @@ class Yumi : Enemy() {
         return if (hasOverloaded || turns > 3) {
             BuffIntent(this, MenacingAura(1), AttackIntent(this, 20, 1, Element.NONE))
         } else {
-            FumbleIntent(this, 1, null)
+            FumbleIntent(this, 1, VentIntent(this, 5, null))
         }
     }
 

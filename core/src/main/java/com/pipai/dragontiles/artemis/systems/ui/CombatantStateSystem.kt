@@ -52,7 +52,7 @@ class CombatantStateSystem(
     private val enemyEntityMap: MutableMap<Enemy, EntityId> = mutableMapOf()
     private val enemyTables: MutableMap<EntityId, EnemyUi> = mutableMapOf()
 
-    private var t = 0
+    private var t = 0f
 
     override fun initialize() {
         initHero()
@@ -166,9 +166,9 @@ class CombatantStateSystem(
     }
 
     override fun processSystem() {
-        t++
-        if (t > 60) {
-            t = 0
+        t += world.delta
+        if (t > 1f) {
+            t = 0f
             flipIntents()
         }
     }
@@ -339,6 +339,15 @@ class CombatantStateSystem(
                                 "This enemy is about to buff and inflict a negative effect on you."
                             )
                         }
+                        is VentIntent -> {
+                            updateVentIntent(ui, innerIntent.amount, false)
+                            updateDebuffIntent(ui, true)
+                            updateTooltip(
+                                ui,
+                                "Strategic",
+                                "This enemy is about to vent flux and inflict a negative effect on you."
+                            )
+                        }
                         else -> {
                             updateDebuffIntent(ui, false)
                             updateTooltip(ui, "Debuffing", "This enemy is about to inflict a negative effect on you.")
@@ -357,6 +366,9 @@ class CombatantStateSystem(
                     updateTooltip(ui, "Unknown", "This enemy is about to do something unusual.")
                 }
             }
+        }
+        if (ui.intent2.drawable != null) {
+            (ui.intent2.drawable as SpriteDrawable).sprite.setAlpha(0f)
         }
     }
 
