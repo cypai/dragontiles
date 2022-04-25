@@ -496,6 +496,12 @@ class CombatApi(
             return
         }
         status.combatant = Combatant.HeroCombatant
+        if (status.amount > 0) {
+            val batch = BatchAnimation()
+            batch.addToBatch(StatusInflictedAnimation(status))
+            batch.addToBatch(TextAnimation(Combatant.HeroCombatant, status))
+            animate(batch)
+        }
         val maybeStatus = combat.heroStatus.find { it.id == status.id }
         if (maybeStatus == null) {
             combat.heroStatus.add(status)
@@ -503,10 +509,6 @@ class CombatApi(
             eventBus.dispatch(PlayerStatusChangeEvent(status, 0))
             status.onInflict(this)
             notifyStatusUpdated()
-            val batch = BatchAnimation()
-            batch.addToBatch(StatusInflictedAnimation(status))
-            batch.addToBatch(TextAnimation(Combatant.HeroCombatant, status))
-            animate(batch)
         } else {
             val previousAmount = maybeStatus.amount
             maybeStatus.amount += status.amount
@@ -537,16 +539,18 @@ class CombatApi(
         status.combatant = Combatant.EnemyCombatant(enemy)
         val enemyStatus = combat.enemyStatus[enemy.enemyId]!!
         val maybeStatus = enemyStatus.find { it.id == status.id }
+        if (status.amount > 0) {
+            val batch = BatchAnimation()
+            batch.addToBatch(StatusInflictedAnimation(status))
+            batch.addToBatch(TextAnimation(Combatant.EnemyCombatant(enemy), status))
+            animate(batch)
+        }
         if (maybeStatus == null) {
             enemyStatus.add(status)
             eventBus.register(status)
             eventBus.dispatch(EnemyStatusChangeEvent(enemy, status, 0))
             status.onInflict(this)
             notifyStatusUpdated()
-            val batch = BatchAnimation()
-            batch.addToBatch(StatusInflictedAnimation(status))
-            batch.addToBatch(TextAnimation(Combatant.EnemyCombatant(enemy), status))
-            animate(batch)
         } else {
             val previousAmount = maybeStatus.amount
             maybeStatus.amount += status.amount
