@@ -23,6 +23,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable
 import com.badlogic.gdx.scenes.scene2d.utils.MultiDrawable
 import com.badlogic.gdx.scenes.scene2d.utils.OffsetDrawable
 import com.badlogic.gdx.utils.viewport.ExtendViewport
+import com.badlogic.gdx.utils.viewport.ScreenViewport
 import com.badlogic.gdx.utils.viewport.Viewport
 import com.esotericsoftware.spine.SkeletonData
 import com.esotericsoftware.spine.SkeletonRenderer
@@ -57,6 +58,12 @@ class DragonTilesGame(val gameConfig: GameConfig) : Game() {
         private set
 
     lateinit var viewport: Viewport
+        private set
+
+    lateinit var uiCamera: Camera
+        private set
+
+    lateinit var uiViewport: Viewport
         private set
 
     lateinit var spriteBatch: PolygonSpriteBatch
@@ -128,6 +135,8 @@ class DragonTilesGame(val gameConfig: GameConfig) : Game() {
         logger.info("World Units: ${worldWidth()} x $WORLD_HEIGHT")
         camera = OrthographicCamera()
         viewport = ExtendViewport(WORLD_HEIGHT * gameConfig.resolution.aspectRatio, WORLD_HEIGHT, camera)
+        uiCamera = OrthographicCamera()
+        uiViewport = ScreenViewport(uiCamera)
         GameDataInitializer().init(data)
 
         if (saveFileHandle.exists()) {
@@ -425,6 +434,7 @@ class DragonTilesGame(val gameConfig: GameConfig) : Game() {
 
     override fun resize(width: Int, height: Int) {
         viewport.update(width, height, true)
+        uiViewport.update(width, height, true)
     }
 
     override fun setScreen(screen: Screen) {

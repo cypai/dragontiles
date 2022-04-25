@@ -1,7 +1,9 @@
 package com.pipai.dragontiles.combat
 
 import com.pipai.dragontiles.artemis.systems.animation.Animation
+import com.pipai.dragontiles.artemis.systems.animation.BatchAnimation
 import com.pipai.dragontiles.artemis.systems.animation.StatusInflictedAnimation
+import com.pipai.dragontiles.artemis.systems.animation.TextAnimation
 import com.pipai.dragontiles.data.*
 import com.pipai.dragontiles.enemies.Enemy
 import com.pipai.dragontiles.spells.*
@@ -501,7 +503,10 @@ class CombatApi(
             eventBus.dispatch(PlayerStatusChangeEvent(status, 0))
             status.onInflict(this)
             notifyStatusUpdated()
-            animate(StatusInflictedAnimation(status))
+            val batch = BatchAnimation()
+            batch.addToBatch(StatusInflictedAnimation(status))
+            batch.addToBatch(TextAnimation(Combatant.HeroCombatant, status))
+            animate(batch)
         } else {
             val previousAmount = maybeStatus.amount
             maybeStatus.amount += status.amount
@@ -538,7 +543,10 @@ class CombatApi(
             eventBus.dispatch(EnemyStatusChangeEvent(enemy, status, 0))
             status.onInflict(this)
             notifyStatusUpdated()
-            animate(StatusInflictedAnimation(status))
+            val batch = BatchAnimation()
+            batch.addToBatch(StatusInflictedAnimation(status))
+            batch.addToBatch(TextAnimation(Combatant.EnemyCombatant(enemy), status))
+            animate(batch)
         } else {
             val previousAmount = maybeStatus.amount
             maybeStatus.amount += status.amount

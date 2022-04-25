@@ -27,7 +27,7 @@ class ItemShopUiSystem(
 
     private val mXy by mapper<XYComponent>()
     private val mSprite by mapper<SpriteComponent>()
-    private val mText by mapper<TextLabelComponent>()
+    private val mText by mapper<TextComponent>()
     private val mClickable by mapper<ClickableComponent>()
     private val mHoverableComponent by mapper<HoverableComponent>()
     private val mPrice by mapper<PriceComponent>()
@@ -107,7 +107,7 @@ class ItemShopUiSystem(
     }
 
     private fun recalculatePriceColor() {
-        world.fetch(allOf(PriceComponent::class, TextLabelComponent::class))
+        world.fetch(allOf(PriceComponent::class, TextComponent::class))
             .forEach {
                 val cPrice = mPrice.get(it)
                 if (cPrice.price > runData.hero.gold) {

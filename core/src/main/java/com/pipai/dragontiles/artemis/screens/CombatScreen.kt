@@ -32,8 +32,8 @@ class CombatScreen(
     writeSave: Boolean,
 ) : Screen {
 
-    private val backStage = Stage(ScreenViewport(), game.spriteBatch)
-    private val frontStage = Stage(ScreenViewport(), game.spriteBatch)
+    private val backStage = Stage(game.uiViewport, game.spriteBatch)
+    private val frontStage = Stage(game.uiViewport, game.spriteBatch)
 
     val world: World
 

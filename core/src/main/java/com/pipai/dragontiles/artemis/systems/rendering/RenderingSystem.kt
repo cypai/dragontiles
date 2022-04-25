@@ -3,7 +3,7 @@ package com.pipai.dragontiles.artemis.systems.rendering
 import com.artemis.BaseSystem
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.GL20
-import com.badlogic.gdx.scenes.scene2d.ui.Label
+import com.badlogic.gdx.math.Vector3
 import com.pipai.dragontiles.DragonTilesGame
 import com.pipai.dragontiles.artemis.components.*
 import com.pipai.dragontiles.utils.allOf
@@ -20,7 +20,7 @@ class RenderingSystem(
     private val mSpine by mapper<SpineComponent>()
     private val mActor by mapper<ActorComponent>()
     private val mParticle by mapper<ParticleEffectComponent>()
-    private val mTextLabel by mapper<TextLabelComponent>()
+    private val mText by mapper<TextComponent>()
     private val mLine by mapper<AnchoredLineComponent>()
 
     private val batch = game.spriteBatch
@@ -69,28 +69,6 @@ class RenderingSystem(
             }
         batch.color = Color.WHITE
 
-        world.fetch(allOf(XYComponent::class, TextLabelComponent::class))
-            .forEach {
-                val cXy = mXy.get(it)
-                val cTextLabel = mTextLabel.get(it)
-//                val font = when (cTextLabel.size) {
-//                    TextLabelSize.NORMAL -> game.font
-//                    TextLabelSize.SMALL -> game.smallFont
-//                    TextLabelSize.TINY -> game.tinyFont
-//                }
-                val styleName = when (cTextLabel.size) {
-                    TextLabelSize.NORMAL -> "white"
-                    TextLabelSize.SMALL -> "whiteSmall"
-                    TextLabelSize.TINY -> "whiteTiny"
-                }
-                val label = Label(" ${cTextLabel.text} ", game.skin, styleName)
-                label.x = cXy.x + cTextLabel.xOffset
-                label.y = cXy.y + cTextLabel.yOffset - label.prefHeight
-                label.draw(batch, 1f)
-//                font.color = cTextLabel.color
-//                font.draw(batch, cTextLabel.text, cXy.x + cTextLabel.xOffset, cXy.y + cTextLabel.yOffset)
-            }
-
         world.fetch(allOf(XYComponent::class, ParticleEffectComponent::class))
             .forEach {
                 val cXy = mXy.get(it)
@@ -105,7 +83,24 @@ class RenderingSystem(
             }
         batch.end()
 
-//        batch.setBlendFunction(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA)
+        game.uiCamera.update()
+        batch.color = Color.WHITE
+        batch.projectionMatrix = game.uiCamera.combined
+        batch.begin()
+        world.fetch(allOf(XYComponent::class, TextComponent::class))
+            .forEach {
+                val cXy = mXy.get(it)
+                val cText = mText.get(it)
+                val font = when (cText.size) {
+                    TextSize.NORMAL -> game.font
+                    TextSize.SMALL -> game.smallFont
+                    TextSize.TINY -> game.tinyFont
+                }
+                font.color = cText.color
+                val screenXy = game.camera.project(Vector3(cXy.x + cText.xOffset, cXy.y + cText.yOffset, 0f))
+                font.draw(batch, cText.text, screenXy.x, screenXy.y)
+            }
+        batch.end()
 
         game.shapeRenderer.projectionMatrix = game.camera.combined
         game.shapeRenderer.begin()

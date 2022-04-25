@@ -179,14 +179,14 @@ class HoverableComponent : Component() {
     var recheck = false
 }
 
-class TextLabelComponent : Component() {
+class TextComponent : Component() {
     var text = ""
-    var size: TextLabelSize = TextLabelSize.NORMAL
+    var size: TextSize = TextSize.NORMAL
     var xOffset = 0f
     var yOffset = 0f
     var color: Color = Color.WHITE
 }
 
-enum class TextLabelSize {
+enum class TextSize {
     NORMAL, SMALL, TINY
 }

@@ -27,7 +27,7 @@ class TownUiSystem(
     private val mSprite by mapper<SpriteComponent>()
     private val mClickable by mapper<ClickableComponent>()
     private val mHoverable by mapper<HoverableComponent>()
-    private val mText by mapper<TextLabelComponent>()
+    private val mText by mapper<TextComponent>()
 
     private val sTooltip by system<TooltipSystem>()
     private val sEvent by system<EventSystem>()

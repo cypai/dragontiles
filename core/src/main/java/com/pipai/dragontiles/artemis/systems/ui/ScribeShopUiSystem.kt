@@ -6,7 +6,6 @@ import com.badlogic.gdx.InputProcessor
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.Sprite
-import com.badlogic.gdx.scenes.scene2d.Stage
 import com.pipai.dragontiles.DragonTilesGame
 import com.pipai.dragontiles.artemis.components.*
 import com.pipai.dragontiles.artemis.events.PricedItemClickEvent
@@ -30,7 +29,7 @@ class ScribeShopUiSystem(
 
     private val mXy by mapper<XYComponent>()
     private val mSprite by mapper<SpriteComponent>()
-    private val mText by mapper<TextLabelComponent>()
+    private val mText by mapper<TextComponent>()
     private val mClickable by mapper<ClickableComponent>()
     private val mHoverableComponent by mapper<HoverableComponent>()
     private val mPrice by mapper<PriceComponent>()
@@ -93,7 +92,7 @@ class ScribeShopUiSystem(
     }
 
     private fun recalculatePriceColor() {
-        world.fetch(allOf(PriceComponent::class, TextLabelComponent::class))
+        world.fetch(allOf(PriceComponent::class, TextComponent::class))
             .forEach {
                 val cPrice = mPrice.get(it)
                 if (cPrice.price > runData.hero.gold) {

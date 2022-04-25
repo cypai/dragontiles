@@ -4,7 +4,7 @@ import com.artemis.systems.IteratingSystem
 import com.pipai.dragontiles.artemis.components.AlphaInterpolationComponent
 import com.pipai.dragontiles.artemis.components.EndStrategy
 import com.pipai.dragontiles.artemis.components.SpriteComponent
-import com.pipai.dragontiles.artemis.components.TextLabelComponent
+import com.pipai.dragontiles.artemis.components.TextComponent
 import com.pipai.dragontiles.utils.allOf
 import com.pipai.dragontiles.utils.mapper
 import com.pipai.dragontiles.utils.require
@@ -12,7 +12,7 @@ import com.pipai.dragontiles.utils.require
 class AlphaInterpolationSystem : IteratingSystem(allOf()) {
     private val mAlpha by require<AlphaInterpolationComponent>()
     private val mSprite by mapper<SpriteComponent>()
-    private val mText by mapper<TextLabelComponent>()
+    private val mText by mapper<TextComponent>()
 
     override fun process(entityId: Int) {
         val cAlpha = mAlpha.get(entityId)

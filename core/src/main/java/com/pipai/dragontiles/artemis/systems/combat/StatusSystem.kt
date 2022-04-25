@@ -17,7 +17,7 @@ class StatusSystem(private val game: DragonTilesGame) : NoProcessingSystem() {
     private val mStatus by mapper<StatusComponent>()
     private val mSprite by mapper<SpriteComponent>()
     private val mSpine by mapper<SpineComponent>()
-    private val mTextLabel by mapper<TextLabelComponent>()
+    private val mText by mapper<TextComponent>()
     private val mHoverable by mapper<HoverableComponent>()
 
     private val sTooltip by system<TooltipSystem>()
@@ -78,8 +78,8 @@ class StatusSystem(private val game: DragonTilesGame) : NoProcessingSystem() {
         cHover.exitCallback = { sTooltip.hideTooltip() }
 
         if (status.displayAmount) {
-            val cText = mTextLabel.create(statusId)
-            cText.size = TextLabelSize.TINY
+            val cText = mText.create(statusId)
+            cText.size = TextSize.TINY
             cText.text = status.amount.toString()
             cText.xOffset = 8f
             cText.yOffset = 8f

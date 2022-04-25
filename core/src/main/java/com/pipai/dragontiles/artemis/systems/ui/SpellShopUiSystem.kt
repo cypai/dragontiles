@@ -15,7 +15,6 @@ import com.badlogic.gdx.utils.Align
 import com.pipai.dragontiles.DragonTilesGame
 import com.pipai.dragontiles.artemis.EntityId
 import com.pipai.dragontiles.artemis.components.*
-import com.pipai.dragontiles.artemis.events.PricedItemClickEvent
 import com.pipai.dragontiles.artemis.screens.TownScreen
 import com.pipai.dragontiles.data.PricedItem
 import com.pipai.dragontiles.data.GlobalApi
@@ -23,7 +22,6 @@ import com.pipai.dragontiles.data.RunData
 import com.pipai.dragontiles.gui.SpellCard
 import com.pipai.dragontiles.utils.*
 import net.mostlyoriginal.api.event.common.EventSystem
-import net.mostlyoriginal.api.event.common.Subscribe
 
 class SpellShopUiSystem(
     private val game: DragonTilesGame,
@@ -38,7 +36,7 @@ class SpellShopUiSystem(
 
     private val mXy by mapper<XYComponent>()
     private val mActor by mapper<ActorComponent>()
-    private val mText by mapper<TextLabelComponent>()
+    private val mText by mapper<TextComponent>()
     private val mClickable by mapper<ClickableComponent>()
     private val mPrice by mapper<PriceComponent>()
 
@@ -126,7 +124,7 @@ class SpellShopUiSystem(
     }
 
     private fun recalculatePriceColor() {
-        world.fetch(allOf(PriceComponent::class, TextLabelComponent::class))
+        world.fetch(allOf(PriceComponent::class, TextComponent::class))
             .forEach {
                 val cPrice = mPrice.get(it)
                 if (cPrice.price > runData.hero.gold) {
