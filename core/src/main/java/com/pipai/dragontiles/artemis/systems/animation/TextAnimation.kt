@@ -2,6 +2,7 @@ package com.pipai.dragontiles.artemis.systems.animation
 
 import com.artemis.ComponentMapper
 import com.badlogic.gdx.graphics.Color
+import com.badlogic.gdx.math.Interpolation
 import com.pipai.dragontiles.artemis.components.*
 import com.pipai.dragontiles.combat.Combatant
 import com.pipai.dragontiles.data.Localized
@@ -12,7 +13,7 @@ class TextAnimation(val combatant: Combatant, val localized: Localized) : Animat
     private lateinit var mEnemy: ComponentMapper<EnemyComponent>
     private lateinit var mXy: ComponentMapper<XYComponent>
     private lateinit var mText: ComponentMapper<TextComponent>
-    private lateinit var mTimer: ComponentMapper<TimerComponent>
+    private lateinit var mAlphaInterp: ComponentMapper<AlphaInterpolationComponent>
 
     override fun startAnimation() {
         val entityId = when (combatant) {
@@ -32,11 +33,11 @@ class TextAnimation(val combatant: Combatant, val localized: Localized) : Animat
         val cText = mText.create(textEntityId)
         cText.text = game.gameStrings.nameLocalization(localized).name
         cText.size = TextSize.NORMAL
-        cText.color = Color.BLACK
+        cText.color = Color.BLACK.cpy()
 
-        val cTimer = mTimer.create(textEntityId)
-        cTimer.maxT = 1f
-        cTimer.onEnd = EndStrategy.DESTROY
+        val cAlphaInterp = mAlphaInterp.create(textEntityId)
+        cAlphaInterp.set(1f, 0f, 0.5f, Interpolation.pow2In, EndStrategy.DESTROY)
+
         endAnimation()
     }
 }
