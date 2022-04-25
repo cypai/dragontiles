@@ -47,8 +47,8 @@ class TownGenerator {
     private fun pricedRelic(relic: Relic): PricedItem {
         val price = when (relic.rarity) {
             Rarity.COMMON -> 6
-            Rarity.UNCOMMON -> 9
-            Rarity.RARE -> 12
+            Rarity.UNCOMMON -> 8
+            Rarity.RARE -> 10
             else -> 0
         }
         return PricedItem(relic.id, price)
@@ -56,10 +56,10 @@ class TownGenerator {
 
     private fun pricedPotion(potion: Potion): PricedItem {
         val price = when (potion.rarity) {
-            Rarity.COMMON -> 3
-            Rarity.UNCOMMON -> 4
-            Rarity.RARE -> 5
-            else -> 4
+            Rarity.COMMON -> 2
+            Rarity.UNCOMMON -> 3
+            Rarity.RARE -> 4
+            else -> 3
         }
         return PricedItem(potion.id, price)
     }

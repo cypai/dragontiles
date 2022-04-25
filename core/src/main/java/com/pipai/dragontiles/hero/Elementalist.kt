@@ -61,7 +61,7 @@ class Elementalist : HeroClass {
     )
     override val hpMax: Int = 60
     override val fluxMax: Int = 40
-    override val startingGold: Int = 1
+    override val startingGold: Int = 3
     override val handSize: Int = 17
     override val activeSpellSize: Int = 6
     override val sideboardSize: Int = 3

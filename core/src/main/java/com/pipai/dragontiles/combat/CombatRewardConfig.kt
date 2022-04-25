@@ -22,7 +22,7 @@ data class CombatRewardConfig(
         }
 
         fun boss(runData: RunData): CombatRewardConfig {
-            return CombatRewardConfig(SpellRewardType.BOSS, 5, true, null, runData.potionChance + 0.2f)
+            return CombatRewardConfig(SpellRewardType.BOSS, 7, true, null, runData.potionChance + 0.2f)
         }
     }
 }
