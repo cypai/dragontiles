@@ -42,6 +42,7 @@ class TownScreen(game: DragonTilesGame, runData: RunData) : Screen {
                 FullScreenColorSystem(game),
                 MutualDestroySystem(),
                 TooltipSystem(game, frontStage),
+                PauseMenuSystem(game, frontStage, runData, true),
             )
             .with(
                 -1,
@@ -61,7 +62,7 @@ class TownScreen(game: DragonTilesGame, runData: RunData) : Screen {
         inputProcessor.addAlwaysOnProcessor(world.getSystem(ClickableSystem::class.java))
         inputProcessor.addAlwaysOnProcessor(world.getSystem(HoverableSystem::class.java))
         inputProcessor.addAlwaysOnProcessor(world.getSystem(TooltipSystem::class.java))
-        inputProcessor.addAlwaysOnProcessor(ExitInputProcessor())
+        inputProcessor.addAlwaysOnProcessor(world.getSystem(PauseMenuSystem::class.java))
         inputProcessor.activateInput()
 
         StandardScreenInit(world).initialize()

@@ -69,7 +69,7 @@ class CombatScreen(
                 FullScreenColorSystem(game),
                 RewardsSystem(game, runData, frontStage, runData.combatWon),
                 MapUiSystem(game, backStage, runData),
-                PauseMenuSystem(game, frontStage, runData),
+                PauseMenuSystem(game, frontStage, runData, false),
                 ReqHelpSystem(game, frontStage),
 
                 InputProcessingSystem(),

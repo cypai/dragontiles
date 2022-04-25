@@ -12,9 +12,15 @@ import com.pipai.dragontiles.DragonTilesGame
 import com.pipai.dragontiles.artemis.screens.MainMenuScreen
 import com.pipai.dragontiles.artemis.systems.NoProcessingSystem
 import com.pipai.dragontiles.data.RunData
+import com.pipai.dragontiles.utils.getSystemSafe
 import com.pipai.dragontiles.utils.system
 
-class PauseMenuSystem(private val game: DragonTilesGame, var stage: Stage, private val runData: RunData) : NoProcessingSystem(), InputProcessor {
+class PauseMenuSystem(
+    private val game: DragonTilesGame,
+    var stage: Stage,
+    private val runData: RunData,
+    private var allowShow: Boolean,
+) : NoProcessingSystem(), InputProcessor {
 
     private val skin = game.skin
 
@@ -22,10 +28,7 @@ class PauseMenuSystem(private val game: DragonTilesGame, var stage: Stage, priva
     private val yesBtn = TextButton(" Yes ", skin)
     private val noBtn = TextButton(" No ", skin)
 
-    private var allowShow = false
     private var showing = false
-
-    private val sUi by system<CombatUiSystem>()
 
     override fun initialize() {
         table.background = skin.getDrawable("frameDrawable")
@@ -57,7 +60,7 @@ class PauseMenuSystem(private val game: DragonTilesGame, var stage: Stage, priva
         table.remove()
         showing = false
         if (!runData.combatWon) {
-            sUi.enable()
+            world.getSystemSafe(CombatUiSystem::class.java)?.enable()
         }
     }
 
@@ -75,7 +78,7 @@ class PauseMenuSystem(private val game: DragonTilesGame, var stage: Stage, priva
                 returnToUi()
             } else {
                 if (allowShow) {
-                    sUi.disable()
+                    world.getSystemSafe(CombatUiSystem::class.java)?.disable()
                     showing = true
                     stage.addActor(table)
                 }

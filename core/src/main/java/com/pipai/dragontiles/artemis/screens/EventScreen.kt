@@ -43,6 +43,7 @@ class EventScreen(game: DragonTilesGame, runData: RunData, event: DungeonEvent) 
                 DeckDisplayUiSystem(game, runData, frontStage),
                 FullScreenColorSystem(game),
                 PathInterpolationSystem(),
+                PauseMenuSystem(game, frontStage, runData, true),
             )
             .with(
                 -1,
@@ -60,7 +61,7 @@ class EventScreen(game: DragonTilesGame, runData: RunData, event: DungeonEvent) 
         inputProcessor.addAlwaysOnProcessor(world.getSystem(HoverableSystem::class.java))
         inputProcessor.addAlwaysOnProcessor(world.getSystem(TooltipSystem::class.java))
         inputProcessor.addAlwaysOnProcessor(world.getSystem(DeckDisplayUiSystem::class.java))
-        inputProcessor.addAlwaysOnProcessor(ExitInputProcessor())
+        inputProcessor.addAlwaysOnProcessor(world.getSystem(PauseMenuSystem::class.java))
         inputProcessor.activateInput()
 
         StandardScreenInit(world).initialize()
