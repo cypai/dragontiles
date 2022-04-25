@@ -48,17 +48,17 @@ class TownUiSystem(
         val town = runData.town!!
         // Draw actions left
         val actionId = world.create()
-        mXy.create(actionId).setXy(80f, 600f)
+        mXy.create(actionId).setXy(1f, 7f)
         val cActionText = mText.create(actionId)
         cActionText.text = "Actions: ${town.actions}"
 
         val innId = world.create()
-        mXy.create(innId).setXy(80f, 20f)
+        mXy.create(innId).setXy(1f, 1f)
         val innSprite = mSprite.create(innId)
         innSprite.sprite =
             Sprite(game.assets.get("assets/binassets/graphics/textures/inn.png", Texture::class.java))
-        innSprite.width = 1f
-        innSprite.height = 1f
+        innSprite.width = 2f
+        innSprite.height = 2f
         val innHover = mHoverable.create(innId)
         innHover.enterCallback = {
             sTooltip.addText("Inn", "Heal 25% of your Max HP for 2 Gold.", false)
@@ -80,10 +80,12 @@ class TownUiSystem(
         }
 
         val spellShopId = world.create()
-        mXy.create(spellShopId).setXy(80f, 200f)
+        mXy.create(spellShopId).setXy(1f, 4f)
         val spellShopSprite = mSprite.create(spellShopId)
         spellShopSprite.sprite =
             Sprite(game.assets.get("assets/binassets/graphics/textures/spell_shop.png", Texture::class.java))
+        spellShopSprite.width = 2f
+        spellShopSprite.height = 2f
         if (town.actions > 0 || town.boughtSpell || town.boughtSideboard) {
             mClickable.create(spellShopId).callback = {
                 game.screen = SpellShopScreen(game, runData)
@@ -105,10 +107,12 @@ class TownUiSystem(
         }
 
         val itemShopId = world.create()
-        mXy.create(itemShopId).setXy(400f, 200f)
+        mXy.create(itemShopId).setXy(4f, 4f)
         val itemShopSprite = mSprite.create(itemShopId)
         itemShopSprite.sprite =
             Sprite(game.assets.get("assets/binassets/graphics/textures/shop.png", Texture::class.java))
+        itemShopSprite.width = 2f
+        itemShopSprite.height = 2f
         if (town.actions > 0 || town.boughtItem) {
             mClickable.create(itemShopId).callback = {
                 game.screen = ItemShopScreen(game, runData)
@@ -130,10 +134,12 @@ class TownUiSystem(
         }
 
         val scribeId = world.create()
-        mXy.create(scribeId).setXy(720f, 200f)
+        mXy.create(scribeId).setXy(7f, 4f)
         val scribeSprite = mSprite.create(scribeId)
         scribeSprite.sprite =
             Sprite(game.assets.get("assets/binassets/graphics/textures/upgrade_shop.png", Texture::class.java))
+        scribeSprite.width = 2f
+        scribeSprite.height = 2f
         if (town.actions > 0 || town.boughtUpgrade) {
             mClickable.create(scribeId).callback = {
                 game.screen = ScribeShopScreen(game, runData)
@@ -156,7 +162,7 @@ class TownUiSystem(
 
         if (town.actions > 0 && !town.solicited) {
             val solicitId = world.create()
-            mXy.create(solicitId).setXy(480f, 20f)
+            mXy.create(solicitId).setXy(5f, 1f)
             val solicitSprite = mSprite.create(solicitId)
             solicitSprite.sprite =
                 Sprite(game.assets.get("assets/binassets/graphics/textures/solicit.png", Texture::class.java))
