@@ -10,6 +10,7 @@ class BattleWinAnimation : Animation() {
     private lateinit var sDeckUi: DeckDisplayUiSystem
     private lateinit var sMap: MapUiSystem
     private lateinit var sPause: PauseMenuSystem
+    private lateinit var sAnimation: CombatAnimationSystem
 
     override fun startAnimation() {
         sCombat.runData.adjustPostCombat(sCombat.combat)
@@ -18,6 +19,7 @@ class BattleWinAnimation : Animation() {
         sRewards.activateRewards()
         sMap.canAdvanceMap = true
         sPause.enable()
+        sAnimation.isEnabled = false
         endAnimation()
     }
 }
