@@ -337,3 +337,8 @@ base:spells:Inflation:
   en:
     name: Inflation
     description: Doubles Max @Flux changes this combat.
+
+base:spells:Ventilation:
+  en:
+    name: Ventilation
+    description: Lose !s(1) Flux at the start of your turn while not @Overloaded.

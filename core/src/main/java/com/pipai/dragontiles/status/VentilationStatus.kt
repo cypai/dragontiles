@@ -5,14 +5,14 @@ import com.pipai.dragontiles.combat.CombatSubscribe
 import com.pipai.dragontiles.combat.Combatant
 import com.pipai.dragontiles.combat.TurnStartEvent
 
-class Ventilation(amount: Int) : Status(amount) {
+class VentilationStatus(amount: Int) : Status(amount) {
     override val id = "base:status:Ventilation"
     override val assetName = "ventilation.png"
     override val displayAmount = true
     override fun isDebuff(): Boolean = false
 
     override fun deepCopy(): Status {
-        return Ventilation(amount)
+        return VentilationStatus(amount)
     }
 
     @CombatSubscribe

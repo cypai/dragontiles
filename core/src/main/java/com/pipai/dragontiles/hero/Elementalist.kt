@@ -57,6 +57,7 @@ class Elementalist : HeroClass {
         Expansion(),
         TransmutationRune(),
         ExpandAnomaly(),
+        Ventilation(),
         Riffle(),
         ReturnToSender(),
         Chillsink(),

@@ -4,7 +4,7 @@ import com.pipai.dragontiles.combat.*
 import com.pipai.dragontiles.data.Element
 import com.pipai.dragontiles.status.BreakStatus
 import com.pipai.dragontiles.status.Ritual
-import com.pipai.dragontiles.status.Ventilation
+import com.pipai.dragontiles.status.VentilationStatus
 
 class RiverSpirit : Enemy() {
 
@@ -20,7 +20,7 @@ class RiverSpirit : Enemy() {
     override suspend fun init(api: CombatApi) {
         flag = api.runData.seed.miscRng().nextBoolean()
         api.addStatusToEnemy(this, Ritual(1))
-        api.addStatusToEnemy(this, Ventilation(3))
+        api.addStatusToEnemy(this, VentilationStatus(3))
     }
 
     override fun getIntent(api: CombatApi): Intent {
