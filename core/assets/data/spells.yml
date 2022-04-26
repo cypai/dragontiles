@@ -354,3 +354,8 @@ base:spells:FluxBlast:
     description: |
       Deal @AOE @Elemented damage equal to Max @Flux - Flux.
       ( !d damage )
+
+base:spells:Normalize:
+  en:
+    name: Normalize
+    description: Transform @Burn, @Freeze, and @Shock tiles in your hand into Fire, Ice, and Lightning tiles respectively.
