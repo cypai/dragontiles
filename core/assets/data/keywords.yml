@@ -14,7 +14,7 @@ base:keywords:Elemented:
   en:
     key: "@Elemented"
     name: Elemented
-    description: The element of the @Components determines the damage element. Star or Life tiles use the Non-Elemental element.
+    description: The element of the @Components. Star or Life tiles use the Non-Elemental element.
 
 base:keywords:X:
   en:

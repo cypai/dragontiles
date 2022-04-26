@@ -322,3 +322,13 @@ base:spells:Patience:
   en:
     name: Patience
     description: Prevent drawing tiles until the end of your next turn.
+
+base:spells:TrialByFire:
+  en:
+    name: Trial By Fire
+    description: Gain !s(1) @Strength when taking damage from @Burn.
+
+base:spells:SelfAffliction:
+  en:
+    name: Self Affliction
+    description: Inflict @Elemented @Burn, @Freeze, or @Shock on a tile in your hand.

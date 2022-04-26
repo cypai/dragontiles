@@ -354,9 +354,9 @@ class CombatApi(
             .forEach { attack(it, element, amount, flags) }
     }
 
-    suspend fun dealFluxDamageToEnemy(enemy: Enemy, damage: Int) {
+    suspend fun dealFluxDamageToEnemy(enemy: Enemy, damage: Int, flags: List<CombatFlag> = listOf()) {
         enemy.flux += damage
-        eventBus.dispatch(EnemyFluxDamageEvent(enemy, damage))
+        eventBus.dispatch(EnemyFluxDamageEvent(enemy, damage, flags))
         if (enemy.flux >= enemy.fluxMax) {
             enemy.flux = enemy.fluxMax
             addStatusToEnemy(enemy, Overloaded(2))
@@ -387,7 +387,7 @@ class CombatApi(
         eventBus.dispatch(EnemyChangeIntentEvent(enemy, intent))
     }
 
-    suspend fun dealDamageToEnemy(enemy: Enemy, damage: Int) {
+    suspend fun dealDamageToEnemy(enemy: Enemy, damage: Int, flags: List<CombatFlag> = listOf()) {
         val actualDamage = if (enemyHasStatus(enemy, Immortality::class) && damage >= enemy.hp) {
             animate(TextAnimation(Combatant.EnemyCombatant(enemy), Immortality(1)))
             enemy.hp - 1
@@ -395,7 +395,7 @@ class CombatApi(
             damage
         }
         enemy.hp -= actualDamage
-        eventBus.dispatch(EnemyDamageEvent(enemy, actualDamage))
+        eventBus.dispatch(EnemyDamageEvent(enemy, actualDamage, flags))
         if (enemy.hp <= 0) {
             combat.enemyIntent.remove(enemy.enemyId)
             val statuses = combat.enemyStatus[enemy.enemyId]!!
@@ -416,7 +416,7 @@ class CombatApi(
         eventBus.dispatch(ComponentConsumeEvent(components))
         components.forEach { tile ->
             when (tile.tileStatus) {
-                TileStatus.BURN -> dealDamageToHero(2)
+                TileStatus.BURN -> dealDamageToHero(2, listOf(CombatFlag.BURN))
                 TileStatus.SHOCK -> shockSpell(spell)
                 TileStatus.VOLATILE -> dealFluxDamageToHero(spell.baseFluxGain())
                 TileStatus.CURSE -> changeTemporaryMaxFlux(spell.baseFluxGain())
@@ -459,14 +459,14 @@ class CombatApi(
             if (flags.none { it == CombatFlag.PIERCING } && runData.hero.flux < runData.hero.tempFluxMax) {
                 dealFluxDamageToHero(damage)
             } else {
-                dealDamageToHero(damage)
+                dealDamageToHero(damage, flags)
             }
         }
     }
 
-    suspend fun dealFluxDamageToHero(damage: Int, showParticleAnimation: Boolean = true) {
+    suspend fun dealFluxDamageToHero(damage: Int, showParticleAnimation: Boolean = true, flags: List<CombatFlag> = listOf()) {
         runData.hero.flux += damage
-        eventBus.dispatch(PlayerFluxDamageEvent(damage, showParticleAnimation))
+        eventBus.dispatch(PlayerFluxDamageEvent(damage, showParticleAnimation, flags))
         if (runData.hero.flux >= runData.hero.tempFluxMax) {
             runData.hero.flux = runData.hero.tempFluxMax
             addStatusToHero(Overloaded(2))
@@ -484,9 +484,9 @@ class CombatApi(
         eventBus.dispatch(PlayerTempMaxFluxChangeEvent(amount))
     }
 
-    suspend fun dealDamageToHero(damage: Int) {
+    suspend fun dealDamageToHero(damage: Int, flags: List<CombatFlag>) {
         runData.hero.hp -= damage
-        eventBus.dispatch(PlayerDamageEvent(damage))
+        eventBus.dispatch(PlayerDamageEvent(damage, flags))
         if (runData.hero.hp <= 0) {
             eventBus.dispatch(GameOverEvent())
         }

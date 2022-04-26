@@ -55,11 +55,11 @@ data class OpenPoolAdjustedEvent(val openPool: List<TileInstance>) : CombatEvent
 
 data class PlayerAttackEnemyEvent(val target: Enemy, val element: Element, val amount: Int) : CombatEvent
 
-data class EnemyFluxDamageEvent(val enemy: Enemy, val amount: Int) : CombatEvent
+data class EnemyFluxDamageEvent(val enemy: Enemy, val amount: Int, val flags: List<CombatFlag>) : CombatEvent
 
 data class EnemyLoseFluxEvent(val enemy: Enemy, val amount: Int) : CombatEvent
 
-data class EnemyDamageEvent(val enemy: Enemy, val amount: Int) : CombatEvent
+data class EnemyDamageEvent(val enemy: Enemy, val amount: Int, val flags: List<CombatFlag>) : CombatEvent
 
 data class EnemyDefeatedEvent(val enemy: Enemy) : CombatEvent
 
@@ -67,7 +67,7 @@ class BattleWinEvent : CombatEvent
 
 data class AnimationEvent(val animation: Animation) : CombatEvent
 
-data class PlayerFluxDamageEvent(val amount: Int, val showParticleAnimation: Boolean) : CombatEvent
+data class PlayerFluxDamageEvent(val amount: Int, val showParticleAnimation: Boolean, val flags: List<CombatFlag>) : CombatEvent
 
 data class PlayerLoseFluxEvent(val amount: Int) : CombatEvent
 
@@ -75,7 +75,7 @@ data class PlayerTempMaxFluxChangeEvent(val amount: Int) : CombatEvent
 
 data class PlayerHealEvent(val amount: Int) : CombatEvent
 
-data class PlayerDamageEvent(val amount: Int) : CombatEvent
+data class PlayerDamageEvent(val amount: Int, val flags: List<CombatFlag>) : CombatEvent
 
 data class ComponentConsumeEvent(val components: List<TileInstance>) : CombatEvent
 
