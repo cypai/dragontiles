@@ -8,7 +8,7 @@ class Chow : Sorcery() {
     override val requirement = Sequential(3)
     override val rarity = Rarity.UNCOMMON
     override val aspects: MutableList<SpellAspect> = mutableListOf(
-        AttackDamageAspect(3)
+        AttackDamageAspect(5)
     )
 
     override suspend fun onCast(hand: FullCastHand, api: CombatApi) {

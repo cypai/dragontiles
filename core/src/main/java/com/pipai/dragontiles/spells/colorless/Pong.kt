@@ -8,7 +8,7 @@ class Pong : Sorcery() {
     override val requirement = Identical(3)
     override val rarity = Rarity.UNCOMMON
     override val aspects: MutableList<SpellAspect> = mutableListOf(
-        AttackDamageAspect(4)
+        AttackDamageAspect(7)
     )
 
     override suspend fun onCast(hand: FullCastHand, api: CombatApi) {
