@@ -26,6 +26,7 @@ abstract class Spell : Localized, DamageAdjustable {
     abstract val type: SpellType
     abstract val rarity: Rarity
     abstract val aspects: MutableList<SpellAspect>
+    open val scoreable: Boolean = false
     private val upgrades: MutableList<SpellUpgrade> = mutableListOf()
 
     protected val data: MutableMap<String, Int> = mutableMapOf()

@@ -10,6 +10,7 @@ class Eyes : Sorcery() {
     override val aspects: MutableList<SpellAspect> = mutableListOf(
         AttackDamageAspect(10)
     )
+    override val scoreable = true
 
     override suspend fun onCast(hand: FullCastHand, api: CombatApi) {
         api.aoeAttack(elemental(components()), baseDamage(), flags())

@@ -15,6 +15,7 @@ class ReactionMastery : PowerSpell() {
     override val aspects: MutableList<SpellAspect> = mutableListOf(
         FluxGainAspect(9),
     )
+    override val scoreable: Boolean = true
 
     override fun additionalKeywords(): List<String> =
         listOf("@Reaction", "@Melt", "@Pyroblast", "@Cryoshock")

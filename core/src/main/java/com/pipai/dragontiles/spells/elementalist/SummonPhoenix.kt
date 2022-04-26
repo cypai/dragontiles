@@ -15,6 +15,7 @@ class SummonPhoenix : Sorcery() {
     override val aspects: MutableList<SpellAspect> = mutableListOf(
         StackableAspect(GenericStatus(10), 1),
     )
+    override val scoreable: Boolean = true
 
     override fun additionalKeywords(): List<String> =
         listOf("@Reactant", "@Reaction", "@Melt", "@Pyroblast", "@Cryoshock")

@@ -25,6 +25,7 @@ class PingHu : Sorcery() {
     override val aspects: MutableList<SpellAspect> = mutableListOf(
         AttackDamageAspect(15)
     )
+    override val scoreable: Boolean = true
 
     override suspend fun onCast(hand: FullCastHand, api: CombatApi) {
         api.aoeAttack(Element.NONE, baseDamage(), flags())

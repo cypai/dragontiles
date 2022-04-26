@@ -17,6 +17,7 @@ class DragonRage : StandardSpell() {
     override val aspects: MutableList<SpellAspect> = mutableListOf(
         StackableAspect(DragonRageStatus(1), 1)
     )
+    override val scoreable: Boolean = true
 
     override suspend fun onCast(params: CastParams, api: CombatApi) {
         val stackable = aspects.findAsWhere(StackableAspect::class) { it.status is DragonRageStatus }!!

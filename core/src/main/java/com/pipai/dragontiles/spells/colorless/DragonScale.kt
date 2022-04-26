@@ -16,6 +16,7 @@ class DragonScale : StandardSpell() {
     override val targetType: TargetType = TargetType.NONE
     override val rarity: Rarity = Rarity.SPECIAL
     override val aspects: MutableList<SpellAspect> = mutableListOf()
+    override val scoreable: Boolean = true
 
     override suspend fun onCast(params: CastParams, api: CombatApi) {
         when (elemental(components())) {

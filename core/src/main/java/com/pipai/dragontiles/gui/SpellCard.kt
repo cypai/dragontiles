@@ -28,6 +28,7 @@ class SpellCard(
     private val reqBorder = Image()
     private val reqImage = Image()
     private val reqNumber = Label("", skin, "cardReq")
+    private val scoreImage = Image()
     private val fluxImage = Image()
     private val fluxNumber = Label("", skin, "cardReq")
     private val nameLabel = Label("", skin, "tiny")
@@ -86,9 +87,11 @@ class SpellCard(
             .prefHeight(reqSize)
             .left()
             .top()
-        frontTable.add()
+        frontTable.add(scoreImage)
             .expand()
             .top()
+            .padTop(su(0.02f))
+            .size(su(0.225f))
         val fluxStack = Stack()
         fluxStack.add(fluxImage)
         fluxStack.add(fluxNumber)
@@ -203,6 +206,7 @@ class SpellCard(
             reqBorder.drawable = null
             reqImage.drawable = null
             reqNumber.setText("")
+            scoreImage.drawable = null
             fluxImage.drawable = null
             fluxNumber.setText("")
             nameLabel.setText("")
@@ -218,6 +222,14 @@ class SpellCard(
                 reqBorder.drawable = borderDrawable(spell.requirement.type)
                 reqImage.drawable = reqSuitDrawable(spell.requirement.suitGroup)
                 reqNumber.setText(spell.requirement.reqAmount.text())
+            }
+            if (spell.scoreable) {
+                scoreImage.drawable = TextureRegionDrawable(
+                    game.assets.get(
+                        "assets/binassets/graphics/textures/yaku_circle.png",
+                        Texture::class.java
+                    )
+                )
             }
             if (spell.aspects.any { it is FluxGainAspect }) {
                 fluxImage.drawable = TextureRegionDrawable(
