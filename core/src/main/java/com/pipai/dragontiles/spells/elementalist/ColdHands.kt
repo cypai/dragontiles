@@ -1,6 +1,9 @@
 package com.pipai.dragontiles.spells.elementalist
 
 import com.pipai.dragontiles.combat.CombatApi
+import com.pipai.dragontiles.combat.RandomTileStatusInflictStrategy
+import com.pipai.dragontiles.combat.TileStatusInflictStrategy
+import com.pipai.dragontiles.data.TileStatus
 import com.pipai.dragontiles.spells.*
 import com.pipai.dragontiles.status.BreakStatus
 import com.pipai.dragontiles.status.Weak
@@ -19,5 +22,12 @@ class ColdHands : StandardSpell() {
 
     override suspend fun onCast(params: CastParams, api: CombatApi) {
         api.addStatusToEnemy(api.getEnemy(params.targets.first()), aspects.getStackableCopy(Weak::class))
+        api.inflictTileStatusOnHand(
+            RandomTileStatusInflictStrategy(
+                TileStatus.FREEZE,
+                1,
+                TileStatusInflictStrategy.NotEnoughStrategy.RANDOM
+            )
+        )
     }
 }
