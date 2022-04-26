@@ -675,6 +675,20 @@ class CombatApi(
     suspend fun castSorceries(fullCastHand: FullCastHand) {
         combat.sorceries.forEach { sorcery ->
             when (val req = sorcery.requirement) {
+                is AnyCombo -> {
+                    when (req.reqAmount.amount) {
+                        3 -> {
+                            fullCastHand.melds
+                                .forEach { meld ->
+                                    sorcery.fill(meld.tiles)
+                                    sorcery.onCast(fullCastHand, this)
+                                }
+                        }
+                        else -> {
+                            // Doesn't make sense in sorcery context
+                        }
+                    }
+                }
                 is Identical -> {
                     when (req.reqAmount.amount) {
                         2 -> {

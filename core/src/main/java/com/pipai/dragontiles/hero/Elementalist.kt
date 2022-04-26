@@ -40,6 +40,7 @@ class Elementalist : HeroClass {
         Spark(),
         Splash(),
         Blast(),
+        GreatBlast(),
         BreakingBlast(),
         Explosion(),
         Precipitate(),

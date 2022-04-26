@@ -10,9 +10,12 @@ class Patience : StandardSpell() {
     override val type: SpellType = SpellType.EFFECT
     override val targetType: TargetType = TargetType.NONE
     override val rarity: Rarity = Rarity.UNCOMMON
-    override val aspects: MutableList<SpellAspect> = mutableListOf()
+    override val aspects: MutableList<SpellAspect> = mutableListOf(
+        FetchAspect(null),
+    )
 
     override suspend fun onCast(params: CastParams, api: CombatApi) {
+        api.fetch()
         api.addStatusToHero(NoDraw(2))
     }
 }
