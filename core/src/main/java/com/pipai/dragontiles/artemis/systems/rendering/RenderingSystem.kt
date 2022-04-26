@@ -92,6 +92,7 @@ class RenderingSystem(
                 val cXy = mXy.get(it)
                 val cText = mText.get(it)
                 val font = when (cText.size) {
+                    TextSize.LARGE -> game.largeFont
                     TextSize.NORMAL -> game.font
                     TextSize.SMALL -> game.smallFont
                     TextSize.TINY -> game.tinyFont

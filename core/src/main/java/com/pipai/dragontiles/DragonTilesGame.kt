@@ -37,7 +37,6 @@ import com.pipai.dragontiles.meta.GameOptions
 import com.pipai.dragontiles.meta.Save
 import com.pipai.dragontiles.meta.SaveSerializer
 import com.pipai.dragontiles.utils.getLogger
-import com.pipai.dragontiles.utils.withBg
 import com.talosvfx.talos.runtime.ParticleEffectDescriptor
 import com.talosvfx.talos.runtime.render.SpriteBatchParticleRenderer
 import org.apache.commons.lang3.builder.ToStringBuilder
@@ -82,6 +81,9 @@ class DragonTilesGame(val gameConfig: GameConfig) : Game() {
         private set
 
     lateinit var font: BitmapFont
+        private set
+
+    lateinit var largeFont: BitmapFont
         private set
 
     lateinit var smallFont: BitmapFont
@@ -221,11 +223,15 @@ class DragonTilesGame(val gameConfig: GameConfig) : Game() {
         val heavyFontGenerator =
             FreeTypeFontGenerator(Gdx.files.internal("assets/binassets/fonts/Comme-Heavy.ttf"))
         val fontParameter = FreeTypeFontParameter()
-        val largeSize = (gameConfig.resolution.height * 0.03f).toInt()
+        val outlinedSize = (gameConfig.resolution.height * 0.03f).toInt()
+        val largeSize = (gameConfig.resolution.height * 0.06f).toInt()
         val smallSize = (gameConfig.resolution.height * 0.025f).toInt()
         val tinySize = (gameConfig.resolution.height * 0.017f).toInt()
-        fontParameter.size = largeSize
+        fontParameter.size = outlinedSize
         font = fontGenerator.generateFont(fontParameter)
+
+        fontParameter.size = largeSize
+        largeFont = fontGenerator.generateFont(fontParameter)
 
         fontParameter.size = smallSize
         smallFont = fontGenerator.generateFont(fontParameter)
@@ -234,7 +240,7 @@ class DragonTilesGame(val gameConfig: GameConfig) : Game() {
         tinyFont = fontGenerator.generateFont(fontParameter)
 
         fontParameter.borderWidth = 1f
-        fontParameter.size = largeSize
+        fontParameter.size = outlinedSize
         outlinedFont = fontGenerator.generateFont(fontParameter)
 
         fontParameter.size = smallSize
@@ -243,7 +249,7 @@ class DragonTilesGame(val gameConfig: GameConfig) : Game() {
         fontParameter.size = tinySize
         outlinedTinyFont = fontGenerator.generateFont(fontParameter)
 
-        fontParameter.size = largeSize
+        fontParameter.size = outlinedSize
         fontParameter.borderWidth = 2f
         heavyFont = heavyFontGenerator.generateFont(fontParameter)
 

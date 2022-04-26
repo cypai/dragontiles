@@ -188,5 +188,5 @@ class TextComponent : Component() {
 }
 
 enum class TextSize {
-    NORMAL, SMALL, TINY
+    LARGE, NORMAL, SMALL, TINY
 }

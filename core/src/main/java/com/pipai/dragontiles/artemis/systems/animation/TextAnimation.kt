@@ -32,7 +32,7 @@ class TextAnimation(val combatant: Combatant, val localized: Localized) : Animat
 
         val cText = mText.create(textEntityId)
         cText.text = game.gameStrings.nameLocalization(localized).name
-        cText.size = TextSize.NORMAL
+        cText.size = TextSize.LARGE
         cText.color = Color.BLACK.cpy()
 
         val cAlphaInterp = mAlphaInterp.create(textEntityId)
