@@ -49,6 +49,7 @@ class Elementalist : HeroClass {
         Precipitate(),
         BurnRune(),
         FrostRune(),
+        ThunderRune(),
         Fireball(),
         IceShard(),
         ChainLightning(),

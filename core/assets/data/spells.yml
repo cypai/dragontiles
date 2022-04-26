@@ -161,7 +161,7 @@ base:spells:FrostRune:
 base:spells:ThunderRune:
   en:
     name: Thunder Rune
-    description: For each @Shock tile consumed, recast the spell.
+    description: Deal 5 !x @AOE Lightning damage for each @Shock tile consumed.
 
 base:spells:InflictReactant:
   en:

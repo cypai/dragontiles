@@ -16,6 +16,6 @@ class BurnRune : Rune() {
     @CombatSubscribe
     suspend fun onTurnEnd(ev: TurnEndEvent, api: CombatApi) {
         val burns = api.combat.hand.filter { it.tileStatus == TileStatus.BURN }.size
-        api.aoeAttack(Element.FIRE, components().size * burns, flags())
+        api.aoeAttack(Element.FIRE, x() * burns, flags())
     }
 }
