@@ -342,3 +342,8 @@ base:spells:Ventilation:
   en:
     name: Ventilation
     description: Lose !s(1) Flux at the start of your turn while not @Overloaded.
+
+base:spells:Megaxplosion:
+  en:
+    name: Megaxplosion
+    description: Deal !d @AOE @Elemented damage.
