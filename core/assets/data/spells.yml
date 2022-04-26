@@ -341,7 +341,7 @@ base:spells:Inflation:
 base:spells:Ventilation:
   en:
     name: Ventilation
-    description: Lose !s(1) Flux at the start of your turn while not @Overloaded.
+    description: Lose !s(1) Flux at the start of your turn.
 
 base:spells:Megaxplosion:
   en:

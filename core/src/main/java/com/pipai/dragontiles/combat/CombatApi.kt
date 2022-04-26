@@ -474,6 +474,9 @@ class CombatApi(
     }
 
     suspend fun heroLoseFlux(amount: Int) {
+        if (heroHasStatus(Overloaded::class)) {
+            return
+        }
         val actualAmount = if (runData.hero.flux >= amount) amount else runData.hero.flux
         runData.hero.flux -= actualAmount
         eventBus.dispatch(PlayerLoseFluxEvent(actualAmount))
