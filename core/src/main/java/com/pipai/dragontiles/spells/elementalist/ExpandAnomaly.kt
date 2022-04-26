@@ -7,7 +7,7 @@ import com.pipai.dragontiles.utils.withAll
 
 class ExpandAnomaly : StandardSpell() {
     override val id: String = "base:spells:ExpandAnomaly"
-    override val requirement: ComponentRequirement = Identical(3, SuitGroup.ARCANE)
+    override val requirement: ComponentRequirement = Identical(2, SuitGroup.ARCANE)
     override val type: SpellType = SpellType.EFFECT
     override val targetType: TargetType = TargetType.NONE
     override val rarity: Rarity = Rarity.RARE

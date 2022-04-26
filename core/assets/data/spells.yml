@@ -156,7 +156,7 @@ base:spells:BurnRune:
 base:spells:FrostRune:
   en:
     name: Frost Rune
-    description: Lose !x @Flux for each tile with @Freeze in your hand at the end of your turn.
+    description: Lose 4 !x @Flux for each tile with @Freeze in your hand at the end of your turn.
 
 base:spells:ThunderRune:
   en:
@@ -276,7 +276,7 @@ base:spells:Breakwave:
 base:spells:Chillsink:
   en:
     name: Chillsink
-    description: Remove all @Freeze from your hand. Lose !f @Flux for each unfrozen tile.
+    description: Remove all @Burn, @Freeze, and @Shock from your hand. Lose !f @Flux for each cleansed tile.
 
 base:spells:MassTransmute:
   en:

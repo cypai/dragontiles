@@ -15,6 +15,6 @@ class FrostRune : Rune() {
     @CombatSubscribe
     suspend fun onTurnEnd(ev: TurnEndEvent, api: CombatApi) {
         val freezes = api.combat.hand.filter { it.tileStatus == TileStatus.FREEZE }.size
-        api.heroLoseFlux(freezes * x())
+        api.heroLoseFlux(4 * freezes * x())
     }
 }

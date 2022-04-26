@@ -3,9 +3,6 @@ package com.pipai.dragontiles.spells.elementalist
 import com.pipai.dragontiles.combat.CombatApi
 import com.pipai.dragontiles.data.TileStatus
 import com.pipai.dragontiles.spells.*
-import com.pipai.dragontiles.status.BreakStatus
-import com.pipai.dragontiles.status.Weak
-import com.pipai.dragontiles.utils.getStackableCopy
 
 class Chillsink : StandardSpell() {
     override val id: String = "base:spells:Chillsink"
@@ -14,13 +11,14 @@ class Chillsink : StandardSpell() {
     override val targetType: TargetType = TargetType.SINGLE_ENEMY
     override val rarity: Rarity = Rarity.UNCOMMON
     override val aspects: MutableList<SpellAspect> = mutableListOf(
-        FluxLossAspect(5)
+        FluxLossAspect(7)
     )
 
     override suspend fun onCast(params: CastParams, api: CombatApi) {
-        val freezes = api.combat.hand.filter { it.tileStatus == TileStatus.FREEZE }
-        api.setTileStatus(freezes, TileStatus.NONE)
-        repeat (freezes.size) {
+        val statuses =
+            api.combat.hand.filter { it.tileStatus in listOf(TileStatus.BURN, TileStatus.FREEZE, TileStatus.SHOCK) }
+        api.setTileStatus(statuses, TileStatus.NONE)
+        repeat(statuses.size) {
             api.heroLoseFlux(baseFluxLoss())
         }
     }
