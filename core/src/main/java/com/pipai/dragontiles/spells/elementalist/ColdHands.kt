@@ -12,7 +12,7 @@ import com.pipai.dragontiles.utils.getStackableCopy
 
 class ColdHands : StandardSpell() {
     override val id: String = "base:spells:ColdHands"
-    override val requirement: ComponentRequirement = Identical(2, SuitGroup.ICE)
+    override val requirement: ComponentRequirement = AnyCombo(2, SuitGroup.ICE)
     override val type: SpellType = SpellType.ATTACK
     override val targetType: TargetType = TargetType.SINGLE_ENEMY
     override val rarity: Rarity = Rarity.COMMON
