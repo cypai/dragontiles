@@ -133,6 +133,11 @@ base:spells:Break:
     name: Break
     description: Inflict !s(1) @Break.
 
+base:spells:BreakingBlast:
+  en:
+    name: Breaking Blast
+    description: Deal !d @Elemented damage and inflict !s(1) @Break to all enemies.
+
 base:spells:Concentrate:
   en:
     name: Concentrate
