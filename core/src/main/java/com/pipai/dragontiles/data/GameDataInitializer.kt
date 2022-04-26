@@ -61,6 +61,7 @@ class GameDataInitializer {
         gameData.addSpell(GameData.COLORLESS, DragonRage())
         gameData.addSpell(GameData.COLORLESS, DragonScale())
         gameData.addSpell(GameData.COLORLESS, PotOfGreed())
+        gameData.addSpell(GameData.COLORLESS, Patience())
     }
 
     private fun initSpellUpgrades(gameData: GameData) {

@@ -7,10 +7,7 @@ import com.pipai.dragontiles.artemis.systems.animation.TextAnimation
 import com.pipai.dragontiles.data.*
 import com.pipai.dragontiles.enemies.Enemy
 import com.pipai.dragontiles.spells.*
-import com.pipai.dragontiles.status.Dodge
-import com.pipai.dragontiles.status.Immunized
-import com.pipai.dragontiles.status.Overloaded
-import com.pipai.dragontiles.status.Status
+import com.pipai.dragontiles.status.*
 import com.pipai.dragontiles.utils.*
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.runBlocking
@@ -85,6 +82,9 @@ class CombatApi(
     }
 
     suspend fun draw(amount: Int) {
+        if (heroHasStatus(NoDraw::class)) {
+            return
+        }
         val drawnTiles: MutableList<Pair<TileInstance, Int>> = mutableListOf()
         val drawnDiscardTiles: MutableList<TileInstance> = mutableListOf()
         var currentSize = numTilesInHand()

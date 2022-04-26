@@ -302,3 +302,8 @@ base:spells:PotOfGreed:
   en:
     name: Pot of Greed
     description: Not deactivateable. Gain 1 Gold if active at the end of battle.
+
+base:spells:Patience:
+  en:
+    name: Patience
+    description: Prevent drawing tiles until the end of your next turn.

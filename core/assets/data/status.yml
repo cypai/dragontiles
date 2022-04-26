@@ -112,3 +112,8 @@ base:status:Sandstorm:
   en:
     name: Sandstorm
     description: At the end of the turn, put Fumble Tiles in your hand.
+
+base:status:NoDraw:
+  en:
+    name: No Draw
+    description: You cannot draw tiles this turn.
