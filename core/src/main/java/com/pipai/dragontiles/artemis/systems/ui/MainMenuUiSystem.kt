@@ -11,11 +11,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.pipai.dragontiles.DragonTilesGame
 import com.pipai.dragontiles.artemis.screens.*
-import com.pipai.dragontiles.combat.CombatRewardConfig
-import com.pipai.dragontiles.combat.SpellRewardType
 import com.pipai.dragontiles.data.*
 import com.pipai.dragontiles.dungeon.*
-import com.pipai.dragontiles.dungeonevents.PlainsStartEvent
 import com.pipai.dragontiles.hero.Elementalist
 import com.pipai.dragontiles.spells.Rarity
 import com.pipai.dragontiles.utils.choose
@@ -68,12 +65,15 @@ class MainMenuUiSystem(
                 game.music!!.volume = game.save.options.musicVolume
                 game.music!!.play()
 
-                val dungeonId = "base:dungeons:Plains"
-                val map = DungeonMap.generateMap(seed)
-                val boss = game.data.getDungeon(dungeonId).bossEncounters.choose(seed.dungeonRng())
+                val act1Id = "base:dungeons:Plains"
+                val act1Map = DungeonMap.generateMap(seed)
+                val act1Boss = game.data.getDungeon(act1Id).bossEncounters.choose(seed.dungeonRng())
+                val act2Id = "base:dungeons:Mountains"
+                val act2Map = DungeonMap.generateMap(seed)
+                val act2Boss = game.data.getDungeon(act1Id).bossEncounters.choose(seed.dungeonRng())
                 val runData = RunData(
                     Elementalist().generateHero("Elementalist"),
-                    DungeonMap(dungeonId, map, boss.id),
+                    DungeonMap(act1Id, DungeonMap(act2Id, null, act2Map, act2Boss.id), act1Map, act1Boss.id),
                     game.data.allRelics().filter { it.rarity != Rarity.SPECIAL && it.rarity != Rarity.STARTER }
                         .map { it.id }.toMutableList(),
                     null,

@@ -1,5 +1,6 @@
 package com.pipai.dragontiles.data
 
+import com.pipai.dragontiles.dungeon.MountainsDungeon
 import com.pipai.dragontiles.dungeon.PlainsDungeon
 import com.pipai.dragontiles.hero.Elementalist
 import com.pipai.dragontiles.potions.*
@@ -17,6 +18,7 @@ class GameDataInitializer {
         initSpellUpgrades(gameData)
         initPotions(gameData)
         gameData.addDungeon(PlainsDungeon.create())
+        gameData.addDungeon(MountainsDungeon.create())
     }
 
     private fun initHeroClasses(gameData: GameData) {

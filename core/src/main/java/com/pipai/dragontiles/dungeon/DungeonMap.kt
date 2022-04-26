@@ -7,6 +7,7 @@ import kotlin.random.Random
 
 data class DungeonMap(
     val dungeonId: String,
+    val nextDungeonMap: DungeonMap?,
     val map: List<List<MapNode>>,
     val bossId: String,
     val encounters: MutableList<String> = mutableListOf(),
@@ -25,7 +26,7 @@ data class DungeonMap(
             val combats = mutableListOf(0, 0, 0)
             val events = mutableListOf(0, 0, 0)
             val towns = mutableListOf(0, 0, 0)
-            for (floorNum in 0..10) {
+            for (floorNum in 0..11) {
                 val floor: MutableList<MapNode> = mutableListOf()
                 when (floorNum) {
                     0 -> {
@@ -47,6 +48,12 @@ data class DungeonMap(
                     }
                     10 -> {
                         val node = MapNode(MapNodeType.BOSS, false, mutableListOf(), mutableListOf())
+                        previousFloor!!.forEach { it.next.add(0) }
+                        node.prev.add(0)
+                        floor.add(node)
+                    }
+                    11 -> {
+                        val node = MapNode(MapNodeType.NEXT_ACT, false, mutableListOf(), mutableListOf())
                         previousFloor!!.forEach { it.next.add(0) }
                         node.prev.add(0)
                         floor.add(node)
@@ -140,6 +147,6 @@ data class DungeonMap(
 data class MapNode(val type: MapNodeType, val hidden: Boolean, val prev: MutableList<Int>, val next: MutableList<Int>)
 
 enum class MapNodeType {
-    START, COMBAT, ELITE, BOSS, EVENT, TOWN;
+    START, COMBAT, ELITE, BOSS, EVENT, TOWN, NEXT_ACT;
 }
 

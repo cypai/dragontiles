@@ -1,5 +1,6 @@
 package com.pipai.dragontiles.artemis.systems.ui
 
+import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input
 import com.badlogic.gdx.InputProcessor
 import com.badlogic.gdx.graphics.Color
@@ -28,6 +29,8 @@ class MapUiSystem(
     private val stage: Stage,
     private val runData: RunData
 ) : NoProcessingSystem(), InputProcessor {
+
+    private val logger = getLogger()
 
     private val mXy by mapper<XYComponent>()
     private val mSprite by mapper<SpriteComponent>()
@@ -145,6 +148,22 @@ class MapUiSystem(
                                 Sprite(
                                     game.assets.get(
                                         "assets/binassets/graphics/textures/rainbow_circle.png",
+                                        Texture::class.java
+                                    )
+                                )
+                        }
+                        MapNodeType.NEXT_ACT -> {
+                            cHover.enterCallback = {
+                                sTooltip.addText("Mountains", "", false)
+                                sTooltip.showTooltip()
+                            }
+                            cHover.exitCallback = {
+                                sTooltip.hideTooltip()
+                            }
+                            cSprite.sprite =
+                                Sprite(
+                                    game.assets.get(
+                                        "assets/binassets/graphics/textures/yaku_circle.png",
                                         Texture::class.java
                                     )
                                 )
@@ -307,6 +326,16 @@ class MapUiSystem(
                         )
                     )
                     game.screen = TownScreen(game, runData)
+                }
+                MapNodeType.NEXT_ACT -> {
+                    val nextAct = runData.dungeonMap.nextDungeonMap
+                    if (nextAct == null) {
+                        logger.info("You win! To be continued...")
+                        Gdx.app.exit()
+                    } else {
+                        runData.dungeonMap = nextAct
+                        game.screen = EventScreen(game, runData, game.data.getDungeon(runData.dungeonMap.dungeonId).startEvent)
+                    }
                 }
                 else -> {
                     throw NotImplementedError()

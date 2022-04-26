@@ -9,6 +9,17 @@ base:events:PlainsStartEvent:
     en:
       text: Choose your path
 
+base:events:MountainsStartEvent:
+  name:
+    en:
+      text: The Mountains
+  start:
+    en:
+      text: You have arrived at the Mountains. You sense that the trials ahead of you will be more severe...
+  option:
+    en:
+      text: Choose your path
+
 base:events:DragonInquiry:
   name:
     en:
