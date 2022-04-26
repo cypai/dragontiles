@@ -226,7 +226,7 @@ base:spells:DragonScale:
 base:spells:Burn:
   en:
     name: Burn
-    description: Deal !d @Piercing Fire damage. @Burn a random tile in your hand.
+    description: Deal !d @Piercing Fire damage. Inflict !s(1) Pyro. @Burn a random tile in your hand.
 
 base:spells:ColdHands:
   en:

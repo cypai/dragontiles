@@ -7,6 +7,7 @@ import com.pipai.dragontiles.combat.TileStatusInflictStrategy
 import com.pipai.dragontiles.data.TileStatus
 import com.pipai.dragontiles.spells.*
 import com.pipai.dragontiles.status.Pyro
+import com.pipai.dragontiles.utils.getStackableCopy
 import com.pipai.dragontiles.utils.withAll
 
 class Burn : StandardSpell() {
@@ -21,6 +22,8 @@ class Burn : StandardSpell() {
         FluxGainAspect(1),
     )
 
+    override fun additionalKeywords(): List<String> = listOf("@Reaction", "@Melt", "@Pyroblast")
+
     override fun flags(): List<CombatFlag> {
         return super.flags().withAll(listOf(CombatFlag.PYRO, CombatFlag.PIERCING))
     }
@@ -28,6 +31,13 @@ class Burn : StandardSpell() {
     override suspend fun onCast(params: CastParams, api: CombatApi) {
         val target = api.getEnemy(params.targets.first())
         api.attack(target, elemental(components()), baseDamage(), flags())
-        api.inflictTileStatusOnHand(RandomTileStatusInflictStrategy(TileStatus.BURN, 1, TileStatusInflictStrategy.NotEnoughStrategy.RANDOM))
+        api.addStatusToEnemy(target, aspects.getStackableCopy(Pyro::class))
+        api.inflictTileStatusOnHand(
+            RandomTileStatusInflictStrategy(
+                TileStatus.BURN,
+                1,
+                TileStatusInflictStrategy.NotEnoughStrategy.RANDOM
+            )
+        )
     }
 }
