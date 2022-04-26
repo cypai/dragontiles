@@ -359,3 +359,8 @@ base:spells:Normalize:
   en:
     name: Normalize
     description: Transform @Burn, @Freeze, and @Shock tiles in your hand into Fire, Ice, and Lightning tiles respectively.
+
+base:spells:FluxMastery:
+  en:
+    name: Flux Mastery
+    description: Start combat with !c additional Max Flux. Permanently gain 2 more when played.

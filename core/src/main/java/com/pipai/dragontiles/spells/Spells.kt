@@ -10,10 +10,13 @@ import kotlin.reflect.full.createInstance
 data class SpellInstance(
     override val id: String,
     val upgrades: MutableList<SpellUpgradeInstance>,
+    var permanentValue: Int = 0,
 ) : Localized {
 
     fun toSpell(gameData: GameData): Spell {
-        return gameData.getSpell(id).withUpgrades(upgrades.map { gameData.getSpellUpgrade(it.id) })
+        return gameData.getSpell(id)
+            .withUpgrades(upgrades.map { gameData.getSpellUpgrade(it.id) })
+            .withRef(this)
     }
 }
 
@@ -28,6 +31,8 @@ abstract class Spell : Localized, DamageAdjustable {
     abstract val aspects: MutableList<SpellAspect>
     open val scoreable: Boolean = false
     private val upgrades: MutableList<SpellUpgrade> = mutableListOf()
+    protected var instanceRef: SpellInstance? = null
+        private set
 
     protected val data: MutableMap<String, Int> = mutableMapOf()
 
@@ -44,7 +49,11 @@ abstract class Spell : Localized, DamageAdjustable {
     }
 
     fun toInstance(): SpellInstance {
-        return SpellInstance(id, upgrades.map { SpellUpgradeInstance(it.id) }.toMutableList())
+        return SpellInstance(
+            id,
+            upgrades.map { SpellUpgradeInstance(it.id) }.toMutableList(),
+            instanceRef?.permanentValue ?: 0
+        )
     }
 
     fun getUpgrades() = upgrades.toList()
@@ -58,6 +67,11 @@ abstract class Spell : Localized, DamageAdjustable {
         upgrades.forEach {
             upgrade(it)
         }
+        return this
+    }
+
+    fun withRef(ref: SpellInstance): Spell {
+        instanceRef = ref
         return this
     }
 
@@ -81,6 +95,10 @@ abstract class Spell : Localized, DamageAdjustable {
 
     open fun dynamicBaseDamage(components: List<TileInstance>, api: CombatApi): Int {
         return baseDamage()
+    }
+
+    open fun dynamicCustom(): Int {
+        return 0
     }
 
     open fun dynamicValue(key: String, param: String?, api: CombatApi?, castParams: CastParams): Int {
@@ -117,6 +135,7 @@ abstract class Spell : Localized, DamageAdjustable {
                     }
                 }
             }
+            "!c" -> dynamicCustom()
             "!f" -> baseFluxLoss()
             "!tmfg" -> baseTempMaxFluxGain()
             "!s" -> {
@@ -795,6 +814,51 @@ class RainbowIdenticalSequence(private val sequenceSize: Int) : ComponentRequire
 
     private fun equivalentSequence(controlSequence: List<TileInstance>, other: List<TileInstance>): Boolean {
         val controlTile = (controlSequence.first().tile as Tile.ElementalTile)
+        val otherTile = (other.first().tile as Tile.ElementalTile)
+        return controlTile.number == otherTile.number
+    }
+}
+
+class RainbowIdentical(private val size: Int) : ComponentRequirement {
+    override val type = SetType.IDENTICAL
+    override var suitGroup: SuitGroup = SuitGroup.RAINBOW
+    override val reqAmount = ReqAmount.Numeric(size)
+    override val description = "Identical Identicals in all three Elemental Suits."
+    override val componentSlots: MutableList<ComponentSlot> = mutableListOf()
+    override val manualOnly = false
+    override val showTooltip: Boolean = true
+
+    override fun find(hand: List<TileInstance>): List<List<TileInstance>> {
+        val found = mutableListOf<List<TileInstance>>()
+        val identicals = Identical(size, SuitGroup.ELEMENTAL).find(hand)
+        identicals
+            .filter { it.first().tile.suit == Suit.FIRE }
+            .forEach { controlIdentical ->
+                val ice = identicals.firstOrNull { other ->
+                    equivalentIdentical(controlIdentical, other) && other.first().tile.suit == Suit.ICE
+                }
+                val lightning = identicals.firstOrNull { other ->
+                    equivalentIdentical(controlIdentical, other) && other.first().tile.suit == Suit.LIGHTNING
+                }
+                if (ice != null && lightning != null) {
+                    found.add(controlIdentical.withAll(ice).withAll(lightning))
+                }
+            }
+        return found
+    }
+
+    override fun findGiven(hand: List<TileInstance>, given: List<TileInstance>): List<List<TileInstance>> {
+        val fullHand = hand.withAll(given).toMutableList()
+        fullHand.sortWith(compareBy({ it.tile.suit.order }, { it.tile.order() }))
+        return find(fullHand).filter { it.containsAll(given) }
+    }
+
+    override fun satisfied(slots: List<TileInstance>): Boolean {
+        return slots.size == size * 3 && find(slots).isNotEmpty()
+    }
+
+    private fun equivalentIdentical(controlIdentical: List<TileInstance>, other: List<TileInstance>): Boolean {
+        val controlTile = (controlIdentical.first().tile as Tile.ElementalTile)
         val otherTile = (other.first().tile as Tile.ElementalTile)
         return controlTile.number == otherTile.number
     }

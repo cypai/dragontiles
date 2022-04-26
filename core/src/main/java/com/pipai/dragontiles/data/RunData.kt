@@ -19,6 +19,7 @@ data class RunData(
     fun adjustPostCombat(combat: Combat) {
         combatWon = true
         hero.flux = 0
+        hero.tempFluxMax = hero.fluxMax
         // TODO: history here
     }
 }
