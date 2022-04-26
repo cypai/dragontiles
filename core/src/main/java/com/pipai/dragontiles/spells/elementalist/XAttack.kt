@@ -5,8 +5,8 @@ import com.pipai.dragontiles.combat.CombatFlag
 import com.pipai.dragontiles.spells.*
 import com.pipai.dragontiles.utils.withAll
 
-class XStrike : StandardSpell() {
-    override val id: String = "base:spells:XStrike"
+class XAttack : StandardSpell() {
+    override val id: String = "base:spells:XAttack"
     override val requirement: ComponentRequirement = SequentialX()
     override val type: SpellType = SpellType.ATTACK
     override val targetType: TargetType = TargetType.SINGLE

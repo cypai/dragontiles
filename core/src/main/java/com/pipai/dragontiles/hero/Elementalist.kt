@@ -25,7 +25,7 @@ class Elementalist : HeroClass {
         Burn(),
         ColdHands(),
         DualStrike(),
-        XStrike(),
+        XAttack(),
         MultiInvoke(),
         StrengthRune(),
         FetchingStrike(),

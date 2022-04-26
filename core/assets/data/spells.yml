@@ -68,9 +68,9 @@ base:spells:MultiInvoke:
     name: Multi Invoke
     description: Deal !d @Elemented damage !x times.
 
-base:spells:XStrike:
+base:spells:XAttack:
   en:
-    name: X Strike
+    name: X Attack
     description: Deal !d @Elemented damage !x times.
 
 base:spells:Mulligan:
