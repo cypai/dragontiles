@@ -14,6 +14,6 @@ class Inflation : StandardSpell() {
     )
 
     override suspend fun onCast(params: CastParams, api: CombatApi) {
-        api.changeTemporaryMaxFlux(api.runData.hero.tempFluxMax)
+        api.changeTemporaryMaxFlux(api.runData.hero.tempFluxMax - api.runData.hero.fluxMax)
     }
 }
