@@ -54,6 +54,7 @@ class Elementalist : HeroClass {
         IceShard(),
         ChainLightning(),
         GreatPower(),
+        Expansion(),
         TransmutationRune(),
         ExpandAnomaly(),
         Riffle(),

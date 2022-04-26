@@ -47,3 +47,8 @@ base:sorceries:GreatBlast:
   en:
     name: Great Blast
     description: Deal !d @AOE @Elemented damage.
+
+base:sorceries:Expansion:
+  en:
+    name: Expansion
+    description: Gain !tmfg Max @Flux this combat.

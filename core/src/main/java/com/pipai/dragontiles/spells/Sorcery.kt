@@ -8,7 +8,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 abstract class Sorcery : Spell() {
-    override val type = SpellType.SORCERY
+    final override val type = SpellType.SORCERY
 
     override fun swappableFromSideboard(): Boolean = false
 
