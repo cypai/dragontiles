@@ -28,10 +28,10 @@ base:spells:Strike:
     name: Strike
     description: Deal !d @Elemented damage.
 
-base:spells:PiercingStrike:
+base:spells:FetchingStrike:
   en:
-    name: Piercing Strike
-    description: Deal !d @Elemented @Piercing damage.
+    name: Fetching Strike
+    description: Deal !d @Elemented damage.
 
 base:spells:Chain:
   en:

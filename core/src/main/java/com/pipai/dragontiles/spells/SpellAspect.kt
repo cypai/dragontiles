@@ -70,9 +70,9 @@ data class FetchAspect(var amount: Int?) : SpellAspect {
             }
         } else {
             if (description.isEmpty()) {
-                "${Keywords.FETCH} !fetch"
+                "${Keywords.FETCH} !fetch."
             } else {
-                "$description ${Keywords.FETCH} !fetch"
+                "$description ${Keywords.FETCH} !fetch."
             }
         }
     }

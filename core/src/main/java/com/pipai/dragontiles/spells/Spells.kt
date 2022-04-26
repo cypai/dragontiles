@@ -192,6 +192,9 @@ abstract class StandardSpell : Spell() {
         if (baseSwap() > 0) {
             api.swapQuery(baseSwap())
         }
+        if (baseFetch() > 0) {
+            api.fetch(baseFetch())
+        }
         api.castSpell(this) // After casting to have effects on spellcast resolve in the proper order
         repeated++
     }
