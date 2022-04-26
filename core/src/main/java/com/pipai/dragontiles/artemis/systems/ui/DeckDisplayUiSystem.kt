@@ -324,7 +324,7 @@ class DeckDisplayUiSystem(
                 }
             })
             if (enableSwapDnd) {
-                dragAndDrop.setDragActorPosition(SpellCard.cardWidth / 2f, -SpellCard.cardHeight / 2f)
+                dragAndDrop.setDragActorPosition(SpellCard.cardWidth / 2f, SpellCard.cardHeight / 2f)
                 dragAndDrop.addSource(object : DragAndDrop.Source(spellCard) {
                     override fun dragStart(event: InputEvent?, x: Float, y: Float, pointer: Int): DragAndDrop.Payload {
                         val payload = DragAndDrop.Payload()
