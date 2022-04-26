@@ -6,6 +6,7 @@ import com.pipai.dragontiles.spells.Rarity
 import com.pipai.dragontiles.spells.Spell
 import com.pipai.dragontiles.spells.upgrades.SpellUpgrade
 import com.pipai.dragontiles.utils.choose
+import com.pipai.dragontiles.utils.chooseAmount
 
 class TownGenerator {
 
@@ -14,7 +15,8 @@ class TownGenerator {
         val heroClass = gameData.getHeroClass(runData.hero.heroClassId)
         val spellShop = SpellShop(
             heroClass.getRandomClassSpells(runData.seed, 6).map { pricedSpell(it) }.toMutableList(),
-            pricedSpell(gameData.colorlessSpells().filter { it.rarity != Rarity.SPECIAL }.choose(rng)),
+            gameData.colorlessSpells().filter { it.rarity != Rarity.SPECIAL }.chooseAmount(2, rng)
+                .map { pricedSpell(it) }.toMutableList(),
         )
         val itemShop = ItemShop(mutableListOf(), mutableListOf())
         val relicRng = runData.seed.relicRng()

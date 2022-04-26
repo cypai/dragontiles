@@ -45,17 +45,17 @@ class SpellShopUiSystem(
     override fun initialize() {
         api = GlobalApi(game.data, runData, sEvent)
         val spellShop = town.spellShop
+        sideboardSpace(1f, 2.5f)
         spellShop.classSpells.forEachIndexed { i, ps ->
             if (i < 3) {
-                createSpell(ps, (i + 2) * 1.5f * SpellCard.cardWorldWidth, 1f)
+                createSpell(ps, 7f + i * 1.5f * SpellCard.cardWorldWidth, 1f)
             } else {
-                createSpell(ps, (i - 1) * 1.5f * SpellCard.cardWorldWidth, 4.5f)
+                createSpell(ps, 7f + (i - 3) * 1.5f * SpellCard.cardWorldWidth, 4.5f)
             }
         }
-        if (spellShop.colorlessSpell != null) {
-            createSpell(spellShop.colorlessSpell!!, 1.5f, 1f)
+        spellShop.colorlessSpells.forEachIndexed { i, ps ->
+            createSpell(ps, 1f + SpellCard.cardWorldHeight, 1f - 3.5f * (i - 1))
         }
-        sideboardSpace(1.5f, 4.5f)
     }
 
     private fun sideboardSpace(x: Float, y: Float) {
@@ -165,8 +165,8 @@ class SpellShopUiSystem(
 
     fun handleSpellCardClick(entityId: EntityId, spellCard: SpellCard, ps: PricedItem) {
         if (runData.hero.gold >= ps.price) {
-            if (ps == town.spellShop.colorlessSpell) {
-                town.spellShop.colorlessSpell = null
+            if (town.spellShop.colorlessSpells.contains(ps)) {
+                town.spellShop.colorlessSpells.remove(ps)
             } else {
                 town.spellShop.classSpells.remove(ps)
             }

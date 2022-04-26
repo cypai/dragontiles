@@ -10,7 +10,6 @@ import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.pipai.dragontiles.DragonTilesGame
 import com.pipai.dragontiles.artemis.components.*
-import com.pipai.dragontiles.artemis.events.DeckDisplayUiEvent
 import com.pipai.dragontiles.artemis.events.MapDisplayUiEvent
 import com.pipai.dragontiles.artemis.events.MapNodeClickEvent
 import com.pipai.dragontiles.artemis.screens.CombatScreen
@@ -295,7 +294,7 @@ class MapUiSystem(
                             town.dungeonEventId,
                             SpellShop(
                                 town.spellShop.classSpells.toMutableList(),
-                                town.spellShop.colorlessSpell?.copy()
+                                town.spellShop.colorlessSpells.toMutableList(),
                             ),
                             ItemShop(
                                 town.itemShop.relics.toMutableList(),

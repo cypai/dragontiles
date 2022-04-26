@@ -16,7 +16,7 @@ data class Town(
 
 data class SpellShop(
     val classSpells: MutableList<PricedItem>,
-    var colorlessSpell: PricedItem?,
+    var colorlessSpells: MutableList<PricedItem>,
 )
 
 data class ItemShop(
