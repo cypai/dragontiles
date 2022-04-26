@@ -12,6 +12,7 @@ abstract class Status(var amount: Int) : Localized, DamageAdjustable, DeepCopyab
 
     abstract val assetName: String
     abstract val displayAmount: Boolean
+    open val negativeAllowed: Boolean = false
     abstract fun isDebuff(): Boolean
 
     var combatant: Combatant? = null

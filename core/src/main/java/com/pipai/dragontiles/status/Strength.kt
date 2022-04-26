@@ -8,6 +8,7 @@ class Strength(amount: Int) : Status(amount) {
     override val id = "base:status:Strength"
     override val assetName = "strength.png"
     override val displayAmount = true
+    override val negativeAllowed = true
     override fun isDebuff(): Boolean {
         return amount < 0
     }
