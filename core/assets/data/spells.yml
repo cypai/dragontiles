@@ -292,3 +292,8 @@ base:spells:PhoenixTears:
   en:
     name: Phoenix Tears
     description: Gain !s(1) Immunized.
+
+base:spells:PotOfGreed:
+  en:
+    name: Pot of Greed
+    description: Not deactivateable. Gain 1 Gold if active at the end of battle.

@@ -287,3 +287,41 @@ base:events:StrangeLotus:
   skipMain:
     en:
       text: You walk by, feeling like you just avoided a trap.
+
+base:events:WhatDoesPotOfGreedDo:
+  name:
+    en:
+      text: What Does Pot of Greed Do?
+  start:
+    en:
+      text: |
+        A man with strange hair walks up to you.
+
+        "Hey you! Do you know what Pot of Greed does?"
+
+        How do you respond?
+  noOption:
+    en:
+      text: "No. (Gain Pot of Greed)"
+  noMain:
+    en:
+      text: |
+        It gives you gold, obviously! Take one and educate yourself properly.
+  draw:
+    en:
+      text: "It draws you a card. (Gain Fetch Upgrade)"
+  drawMain:
+    en:
+      text: |
+        "What? No it doesn't. Why does everyone keep saying that? Kids these days..."
+
+        He storms off angrily. As he walks away, a seal falls out of his pocket. You're not quite sure what to think.
+  gold:
+    en:
+      text: "It gives you gold. (Gain 5 Gold)"
+  goldMain:
+    en:
+      text: |
+        "Excellent, looks like at least you know what's true."
+
+        He gives you 5 Gold as a prize for knowing this trivial bit of knowledge.

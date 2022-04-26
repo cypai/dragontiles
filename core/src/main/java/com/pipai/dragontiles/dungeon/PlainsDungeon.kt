@@ -103,6 +103,7 @@ class PlainsDungeon {
                     TheBeggar(),
                     StrangeLotus(),
                     StrangeScribe(),
+                    WhatDoesPotOfGreedDo(),
                 ),
                 PlainsStartEvent(),
             )
