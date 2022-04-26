@@ -141,19 +141,16 @@ class EventUiSystem(
     fun onSpellGain(ev: SpellGainedEvent) {
         val id = world.create()
         val cXy = mXy.create(id)
-        cXy.setXy(
-            game.gameConfig.resolution.width / 3f + Random.Default.nextFloat() * game.gameConfig.resolution.width / 3f,
-            game.gameConfig.resolution.height / 4f
-        )
+        cXy.setXy(DragonTilesGame.worldWidth() / 2f, DragonTilesGame.WORLD_HEIGHT / 2f)
         val cActor = mActor.create(id)
         cActor.actor = SpellCard(game, ev.spell, null, game.skin, null)
         val cPath = mPath.create(id)
         cPath.setPath(
             cXy.toVector2(),
-            Vector2(game.gameConfig.resolution.width / 2f, -SpellCard.cardHeight * 2),
+            Vector2(DragonTilesGame.worldWidth() / 2f, -5f),
             0.8f,
             Interpolation.exp5In,
-            EndStrategy.REMOVE
+            EndStrategy.DESTROY
         )
     }
 

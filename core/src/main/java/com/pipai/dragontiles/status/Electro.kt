@@ -1,8 +1,10 @@
 package com.pipai.dragontiles.status
 
+import com.pipai.dragontiles.artemis.systems.animation.TextAnimation
 import com.pipai.dragontiles.combat.CombatApi
 import com.pipai.dragontiles.combat.Combatant
 import com.pipai.dragontiles.data.Element
+import com.pipai.dragontiles.data.StringLocalized
 
 class Electro(amount: Int) : Status(amount) {
     override val id = "base:status:Electro"
@@ -18,6 +20,12 @@ class Electro(amount: Int) : Status(amount) {
         when (val c = combatant) {
             is Combatant.EnemyCombatant -> {
                 if (api.enemyHasStatus(c.enemy, Pyro::class)) {
+                    api.animate(
+                        TextAnimation(
+                            Combatant.EnemyCombatant(c.enemy),
+                            StringLocalized("base:keywords:Pyroblast")
+                        )
+                    )
                     val pyroAmount = api.enemyStatusAmount(c.enemy, Pyro::class)
                     if (pyroAmount >= amount) {
                         val theAmount = amount // cached because the api changes it
@@ -31,6 +39,12 @@ class Electro(amount: Int) : Status(amount) {
                     }
                 }
                 if (api.enemyHasStatus(c.enemy, Cryo::class)) {
+                    api.animate(
+                        TextAnimation(
+                            Combatant.EnemyCombatant(c.enemy),
+                            StringLocalized("base:keywords:Cryoshock")
+                        )
+                    )
                     val cryoAmount = api.enemyStatusAmount(c.enemy, Cryo::class)
                     if (cryoAmount >= amount) {
                         val theAmount = amount // cached because the api changes it

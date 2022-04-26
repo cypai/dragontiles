@@ -6,3 +6,5 @@ interface Localized {
     fun additionalKeywords(): List<String> = listOf()
     fun additionalLocalized(): List<String> = listOf()
 }
+
+data class StringLocalized(override val id: String) : Localized
