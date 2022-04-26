@@ -121,7 +121,7 @@ base:spells:Nudge:
 base:spells:RampStrike:
   en:
     name: Ramp Strike
-    description: Deal !d @Elemented damage. Increases damage by 1 per spells cast this turn.
+    description: Deal !d @Elemented damage. Increases damage by 3 per spells cast this turn.
 
 base:spells:Split:
   en:

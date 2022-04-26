@@ -35,6 +35,6 @@ class VentTest : CombatBackendTest(QueryHandler()) {
 
         vent.fill(hand.subList(0, 2))
         runBlocking { vent.cast(CastParams(listOf()), controller.api) }
-        Assert.assertEquals(2, runData.hero.flux)
+        Assert.assertEquals(5, runData.hero.flux)
     }
 }

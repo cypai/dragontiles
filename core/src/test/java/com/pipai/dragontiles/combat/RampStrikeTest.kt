@@ -23,15 +23,15 @@ class RampStrikeTest : CombatBackendTest(QueryHandler()) {
 
         val invoke = controller.api.combat.spells[0] as Invoke
         val rampStrike = controller.api.combat.spells[1]
-        Assert.assertEquals(3, rampStrike.baseDamage())
+        Assert.assertEquals(7, rampStrike.baseDamage())
         invoke.fill(invoke.requirement.find(combat.hand).first())
         runBlocking { invoke.cast(CastParams(listOf(flameTurtle.enemyId)), controller.api) }
-        Assert.assertEquals(6, rampStrike.baseDamage())
+        Assert.assertEquals(10, rampStrike.baseDamage())
 
         runBlocking { controller.endTurn() }
-        Assert.assertEquals(3, rampStrike.baseDamage())
+        Assert.assertEquals(7, rampStrike.baseDamage())
         invoke.fill(invoke.requirement.find(combat.hand).first())
         runBlocking { invoke.cast(CastParams(listOf(flameTurtle.enemyId)), controller.api) }
-        Assert.assertEquals(6, rampStrike.baseDamage())
+        Assert.assertEquals(10, rampStrike.baseDamage())
     }
 }

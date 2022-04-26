@@ -25,7 +25,7 @@ fun runDataFixture(spells: MutableList<Spell>, relics: MutableList<Relic>): RunD
             0,
             mutableListOf()
         ),
-        DungeonMap("", listOf(), "", mutableListOf(), mutableListOf()),
+        DungeonMap("", null, listOf(), "", mutableListOf(), mutableListOf()),
         mutableListOf(),
         null,
         0,

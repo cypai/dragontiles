@@ -13,7 +13,7 @@ class FetchUpgrade : SpellUpgrade {
         if (fetchAspect != null) {
             return fetchAspect.amount != null
         }
-        return spell.aspects.any { it is StandardSpell || it is PowerSpell }
+        return spell is StandardSpell || spell is PowerSpell
     }
 
     override fun onUpgrade(spell: Spell) {
