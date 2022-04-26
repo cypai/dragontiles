@@ -117,6 +117,7 @@ abstract class Spell : Localized, DamageAdjustable {
                 }
             }
             "!f" -> baseFluxLoss()
+            "!tmfg" -> baseTempMaxFluxGain()
             "!s" -> {
                 aspects.filterIsInstance(StackableAspect::class.java)
                     .firstOrNull { it.dynamicId.toString() == param }?.status?.amount ?: 0

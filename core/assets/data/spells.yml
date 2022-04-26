@@ -36,7 +36,7 @@ base:spells:FetchingStrike:
 base:spells:VentingCycle:
   en:
     name: Venting Cycle
-    description: Lose !f @Flux.
+    description: Lose !f @Flux. Gain !tmfg Max @Flux this combat.
 
 base:spells:ElementalSight:
   en:
@@ -191,7 +191,7 @@ base:spells:HasteRune:
 base:spells:FluxCapacitor:
   en:
     name: Flux Capacitor
-    description: Gain 10 Max @Flux this combat.
+    description: Gain !tmfg Max @Flux this combat.
 
 base:spells:MeldPromotion:
   en:

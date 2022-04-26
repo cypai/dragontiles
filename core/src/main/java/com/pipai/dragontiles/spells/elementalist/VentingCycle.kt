@@ -11,11 +11,13 @@ class VentingCycle : StandardSpell() {
     override val targetType: TargetType = TargetType.NONE
     override val rarity: Rarity = Rarity.COMMON
     override val aspects: MutableList<SpellAspect> = mutableListOf(
-        FluxLossAspect(8),
+        FluxLossAspect(4),
+        TempMaxFluxGainAspect(4),
         FetchAspect(1),
     )
 
     override suspend fun onCast(params: CastParams, api: CombatApi) {
         api.heroLoseFlux(baseFluxLoss())
+        api.changeTemporaryMaxFlux(baseTempMaxFluxGain())
     }
 }

@@ -15,6 +15,6 @@ class FluxCapacitor : StandardSpell() {
     )
 
     override suspend fun onCast(params: CastParams, api: CombatApi) {
-        api.changeTemporaryMaxFlux(aspects.findAs(TempMaxFluxGainAspect::class)!!.amount)
+        api.changeTemporaryMaxFlux(baseTempMaxFluxGain())
     }
 }
