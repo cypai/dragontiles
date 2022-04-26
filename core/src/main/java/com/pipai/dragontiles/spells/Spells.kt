@@ -274,7 +274,7 @@ abstract class Rune : Spell() {
 abstract class PowerSpell : Spell() {
     private val logger = getLogger()
 
-    override val type: SpellType = SpellType.POWER
+    final override val type: SpellType = SpellType.POWER
 
     var powered = false
 

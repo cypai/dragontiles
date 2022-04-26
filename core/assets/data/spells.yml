@@ -168,6 +168,21 @@ base:spells:InflictReactant:
     name: Inflict Reactant
     description: Inflict !s(1) Elemented Reactant.
 
+base:spells:DenseReactants:
+  en:
+    name: Dense Reactants
+    description: Inflict !s(1) Elemented Reactant.
+
+base:spells:ReactantSmoke:
+  en:
+    name: Reactant Smoke
+    description: Inflict !s(1) @AOE Elemented Reactant.
+
+base:spells:ReactantFumes:
+  en:
+    name: Reactant Fumes
+    description: Inflict !s(1) @AOE Elemented Reactant at the start of your turn.
+
 base:spells:Fireball:
   en:
     name: Fireball
