@@ -332,3 +332,8 @@ base:spells:SelfAffliction:
   en:
     name: Self Affliction
     description: Inflict @Elemented @Burn, @Freeze, or @Shock on a tile in your hand.
+
+base:spells:Inflation:
+  en:
+    name: Inflation
+    description: Doubles Max @Flux changes this combat.

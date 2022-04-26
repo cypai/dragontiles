@@ -69,6 +69,7 @@ class Elementalist : HeroClass {
         PhoenixTears(),
         TrialByFire(),
         SelfAffliction(),
+        Inflation(),
     )
     override val hpMax: Int = 60
     override val fluxMax: Int = 40
