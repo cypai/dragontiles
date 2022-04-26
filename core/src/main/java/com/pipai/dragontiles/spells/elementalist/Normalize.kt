@@ -14,7 +14,7 @@ class Normalize : StandardSpell() {
     override val targetType: TargetType = TargetType.NONE
     override val requirement: ComponentRequirement = Single(SuitGroup.STAR)
     override val aspects: MutableList<SpellAspect> = mutableListOf(
-        FluxGainAspect(5),
+        FluxGainAspect(3),
         TransformAspect(),
     )
 

@@ -12,7 +12,7 @@ class ExpandAnomaly : StandardSpell() {
     override val targetType: TargetType = TargetType.NONE
     override val rarity: Rarity = Rarity.RARE
     override val aspects: MutableList<SpellAspect> = mutableListOf(
-        FluxGainAspect(7)
+        FluxGainAspect(3)
     )
 
     override suspend fun onCast(params: CastParams, api: CombatApi) {
