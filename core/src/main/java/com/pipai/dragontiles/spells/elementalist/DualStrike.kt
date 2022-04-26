@@ -12,7 +12,7 @@ class DualStrike : StandardSpell() {
     override val targetType: TargetType = TargetType.SINGLE
     override val rarity: Rarity = Rarity.COMMON
     override val aspects: MutableList<SpellAspect> = mutableListOf(
-        AttackDamageAspect(5),
+        AttackDamageAspect(4),
         FluxGainAspect(6)
     )
 

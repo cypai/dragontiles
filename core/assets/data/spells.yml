@@ -33,6 +33,11 @@ base:spells:FetchingStrike:
     name: Fetching Strike
     description: Deal !d @Elemented damage.
 
+base:spells:ReactantStrike:
+  en:
+    name: Reactant Strike
+    description: Deal !d @Elemented damage. Inflict !s(1) Elemented Reactant.
+
 base:spells:VentingCycle:
   en:
     name: Venting Cycle

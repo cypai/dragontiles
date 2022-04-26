@@ -34,6 +34,7 @@ class Elementalist : HeroClass {
         ElementalSight(),
         FluxCapacitor(),
         InflictReactant(),
+        ReactantStrike(),
         Concentrate(),
         FeedbackLoop(),
         Spark(),
