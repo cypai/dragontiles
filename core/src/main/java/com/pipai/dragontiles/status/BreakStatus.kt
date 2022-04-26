@@ -19,7 +19,7 @@ class BreakStatus(amount: Int, var skip: Boolean) : Status(amount) {
         element: Element,
         flags: List<CombatFlag>
     ): Float {
-        return if (target == combatant) {
+        return if (element.isElemental && target == combatant) {
             1.5f
         } else {
             1f
