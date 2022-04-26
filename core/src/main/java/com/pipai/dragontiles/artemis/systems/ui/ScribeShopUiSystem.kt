@@ -41,10 +41,10 @@ class ScribeShopUiSystem(
         api = GlobalApi(game.data, runData, sEvent)
         val scribeShop = town.scribe
         scribeShop.upgrades.forEachIndexed { i, ps ->
-            if (i < 3) {
+            if (i < 4) {
                 createUpgrade(ps, 3f + i * 1.5f * SpellCard.cardWorldWidth, 2f)
             } else {
-                createUpgrade(ps, 3f + (i - 3) * 1.5f * SpellCard.cardWorldWidth, 4.5f)
+                createUpgrade(ps, 3f + (i - 4) * 1.5f * SpellCard.cardWorldWidth, 4.5f)
             }
         }
     }

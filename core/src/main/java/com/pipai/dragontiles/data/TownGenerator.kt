@@ -4,7 +4,9 @@ import com.pipai.dragontiles.potions.Potion
 import com.pipai.dragontiles.relics.Relic
 import com.pipai.dragontiles.spells.Rarity
 import com.pipai.dragontiles.spells.Spell
+import com.pipai.dragontiles.spells.upgrades.PowerUpgrade
 import com.pipai.dragontiles.spells.upgrades.SpellUpgrade
+import com.pipai.dragontiles.spells.upgrades.SwapUpgrade
 import com.pipai.dragontiles.utils.choose
 import com.pipai.dragontiles.utils.chooseAmount
 
@@ -33,6 +35,8 @@ class TownGenerator {
             val upgrade = gameData.allSpellUpgrades().choose(rng)
             scribe.upgrades.add(pricedUpgrade(upgrade))
         }
+        scribe.upgrades.add(pricedUpgrade(PowerUpgrade()))
+        scribe.upgrades.add(pricedUpgrade(SwapUpgrade()))
         runData.town = Town(3, null, spellShop, itemShop, scribe)
     }
 
