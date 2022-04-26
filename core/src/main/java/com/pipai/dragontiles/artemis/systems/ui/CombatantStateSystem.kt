@@ -531,7 +531,7 @@ class CombatantStateSystem(
                 table.add(intentStack)
                     .size(su(0.5f))
 
-                val nameLabel = Label("", game.skin, "whiteSmall")
+                val nameLabel = Label("", game.skin, "whiteTiny")
                 nameLabel.setAlignment(Align.center)
                 nameLabel.wrap = true
                 table.add(nameLabel)
