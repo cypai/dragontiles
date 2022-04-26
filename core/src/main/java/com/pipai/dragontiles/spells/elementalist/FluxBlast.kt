@@ -4,24 +4,24 @@ import com.pipai.dragontiles.combat.CombatApi
 import com.pipai.dragontiles.data.TileInstance
 import com.pipai.dragontiles.spells.*
 
-class Explosion : StandardSpell() {
-    override val id: String = "base:spells:Explosion"
-    override val requirement: ComponentRequirement = Identical(3, SuitGroup.ELEMENTAL)
+class FluxBlast : StandardSpell() {
+    override val id: String = "base:spells:FluxBlast"
+    override val requirement: ComponentRequirement = Identical(4, SuitGroup.ANY_NO_FUMBLE)
     override val type: SpellType = SpellType.ATTACK
     override val targetType: TargetType = TargetType.AOE
-    override val rarity: Rarity = Rarity.UNCOMMON
+    override val rarity: Rarity = Rarity.RARE
     override val aspects: MutableList<SpellAspect> = mutableListOf(
         AttackDamageAspect(0),
-        FluxGainAspect(8),
-        ExhaustAspect(),
+        FluxGainAspect(40),
     )
+    override val scoreable: Boolean = true
 
     override fun dynamicBaseDamage(components: List<TileInstance>, api: CombatApi): Int {
-        return 3 * numeric(components)
+        val hero = api.runData.hero
+        return hero.fluxMax + hero.tempFluxMax - hero.flux
     }
 
     override suspend fun onCast(params: CastParams, api: CombatApi) {
-        exhausted = true
         api.aoeAttack(elemental(components()), baseDamage() + dynamicBaseDamage(components(), api), flags())
     }
 }

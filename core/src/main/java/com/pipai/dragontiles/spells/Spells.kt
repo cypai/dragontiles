@@ -79,7 +79,7 @@ abstract class Spell : Localized, DamageAdjustable {
         flags: List<CombatFlag>
     ): Float = 1f
 
-    open fun dynamicBaseDamage(components: List<TileInstance>): Int {
+    open fun dynamicBaseDamage(components: List<TileInstance>, api: CombatApi): Int {
         return baseDamage()
     }
 
@@ -97,7 +97,7 @@ abstract class Spell : Localized, DamageAdjustable {
                         api.calculateDamageOnEnemy(
                             target,
                             elemental(components()),
-                            dynamicBaseDamage(components()),
+                            dynamicBaseDamage(components(), api),
                             flags()
                         )
                     }

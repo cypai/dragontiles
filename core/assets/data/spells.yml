@@ -347,3 +347,10 @@ base:spells:Megaxplosion:
   en:
     name: Megaxplosion
     description: Deal !d @AOE @Elemented damage.
+
+base:spells:FluxBlast:
+  en:
+    name: Flux Blast
+    description: |
+      Deal @AOE @Elemented damage equal to Max @Flux - Flux.
+      ( !d damage )

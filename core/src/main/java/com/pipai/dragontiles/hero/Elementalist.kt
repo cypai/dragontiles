@@ -73,6 +73,7 @@ class Elementalist : HeroClass {
         SelfAffliction(),
         Inflation(),
         Megaxplosion(),
+        FluxBlast(),
     )
     override val hpMax: Int = 60
     override val fluxMax: Int = 40
