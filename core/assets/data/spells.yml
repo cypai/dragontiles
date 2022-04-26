@@ -33,6 +33,16 @@ base:spells:FetchingStrike:
     name: Fetching Strike
     description: Deal !d @Elemented damage.
 
+base:spells:VentingCycle:
+  en:
+    name: Venting Cycle
+    description: Lose !f @Flux.
+
+base:spells:ElementalSight:
+  en:
+    name: Elemental Sight
+    description: ""
+
 base:spells:Chain:
   en:
     name: Chain
