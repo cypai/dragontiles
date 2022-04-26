@@ -39,10 +39,10 @@ class ItemShopUiSystem(
         api = GlobalApi(game.data, runData, sEvent)
         val itemShop = town.itemShop
         itemShop.relics.forEachIndexed { i, ps ->
-            createRelic(ps, SpellCard.cardWidth * 2 + i * SpellCard.cardWidth * 2, SpellCard.cardHeight * 2)
+            createRelic(ps, 3f + i * 1.5f * SpellCard.cardWorldWidth, 2f)
         }
         itemShop.potions.forEachIndexed { i, ps ->
-            createPotion(ps, SpellCard.cardWidth * 2 + i * SpellCard.cardWidth * 2, SpellCard.cardHeight / 2)
+            createPotion(ps, 3f + i * 1.5f * SpellCard.cardWorldWidth, 4.5f)
         }
     }
 
@@ -54,7 +54,6 @@ class ItemShopUiSystem(
         val cXy = mXy.create(entityId)
         cXy.setXy(x, y)
         val cText = mText.create(entityId)
-        cText.yOffset = -16f
         if (runData.hero.gold >= ps.price) {
             cText.color = Color.WHITE
         } else {
@@ -84,7 +83,6 @@ class ItemShopUiSystem(
         val cXy = mXy.create(entityId)
         cXy.setXy(x, y)
         val cText = mText.create(entityId)
-        cText.yOffset = -16f
         if (runData.hero.gold >= ps.price) {
             cText.color = Color.WHITE
         } else {

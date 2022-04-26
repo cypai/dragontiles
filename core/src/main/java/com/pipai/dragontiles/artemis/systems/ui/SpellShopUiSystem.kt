@@ -4,6 +4,7 @@ import com.artemis.BaseSystem
 import com.badlogic.gdx.Input
 import com.badlogic.gdx.InputProcessor
 import com.badlogic.gdx.graphics.Color
+import com.badlogic.gdx.math.Vector3
 import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.InputEvent
 import com.badlogic.gdx.scenes.scene2d.Stage
@@ -35,9 +36,7 @@ class SpellShopUiSystem(
     private val town = runData.town!!
 
     private val mXy by mapper<XYComponent>()
-    private val mActor by mapper<ActorComponent>()
     private val mText by mapper<TextComponent>()
-    private val mClickable by mapper<ClickableComponent>()
     private val mPrice by mapper<PriceComponent>()
 
     private val sEvent by system<EventSystem>()
@@ -48,19 +47,15 @@ class SpellShopUiSystem(
         val spellShop = town.spellShop
         spellShop.classSpells.forEachIndexed { i, ps ->
             if (i < 3) {
-                createSpell(ps, SpellCard.cardWidth * 3 + i * SpellCard.cardWidth * 2, SpellCard.cardHeight * 2 - 48f)
+                createSpell(ps, (i + 2) * 1.5f * SpellCard.cardWorldWidth, 1f)
             } else {
-                createSpell(
-                    ps,
-                    SpellCard.cardWidth * 3 + (i - 3) * SpellCard.cardWidth * 2,
-                    SpellCard.cardHeight / 2 - 24f
-                )
+                createSpell(ps, (i - 1) * 1.5f * SpellCard.cardWorldWidth, 4.5f)
             }
         }
         if (spellShop.colorlessSpell != null) {
-            createSpell(spellShop.colorlessSpell!!, SpellCard.cardWidth, SpellCard.cardHeight / 2 - 24f)
+            createSpell(spellShop.colorlessSpell!!, 1.5f, 1f)
         }
-        sideboardSpace(SpellCard.cardWidth, SpellCard.cardHeight * 2 - 48f)
+        sideboardSpace(1.5f, 4.5f)
     }
 
     private fun sideboardSpace(x: Float, y: Float) {
@@ -76,12 +71,14 @@ class SpellShopUiSystem(
         label.setAlignment(Align.center)
         label.wrap = true
         table.add(label)
+            .width(SpellCard.cardWidth)
             .expand()
         table.row()
+        val screenXy = game.camera.project(Vector3(x, y, 0f))
         table.width = SpellCard.cardWidth
         table.height = SpellCard.cardHeight
-        table.x = x
-        table.y = y
+        table.x = screenXy.x
+        table.y = screenXy.y
 
         if (available) {
             val price = 3 + runData.sideboardSpaceBought
@@ -90,7 +87,6 @@ class SpellShopUiSystem(
             val cXy = mXy.create(entityId)
             cXy.setXy(x, y)
             val cText = mText.create(entityId)
-            cText.yOffset = -16f
             if (runData.hero.gold >= price) {
                 cText.color = Color.WHITE
             } else {
@@ -136,14 +132,14 @@ class SpellShopUiSystem(
     private fun createSpell(ps: PricedItem, x: Float, y: Float) {
         val entityId = world.create()
         mPrice.create(entityId).price = ps.price
-        val cActor = mActor.create(entityId)
         val spell = game.data.getSpell(ps.id)
         val spellCard = SpellCard(game, spell, null, game.skin, null)
-        cActor.actor = spellCard
+        val screenXy = game.camera.project(Vector3(x, y, 0f))
+        spellCard.x = screenXy.x
+        spellCard.y = screenXy.y
         val cXy = mXy.create(entityId)
         cXy.setXy(x, y)
         val cText = mText.create(entityId)
-        cText.yOffset = -16f
         if (runData.hero.gold >= ps.price) {
             cText.color = Color.WHITE
         } else {
@@ -161,13 +157,13 @@ class SpellShopUiSystem(
             }
 
             override fun clicked(event: InputEvent?, x: Float, y: Float) {
-                handleSpellCardClick(entityId, ps)
+                handleSpellCardClick(entityId, spellCard, ps)
             }
         })
         stage.addActor(spellCard)
     }
 
-    fun handleSpellCardClick(entityId: EntityId, ps: PricedItem) {
+    fun handleSpellCardClick(entityId: EntityId, spellCard: SpellCard, ps: PricedItem) {
         if (runData.hero.gold >= ps.price) {
             if (ps == town.spellShop.colorlessSpell) {
                 town.spellShop.colorlessSpell = null
@@ -180,10 +176,11 @@ class SpellShopUiSystem(
             logger.info("Adding ${spell.id} to deck at price ${ps.price}")
             api.addSpellToDeck(spell)
             world.delete(entityId)
-            town.boughtSpell = true
+            spellCard.remove()
             if (!town.boughtSpell) {
                 town.actions--
             }
+            town.boughtSpell = true
         }
     }
 

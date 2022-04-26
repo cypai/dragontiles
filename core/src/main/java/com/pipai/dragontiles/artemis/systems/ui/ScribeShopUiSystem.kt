@@ -42,9 +42,9 @@ class ScribeShopUiSystem(
         val scribeShop = town.scribe
         scribeShop.upgrades.forEachIndexed { i, ps ->
             if (i < 3) {
-                createUpgrade(ps, SpellCard.cardWidth * 2 + i * SpellCard.cardWidth * 2, SpellCard.cardHeight * 2)
+                createUpgrade(ps, 3f + i * 1.5f * SpellCard.cardWorldWidth, 2f)
             } else {
-                createUpgrade(ps, SpellCard.cardWidth * 2 + (i - 3) * SpellCard.cardWidth * 2, SpellCard.cardHeight / 2)
+                createUpgrade(ps, 3f + (i - 3) * 1.5f * SpellCard.cardWorldWidth, 4.5f)
             }
         }
     }
@@ -57,7 +57,6 @@ class ScribeShopUiSystem(
         val cXy = mXy.create(entityId)
         cXy.setXy(x, y)
         val cText = mText.create(entityId)
-        cText.yOffset = -16f
         if (runData.hero.gold >= ps.price) {
             cText.color = Color.WHITE
         } else {

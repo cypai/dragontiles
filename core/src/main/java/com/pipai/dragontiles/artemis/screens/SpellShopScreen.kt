@@ -23,8 +23,8 @@ import net.mostlyoriginal.api.event.common.EventSystem
 
 class SpellShopScreen(game: DragonTilesGame, runData: RunData) : Screen {
 
-    private val stage = Stage(ScreenViewport(), game.spriteBatch)
-    private val frontStage = Stage(ScreenViewport(), game.spriteBatch)
+    private val stage = Stage(game.uiViewport, game.spriteBatch)
+    private val frontStage = Stage(game.uiViewport, game.spriteBatch)
 
     val world: World
 
