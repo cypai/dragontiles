@@ -16,6 +16,13 @@ abstract class Sorcery : Spell() {
         throw NotImplementedError()
     }
 
+    suspend fun cast(hand: FullCastHand, api: CombatApi) {
+        if (scoreable) {
+            api.score()
+        }
+        onCast(hand, api)
+    }
+
     abstract suspend fun onCast(hand: FullCastHand, api: CombatApi)
 
     override fun turnReset() {

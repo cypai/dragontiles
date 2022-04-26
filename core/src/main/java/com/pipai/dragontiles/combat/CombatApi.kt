@@ -66,6 +66,10 @@ class CombatApi(
         dealFluxDamageToHero(flux, false)
     }
 
+    suspend fun score() {
+        addAoeStatus(Immortality(-1))
+    }
+
     suspend fun activateRune(rune: Rune, components: List<TileInstance>) {
         val runeIndex = combat.spells.indexOf(rune)
         combat.assigned[runeIndex] = components
@@ -384,8 +388,14 @@ class CombatApi(
     }
 
     suspend fun dealDamageToEnemy(enemy: Enemy, damage: Int) {
-        enemy.hp -= damage
-        eventBus.dispatch(EnemyDamageEvent(enemy, damage))
+        val actualDamage = if (enemyHasStatus(enemy, Immortality::class) && damage >= enemy.hp) {
+            animate(TextAnimation(Combatant.EnemyCombatant(enemy), Immortality(1)))
+            enemy.hp - 1
+        } else {
+            damage
+        }
+        enemy.hp -= actualDamage
+        eventBus.dispatch(EnemyDamageEvent(enemy, actualDamage))
         if (enemy.hp <= 0) {
             combat.enemyIntent.remove(enemy.enemyId)
             val statuses = combat.enemyStatus[enemy.enemyId]!!
@@ -673,6 +683,9 @@ class CombatApi(
     }
 
     suspend fun castSorceries(fullCastHand: FullCastHand) {
+        if (fullCastHand.eye.isNotEmpty() && fullCastHand.melds.size == runData.hero.handSize % 3) {
+            score()
+        }
         combat.sorceries.forEach { sorcery ->
             when (val req = sorcery.requirement) {
                 is AnyCombo -> {
@@ -681,7 +694,7 @@ class CombatApi(
                             fullCastHand.melds
                                 .forEach { meld ->
                                     sorcery.fill(meld.tiles)
-                                    sorcery.onCast(fullCastHand, this)
+                                    sorcery.cast(fullCastHand, this)
                                 }
                         }
                         else -> {
@@ -693,20 +706,20 @@ class CombatApi(
                     when (req.reqAmount.amount) {
                         2 -> {
                             sorcery.fill(fullCastHand.eye)
-                            sorcery.onCast(fullCastHand, this)
+                            sorcery.cast(fullCastHand, this)
                         }
                         3 -> {
                             fullCastHand.melds.filter { meld -> meld.type == MeldType.IDENTICAL }
                                 .forEach { meld ->
                                     sorcery.fill(meld.tiles)
-                                    sorcery.onCast(fullCastHand, this)
+                                    sorcery.cast(fullCastHand, this)
                                 }
                         }
                         else -> {
                             req.find(combat.hand)
                                 .forEach { match ->
                                     sorcery.fill(match)
-                                    sorcery.onCast(fullCastHand, this)
+                                    sorcery.cast(fullCastHand, this)
                                 }
                         }
                     }
@@ -717,13 +730,13 @@ class CombatApi(
                             fullCastHand.melds.filter { meld -> meld.type == MeldType.SEQUENCE }
                                 .forEach { meld ->
                                     sorcery.fill(meld.tiles)
-                                    sorcery.onCast(fullCastHand, this)
+                                    sorcery.cast(fullCastHand, this)
                                 }
                         }
                         9 -> {
                             req.find(combat.hand).firstOrNull()?.let { match ->
                                 sorcery.fill(match)
-                                sorcery.onCast(fullCastHand, this)
+                                sorcery.cast(fullCastHand, this)
                             }
                         }
                     }
@@ -731,7 +744,7 @@ class CombatApi(
                 else -> {
                     if (req.satisfied(fullCastHand)) {
                         sorcery.fill(combat.hand)
-                        sorcery.onCast(fullCastHand, this)
+                        sorcery.cast(fullCastHand, this)
                     }
                 }
             }

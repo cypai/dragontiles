@@ -189,6 +189,9 @@ abstract class StandardSpell : Spell() {
             logger.error("Attempted to cast without being ready. State: $this")
             return
         }
+        if (scoreable) {
+            api.score()
+        }
         handleComponents(api)
         onCast(params, api)
         if (baseSwap() > 0) {
@@ -283,6 +286,9 @@ abstract class PowerSpell : Spell() {
         if (available() && !requirement.satisfied(requirement.componentSlots.mapNotNull { it.tile })) {
             logger.error("Attempted to cast without being ready. State: $this")
             return
+        }
+        if (scoreable) {
+            api.score()
         }
         handleComponents(api)
         onCast(params, api)

@@ -117,3 +117,8 @@ base:status:NoDraw:
   en:
     name: No Draw
     description: You cannot draw tiles this turn.
+
+base:status:Immortality:
+  en:
+    name: Immortality
+    description: Cannot defeat this enemy. Reduced by Yaku.
