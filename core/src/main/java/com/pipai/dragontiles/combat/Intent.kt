@@ -12,6 +12,7 @@ interface Intent {
     val displayData: Pair<IntentDisplayData, IntentDisplayData?>
     val animation: IntentAnimation?
     suspend fun execute(api: CombatApi)
+    fun flags(): List<CombatFlag> = listOf()
 }
 
 data class IntentAnimation(val animation: String, val endEvent: String)
@@ -36,9 +37,11 @@ data class AttackIntent(
 
     override val displayData = Pair(IntentDisplayData.AttackIntentDisplay(attackPower, multistrike, element), null)
 
+    override fun flags(): List<CombatFlag> = listOf(CombatFlag.ATTACK)
+
     override suspend fun execute(api: CombatApi) {
         repeat(multistrike) {
-            api.attackHero(enemy, element, attackPower, listOf())
+            api.attackHero(enemy, element, attackPower, flags())
             api.animate(DelayAnimation(0.1f))
         }
         api.animate(DelayAnimation(0.9f))

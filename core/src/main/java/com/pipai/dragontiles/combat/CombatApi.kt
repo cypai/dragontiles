@@ -304,7 +304,7 @@ class CombatApi(
         return ((amount + flat) * scaling).toInt()
     }
 
-    fun calculateDamageOnHero(enemy: Enemy, element: Element, amount: Int): Int {
+    fun calculateDamageOnHero(enemy: Enemy, element: Element, amount: Int, flags: List<CombatFlag>): Int {
         var flat = 0
         var scaling = 1f
         val allQueryRespondents: List<DamageAdjustable> = combat.relics
@@ -317,7 +317,7 @@ class CombatApi(
                 Combatant.EnemyCombatant(enemy),
                 Combatant.HeroCombatant,
                 element,
-                listOf()
+                flags,
             )
         }
         return ((amount + flat) * scaling).toInt()
@@ -455,7 +455,7 @@ class CombatApi(
         if (heroHasStatus(Dodge::class)) {
             addStatusToHero(Dodge(-1))
         } else {
-            val damage = calculateDamageOnHero(enemy, element, amount)
+            val damage = calculateDamageOnHero(enemy, element, amount, flags)
             if (flags.none { it == CombatFlag.PIERCING } && runData.hero.flux < runData.hero.tempFluxMax) {
                 dealFluxDamageToHero(damage)
             } else {

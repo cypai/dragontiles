@@ -63,26 +63,26 @@ class PlainsDungeon {
                 ),
                 // Elite
                 listOf(
-                    Encounter(
-                        "base:dungeons:Plains:Yumi",
-                        listOf(
-                            Pair(Yumi(), Vector2(2f, 4.5f))
-                        )
-                    ),
+//                    Encounter(
+//                        "base:dungeons:Plains:Yumi",
+//                        listOf(
+//                            Pair(Yumi(), Vector2(2f, 4.5f))
+//                        )
+//                    ),
                     Encounter(
                         "base:dungeons:Plains:Minotaur",
                         listOf(
                             Pair(Minotaur(), Vector2(2f, 4.5f))
                         )
                     ),
-                    Encounter(
-                        "base:dungeons:Plains:DragonHorseTrio",
-                        listOf(
-                            Pair(FlameDragonHorse(), Vector2(0.5f, 4.5f)),
-                            Pair(RiverDragonHorse(), Vector2(3f, 4.5f)),
-                            Pair(WhiteDragonHorse(), Vector2(5.5f, 4.5f)),
-                        )
-                    ),
+//                    Encounter(
+//                        "base:dungeons:Plains:DragonHorseTrio",
+//                        listOf(
+//                            Pair(FlameDragonHorse(), Vector2(0.5f, 4.5f)),
+//                            Pair(RiverDragonHorse(), Vector2(3f, 4.5f)),
+//                            Pair(WhiteDragonHorse(), Vector2(5.5f, 4.5f)),
+//                        )
+//                    ),
                 ),
                 // Boss
                 listOf(

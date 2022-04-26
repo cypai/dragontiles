@@ -388,7 +388,7 @@ class CombatantStateSystem(
 
     private fun updateAttackIntent(ui: EnemyUi, intent: AttackIntent) {
         val attackPower =
-            sCombat.controller.api.calculateDamageOnHero(intent.enemy, intent.element, intent.attackPower)
+            sCombat.controller.api.calculateDamageOnHero(intent.enemy, intent.element, intent.attackPower, intent.flags())
         if (intent.multistrike == 1) {
             ui.attackLabel.setText(attackPower)
         } else {

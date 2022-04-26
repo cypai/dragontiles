@@ -18,6 +18,11 @@ base:status:Break:
     name: Break
     description: Takes 50% more damage when taking Elemental damage.
 
+base:status:Vulnerable:
+  en:
+    name: Vulnerable
+    description: Takes 50% more damage when taking attack damage.
+
 base:status:Weak:
   en:
     name: Weak

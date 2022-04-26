@@ -1,9 +1,12 @@
 package com.pipai.dragontiles.enemies
 
-import com.pipai.dragontiles.combat.*
+import com.pipai.dragontiles.combat.AttackIntent
+import com.pipai.dragontiles.combat.CombatApi
+import com.pipai.dragontiles.combat.DebuffIntent
+import com.pipai.dragontiles.combat.Intent
 import com.pipai.dragontiles.data.Element
-import com.pipai.dragontiles.status.BreakStatus
 import com.pipai.dragontiles.status.Overloaded
+import com.pipai.dragontiles.status.Vulnerable
 
 class Minotaur : Enemy() {
 
@@ -20,7 +23,7 @@ class Minotaur : Enemy() {
             AttackIntent(this, 20, 1, Element.NONE)
         }
         return when (intents) {
-            0 -> DebuffIntent(this, BreakStatus(2, true), null, listOf())
+            0 -> DebuffIntent(this, Vulnerable(2, true), null, listOf())
             1 -> AttackIntent(this, 20, 1, Element.NONE)
             else -> AttackIntent(this, 20, 1, Element.NONE)
         }
