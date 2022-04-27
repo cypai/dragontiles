@@ -573,8 +573,8 @@ class CombatUiSystem(
         spellComponentList.setFullCastOptions(fch)
         spellComponentList.height = spellComponentList.prefHeight.coerceAtLeast(SpellCard.cardHeight)
         val position = mXy.get(heroEntityId)
-        spellComponentList.x = position.x + mSprite.get(heroEntityId).sprite.width + SpellCard.cardWidth
-        spellComponentList.y = position.y
+        spellComponentList.x = su(DragonTilesGame.worldWidth() / 2f) - spellComponentList.width / 2f
+        spellComponentList.y = su(position.y)
         spellComponentList.width = spellComponentList.prefWidth
 
         frontStage.addActor(spellComponentList)
