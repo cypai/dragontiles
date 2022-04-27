@@ -327,6 +327,7 @@ class CombatApi(
             eventBus.dispatch(PlayerAttackEnemyEvent(enemy, element, amount))
         }
         if (asAttack && enemyHasStatus(enemy, Dodge::class)) {
+            animate(TextAnimation(Combatant.EnemyCombatant(enemy), Dodge(-1)))
             addStatusToEnemy(enemy, Dodge(-1))
         } else {
             if (!flags.contains(CombatFlag.PIERCING) && enemy.flux < enemy.fluxMax) {
@@ -449,6 +450,7 @@ class CombatApi(
         flags: List<CombatFlag>,
     ) {
         if (heroHasStatus(Dodge::class)) {
+            animate(TextAnimation(Combatant.HeroCombatant, Dodge(-1)))
             addStatusToHero(Dodge(-1))
         } else {
             val damage = calculateDamageOnHero(enemy, element, amount, flags)
