@@ -272,7 +272,7 @@ class CombatApi(
             .withAll(combat.spells)
             .withAll(combat.heroStatus)
             .withAll(combat.enemyStatus[enemy.enemyId]!!)
-        val allFlags: MutableList<CombatFlag> = mutableListOf()
+        val allFlags: MutableList<CombatFlag> = flags.toMutableList()
         allQueryRespondents.forEach {
             allFlags.addAll(
                 it.queryForAdditionalFlags(

@@ -14,7 +14,6 @@ class CombatTest : CombatBackendTest(QueryHandler()) {
         val runData = runDataFixture(mutableListOf(Invoke()), mutableListOf())
         val combat = Combat(mutableListOf(flameTurtle))
 
-        println(runData)
         val controller = CombatController(gameData, runData, combat, sEvent)
         controller.init()
         controller.initCombat()
