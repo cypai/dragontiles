@@ -4,6 +4,7 @@ import com.pipai.dragontiles.combat.CombatApi
 import com.pipai.dragontiles.combat.CombatFlag
 import com.pipai.dragontiles.spells.*
 import com.pipai.dragontiles.status.Pyro
+import com.pipai.dragontiles.utils.getStackableCopy
 import com.pipai.dragontiles.utils.withAll
 
 class PhoenixFire : StandardSpell() {
@@ -26,5 +27,6 @@ class PhoenixFire : StandardSpell() {
 
     override suspend fun onCast(params: CastParams, api: CombatApi) {
         api.aoeAttack(elemental(components()), baseDamage(), flags())
+        api.addAoeStatus(aspects.getStackableCopy(Pyro::class))
     }
 }
