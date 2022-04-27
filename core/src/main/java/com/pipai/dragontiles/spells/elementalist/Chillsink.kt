@@ -11,7 +11,7 @@ class Chillsink : StandardSpell() {
     override val targetType: TargetType = TargetType.SINGLE_ENEMY
     override val rarity: Rarity = Rarity.UNCOMMON
     override val aspects: MutableList<SpellAspect> = mutableListOf(
-        FluxLossAspect(7)
+        FluxLossAspect(7, false),
     )
 
     override suspend fun onCast(params: CastParams, api: CombatApi) {

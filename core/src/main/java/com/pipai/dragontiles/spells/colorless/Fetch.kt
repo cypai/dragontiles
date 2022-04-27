@@ -15,6 +15,5 @@ class Fetch : StandardSpell() {
     )
 
     override suspend fun onCast(params: CastParams, api: CombatApi) {
-        api.fetch()
     }
 }

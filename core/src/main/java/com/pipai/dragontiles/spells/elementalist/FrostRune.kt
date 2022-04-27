@@ -10,7 +10,9 @@ class FrostRune : Rune() {
     override val id: String = "base:spells:FrostRune"
     override val rarity: Rarity = Rarity.UNCOMMON
     override val requirement: ComponentRequirement = IdenticalX(SuitGroup.ICE)
-    override val aspects: MutableList<SpellAspect> = mutableListOf()
+    override val aspects: MutableList<SpellAspect> = mutableListOf(
+        XAspect(0),
+    )
 
     @CombatSubscribe
     suspend fun onTurnEnd(ev: TurnEndEvent, api: CombatApi) {

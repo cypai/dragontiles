@@ -1,11 +1,9 @@
-package com.pipai.dragontiles.spells.elementalist
+package com.pipai.dragontiles.spells.colorless
 
 import com.pipai.dragontiles.combat.CombatApi
 import com.pipai.dragontiles.data.Tile
 import com.pipai.dragontiles.data.TileStatus
 import com.pipai.dragontiles.spells.*
-import kotlinx.serialization.Serializable
-import kotlin.math.min
 
 class Split : StandardSpell() {
     override val id: String = "base:spells:Split"

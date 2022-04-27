@@ -6,7 +6,7 @@ import com.pipai.dragontiles.hero.Elementalist
 import com.pipai.dragontiles.potions.*
 import com.pipai.dragontiles.relics.*
 import com.pipai.dragontiles.spells.colorless.*
-import com.pipai.dragontiles.spells.elementalist.Split
+import com.pipai.dragontiles.spells.colorless.Split
 import com.pipai.dragontiles.spells.upgrades.*
 
 class GameDataInitializer {

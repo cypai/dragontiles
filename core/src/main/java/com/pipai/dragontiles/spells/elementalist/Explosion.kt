@@ -21,7 +21,6 @@ class Explosion : StandardSpell() {
     }
 
     override suspend fun onCast(params: CastParams, api: CombatApi) {
-        exhausted = true
         api.aoeAttack(elemental(components()), baseDamage() + dynamicBaseDamage(components(), api), flags())
     }
 }

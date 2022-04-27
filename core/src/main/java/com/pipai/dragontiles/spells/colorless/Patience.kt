@@ -15,7 +15,6 @@ class Patience : StandardSpell() {
     )
 
     override suspend fun onCast(params: CastParams, api: CombatApi) {
-        api.fetch()
         api.addStatusToHero(NoDraw(2))
     }
 }

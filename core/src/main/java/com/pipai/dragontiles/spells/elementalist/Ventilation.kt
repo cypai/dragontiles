@@ -11,7 +11,6 @@ class Ventilation : PowerSpell() {
     override val rarity: Rarity = Rarity.UNCOMMON
     override val aspects: MutableList<SpellAspect> = mutableListOf(
         StackableAspect(VentilationStatus(2), 1),
-        FluxGainAspect(5),
     )
 
     override suspend fun onCast(params: CastParams, api: CombatApi) {

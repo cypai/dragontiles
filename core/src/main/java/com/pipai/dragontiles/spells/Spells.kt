@@ -213,12 +213,7 @@ abstract class StandardSpell : Spell() {
         }
         handleComponents(api)
         onCast(params, api)
-        if (baseSwap() > 0) {
-            api.swapQuery(baseSwap())
-        }
-        if (baseFetch() > 0) {
-            api.fetch(baseFetch())
-        }
+        aspects.forEach { it.onCast(this, api) }
         api.castSpell(this) // After casting to have effects on spellcast resolve in the proper order
         repeated++
     }
@@ -311,9 +306,7 @@ abstract class PowerSpell : Spell() {
         }
         handleComponents(api)
         onCast(params, api)
-        if (baseSwap() > 0) {
-            api.swapQuery(baseSwap())
-        }
+        aspects.forEach { it.onCast(this, api) }
         api.castSpell(this)
         powered = true
     }

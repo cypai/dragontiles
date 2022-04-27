@@ -8,10 +8,9 @@ class Expansion : Sorcery() {
     override val requirement: ComponentRequirement = AnyCombo(3)
     override val rarity: Rarity = Rarity.UNCOMMON
     override val aspects: MutableList<SpellAspect> = mutableListOf(
-        TempMaxFluxGainAspect(7)
+        TempMaxFluxChangeAspect(7)
     )
 
     override suspend fun onCast(hand: FullCastHand, api: CombatApi) {
-        api.changeTemporaryMaxFlux(baseTempMaxFluxGain())
     }
 }

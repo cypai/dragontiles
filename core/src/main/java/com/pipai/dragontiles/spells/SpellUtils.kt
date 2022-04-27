@@ -58,7 +58,7 @@ fun Spell.baseFluxLoss(): Int {
 }
 
 fun Spell.baseTempMaxFluxGain(): Int {
-    return aspects.findAs(TempMaxFluxGainAspect::class)?.amount ?: 0
+    return aspects.findAs(TempMaxFluxChangeAspect::class)?.amount ?: 0
 }
 
 fun Spell.baseFetch(): Int {

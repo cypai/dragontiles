@@ -11,12 +11,11 @@ class Precipitate : StandardSpell() {
     override val rarity: Rarity = Rarity.COMMON
     override val aspects: MutableList<SpellAspect> = mutableListOf(
         AttackDamageAspect(1),
-        FluxLossAspect(10)
+        FluxLossAspect(10),
     )
 
     override suspend fun onCast(params: CastParams, api: CombatApi) {
         val target = api.getEnemy(params.targets.first())
         api.attack(target, elemental(components()), baseDamage(), flags())
-        api.heroLoseFlux(baseFluxLoss())
     }
 }

@@ -11,11 +11,16 @@ class BurnRune : Rune() {
     override val id: String = "base:spells:BurnRune"
     override val rarity: Rarity = Rarity.UNCOMMON
     override val requirement: ComponentRequirement = IdenticalX(SuitGroup.FIRE)
-    override val aspects: MutableList<SpellAspect> = mutableListOf()
+    override val aspects: MutableList<SpellAspect> = mutableListOf(
+        XAspect(0),
+    )
 
     @CombatSubscribe
     suspend fun onTurnEnd(ev: TurnEndEvent, api: CombatApi) {
         val burns = api.combat.hand.filter { it.tileStatus == TileStatus.BURN }.size
-        api.aoeAttack(Element.FIRE, x() * burns, flags())
+        val damage = 5 * x() * burns
+        if (damage > 0) {
+            api.aoeAttack(Element.FIRE, damage, flags())
+        }
     }
 }

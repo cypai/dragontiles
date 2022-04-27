@@ -55,15 +55,6 @@ class CombatApi(
 
     suspend fun castSpell(spell: Spell) {
         eventBus.dispatch(SpellCastedEvent(spell))
-        val flux = spell.baseFluxGain()
-        if (runData.hero.flux + flux >= runData.hero.tempFluxMax) {
-            logger.error("Attempted to cast spell that would cause self-overload")
-            return
-        }
-        if (spell is StandardSpell && spell.aspects.any { it is ExhaustAspect }) {
-            spell.exhausted = true
-        }
-        dealFluxDamageToHero(flux, false)
     }
 
     suspend fun score() {
@@ -416,8 +407,12 @@ class CombatApi(
         eventBus.dispatch(ComponentConsumeEvent(components))
         components.forEach { tile ->
             when (tile.tileStatus) {
-                TileStatus.BURN -> dealDamageToHero(2, listOf(CombatFlag.BURN))
-                TileStatus.SHOCK -> shockSpell(spell)
+                TileStatus.BURN -> if (spell.aspects.none { it is Heatsink }) {
+                    dealDamageToHero(2, listOf(CombatFlag.BURN))
+                }
+                TileStatus.SHOCK -> if (spell.aspects.none { it is Groundwire }) {
+                    shockSpell(spell)
+                }
                 TileStatus.VOLATILE -> dealFluxDamageToHero(spell.baseFluxGain())
                 TileStatus.CURSE -> changeTemporaryMaxFlux(spell.baseFluxGain())
                 else -> {
@@ -464,7 +459,11 @@ class CombatApi(
         }
     }
 
-    suspend fun dealFluxDamageToHero(damage: Int, showParticleAnimation: Boolean = true, flags: List<CombatFlag> = listOf()) {
+    suspend fun dealFluxDamageToHero(
+        damage: Int,
+        showParticleAnimation: Boolean = true,
+        flags: List<CombatFlag> = listOf()
+    ) {
         runData.hero.flux += damage
         eventBus.dispatch(PlayerFluxDamageEvent(damage, showParticleAnimation, flags))
         if (runData.hero.flux >= runData.hero.tempFluxMax) {

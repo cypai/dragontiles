@@ -14,13 +14,33 @@ interface SpellAspect {
 
 data class AttackDamageAspect(var amount: Int) : SpellAspect
 
-data class FluxGainAspect(var amount: Int) : SpellAspect
+data class FluxGainAspect(var amount: Int) : SpellAspect {
+    override suspend fun onCast(spell: Spell, api: CombatApi) {
+        api.dealFluxDamageToHero(amount, false)
+    }
+}
 
-data class FluxLossAspect(var amount: Int) : SpellAspect
+data class FluxLossAspect(var amount: Int, val autoImpl: Boolean = true) : SpellAspect {
+    override suspend fun onCast(spell: Spell, api: CombatApi) {
+        if (autoImpl) {
+            api.heroLoseFlux(amount)
+        }
+    }
+}
 
-data class TempMaxFluxGainAspect(var amount: Int) : SpellAspect
+data class TempMaxFluxChangeAspect(var amount: Int) : SpellAspect {
+    override suspend fun onCast(spell: Spell, api: CombatApi) {
+        api.changeTemporaryMaxFlux(amount)
+    }
+}
 
 class ExhaustAspect : SpellAspect {
+    override suspend fun onCast(spell: Spell, api: CombatApi) {
+        if (spell is StandardSpell) {
+            spell.exhausted = true
+        }
+    }
+
     override fun adjustDescription(description: String): String {
         return if (description.isEmpty()) {
             "${Keywords.EXHAUST}."
@@ -51,6 +71,10 @@ data class LimitedRepeatableAspect(var max: Int) : SpellAspect {
 }
 
 data class SwapAspect(var amount: Int) : SpellAspect {
+    override suspend fun onCast(spell: Spell, api: CombatApi) {
+        api.swapQuery(amount)
+    }
+
     override fun adjustDescription(description: String): String {
         return if (description.isEmpty()) {
             "${Keywords.SWAP} !swap."
@@ -61,6 +85,14 @@ data class SwapAspect(var amount: Int) : SpellAspect {
 }
 
 data class FetchAspect(var amount: Int?) : SpellAspect {
+    override suspend fun onCast(spell: Spell, api: CombatApi) {
+        if (amount == null) {
+            api.fetch()
+        } else {
+            api.fetch(amount!!)
+        }
+    }
+
     override fun adjustDescription(description: String): String {
         return if (amount == null) {
             if (description.isEmpty()) {
