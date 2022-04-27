@@ -26,10 +26,10 @@ base:keywords:Volatile:
   en:
     key: "@Volatile"
     name: Volatile
-    description: "Take damage equal to twice the spell's @Flux cost if used as a @Component."
+    description: "Take damage equal to the spell's @Flux cost if used as a @Component."
 
 base:keywords:Curse:
   en:
     key: "@Curse"
     name: Curse
-    description: "Lose temporary Max @Flux equal twice to the spell's @Flux cost if used as a @Component."
+    description: "Lose Max @Flux this combat equal to the spell's @Flux cost if used as a @Component."
