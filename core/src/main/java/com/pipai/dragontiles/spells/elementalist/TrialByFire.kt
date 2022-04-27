@@ -5,7 +5,6 @@ import com.pipai.dragontiles.combat.CombatFlag
 import com.pipai.dragontiles.combat.CombatSubscribe
 import com.pipai.dragontiles.combat.PlayerDamageEvent
 import com.pipai.dragontiles.spells.*
-import com.pipai.dragontiles.status.GenericStatus
 import com.pipai.dragontiles.status.SimpleStatus
 import com.pipai.dragontiles.status.Strength
 import com.pipai.dragontiles.utils.findAs
@@ -15,7 +14,7 @@ class TrialByFire : PowerSpell() {
     override val requirement: ComponentRequirement = Identical(3, SuitGroup.FIRE)
     override val rarity: Rarity = Rarity.UNCOMMON
     override val aspects: MutableList<SpellAspect> = mutableListOf(
-        StackableAspect(GenericStatus(1), 1),
+        StackableAspect(Strength(1), 1),
         FluxGainAspect(7),
     )
 
