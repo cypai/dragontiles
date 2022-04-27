@@ -21,6 +21,7 @@ abstract class Sorcery : Spell() {
             api.score()
         }
         onCast(hand, api)
+        aspects.forEach { it.onCast(this, api) }
     }
 
     abstract suspend fun onCast(hand: FullCastHand, api: CombatApi)
