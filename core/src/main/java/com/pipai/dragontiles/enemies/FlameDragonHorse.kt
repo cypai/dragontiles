@@ -18,7 +18,7 @@ class FlameDragonHorse : Enemy() {
         return if (flag) {
             DebuffIntent(
                 this,
-                null,
+                listOf(),
                 null,
                 listOf(
                     RandomTileStatusInflictStrategy(

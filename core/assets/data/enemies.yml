@@ -63,6 +63,26 @@ base:enemies:AncientTurtle:
     name: Ancient Turtle
     description: This turtle has drank the Elixir of Life and has gained Immortality!
 
+base:enemies:MoonRabbit:
+  en:
+    name: Moon Rabbit
+    description: A moon rabbit. Pounds the Elixir of Life.
+
+base:enemies:VermillionBird:
+  en:
+    name: Vermillion Bird
+    description: An ordinary bird?
+
+base:enemies:Kitsune:
+  en:
+    name: Kitsune
+    description: A very clever fox.
+
+base:enemies:StarElemental:
+  en:
+    name: Star Elemental
+    description: A being composed of pure Star energy.
+
 base:enemies:Nekomata:
   en:
     name: Nekomata

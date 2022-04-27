@@ -21,9 +21,9 @@ class Rat : Enemy() {
 
     override fun getIntent(api: CombatApi): Intent {
         return if (flag) {
-            DebuffIntent(this, Weak(1, true), AttackIntent(this, 8, 1, Element.ICE), listOf())
+            DebuffIntent(this, listOf(Weak(1, true)), AttackIntent(this, 8, 1, Element.ICE), listOf())
         } else {
-            BuffIntent(this, Dodge(1), null)
+            BuffIntent(this, listOf(Dodge(1)), null)
         }
     }
 

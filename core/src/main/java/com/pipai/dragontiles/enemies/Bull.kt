@@ -19,7 +19,7 @@ class Bull : Enemy() {
         return if (hasOverloaded) {
             AttackIntent(this, 10, 1, Element.NONE)
         } else {
-            BuffIntent(this, Strength(4), null)
+            BuffIntent(this, listOf(Strength(4)), null)
         }
     }
 

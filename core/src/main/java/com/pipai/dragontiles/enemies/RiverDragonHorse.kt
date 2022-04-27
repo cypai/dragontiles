@@ -20,7 +20,7 @@ class RiverDragonHorse : Enemy() {
         } else {
             DebuffIntent(
                 this,
-                null,
+                listOf(),
                 null,
                 listOf(
                     RandomTileStatusInflictStrategy(

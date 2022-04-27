@@ -5,10 +5,7 @@ import com.pipai.dragontiles.dungeonevents.FreeRelic
 import com.pipai.dragontiles.dungeonevents.MountainsStartEvent
 import com.pipai.dragontiles.dungeonevents.UnusedSeal
 import com.pipai.dragontiles.dungeonevents.WhatDoesPotOfGreedDo
-import com.pipai.dragontiles.enemies.AncientTurtle
-import com.pipai.dragontiles.enemies.Nekomata
-import com.pipai.dragontiles.enemies.ShaWujin
-import com.pipai.dragontiles.enemies.Yumi
+import com.pipai.dragontiles.enemies.*
 
 class MountainsDungeon {
     companion object {
@@ -24,18 +21,21 @@ class MountainsDungeon {
                         )
                     ),
                     Encounter(
-                        "base:dungeons:Mountains:AncientTurtle2",
+                        "base:dungeons:Mountains:MoonRabbitBirds",
                         listOf(
-                            Pair(AncientTurtle(), Vector2(2f, 4.5f))
+                            Pair(MoonRabbit(), Vector2(0.5f, 4.5f)),
+                            Pair(VermillionBird(), Vector2(3f, 4.5f)),
+                            Pair(VermillionBird(), Vector2(5.5f, 4.5f)),
                         )
                     ),
                 ),
                 // Standard
                 listOf(
                     Encounter(
-                        "base:dungeons:Mountains:AncientTurtle3",
+                        "base:dungeons:Mountains:KitsuneStarElemental",
                         listOf(
-                            Pair(AncientTurtle(), Vector2(2f, 4.5f))
+                            Pair(Kitsune(), Vector2(0.5f, 4.5f)),
+                            Pair(StarElemental(), Vector2(4f, 4.5f)),
                         )
                     ),
                 ),

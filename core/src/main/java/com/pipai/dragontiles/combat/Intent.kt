@@ -58,8 +58,9 @@ data class StunnedIntent(override val enemy: Enemy, override val animation: Inte
 
 data class BuffIntent(
     override val enemy: Enemy,
-    val status: Status,
+    val buffs: List<Status>,
     val attackIntent: AttackIntent?,
+    val callback: suspend (CombatApi) -> Unit = {},
     override val animation: IntentAnimation? = null,
 ) : Intent {
 
@@ -71,13 +72,14 @@ data class BuffIntent(
 
     override suspend fun execute(api: CombatApi) {
         attackIntent?.execute(api)
-        api.addStatusToEnemy(enemy, status)
+        buffs.forEach { api.addStatusToEnemy(enemy, it) }
+        callback.invoke(api)
     }
 }
 
 data class DebuffIntent(
     override val enemy: Enemy,
-    val status: Status?,
+    val debuffs: List<Status>,
     val attackIntent: AttackIntent?,
     val inflictTileStatuses: List<TileStatusInflictStrategy>,
     override val animation: IntentAnimation? = null,
@@ -91,7 +93,7 @@ data class DebuffIntent(
 
     override suspend fun execute(api: CombatApi) {
         attackIntent?.execute(api)
-        status?.let { api.addStatusToHero(status) }
+        debuffs.forEach { api.addStatusToHero(it) }
         inflictTileStatuses.forEach { strategy ->
             api.inflictTileStatusOnHand(strategy)
         }
@@ -103,6 +105,7 @@ data class StrategicIntent(
     val buffs: List<Status>,
     val debuffs: List<Status>,
     val inflictTileStatuses: List<TileStatusInflictStrategy>,
+    val callback: suspend (CombatApi) -> Unit = {},
     override val animation: IntentAnimation? = null,
 ) : Intent {
 
@@ -114,6 +117,7 @@ data class StrategicIntent(
         inflictTileStatuses.forEach { strategy ->
             api.inflictTileStatusOnHand(strategy)
         }
+        callback.invoke(api)
     }
 }
 
@@ -173,6 +177,23 @@ data class RandomTileStatusInflictStrategy(
     override fun select(hand: List<TileInstance>, rng: Random): List<TileInstance> {
         return hand
             .filter { it.tileStatus == TileStatus.NONE }
+            .chooseAmount(amount, rng)
+    }
+}
+
+data class NonterminalTileStatusInflictStrategy(
+    override val tileStatus: TileStatus,
+    override val amount: Int,
+    override val notEnoughStrategy: TileStatusInflictStrategy.NotEnoughStrategy
+) : TileStatusInflictStrategy {
+
+    override fun select(hand: List<TileInstance>, rng: Random): List<TileInstance> {
+        return hand
+            .filter { t ->
+                t.tileStatus == TileStatus.NONE
+                        && t.tile !is Tile.FumbleTile
+                        && !terminal(t.tile, hand.map { it.tile })
+            }
             .chooseAmount(amount, rng)
     }
 }

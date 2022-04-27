@@ -19,7 +19,7 @@ class KillerRabbit : Enemy() {
 
     override fun getIntent(api: CombatApi): Intent {
         return when (intents) {
-            0 -> BuffIntent(this, MenacingAura(1), null)
+            0 -> BuffIntent(this, listOf(MenacingAura(1)), null)
             else -> AttackIntent(this, 13, 1, Element.NONE)
         }
     }

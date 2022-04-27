@@ -24,9 +24,9 @@ class ShaWujin : Enemy() {
 
     override fun getIntent(api: CombatApi): Intent {
         val originalIntent = when (turns % 4) {
-            0 -> BuffIntent(this, Strength(3), null)
+            0 -> BuffIntent(this, listOf(Strength(3)), null)
             1 -> DebuffIntent(
-                this, null,
+                this, listOf(),
                 AttackIntent(this, 1, 3, Element.ICE),
                 listOf(
                     TerminalTileStatusInflictStrategy(

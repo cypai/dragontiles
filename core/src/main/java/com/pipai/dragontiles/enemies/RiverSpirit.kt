@@ -29,7 +29,7 @@ class RiverSpirit : Enemy() {
         } else {
             if (flag) {
                 DebuffIntent(this,
-                    BreakStatus(1, true),
+                    listOf(BreakStatus(1, true)),
                     AttackIntent(this, 1, 1, Element.ICE),
                     listOf())
             } else {

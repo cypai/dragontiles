@@ -24,7 +24,7 @@ class LargeTurtle : Enemy() {
         return when (intents) {
             0 -> AttackIntent(this, 12, 1, Element.NONE)
             1 -> AttackIntent(this, 12, 1, Element.NONE, null)
-            else -> BuffIntent(this, Strength(4), AttackIntent(this, 4, 1, Element.NONE))
+            else -> BuffIntent(this, listOf(Strength(4)), AttackIntent(this, 4, 1, Element.NONE))
         }
     }
 
