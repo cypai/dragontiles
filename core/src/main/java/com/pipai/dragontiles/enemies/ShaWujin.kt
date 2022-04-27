@@ -23,11 +23,9 @@ class ShaWujin : Enemy() {
     }
 
     override fun getIntent(api: CombatApi): Intent {
-        if (api.heroHasStatus(Overloaded::class) && turns % 4 != 2) {
-            return AttackIntent(this, 15, 1, Element.ICE)
-        }
         val originalIntent = when (turns % 4) {
-            0 -> DebuffIntent(
+            1 -> BuffIntent(this, Strength(3), null)
+            2 -> DebuffIntent(
                 this, null,
                 AttackIntent(this, 1, 3, Element.ICE),
                 listOf(
@@ -38,11 +36,11 @@ class ShaWujin : Enemy() {
                     )
                 )
             )
-            1 -> BuffIntent(this, Strength(3), null)
-            2 -> AttackIntent(this, 30, 1, Element.ICE)
-            else -> VentIntent(
-                this, 20, Sandstorm(1)
-            )
+            3 -> VentIntent(this, 20, Sandstorm(1))
+            else -> AttackIntent(this, 30, 1, Element.ICE)
+        }
+        if (api.heroHasStatus(Overloaded::class) && originalIntent !is AttackIntent && originalIntent !is DebuffIntent) {
+            return AttackIntent(this, 10, 1, Element.ICE)
         }
         if (justOverloaded && originalIntent is VentIntent) {
             justOverloaded = false
