@@ -203,6 +203,16 @@ base:spells:ElementalRune:
     name: Elemental Rune
     description: Increases damage from same @Elemented attacks by 2.
 
+base:spells:EnpoweringRune:
+  en:
+    name: Enpowering Rune
+    description: Increases damage from same @Elemented attacks by @X.
+
+base:spells:ElementalBreathing:
+  en:
+    name: Elemental Breathing
+    description: At the start of your turn, inflict @Elemented @Burn, @Freeze, or @Shock on !s(1) random tile in your hand.
+
 base:spells:StrengthRune:
   en:
     name: Strength Rune
@@ -379,3 +389,18 @@ base:spells:HighLethality:
   en:
     name: High Lethality
     description: ""
+
+base:spells:Cyclone:
+  en:
+    name: Cyclone
+    description: Deal !d @AOE @Elemented damage @X times.
+
+base:spells:Enpower:
+  en:
+    name: Enpower
+    description: The next same @Elemented attack does !s(1) more damage.
+
+base:spells:Typhoon:
+  en:
+    name: Typhoon
+    description: Deals !d @AOE @Elemented damage !c times, increasing each cast. If not casted in a turn, resets multiplier and @CountdownTile.

@@ -597,6 +597,20 @@ class CombatApi(
         return combat.heroStatus.any { statusType.isInstance(it) }
     }
 
+    suspend fun removeHeroStatus(id: String): Boolean {
+        val item = combat.heroStatus.find { it.id == id }
+        if (item != null) {
+            val previousAmount = item.amount
+            item.amount = 0
+            eventBus.dispatch(PlayerStatusChangeEvent(item, previousAmount))
+            combat.heroStatus.remove(item)
+            eventBus.unregister(item)
+            notifyStatusUpdated()
+            return true
+        }
+        return false
+    }
+
     suspend fun <T : Status> removeHeroStatus(statusType: KClass<T>): Boolean {
         val item = combat.heroStatus.find { statusType.isInstance(it) }
         if (item != null) {

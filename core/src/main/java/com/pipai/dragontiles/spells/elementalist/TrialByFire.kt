@@ -11,7 +11,7 @@ import com.pipai.dragontiles.utils.findAs
 
 class TrialByFire : PowerSpell() {
     override val id: String = "base:spells:TrialByFire"
-    override val requirement: ComponentRequirement = Identical(3, SuitGroup.FIRE)
+    override val requirement: ComponentRequirement = Identical(2, SuitGroup.FIRE)
     override val rarity: Rarity = Rarity.UNCOMMON
     override val aspects: MutableList<SpellAspect> = mutableListOf(
         StackableAspect(Strength(1), 1),

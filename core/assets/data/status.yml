@@ -147,3 +147,33 @@ base:status:ElectroFumes:
   en:
     name: Electro Fumes
     description: Inflicts Electro to all enemies at the start of your turn.
+
+base:status:FireBreathing:
+  en:
+    name: Fire Breathing
+    description: Inflicts @Burn on tiles in your hand at the start of your turn.
+
+base:status:IceBreathing:
+  en:
+    name: Ice Breathing
+    description: Inflicts @Freeze on tiles in your hand at the start of your turn.
+
+base:status:LightningBreathing:
+  en:
+    name: Lightning Breathing
+    description: Inflicts @Shock on tiles in your hand at the start of your turn.
+
+base:status:EnpoweredFire:
+  en:
+    name: Enpowered Fire
+    description: The next Fire attack does more damage.
+
+base:status:EnpoweredIce:
+  en:
+    name: Enpowered Ice
+    description: The next Ice attack does more damage.
+
+base:status:EnpoweredLightning:
+  en:
+    name: Enpowered Lightning
+    description: The next Lightning attack does more damage.
