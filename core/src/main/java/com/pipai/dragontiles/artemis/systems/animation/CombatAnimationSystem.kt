@@ -5,7 +5,6 @@ import com.pipai.dragontiles.DragonTilesGame
 import com.pipai.dragontiles.artemis.events.TopRowUiUpdateEvent
 import com.pipai.dragontiles.artemis.systems.combat.CombatControllerSystem
 import com.pipai.dragontiles.artemis.systems.ui.CombatUiSystem
-import com.pipai.dragontiles.artemis.systems.ui.TopRowUiSystem
 import com.pipai.dragontiles.combat.*
 import com.pipai.dragontiles.status.Overloaded
 import com.pipai.dragontiles.utils.getLogger
