@@ -81,7 +81,7 @@ class SpellShopUiSystem(
         table.y = screenXy.y
 
         if (available) {
-            val price = 3 + runData.sideboardSpaceBought
+            val price = 3 + runData.sideboardSpaceBought * 2
             val entityId = world.create()
 
             val cXy = mXy.create(entityId)
