@@ -129,3 +129,21 @@ base:keywords:Cryoshock:
     key: "@Cryoshock"
     name: Cryoshock
     description: "Cryo and Electro reaction. Take @Piercing Lightning damage at the start of the turn equal to the amount of Cryoshock on all enemies."
+
+base:keywords:Score:
+  en:
+    key: "@Score"
+    name: Score
+    description: Reduces @Immortality on all enemies.
+
+base:keywords:CountdownTile:
+  en:
+    key: "@CountdownTile"
+    name: Countdown (tiles)
+    description: "Performs an effect after consuming the listed number of tiles."
+
+base:keywords:CountdownNumeric:
+  en:
+    key: "@CountdownNumeric"
+    name: Countdown (numeric)
+    description: "Performs an effect after consuming the sum total of tile numbers."

@@ -10,6 +10,7 @@ import com.pipai.dragontiles.DragonTilesGame
 import com.pipai.dragontiles.combat.CombatApi
 import com.pipai.dragontiles.enemies.Enemy
 import com.pipai.dragontiles.spells.*
+import com.pipai.dragontiles.utils.findAs
 import com.pipai.dragontiles.utils.firstCapOnly
 import com.pipai.dragontiles.utils.su
 import com.pipai.dragontiles.utils.upgradeAssetPath
@@ -29,6 +30,8 @@ class SpellCard(
     private val reqImage = Image()
     private val reqNumber = Label("", skin, "cardReq")
     private val scoreImage = Image()
+    private val cdImage = Image()
+    private val cdNumber = Label("", skin, "cardReqTiny")
     private val fluxImage = Image()
     private val fluxNumber = Label("", skin, "cardReq")
     private val nameLabel = Label("", skin, "tiny")
@@ -87,11 +90,22 @@ class SpellCard(
             .prefHeight(reqSize)
             .left()
             .top()
-        frontTable.add(scoreImage)
+
+        val cdTable = Table()
+        cdTable.add(cdImage)
+            .size(su(0.225f))
+        cdTable.add(cdNumber)
+
+        val cdStack = Stack()
+        cdStack.add(cdTable)
+        cdStack.add(scoreImage)
+
+        frontTable.add(cdStack)
             .expand()
             .top()
             .padTop(su(0.02f))
             .size(su(0.225f))
+
         val fluxStack = Stack()
         fluxStack.add(fluxImage)
         fluxStack.add(fluxNumber)
@@ -207,6 +221,8 @@ class SpellCard(
             reqImage.drawable = null
             reqNumber.setText("")
             scoreImage.drawable = null
+            cdImage.drawable = null
+            cdNumber.setText("")
             fluxImage.drawable = null
             fluxNumber.setText("")
             nameLabel.setText("")
@@ -230,6 +246,23 @@ class SpellCard(
                         Texture::class.java
                     )
                 )
+            }
+            val cdAspect = spell.aspects.findAs(CountdownAspect::class)
+            if (cdAspect != null) {
+                val cdAssetName = when (cdAspect.type) {
+                    CountdownType.SCORE -> "assets/binassets/graphics/textures/yaku_circle.png"
+                    CountdownType.CONSUMED_TILES -> ""
+                    CountdownType.NUMERIC_SCORE -> "assets/binassets/graphics/textures/yaku_circle.png"
+                    CountdownType.NUMERIC -> ""
+                }
+                cdImage.drawable = TextureRegionDrawable(game.assets.get(cdAssetName, Texture::class.java))
+                val cdNumberPrefix = when (cdAspect.type) {
+                    CountdownType.SCORE -> ""
+                    CountdownType.CONSUMED_TILES -> ""
+                    CountdownType.NUMERIC_SCORE -> "N:"
+                    CountdownType.NUMERIC -> "N:"
+                }
+                cdNumber.setText("$cdNumberPrefix${cdAspect.current}")
             }
             if (spell.aspects.any { it is FluxGainAspect }) {
                 fluxImage.drawable = TextureRegionDrawable(

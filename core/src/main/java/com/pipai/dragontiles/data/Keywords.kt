@@ -8,5 +8,7 @@ class Keywords  {
         const val TRANSFORM = "@Transform"
         const val SWAP = "@Swap"
         const val FETCH = "@Fetch"
+        const val COUNTDOWN = "@Countdown"
+        const val SCORE = "@Score"
     }
 }

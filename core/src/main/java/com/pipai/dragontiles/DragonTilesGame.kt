@@ -80,6 +80,9 @@ class DragonTilesGame(val gameConfig: GameConfig) : Game() {
     lateinit var heavyFont: BitmapFont
         private set
 
+    lateinit var tinyHeavyFont: BitmapFont
+        private set
+
     lateinit var font: BitmapFont
         private set
 
@@ -253,6 +256,10 @@ class DragonTilesGame(val gameConfig: GameConfig) : Game() {
         fontParameter.borderWidth = 2f
         heavyFont = heavyFontGenerator.generateFont(fontParameter)
 
+        fontParameter.size = tinySize
+        fontParameter.borderWidth = 1f
+        tinyHeavyFont = heavyFontGenerator.generateFont(fontParameter)
+
         fontGenerator.dispose()
 
         gameStrings = GameStrings()
@@ -374,6 +381,7 @@ class DragonTilesGame(val gameConfig: GameConfig) : Game() {
 
         skin.add("cardReq", LabelStyle(heavyFont, Color.WHITE))
         skin.add("cardReqRed", LabelStyle(heavyFont, Color.RED))
+        skin.add("cardReqTiny", LabelStyle(tinyHeavyFont, Color.WHITE))
         skin.add("default", LabelStyle(font, Color.BLACK))
         skin.add("small", LabelStyle(smallFont, Color.BLACK))
         skin.add("tiny", LabelStyle(tinyFont, Color.BLACK))

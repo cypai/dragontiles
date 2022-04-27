@@ -119,3 +119,49 @@ class NotManuallyDeactivateable : SpellAspect
 class PreserveComponentOrder : SpellAspect
 class Heatsink : SpellAspect
 class Groundwire : SpellAspect
+
+data class CountdownAspect(
+    val total: Int,
+    val type: CountdownType,
+    val callback: suspend (CombatApi) -> Unit,
+    val customDescription: String = "",
+    var current: Int = total,
+) : SpellAspect {
+
+    companion object {
+        fun generateScoreCountdown(amount: Int): CountdownAspect {
+            return CountdownAspect(
+                amount,
+                CountdownType.SCORE,
+                this::callback,
+                "${Keywords.COUNTDOWN} ${Keywords.SCORE}"
+            )
+        }
+
+        private suspend fun callback(api: CombatApi) {
+            api.score()
+        }
+    }
+
+    override suspend fun onCast(spell: Spell, api: CombatApi) {
+        val amount = when (type) {
+            CountdownType.SCORE -> spell.components().size
+            CountdownType.CONSUMED_TILES -> spell.components().size
+            CountdownType.NUMERIC -> numeric(spell.components())
+            CountdownType.NUMERIC_SCORE -> numeric(spell.components())
+        }
+        current -= amount
+        if (current <= 0) {
+            callback.invoke(api)
+            current += total
+        }
+    }
+
+    override fun adjustDescription(description: String): String {
+        return "$description $customDescription"
+    }
+}
+
+enum class CountdownType {
+    SCORE, NUMERIC_SCORE, CONSUMED_TILES, NUMERIC
+}

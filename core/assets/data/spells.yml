@@ -364,3 +364,13 @@ base:spells:FluxMastery:
   en:
     name: Flux Mastery
     description: Start combat with !c additional Max Flux. Permanently gain 2 more when played.
+
+base:spells:ElixirsToxicity:
+  en:
+    name: Elixir's Toxicity
+    description: ""
+
+base:spells:HighLethality:
+  en:
+    name: High Lethality
+    description: ""
