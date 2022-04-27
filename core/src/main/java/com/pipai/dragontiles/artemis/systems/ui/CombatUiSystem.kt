@@ -1310,6 +1310,7 @@ class CombatUiSystem(
                 uiSystem.moveSideboardSpellsFront()
                 uiSystem.sFsTexture.fadeIn(0.2f)
                 uiSystem.frontStage.addActor(uiSystem.queryTable)
+                uiSystem.queryConfirmBtn.isVisible = true
             }
 
             override fun exit(uiSystem: CombatUiSystem) {
@@ -1325,6 +1326,7 @@ class CombatUiSystem(
                 uiSystem.moveSideboardSpellsBack()
                 uiSystem.sFsTexture.fadeIn(0.2f)
                 uiSystem.frontStage.addActor(uiSystem.queryTable)
+                uiSystem.queryConfirmBtn.isVisible = true
             }
 
             override fun exit(uiSystem: CombatUiSystem) {
@@ -1339,6 +1341,7 @@ class CombatUiSystem(
                 uiSystem.moveSideboardSpellsBack()
                 uiSystem.sFsTexture.fadeIn(0.2f)
                 uiSystem.frontStage.addActor(uiSystem.queryTable)
+                uiSystem.queryConfirmBtn.isVisible = false
             }
 
             override fun exit(uiSystem: CombatUiSystem) {
