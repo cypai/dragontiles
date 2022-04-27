@@ -1,12 +1,11 @@
 package com.pipai.dragontiles.spells.colorless
 
 import com.pipai.dragontiles.combat.CombatApi
-import com.pipai.dragontiles.combat.CombatFlag
 import com.pipai.dragontiles.spells.*
 
 class ElixirsToxicity : StandardSpell() {
     override val id: String = "base:spells:ElixirsToxicity"
-    override val requirement: ComponentRequirement = AnyCombo(1)
+    override val requirement: ComponentRequirement = Single()
     override val type: SpellType = SpellType.EFFECT
     override val targetType: TargetType = TargetType.NONE
     override val rarity: Rarity = Rarity.RARE
