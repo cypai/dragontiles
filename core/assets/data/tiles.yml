@@ -8,7 +8,7 @@ base:keywords:Burn:
   en:
     key: "@Burn"
     name: Burn
-    description: "Take 2 piercing damage if used as a @Component."
+    description: "Take 2 piercing damage if consumed as a @Component."
 
 base:keywords:Freeze:
   en:
@@ -20,16 +20,16 @@ base:keywords:Shock:
   en:
     key: "@Shock"
     name: Shock
-    description: "Disable the spell for 2 turns if used as a @Component."
+    description: "Disable the spell for 2 turns if consumed as a @Component."
 
 base:keywords:Volatile:
   en:
     key: "@Volatile"
     name: Volatile
-    description: "Take damage equal to the spell's @Flux cost if used as a @Component."
+    description: "Take damage equal to the spell's @Flux cost if consumed as a @Component."
 
 base:keywords:Curse:
   en:
     key: "@Curse"
     name: Curse
-    description: "Lose Max @Flux this combat equal to the spell's @Flux cost if used as a @Component."
+    description: "Lose Max @Flux this combat equal to the spell's @Flux cost if consumed as a @Component."

@@ -27,7 +27,7 @@ class Split : StandardSpell() {
         repeat(2) {
             newTiles.add(Tile.ElementalTile(tile.suit, tile.number / 2))
         }
-        api.addTilesToHand(newTiles, TileStatus.NONE)
+        api.addTilesToHand(newTiles, tileInstance.tileStatus)
     }
 
     override suspend fun handleComponents(api: CombatApi) {
