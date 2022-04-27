@@ -58,3 +58,8 @@ base:enemies:ShaWujin:
     name: Sha Wujin
     description: ???
 
+base:enemies:AncientTurtle:
+  en:
+    name: Ancient Turtle
+    description: This turtle has drank the Elixir of Life and has gained Immortality!
+

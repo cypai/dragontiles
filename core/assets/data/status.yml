@@ -126,7 +126,7 @@ base:status:NoDraw:
 base:status:Immortality:
   en:
     name: Immortality
-    description: Cannot defeat this enemy. Reduced by Yaku.
+    description: Cannot defeat this enemy. Reduced by Score.
 
 base:status:PyroFumes:
   en:

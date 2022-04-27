@@ -17,7 +17,7 @@ class AncientTurtle : Enemy() {
     override val assetName: String = "flame_turtle.png"
     override val assetConfig: AssetConfig = AssetConfig(AssetType.SPRITE, 2.5f)
 
-    override val hpMax: Int = 40
+    override val hpMax: Int = 10
     override val fluxMax: Int = 60
 
     private var intents = 0
