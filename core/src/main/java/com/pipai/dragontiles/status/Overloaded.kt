@@ -19,11 +19,13 @@ class Overloaded(amount: Int) : Status(amount) {
     suspend fun onEnemyTurnEnd(ev: EnemyTurnEndEvent, api: CombatApi) {
         amount--
         if (amount == 0) {
+            api.notifyStatusUpdated()
             when (val c = combatant!!) {
-                is Combatant.HeroCombatant -> api.heroLoseFlux(api.runData.hero.fluxMax / 2)
+                is Combatant.HeroCombatant -> {
+                    api.heroLoseFlux(api.runData.hero.tempFluxMax / 2)
+                }
                 is Combatant.EnemyCombatant -> api.enemyLoseFlux(c.enemy, c.enemy.fluxMax / 2)
             }
         }
-        api.notifyStatusUpdated()
     }
 }
