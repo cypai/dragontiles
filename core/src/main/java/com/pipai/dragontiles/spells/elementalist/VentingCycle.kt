@@ -10,8 +10,8 @@ class VentingCycle : StandardSpell() {
     override val targetType: TargetType = TargetType.NONE
     override val rarity: Rarity = Rarity.COMMON
     override val aspects: MutableList<SpellAspect> = mutableListOf(
-        FluxLossAspect(4),
-        TempMaxFluxChangeAspect(4),
+        FluxLossAspect(5),
+        TempMaxFluxChangeAspect(5),
         FetchAspect(1),
     )
 
