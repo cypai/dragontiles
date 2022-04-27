@@ -223,6 +223,7 @@ class CombatApi(
         }
         eventBus.dispatch(QuerySwapEvent(amount))
         val data = swapChannel.receive()
+        logger.debug("Received swap data $data")
         swap(data.activeIndexes, data.sideboardIndexes)
     }
 

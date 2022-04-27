@@ -55,6 +55,8 @@ class CombatAnimationSystem(private val game: DragonTilesGame) : BaseSystem(), A
         animationQueue.add(animation)
     }
 
+    fun isEmpty(): Boolean = animationQueue.isEmpty()
+
     override fun notify(animation: Animation) {
         animationQueue.remove(animation)
         animating = false

@@ -58,6 +58,8 @@ class CombatUiSystem(
     private val frontStage: Stage
 ) : BaseSystem(), InputProcessor {
 
+    private val logger = getLogger()
+
     private val scope = CoroutineScope(Dispatchers.Default)
     private val config = game.gameConfig
     private val skin = game.skin
@@ -407,6 +409,9 @@ class CombatUiSystem(
                         sHelp.show()
                     }
                 }
+            }
+            Keys.F9 -> {
+                logger.debug("${stateMachine.currentState}")
             }
             Keys.F12 -> {
                 scope.launch {
@@ -938,6 +943,9 @@ class CombatUiSystem(
             }
             else -> {
             }
+        }
+        if (sAnimation.isEmpty()) {
+            stateMachine.changeState(CombatUiState.ROOT)
         }
     }
 
