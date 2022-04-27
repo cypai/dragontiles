@@ -25,9 +25,9 @@ class RabbitSwarm : DungeonEvent() {
             val encounter = Encounter(
                 "base:dungeons:Plains:RabbitSwarm",
                 listOf(
-                    Pair(KillerRabbit(), Vector2(700f, 320f)),
-                    Pair(KillerRabbit(), Vector2(900f, 320f)),
-                    Pair(KillerRabbit(), Vector2(1100f, 320f)),
+                    Pair(KillerRabbit(), Vector2(0.5f, 4.5f)),
+                    Pair(KillerRabbit(), Vector2(3f, 4.5f)),
+                    Pair(KillerRabbit(), Vector2(5.5f, 4.5f)),
                 )
             )
             api.startCombat(encounter, CombatRewardConfig(SpellRewardType.STANDARD, 3, false, RabbitsFoot(), api.runData.potionChance))
