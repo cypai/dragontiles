@@ -61,16 +61,17 @@ class StatusSystem(private val game: DragonTilesGame) : NoProcessingSystem() {
         val cTargetXy = mXy.get(target)
         val cXy = mXy.create(statusId)
         val cTargetSprite = mSprite.getSafe(target, null)
+        val statusSize = 0.25f
         if (cTargetSprite == null) {
             val cTargetSpine = mSpine.get(target)
-            cXy.setXy(cTargetXy.x - cTargetSpine.skeleton.actualWidth() / 2f + index, cTargetXy.y - 0.25f)
+            cXy.setXy(cTargetXy.x - cTargetSpine.skeleton.actualWidth() / 2f + index * statusSize, cTargetXy.y - statusSize)
         } else {
-            cXy.setXy(cTargetXy.x + index, cTargetXy.y - 0.25f)
+            cXy.setXy(cTargetXy.x + index * statusSize, cTargetXy.y - statusSize)
         }
         val cSprite = mSprite.create(statusId)
         cSprite.sprite = Sprite(game.assets.get(statusAssetPath(status.assetName), Texture::class.java))
-        cSprite.width = 0.25f
-        cSprite.height = 0.25f
+        cSprite.width = statusSize
+        cSprite.height = statusSize
         val cHover = mHoverable.create(statusId)
         cHover.enterCallback = {
             cHover.recheck = true
