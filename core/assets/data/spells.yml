@@ -248,6 +248,11 @@ base:spells:ColdHands:
     name: Cold Hands
     description: Deal !d Ice damage. Inflict !s(1) Weak. @Freeze a random tile in your hand.
 
+base:spells:Thundershock:
+  en:
+    name: Thundershock
+    description: Deal !d @AOE Lightning damage. @Shock a random tile in your hand.
+
 base:spells:Transmutation:
   en:
     name: Transmutation

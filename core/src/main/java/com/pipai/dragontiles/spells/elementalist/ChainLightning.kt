@@ -17,7 +17,7 @@ class ChainLightning : StandardSpell() {
     override val targetType: TargetType = TargetType.AOE
     override val rarity: Rarity = Rarity.UNCOMMON
     override val aspects: MutableList<SpellAspect> = mutableListOf(
-        AttackDamageAspect(14),
+        AttackDamageAspect(12),
         FluxGainAspect(7),
         StackableAspect(Electro(1), 1),
     )
