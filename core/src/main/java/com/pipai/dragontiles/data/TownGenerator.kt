@@ -31,12 +31,10 @@ class TownGenerator {
             itemShop.potions.add(pricedPotion(potion))
         }
         val scribe = Scribe(mutableListOf())
-        repeat(6) {
+        repeat(8) {
             val upgrade = gameData.allSpellUpgrades().choose(rng)
             scribe.upgrades.add(pricedUpgrade(upgrade))
         }
-        scribe.upgrades.add(pricedUpgrade(PowerUpgrade()))
-        scribe.upgrades.add(pricedUpgrade(SwapUpgrade()))
         runData.town = Town(3, null, spellShop, itemShop, scribe)
     }
 

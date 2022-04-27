@@ -134,7 +134,6 @@ data class CountdownAspect(
                 amount,
                 CountdownType.SCORE,
                 this::callback,
-                "${Keywords.COUNTDOWN} ${Keywords.SCORE}"
             )
         }
 

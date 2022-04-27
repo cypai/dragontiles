@@ -57,3 +57,8 @@ base:upgrades:SwapUpgrade:
   en:
     name: Swap Upgrade
     description: Adds Swap 1.
+
+base:upgrades:ScoreUpgrade:
+  en:
+    name: Score Upgrade
+    description: Adds a 17 @CountdownTile to gain Score.
