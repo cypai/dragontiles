@@ -10,7 +10,7 @@ class Ventilation : PowerSpell() {
     override val requirement: ComponentRequirement = Identical(2, SuitGroup.ARCANE)
     override val rarity: Rarity = Rarity.UNCOMMON
     override val aspects: MutableList<SpellAspect> = mutableListOf(
-        StackableAspect(VentilationStatus(2), 1),
+        StackableAspect(VentilationStatus(3), 1),
     )
 
     override suspend fun onCast(params: CastParams, api: CombatApi) {

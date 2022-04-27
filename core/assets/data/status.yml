@@ -41,7 +41,7 @@ base:status:Ritual:
 base:status:Ventilation:
   en:
     name: Ventilation
-    description: Lose @Flux per turn while not @Overloaded.
+    description: Lose @Flux at the end its turn.
 
 base:status:Dodge:
   en:

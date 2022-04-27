@@ -358,6 +358,9 @@ class CombatApi(
     }
 
     suspend fun enemyLoseFlux(enemy: Enemy, amount: Int) {
+        if (enemyHasStatus(enemy, Overloaded::class)) {
+            return
+        }
         val actualAmount = if (enemy.flux >= amount) amount else enemy.flux
         enemy.flux -= actualAmount
         eventBus.dispatch(EnemyLoseFluxEvent(enemy, actualAmount))

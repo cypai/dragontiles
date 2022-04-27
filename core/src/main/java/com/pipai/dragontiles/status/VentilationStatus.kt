@@ -1,9 +1,6 @@
 package com.pipai.dragontiles.status
 
-import com.pipai.dragontiles.combat.CombatApi
-import com.pipai.dragontiles.combat.CombatSubscribe
-import com.pipai.dragontiles.combat.Combatant
-import com.pipai.dragontiles.combat.TurnStartEvent
+import com.pipai.dragontiles.combat.*
 
 class VentilationStatus(amount: Int) : Status(amount) {
     override val id = "base:status:Ventilation"
@@ -16,20 +13,17 @@ class VentilationStatus(amount: Int) : Status(amount) {
     }
 
     @CombatSubscribe
-    suspend fun onPlayerStartTurn(ev: TurnStartEvent, api: CombatApi) {
-        when (val c = combatant) {
-            is Combatant.HeroCombatant -> {
-                if (!api.heroHasStatus(Overloaded::class)) {
-                    api.heroLoseFlux(amount)
-                }
-            }
-            is Combatant.EnemyCombatant -> {
-                if (!api.enemyHasStatus(c.enemy, Overloaded::class)) {
-                    api.enemyLoseFlux(c.enemy, amount)
-                }
-            }
-            else -> {
-            }
+    suspend fun onPlayerEndTurn(ev: TurnEndEvent, api: CombatApi) {
+        if (combatant is Combatant.HeroCombatant) {
+            api.heroLoseFlux(amount)
+        }
+    }
+
+    @CombatSubscribe
+    suspend fun onEnemyEndTurn(ev: EnemyTurnEndEvent, api: CombatApi) {
+        val c = combatant
+        if (c is Combatant.EnemyCombatant) {
+            api.enemyLoseFlux(c.enemy, amount)
         }
     }
 }
