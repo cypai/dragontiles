@@ -545,6 +545,9 @@ class CombatApi(
     }
 
     suspend fun addStatusToEnemy(enemy: Enemy, status: Status) {
+        if (enemy.hp <= 0) {
+            return
+        }
         if (status.isDebuff() && enemyHasStatus(enemy, Immunized::class)) {
             addStatusToEnemy(enemy, Immunized(-1))
             return
