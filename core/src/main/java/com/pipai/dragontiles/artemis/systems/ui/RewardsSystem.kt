@@ -169,6 +169,9 @@ class RewardsSystem(
                         game.gameStrings.nameDescLocalization(reward.potion).name
                     )
                 }
+                is Reward.SideboardSpaceReward -> {
+                    rewardItemTable({ api.runData.hero.sideboardSize++ }, Image(), null, "+1 Sideboard Space")
+                }
                 is Reward.EmptyReward -> {
                     Table()
                 }

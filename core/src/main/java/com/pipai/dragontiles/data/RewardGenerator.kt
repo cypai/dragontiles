@@ -18,6 +18,9 @@ class RewardGenerator {
         val actualRewards = mutableListOf<Reward>()
         val heroClass = gameData.getHeroClass(runData.hero.heroClassId)
         val rng = runData.seed.rewardRng()
+        if (rewardConfig.spellRewardType == SpellRewardType.BOSS) {
+            actualRewards.add(Reward.SideboardSpaceReward())
+        }
         actualRewards.add(Reward.SpellDraftReward(generateCardRewards(heroClass, rewardConfig.spellRewardType, rng, 3)))
         actualRewards.add(Reward.GoldReward(rewardConfig.gold))
         if (rng.nextFloat() < rewardConfig.potionChance) {
