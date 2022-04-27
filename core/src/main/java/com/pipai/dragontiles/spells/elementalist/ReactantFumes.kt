@@ -44,6 +44,7 @@ class ReactantFumes : PowerSpell() {
 
     class PyroFumes(amount: Int) :
         SimpleStatus("base:status:PyroFumes", "red.png", true, amount) {
+
         @CombatSubscribe
         suspend fun onTurnStart(ev: TurnStartEvent, api: CombatApi) {
             api.addAoeStatus(Pyro(amount))
@@ -51,7 +52,7 @@ class ReactantFumes : PowerSpell() {
     }
 
     class CryoFumes(amount: Int) :
-        SimpleStatus("base:status:CryoFumes", "blue.png", false, amount) {
+        SimpleStatus("base:status:CryoFumes", "blue.png", true, amount) {
 
         @CombatSubscribe
         suspend fun onTurnStart(ev: TurnStartEvent, api: CombatApi) {
@@ -60,7 +61,7 @@ class ReactantFumes : PowerSpell() {
     }
 
     class ElectroFumes(amount: Int) :
-        SimpleStatus("base:status:ElectroFumes", "yellow.png", false, amount) {
+        SimpleStatus("base:status:ElectroFumes", "yellow.png", true, amount) {
 
         @CombatSubscribe
         suspend fun onTurnStart(ev: TurnStartEvent, api: CombatApi) {

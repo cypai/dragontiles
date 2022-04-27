@@ -127,3 +127,18 @@ base:status:Immortality:
   en:
     name: Immortality
     description: Cannot defeat this enemy. Reduced by Yaku.
+
+base:status:PyroFumes:
+  en:
+    name: Pyro Fumes
+    description: Inflicts Pyro to all enemies at the start of your turn.
+
+base:status:CryoFumes:
+  en:
+    name: Cryo Fumes
+    description: Inflicts Cryo to all enemies at the start of your turn.
+
+base:status:ElectroFumes:
+  en:
+    name: Electro Fumes
+    description: Inflicts Electro to all enemies at the start of your turn.

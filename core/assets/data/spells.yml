@@ -291,7 +291,7 @@ base:spells:WindSwirl:
 base:spells:ReactionMastery:
   en:
     name: Reaction Mastery
-    description: "Elemented attacks now also apply a @Reactant."
+    description: "Elemental attacks now also apply a @Reactant."
 
 base:spells:Splash:
   en:
