@@ -14,7 +14,6 @@ class Invoke : StandardSpell() {
     override val aspects: MutableList<SpellAspect> = mutableListOf(
         AttackDamageAspect(2),
         FluxGainAspect(1),
-        RepeatableAspect(),
     )
 
     override fun flags(): List<CombatFlag> {
