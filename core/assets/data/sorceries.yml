@@ -16,12 +16,12 @@ base:sorceries:Chow:
 base:sorceries:PingHu:
   en:
     name: Ping Hu
-    description: Deal !d @AOE damage.
+    description: Deal !d @AOE @Piercing damage.
 
 base:sorceries:DuiDuiHu:
   en:
     name: Dui Dui Hu
-    description: Deal !d @AOE damage.
+    description: Deal !d @AOE @Piercing damage.
 
 base:sorceries:ForceOverload:
   en:

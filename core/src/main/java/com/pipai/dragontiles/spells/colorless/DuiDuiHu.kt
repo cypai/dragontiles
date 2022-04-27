@@ -1,6 +1,7 @@
 package com.pipai.dragontiles.spells.colorless
 
 import com.pipai.dragontiles.combat.CombatApi
+import com.pipai.dragontiles.combat.CombatFlag
 import com.pipai.dragontiles.data.Element
 import com.pipai.dragontiles.data.TileInstance
 import com.pipai.dragontiles.spells.*
@@ -23,8 +24,11 @@ class DuiDuiHu : Sorcery() {
         }
     }
     override val aspects: MutableList<SpellAspect> = mutableListOf(
-        AttackDamageAspect(20)
+        AttackDamageAspect(24)
     )
+
+    override fun flags(): List<CombatFlag> = listOf(CombatFlag.PIERCING)
+
     override val scoreable: Boolean = true
 
     override suspend fun onCast(hand: FullCastHand, api: CombatApi) {
