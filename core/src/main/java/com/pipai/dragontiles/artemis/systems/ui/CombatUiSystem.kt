@@ -493,7 +493,7 @@ class CombatUiSystem(
                     val spell = spellCard.getSpell()
                     when (event.button) {
                         Input.Buttons.LEFT -> {
-                            if (!(spell is Rune && spell.active)) {
+                            if (!(spell is Rune && spell.active) && spell!!.requirement !is UnplayableRequirement) {
                                 spellCard.data[ALLOW_HOVER_MOVE] = 0
                                 selectedSpellNumber = spellCard.number
                                 stateMachine.changeState(CombatUiState.COMPONENT_SELECTION)

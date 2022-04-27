@@ -163,6 +163,7 @@ class TooltipSystem(private val game: DragonTilesGame, var stage: Stage) : NoPro
         } else {
             table.y = fixY!!.coerceAtMost(resolution.height - table.prefHeight).coerceAtLeast(0f)
         }
+        table.toFront()
     }
 
     override fun keyDown(keycode: Int) = false
