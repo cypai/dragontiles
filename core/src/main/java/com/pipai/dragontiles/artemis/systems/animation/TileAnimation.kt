@@ -62,6 +62,7 @@ abstract class TileAnimation(protected val layout: CombatUiLayout) : Animation()
                 TileStatus.FREEZE -> sTooltip.addKeyword("@Freeze")
                 TileStatus.SHOCK -> sTooltip.addKeyword("@Shock")
                 TileStatus.VOLATILE -> sTooltip.addKeyword("@Volatile")
+                TileStatus.CURSE -> sTooltip.addKeyword("@Curse")
                 else -> {
                 }
             }

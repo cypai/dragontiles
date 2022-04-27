@@ -6,6 +6,7 @@ import com.pipai.dragontiles.dungeonevents.MountainsStartEvent
 import com.pipai.dragontiles.dungeonevents.UnusedSeal
 import com.pipai.dragontiles.dungeonevents.WhatDoesPotOfGreedDo
 import com.pipai.dragontiles.enemies.AncientTurtle
+import com.pipai.dragontiles.enemies.Nekomata
 import com.pipai.dragontiles.enemies.ShaWujin
 import com.pipai.dragontiles.enemies.Yumi
 
@@ -17,7 +18,13 @@ class MountainsDungeon {
                 // Easy
                 listOf(
                     Encounter(
-                        "base:dungeons:Plains:AncientTurtle",
+                        "base:dungeons:Mountains:AncientTurtle",
+                        listOf(
+                            Pair(AncientTurtle(), Vector2(2f, 4.5f))
+                        )
+                    ),
+                    Encounter(
+                        "base:dungeons:Mountains:AncientTurtle2",
                         listOf(
                             Pair(AncientTurtle(), Vector2(2f, 4.5f))
                         )
@@ -26,7 +33,7 @@ class MountainsDungeon {
                 // Standard
                 listOf(
                     Encounter(
-                        "base:dungeons:Plains:AncientTurtle",
+                        "base:dungeons:Mountains:AncientTurtle3",
                         listOf(
                             Pair(AncientTurtle(), Vector2(2f, 4.5f))
                         )
@@ -35,16 +42,16 @@ class MountainsDungeon {
                 // Elite
                 listOf(
                     Encounter(
-                        "base:dungeons:Plains:Yumi",
+                        "base:dungeons:Mountains:Nekomata",
                         listOf(
-                            Pair(Yumi(), Vector2(2f, 4.5f))
+                            Pair(Nekomata(), Vector2(2f, 4.5f))
                         )
                     ),
                 ),
                 // Boss
                 listOf(
                     Encounter(
-                        "base:dungeons:Plains:ShaWujin",
+                        "base:dungeons:Mountains:ShaWujin",
                         listOf(
                             Pair(ShaWujin(), Vector2(2f, 4.5f))
                         )

@@ -98,6 +98,25 @@ data class DebuffIntent(
     }
 }
 
+data class StrategicIntent(
+    override val enemy: Enemy,
+    val buffs: List<Status>,
+    val debuffs: List<Status>,
+    val inflictTileStatuses: List<TileStatusInflictStrategy>,
+    override val animation: IntentAnimation? = null,
+) : Intent {
+
+    override val displayData = Pair(IntentDisplayData.BuffIntentDisplay(), IntentDisplayData.DebuffIntentDisplay())
+
+    override suspend fun execute(api: CombatApi) {
+        buffs.forEach { api.addStatusToEnemy(enemy, it) }
+        debuffs.forEach { api.addStatusToHero(it) }
+        inflictTileStatuses.forEach { strategy ->
+            api.inflictTileStatusOnHand(strategy)
+        }
+    }
+}
+
 data class FumbleIntent(
     override val enemy: Enemy, val amount: Int, val intent: Intent?, override val animation: IntentAnimation? = null,
 ) : Intent {

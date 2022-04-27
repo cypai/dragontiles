@@ -63,3 +63,7 @@ base:enemies:AncientTurtle:
     name: Ancient Turtle
     description: This turtle has drank the Elixir of Life and has gained Immortality!
 
+base:enemies:Nekomata:
+  en:
+    name: Nekomata
+    description: A cursed cat with 2 tails.

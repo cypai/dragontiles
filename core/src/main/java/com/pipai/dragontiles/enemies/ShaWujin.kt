@@ -32,7 +32,7 @@ class ShaWujin : Enemy() {
                     TerminalTileStatusInflictStrategy(
                         TileStatus.FREEZE,
                         3,
-                        TileStatusInflictStrategy.NotEnoughStrategy.RANDOM
+                        TileStatusInflictStrategy.NotEnoughStrategy.SKIP
                     )
                 )
             )

@@ -541,6 +541,8 @@ class CombatApi(
     }
 
     suspend fun devInstantWin() {
+        score()
+        score()
         aoeAttack(Element.NONE, 99999, flags = listOf(CombatFlag.PIERCING))
     }
 

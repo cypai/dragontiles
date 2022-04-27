@@ -53,6 +53,11 @@ base:status:MenacingAura:
     name: Menacing Aura
     description: Gain a @Volatile @FumbleTile each time you cast an Effect.
 
+base:status:CursedAura:
+  en:
+    name: Cursed Aura
+    description: Gain a @Curse @FumbleTile each time you cast an Effect.
+
 base:status:DragonRage:
   en:
     name: Dragon Rage

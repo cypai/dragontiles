@@ -308,6 +308,29 @@ class CombatantStateSystem(
                         )
                     }
                 }
+                is StrategicIntent -> {
+                    val buffs = intent.buffs.isNotEmpty()
+                    val debuffs = intent.debuffs.isNotEmpty() || intent.inflictTileStatuses.isNotEmpty()
+                    when {
+                        buffs && debuffs -> {
+                            updateBuffIntent(ui, false)
+                            updateDebuffIntent(ui, true)
+                            updateTooltip(
+                                ui,
+                                "Strategic",
+                                "This enemy is about to buff itself and inflict a negative effect on you."
+                            )
+                        }
+                        buffs && !debuffs -> {
+                            updateBuffIntent(ui, false)
+                            updateTooltip(ui, "Buffing", "This enemy is about to buff itself.")
+                        }
+                        !buffs && debuffs -> {
+                            updateDebuffIntent(ui, false)
+                            updateTooltip(ui, "Debuffing", "This enemy is about to inflict a negative effect on you.")
+                        }
+                    }
+                }
                 is StunnedIntent -> {
                     ui.intent1.drawable = SpriteDrawable(
                         Sprite(
@@ -388,7 +411,12 @@ class CombatantStateSystem(
 
     private fun updateAttackIntent(ui: EnemyUi, intent: AttackIntent) {
         val attackPower =
-            sCombat.controller.api.calculateDamageOnHero(intent.enemy, intent.element, intent.attackPower, intent.flags())
+            sCombat.controller.api.calculateDamageOnHero(
+                intent.enemy,
+                intent.element,
+                intent.attackPower,
+                intent.flags()
+            )
         if (intent.multistrike == 1) {
             ui.attackLabel.setText(attackPower)
         } else {
