@@ -170,7 +170,7 @@ class RewardsSystem(
                     )
                 }
                 is Reward.SideboardSpaceReward -> {
-                    rewardItemTable({ api.runData.hero.sideboardSize++ }, Image(), null, "+1 Sideboard Space")
+                    rewardItemTable(this::gainSideboardSpace, Image(), null, "+1 Sideboard Space")
                 }
                 is Reward.EmptyReward -> {
                     Table()
@@ -205,6 +205,13 @@ class RewardsSystem(
         rewardsTable.add(openMapBtn)
             .pad(32f)
         rewardsTable.row()
+    }
+
+    private fun gainSideboardSpace() {
+        runData.combatRewards.removeAll { it is Reward.SideboardSpaceReward }
+        runData.combatRewards.add(Reward.EmptyReward())
+        api.runData.hero.sideboardSize++
+        buildAndShowRewardsTable()
     }
 
     private fun getGold(amount: Int) {
