@@ -3,6 +3,11 @@ base:sorceries:Eyes:
     name: Eyes
     description: Deal !d @AOE @Elemented damage.
 
+base:sorceries:EyesOfLethality:
+  en:
+    name: Eyes of Lethality
+    description: Deal !d @AOE @Elemented damage.
+
 base:sorceries:Pong:
   en:
     name: Pong

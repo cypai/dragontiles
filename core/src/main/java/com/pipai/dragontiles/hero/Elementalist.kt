@@ -22,6 +22,7 @@ class Elementalist : HeroClass {
         Eyes(),
     )
     override val spells: List<Spell> = listOf(
+        EyesOfLethality(),
         Burn(),
         ColdHands(),
         Thundershock(),
@@ -83,7 +84,7 @@ class Elementalist : HeroClass {
         SelfAffliction(),
         Inflation(),
 //        Megaxplosion(),
-        FluxBlast(),
+//        FluxBlast(),
         Normalize(),
         FluxMastery(),
     )
