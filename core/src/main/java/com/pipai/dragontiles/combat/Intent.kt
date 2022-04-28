@@ -183,7 +183,9 @@ data class RandomTileStatusInflictStrategy(
             when (notEnoughStrategy) {
                 TileStatusInflictStrategy.NotEnoughStrategy.SKIP -> {}
                 TileStatusInflictStrategy.NotEnoughStrategy.RANDOM -> {
-                    tiles.addAll(hand.filter { it !in tiles && it.tileStatus == TileStatus.NONE })
+                    tiles.addAll(hand
+                        .filter { it !in tiles && it.tileStatus == TileStatus.NONE }
+                        .chooseAmount(amount - tiles.size, rng))
                 }
             }
         }
@@ -205,7 +207,9 @@ data class NonterminalTileStatusInflictStrategy(
             when (notEnoughStrategy) {
                 TileStatusInflictStrategy.NotEnoughStrategy.SKIP -> {}
                 TileStatusInflictStrategy.NotEnoughStrategy.RANDOM -> {
-                    tiles.addAll(hand.filter { it !in tiles && condition(it, hand) })
+                    tiles.addAll(hand
+                        .filter { it !in tiles && condition(it, hand) }
+                        .chooseAmount(amount - tiles.size, rng))
                 }
             }
         }
@@ -233,7 +237,9 @@ data class TerminalTileStatusInflictStrategy(
             when (notEnoughStrategy) {
                 TileStatusInflictStrategy.NotEnoughStrategy.SKIP -> {}
                 TileStatusInflictStrategy.NotEnoughStrategy.RANDOM -> {
-                    tiles.addAll(hand.filter { it !in tiles && condition(it, hand) })
+                    tiles.addAll(hand
+                        .filter { it !in tiles && condition(it, hand) }
+                        .chooseAmount(amount - tiles.size, rng))
                 }
             }
         }
