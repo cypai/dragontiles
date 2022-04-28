@@ -34,7 +34,7 @@ class Elementalist : HeroClass {
 //        StrengthRune(),
         FetchingStrike(),
         RampStrike(),
-        VentingCycle(),
+        CircularBreathing(),
         ElementalSight(),
         FluxCapacitor(),
         InflictReactant(),

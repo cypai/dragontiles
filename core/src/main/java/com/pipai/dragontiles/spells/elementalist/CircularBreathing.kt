@@ -3,8 +3,8 @@ package com.pipai.dragontiles.spells.elementalist
 import com.pipai.dragontiles.combat.CombatApi
 import com.pipai.dragontiles.spells.*
 
-class VentingCycle : StandardSpell() {
-    override val id: String = "base:spells:VentingCycle"
+class CircularBreathing : StandardSpell() {
+    override val id: String = "base:spells:CircularBreathing"
     override val requirement: ComponentRequirement = AnyCombo(2, SuitGroup.ARCANE)
     override val type: SpellType = SpellType.EFFECT
     override val targetType: TargetType = TargetType.NONE

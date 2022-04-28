@@ -38,9 +38,9 @@ base:spells:ReactantStrike:
     name: Reactant Strike
     description: Deal !d @Elemented damage. Inflict !s(1) Elemented Reactant.
 
-base:spells:VentingCycle:
+base:spells:CircularBreathing:
   en:
-    name: Venting Cycle
+    name: Circular Breathing
     description: Lose !f @Flux. Gain !tmfg Max @Flux this combat.
 
 base:spells:ElementalSight:
