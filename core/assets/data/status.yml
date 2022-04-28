@@ -11,7 +11,7 @@ base:status:Overloaded:
 base:status:Strength:
   en:
     name: Strength
-    description: Attacks deal 1 more damage per point of Strength.
+    description: Attacks and Sorceries deal 1 more damage per point of Strength.
 
 base:status:Break:
   en:

@@ -17,8 +17,13 @@ class Strength(amount: Int) : Status(amount) {
         return Strength(amount)
     }
 
-    override fun queryFlatAdjustment(origin: Combatant?, target: Combatant?, element: Element, flags: List<CombatFlag>): Int {
-        return if (origin == combatant && CombatFlag.ATTACK in flags) {
+    override fun queryFlatAdjustment(
+        origin: Combatant?,
+        target: Combatant?,
+        element: Element,
+        flags: List<CombatFlag>
+    ): Int {
+        return if (origin == combatant && flags.any { it in listOf(CombatFlag.ATTACK, CombatFlag.SORCERY) }) {
             amount
         } else {
             0

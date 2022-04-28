@@ -1,6 +1,7 @@
 package com.pipai.dragontiles.spells
 
 import com.pipai.dragontiles.combat.CombatApi
+import com.pipai.dragontiles.combat.CombatFlag
 import com.pipai.dragontiles.data.TileInstance
 import com.pipai.dragontiles.utils.with
 import com.pipai.dragontiles.utils.withoutAll
@@ -9,6 +10,10 @@ import kotlinx.serialization.Serializable
 @Serializable
 abstract class Sorcery : Spell() {
     final override val type = SpellType.SORCERY
+
+    override fun flags(): List<CombatFlag> {
+        return super.flags().with(CombatFlag.SORCERY)
+    }
 
     override fun swappableFromSideboard(): Boolean = false
 
@@ -82,16 +87,16 @@ private fun findFullCastEyeIteration(hand: List<TileInstance>): List<FullCastHan
     }
     fullCastHands.addAll(
         findFullCastMeldIteration(hand)
-        .map { f ->
-            FullCastHand(
-                f.sortedWith(
-                    compareBy(
-                        { it.tiles.first().tile.suit.order },
-                        { it.tiles.first().tile.order() },
-                        { it.type })
-                ), listOf()
-            )
-        })
+            .map { f ->
+                FullCastHand(
+                    f.sortedWith(
+                        compareBy(
+                            { it.tiles.first().tile.suit.order },
+                            { it.tiles.first().tile.order() },
+                            { it.type })
+                    ), listOf()
+                )
+            })
     return fullCastHands
 }
 
