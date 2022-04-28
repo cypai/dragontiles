@@ -414,3 +414,8 @@ base:spells:Superconduct:
   en:
     name: Superconduct
     description: Doubles the target's Cryoshock.
+
+base:spells:DumpFlux:
+  en:
+    name: Dump Flux
+    description: Lose !f Flux.
