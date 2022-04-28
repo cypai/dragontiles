@@ -20,7 +20,12 @@ class Kitsune : Enemy() {
     override fun getIntent(api: CombatApi): Intent {
         return when (turns % 3) {
             0 -> AttackIntent(this, 9, 1, Element.NONE)
-            1 -> BuffIntent(this, listOf(Weak(3, false), Vulnerable(2, false)), null)
+            1 -> DebuffIntent(
+                this,
+                listOf(Weak(3, false), Vulnerable(2, false)),
+                null,
+                listOf(),
+            )
             else -> StrategicIntent(
                 this,
                 listOf(Strength(3)),
