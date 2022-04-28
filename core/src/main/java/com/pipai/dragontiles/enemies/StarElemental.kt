@@ -20,7 +20,7 @@ class StarElemental : Enemy() {
             DebuffIntent(
                 this, listOf(), null,
                 listOf(
-                    NonterminalTileStatusInflictStrategy(
+                    NonorphanedTileStatusInflictStrategy(
                         TileStatus.VOLATILE,
                         n,
                         TileStatusInflictStrategy.NotEnoughStrategy.SKIP

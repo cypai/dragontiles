@@ -29,7 +29,7 @@ class ShaWujin : Enemy() {
                 this, listOf(),
                 AttackIntent(this, 1, 3, Element.ICE),
                 listOf(
-                    TerminalTileStatusInflictStrategy(
+                    OrphanedTileStatusInflictStrategy(
                         TileStatus.FREEZE,
                         3,
                         TileStatusInflictStrategy.NotEnoughStrategy.SKIP

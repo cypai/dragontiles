@@ -31,12 +31,12 @@ class Kitsune : Enemy() {
                 listOf(Strength(3)),
                 listOf(),
                 listOf(
-                    NonterminalTileStatusInflictStrategy(
+                    NonorphanedTileStatusInflictStrategy(
                         TileStatus.CURSE,
                         1,
                         TileStatusInflictStrategy.NotEnoughStrategy.SKIP
                     ),
-                    NonterminalTileStatusInflictStrategy(
+                    NonorphanedTileStatusInflictStrategy(
                         TileStatus.VOLATILE,
                         1,
                         TileStatusInflictStrategy.NotEnoughStrategy.SKIP

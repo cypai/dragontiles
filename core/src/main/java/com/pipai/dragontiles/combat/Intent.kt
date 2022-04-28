@@ -193,7 +193,7 @@ data class RandomTileStatusInflictStrategy(
     }
 }
 
-data class NonterminalTileStatusInflictStrategy(
+data class NonorphanedTileStatusInflictStrategy(
     override val tileStatus: TileStatus,
     override val amount: Int,
     override val notEnoughStrategy: TileStatusInflictStrategy.NotEnoughStrategy
@@ -223,7 +223,7 @@ data class NonterminalTileStatusInflictStrategy(
     }
 }
 
-data class TerminalTileStatusInflictStrategy(
+data class OrphanedTileStatusInflictStrategy(
     override val tileStatus: TileStatus,
     override val amount: Int,
     override val notEnoughStrategy: TileStatusInflictStrategy.NotEnoughStrategy
