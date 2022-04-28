@@ -12,7 +12,7 @@ class ThornedBush : DungeonEvent() {
     private class DigOption : EventOption {
         override val id = "dig"
 
-        private fun hpLoss(api: EventApi): Int = (api.runData.hero.hpMax * 0.15f).toInt()
+        private fun hpLoss(api: EventApi): Int = (api.runData.hero.hpMax * 0.25f).toInt()
 
         override fun additionalText(api: EventApi): String {
             return "Lose ${hpLoss(api)} HP."
