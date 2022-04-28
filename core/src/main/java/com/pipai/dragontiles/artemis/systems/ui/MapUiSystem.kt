@@ -334,6 +334,7 @@ class MapUiSystem(
                         Gdx.app.exit()
                     } else {
                         runData.dungeonMap = nextAct
+                        runData.hero.hp = runData.hero.hpMax
                         game.screen = EventScreen(game, runData, game.data.getDungeon(runData.dungeonMap.dungeonId).startEvent)
                     }
                 }
