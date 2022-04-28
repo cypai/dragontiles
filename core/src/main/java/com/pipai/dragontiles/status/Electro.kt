@@ -1,6 +1,6 @@
 package com.pipai.dragontiles.status
 
-import com.pipai.dragontiles.artemis.systems.animation.TextAnimation
+import com.pipai.dragontiles.artemis.systems.animation.NameTextAnimation
 import com.pipai.dragontiles.combat.CombatApi
 import com.pipai.dragontiles.combat.Combatant
 import com.pipai.dragontiles.data.Element
@@ -21,7 +21,7 @@ class Electro(amount: Int) : Status(amount) {
             is Combatant.EnemyCombatant -> {
                 if (api.enemyHasStatus(c.enemy, Pyro::class)) {
                     api.animate(
-                        TextAnimation(
+                        NameTextAnimation(
                             Combatant.EnemyCombatant(c.enemy),
                             StringLocalized("base:keywords:Pyroblast")
                         )
@@ -40,7 +40,7 @@ class Electro(amount: Int) : Status(amount) {
                 }
                 if (api.enemyHasStatus(c.enemy, Cryo::class)) {
                     api.animate(
-                        TextAnimation(
+                        NameTextAnimation(
                             Combatant.EnemyCombatant(c.enemy),
                             StringLocalized("base:keywords:Cryoshock")
                         )

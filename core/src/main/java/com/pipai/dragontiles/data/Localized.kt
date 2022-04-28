@@ -7,4 +7,5 @@ interface Localized {
     fun additionalLocalized(): List<String> = listOf()
 }
 
-data class StringLocalized(override val id: String) : Localized
+@JvmInline
+value class StringLocalized(override val id: String) : Localized

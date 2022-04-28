@@ -214,7 +214,7 @@ class CombatantStateSystem(
                 ui
             }
         }
-        ui.nameLabel.setText(game.gameStrings.nameLocalization(cEnemy.enemy).name)
+        ui.nameLabel.setText(game.gameStrings.nameLocalization(cEnemy.enemy))
 
         enemyTables[entityId] = ui
         stage.addActor(ui.table)

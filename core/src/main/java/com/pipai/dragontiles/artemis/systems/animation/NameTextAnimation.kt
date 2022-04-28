@@ -9,7 +9,7 @@ import com.pipai.dragontiles.data.Localized
 import com.pipai.dragontiles.utils.allOf
 import com.pipai.dragontiles.utils.fetch
 
-class TextAnimation(val combatant: Combatant, val localized: Localized) : Animation() {
+class NameTextAnimation(val combatant: Combatant, val localized: Localized) : Animation() {
     private lateinit var mEnemy: ComponentMapper<EnemyComponent>
     private lateinit var mXy: ComponentMapper<XYComponent>
     private lateinit var mText: ComponentMapper<TextComponent>
@@ -31,7 +31,7 @@ class TextAnimation(val combatant: Combatant, val localized: Localized) : Animat
         mXy.create(textEntityId).setXy(cCombatantXy.x, cCombatantXy.y)
 
         val cText = mText.create(textEntityId)
-        cText.text = game.gameStrings.nameLocalization(localized).name
+        cText.text = game.gameStrings.nameLocalization(localized)
         cText.size = TextSize.LARGE
         cText.color = Color.BLACK.cpy()
 

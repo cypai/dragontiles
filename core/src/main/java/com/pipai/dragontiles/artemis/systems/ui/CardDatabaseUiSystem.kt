@@ -27,7 +27,7 @@ class CardDatabaseUiSystem(
     private val spellsTable = Table()
     private val scrollPane = ScrollPane(spellsTable)
     private val elementalistButton =
-        TextButton("  ${game.gameStrings.nameLocalization(Elementalist()).name}  ", game.skin)
+        TextButton("  ${game.gameStrings.nameLocalization(Elementalist())}  ", game.skin)
     private val colorlessButton = TextButton("  Colorless  ", game.skin)
     private val topLabel = Label("", game.skin, "white")
     private val colspan = 6
@@ -78,14 +78,14 @@ class CardDatabaseUiSystem(
         spellsTable.clearChildren()
         val heroClass = game.data.getHeroClass(heroClassId)
 
-        topLabel.setText(game.gameStrings.nameLocalization(heroClass).name)
+        topLabel.setText(game.gameStrings.nameLocalization(heroClass))
         spellsTable.add(topLabel).colspan(colspan)
         spellsTable.row()
         val spells = heroClass.starterDeck.withAll(heroClass.spells)
         val sortedSpells = spells.sortedWith(compareBy(
             { it.rarity },
             { it.type },
-            { game.gameStrings.nameLocalization(it).name }
+            { game.gameStrings.nameLocalization(it) }
         ))
         addSpellsInSection(sortedSpells)
     }
@@ -100,7 +100,7 @@ class CardDatabaseUiSystem(
         val sortedSpells = spells.sortedWith(compareBy(
             { it.rarity },
             { it.type },
-            { game.gameStrings.nameLocalization(it).name }
+            { game.gameStrings.nameLocalization(it) }
         ))
         addSpellsInSection(sortedSpells)
     }

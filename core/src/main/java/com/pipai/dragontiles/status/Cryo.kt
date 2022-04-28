@@ -1,6 +1,6 @@
 package com.pipai.dragontiles.status
 
-import com.pipai.dragontiles.artemis.systems.animation.TextAnimation
+import com.pipai.dragontiles.artemis.systems.animation.NameTextAnimation
 import com.pipai.dragontiles.combat.CombatApi
 import com.pipai.dragontiles.combat.CombatFlag
 import com.pipai.dragontiles.combat.Combatant
@@ -21,7 +21,7 @@ class Cryo(amount: Int) : Status(amount) {
         when (val c = combatant) {
             is Combatant.EnemyCombatant -> {
                 if (api.enemyHasStatus(c.enemy, Pyro::class)) {
-                    api.animate(TextAnimation(Combatant.EnemyCombatant(c.enemy), StringLocalized("base:keywords:Melt")))
+                    api.animate(NameTextAnimation(Combatant.EnemyCombatant(c.enemy), StringLocalized("base:keywords:Melt")))
                     val pyroAmount = api.enemyStatusAmount(c.enemy, Pyro::class)
                     if (pyroAmount >= amount) {
                         val theAmount = amount // cached because the api changes it
@@ -34,7 +34,7 @@ class Cryo(amount: Int) : Status(amount) {
                 }
                 if (api.enemyHasStatus(c.enemy, Electro::class)) {
                     api.animate(
-                        TextAnimation(
+                        NameTextAnimation(
                             Combatant.EnemyCombatant(c.enemy),
                             StringLocalized("base:keywords:Cryoshock")
                         )

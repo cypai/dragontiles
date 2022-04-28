@@ -49,12 +49,16 @@ class GameStrings {
         }
     }
 
-    fun nameLocalization(localized: Localized): NameLocalization {
+    fun textLocalization(localized: Localized): String {
         val id = localized.id
         val data = strings[id]?.get(language) ?: throw IllegalArgumentException("$id not found")
-        return NameLocalization(
-            data["name"] ?: throw IllegalStateException("$id name not found"),
-        )
+        return data["text"] ?: throw IllegalStateException("$id text not found")
+    }
+
+    fun nameLocalization(localized: Localized): String {
+        val id = localized.id
+        val data = strings[id]?.get(language) ?: throw IllegalArgumentException("$id not found")
+        return data["name"] ?: throw IllegalStateException("$id name not found")
     }
 
     fun nameDescLocalization(localized: Localized): NameDescLocalization {
@@ -114,7 +118,6 @@ class GameStrings {
     }
 }
 
-data class NameLocalization(val name: String)
 data class NameDescLocalization(val name: String, val description: String)
 data class SpellLocalization(val name: String, val description: String)
 data class KeywordLocalization(val key: String, val name: String, val description: String)

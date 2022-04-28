@@ -1,9 +1,6 @@
 package com.pipai.dragontiles.combat
 
-import com.pipai.dragontiles.artemis.systems.animation.Animation
-import com.pipai.dragontiles.artemis.systems.animation.BatchAnimation
-import com.pipai.dragontiles.artemis.systems.animation.StatusInflictedAnimation
-import com.pipai.dragontiles.artemis.systems.animation.TextAnimation
+import com.pipai.dragontiles.artemis.systems.animation.*
 import com.pipai.dragontiles.data.*
 import com.pipai.dragontiles.enemies.Enemy
 import com.pipai.dragontiles.spells.*
@@ -162,6 +159,7 @@ class CombatApi(
         }
         eventBus.dispatch(TilesAddedToHandEvent(addedTiles, originator))
         if (discardedTiles.isNotEmpty()) {
+            animate(TalkAnimation(Combatant.HeroCombatant, StringLocalized("base:text:HandIsFull")))
             eventBus.dispatch(TilesAddedDiscardedEvent(discardedTiles))
         }
         sortHand()
@@ -331,7 +329,7 @@ class CombatApi(
             eventBus.dispatch(PlayerAttackEnemyEvent(enemy, element, amount))
         }
         if (asAttack && enemyHasStatus(enemy, Dodge::class)) {
-            animate(TextAnimation(Combatant.EnemyCombatant(enemy), Dodge(-1)))
+            animate(NameTextAnimation(Combatant.EnemyCombatant(enemy), Dodge(-1)))
             addStatusToEnemy(enemy, Dodge(-1))
         } else {
             if (!flags.contains(CombatFlag.PIERCING) && enemy.flux < enemy.fluxMax) {
@@ -389,7 +387,7 @@ class CombatApi(
 
     suspend fun dealDamageToEnemy(enemy: Enemy, damage: Int, flags: List<CombatFlag> = listOf()) {
         val actualDamage = if (enemyHasStatus(enemy, Immortality::class) && damage >= enemy.hp) {
-            animate(TextAnimation(Combatant.EnemyCombatant(enemy), Immortality(1)))
+            animate(NameTextAnimation(Combatant.EnemyCombatant(enemy), Immortality(1)))
             enemy.hp - 1
         } else {
             damage
@@ -457,7 +455,7 @@ class CombatApi(
         flags: List<CombatFlag>,
     ) {
         if (heroHasStatus(Dodge::class)) {
-            animate(TextAnimation(Combatant.HeroCombatant, Dodge(-1)))
+            animate(NameTextAnimation(Combatant.HeroCombatant, Dodge(-1)))
             addStatusToHero(Dodge(-1))
         } else {
             val damage = calculateDamageOnHero(enemy, element, amount, flags)
@@ -521,7 +519,7 @@ class CombatApi(
         if (status.amount > 0) {
             val batch = BatchAnimation()
             batch.addToBatch(StatusInflictedAnimation(status))
-            batch.addToBatch(TextAnimation(Combatant.HeroCombatant, status))
+            batch.addToBatch(NameTextAnimation(Combatant.HeroCombatant, status))
             animate(batch)
         }
         val maybeStatus = combat.heroStatus.find { it.id == status.id }
@@ -569,7 +567,7 @@ class CombatApi(
         if (status.amount > 0) {
             val batch = BatchAnimation()
             batch.addToBatch(StatusInflictedAnimation(status))
-            batch.addToBatch(TextAnimation(Combatant.EnemyCombatant(enemy), status))
+            batch.addToBatch(NameTextAnimation(Combatant.EnemyCombatant(enemy), status))
             animate(batch)
         }
         if (maybeStatus == null) {
