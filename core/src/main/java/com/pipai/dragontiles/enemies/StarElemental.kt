@@ -29,7 +29,7 @@ class StarElemental : Enemy() {
             )
         } else {
             val volatility = api.combat.hand.filter { it.tileStatus == TileStatus.VOLATILE }.size
-            AttackIntent(this, 9, volatility, Element.NONE)
+            AttackIntent(this, 4, volatility, Element.NONE)
         }
     }
 
