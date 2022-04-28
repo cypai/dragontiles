@@ -53,6 +53,10 @@ class CombatApi(
         return combat.enemies.first { it.enemyId == id }
     }
 
+    fun getEnemies(): List<Enemy> {
+        return combat.enemies.filter { it.hp > 0 }
+    }
+
     suspend fun castSpell(spell: Spell) {
         eventBus.dispatch(SpellCastedEvent(spell))
     }

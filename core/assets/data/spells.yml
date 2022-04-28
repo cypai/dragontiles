@@ -301,7 +301,7 @@ base:spells:MassTransmute:
 base:spells:WindSwirl:
   en:
     name: Wind Swirl
-    description: Add all Reactants on the target to all other enemies.
+    description: Add all Reactants and Cryoshock on the target to all other enemies.
 
 base:spells:ReactionMastery:
   en:
