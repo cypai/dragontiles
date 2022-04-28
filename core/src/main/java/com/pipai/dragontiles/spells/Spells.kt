@@ -255,6 +255,7 @@ abstract class Rune : Spell() {
         active = true
         canActivate = false
         api.activateRune(this, components())
+        aspects.forEach { it.onCast(this, api) }
         onActivate(api)
     }
 

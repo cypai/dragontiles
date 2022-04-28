@@ -40,7 +40,7 @@ class ShaWujin : Enemy() {
             else -> AttackIntent(this, 30, 1, Element.ICE)
         }
         if (api.heroHasStatus(Overloaded::class) && originalIntent !is AttackIntent && originalIntent !is DebuffIntent) {
-            return AttackIntent(this, 10, 1, Element.ICE)
+            return BuffIntent(this, listOf(Strength(1)), AttackIntent(this, 10, 1, Element.ICE))
         }
         if (justOverloaded && originalIntent is VentIntent) {
             justOverloaded = false

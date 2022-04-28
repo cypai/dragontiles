@@ -19,6 +19,7 @@ class Transmutation : Rune() {
         TransformAspect(),
         NotManuallyDeactivateable(),
         PreserveComponentOrder(),
+        FluxGainAspect(9),
     )
 
     override suspend fun onDeactivate(api: CombatApi) {
