@@ -41,7 +41,7 @@ base:upgrades:AntifreezeUpgrade:
 base:upgrades:DoublestackUpgrade:
   en:
     name: Doublestack Upgrade
-    description: Double all effect stacks.
+    description: Doubles all effect stacks and Flux cost.
 
 base:upgrades:XUpgrade:
   en:
@@ -51,7 +51,7 @@ base:upgrades:XUpgrade:
 base:upgrades:EternalUpgrade:
   en:
     name: Eternal Upgrade
-    description: Can no longer Exhaust.
+    description: Can no longer Exhaust. Doubles Flux cost.
 
 base:upgrades:SwapUpgrade:
   en:

@@ -10,7 +10,8 @@ class DumpFlux : StandardSpell() {
     override val targetType: TargetType = TargetType.NONE
     override val rarity: Rarity = Rarity.RARE
     override val aspects: MutableList<SpellAspect> = mutableListOf(
-        FluxLossAspect(35),
+        FluxGainAspect(5),
+        FluxLossAspect(40),
         ExhaustAspect(),
     )
 

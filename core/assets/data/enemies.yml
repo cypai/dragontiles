@@ -81,7 +81,7 @@ base:enemies:Kitsune:
 base:enemies:StarElemental:
   en:
     name: Star Elemental
-    description: A being composed of pure Star energy.
+    description: A being composed of pure Star energy. Enjoys multiattacks when Volatile.
 
 base:enemies:Nekomata:
   en:

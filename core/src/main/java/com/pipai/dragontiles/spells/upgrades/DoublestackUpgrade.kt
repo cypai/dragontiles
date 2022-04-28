@@ -1,5 +1,6 @@
 package com.pipai.dragontiles.spells.upgrades
 
+import com.pipai.dragontiles.spells.FluxGainAspect
 import com.pipai.dragontiles.spells.Rarity
 import com.pipai.dragontiles.spells.Spell
 import com.pipai.dragontiles.spells.StackableAspect
@@ -17,5 +18,7 @@ class DoublestackUpgrade : SpellUpgrade {
     override fun onUpgrade(spell: Spell) {
         spell.aspects.filterIsInstance(StackableAspect::class.java)
             .map { it.status.amount *= 2 }
+        spell.aspects.filterIsInstance(FluxGainAspect::class.java)
+            .map { it.amount *= 2 }
     }
 }
