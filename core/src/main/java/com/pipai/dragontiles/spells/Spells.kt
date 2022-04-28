@@ -404,6 +404,7 @@ enum class SuitGroup(val allowedSuits: Set<Suit>, val isElemental: Boolean) {
     STAR(setOf(Suit.STAR), false),
     LIFE(setOf(Suit.LIFE), false),
     ELEMENTAL(elementalSet, true),
+    ICE_LIGHTNING(setOf(Suit.ICE, Suit.LIGHTNING), true),
     ARCANE(arcaneSet, false),
     ANY_NO_FUMBLE(anyNoFumbleSet, false),
     ANY(anySet, false),

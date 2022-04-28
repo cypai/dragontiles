@@ -409,3 +409,8 @@ base:spells:RapidMiniInvoke:
   en:
     name: Rapid Mini Invoke
     description: Deal !d @Elemented damage 5 times.
+
+base:spells:Superconduct:
+  en:
+    name: Superconduct
+    description: Doubles the target's Cryoshock.

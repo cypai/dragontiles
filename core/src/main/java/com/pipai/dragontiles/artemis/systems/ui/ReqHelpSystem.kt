@@ -137,6 +137,7 @@ class ReqHelpSystem(private val game: DragonTilesGame, var stage: Stage) : NoPro
             SuitGroup.LIFE -> "assets/binassets/graphics/textures/life_circle.png"
             SuitGroup.STAR -> "assets/binassets/graphics/textures/star_circle.png"
             SuitGroup.ELEMENTAL -> "assets/binassets/graphics/textures/elemental_circle.png"
+            SuitGroup.ICE_LIGHTNING -> "assets/binassets/graphics/textures/ice_lightning_circle.png"
             SuitGroup.ARCANE -> "assets/binassets/graphics/textures/arcane_circle.png"
             SuitGroup.ANY_NO_FUMBLE -> "assets/binassets/graphics/textures/any_circle.png"
             SuitGroup.ANY -> "assets/binassets/graphics/textures/any_circle.png"
