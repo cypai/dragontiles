@@ -6,7 +6,7 @@ import com.pipai.dragontiles.spells.*
 
 class FluxBlast : StandardSpell() {
     override val id: String = "base:spells:FluxBlast"
-    override val requirement: ComponentRequirement = Identical(4, SuitGroup.ANY_NO_FUMBLE)
+    override val requirement: ComponentRequirement = Identical(4)
     override val type: SpellType = SpellType.ATTACK
     override val targetType: TargetType = TargetType.AOE
     override val rarity: Rarity = Rarity.RARE

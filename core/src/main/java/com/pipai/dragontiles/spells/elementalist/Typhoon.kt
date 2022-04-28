@@ -8,7 +8,7 @@ import com.pipai.dragontiles.utils.findAs
 
 class Typhoon : StandardSpell() {
     override val id: String = "base:spells:Typhoon"
-    override val requirement: ComponentRequirement = Identical(3, SuitGroup.ANY_NO_FUMBLE)
+    override val requirement: ComponentRequirement = Identical(3)
     override val type: SpellType = SpellType.ATTACK
     override val targetType: TargetType = TargetType.AOE
     override val rarity: Rarity = Rarity.RARE
@@ -32,7 +32,7 @@ class Typhoon : StandardSpell() {
     }
 
     @CombatSubscribe
-    suspend fun onTurnEnd(ev: TurnEndEvent, api: CombatApi) {
+    fun onTurnEnd(ev: TurnEndEvent, api: CombatApi) {
         if (!played) {
             n = 1
             aspects.findAs(CountdownAspect::class)!!.current = 18

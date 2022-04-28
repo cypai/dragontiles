@@ -8,7 +8,7 @@ import com.pipai.dragontiles.utils.getStackableAmount
 
 class Breakwave : StandardSpell() {
     override val id: String = "base:spells:Breakwave"
-    override val requirement: ComponentRequirement = Identical(3, SuitGroup.ANY_NO_FUMBLE)
+    override val requirement: ComponentRequirement = Identical(3)
     override val type: SpellType = SpellType.EFFECT
     override val targetType: TargetType = TargetType.AOE
     override val rarity: Rarity = Rarity.UNCOMMON

@@ -8,7 +8,7 @@ import com.pipai.dragontiles.spells.*
 class PotOfGreed : Rune() {
     override val id: String = "base:spells:PotOfGreed"
     override val rarity: Rarity = Rarity.UNCOMMON
-    override val requirement: ComponentRequirement = Identical(3, SuitGroup.ANY_NO_FUMBLE)
+    override val requirement: ComponentRequirement = Identical(3)
     override val aspects: MutableList<SpellAspect> = mutableListOf(
         NotManuallyDeactivateable(),
     )
