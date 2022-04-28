@@ -38,6 +38,7 @@ class CombatScreen(
     val world: World
 
     init {
+        runData.dungeonMap.encounters.add(encounter.id)
         val combat = Combat(encounter.enemies.map { it.first })
         if (rewardConfig != null) {
             RewardGenerator().generate(game.data, runData, rewardConfig)
