@@ -34,6 +34,8 @@ class Enpower : StandardSpell() {
     class EnpowerStatus(amount: Int, private val enpoweredElement: Element, id: String, assetName: String) :
         SimpleStatus(id, assetName, true, amount) {
 
+        private var used = false
+
         override fun queryFlatAdjustment(
             origin: Combatant?,
             target: Combatant?,
@@ -48,9 +50,17 @@ class Enpower : StandardSpell() {
         }
 
         @CombatSubscribe
-        suspend fun onAttack(ev: PlayerAttackEnemyEvent, api: CombatApi) {
+        fun onAttack(ev: PlayerAttackEnemyEvent, api: CombatApi) {
             if (ev.element == enpoweredElement) {
+                used = true
+            }
+        }
+
+        @CombatSubscribe
+        suspend fun onCasting(ev: SpellCastedEvent, api: CombatApi) {
+            if (used) {
                 api.removeHeroStatus(id)
+                used = true
             }
         }
     }
