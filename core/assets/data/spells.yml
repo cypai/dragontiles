@@ -404,3 +404,8 @@ base:spells:Typhoon:
   en:
     name: Typhoon
     description: Deals !d @AOE @Elemented damage !c times, increasing each cast. If not casted in a turn, resets multiplier and @CountdownTile.
+
+base:spells:RapidMiniInvoke:
+  en:
+    name: Rapid Mini Invoke
+    description: Deal !d @Elemented damage 5 times.
