@@ -17,13 +17,9 @@ class Cryoshock(amount: Int) : Status(amount) {
 
     @CombatSubscribe
     suspend fun onEnemyStart(ev: EnemyTurnStartEvent, api: CombatApi) {
-        val total = api.combat.enemies
-            .filter { it.hp > 0 }
-            .map { api.enemyStatusAmount(it, Cryoshock::class) }
-            .sum()
         when (val c = combatant) {
             is Combatant.EnemyCombatant -> {
-                api.dealDamageToEnemy(c.enemy, total)
+                api.dealDamageToEnemy(c.enemy, amount)
             }
             else -> {
             }
