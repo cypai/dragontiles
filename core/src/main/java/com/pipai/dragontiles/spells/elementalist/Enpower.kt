@@ -14,12 +14,12 @@ class Enpower : StandardSpell() {
     override val targetType: TargetType = TargetType.NONE
     override val rarity: Rarity = Rarity.UNCOMMON
     override val aspects: MutableList<SpellAspect> = mutableListOf(
-        StackableAspect(GenericStatus(6), 1),
         FluxGainAspect(2),
     )
 
+    private val amount = 6
+
     override suspend fun onCast(params: CastParams, api: CombatApi) {
-        val amount = aspects.findAs(StackableAspect::class)!!.status.amount
         val type = when (val element = elemental(components())) {
             Element.FIRE -> EnpowerStatus(amount, element, "base:status:EnpoweredFire", "red.png")
             Element.ICE -> EnpowerStatus(amount, element, "base:status:EnpoweredIce", "blue.png")

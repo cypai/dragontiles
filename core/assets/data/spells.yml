@@ -398,7 +398,7 @@ base:spells:Cyclone:
 base:spells:Enpower:
   en:
     name: Enpower
-    description: The next same @Elemented attack does !s(1) more damage.
+    description: The next same @Elemented attack does 6 more damage.
 
 base:spells:Typhoon:
   en:
