@@ -14,7 +14,7 @@ class DenseReactants : StandardSpell() {
     override val targetType: TargetType = TargetType.SINGLE
     override val rarity: Rarity = Rarity.UNCOMMON
     override val aspects: MutableList<SpellAspect> = mutableListOf(
-        StackableAspect(GenericStatus(7), 1),
+        StackableAspect(GenericStatus(5), 1),
         FluxGainAspect(3),
     )
 
