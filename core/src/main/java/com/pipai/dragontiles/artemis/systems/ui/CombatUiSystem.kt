@@ -41,6 +41,7 @@ import com.pipai.dragontiles.gui.SpellCard
 import com.pipai.dragontiles.gui.SpellComponentList
 import com.pipai.dragontiles.potions.PotionTargetType
 import com.pipai.dragontiles.spells.*
+import com.pipai.dragontiles.status.Overloaded
 import com.pipai.dragontiles.utils.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -489,6 +490,9 @@ class CombatUiSystem(
     private fun spellCardClickCallback(event: InputEvent, spellCard: SpellCard) {
         when (stateMachine.currentState) {
             CombatUiState.ROOT -> {
+                if (sCombat.controller.api.heroHasStatus(Overloaded::class)) {
+                    return
+                }
                 if (!spellCard.powered && !spellCard.shocked && spells.values.contains(spellCard)) {
                     val spell = spellCard.getSpell()
                     when (event.button) {
