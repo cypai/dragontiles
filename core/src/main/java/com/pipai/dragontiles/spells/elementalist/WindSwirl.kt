@@ -13,7 +13,7 @@ import com.pipai.dragontiles.utils.getStackableCopy
 
 class WindSwirl : StandardSpell() {
     override val id: String = "base:spells:WindSwirl"
-    override val requirement: ComponentRequirement = Single(SuitGroup.LIFE)
+    override val requirement: ComponentRequirement = AnyCombo(2, SuitGroup.LIFE)
     override val type: SpellType = SpellType.EFFECT
     override val targetType: TargetType = TargetType.SINGLE
     override val rarity: Rarity = Rarity.UNCOMMON
@@ -34,15 +34,15 @@ class WindSwirl : StandardSpell() {
                 }
                 val cryoAmount = api.enemyStatusAmount(target, Cryo::class)
                 if (cryoAmount > 0) {
-                    api.addStatusToEnemy(enemy, Cryo(pyroAmount))
+                    api.addStatusToEnemy(enemy, Cryo(cryoAmount))
                 }
                 val electroAmount = api.enemyStatusAmount(target, Electro::class)
                 if (electroAmount > 0) {
-                    api.addStatusToEnemy(enemy, Electro(pyroAmount))
+                    api.addStatusToEnemy(enemy, Electro(electroAmount))
                 }
                 val cryoshockAmount = api.enemyStatusAmount(target, Cryoshock::class)
                 if (cryoshockAmount > 0) {
-                    api.addStatusToEnemy(enemy, Cryoshock(pyroAmount))
+                    api.addStatusToEnemy(enemy, Cryoshock(cryoshockAmount))
                 }
             }
         }
