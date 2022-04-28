@@ -98,13 +98,16 @@ class CombatUiSystem(
     val layout = CombatUiLayout(config, tileSkin, runData.hero.handSize)
 
     private val spellCardY = -SpellCard.cardWorldHeight / 3f
-    private val leftSpellClosedCenter = Vector2(SpellCard.cardWorldWidth, spellCardY)
-    private val leftSpellOpenCenter = Vector2(SpellCard.cardWorldWidth * 3, spellCardY)
+    private val leftSpellOpenBounds = Pair(0f, SpellCard.cardWorldWidth * 6)
+    private val leftSpellClosedBounds = Pair(0f, SpellCard.cardWorldWidth)
     private val leftSpellSwapCenter = Vector2(SpellCard.cardWorldWidth * 3, DragonTilesGame.WORLD_HEIGHT / 2)
-    private val rightSpellClosedCenter =
-        Vector2(DragonTilesGame.worldWidth() - SpellCard.cardWorldWidth * 1.5f, spellCardY)
-    private val rightSpellOpenCenter =
-        Vector2(DragonTilesGame.worldWidth() - SpellCard.cardWorldWidth * 3, spellCardY)
+    private val rightSpellOpenBounds =
+        Pair(
+            leftSpellClosedBounds.second + SpellCard.cardWorldWidth * 1.5f,
+            DragonTilesGame.worldWidth() - SpellCard.cardWorldWidth
+        )
+    private val rightSpellClosedBounds =
+        Pair(leftSpellOpenBounds.second + SpellCard.cardWorldWidth / 2f, rightSpellOpenBounds.second)
     private val rightSpellSwapCenter = Vector2(
         DragonTilesGame.worldWidth() - SpellCard.cardWorldWidth * 3,
         DragonTilesGame.WORLD_HEIGHT / 2
@@ -278,7 +281,8 @@ class CombatUiSystem(
 
     private fun addSpellCardToSideboard(number: Int, spell: Spell) {
         val spellCard = SpellCard(game, spell, number, game.skin, sCombat.controller.api)
-        spellCard.x = game.gameConfig.resolution.width - SpellCard.cardWorldWidth * 2.5f + number * SpellCard.cardWorldWidth * 0.8f
+        spellCard.x =
+            game.gameConfig.resolution.width - SpellCard.cardWorldWidth * 2.5f + number * SpellCard.cardWorldWidth * 0.8f
         spellCard.y = spellCardY
         frontStage.addActor(spellCard)
         sideboard[number] = spellCard
@@ -998,24 +1002,26 @@ class CombatUiSystem(
     override fun scrolled(amountX: Float, amountY: Float) = false
 
     private fun openActiveSpells() {
+        val spacing = (leftSpellOpenBounds.second - leftSpellOpenBounds.first) / spells.size
         spells.forEach { (number, spellCard) ->
             if (spellCard.data[ALLOW_HOVER_MOVE] == 1) {
                 val entityId = spellEntityIds[number]!!
                 val cAnchor = mAnchor.get(entityId)
-                cAnchor.x = leftSpellOpenCenter.x + SpellCard.cardWorldWidth * (number - spellEntityIds.size / 2)
-                cAnchor.y = leftSpellOpenCenter.y
+                cAnchor.x = leftSpellOpenBounds.first + spacing * number
+                cAnchor.y = spellCardY
                 sAnchor.returnToAnchor(entityId)
             }
         }
     }
 
     private fun closeActiveSpells() {
+        val spacing = (leftSpellClosedBounds.second - leftSpellClosedBounds.first) / spells.size
         spells.forEach { (number, spellCard) ->
             if (spellCard.data[ALLOW_HOVER_MOVE] == 1) {
                 val entityId = spellEntityIds[number]!!
                 val cAnchor = mAnchor.get(entityId)
-                cAnchor.x = leftSpellClosedCenter.x + SpellCard.cardWorldWidth / 4 * (number - spellEntityIds.size / 2)
-                cAnchor.y = leftSpellClosedCenter.y
+                cAnchor.x = leftSpellOpenBounds.first + spacing * number
+                cAnchor.y = spellCardY
                 sAnchor.returnToAnchor(entityId)
                 spellCard.toFront()
             }
@@ -1024,24 +1030,26 @@ class CombatUiSystem(
     }
 
     private fun openSideboardSpells() {
+        val spacing = (rightSpellOpenBounds.second - rightSpellOpenBounds.first) / (sideboard.size - 1)
         sideboard.forEach { (number, spellCard) ->
             if (spellCard.data[ALLOW_HOVER_MOVE] == 1) {
                 val entityId = sideboardEntityIds[number]!!
                 val cAnchor = mAnchor.get(entityId)
-                cAnchor.x = rightSpellOpenCenter.x + SpellCard.cardWorldWidth * (number - sideboardEntityIds.size / 2)
-                cAnchor.y = rightSpellOpenCenter.y
+                cAnchor.x = rightSpellOpenBounds.first + spacing * number
+                cAnchor.y = spellCardY
                 sAnchor.returnToAnchor(entityId)
             }
         }
     }
 
     private fun closeSideboardSpells() {
+        val spacing = (rightSpellClosedBounds.second - rightSpellClosedBounds.first) / (sideboard.size - 1)
         sideboard.forEach { (number, spellCard) ->
             if (spellCard.data[ALLOW_HOVER_MOVE] == 1) {
                 val entityId = sideboardEntityIds[number]!!
                 val cAnchor = mAnchor.get(entityId)
-                cAnchor.x = rightSpellClosedCenter.x + SpellCard.cardWorldWidth / 4 * (number - sideboardEntityIds.size / 2)
-                cAnchor.y = rightSpellClosedCenter.y
+                cAnchor.x = rightSpellClosedBounds.first + spacing * number
+                cAnchor.y = spellCardY
                 sAnchor.returnToAnchor(entityId)
                 spellCard.toFront()
             }
