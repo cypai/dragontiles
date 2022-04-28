@@ -16,7 +16,6 @@ class NineTailedVixen : Enemy() {
     override val fluxMax: Int = 0
 
     private var turns: Int = 1
-    private var fumbleAmount: Int = 9
 
     override suspend fun init(api: CombatApi) {
         api.addStatusToEnemy(this, Immortality(1))
@@ -28,10 +27,9 @@ class NineTailedVixen : Enemy() {
             1 -> BuffIntent(this, listOf(Strength(3)), AttackIntent(this, 9, 1, Element.NONE))
             else -> {
                 val fumbles: MutableList<Tile> = mutableListOf()
-                repeat(fumbleAmount) {
+                repeat(9) {
                     fumbles.add(Tile.FumbleTile())
                 }
-                fumbleAmount = MathUtils.clamp(fumbleAmount - 3, 3, 9)
                 StrategicIntent(this, listOf(), listOf(), listOf(), {
                     api.addToOpenPool(api.createTiles(fumbles), Combatant.EnemyCombatant(this))
                 })
