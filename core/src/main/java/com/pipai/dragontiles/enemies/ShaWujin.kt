@@ -36,7 +36,7 @@ class ShaWujin : Enemy() {
                     )
                 )
             )
-            2 -> VentIntent(this, 20, Sandstorm(1))
+            2 -> VentIntent(this, 20, null)
             else -> AttackIntent(this, 30, 1, Element.ICE)
         }
         if (api.heroHasStatus(Overloaded::class) && originalIntent !is AttackIntent && originalIntent !is DebuffIntent) {
@@ -44,7 +44,7 @@ class ShaWujin : Enemy() {
         }
         if (justOverloaded && originalIntent is VentIntent) {
             justOverloaded = false
-            return VentIntent(this, 40, Sandstorm(1))
+            return VentIntent(this, 40, null)
         }
         return originalIntent
     }
