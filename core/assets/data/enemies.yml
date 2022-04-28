@@ -6,7 +6,7 @@ base:enemies:LargeTurtle:
 base:enemies:Slime:
   en:
     name: Slime
-    description: A standard slime. A bit more dangerous than appears at first sight.
+    description: A standard slime. Not very dangerous.
 
 base:enemies:KillerRabbit:
   en:
@@ -36,7 +36,7 @@ base:enemies:Yumi:
 base:enemies:Minotaur:
   en:
     name: Minotaur
-    description: What a brute!
+    description: What a brute! He doesn't seem to fit in this setting though.
 
 base:enemies:FlameDragonHorse:
   en:
