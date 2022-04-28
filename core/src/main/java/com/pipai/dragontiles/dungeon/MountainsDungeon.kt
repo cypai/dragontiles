@@ -48,6 +48,12 @@ class MountainsDungeon {
                         )
                     ),
                     Encounter(
+                        "base:dungeons:Mountains:NineTailedVixen",
+                        listOf(
+                            Pair(NineTailedVixen(), Vector2(2f, 4.5f)),
+                        )
+                    ),
+                    Encounter(
                         "base:dungeons:Mountains:Yumi2",
                         listOf(
                             Pair(MoonRabbit(), Vector2(0.5f, 4.5f)),

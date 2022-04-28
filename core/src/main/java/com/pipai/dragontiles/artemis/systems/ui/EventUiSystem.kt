@@ -3,6 +3,7 @@ package com.pipai.dragontiles.artemis.systems.ui
 import com.artemis.BaseSystem
 import com.badlogic.gdx.math.Interpolation
 import com.badlogic.gdx.math.Vector2
+import com.badlogic.gdx.math.Vector3
 import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.InputEvent
 import com.badlogic.gdx.scenes.scene2d.Stage
@@ -22,8 +23,7 @@ import com.pipai.dragontiles.dungeonevents.DungeonEvent
 import com.pipai.dragontiles.dungeonevents.EventApi
 import com.pipai.dragontiles.dungeonevents.EventOption
 import com.pipai.dragontiles.gui.SpellCard
-import com.pipai.dragontiles.utils.mapper
-import com.pipai.dragontiles.utils.system
+import com.pipai.dragontiles.utils.*
 import net.mostlyoriginal.api.event.common.EventSystem
 import net.mostlyoriginal.api.event.common.Subscribe
 import kotlin.random.Random
@@ -141,17 +141,22 @@ class EventUiSystem(
     fun onSpellGain(ev: SpellGainedEvent) {
         val id = world.create()
         val cXy = mXy.create(id)
-        cXy.setXy(DragonTilesGame.worldWidth() / 2f, DragonTilesGame.WORLD_HEIGHT / 2f)
+        cXy.setXy(
+            su(DragonTilesGame.worldWidth() / 2f + 3 * runData.seed.miscRng().nextFloat()),
+            su(DragonTilesGame.WORLD_HEIGHT / 2f)
+        )
+        val spellCard = SpellCard(game, ev.spell, null, game.skin, null)
         val cActor = mActor.create(id)
-        cActor.actor = SpellCard(game, ev.spell, null, game.skin, null)
+        cActor.actor = spellCard
         val cPath = mPath.create(id)
         cPath.setPath(
             cXy.toVector2(),
-            Vector2(DragonTilesGame.worldWidth() / 2f, -5f),
-            0.8f,
-            Interpolation.exp5In,
+            Vector2(cXy.x, su(-5f)),
+            1f,
+            Interpolation.pow3In,
             EndStrategy.DESTROY
         )
+        stage.addActor(spellCard)
     }
 
     override fun processSystem() {

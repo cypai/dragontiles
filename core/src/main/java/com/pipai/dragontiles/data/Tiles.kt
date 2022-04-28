@@ -1,5 +1,7 @@
 package com.pipai.dragontiles.data
 
+import com.pipai.dragontiles.combat.CombatApi
+
 enum class Suit(val order: Int) {
     FUMBLE(0), FIRE(1), ICE(2), LIGHTNING(3), LIFE(4), STAR(5)
 }

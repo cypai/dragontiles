@@ -45,7 +45,7 @@ data class EnemyChangeIntentEvent(val enemy: Enemy, val intent: Intent?) : Comba
 data class HandAdjustedEvent(val hand: List<TileInstance>, val assigned: MutableMap<Int, List<TileInstance>>) :
     CombatEvent
 
-data class DrawToOpenPoolEvent(val tiles: List<Pair<TileInstance, Int>>) : CombatEvent
+data class AddToOpenPoolEvent(val tiles: List<Pair<TileInstance, Int>>, val originator: Combatant?) : CombatEvent
 
 data class OpenPoolToDiscardEvent(val tiles: List<TileInstance>) : CombatEvent
 

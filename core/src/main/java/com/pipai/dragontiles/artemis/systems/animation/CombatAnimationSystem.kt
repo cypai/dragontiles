@@ -106,7 +106,7 @@ class CombatAnimationSystem(private val game: DragonTilesGame) : BaseSystem(), A
     }
 
     @Subscribe
-    fun handleOpenDrawEvent(ev: DrawToOpenPoolEvent) {
+    fun handleOpenDrawEvent(ev: AddToOpenPoolEvent) {
         val batch = BatchAnimation()
         ev.tiles.forEach {
             batch.addToBatch(DrawToOpenPoolAnimation(it.first, it.second, sUi.layout))

@@ -87,3 +87,8 @@ base:enemies:Nekomata:
   en:
     name: Nekomata
     description: A cursed cat with 2 tails.
+
+base:enemies:NineTailedVixen:
+  en:
+    name: Nine Tailed Vixen
+    description: A fox with 9 tails. Is it related to anyone on this mountain?

@@ -23,8 +23,8 @@ import net.mostlyoriginal.api.event.common.EventSystem
 
 class EventScreen(game: DragonTilesGame, runData: RunData, event: DungeonEvent) : Screen {
 
-    private val backStage = Stage(ScreenViewport(), game.spriteBatch)
-    private val frontStage = Stage(ScreenViewport(), game.spriteBatch)
+    private val backStage = Stage(game.uiViewport, game.spriteBatch)
+    private val frontStage = Stage(game.uiViewport, game.spriteBatch)
 
     val world: World
 

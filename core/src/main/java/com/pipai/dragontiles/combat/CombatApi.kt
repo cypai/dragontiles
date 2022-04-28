@@ -144,6 +144,10 @@ class CombatApi(
         sortHand()
     }
 
+    fun createTiles(tiles: List<Tile>): List<TileInstance> {
+        return tiles.map { TileInstance(it, TileStatus.NONE, nextId()) }
+    }
+
     suspend fun addTilesToHand(tiles: List<Tile>, status: TileStatus, originator: Enemy? = null) {
         val addedTiles: MutableList<Pair<TileInstance, Int>> = mutableListOf()
         val discardedTiles: MutableList<TileInstance> = mutableListOf()
@@ -207,13 +211,20 @@ class CombatApi(
     }
 
     suspend fun drawToOpenPool(amount: Int) {
-        val drawnTiles: MutableList<Pair<TileInstance, Int>> = mutableListOf()
+        val tiles: MutableList<TileInstance> = mutableListOf()
         repeat(amount) {
-            val tile = combat.drawPile.removeAt(0)
+            tiles.add(combat.drawPile.removeAt(0))
+        }
+        addToOpenPool(tiles, null)
+    }
+
+    suspend fun addToOpenPool(tiles: List<TileInstance>, originator: Combatant?) {
+        val drawnTiles: MutableList<Pair<TileInstance, Int>> = mutableListOf()
+        tiles.forEach { tile ->
             combat.openPool.add(tile)
             drawnTiles.add(Pair(tile, combat.openPool.size - 1))
         }
-        eventBus.dispatch(DrawToOpenPoolEvent(drawnTiles))
+        eventBus.dispatch(AddToOpenPoolEvent(drawnTiles, originator))
         if (combat.openPool.size > OPEN_POOL_SIZE) {
             removeFromOpenPool(combat.openPool.slice(0 until combat.openPool.size - OPEN_POOL_SIZE))
         }

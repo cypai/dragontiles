@@ -342,6 +342,15 @@ class CombatantStateSystem(
                                 "This enemy is about to inflict a negative effect on you."
                             )
                         }
+                        else -> {
+                            updateUnknownIntent(ui)
+                            updateTooltip(
+                                ui,
+                                enemy,
+                                "Unknown",
+                                "This enemy is about to do something strange."
+                            )
+                        }
                     }
                 }
                 is StunnedIntent -> {
@@ -525,6 +534,17 @@ class CombatantStateSystem(
             Sprite(
                 game.assets.get(
                     intentAssetPath("vent.png"),
+                    Texture::class.java
+                )
+            )
+        )
+    }
+
+    private fun updateUnknownIntent(ui: EnemyUi) {
+        ui.intent1.drawable = SpriteDrawable(
+            Sprite(
+                game.assets.get(
+                    intentAssetPath("unknown.png"),
                     Texture::class.java
                 )
             )
