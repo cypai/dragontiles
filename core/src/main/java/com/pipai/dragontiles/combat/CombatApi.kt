@@ -147,7 +147,7 @@ class CombatApi(
         sortHand()
     }
 
-    suspend fun addTilesToHand(tiles: List<Tile>, status: TileStatus) {
+    suspend fun addTilesToHand(tiles: List<Tile>, status: TileStatus, originator: Enemy? = null) {
         val addedTiles: MutableList<Pair<TileInstance, Int>> = mutableListOf()
         val discardedTiles: MutableList<TileInstance> = mutableListOf()
         tiles.forEach {
@@ -160,7 +160,7 @@ class CombatApi(
                 discardedTiles.add(tileInstance)
             }
         }
-        eventBus.dispatch(TilesAddedToHandEvent(addedTiles))
+        eventBus.dispatch(TilesAddedToHandEvent(addedTiles, originator))
         if (discardedTiles.isNotEmpty()) {
             eventBus.dispatch(TilesAddedDiscardedEvent(discardedTiles))
         }

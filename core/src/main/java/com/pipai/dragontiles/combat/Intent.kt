@@ -137,7 +137,7 @@ data class FumbleIntent(
         repeat(amount) {
             tiles.add(Tile.FumbleTile())
         }
-        api.addTilesToHand(tiles, TileStatus.NONE)
+        api.addTilesToHand(tiles, TileStatus.NONE, enemy)
     }
 }
 

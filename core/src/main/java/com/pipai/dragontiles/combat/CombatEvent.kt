@@ -34,7 +34,7 @@ data class TileDestroyedEvent(val tile: TileInstance) : CombatEvent
 
 data class TileStatusChangeEvent(val tiles: List<TileInstance>, val tileStatus: TileStatus) : CombatEvent
 
-data class TilesAddedToHandEvent(val tiles: List<Pair<TileInstance, Int>>) : CombatEvent
+data class TilesAddedToHandEvent(val tiles: List<Pair<TileInstance, Int>>, val originator: Enemy?) : CombatEvent
 
 data class TilesAddedDiscardedEvent(val tiles: List<TileInstance>) : CombatEvent
 

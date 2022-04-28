@@ -2,6 +2,7 @@ package com.pipai.dragontiles.status
 
 import com.pipai.dragontiles.combat.CombatApi
 import com.pipai.dragontiles.combat.CombatSubscribe
+import com.pipai.dragontiles.combat.Combatant
 import com.pipai.dragontiles.combat.EnemyTurnEndEvent
 import com.pipai.dragontiles.data.Tile
 import com.pipai.dragontiles.data.TileStatus
@@ -22,6 +23,6 @@ class Sandstorm(amount: Int) : Status(amount) {
         repeat(amount) {
             list.add(Tile.FumbleTile())
         }
-        api.addTilesToHand(list, TileStatus.NONE)
+        api.addTilesToHand(list, TileStatus.NONE, (combatant as Combatant.EnemyCombatant).enemy)
     }
 }

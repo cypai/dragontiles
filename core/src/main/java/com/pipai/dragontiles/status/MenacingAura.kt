@@ -1,6 +1,9 @@
 package com.pipai.dragontiles.status
 
-import com.pipai.dragontiles.combat.*
+import com.pipai.dragontiles.combat.CombatApi
+import com.pipai.dragontiles.combat.CombatSubscribe
+import com.pipai.dragontiles.combat.Combatant
+import com.pipai.dragontiles.combat.SpellCastedEvent
 import com.pipai.dragontiles.data.Tile
 import com.pipai.dragontiles.data.TileStatus
 import com.pipai.dragontiles.spells.SpellType
@@ -22,7 +25,7 @@ class MenacingAura(amount: Int) : Status(amount) {
             repeat(amount) {
                 tiles.add(Tile.FumbleTile())
             }
-            api.addTilesToHand(tiles, TileStatus.VOLATILE)
+            api.addTilesToHand(tiles, TileStatus.VOLATILE, (combatant as Combatant.EnemyCombatant).enemy)
         }
     }
 }

@@ -205,7 +205,7 @@ class CombatAnimationSystem(private val game: DragonTilesGame) : BaseSystem(), A
 
     @Subscribe
     fun handleAddedToHand(ev: TilesAddedToHandEvent) {
-        queueAnimation(TilesAddedToHandAnimation(ev.tiles, sUi.layout))
+        queueAnimation(TilesAddedToHandAnimation(ev.tiles, ev.originator, sUi.layout))
     }
 
     @Subscribe
