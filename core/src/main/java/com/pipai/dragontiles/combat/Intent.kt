@@ -175,9 +175,19 @@ data class RandomTileStatusInflictStrategy(
 ) : TileStatusInflictStrategy {
 
     override fun select(hand: List<TileInstance>, rng: Random): List<TileInstance> {
-        return hand
+        val tiles = hand
             .filter { it.tileStatus == TileStatus.NONE }
             .chooseAmount(amount, rng)
+            .toMutableList()
+        if (tiles.size < amount) {
+            when (notEnoughStrategy) {
+                TileStatusInflictStrategy.NotEnoughStrategy.SKIP -> {}
+                TileStatusInflictStrategy.NotEnoughStrategy.RANDOM -> {
+                    tiles.addAll(hand.filter { it !in tiles && it.tileStatus == TileStatus.NONE })
+                }
+            }
+        }
+        return tiles
     }
 }
 
@@ -188,13 +198,24 @@ data class NonterminalTileStatusInflictStrategy(
 ) : TileStatusInflictStrategy {
 
     override fun select(hand: List<TileInstance>, rng: Random): List<TileInstance> {
-        return hand
-            .filter { t ->
-                t.tileStatus == TileStatus.NONE
-                        && t.tile !is Tile.FumbleTile
-                        && !terminal(t.tile, hand.map { it.tile })
-            }
+        val tiles = hand.filter { condition(it, hand) }
             .chooseAmount(amount, rng)
+            .toMutableList()
+        if (tiles.size < amount) {
+            when (notEnoughStrategy) {
+                TileStatusInflictStrategy.NotEnoughStrategy.SKIP -> {}
+                TileStatusInflictStrategy.NotEnoughStrategy.RANDOM -> {
+                    tiles.addAll(hand.filter { it !in tiles && condition(it, hand) })
+                }
+            }
+        }
+        return tiles
+    }
+
+    private fun condition(t: TileInstance, hand: List<TileInstance>): Boolean {
+        return t.tileStatus == TileStatus.NONE
+                && t.tile !is Tile.FumbleTile
+                && !orphan(t.tile, hand.map { it.tile })
     }
 }
 
@@ -205,12 +226,23 @@ data class TerminalTileStatusInflictStrategy(
 ) : TileStatusInflictStrategy {
 
     override fun select(hand: List<TileInstance>, rng: Random): List<TileInstance> {
-        return hand
-            .filter { t ->
-                t.tileStatus == TileStatus.NONE
-                        && t.tile !is Tile.FumbleTile
-                        && terminal(t.tile, hand.map { it.tile })
-            }
+        val tiles = hand.filter { condition(it, hand) }
             .chooseAmount(amount, rng)
+            .toMutableList()
+        if (tiles.size < amount) {
+            when (notEnoughStrategy) {
+                TileStatusInflictStrategy.NotEnoughStrategy.SKIP -> {}
+                TileStatusInflictStrategy.NotEnoughStrategy.RANDOM -> {
+                    tiles.addAll(hand.filter { it !in tiles && condition(it, hand) })
+                }
+            }
+        }
+        return tiles
+    }
+
+    private fun condition(t: TileInstance, hand: List<TileInstance>): Boolean {
+        return t.tileStatus == TileStatus.NONE
+                && t.tile !is Tile.FumbleTile
+                && orphan(t.tile, hand.map { it.tile })
     }
 }

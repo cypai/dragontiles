@@ -1,7 +1,5 @@
 package com.pipai.dragontiles.data
 
-import com.pipai.dragontiles.combat.CombatApi
-
 enum class Suit(val order: Int) {
     FUMBLE(0), FIRE(1), ICE(2), LIGHTNING(3), LIFE(4), STAR(5)
 }
@@ -54,13 +52,16 @@ val lifeTiles = LifeType.values().map { Tile.LifeTile(it) }
 
 data class TileInstance(val tile: Tile, var tileStatus: TileStatus, val id: Int)
 
-fun terminal(tile: Tile, hand: List<Tile>): Boolean {
+/**
+ * @param hand The hand with the tile (do not exclude)
+ */
+fun orphan(tile: Tile, hand: List<Tile>): Boolean {
     if (hand.count { it == tile } > 1) {
         return false
     }
     return when (tile) {
         is Tile.ElementalTile -> {
-            hand.none { (tile.number < 9 && it == successor(tile)) && (tile.number > 1 && it == predecessor(tile)) }
+            hand.none { (tile.number < 9 && it == successor(tile)) || (tile.number > 1 && it == predecessor(tile)) }
         }
         else -> {
             true
