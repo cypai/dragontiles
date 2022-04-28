@@ -308,7 +308,7 @@ class CombatApi(
             .withAll(combat.heroStatus)
             .withAll(combat.enemyStatus[enemy.enemyId]!!)
         allQueryRespondents.forEach {
-            flat += it.queryFlatAdjustment(Combatant.EnemyCombatant(enemy), Combatant.HeroCombatant, element, listOf())
+            flat += it.queryFlatAdjustment(Combatant.EnemyCombatant(enemy), Combatant.HeroCombatant, element, flags)
             scaling *= it.queryScaledAdjustment(
                 Combatant.EnemyCombatant(enemy),
                 Combatant.HeroCombatant,
