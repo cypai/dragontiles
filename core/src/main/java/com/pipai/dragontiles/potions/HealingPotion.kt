@@ -16,6 +16,7 @@ class HealingPotion : Potion() {
     }
 
     override suspend fun onCombatUse(target: Int?, api: CombatApi) {
-        api.healHero((api.runData.hero.hpMax * 0.2f).toInt())
+        val amount = (api.runData.hero.hpMax * 0.2f).toInt()
+        api.healHero(amount)
     }
 }

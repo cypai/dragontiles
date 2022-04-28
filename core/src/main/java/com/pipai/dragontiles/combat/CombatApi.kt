@@ -517,8 +517,8 @@ class CombatApi(
         runData.hero.hp += amount
         if (runData.hero.hp > runData.hero.hpMax) {
             runData.hero.hp = runData.hero.hpMax
-            eventBus.dispatch(PlayerHealEvent(amount))
         }
+        eventBus.dispatch(PlayerHealEvent(amount))
     }
 
     suspend fun addStatusToHero(status: Status) {
