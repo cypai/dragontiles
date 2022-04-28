@@ -63,7 +63,7 @@ class Elementalist : HeroClass {
         ReactantGenesis(),
 //        GreatPower(),
         Expansion(),
-        TransmutationRune(),
+        Transmutation(),
         ExpandAnomaly(),
         Ventilation(),
         Riffle(),

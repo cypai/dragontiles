@@ -266,7 +266,7 @@ base:spells:Thundershock:
 base:spells:Transmutation:
   en:
     name: Transmutation
-    description: Not deactivateable. Next turn, transform all Components into the Element of the first Component.
+    description: Not deactivateable. Next turn, deactivate and transform all Components into the Element of the first Component.
 
 base:spells:ExpandAnomaly:
   en:
@@ -356,7 +356,7 @@ base:spells:Inflation:
 base:spells:Ventilation:
   en:
     name: Ventilation
-    description: Lose !s(1) Flux at the end of your turn.
+    description: Gain !s(1) Ventilation.
 
 base:spells:Megaxplosion:
   en:

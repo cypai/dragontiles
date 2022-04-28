@@ -8,7 +8,7 @@ import com.pipai.dragontiles.spells.*
 import com.pipai.dragontiles.status.Strength
 import com.pipai.dragontiles.utils.findAs
 
-class TransmutationRune : Rune() {
+class Transmutation : Rune() {
     override val id: String = "base:spells:Transmutation"
     override val rarity: Rarity = Rarity.UNCOMMON
     override val requirement: ComponentRequirement = ForbidTransformFreeze(
