@@ -232,10 +232,12 @@ class CombatantStateSystem(
     }
 
     fun changeEnemyHp(enemy: Enemy, amount: Int) {
-        val entityId = enemyEntityMap[enemy]!!
-        val cEnemy = mEnemy.get(entityId)
-        cEnemy.hp += amount
-        updateEnemyStats(enemy, cEnemy.hp, cEnemy.hpMax, cEnemy.flux, cEnemy.fluxMax)
+        val entityId = enemyEntityMap[enemy]
+        if (entityId != null) {
+            val cEnemy = mEnemy.get(entityId)
+            cEnemy.hp += amount
+            updateEnemyStats(enemy, cEnemy.hp, cEnemy.hpMax, cEnemy.flux, cEnemy.fluxMax)
+        }
     }
 
     fun updateEnemyStats(enemy: Enemy, hp: Int, hpMax: Int, flux: Int, fluxMax: Int) {
