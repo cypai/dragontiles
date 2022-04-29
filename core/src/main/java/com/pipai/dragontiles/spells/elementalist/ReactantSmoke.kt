@@ -14,8 +14,8 @@ class ReactantSmoke : StandardSpell() {
     override val targetType: TargetType = TargetType.AOE
     override val rarity: Rarity = Rarity.UNCOMMON
     override val aspects: MutableList<SpellAspect> = mutableListOf(
-        StackableAspect(GenericStatus(5), 1),
-        FluxGainAspect(3),
+        StackableAspect(GenericStatus(3), 1),
+        FluxGainAspect(6),
     )
 
     override fun additionalKeywords(): List<String> =
