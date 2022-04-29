@@ -14,7 +14,7 @@ class Gnat : Enemy() {
 
     override val id: String = "base:enemies:Gnat"
     override val assetName: String = "gnat.png"
-    override val assetConfig: AssetConfig = AssetConfig(AssetType.SPRITE, 0.5f)
+    override val assetConfig: AssetConfig = AssetConfig(AssetType.SPRITE, 1f)
 
     override val hpMax: Int = 1
     override val fluxMax: Int = 20

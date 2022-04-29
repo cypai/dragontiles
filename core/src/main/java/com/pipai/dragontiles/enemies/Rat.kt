@@ -11,7 +11,7 @@ class Rat : Enemy() {
 
     override val id: String = "base:enemies:Rat"
     override val assetName: String = "rat.png"
-    override val assetConfig: AssetConfig = AssetConfig(AssetType.SPRITE, 0.7f)
+    override val assetConfig: AssetConfig = AssetConfig(AssetType.SPRITE, 1f)
 
     override val hpMax: Int = 2
     override val fluxMax: Int = 20

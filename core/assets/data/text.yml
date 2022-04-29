@@ -6,6 +6,10 @@ base:text:Howl:
   en:
     text: Howl
 
+base:text:ZhuBajieAwake:
+  en:
+    text: Oi you! Don't attack my food!
+
 base:text:ZhuBajieOmNomNom:
   en:
     text: Om nom nom!

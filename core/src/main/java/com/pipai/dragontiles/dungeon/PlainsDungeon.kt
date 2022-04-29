@@ -96,7 +96,7 @@ class PlainsDungeon {
                         "base:dungeons:Plains:ZhuBajie",
                         listOf(
                             Pair(Cornucopia(), Vector2(0.5f, 4.5f)),
-                            Pair(ZhuBajie(), Vector2(3f, 4.5f)),
+                            Pair(ZhuBajie(), Vector2(2.5f, 4.5f)),
                             Pair(Cornucopia(), Vector2(5.5f, 4.5f)),
                         )
                     ),
