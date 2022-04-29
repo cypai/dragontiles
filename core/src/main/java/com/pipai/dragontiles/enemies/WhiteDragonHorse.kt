@@ -22,8 +22,7 @@ class WhiteDragonHorse : Enemy() {
                 listOf(
                     RandomTileStatusInflictStrategy(
                         TileStatus.VOLATILE,
-                        3,
-                        TileStatusInflictStrategy.NotEnoughStrategy.SKIP
+                        3
                     )
                 ),
                 null

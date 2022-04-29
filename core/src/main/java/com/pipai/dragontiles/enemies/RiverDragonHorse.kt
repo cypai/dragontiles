@@ -24,8 +24,7 @@ class RiverDragonHorse : Enemy() {
                 listOf(
                     RandomTileStatusInflictStrategy(
                         TileStatus.FREEZE,
-                        3,
-                        TileStatusInflictStrategy.NotEnoughStrategy.SKIP
+                        3
                     )
                 ),
                 null

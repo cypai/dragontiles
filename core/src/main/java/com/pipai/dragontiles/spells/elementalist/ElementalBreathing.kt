@@ -55,8 +55,7 @@ class ElementalBreathing : PowerSpell() {
                     api.inflictTileStatusOnHand(
                         RandomTileStatusInflictStrategy(
                             tileStatus,
-                            amount,
-                            TileStatusInflictStrategy.NotEnoughStrategy.RANDOM
+                            amount
                         )
                     )
                 }

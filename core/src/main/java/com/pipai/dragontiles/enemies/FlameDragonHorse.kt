@@ -22,8 +22,7 @@ class FlameDragonHorse : Enemy() {
                 listOf(
                     RandomTileStatusInflictStrategy(
                         TileStatus.BURN,
-                        3,
-                        TileStatusInflictStrategy.NotEnoughStrategy.SKIP
+                        3
                     )
                 ),
                 null

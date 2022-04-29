@@ -33,8 +33,7 @@ class Nekomata : Enemy() {
                 listOf(
                     RandomTileStatusInflictStrategy(
                         TileStatus.CURSE,
-                        4,
-                        TileStatusInflictStrategy.NotEnoughStrategy.SKIP
+                        4
                     )
                 ),
             )

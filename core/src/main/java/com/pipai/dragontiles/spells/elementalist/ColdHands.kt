@@ -2,11 +2,9 @@ package com.pipai.dragontiles.spells.elementalist
 
 import com.pipai.dragontiles.combat.CombatApi
 import com.pipai.dragontiles.combat.RandomTileStatusInflictStrategy
-import com.pipai.dragontiles.combat.TileStatusInflictStrategy
 import com.pipai.dragontiles.data.Element
 import com.pipai.dragontiles.data.TileStatus
 import com.pipai.dragontiles.spells.*
-import com.pipai.dragontiles.status.BreakStatus
 import com.pipai.dragontiles.status.Weak
 import com.pipai.dragontiles.utils.getStackableCopy
 
@@ -29,8 +27,7 @@ class ColdHands : StandardSpell() {
         api.inflictTileStatusOnHand(
             RandomTileStatusInflictStrategy(
                 TileStatus.FREEZE,
-                1,
-                TileStatusInflictStrategy.NotEnoughStrategy.RANDOM
+                1
             )
         )
     }

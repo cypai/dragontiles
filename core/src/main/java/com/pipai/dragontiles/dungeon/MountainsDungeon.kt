@@ -85,6 +85,12 @@ class MountainsDungeon {
                             Pair(Yumi3(), Vector2(4f, 4.5f)),
                         )
                     ),
+                    Encounter(
+                        "base:dungeons:Mountains:TamamoNoMae",
+                        listOf(
+                            Pair(Tamamo(), Vector2(3f, 4.5f)),
+                        )
+                    ),
                 ),
                 // Dungeon Events
                 listOf(

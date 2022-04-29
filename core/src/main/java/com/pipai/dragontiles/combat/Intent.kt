@@ -32,6 +32,7 @@ data class AttackIntent(
     val attackPower: Int,
     val multistrike: Int,
     val element: Element,
+    val callback: suspend (CombatApi) -> Unit = {},
     override val animation: IntentAnimation? = null
 ) : Intent {
 
@@ -51,6 +52,7 @@ data class AttackIntent(
 data class DoNothingIntent(
     override val enemy: Enemy,
     val type: DoNothingType,
+    val callback: suspend (CombatApi) -> Unit = {},
     override val animation: IntentAnimation? = null
 ) : Intent {
 
@@ -90,6 +92,7 @@ data class DebuffIntent(
     val debuffs: List<Status>,
     val inflictTileStatuses: List<TileStatusInflictStrategy>,
     val attackIntent: AttackIntent?,
+    val callback: suspend (CombatApi) -> Unit = {},
     override val animation: IntentAnimation? = null,
 ) : Intent {
 
@@ -178,26 +181,17 @@ interface TileStatusInflictStrategy {
 
 data class RandomTileStatusInflictStrategy(
     override val tileStatus: TileStatus,
-    override val amount: Int,
-    override val notEnoughStrategy: TileStatusInflictStrategy.NotEnoughStrategy
+    override val amount: Int
 ) : TileStatusInflictStrategy {
 
+    override val notEnoughStrategy: TileStatusInflictStrategy.NotEnoughStrategy =
+        TileStatusInflictStrategy.NotEnoughStrategy.SKIP
+
     override fun select(hand: List<TileInstance>, rng: Random): List<TileInstance> {
-        val tiles = hand
+        return hand
             .filter { it.tileStatus == TileStatus.NONE }
             .chooseAmount(amount, rng)
             .toMutableList()
-        if (tiles.size < amount) {
-            when (notEnoughStrategy) {
-                TileStatusInflictStrategy.NotEnoughStrategy.SKIP -> {}
-                TileStatusInflictStrategy.NotEnoughStrategy.RANDOM -> {
-                    tiles.addAll(hand
-                        .filter { it !in tiles && it.tileStatus == TileStatus.NONE }
-                        .chooseAmount(amount - tiles.size, rng))
-                }
-            }
-        }
-        return tiles
     }
 }
 
