@@ -8,7 +8,6 @@ import com.pipai.dragontiles.data.AssetConfig
 import com.pipai.dragontiles.data.AssetType
 import com.pipai.dragontiles.data.Element
 import com.pipai.dragontiles.status.Immortality
-import com.pipai.dragontiles.status.Sandstorm
 import com.pipai.dragontiles.status.Strength
 
 class AncientTurtle : Enemy() {
@@ -29,7 +28,7 @@ class AncientTurtle : Enemy() {
     override fun getIntent(api: CombatApi): Intent {
         return when (intents) {
             0 -> AttackIntent(this, 12, 1, Element.NONE)
-            1 -> AttackIntent(this, 12, 1, Element.NONE, null)
+            1 -> AttackIntent(this, 12, 1, Element.NONE)
             else -> BuffIntent(this, listOf(Strength(6)), AttackIntent(this, 4, 1, Element.NONE))
         }
     }

@@ -100,6 +100,12 @@ class PlainsDungeon {
                             Pair(Cornucopia(), Vector2(5.5f, 4.5f)),
                         )
                     ),
+                    Encounter(
+                        "base:dungeons:Plains:SunWukong",
+                        listOf(
+                            Pair(SunWukong(), Vector2(3f, 4.5f)),
+                        )
+                    ),
                 ),
                 // Dungeon Events
                 listOf(

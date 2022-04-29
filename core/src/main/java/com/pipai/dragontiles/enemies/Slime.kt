@@ -24,7 +24,7 @@ class Slime : Enemy() {
     override fun getIntent(api: CombatApi): Intent {
         return when (attacks % 4) {
             0 -> DebuffIntent(this, listOf(BreakStatus(2, true)), listOf(), null)
-            else -> AttackIntent(this, 8, 1, Element.ICE, IntentAnimation("Attack", "OnDamaging"))
+            else -> AttackIntent(this, 8, 1, Element.ICE, {}, IntentAnimation("Attack", "OnDamaging"))
         }
     }
 
