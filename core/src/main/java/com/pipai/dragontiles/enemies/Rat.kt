@@ -1,6 +1,8 @@
 package com.pipai.dragontiles.enemies
 
 import com.pipai.dragontiles.combat.*
+import com.pipai.dragontiles.data.AssetConfig
+import com.pipai.dragontiles.data.AssetType
 import com.pipai.dragontiles.data.Element
 import com.pipai.dragontiles.status.Dodge
 import com.pipai.dragontiles.status.Weak
@@ -9,6 +11,7 @@ class Rat : Enemy() {
 
     override val id: String = "base:enemies:Rat"
     override val assetName: String = "rat.png"
+    override val assetConfig: AssetConfig = AssetConfig(AssetType.SPRITE, 0.7f)
 
     override val hpMax: Int = 2
     override val fluxMax: Int = 20

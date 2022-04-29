@@ -1,5 +1,6 @@
 package com.pipai.dragontiles.combat
 
+import com.badlogic.gdx.math.Vector2
 import com.pipai.dragontiles.artemis.systems.animation.*
 import com.pipai.dragontiles.data.*
 import com.pipai.dragontiles.enemies.Enemy
@@ -50,7 +51,7 @@ class CombatApi(
         return combat.enemies.first { it.enemyId == id }
     }
 
-    fun getEnemies(): List<Enemy> {
+    fun getLiveEnemies(): List<Enemy> {
         return combat.enemies.filter { it.hp > 0 }
     }
 
@@ -356,7 +357,7 @@ class CombatApi(
         amount: Int,
         flags: List<CombatFlag>,
     ) {
-        combat.enemies.filter { it.hp > 0 }
+        getLiveEnemies()
             .forEach { attack(it, element, amount, flags) }
     }
 
@@ -412,11 +413,15 @@ class CombatApi(
             statuses.clear()
             eventBus.unregister(enemy)
             eventBus.dispatch(EnemyDefeatedEvent(enemy))
-            if (combat.enemies.all { it.hp <= 0 }) {
+            if (getLiveEnemies().all { enemyHasStatus(it, Minion::class) }) { // also true if no live enemies
                 combat.heroStatus.clear()
                 eventBus.dispatch(BattleWinEvent())
             }
         }
+    }
+
+    suspend fun summonEnemy(enemy: Enemy, location: Vector2) {
+        combat.enemies.add(enemy)
     }
 
     suspend fun consume(components: List<TileInstance>, spell: Spell) {
@@ -554,13 +559,14 @@ class CombatApi(
     }
 
     suspend fun devInstantWin() {
-        score()
-        score()
+        while (getLiveEnemies().any { enemyHasStatus(it, Immortality::class) }) {
+            score()
+        }
         aoeAttack(Element.NONE, 99999, flags = listOf(CombatFlag.PIERCING))
     }
 
     suspend fun addAoeStatus(status: Status) {
-        combat.enemies.filter { it.hp > 0 }
+        getLiveEnemies()
             .forEach { addStatusToEnemy(it, status.deepCopy()) }
     }
 

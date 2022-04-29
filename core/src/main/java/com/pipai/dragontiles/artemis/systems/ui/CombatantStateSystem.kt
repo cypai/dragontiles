@@ -3,6 +3,7 @@ package com.pipai.dragontiles.artemis.systems.ui
 import com.artemis.BaseSystem
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.Sprite
+import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.InputEvent
 import com.badlogic.gdx.scenes.scene2d.Stage
@@ -56,39 +57,43 @@ class CombatantStateSystem(
     override fun initialize() {
         initHero()
         encounter.enemies.forEach { (enemy, position) ->
-            val entityId = world.create()
-            val cXy = mXy.create(entityId)
-            cXy.setXy(position)
-
-            when (enemy.assetConfig.type) {
-                AssetType.SPRITE -> {
-                    val cSprite = mSprite.create(entityId)
-                    cSprite.sprite = Sprite(game.assets.get(enemyAssetPath(enemy.assetName), Texture::class.java))
-                    cSprite.width = enemy.assetConfig.width
-                    cSprite.height = enemy.assetConfig.width / cSprite.sprite.width * cSprite.sprite.height
-                }
-                AssetType.SPINE -> {
-                    val cSpine = mSpine.create(entityId)
-                    cSpine.load(game.assets.get(spineAssetPath(enemy.assetName)))
-                    val scale = enemy.assetConfig.width / cSpine.skeleton.data.width
-                    cSpine.skeleton.setScale(scale, scale)
-                    cSpine.state.setAnimation(0, "Idle", true)
-                }
-            }
-
-            val cEnemy = mEnemy.create(entityId)
-            cEnemy.setByEnemy(enemy)
-
-            val cHover = mHoverable.create(entityId)
-            cHover.enterEvent = EnemyHoverEnterEvent(cEnemy)
-            cHover.exitEvent = EnemyHoverExitEvent()
-
-            mClickable.create(entityId).eventGenerator = { EnemyClickEvent(entityId, it) }
-
-            enemyEntityMap[enemy] = entityId
-            createUi(enemy, entityId)
-            updateEnemyStats(enemy, enemy.hpMax, enemy.hpMax, enemy.flux, enemy.fluxMax)
+            initEnemy(enemy, position)
         }
+    }
+
+    fun initEnemy(enemy: Enemy, position: Vector2) {
+        val entityId = world.create()
+        val cXy = mXy.create(entityId)
+        cXy.setXy(position)
+
+        when (enemy.assetConfig.type) {
+            AssetType.SPRITE -> {
+                val cSprite = mSprite.create(entityId)
+                cSprite.sprite = Sprite(game.assets.get(enemyAssetPath(enemy.assetName), Texture::class.java))
+                cSprite.width = enemy.assetConfig.width
+                cSprite.height = enemy.assetConfig.width / cSprite.sprite.width * cSprite.sprite.height
+            }
+            AssetType.SPINE -> {
+                val cSpine = mSpine.create(entityId)
+                cSpine.load(game.assets.get(spineAssetPath(enemy.assetName)))
+                val scale = enemy.assetConfig.width / cSpine.skeleton.data.width
+                cSpine.skeleton.setScale(scale, scale)
+                cSpine.state.setAnimation(0, "Idle", true)
+            }
+        }
+
+        val cEnemy = mEnemy.create(entityId)
+        cEnemy.setByEnemy(enemy)
+
+        val cHover = mHoverable.create(entityId)
+        cHover.enterEvent = EnemyHoverEnterEvent(cEnemy)
+        cHover.exitEvent = EnemyHoverExitEvent()
+
+        mClickable.create(entityId).eventGenerator = { EnemyClickEvent(entityId, it) }
+
+        enemyEntityMap[enemy] = entityId
+        createUi(enemy, entityId)
+        updateEnemyStats(enemy, enemy.hpMax, enemy.hpMax, enemy.flux, enemy.fluxMax)
     }
 
     private fun initHero() {

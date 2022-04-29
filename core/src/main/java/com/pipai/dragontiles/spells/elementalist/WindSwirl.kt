@@ -1,15 +1,11 @@
 package com.pipai.dragontiles.spells.elementalist
 
 import com.pipai.dragontiles.combat.CombatApi
-import com.pipai.dragontiles.combat.CombatFlag
-import com.pipai.dragontiles.combat.RandomTileStatusInflictStrategy
-import com.pipai.dragontiles.data.TileStatus
 import com.pipai.dragontiles.spells.*
 import com.pipai.dragontiles.status.Cryo
 import com.pipai.dragontiles.status.Cryoshock
 import com.pipai.dragontiles.status.Electro
 import com.pipai.dragontiles.status.Pyro
-import com.pipai.dragontiles.utils.getStackableCopy
 
 class WindSwirl : StandardSpell() {
     override val id: String = "base:spells:WindSwirl"
@@ -26,7 +22,7 @@ class WindSwirl : StandardSpell() {
 
     override suspend fun onCast(params: CastParams, api: CombatApi) {
         val target = api.getEnemy(params.targets.first())
-        api.getEnemies().forEach { enemy ->
+        api.getLiveEnemies().forEach { enemy ->
             if (enemy.enemyId != target.enemyId) {
                 val pyroAmount = api.enemyStatusAmount(target, Pyro::class)
                 if (pyroAmount > 0) {

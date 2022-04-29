@@ -273,6 +273,11 @@ class CombatAnimationSystem(private val game: DragonTilesGame) : BaseSystem(), A
     }
 
     @Subscribe
+    fun handleEnemySummon(ev: EnemySummonEvent) {
+        queueAnimation(EnemySummonAnimation(ev))
+    }
+
+    @Subscribe
     fun handleAnimation(ev: AnimationEvent) {
         queueAnimation(ev.animation)
     }

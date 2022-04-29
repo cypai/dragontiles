@@ -177,3 +177,8 @@ base:status:EnpoweredLightning:
   en:
     name: Enpowered Lightning
     description: The next Lightning attack does more damage.
+
+base:status:Minion:
+  en:
+    name: Minion
+    description: Minions do not need to be defeated to win the battle.

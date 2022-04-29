@@ -28,14 +28,28 @@ class MountainsDungeon {
                             Pair(VermillionBird(), Vector2(5.5f, 4.5f)),
                         )
                     ),
-                ),
-                // Standard
-                listOf(
                     Encounter(
                         "base:dungeons:Mountains:KitsuneStarElemental",
                         listOf(
                             Pair(Kitsune(), Vector2(0.5f, 4.5f)),
                             Pair(StarElemental(), Vector2(4f, 4.5f)),
+                        )
+                    ),
+                ),
+                // Standard
+                listOf(
+                    Encounter(
+                        "base:dungeons:Mountains:WhiteDragonHorseStarElemental",
+                        listOf(
+                            Pair(WhiteDragonHorse(), Vector2(0.5f, 4.5f)),
+                            Pair(StarElemental(), Vector2(4f, 4.5f)),
+                        )
+                    ),
+                    Encounter(
+                        "base:dungeons:Mountains:DoubleStarElemental",
+                        listOf(
+                            Pair(StarElemental(), Vector2(0.5f, 4.5f)),
+                            Pair(StarElemental(), Vector2(3f, 4.5f)),
                         )
                     ),
                 ),

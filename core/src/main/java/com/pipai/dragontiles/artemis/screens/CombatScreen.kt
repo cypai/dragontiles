@@ -39,7 +39,7 @@ class CombatScreen(
 
     init {
         runData.dungeonMap.encounters.add(encounter.id)
-        val combat = Combat(encounter.enemies.map { it.first })
+        val combat = Combat(encounter.enemies.map { it.first }.toMutableList())
         if (rewardConfig != null) {
             RewardGenerator().generate(game.data, runData, rewardConfig)
         }

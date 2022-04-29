@@ -10,7 +10,7 @@ import com.pipai.dragontiles.spells.Sorcery
 import com.pipai.dragontiles.spells.Spell
 import com.pipai.dragontiles.status.Status
 
-data class Combat(val enemies: List<Enemy>) {
+data class Combat(val enemies: MutableList<Enemy>) {
 
     var turnNumber = 0
 

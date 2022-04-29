@@ -1,5 +1,6 @@
 package com.pipai.dragontiles.combat
 
+import com.badlogic.gdx.math.Vector2
 import com.pipai.dragontiles.artemis.systems.animation.Animation
 import com.pipai.dragontiles.data.Element
 import com.pipai.dragontiles.data.Tile
@@ -62,6 +63,8 @@ data class EnemyLoseFluxEvent(val enemy: Enemy, val amount: Int) : CombatEvent
 data class EnemyDamageEvent(val enemy: Enemy, val amount: Int, val flags: List<CombatFlag>) : CombatEvent
 
 data class EnemyDefeatedEvent(val enemy: Enemy) : CombatEvent
+
+data class EnemySummonEvent(val enemy: Enemy, val location: Vector2) : CombatEvent
 
 class BattleWinEvent : CombatEvent
 
