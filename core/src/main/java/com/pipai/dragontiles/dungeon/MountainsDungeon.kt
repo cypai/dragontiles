@@ -88,7 +88,7 @@ class MountainsDungeon {
                     Encounter(
                         "base:dungeons:Mountains:TamamoNoMae",
                         listOf(
-                            Pair(Tamamo(), Vector2(3f, 4.5f)),
+                            Pair(TamamoNoMae(), Vector2(3f, 4.5f)),
                         )
                     ),
                 ),

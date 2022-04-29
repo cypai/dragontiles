@@ -7,9 +7,9 @@ import com.pipai.dragontiles.status.Immortality
 import com.pipai.dragontiles.status.Overloaded
 import com.pipai.dragontiles.status.Strength
 
-class Tamamo : Enemy() {
+class TamamoNoMae : Enemy() {
 
-    override val id: String = "base:enemies:Tamamo"
+    override val id: String = "base:enemies:TamamoNoMae"
     override val assetName: String = "tamamo_no_mae.png"
 
     override val hpMax: Int = 90
