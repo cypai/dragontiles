@@ -182,3 +182,8 @@ base:status:Minion:
   en:
     name: Minion
     description: Minions do not need to be defeated to win the battle.
+
+base:status:Regen:
+  en:
+    name: Regen
+    description: Heals HP at the start of its turn.

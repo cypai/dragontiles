@@ -21,7 +21,7 @@ class Cornucopia : Enemy() {
     }
 
     override fun getIntent(api: CombatApi): Intent {
-        return DoNothingIntent(this, DoNothingType.CANNOT_ACT)
+        return DoNothingIntent(this, DoNothingType.WAITING)
     }
 
     override fun nextIntent(api: CombatApi): Intent {

@@ -3,7 +3,7 @@ package com.pipai.dragontiles.status
 import com.pipai.dragontiles.combat.*
 
 class Regen(amount: Int, private val decreasing: Boolean) : Status(amount) {
-    override val id = "base:status:regen"
+    override val id = "base:status:Regen"
     override val assetName = "regen.png"
     override val displayAmount = true
     override val negativeAllowed = false

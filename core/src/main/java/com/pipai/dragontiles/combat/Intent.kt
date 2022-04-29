@@ -63,7 +63,7 @@ data class DoNothingIntent(
 }
 
 enum class DoNothingType {
-    STUNNED, SLEEPING, CANNOT_ACT
+    STUNNED, SLEEPING, WAITING
 }
 
 data class BuffIntent(

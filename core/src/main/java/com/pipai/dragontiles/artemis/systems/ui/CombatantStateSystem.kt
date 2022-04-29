@@ -359,15 +359,30 @@ class CombatantStateSystem(
                     }
                 }
                 is DoNothingIntent -> {
+                    val assetName = when (intent.type) {
+                        DoNothingType.STUNNED -> "stunned.png"
+                        DoNothingType.SLEEPING -> "sleeping.png"
+                        DoNothingType.WAITING -> "waiting.png"
+                    }
+                    val name = when (intent.type) {
+                        DoNothingType.STUNNED -> "Stunned"
+                        DoNothingType.SLEEPING -> "Sleeping"
+                        DoNothingType.WAITING -> "Waiting"
+                    }
+                    val description = when (intent.type) {
+                        DoNothingType.STUNNED -> "This enemy is stunned."
+                        DoNothingType.SLEEPING -> "This enemy is sleeping."
+                        DoNothingType.WAITING -> "This enemy is not doing anything."
+                    }
                     ui.intent1.drawable = SpriteDrawable(
                         Sprite(
                             game.assets.get(
-                                intentAssetPath("stunned.png"),
+                                intentAssetPath(assetName),
                                 Texture::class.java
                             )
                         )
                     )
-                    updateTooltip(ui, enemy, "Stunned", "This enemy is stunned.")
+                    updateTooltip(ui, enemy, name, description)
                 }
                 is FumbleIntent -> {
                     when (val innerIntent = intent.intent) {
