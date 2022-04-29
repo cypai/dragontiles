@@ -92,3 +92,33 @@ base:enemies:NineTailedVixen:
   en:
     name: Nine Tailed Vixen
     description: A fox with 9 tails. Is it related to anyone on this mountain?
+
+base:enemies:Cornucopia:
+  en:
+    name: Cornucopia
+    description: Generates unlimited amounts of food...
+
+base:enemies:ZhuBajie:
+  en:
+    name: Zhu Bajie
+    description: A very lazy, but powerful disciple.
+
+base:enemies:SunWukong:
+  en:
+    name: Sun Wukong
+    description: A very impulsive and mischievous monkey.
+
+base:enemies:Gnat:
+  en:
+    name: Gnat
+    description: Weak, but incredibly annoying.
+
+base:enemies:WolfPup:
+  en:
+    name: Wolf Pup
+    description: A young version of a wolf. Only really knows how to howl.
+
+base:enemies:Monkey:
+  en:
+    name: Monkey
+    description: A monkey from Flower Fruit Mountain. Or is it actually just some hair?
