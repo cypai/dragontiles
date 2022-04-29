@@ -62,6 +62,8 @@ data class EnemyLoseFluxEvent(val enemy: Enemy, val amount: Int) : CombatEvent
 
 data class EnemyDamageEvent(val enemy: Enemy, val amount: Int, val flags: List<CombatFlag>) : CombatEvent
 
+data class EnemyHealEvent(val enemy: Enemy, val amount: Int) : CombatEvent
+
 data class EnemyDefeatedEvent(val enemy: Enemy) : CombatEvent
 
 data class EnemySummonEvent(val enemy: Enemy, val location: Vector2) : CombatEvent

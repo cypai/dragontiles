@@ -358,7 +358,7 @@ class CombatantStateSystem(
                         }
                     }
                 }
-                is StunnedIntent -> {
+                is DoNothingIntent -> {
                     ui.intent1.drawable = SpriteDrawable(
                         Sprite(
                             game.assets.get(

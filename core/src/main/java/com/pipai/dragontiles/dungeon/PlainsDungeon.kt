@@ -89,7 +89,15 @@ class PlainsDungeon {
                     Encounter(
                         "base:dungeons:Plains:ShaWujin",
                         listOf(
-                            Pair(ShaWujin(), Vector2(2f, 4.5f))
+                            Pair(ShaWujin(), Vector2(2f, 4.5f)),
+                        )
+                    ),
+                    Encounter(
+                        "base:dungeons:Plains:ZhuBajie",
+                        listOf(
+                            Pair(Cornucopia(), Vector2(0.5f, 4.5f)),
+                            Pair(ZhuBajie(), Vector2(3f, 4.5f)),
+                            Pair(Cornucopia(), Vector2(5.5f, 4.5f)),
                         )
                     ),
                 ),

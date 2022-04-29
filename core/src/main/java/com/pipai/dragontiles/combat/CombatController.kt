@@ -109,7 +109,7 @@ class CombatController(
             .filter { it.hp > 0 }
             .forEach {
                 val intent = if (api.enemyHasStatus(it, Overloaded::class)) {
-                    StunnedIntent(it)
+                    DoNothingIntent(it, DoNothingType.STUNNED)
                 } else {
                     it.nextIntent(api)
                 }

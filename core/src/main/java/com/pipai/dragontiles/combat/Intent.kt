@@ -48,12 +48,20 @@ data class AttackIntent(
     }
 }
 
-data class StunnedIntent(override val enemy: Enemy, override val animation: IntentAnimation? = null) : Intent {
+data class DoNothingIntent(
+    override val enemy: Enemy,
+    val type: DoNothingType,
+    override val animation: IntentAnimation? = null
+) : Intent {
 
     override val displayData = Pair(IntentDisplayData.StunnedIntentDisplay(), null)
 
     override suspend fun execute(api: CombatApi) {
     }
+}
+
+enum class DoNothingType {
+    STUNNED, SLEEPING, CANNOT_ACT
 }
 
 data class BuffIntent(

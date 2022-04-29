@@ -1,3 +1,11 @@
 base:text:HandIsFull:
   en:
     text: My hand is full!
+
+base:text:ZhuBajieOmNomNom:
+  en:
+    text: Om nom nom!
+
+base:text:ZhuBajieHowDareYou:
+  en:
+    text: How dare you break the cornucopias!

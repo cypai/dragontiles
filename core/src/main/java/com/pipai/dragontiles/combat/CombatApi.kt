@@ -367,7 +367,7 @@ class CombatApi(
         if (enemy.flux >= enemy.fluxMax) {
             enemy.flux = enemy.fluxMax
             addStatusToEnemy(enemy, Overloaded(2))
-            changeEnemyIntent(enemy, StunnedIntent(enemy))
+            changeEnemyIntent(enemy, DoNothingIntent(enemy, DoNothingType.STUNNED))
         }
     }
 
@@ -382,7 +382,7 @@ class CombatApi(
 
     fun getEnemyIntent(enemy: Enemy): Intent? {
         return if (enemyHasStatus(enemy, Overloaded::class)) {
-            StunnedIntent(enemy)
+            DoNothingIntent(enemy, DoNothingType.STUNNED)
         } else {
             enemy.getIntent(this)
         }
@@ -420,8 +420,14 @@ class CombatApi(
         }
     }
 
+    suspend fun healEnemy(enemy: Enemy, amount: Int) {
+        enemy.hp += amount
+        eventBus.dispatch(EnemyHealEvent(enemy, amount))
+    }
+
     suspend fun summonEnemy(enemy: Enemy, location: Vector2) {
         combat.enemies.add(enemy)
+        eventBus.dispatch(EnemySummonEvent(enemy, location))
     }
 
     suspend fun consume(components: List<TileInstance>, spell: Spell) {
