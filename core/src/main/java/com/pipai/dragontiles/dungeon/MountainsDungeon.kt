@@ -79,9 +79,10 @@ class MountainsDungeon {
                 // Boss
                 listOf(
                     Encounter(
-                        "base:dungeons:Mountains:ShaWujin",
+                        "base:dungeons:Mountains:ChangE",
                         listOf(
-                            Pair(ShaWujin(), Vector2(2f, 4.5f)),
+                            Pair(ChangE(), Vector2(1f, 4.5f)),
+                            Pair(Yumi3(), Vector2(4f, 4.5f)),
                         )
                     ),
                 ),

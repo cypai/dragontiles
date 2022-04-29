@@ -23,8 +23,8 @@ class Kitsune : Enemy() {
             1 -> DebuffIntent(
                 this,
                 listOf(Weak(3, false), Vulnerable(2, false)),
-                null,
                 listOf(),
+                null,
             )
             else -> StrategicIntent(
                 this,

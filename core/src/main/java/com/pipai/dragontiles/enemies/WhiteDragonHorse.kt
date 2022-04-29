@@ -19,14 +19,14 @@ class WhiteDragonHorse : Enemy() {
             DebuffIntent(
                 this,
                 listOf(),
-                null,
                 listOf(
                     RandomTileStatusInflictStrategy(
                         TileStatus.VOLATILE,
                         3,
                         TileStatusInflictStrategy.NotEnoughStrategy.SKIP
                     )
-                )
+                ),
+                null
             )
         } else {
             AttackIntent(this, 10, 1, Element.NONE)

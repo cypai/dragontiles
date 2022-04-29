@@ -21,14 +21,14 @@ class RiverDragonHorse : Enemy() {
             DebuffIntent(
                 this,
                 listOf(),
-                null,
                 listOf(
                     RandomTileStatusInflictStrategy(
                         TileStatus.FREEZE,
                         3,
                         TileStatusInflictStrategy.NotEnoughStrategy.SKIP
                     )
-                )
+                ),
+                null
             )
         }
     }

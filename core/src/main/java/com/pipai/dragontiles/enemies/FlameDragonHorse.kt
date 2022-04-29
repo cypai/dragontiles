@@ -19,14 +19,14 @@ class FlameDragonHorse : Enemy() {
             DebuffIntent(
                 this,
                 listOf(),
-                null,
                 listOf(
                     RandomTileStatusInflictStrategy(
                         TileStatus.BURN,
                         3,
                         TileStatusInflictStrategy.NotEnoughStrategy.SKIP
                     )
-                )
+                ),
+                null
             )
         } else {
             AttackIntent(this, 10, 1, Element.FIRE)

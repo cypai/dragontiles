@@ -28,10 +28,12 @@ class RiverSpirit : Enemy() {
             FumbleIntent(this, 1, AttackIntent(this, 1, 3, Element.ICE))
         } else {
             if (flag) {
-                DebuffIntent(this,
+                DebuffIntent(
+                    this,
                     listOf(BreakStatus(1, true)),
-                    AttackIntent(this, 1, 1, Element.ICE),
-                    listOf())
+                    listOf(),
+                    AttackIntent(this, 1, 1, Element.ICE)
+                )
             } else {
                 FumbleIntent(this, 1, AttackIntent(this, 1, 1, Element.ICE))
             }

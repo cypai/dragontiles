@@ -27,14 +27,14 @@ class ShaWujin : Enemy() {
             0 -> BuffIntent(this, listOf(Strength(3)), null)
             1 -> DebuffIntent(
                 this, listOf(),
-                AttackIntent(this, 1, 3, Element.ICE),
                 listOf(
                     OrphanedTileStatusInflictStrategy(
                         TileStatus.FREEZE,
                         3,
                         TileStatusInflictStrategy.NotEnoughStrategy.SKIP
                     )
-                )
+                ),
+                AttackIntent(this, 1, 3, Element.ICE)
             )
             2 -> VentIntent(this, 20, null)
             else -> AttackIntent(this, 30, 1, Element.ICE)

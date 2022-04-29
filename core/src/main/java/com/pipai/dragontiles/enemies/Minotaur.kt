@@ -23,7 +23,7 @@ class Minotaur : Enemy() {
             AttackIntent(this, 20, 1, Element.NONE)
         }
         return when (intents) {
-            0 -> DebuffIntent(this, listOf(Vulnerable(2, true)), null, listOf())
+            0 -> DebuffIntent(this, listOf(Vulnerable(2, true)), listOf(), null)
             1 -> AttackIntent(this, 20, 1, Element.NONE)
             else -> AttackIntent(this, 20, 1, Element.NONE)
         }

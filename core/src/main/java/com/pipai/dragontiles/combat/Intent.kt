@@ -88,8 +88,8 @@ data class BuffIntent(
 data class DebuffIntent(
     override val enemy: Enemy,
     val debuffs: List<Status>,
-    val attackIntent: AttackIntent?,
     val inflictTileStatuses: List<TileStatusInflictStrategy>,
+    val attackIntent: AttackIntent?,
     override val animation: IntentAnimation? = null,
 ) : Intent {
 

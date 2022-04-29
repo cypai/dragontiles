@@ -18,14 +18,14 @@ class StarElemental : Enemy() {
     override fun getIntent(api: CombatApi): Intent {
         return if (turns % 3 < 2) {
             DebuffIntent(
-                this, listOf(), null,
-                listOf(
+                this, listOf(), listOf(
                     NonorphanedTileStatusInflictStrategy(
                         TileStatus.VOLATILE,
                         n,
                         TileStatusInflictStrategy.NotEnoughStrategy.SKIP
                     ),
-                )
+                ),
+                null
             )
         } else {
             val volatility = api.combat.hand.filter { it.tileStatus == TileStatus.VOLATILE }.size
