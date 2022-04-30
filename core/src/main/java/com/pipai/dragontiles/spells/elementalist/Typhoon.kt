@@ -15,7 +15,7 @@ class Typhoon : StandardSpell() {
     override val aspects: MutableList<SpellAspect> = mutableListOf(
         AttackDamageAspect(5),
         FluxGainAspect(8),
-        CountdownAspect(18, CountdownType.SCORE, this::cdCallback)
+        CountdownAspect(12, CountdownType.SCORE, this::cdCallback)
     )
 
     private var n = 1

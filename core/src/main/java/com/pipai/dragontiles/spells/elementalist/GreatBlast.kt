@@ -8,7 +8,7 @@ class GreatBlast : Sorcery() {
     override val requirement = AnyCombo(3)
     override val rarity = Rarity.UNCOMMON
     override val aspects: MutableList<SpellAspect> = mutableListOf(
-        AttackDamageAspect(4)
+        AttackDamageAspect(6)
     )
 
     override suspend fun onCast(hand: FullCastHand, api: CombatApi) {

@@ -14,7 +14,8 @@ class Bump : StandardSpell() {
     override val targetType: TargetType = TargetType.NONE
     override val rarity: Rarity = Rarity.COMMON
     override val aspects: MutableList<SpellAspect> = mutableListOf(
-        TransformAspect()
+        FluxGainAspect(1),
+        TransformAspect(),
     )
 
     override suspend fun onCast(params: CastParams, api: CombatApi) {
