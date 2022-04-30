@@ -765,6 +765,26 @@ class SequentialX(override var suitGroup: SuitGroup) : ComponentRequirement {
 class ForbidTransformFreeze(private val spell: Spell, private val compReq: ComponentRequirement) :
     ComponentRequirement by compReq {
 
+    override fun find(hand: List<TileInstance>): List<List<TileInstance>> {
+        return if (spell.aspects.none { it is TransformAspect }) {
+            compReq.find(hand)
+        } else {
+            compReq.find(hand.filter { it.tileStatus != TileStatus.FREEZE })
+        }
+    }
+
+    override fun findGiven(hand: List<TileInstance>, given: List<TileInstance>): List<List<TileInstance>> {
+        return if (spell.aspects.none { it is TransformAspect }) {
+            compReq.findGiven(hand, given)
+        } else {
+            if (given.any { it.tileStatus == TileStatus.FREEZE }) {
+                listOf()
+            } else {
+                compReq.findGiven(hand.filter { it.tileStatus != TileStatus.FREEZE }, given)
+            }
+        }
+    }
+
     override fun satisfied(slots: List<TileInstance>): Boolean {
         return compReq.satisfied(slots)
                 && (spell.aspects.none { it is TransformAspect } || slots.none { it.tileStatus == TileStatus.FREEZE })
