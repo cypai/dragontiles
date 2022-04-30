@@ -13,7 +13,7 @@ class TamamoNoMae : Enemy() {
     override val assetName: String = "tamamo_no_mae.png"
 
     override val hpMax: Int = 90
-    override val fluxMax: Int = 180
+    override val fluxMax: Int = 120
 
     private var turns: Int = 0
 
