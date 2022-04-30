@@ -94,6 +94,12 @@ base:keywords:Transform:
     name: Transform
     description: Changes (does not consume) the tile. Blocked by @Freeze.
 
+base:keywords:Swap:
+  en:
+    key: "@Swap"
+    name: Swap
+    description: Swap spells with your sideboard.
+
 base:keywords:Fetch:
   en:
     key: "@Fetch"
