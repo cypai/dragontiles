@@ -45,7 +45,7 @@ class TamamoNoMae : Enemy() {
             BuffIntent(
                 this,
                 listOf(Strength(3)),
-                AttackIntent(this, 6, 9, Element.NONE),
+                AttackIntent(this, 3, 9, Element.NONE),
             )
         }
     }
