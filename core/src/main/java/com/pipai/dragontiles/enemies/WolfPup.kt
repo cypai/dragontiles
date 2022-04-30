@@ -14,7 +14,7 @@ class WolfPup : Enemy() {
     override val assetConfig: AssetConfig = AssetConfig(AssetType.SPRITE, 1.5f)
 
     override val hpMax: Int = 20
-    override val fluxMax: Int = 20
+    override val fluxMax: Int = 15
 
     override fun getIntent(api: CombatApi): Intent {
         return BuffIntent(

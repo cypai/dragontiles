@@ -19,6 +19,8 @@ class CheapUpgrades : DungeonEvent() {
         override fun onSelect(api: EventApi) {
             api.gainGoldImmediate(-2)
             api.queryUpgradeSpell(HeatsinkUpgrade())
+            api.changeMainText("buyMain")
+            api.changeOptions(listOf(BuyHeatsink(), BuyStability(), MoveOnOption()))
         }
     }
 
@@ -32,11 +34,22 @@ class CheapUpgrades : DungeonEvent() {
         override fun onSelect(api: EventApi) {
             api.gainGoldImmediate(-2)
             api.queryUpgradeSpell(StabilityUpgrade())
+            api.changeMainText("buyMain")
+            api.changeOptions(listOf(BuyHeatsink(), BuyStability(), MoveOnOption()))
         }
     }
 
     private class PassOption : EventOption {
         override val id = "pass"
+
+        override fun onSelect(api: EventApi) {
+            api.allowMapAdvance()
+            api.showMap()
+        }
+    }
+
+    private class MoveOnOption : EventOption {
+        override val id = "moveOn"
 
         override fun onSelect(api: EventApi) {
             api.allowMapAdvance()

@@ -360,7 +360,10 @@ base:events:CheapUpgrades:
 
         Whether or not he obtained them legitimately is another story entirely.
 
-        Will the gods approve of your purchase?
+        You may buy more, or move on.
   pass:
     en:
       text: He looks shady. Pass on by.
+  moveOn:
+    en:
+      text: Move on.

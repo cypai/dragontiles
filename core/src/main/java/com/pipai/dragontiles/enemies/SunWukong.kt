@@ -11,7 +11,7 @@ class SunWukong : Enemy() {
     override val id: String = "base:enemies:SunWukong"
     override val assetName: String = "sun_wukong.png"
 
-    override val hpMax: Int = 144
+    override val hpMax: Int = 100
     override val fluxMax: Int = 0
 
     private var leftMinion: Enemy? = null
@@ -37,7 +37,7 @@ class SunWukong : Enemy() {
 
     private suspend fun summon(api: CombatApi) {
         val rng = api.runData.seed.miscRng()
-        val availableMinions = listOf(Gnat(), Monkey(), Rat(), WolfPup())
+        val availableMinions = listOf(Gnat(), Monkey(), WolfPup())
         if (leftMinion == null) {
             val right = rightMinion
             val choice = if (right == null) {

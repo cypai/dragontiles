@@ -17,7 +17,7 @@ class Gnat : Enemy() {
     override val assetConfig: AssetConfig = AssetConfig(AssetType.SPRITE, 1f)
 
     override val hpMax: Int = 1
-    override val fluxMax: Int = 20
+    override val fluxMax: Int = 15
 
     var n = 1
 
