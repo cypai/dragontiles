@@ -1,6 +1,7 @@
 package com.pipai.dragontiles.artemis.systems.ui
 
 import com.artemis.BaseSystem
+import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.math.Interpolation
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.math.Vector3
@@ -18,6 +19,7 @@ import com.pipai.dragontiles.artemis.components.EndStrategy
 import com.pipai.dragontiles.artemis.components.PathInterpolationComponent
 import com.pipai.dragontiles.artemis.components.XYComponent
 import com.pipai.dragontiles.artemis.events.SpellGainedEvent
+import com.pipai.dragontiles.combat.GameOverEvent
 import com.pipai.dragontiles.data.RunData
 import com.pipai.dragontiles.dungeonevents.DungeonEvent
 import com.pipai.dragontiles.dungeonevents.EventApi
@@ -34,6 +36,8 @@ class EventUiSystem(
     private val runData: RunData,
     private val event: DungeonEvent
 ) : BaseSystem() {
+
+    private val logger = getLogger()
 
     private val skin = game.skin
 
@@ -157,6 +161,12 @@ class EventUiSystem(
             EndStrategy.DESTROY
         )
         stage.addActor(spellCard)
+    }
+
+    @Subscribe
+    fun onGameOver(ev: GameOverEvent) {
+        logger.info("You lost! Game Over.")
+        Gdx.app.exit()
     }
 
     override fun processSystem() {
