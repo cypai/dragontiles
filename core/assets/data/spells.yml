@@ -206,7 +206,7 @@ base:spells:ElementalRune:
 base:spells:EnpoweringRune:
   en:
     name: Enpowering Rune
-    description: Increases damage from same @Elemented attacks by @X.
+    description: Increases damage from same @Elemented attacks by 2 @X.
 
 base:spells:ElementalBreathing:
   en:

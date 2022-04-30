@@ -22,7 +22,7 @@ class EnpoweringRune : Rune() {
             && origin == Combatant.HeroCombatant
             && element == elemental(c)
         ) {
-            x()
+            2 * x()
         } else {
             0
         }
