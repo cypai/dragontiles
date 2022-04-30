@@ -86,6 +86,14 @@ class TooltipSystem(private val game: DragonTilesGame, var stage: Stage) : NoPro
             description = aspect.adjustDescription(description)
         }
         addKeywordsInString(description)
+        if (spell.scoreable || spell.aspects.any {
+                it is CountdownAspect && it.type in listOf(
+                    CountdownType.NUMERIC_SCORE,
+                    CountdownType.SCORE
+                )
+            }) {
+            addKeyword("@Score")
+        }
         spell.additionalKeywords().forEach { addKeyword(it) }
         spell.additionalLocalized().forEach { addNameDescLocalization(game.gameStrings.nameDescLocalization(it)) }
         spell.aspects.filterIsInstance<StackableAspect>()

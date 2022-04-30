@@ -142,6 +142,12 @@ base:keywords:Cryoshock:
     name: Cryoshock
     description: "Cryo and Electro reaction. Take @Piercing Lightning damage at the start of its turn."
 
+base:keywords:Immortality:
+  en:
+    key: "@Immortality"
+    name: Immortality
+    description: Cannot be defeated until removed with @Score. Can also be reduced by casting a Sorcery with your whole hand.
+
 base:keywords:Score:
   en:
     key: "@Score"
