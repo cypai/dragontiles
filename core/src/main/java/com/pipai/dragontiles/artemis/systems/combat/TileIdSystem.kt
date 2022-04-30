@@ -33,6 +33,8 @@ class TileIdSystem : NoProcessingSystem() {
 
     fun getEntityId(tileId: Int) = tileIdIndex[tileId]!!
 
+    fun getEntityIdSafe(tileId: Int) = tileIdIndex[tileId]
+
     fun notify(entityId: Int) {
         tileIdIndex[mTile.get(entityId).tile.id] = entityId
     }

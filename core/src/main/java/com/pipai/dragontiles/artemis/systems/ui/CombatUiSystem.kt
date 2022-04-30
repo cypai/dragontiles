@@ -635,6 +635,7 @@ class CombatUiSystem(
                     TargetType.NONE -> {
                         spell.fill(components)
                         sAnimation.pauseUiMode = true
+                        givenComponents.clear()
                         scope.launch {
                             spell.cast(CastParams(listOf()), sCombat.controller.api)
                         }
@@ -658,6 +659,7 @@ class CombatUiSystem(
             is PowerSpell -> {
                 spell.fill(components)
                 sAnimation.pauseUiMode = true
+                givenComponents.clear()
                 scope.launch {
                     spell.cast(CastParams(listOf()), sCombat.controller.api)
                 }
@@ -738,6 +740,7 @@ class CombatUiSystem(
                         ) {
 
                             sAnimation.pauseUiMode = true
+                            givenComponents.clear()
                             scope.launch {
                                 spell.cast(
                                     CastParams(listOf(mEnemy.get(ev.entityId).enemy.enemyId)),
@@ -746,6 +749,7 @@ class CombatUiSystem(
                             }
                         } else if (spell.targetType == TargetType.AOE) {
                             sAnimation.pauseUiMode = true
+                            givenComponents.clear()
                             scope.launch {
                                 spell.cast(
                                     CastParams(sCombat.combat.enemies
@@ -1244,7 +1248,6 @@ class CombatUiSystem(
                     uiSystem.resetSpellCard(spellCard)
                 }
                 uiSystem.givenComponents.clear()
-                uiSystem.readjustHand()
                 uiSystem.sPause.enable()
             }
 

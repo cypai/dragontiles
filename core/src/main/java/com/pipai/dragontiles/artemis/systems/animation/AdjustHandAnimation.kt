@@ -29,15 +29,17 @@ class AdjustHandAnimation(private val tileLocations: List<Pair<TileInstance, Int
         }
         val activeTiles = sCombatUi.activeTiles()
         tileLocations.forEach { (tile, index) ->
-            val entityId = sTileId.getEntityId(tile.id)
-            mLine.remove(entityId)
-            if (tile in activeTiles) {
-                moveTile(entityId, layout.handActiveTilePosition(index), 0.1f) {
-                    endAnimation()
-                }
-            } else {
-                moveTile(entityId, layout.handTilePosition(index), 0.3f) {
-                    endAnimation()
+            val entityId = sTileId.getEntityIdSafe(tile.id)
+            if (entityId != null) {
+                mLine.remove(entityId)
+                if (tile in activeTiles) {
+                    moveTile(entityId, layout.handActiveTilePosition(index), 0.1f) {
+                        endAnimation()
+                    }
+                } else {
+                    moveTile(entityId, layout.handTilePosition(index), 0.3f) {
+                        endAnimation()
+                    }
                 }
             }
         }
