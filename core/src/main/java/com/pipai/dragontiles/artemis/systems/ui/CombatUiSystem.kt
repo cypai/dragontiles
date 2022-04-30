@@ -1033,7 +1033,11 @@ class CombatUiSystem(
     }
 
     private fun openSideboardSpells() {
-        val spacing = (rightSpellOpenBounds.second - rightSpellOpenBounds.first) / (sideboard.size - 1)
+        val spacing = if (sideboard.size < 5) {
+            SpellCard.cardWorldWidth
+        } else {
+            (rightSpellOpenBounds.second - rightSpellOpenBounds.first) / (sideboard.size - 1)
+        }
         sideboard.forEach { (number, spellCard) ->
             if (spellCard.data[ALLOW_HOVER_MOVE] == 1) {
                 val entityId = sideboardEntityIds[number]!!
@@ -1046,7 +1050,11 @@ class CombatUiSystem(
     }
 
     private fun closeSideboardSpells() {
-        val spacing = (rightSpellClosedBounds.second - rightSpellClosedBounds.first) / (sideboard.size - 1)
+        val spacing = if (sideboard.size < 2) {
+            SpellCard.cardWorldWidth
+        } else {
+            (rightSpellClosedBounds.second - rightSpellClosedBounds.first) / (sideboard.size - 1)
+        }
         sideboard.forEach { (number, spellCard) ->
             if (spellCard.data[ALLOW_HOVER_MOVE] == 1) {
                 val entityId = sideboardEntityIds[number]!!
