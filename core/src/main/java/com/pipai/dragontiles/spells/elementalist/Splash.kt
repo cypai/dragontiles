@@ -1,6 +1,7 @@
 package com.pipai.dragontiles.spells.elementalist
 
 import com.pipai.dragontiles.combat.CombatApi
+import com.pipai.dragontiles.data.Element
 import com.pipai.dragontiles.spells.*
 
 class Splash : StandardSpell() {
@@ -16,5 +17,7 @@ class Splash : StandardSpell() {
     )
 
     override suspend fun onCast(params: CastParams, api: CombatApi) {
+        val target = api.getEnemy(params.targets.first())
+        api.attack(target, Element.ICE, baseDamage(), flags())
     }
 }

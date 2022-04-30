@@ -311,7 +311,7 @@ base:spells:ReactionMastery:
 base:spells:Splash:
   en:
     name: Splash
-    description: ""
+    description: Deal !d Ice damage.
 
 base:spells:PhilosophersStone:
   en:
