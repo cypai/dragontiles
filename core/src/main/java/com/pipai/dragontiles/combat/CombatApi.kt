@@ -735,7 +735,7 @@ class CombatApi(
     }
 
     suspend fun castSorceries(fullCastHand: FullCastHand) {
-        if (fullCastHand.eye.isNotEmpty() && fullCastHand.melds.size == runData.hero.handSize % 3) {
+        if (fullCastHand.eye.size + fullCastHand.melds.size * 3 == runData.hero.handSize) {
             score()
         }
         combat.sorceries.forEach { sorcery ->
