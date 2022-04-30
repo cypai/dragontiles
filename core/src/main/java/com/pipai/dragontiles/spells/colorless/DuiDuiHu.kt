@@ -24,7 +24,7 @@ class DuiDuiHu : Sorcery() {
         }
     }
     override val aspects: MutableList<SpellAspect> = mutableListOf(
-        AttackDamageAspect(24)
+        AttackDamageAspect(30)
     )
 
     override fun flags(): List<CombatFlag> = listOf(CombatFlag.PIERCING)

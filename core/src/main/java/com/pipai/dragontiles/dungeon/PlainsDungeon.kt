@@ -31,7 +31,8 @@ class PlainsDungeon {
                         "base:dungeons:Plains:TurtleAndSlime",
                         listOf(
                             Pair(LargeTurtle(), Vector2(0.5f, 4.5f)),
-                            Pair(Slime(), Vector2(5f, 4.5f))
+                            Pair(Slime(), Vector2(5f, 4.5f)),
+                            Pair(Slime(), Vector2(7f, 4.5f)),
                         ),
                     ),
                     Encounter(

@@ -488,7 +488,11 @@ class SinglePredicate(
     }
 }
 
-class AnyCombo(slotAmount: Int, override var suitGroup: SuitGroup) : ManualComponentRequirement() {
+class AnyCombo(
+    slotAmount: Int,
+    override var suitGroup: SuitGroup,
+    private val predicate: (TileInstance) -> Boolean = { true },
+) : ManualComponentRequirement() {
     constructor(slotAmount: Int) : this(slotAmount, SuitGroup.ANY)
 
     override val type = SetType.MISC
@@ -498,7 +502,7 @@ class AnyCombo(slotAmount: Int, override var suitGroup: SuitGroup) : ManualCompo
 
     override fun satisfied(slots: List<TileInstance>): Boolean {
         return slots.size == reqAmount.amount
-                && slots.all { it.tile.suit in suitGroup.allowedSuits }
+                && slots.all { it.tile.suit in suitGroup.allowedSuits && predicate(it) }
     }
 }
 

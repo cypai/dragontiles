@@ -12,18 +12,18 @@ class Normalize : StandardSpell() {
     override val type: SpellType = SpellType.EFFECT
     override val rarity: Rarity = Rarity.RARE
     override val targetType: TargetType = TargetType.NONE
-    override val requirement: ComponentRequirement = Single(SuitGroup.STAR)
+    override val requirement: ComponentRequirement = ForbidTransformFreeze(this,
+        AnyCombo(3, SuitGroup.ELEMENTAL) {
+            it.tileStatus in listOf(TileStatus.BURN, TileStatus.FREEZE, TileStatus.SHOCK)
+        }
+    )
     override val aspects: MutableList<SpellAspect> = mutableListOf(
-        FluxGainAspect(1),
+        FluxGainAspect(9),
         TransformAspect(),
     )
 
     override suspend fun onCast(params: CastParams, api: CombatApi) {
-        val antifreeze = getUpgrades().any { u -> u is AntifreezeUpgrade }
-        api.combat.hand.filter {
-            it.tileStatus in listOf(TileStatus.BURN, TileStatus.FREEZE, TileStatus.SHOCK)
-                    && (antifreeze || it.tileStatus != TileStatus.FREEZE)
-        }
+        components()
             .forEach {
                 val targetSuit = when (it.tileStatus) {
                     TileStatus.BURN -> Suit.FIRE

@@ -5,7 +5,7 @@ import com.pipai.dragontiles.spells.*
 
 class DumpFlux : StandardSpell() {
     override val id: String = "base:spells:DumpFlux"
-    override val requirement: ComponentRequirement = Identical(4)
+    override val requirement: ComponentRequirement = Identical(3)
     override val type: SpellType = SpellType.EFFECT
     override val targetType: TargetType = TargetType.NONE
     override val rarity: Rarity = Rarity.RARE

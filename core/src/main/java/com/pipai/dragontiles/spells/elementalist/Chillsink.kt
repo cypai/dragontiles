@@ -6,7 +6,7 @@ import com.pipai.dragontiles.spells.*
 
 class Chillsink : StandardSpell() {
     override val id: String = "base:spells:Chillsink"
-    override val requirement: ComponentRequirement = Identical(3, SuitGroup.ICE)
+    override val requirement: ComponentRequirement = Identical(2, SuitGroup.ICE)
     override val type: SpellType = SpellType.EFFECT
     override val targetType: TargetType = TargetType.SINGLE_ENEMY
     override val rarity: Rarity = Rarity.UNCOMMON

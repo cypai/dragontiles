@@ -13,7 +13,7 @@ class Typhoon : StandardSpell() {
     override val targetType: TargetType = TargetType.AOE
     override val rarity: Rarity = Rarity.RARE
     override val aspects: MutableList<SpellAspect> = mutableListOf(
-        AttackDamageAspect(5),
+        AttackDamageAspect(10),
         FluxGainAspect(8),
         CountdownAspect(12, CountdownType.SCORE, this::cdCallback)
     )

@@ -24,7 +24,7 @@ class PingHu : Sorcery() {
         }
     }
     override val aspects: MutableList<SpellAspect> = mutableListOf(
-        AttackDamageAspect(14)
+        AttackDamageAspect(20)
     )
 
     override fun flags(): List<CombatFlag> = listOf(CombatFlag.PIERCING)

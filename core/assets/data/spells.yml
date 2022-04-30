@@ -111,12 +111,12 @@ base:spells:Ground:
 base:spells:Bump:
   en:
     name: Bump
-    description: Transform the @Component into its @Successor.
+    description: "@Transform the @Component into its @Successor."
 
 base:spells:Nudge:
   en:
     name: Nudge
-    description: Transform the @Component into its @Predecessor.
+    description: "@Transform the @Component into its @Predecessor."
 
 base:spells:RampStrike:
   en:
@@ -296,7 +296,7 @@ base:spells:Chillsink:
 base:spells:MassTransmute:
   en:
     name: Mass Transmute
-    description: Transform all @Elemented tiles in your hand to the element of the @Components.
+    description: "@Transform all @Elemented tiles in your hand to the element of the @Components."
 
 base:spells:WindSwirl:
   en:
@@ -316,7 +316,7 @@ base:spells:Splash:
 base:spells:PhilosophersStone:
   en:
     name: Philosopher's Stone
-    description: Transform the @Component into a Life or Star tile of your choice.
+    description: "@Transform the @Component into a Life or Star tile of your choice."
 
 base:spells:PhoenixFire:
   en:
@@ -373,7 +373,7 @@ base:spells:FluxBlast:
 base:spells:Normalize:
   en:
     name: Normalize
-    description: Transform @Burn, @Freeze, and @Shock tiles in your hand into Fire, Ice, and Lightning tiles respectively.
+    description: "@Transform @Burn, @Freeze, and @Shock @Components into Fire, Ice, and Lightning tiles respectively."
 
 base:spells:FluxMastery:
   en:
