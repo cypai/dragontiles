@@ -9,7 +9,7 @@ class RepeatUpgrade : SpellUpgrade {
     override val assetName: String = "repeat.png"
 
     override fun canUpgrade(spell: Spell): Boolean {
-        return spell !is Rune
+        return spell is StandardSpell
                 && spell.aspects.none { it is RepeatableAspect }
     }
 
