@@ -20,11 +20,11 @@ class MoonRabbit : Enemy() {
             FumbleIntent(this, 1, null)
         } else {
             if (api.getLiveEnemies().all { it is MoonRabbit }) {
-                AttackIntent(this, 10, 1,Element.NONE)
+                AttackIntent(this, 10, 1, Element.NONE)
             } else {
                 BuffIntent(this, listOf(), null, {
                     api.getLiveEnemies()
-                        .filter { it != this }
+                        .filter { it !is MoonRabbit }
                         .forEach {
                             api.addStatusToEnemy(it, Immortality(1))
                         }
