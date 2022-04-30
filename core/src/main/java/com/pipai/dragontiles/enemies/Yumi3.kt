@@ -5,6 +5,7 @@ import com.pipai.dragontiles.combat.CombatApi
 import com.pipai.dragontiles.combat.Intent
 import com.pipai.dragontiles.data.Element
 import com.pipai.dragontiles.status.MenacingAura
+import com.pipai.dragontiles.status.Minion
 
 class Yumi3 : Enemy() {
 
@@ -15,6 +16,7 @@ class Yumi3 : Enemy() {
     override val fluxMax: Int = 80
 
     override suspend fun init(api: CombatApi) {
+        api.addStatusToEnemy(this, Minion())
         api.addStatusToEnemy(this, MenacingAura(1))
     }
 
