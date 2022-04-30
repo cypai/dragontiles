@@ -10,7 +10,7 @@ class ElixirsToxicity : StandardSpell() {
     override val targetType: TargetType = TargetType.NONE
     override val rarity: Rarity = Rarity.RARE
     override val aspects: MutableList<SpellAspect> = mutableListOf(
-        FluxGainAspect(4),
+        FluxGainAspect(3),
         LimitedRepeatableAspect(2),
         CountdownAspect(17, CountdownType.SCORE, this::cdCallback)
     )

@@ -1,9 +1,7 @@
 package com.pipai.dragontiles.enemies
 
-import com.pipai.dragontiles.combat.BuffIntent
-import com.pipai.dragontiles.combat.CombatApi
-import com.pipai.dragontiles.combat.FumbleIntent
-import com.pipai.dragontiles.combat.Intent
+import com.pipai.dragontiles.combat.*
+import com.pipai.dragontiles.data.Element
 import com.pipai.dragontiles.status.Immortality
 
 class MoonRabbit : Enemy() {
@@ -21,13 +19,17 @@ class MoonRabbit : Enemy() {
         return if (waitTurns > 0) {
             FumbleIntent(this, 1, null)
         } else {
-            BuffIntent(this, listOf(), null, {
-                api.getLiveEnemies()
-                    .filter { it != this }
-                    .forEach {
-                        api.addStatusToEnemy(it, Immortality(1))
-                    }
-            })
+            if (api.getLiveEnemies().all { it is MoonRabbit }) {
+                AttackIntent(this, 10, 1,Element.NONE)
+            } else {
+                BuffIntent(this, listOf(), null, {
+                    api.getLiveEnemies()
+                        .filter { it != this }
+                        .forEach {
+                            api.addStatusToEnemy(it, Immortality(1))
+                        }
+                })
+            }
         }
     }
 
