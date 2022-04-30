@@ -15,7 +15,7 @@ class TrialByFire : PowerSpell() {
     override val rarity: Rarity = Rarity.UNCOMMON
     override val aspects: MutableList<SpellAspect> = mutableListOf(
         StackableAspect(Strength(1), 1),
-        FluxGainAspect(7),
+        FluxGainAspect(5),
     )
 
     override suspend fun onCast(params: CastParams, api: CombatApi) {

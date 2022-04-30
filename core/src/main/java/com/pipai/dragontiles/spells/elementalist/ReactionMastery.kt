@@ -12,9 +12,7 @@ class ReactionMastery : PowerSpell() {
     override val id: String = "base:spells:ReactionMastery"
     override val requirement: ComponentRequirement = RainbowIdenticalSequence(3)
     override val rarity: Rarity = Rarity.RARE
-    override val aspects: MutableList<SpellAspect> = mutableListOf(
-        FluxGainAspect(9),
-    )
+    override val aspects: MutableList<SpellAspect> = mutableListOf()
     override val scoreable: Boolean = true
 
     override fun additionalKeywords(): List<String> =

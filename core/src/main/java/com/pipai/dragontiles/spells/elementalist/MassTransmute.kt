@@ -14,7 +14,7 @@ class MassTransmute : StandardSpell() {
     override val requirement: ComponentRequirement = Single(SuitGroup.ELEMENTAL)
     override val aspects: MutableList<SpellAspect> = mutableListOf(
         ExhaustAspect(),
-        FluxGainAspect(27),
+        FluxGainAspect(20),
         TransformAspect(),
     )
 

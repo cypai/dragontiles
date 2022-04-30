@@ -12,11 +12,11 @@ import com.pipai.dragontiles.utils.with
 
 class ReactantFumes : PowerSpell() {
     override val id: String = "base:spells:ReactantFumes"
-    override val requirement: ComponentRequirement = Identical(3, SuitGroup.ELEMENTAL)
+    override val requirement: ComponentRequirement = Identical(2, SuitGroup.ELEMENTAL)
     override val rarity: Rarity = Rarity.UNCOMMON
     override val aspects: MutableList<SpellAspect> = mutableListOf(
         StackableAspect(GenericStatus(1), 1),
-        FluxGainAspect(10),
+        FluxGainAspect(9),
     )
 
     override fun additionalKeywords(): List<String> =

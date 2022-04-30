@@ -17,7 +17,7 @@ class Fireball : StandardSpell() {
     override val targetType: TargetType = TargetType.SINGLE
     override val rarity: Rarity = Rarity.UNCOMMON
     override val aspects: MutableList<SpellAspect> = mutableListOf(
-        AttackDamageAspect(14),
+        AttackDamageAspect(15),
         FluxGainAspect(8),
         StackableAspect(Pyro(1), 1),
     )

@@ -14,7 +14,7 @@ class ReactantStrike : StandardSpell() {
     override val targetType: TargetType = TargetType.SINGLE
     override val rarity: Rarity = Rarity.COMMON
     override val aspects: MutableList<SpellAspect> = mutableListOf(
-        AttackDamageAspect(6),
+        AttackDamageAspect(8),
         FluxGainAspect(6),
         StackableAspect(GenericStatus(1), 1),
     )

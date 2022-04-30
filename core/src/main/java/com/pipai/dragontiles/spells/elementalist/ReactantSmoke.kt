@@ -9,12 +9,12 @@ import com.pipai.dragontiles.utils.with
 
 class ReactantSmoke : StandardSpell() {
     override val id: String = "base:spells:ReactantSmoke"
-    override val requirement: ComponentRequirement = Identical(3, SuitGroup.ELEMENTAL)
+    override val requirement: ComponentRequirement = Identical(2, SuitGroup.ELEMENTAL)
     override val type: SpellType = SpellType.EFFECT
     override val targetType: TargetType = TargetType.AOE
     override val rarity: Rarity = Rarity.UNCOMMON
     override val aspects: MutableList<SpellAspect> = mutableListOf(
-        StackableAspect(GenericStatus(3), 1),
+        StackableAspect(GenericStatus(4), 1),
         FluxGainAspect(6),
     )
 

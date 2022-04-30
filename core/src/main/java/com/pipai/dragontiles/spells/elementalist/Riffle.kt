@@ -11,7 +11,7 @@ class Riffle : StandardSpell() {
     override val rarity: Rarity = Rarity.COMMON
     override val aspects: MutableList<SpellAspect> = mutableListOf(
         SwapAspect(1),
-        FluxGainAspect(3),
+        FluxGainAspect(1),
     )
 
     override suspend fun onCast(params: CastParams, api: CombatApi) {

@@ -10,7 +10,7 @@ class Blast : StandardSpell() {
     override val targetType: TargetType = TargetType.AOE
     override val rarity: Rarity = Rarity.COMMON
     override val aspects: MutableList<SpellAspect> = mutableListOf(
-        AttackDamageAspect(12),
+        AttackDamageAspect(15),
         FluxGainAspect(7)
     )
 
