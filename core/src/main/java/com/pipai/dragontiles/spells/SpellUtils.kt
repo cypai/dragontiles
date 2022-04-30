@@ -65,6 +65,10 @@ fun Spell.baseFetch(): Int {
     return aspects.findAs(FetchAspect::class)?.amount ?: 0
 }
 
+fun Spell.baseOpenDraw(): Int {
+    return aspects.findAs(OpenDrawAspect::class)?.amount ?: 0
+}
+
 fun Spell.baseSwap(): Int {
     return aspects.findAs(SwapAspect::class)?.amount ?: 0
 }

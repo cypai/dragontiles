@@ -707,8 +707,7 @@ class CombatApi(
         return retval
     }
 
-    suspend fun queryOpenPoolDraw() {
-        val amount = runData.hero.handSize - numTilesInHand()
+    suspend fun queryOpenPoolDraw(amount: Int) {
         val tiles = queryTiles(
             "Select up to $amount tile(s) to draw from the Open Pool",
             combat.openPool, 0, amount

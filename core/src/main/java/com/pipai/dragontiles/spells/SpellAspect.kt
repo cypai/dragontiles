@@ -110,6 +110,20 @@ data class FetchAspect(var amount: Int?) : SpellAspect {
     }
 }
 
+data class OpenDrawAspect(var amount: Int) : SpellAspect {
+    override suspend fun onCast(spell: Spell, api: CombatApi) {
+        api.queryOpenPoolDraw(amount)
+    }
+
+    override fun adjustDescription(description: String): String {
+        return if (description.isEmpty()) {
+            "${Keywords.OPEN_DRAW} !od."
+        } else {
+            "$description ${Keywords.OPEN_DRAW} !od."
+        }
+    }
+}
+
 data class StackableAspect(val status: Status, val dynamicId: Int) : SpellAspect
 
 data class XAspect(var amount: Int) : SpellAspect

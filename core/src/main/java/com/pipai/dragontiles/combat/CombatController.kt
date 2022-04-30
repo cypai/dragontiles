@@ -72,7 +72,7 @@ class CombatController(
     suspend fun runTurn() {
         combat.turnNumber += 1
         if (combat.turnNumber > 1) {
-            api.queryOpenPoolDraw()
+            api.queryOpenPoolDraw(runData.hero.handSize - api.numTilesInHand())
         }
         if (combat.turnNumber == 1) {
             // Normally intents are changed after endTurn(), this inits the intents and avoids messing with Stunned

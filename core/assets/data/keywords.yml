@@ -100,6 +100,12 @@ base:keywords:Fetch:
     name: Fetch
     description: Draw tiles into the Open Pool. If no number, fills the Open Pool to maximum.
 
+base:keywords:OpenDraw:
+  en:
+    key: "@OpenDraw"
+    name: Open Draw
+    description: Draw tiles from the Open Pool.
+
 base:keywords:Reactant:
   en:
     key: "@Reactant"

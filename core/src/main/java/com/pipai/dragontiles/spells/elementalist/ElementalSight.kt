@@ -12,6 +12,7 @@ class ElementalSight : StandardSpell() {
     override val aspects: MutableList<SpellAspect> = mutableListOf(
         FetchAspect(4),
         FluxGainAspect(1),
+        OpenDrawAspect(1),
     )
 
     override suspend fun onCast(params: CastParams, api: CombatApi) {

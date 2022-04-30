@@ -143,6 +143,7 @@ abstract class Spell : Localized, DamageAdjustable {
                     .firstOrNull { it.dynamicId.toString() == param }?.status?.amount ?: 0
             }
             "!fetch" -> baseFetch()
+            "!od" -> baseOpenDraw()
             "!swap" -> baseSwap()
             "!x" -> aspects.findAs(XAspect::class)?.amount ?: 0
             "!xsleft" -> {
