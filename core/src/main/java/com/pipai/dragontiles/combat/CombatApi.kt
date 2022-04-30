@@ -381,11 +381,7 @@ class CombatApi(
     }
 
     fun getEnemyIntent(enemy: Enemy): Intent? {
-        return if (enemyHasStatus(enemy, Overloaded::class)) {
-            DoNothingIntent(enemy, DoNothingType.STUNNED)
-        } else {
-            enemy.getIntent(this)
-        }
+        return combat.enemyIntent[enemy.enemyId]
     }
 
     suspend fun changeEnemyIntent(enemy: Enemy, intent: Intent?) {
@@ -498,7 +494,9 @@ class CombatApi(
         eventBus.dispatch(PlayerFluxDamageEvent(damage, showParticleAnimation, flags))
         if (runData.hero.flux >= runData.hero.tempFluxMax) {
             runData.hero.flux = runData.hero.tempFluxMax
-            addStatusToHero(Overloaded(2))
+            if (!heroHasStatus(Overloaded::class)) {
+                addStatusToHero(Overloaded(2))
+            }
         }
     }
 
