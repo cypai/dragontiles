@@ -26,14 +26,13 @@ import com.pipai.dragontiles.artemis.events.*
 import com.pipai.dragontiles.artemis.systems.AnchorSystem
 import com.pipai.dragontiles.artemis.systems.PathInterpolationSystem
 import com.pipai.dragontiles.artemis.systems.animation.CombatAnimationSystem
+import com.pipai.dragontiles.artemis.systems.animation.TalkAnimation
 import com.pipai.dragontiles.artemis.systems.combat.CombatControllerSystem
 import com.pipai.dragontiles.artemis.systems.combat.TileIdSystem
 import com.pipai.dragontiles.artemis.systems.rendering.FullScreenColorSystem
-import com.pipai.dragontiles.combat.HandAdjustedEvent
-import com.pipai.dragontiles.combat.QueryTileOptionsEvent
-import com.pipai.dragontiles.combat.QueryTilesEvent
-import com.pipai.dragontiles.combat.SwapData
+import com.pipai.dragontiles.combat.*
 import com.pipai.dragontiles.data.RunData
+import com.pipai.dragontiles.data.StringLocalized
 import com.pipai.dragontiles.data.Tile
 import com.pipai.dragontiles.data.TileInstance
 import com.pipai.dragontiles.gui.CombatUiLayout
@@ -601,8 +600,12 @@ class CombatUiSystem(
     }
 
     private fun selectFullCastHand(fullCastHand: FullCastHand) {
-        scope.launch {
-            sCombat.controller.api.castSorceries(fullCastHand)
+        if (sCombat.combat.spells.filterIsInstance(Rune::class.java).any { it.active }) {
+            sAnimation.queueAnimation(TalkAnimation(Combatant.HeroCombatant, StringLocalized("base:text:RuneBlockingSorcery")))
+        } else {
+            scope.launch {
+                sCombat.controller.api.castSorceries(fullCastHand)
+            }
         }
     }
 

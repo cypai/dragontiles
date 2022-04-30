@@ -47,7 +47,7 @@ class CombatAnimationSystem(private val game: DragonTilesGame) : BaseSystem(), A
         }
     }
 
-    private fun queueAnimation(animation: Animation) {
+    fun queueAnimation(animation: Animation) {
         logger.debug("Received animation queue: $animation")
         animation.init(world, game)
         animation.initObserver(this)
