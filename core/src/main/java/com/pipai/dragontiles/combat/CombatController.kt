@@ -22,11 +22,8 @@ class CombatController(
     fun init() {
         eventBus.init(api)
         combat.init(gameData, runData)
-        combat.enemies.forEach {
-            it.preInit(api.nextId())
-            combat.enemyStatus[it.enemyId] = mutableListOf()
-            eventBus.register(it)
-            runBlocking { it.init(api) }
+        combat.enemies.toList().forEach {
+            runBlocking { api.initEnemy(it) }
         }
         combat.spells.forEach {
             it.combatReset()

@@ -263,7 +263,9 @@ class CombatantStateSystem(
     }
 
     fun updateAllIntents() {
-        sCombat.combat.enemies.filter { it.hp > 0 }
+        world.fetch(allOf(EnemyComponent::class))
+            .map { mEnemy.get(it).enemy }
+            .filter { it.hp > 0 }
             .forEach { updateIntent(it, sCombat.controller.api.getEnemyIntent(it)) }
     }
 

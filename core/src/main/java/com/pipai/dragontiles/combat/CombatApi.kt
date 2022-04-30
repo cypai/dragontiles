@@ -38,6 +38,19 @@ class CombatApi(
         eventBus.register(o)
     }
 
+    suspend fun initEnemy(enemy: Enemy) {
+        enemy.preInit(nextId())
+        combat.enemyStatus[enemy.enemyId] = mutableListOf()
+        eventBus.register(enemy)
+        enemy.init(this)
+    }
+
+    suspend fun summonEnemy(enemy: Enemy, location: Vector2) {
+        initEnemy(enemy)
+        combat.enemies.add(enemy)
+        eventBus.dispatch(EnemySummonEvent(enemy, location))
+    }
+
     suspend fun exhaust(spell: StandardSpell) {
         spell.exhausted = true
         eventBus.dispatch(SpellExhaustedEvent(spell))
@@ -419,11 +432,6 @@ class CombatApi(
     suspend fun healEnemy(enemy: Enemy, amount: Int) {
         enemy.hp += amount
         eventBus.dispatch(EnemyHealEvent(enemy, amount))
-    }
-
-    suspend fun summonEnemy(enemy: Enemy, location: Vector2) {
-        combat.enemies.add(enemy)
-        eventBus.dispatch(EnemySummonEvent(enemy, location))
     }
 
     suspend fun consume(components: List<TileInstance>, spell: Spell) {

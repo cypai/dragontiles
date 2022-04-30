@@ -3,6 +3,7 @@ package com.pipai.dragontiles.enemies
 import com.badlogic.gdx.math.Vector2
 import com.pipai.dragontiles.combat.*
 import com.pipai.dragontiles.data.Element
+import com.pipai.dragontiles.status.Minion
 import com.pipai.dragontiles.utils.choose
 
 class SunWukong : Enemy() {
@@ -45,6 +46,8 @@ class SunWukong : Enemy() {
                 availableMinions.filter { it::class != right::class }.choose(rng)
             }
             api.summonEnemy(choice, leftPosition)
+            api.addStatusToEnemy(choice, Minion())
+            leftMinion = choice
         } else if (rightMinion == null) {
             val left = leftMinion
             val choice = if (left == null) {
@@ -53,6 +56,8 @@ class SunWukong : Enemy() {
                 availableMinions.filter { it::class != left::class }.choose(rng)
             }
             api.summonEnemy(choice, rightPosition)
+            api.addStatusToEnemy(choice, Minion())
+            rightMinion = choice
         }
     }
 
