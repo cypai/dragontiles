@@ -70,7 +70,7 @@ class MainMenuUiSystem(
                 val act1Boss = game.data.getDungeon(act1Id).bossEncounters.choose(seed.dungeonRng())
                 val act2Id = "base:dungeons:Mountains"
                 val act2Map = DungeonMap.generateMap(seed)
-                val act2Boss = game.data.getDungeon(act1Id).bossEncounters.choose(seed.dungeonRng())
+                val act2Boss = game.data.getDungeon(act2Id).bossEncounters.choose(seed.dungeonRng())
                 val runData = RunData(
                     Elementalist().generateHero("Elementalist"),
                     DungeonMap(act1Id, DungeonMap(act2Id, null, act2Map, act2Boss.id), act1Map, act1Boss.id),
