@@ -122,3 +122,13 @@ base:enemies:Monkey:
   en:
     name: Monkey
     description: A monkey from Flower Fruit Mountain. Or is it actually just some hair?
+
+base:enemies:ChangE:
+  en:
+    name: Chang'e
+    description: The Moon Princess. Not much of a fighter, but uses minions to her advantage.
+
+base:enemies:TamamoNoMae:
+  en:
+    name: Tamamo no Mae
+    description: A legendary kitsune. Themes all her attacks around the number 9.
