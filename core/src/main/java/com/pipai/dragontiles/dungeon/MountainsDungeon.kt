@@ -28,6 +28,9 @@ class MountainsDungeon {
                             Pair(VermillionBird(), Vector2(5.5f, 4.5f)),
                         )
                     ),
+                ),
+                // Standard
+                listOf(
                     Encounter(
                         "base:dungeons:Mountains:KitsuneStarElemental",
                         listOf(
@@ -35,9 +38,6 @@ class MountainsDungeon {
                             Pair(StarElemental(), Vector2(4f, 4.5f)),
                         )
                     ),
-                ),
-                // Standard
-                listOf(
                     Encounter(
                         "base:dungeons:Mountains:WhiteDragonHorseStarElemental",
                         listOf(

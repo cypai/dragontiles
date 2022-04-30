@@ -22,7 +22,11 @@ class MoonRabbit : Enemy() {
             FumbleIntent(this, 1, null)
         } else {
             BuffIntent(this, listOf(), null, {
-                api.addAoeStatus(Immortality(1))
+                api.getLiveEnemies()
+                    .filter { it != this }
+                    .forEach {
+                        api.addStatusToEnemy(it, Immortality(1))
+                    }
             })
         }
     }
