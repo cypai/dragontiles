@@ -38,6 +38,11 @@ base:upgrades:AntifreezeUpgrade:
     name: Antifreeze Upgrade
     description: Allows transformation of Freeze Tiles.
 
+base:upgrades:StabilityUpgrade:
+  en:
+    name: Stability Upgrade
+    description: Immunity to @Volatile.
+
 base:upgrades:DoublestackUpgrade:
   en:
     name: Doublestack Upgrade

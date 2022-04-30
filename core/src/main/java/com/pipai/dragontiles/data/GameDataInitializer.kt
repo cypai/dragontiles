@@ -66,6 +66,7 @@ class GameDataInitializer {
         gameData.addSpell(GameData.COLORLESS, Patience())
         gameData.addSpell(GameData.COLORLESS, ElixirsToxicity())
         gameData.addSpell(GameData.COLORLESS, HighLethality())
+        gameData.addSpell(GameData.COLORLESS, Purify())
     }
 
     private fun initSpellUpgrades(gameData: GameData) {
@@ -75,6 +76,7 @@ class GameDataInitializer {
         gameData.addSpellUpgrade(HeatsinkUpgrade())
         gameData.addSpellUpgrade(AntifreezeUpgrade())
         gameData.addSpellUpgrade(GroundwireUpgrade())
+        gameData.addSpellUpgrade(StabilityUpgrade())
         gameData.addSpellUpgrade(RepeatUpgrade())
         gameData.addSpellUpgrade(EternalUpgrade())
         gameData.addSpellUpgrade(DoublestackUpgrade())

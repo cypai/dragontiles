@@ -1236,6 +1236,7 @@ class CombatUiSystem(
                     uiSystem.resetSpellCard(spellCard)
                 }
                 uiSystem.givenComponents.clear()
+                uiSystem.readjustHand()
                 uiSystem.sPause.enable()
             }
 

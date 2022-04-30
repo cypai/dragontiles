@@ -10,5 +10,10 @@ class Keywords  {
         const val FETCH = "@Fetch"
         const val COUNTDOWN = "@CountdownTile"
         const val SCORE = "@Score"
+        const val HEATSINK = "@Heatsink"
+        const val ANTIFREEZE = "@Antifreeze"
+        const val GROUNDWIRE = "@Groundwire"
+        const val STABLE = "@Stable"
+        const val BLESSED = "@Blessed"
     }
 }

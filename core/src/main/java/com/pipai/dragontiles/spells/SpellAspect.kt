@@ -117,8 +117,55 @@ data class XAspect(var amount: Int) : SpellAspect
 class TransformAspect : SpellAspect
 class NotManuallyDeactivateable : SpellAspect
 class PreserveComponentOrder : SpellAspect
-class Heatsink : SpellAspect
-class Groundwire : SpellAspect
+class Heatsink : SpellAspect {
+    override fun adjustDescription(description: String): String {
+        return if (description.isEmpty()) {
+            "${Keywords.HEATSINK}."
+        } else {
+            "$description ${Keywords.HEATSINK}."
+        }
+    }
+}
+
+class Antifreeze : SpellAspect {
+    override fun adjustDescription(description: String): String {
+        return if (description.isEmpty()) {
+            "${Keywords.ANTIFREEZE}."
+        } else {
+            "$description ${Keywords.ANTIFREEZE}."
+        }
+    }
+}
+
+class Groundwire : SpellAspect {
+    override fun adjustDescription(description: String): String {
+        return if (description.isEmpty()) {
+            "${Keywords.GROUNDWIRE}."
+        } else {
+            "$description ${Keywords.GROUNDWIRE}."
+        }
+    }
+}
+
+class Stable : SpellAspect {
+    override fun adjustDescription(description: String): String {
+        return if (description.isEmpty()) {
+            "${Keywords.STABLE}."
+        } else {
+            "$description ${Keywords.STABLE}."
+        }
+    }
+}
+
+class Blessed : SpellAspect {
+    override fun adjustDescription(description: String): String {
+        return if (description.isEmpty()) {
+            "${Keywords.BLESSED}."
+        } else {
+            "$description ${Keywords.BLESSED}."
+        }
+    }
+}
 
 data class CountdownAspect(
     val total: Int,

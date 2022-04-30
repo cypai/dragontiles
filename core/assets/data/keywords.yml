@@ -92,7 +92,7 @@ base:keywords:Transform:
   en:
     key: "@Transform"
     name: Transform
-    description: Cannot be done on tiles with @Freeze.
+    description: Changes (does not consume) the tile. Blocked by @Freeze.
 
 base:keywords:Fetch:
   en:
@@ -147,3 +147,33 @@ base:keywords:CountdownNumeric:
     key: "@CountdownNumeric"
     name: Countdown (numeric)
     description: "Performs an effect after consuming the sum total of tile numbers."
+
+base:keywords:Heatsink:
+  en:
+    key: "@Heatsink"
+    name: Heatsink
+    description: Immune to @Burn.
+
+base:keywords:Antifreeze:
+  en:
+    key: "@Antifreeze"
+    name: Antifreeze
+    description: Enables transformation of @Freeze tiles.
+
+base:keywords:Groundwire:
+  en:
+    key: "@Groundwire"
+    name: Groundwire
+    description: Immune to @Shock.
+
+base:keywords:Stable:
+  en:
+    key: "@Stable"
+    name: Stable
+    description: Immune to @Volatile.
+
+base:keywords:Blessed:
+  en:
+    key: "@Blessed"
+    name: Blessed
+    description: Immune to @Curse.

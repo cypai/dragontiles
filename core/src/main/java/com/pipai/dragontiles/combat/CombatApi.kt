@@ -438,13 +438,14 @@ class CombatApi(
                 TileStatus.SHOCK -> if (spell.aspects.none { it is Groundwire }) {
                     shockSpell(spell)
                 }
-                TileStatus.VOLATILE -> dealFluxDamageToHero(spell.baseFluxGain())
+                TileStatus.VOLATILE -> if (spell.aspects.none { it is Stable }) {
+                    dealFluxDamageToHero(spell.baseFluxGain())
+                }
                 TileStatus.CURSE -> changeTemporaryMaxFlux(-spell.baseFluxGain())
                 else -> {
                 }
             }
         }
-        sortHand()
     }
 
     suspend fun shockSpell(spell: Spell) {

@@ -81,26 +81,15 @@ class TooltipSystem(private val game: DragonTilesGame, var stage: Stage) : NoPro
         if (spell is StandardSpell && spell.shockTurns > 0) {
             addText("Shocked", "Cannot be played for ${spell.shockTurns} turns.", false)
         }
-        if (spell.aspects.any { it is XAspect }) {
-            addKeyword(Keywords.X)
+        var description = game.gameStrings.spellLocalization(spell.id).description
+        spell.aspects.forEach { aspect ->
+            description = aspect.adjustDescription(description)
         }
-        addKeywordsInString(game.gameStrings.spellLocalization(spell.id).description)
+        addKeywordsInString(description)
         spell.additionalKeywords().forEach { addKeyword(it) }
         spell.additionalLocalized().forEach { addNameDescLocalization(game.gameStrings.nameDescLocalization(it)) }
         spell.aspects.filterIsInstance<StackableAspect>()
             .forEach { addLocalized(it.status) }
-        if (spell.aspects.any { a -> a is ExhaustAspect }) {
-            addKeyword(Keywords.EXHAUST)
-        }
-        if (spell.aspects.any { a -> a is TransformAspect }) {
-            addKeyword(Keywords.TRANSFORM)
-        }
-        if (spell.aspects.any { a -> a is RepeatableAspect || a is LimitedRepeatableAspect }) {
-            addKeyword(Keywords.REPEATABLE)
-        }
-        if (spell.aspects.any { a -> a is FetchAspect }) {
-            addKeyword(Keywords.FETCH)
-        }
     }
 
     fun hideTooltip() {

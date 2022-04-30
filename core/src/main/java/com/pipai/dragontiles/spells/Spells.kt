@@ -215,6 +215,7 @@ abstract class StandardSpell : Spell() {
         onCast(params, api)
         aspects.forEach { it.onCast(this, api) }
         api.castSpell(this) // After casting to have effects on spellcast resolve in the proper order
+        api.sortHand()
         repeated++
     }
 
@@ -309,6 +310,7 @@ abstract class PowerSpell : Spell() {
         onCast(params, api)
         aspects.forEach { it.onCast(this, api) }
         api.castSpell(this)
+        api.sortHand()
         powered = true
     }
 

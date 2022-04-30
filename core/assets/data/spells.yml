@@ -419,3 +419,8 @@ base:spells:DumpFlux:
   en:
     name: Dump Flux
     description: Lose !f Flux.
+
+base:spells:Purify:
+  en:
+    name: Purify
+    description: Removes all abnormal status on the components.
