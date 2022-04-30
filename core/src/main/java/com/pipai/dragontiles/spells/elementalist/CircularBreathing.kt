@@ -12,7 +12,7 @@ class CircularBreathing : StandardSpell() {
     override val aspects: MutableList<SpellAspect> = mutableListOf(
         FluxLossAspect(5),
         TempMaxFluxChangeAspect(5),
-        FetchAspect(1),
+        DrawAspect(1),
     )
 
     override suspend fun onCast(params: CastParams, api: CombatApi) {

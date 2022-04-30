@@ -110,6 +110,20 @@ data class FetchAspect(var amount: Int?) : SpellAspect {
     }
 }
 
+data class DrawAspect(var amount: Int) : SpellAspect {
+    override suspend fun onCast(spell: Spell, api: CombatApi) {
+        api.draw(amount)
+    }
+
+    override fun adjustDescription(description: String): String {
+        return if (description.isEmpty()) {
+            "${Keywords.DRAW} !draw tile."
+        } else {
+            "$description ${Keywords.DRAW} !draw tile."
+        }
+    }
+}
+
 data class OpenDrawAspect(var amount: Int) : SpellAspect {
     override suspend fun onCast(spell: Spell, api: CombatApi) {
         api.queryOpenPoolDraw(amount)
@@ -117,9 +131,9 @@ data class OpenDrawAspect(var amount: Int) : SpellAspect {
 
     override fun adjustDescription(description: String): String {
         return if (description.isEmpty()) {
-            "${Keywords.OPEN_DRAW} !od."
+            "${Keywords.OPEN_DRAW} !od tile."
         } else {
-            "$description ${Keywords.OPEN_DRAW} !od."
+            "$description ${Keywords.OPEN_DRAW} !od tile."
         }
     }
 }

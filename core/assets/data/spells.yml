@@ -81,7 +81,7 @@ base:spells:XAttack:
 base:spells:Mulligan:
   en:
     name: Mulligan
-    description: Draw 1 tile.
+    description: ""
 
 base:spells:Spark:
   en:

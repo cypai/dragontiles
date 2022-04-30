@@ -10,10 +10,10 @@ class Mulligan : StandardSpell() {
     override val targetType: TargetType = TargetType.NONE
     override val rarity: Rarity = Rarity.SPECIAL
     override val aspects: MutableList<SpellAspect> = mutableListOf(
-        LimitedRepeatableAspect(2)
+        LimitedRepeatableAspect(2),
+        DrawAspect(1),
     )
 
     override suspend fun onCast(params: CastParams, api: CombatApi) {
-        api.draw(1)
     }
 }

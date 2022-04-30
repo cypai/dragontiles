@@ -8,6 +8,7 @@ class Keywords  {
         const val TRANSFORM = "@Transform"
         const val SWAP = "@Swap"
         const val FETCH = "@Fetch"
+        const val DRAW = "Draw"
         const val OPEN_DRAW = "@OpenDraw"
         const val COUNTDOWN = "@CountdownTile"
         const val SCORE = "@Score"
