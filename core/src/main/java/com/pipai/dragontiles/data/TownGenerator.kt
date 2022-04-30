@@ -4,6 +4,7 @@ import com.pipai.dragontiles.potions.Potion
 import com.pipai.dragontiles.relics.Relic
 import com.pipai.dragontiles.spells.Rarity
 import com.pipai.dragontiles.spells.Spell
+import com.pipai.dragontiles.spells.upgrades.PowerUpgrade
 import com.pipai.dragontiles.spells.upgrades.ScoreUpgrade
 import com.pipai.dragontiles.spells.upgrades.SpellUpgrade
 import com.pipai.dragontiles.utils.choose
@@ -32,12 +33,13 @@ class TownGenerator {
         }
         val scribe = Scribe(mutableListOf())
         val upgrades = gameData.allSpellUpgrades()
-            .filter { it !is ScoreUpgrade }
+            .filter { it !is ScoreUpgrade && it !is PowerUpgrade }
             .toMutableList()
-        repeat(7) {
+        repeat(6) {
             val upgrade = upgrades.removeRandom(rng)
             scribe.upgrades.add(pricedUpgrade(upgrade))
         }
+        scribe.upgrades.add(pricedUpgrade(PowerUpgrade()))
         scribe.upgrades.add(pricedUpgrade(ScoreUpgrade()))
         runData.town = Town(3, null, spellShop, itemShop, scribe)
     }
