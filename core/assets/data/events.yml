@@ -336,3 +336,31 @@ base:events:WhatDoesPotOfGreedDo:
         "Excellent, looks like at least you know what's true."
 
         He gives you 5 Gold as a prize for knowing this trivial bit of knowledge.
+
+base:events:CheapUpgrades:
+  name:
+    en:
+      text: Cheap Upgrades
+  start:
+    en:
+      text: |
+        As you walk along the mountain path, you encounter a shady merchant.
+
+        "Cheap spell seals! You'll regret it if you pass on it!"
+  buyHeatsink:
+    en:
+      text: Buy a Heatsink Upgrade. (-2 Gold)
+  buyStability:
+    en:
+      text: Buy a Stability Upgrade. (-2 Gold)
+  buyMain:
+    en:
+      text: |
+        To your surprise, the upgrade seals are legitimate.
+
+        Whether or not he obtained them legitimately is another story entirely.
+
+        Will the gods approve of your purchase?
+  pass:
+    en:
+      text: He looks shady. Pass on by.

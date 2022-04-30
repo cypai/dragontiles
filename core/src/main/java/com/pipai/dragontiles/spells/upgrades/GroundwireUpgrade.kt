@@ -1,9 +1,6 @@
 package com.pipai.dragontiles.spells.upgrades
 
-import com.pipai.dragontiles.spells.Groundwire
-import com.pipai.dragontiles.spells.Rarity
-import com.pipai.dragontiles.spells.Spell
-import com.pipai.dragontiles.spells.StandardSpell
+import com.pipai.dragontiles.spells.*
 
 class GroundwireUpgrade : SpellUpgrade {
     override val id: String = "base:upgrades:GroundwireUpgrade"
@@ -11,7 +8,7 @@ class GroundwireUpgrade : SpellUpgrade {
     override val assetName: String = "groundwire.png"
 
     override fun canUpgrade(spell: Spell): Boolean {
-        return spell is StandardSpell
+        return spell is StandardSpell || spell is PowerSpell
     }
 
     override fun onUpgrade(spell: Spell) {

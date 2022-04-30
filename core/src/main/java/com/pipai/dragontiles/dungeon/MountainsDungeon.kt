@@ -1,10 +1,7 @@
 package com.pipai.dragontiles.dungeon
 
 import com.badlogic.gdx.math.Vector2
-import com.pipai.dragontiles.dungeonevents.FreeRelic
-import com.pipai.dragontiles.dungeonevents.MountainsStartEvent
-import com.pipai.dragontiles.dungeonevents.UnusedSeal
-import com.pipai.dragontiles.dungeonevents.WhatDoesPotOfGreedDo
+import com.pipai.dragontiles.dungeonevents.*
 import com.pipai.dragontiles.enemies.*
 
 class MountainsDungeon {
@@ -97,6 +94,7 @@ class MountainsDungeon {
                     FreeRelic(),
                     UnusedSeal(),
                     WhatDoesPotOfGreedDo(),
+                    CheapUpgrades(),
                 ),
                 MountainsStartEvent(),
             )
