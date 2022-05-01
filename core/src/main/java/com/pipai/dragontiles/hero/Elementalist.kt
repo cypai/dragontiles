@@ -52,7 +52,7 @@ class Elementalist : HeroClass {
 //        Spark(),
         Splash(),
         Blast(),
-        GreatBlast(),
+        BigBang(),
         BreakingBlast(),
         Explosion(),
         Precipitate(),
@@ -90,6 +90,7 @@ class Elementalist : HeroClass {
         Barrier(),
         EnpoweringCounter(),
         Abnormality(),
+        SorcerousPower(),
     )
     override val hpMax: Int = 60
     override val fluxMax: Int = 40

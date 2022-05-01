@@ -237,3 +237,13 @@ base:status:NonElementalEnpoweringCounter:
   en:
     name: Non-Elemental Enpowering Counter
     description: When attacked, gains Enpowered Non-Elemental.
+
+base:status:Enpowerment:
+  en:
+    name: Enpowerment
+    description: Gain Enpowered Fire, Ice, and Lightning at the end of the turn.
+
+base:status:Abnormality:
+  en:
+    name: Abnormality
+    description: Deal damage to a random enemy whenever a tile in your hand gains an effect.

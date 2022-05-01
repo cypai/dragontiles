@@ -3,8 +3,8 @@ package com.pipai.dragontiles.spells.elementalist
 import com.pipai.dragontiles.combat.CombatApi
 import com.pipai.dragontiles.spells.*
 
-class GreatBlast : Sorcery() {
-    override val id = "base:sorceries:GreatBlast"
+class BigBang : Sorcery() {
+    override val id = "base:sorceries:BigBang"
     override val requirement = AnyCombo(3)
     override val rarity = Rarity.UNCOMMON
     override val aspects: MutableList<SpellAspect> = mutableListOf(

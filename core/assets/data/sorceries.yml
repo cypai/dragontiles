@@ -48,9 +48,9 @@ base:sorceries:SummonPhoenix:
     name: Summon Phoenix
     description: Inflicts !s(1) Elemented Reactants to all enemies at the start of your turn.
 
-base:sorceries:GreatBlast:
+base:sorceries:BigBang:
   en:
-    name: Great Blast
+    name: Big Bang
     description: Deal !d @AOE @Elemented damage.
 
 base:sorceries:Expansion:
@@ -62,3 +62,8 @@ base:sorceries:ReactantGenesis:
   en:
     name: Reactant Genesis
     description: Inflicts !s(1) Elemented Reactants to all enemies.
+
+base:sorceries:SorcerousPower:
+  en:
+    name: Sorcerous Power
+    description: Gain !s(1) @Elemented Enpower.
