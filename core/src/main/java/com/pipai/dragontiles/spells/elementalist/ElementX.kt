@@ -9,7 +9,9 @@ class ElementX : Rune() {
     override val id: String = "base:spells:ElementX"
     override val rarity: Rarity = Rarity.UNCOMMON
     override val requirement: ComponentRequirement = IdenticalX(SuitGroup.ELEMENTAL)
-    override val aspects: MutableList<SpellAspect> = mutableListOf()
+    override val aspects: MutableList<SpellAspect> = mutableListOf(
+        XAspect(2, 0),
+    )
 
     override fun queryFlatAdjustment(
         origin: Combatant?,
@@ -22,7 +24,7 @@ class ElementX : Rune() {
             && origin == Combatant.HeroCombatant
             && element == elemental(c)
         ) {
-            2 * x()
+            x()
         } else {
             0
         }
