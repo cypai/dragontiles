@@ -92,6 +92,7 @@ class Elementalist : HeroClass {
         Abnormality(),
         SorcerousPower(),
         VermilionBird(),
+        VentToAttack(),
     )
     override val hpMax: Int = 60
     override val fluxMax: Int = 40

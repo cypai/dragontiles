@@ -21,7 +21,7 @@ class Abnormality : PowerSpell() {
         api.addStatusToHero(AbnormalityStatus(5))
     }
 
-    class AbnormalityStatus(amount: Int) : SimpleStatus("base:status:Abnormality", "gray.png", false, amount) {
+    class AbnormalityStatus(amount: Int) : SimpleStatus("base:status:Abnormality", "gray.png", true, amount) {
         @CombatSubscribe
         suspend fun onTileStatus(ev: TileStatusChangeEvent, api: CombatApi) {
             if (ev.tileStatus != TileStatus.NONE) {
