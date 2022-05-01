@@ -539,3 +539,8 @@ base:spells:BirdCall:
   en:
     name: Bird Call
     description: Deal !d @AOE Fire damage.
+
+base:spells:Discharge:
+  en:
+    name: Discharge
+    description: Lose half your @Flux. Deal Lightning damage equal to the amount lost.

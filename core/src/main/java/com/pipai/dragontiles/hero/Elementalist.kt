@@ -39,6 +39,7 @@ class Elementalist : HeroClass {
         CircularBreathing(),
         ElementalSight(),
         Battery(),
+        Discharge(),
         FluxCapacitor(),
 //        InflictReactant(),
 //        DenseReactants(),
