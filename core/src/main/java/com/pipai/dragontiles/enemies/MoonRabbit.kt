@@ -12,8 +12,8 @@ class MoonRabbit : Enemy() {
     override val hpMax: Int = 24
     override val fluxMax: Int = 48
 
-    private var waitTurns = 2
-    private var nextWaitTurns = 3
+    private var waitTurns = 4
+    private var nextWaitTurns = 6
 
     override fun getIntent(api: CombatApi): Intent {
         return if (waitTurns > 0) {

@@ -5,8 +5,6 @@ import com.pipai.dragontiles.combat.CombatFlag
 import com.pipai.dragontiles.combat.RandomTileStatusInflictStrategy
 import com.pipai.dragontiles.data.TileStatus
 import com.pipai.dragontiles.spells.*
-import com.pipai.dragontiles.status.Pyro
-import com.pipai.dragontiles.utils.getStackableCopy
 import com.pipai.dragontiles.utils.withAll
 
 class Burn : StandardSpell() {
@@ -16,7 +14,6 @@ class Burn : StandardSpell() {
     override val targetType: TargetType = TargetType.SINGLE
     override val rarity: Rarity = Rarity.COMMON
     override val aspects: MutableList<SpellAspect> = mutableListOf(
-        StackableAspect(Pyro(1), 1),
         AttackDamageAspect(2),
         FluxGainAspect(1),
     )
@@ -30,7 +27,6 @@ class Burn : StandardSpell() {
     override suspend fun onCast(params: CastParams, api: CombatApi) {
         val target = api.getEnemy(params.targets.first())
         api.attack(target, elemental(components()), baseDamage(), flags())
-        api.addStatusToEnemy(target, aspects.getStackableCopy(Pyro::class))
         api.inflictTileStatusOnHand(
             RandomTileStatusInflictStrategy(
                 TileStatus.BURN,
