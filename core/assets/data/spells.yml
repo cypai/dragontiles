@@ -191,7 +191,7 @@ base:spells:Fireball:
 base:spells:IceShard:
   en:
     name: Ice Shard
-    description: Deal !d Ice damage. Inflict !s(1) @Cryo. @Freeze a tile in your hand.
+    description: Deal !d Ice damage. @Freeze a tile in your hand.
 
 base:spells:ChainLightning:
   en:
