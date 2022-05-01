@@ -247,3 +247,8 @@ base:status:Abnormality:
   en:
     name: Abnormality
     description: Deal damage to a random enemy whenever a tile in your hand gains an effect.
+
+base:status:VermilionBird:
+  en:
+    name: Vermilion Bird
+    description: Doubles Fire damage.

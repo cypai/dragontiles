@@ -514,3 +514,8 @@ base:spells:SorcerousPower:
   en:
     name: Sorcerous Power
     description: Gain !s(1) @Elemented Enpower.
+
+base:spells:VermilionBird:
+  en:
+    name: Vermilion Bird
+    description: Doubles Fire damage.
