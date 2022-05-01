@@ -10,7 +10,7 @@ import com.pipai.dragontiles.spells.upgrades.AntifreezeUpgrade
 class Normalize : StandardSpell() {
     override val id: String = "base:spells:Normalize"
     override val type: SpellType = SpellType.EFFECT
-    override val rarity: Rarity = Rarity.RARE
+    override val rarity: Rarity = Rarity.UNCOMMON
     override val targetType: TargetType = TargetType.NONE
     override val requirement: ComponentRequirement = ForbidTransformFreeze(this,
         AnyCombo(3, SuitGroup.ELEMENTAL) {

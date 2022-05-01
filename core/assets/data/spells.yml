@@ -529,3 +529,8 @@ base:spells:Spray:
   en:
     name: Spray
     description: Deal !d @Elemented damage to a random enemy 4 times.
+
+base:spells:BirdCall:
+  en:
+    name: Bird Call
+    description: Deal !d @AOE Fire damage.
