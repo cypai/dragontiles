@@ -1,11 +1,9 @@
 package com.pipai.dragontiles.spells.elementalist
 
 import com.pipai.dragontiles.combat.CombatApi
-import com.pipai.dragontiles.combat.CombatFlag
 import com.pipai.dragontiles.combat.RandomTileStatusInflictStrategy
 import com.pipai.dragontiles.data.TileStatus
 import com.pipai.dragontiles.spells.*
-import com.pipai.dragontiles.utils.withAll
 
 class Burn : StandardSpell() {
     override val id: String = "base:spells:Burn"
@@ -17,12 +15,6 @@ class Burn : StandardSpell() {
         AttackDamageAspect(2),
         FluxGainAspect(1),
     )
-
-    override fun additionalKeywords(): List<String> = listOf("@Reaction", "@Melt", "@Pyroblast")
-
-    override fun flags(): List<CombatFlag> {
-        return super.flags().withAll(listOf(CombatFlag.PYRO, CombatFlag.PIERCING))
-    }
 
     override suspend fun onCast(params: CastParams, api: CombatApi) {
         val target = api.getEnemy(params.targets.first())

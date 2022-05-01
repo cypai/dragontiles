@@ -321,7 +321,7 @@ base:spells:PhilosophersStone:
 base:spells:PhoenixFire:
   en:
     name: Phoenix Fire
-    description: Deal !d Fire damage and inflict 1 Pyro on all enemies.
+    description: Deal !d @AOE Fire damage. @Burn a tile in your hand.
 
 base:spells:PhoenixTears:
   en:

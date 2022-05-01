@@ -1,11 +1,8 @@
 package com.pipai.dragontiles.spells.elementalist
 
 import com.pipai.dragontiles.combat.CombatApi
-import com.pipai.dragontiles.combat.CombatFlag
+import com.pipai.dragontiles.data.TileStatus
 import com.pipai.dragontiles.spells.*
-import com.pipai.dragontiles.status.Pyro
-import com.pipai.dragontiles.utils.getStackableCopy
-import com.pipai.dragontiles.utils.withAll
 
 class PhoenixFire : StandardSpell() {
     override val id: String = "base:spells:PhoenixFire"
@@ -16,17 +13,17 @@ class PhoenixFire : StandardSpell() {
     override val aspects: MutableList<SpellAspect> = mutableListOf(
         AttackDamageAspect(17),
         FluxGainAspect(9),
-        StackableAspect(Pyro(1), 1),
     )
-
-    override fun additionalKeywords(): List<String> = listOf("@Reaction", "@Melt", "@Pyroblast")
-
-    override fun flags(): List<CombatFlag> {
-        return super.flags().withAll(listOf(CombatFlag.PYRO))
-    }
 
     override suspend fun onCast(params: CastParams, api: CombatApi) {
         api.aoeAttack(elemental(components()), baseDamage(), flags())
-        api.addAoeStatus(aspects.getStackableCopy(Pyro::class))
+        if (api.combat.hand.isNotEmpty()) {
+            if (api.combat.hand.size > 1) {
+                val tile = api.queryTiles("Pick a tile to burn", api.combat.hand, 1, 1)
+                api.setTileStatus(tile, TileStatus.BURN)
+            } else {
+                api.setTileStatus(api.combat.hand, TileStatus.BURN)
+            }
+        }
     }
 }

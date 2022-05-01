@@ -1,15 +1,9 @@
 package com.pipai.dragontiles.spells.elementalist
 
 import com.pipai.dragontiles.combat.CombatApi
-import com.pipai.dragontiles.combat.CombatFlag
-import com.pipai.dragontiles.combat.RandomTileStatusInflictStrategy
-import com.pipai.dragontiles.combat.TileStatusInflictStrategy
 import com.pipai.dragontiles.data.Element
 import com.pipai.dragontiles.data.TileStatus
 import com.pipai.dragontiles.spells.*
-import com.pipai.dragontiles.status.Pyro
-import com.pipai.dragontiles.utils.getStackableCopy
-import com.pipai.dragontiles.utils.withAll
 
 class SelfAffliction : StandardSpell() {
     override val id: String = "base:spells:SelfAffliction"
@@ -21,10 +15,6 @@ class SelfAffliction : StandardSpell() {
         FluxGainAspect(3),
         LimitedRepeatableAspect(2),
     )
-
-    override fun flags(): List<CombatFlag> {
-        return super.flags().withAll(listOf(CombatFlag.PYRO))
-    }
 
     override suspend fun onCast(params: CastParams, api: CombatApi) {
         val tileStatus = when (elemental(components())) {

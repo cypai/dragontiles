@@ -77,7 +77,7 @@ class Elementalist : HeroClass {
 //        WindSwirl(),
 //        SummonPhoenix(),
         PhilosophersStone(),
-//        PhoenixFire(),
+        PhoenixFire(),
 //        PhoenixTears(),
         DumpFlux(),
         TrialByFire(),
