@@ -5,8 +5,8 @@ import com.pipai.dragontiles.combat.Combatant
 import com.pipai.dragontiles.data.Element
 import com.pipai.dragontiles.spells.*
 
-class EnpoweringRune : Rune() {
-    override val id: String = "base:spells:EnpoweringRune"
+class ElementX : Rune() {
+    override val id: String = "base:spells:ElementX"
     override val rarity: Rarity = Rarity.UNCOMMON
     override val requirement: ComponentRequirement = IdenticalX(SuitGroup.ELEMENTAL)
     override val aspects: MutableList<SpellAspect> = mutableListOf()

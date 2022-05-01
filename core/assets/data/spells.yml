@@ -203,10 +203,10 @@ base:spells:ElementalRune:
     name: Elemental Rune
     description: Increases damage from same @Elemented attacks by 2.
 
-base:spells:EnpoweringRune:
+base:spells:ElementX:
   en:
-    name: Enpowering Rune
-    description: Increases damage from same @Elemented attacks by 2 @X.
+    name: Element X
+    description: Increases damage from same @Elemented attacks by !x.
 
 base:spells:ElementalBreathing:
   en:
@@ -393,12 +393,17 @@ base:spells:HighLethality:
 base:spells:Cyclone:
   en:
     name: Cyclone
-    description: Deal !d @AOE @Elemented damage @X times.
+    description: Deal !d @AOE @Elemented damage !x times.
 
 base:spells:Enpower:
   en:
     name: Enpower
-    description: The next same @Elemented attack does 6 more damage.
+    description: Gain !s(1) @Elemented Enpower.
+
+base:spells:Enpowerment:
+  en:
+    name: Enpowerment
+    description: Gain !s(1) Enpower for Fire, Ice, and Lightning at the end of your turn.
 
 base:spells:Typhoon:
   en:

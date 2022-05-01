@@ -35,8 +35,7 @@ abstract class Status(var amount: Int) : Localized, DamageAdjustable, DeepCopyab
     ): Float = 1f
 }
 
-class GenericStatus(amount: Int) : Status(amount) {
-    override val id: String = "base:status:Generic"
+class GenericStatus(amount: Int, override val id: String = "base:status:Generic") : Status(amount) {
     override val assetName: String = ""
     override val displayAmount: Boolean = false
     override fun isDebuff(): Boolean = false
