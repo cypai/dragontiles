@@ -89,6 +89,7 @@ class Elementalist : HeroClass {
         FluxMastery(),
         Barrier(),
         EnpoweringCounter(),
+        Abnormality(),
     )
     override val hpMax: Int = 60
     override val fluxMax: Int = 40

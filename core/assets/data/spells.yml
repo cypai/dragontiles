@@ -439,3 +439,8 @@ base:spells:EnpoweringCounter:
   en:
     name: Enpowering Counter
     description: Whenever you are hit with an attack this turn, gain 1 @Elemented Enpower.
+
+base:spells:Abnormality:
+  en:
+    name: Abnormality
+    description: Whenever a tile in your hand gains an effect (such as @Burn), deal 5 damage to a random enemy.
