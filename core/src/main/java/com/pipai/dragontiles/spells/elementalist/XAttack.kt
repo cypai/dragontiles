@@ -1,9 +1,7 @@
 package com.pipai.dragontiles.spells.elementalist
 
 import com.pipai.dragontiles.combat.CombatApi
-import com.pipai.dragontiles.combat.CombatFlag
 import com.pipai.dragontiles.spells.*
-import com.pipai.dragontiles.utils.withAll
 
 class XAttack : StandardSpell() {
     override val id: String = "base:spells:XAttack"
@@ -14,7 +12,7 @@ class XAttack : StandardSpell() {
     override val aspects: MutableList<SpellAspect> = mutableListOf(
         AttackDamageAspect(1),
         FluxGainAspect(5),
-        XAspect(0),
+        XAspect(1, 0),
     )
 
     override suspend fun onCast(params: CastParams, api: CombatApi) {

@@ -309,23 +309,21 @@ class SpellCard(
                         }
                     }
                     "!x" -> {
-                        val r = replacement.toInt()
-                        when {
-                            r == 0 -> "X"
-                            r < 0 -> "X$r"
-                            else -> "X+$r"
-                        }
-                    }
-                    "!xsleft" -> {
-                        when (val r = replacement.toInt()) {
-                            1 -> ""
-                            else -> "$r("
-                        }
-                    }
-                    "!xsright" -> {
-                        when (replacement.toInt()) {
-                            1 -> ""
-                            else -> ")"
+                        val flat = spell.xFlatModifier()
+                        val mul = spell.xMultiplier()
+                        when (flat) {
+                            0 -> {
+                                when (mul) {
+                                    1 -> "X"
+                                    else -> "${mul}X"
+                                }
+                            }
+                            else -> {
+                                when (mul) {
+                                    1 -> "X+$flat"
+                                    else -> "${mul}X+$flat"
+                                }
+                            }
                         }
                     }
                     else -> {

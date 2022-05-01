@@ -146,15 +146,9 @@ abstract class Spell : Localized, DamageAdjustable {
             "!draw" -> baseDraw()
             "!od" -> baseOpenDraw()
             "!swap" -> baseSwap()
-            "!x" -> aspects.findAs(XAspect::class)?.amount ?: 0
-            "!xsleft" -> {
-                aspects.filterIsInstance(StackableAspect::class.java)
-                    .firstOrNull { it.dynamicId.toString() == param }?.status?.amount ?: 1
-            }
-            "!xsright" -> {
-                aspects.filterIsInstance(StackableAspect::class.java)
-                    .firstOrNull { it.dynamicId.toString() == param }?.status?.amount ?: 1
-            }
+            "!xtotal" -> x()
+            "!xmul" -> xMultiplier()
+            "!xflat" -> xFlatModifier()
             else -> data[key] ?: 0
         }
     }

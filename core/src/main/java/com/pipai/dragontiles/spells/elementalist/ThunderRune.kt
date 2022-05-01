@@ -12,13 +12,13 @@ class ThunderRune : Rune() {
     override val rarity: Rarity = Rarity.UNCOMMON
     override val requirement: ComponentRequirement = IdenticalX(SuitGroup.LIGHTNING)
     override val aspects: MutableList<SpellAspect> = mutableListOf(
-        XAspect(0),
+        XAspect(13, 0),
     )
 
     @CombatSubscribe
     suspend fun onConsume(ev: ComponentConsumeEvent, api: CombatApi) {
         val shocks = ev.components.filter { it.tileStatus == TileStatus.SHOCK }.size
-        val damage = 13 * x() * shocks
+        val damage = x() * shocks
         if (damage > 0) {
             api.aoeAttack(Element.LIGHTNING, damage, flags())
         }

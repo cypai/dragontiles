@@ -78,7 +78,18 @@ fun Spell.baseSwap(): Int {
 }
 
 fun Spell.x(): Int {
-    return components().size + (aspects.findAs(XAspect::class)?.amount ?: 0)
+    val xAspect = aspects.findAs(XAspect::class) ?: return 0
+    return xAspect.multiplier * components().size + xAspect.flatModifier
+}
+
+fun Spell.xMultiplier(): Int {
+    val xAspect = aspects.findAs(XAspect::class) ?: return 0
+    return xAspect.multiplier
+}
+
+fun Spell.xFlatModifier(): Int {
+    val xAspect = aspects.findAs(XAspect::class) ?: return 0
+    return xAspect.flatModifier
 }
 
 val anySet = setOf(Suit.FIRE, Suit.ICE, Suit.LIGHTNING, Suit.LIFE, Suit.STAR, Suit.FUMBLE)

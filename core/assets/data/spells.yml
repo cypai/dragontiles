@@ -151,17 +151,17 @@ base:spells:FeedbackLoop:
 base:spells:BurnRune:
   en:
     name: Burn Rune
-    description: Deal 5 !x @AOE Fire damage for each tile with @Burn in your hand at the end of your turn.
+    description: Deal !x @AOE Fire damage for each tile with @Burn in your hand at the end of your turn.
 
 base:spells:FrostRune:
   en:
     name: Frost Rune
-    description: Lose 4 !x @Flux for each tile with @Freeze in your hand at the end of your turn.
+    description: Lose !x @Flux for each tile with @Freeze in your hand at the end of your turn.
 
 base:spells:ThunderRune:
   en:
     name: Thunder Rune
-    description: Deal 13 !x @AOE Lightning damage for each @Shock tile consumed.
+    description: Deal !x @AOE Lightning damage for each @Shock tile consumed.
 
 base:spells:InflictReactant:
   en:
@@ -216,7 +216,7 @@ base:spells:ElementalBreathing:
 base:spells:StrengthRune:
   en:
     name: Strength Rune
-    description: Increases Strength by !xsleft(1)!x!xsright(1).
+    description: Increases Strength by !x.
 
 base:spells:HasteRune:
   en:

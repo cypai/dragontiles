@@ -11,7 +11,7 @@ class StrengthRune : Rune() {
     override val requirement: ComponentRequirement = IdenticalX()
     override val aspects: MutableList<SpellAspect> = mutableListOf(
         StackableAspect(Strength(1), 1),
-        XAspect(-1)
+        XAspect(1, -1)
     )
 
     override suspend fun onActivate(api: CombatApi) {

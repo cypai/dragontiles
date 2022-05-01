@@ -92,7 +92,10 @@ class TooltipSystem(private val game: DragonTilesGame, var stage: Stage) : NoPro
                     CountdownType.SCORE
                 )
             }) {
-            addKeyword("@Score")
+            addKeyword(Keywords.SCORE)
+        }
+        if (spell.aspects.any { it is XAspect }) {
+            addKeyword(Keywords.X)
         }
         spell.additionalKeywords().forEach { addKeyword(it) }
         spell.additionalLocalized().forEach { addNameDescLocalization(game.gameStrings.nameDescLocalization(it)) }

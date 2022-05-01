@@ -14,7 +14,7 @@ class MultiInvoke : StandardSpell() {
     override val aspects: MutableList<SpellAspect> = mutableListOf(
         AttackDamageAspect(1),
         FluxGainAspect(5),
-        XAspect(0),
+        XAspect(1, 0),
     )
 
     override suspend fun onCast(params: CastParams, api: CombatApi) {

@@ -15,6 +15,6 @@ class XUpgrade : SpellUpgrade {
     }
 
     override fun onUpgrade(spell: Spell) {
-        spell.aspects.findAs(XAspect::class)!!.amount += 1
+        spell.aspects.findAs(XAspect::class)!!.flatModifier++
     }
 }

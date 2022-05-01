@@ -11,12 +11,12 @@ class FrostRune : Rune() {
     override val rarity: Rarity = Rarity.UNCOMMON
     override val requirement: ComponentRequirement = IdenticalX(SuitGroup.ICE)
     override val aspects: MutableList<SpellAspect> = mutableListOf(
-        XAspect(0),
+        XAspect(4,0),
     )
 
     @CombatSubscribe
     suspend fun onTurnEnd(ev: TurnEndEvent, api: CombatApi) {
         val freezes = api.combat.hand.filter { it.tileStatus == TileStatus.FREEZE }.size
-        api.heroLoseFlux(4 * freezes * x())
+        api.heroLoseFlux(freezes * x())
     }
 }

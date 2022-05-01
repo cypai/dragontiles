@@ -12,7 +12,7 @@ class Cyclone : StandardSpell() {
     override val aspects: MutableList<SpellAspect> = mutableListOf(
         AttackDamageAspect(5),
         FluxGainAspect(8),
-        XAspect(0),
+        XAspect(1, 0),
     )
 
     override suspend fun onCast(params: CastParams, api: CombatApi) {
