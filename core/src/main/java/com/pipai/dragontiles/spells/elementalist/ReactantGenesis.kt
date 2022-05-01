@@ -6,7 +6,7 @@ import com.pipai.dragontiles.status.GenericStatus
 import com.pipai.dragontiles.utils.findAs
 
 class ReactantGenesis : Sorcery() {
-    override val id = "base:sorceries:ReactantGenesis"
+    override val id = "base:spells:ReactantGenesis"
     override val requirement = Identical(3, SuitGroup.ELEMENTAL)
     override val rarity = Rarity.UNCOMMON
     override val aspects: MutableList<SpellAspect> = mutableListOf(

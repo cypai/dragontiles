@@ -444,3 +444,73 @@ base:spells:Abnormality:
   en:
     name: Abnormality
     description: Whenever a tile in your hand gains an effect (such as @Burn), deal 5 damage to a random enemy.
+
+base:spells:Eyes:
+  en:
+    name: Eyes
+    description: Deal !d @AOE @Elemented damage.
+
+base:spells:EyesOfLethality:
+  en:
+    name: Eyes of Lethality
+    description: Deal !d @AOE @Elemented damage.
+
+base:spells:Pong:
+  en:
+    name: Pong
+    description: Deal !d @AOE @Elemented damage.
+
+base:spells:Chow:
+  en:
+    name: Chow
+    description: Deal !d @AOE @Elemented damage.
+
+base:spells:PingHu:
+  en:
+    name: Ping Hu
+    description: Deal !d @AOE @Piercing damage.
+
+base:spells:DuiDuiHu:
+  en:
+    name: Dui Dui Hu
+    description: Deal !d @AOE @Piercing damage.
+
+base:spells:ForceOverload:
+  en:
+    name: Force Overload
+    description: Maximize @Flux for all enemies.
+
+base:spells:PhoenixRebirth:
+  en:
+    name: Phoenix's Rebirth
+    description: Vent all Flux. Deal !d Fire @Piercing damage. Heal HP equal to damage dealt.
+
+base:spells:GreatPower:
+  en:
+    name: Great Power
+    description: Gain !s(1) Strength.
+
+base:spells:SummonPhoenix:
+  en:
+    name: Summon Phoenix
+    description: Inflicts !s(1) Elemented Reactants to all enemies at the start of your turn.
+
+base:spells:BigBang:
+  en:
+    name: Big Bang
+    description: Deal !d @AOE @Elemented damage.
+
+base:spells:Expansion:
+  en:
+    name: Expansion
+    description: Gain !tmfg Max @Flux this combat.
+
+base:spells:ReactantGenesis:
+  en:
+    name: Reactant Genesis
+    description: Inflicts !s(1) Elemented Reactants to all enemies.
+
+base:spells:SorcerousPower:
+  en:
+    name: Sorcerous Power
+    description: Gain !s(1) @Elemented Enpower.

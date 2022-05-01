@@ -7,7 +7,7 @@ import com.pipai.dragontiles.data.TileInstance
 import com.pipai.dragontiles.spells.*
 
 class DuiDuiHu : Sorcery() {
-    override val id = "base:sorceries:DuiDuiHu"
+    override val id = "base:spells:DuiDuiHu"
     override val rarity = Rarity.UNCOMMON
     override val requirement = object : CustomRequirement() {
         override val type: SetType = SetType.IDENTICAL

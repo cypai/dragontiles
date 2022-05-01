@@ -4,7 +4,7 @@ import com.pipai.dragontiles.combat.CombatApi
 import com.pipai.dragontiles.spells.*
 
 class Pong : Sorcery() {
-    override val id = "base:sorceries:Pong"
+    override val id = "base:spells:Pong"
     override val requirement = Identical(3)
     override val rarity = Rarity.UNCOMMON
     override val aspects: MutableList<SpellAspect> = mutableListOf(

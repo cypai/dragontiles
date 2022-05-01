@@ -7,7 +7,7 @@ import com.pipai.dragontiles.status.GenericStatus
 import com.pipai.dragontiles.utils.getStackableAmount
 
 class SorcerousPower : Sorcery() {
-    override val id: String = "base:sorceries:SorcerousPower"
+    override val id: String = "base:spells:SorcerousPower"
     override val requirement: ComponentRequirement = AnyCombo(3)
     override val rarity: Rarity = Rarity.UNCOMMON
     override val aspects: MutableList<SpellAspect> = mutableListOf(

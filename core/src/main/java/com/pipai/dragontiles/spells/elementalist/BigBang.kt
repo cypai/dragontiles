@@ -4,7 +4,7 @@ import com.pipai.dragontiles.combat.CombatApi
 import com.pipai.dragontiles.spells.*
 
 class BigBang : Sorcery() {
-    override val id = "base:sorceries:BigBang"
+    override val id = "base:spells:BigBang"
     override val requirement = AnyCombo(3)
     override val rarity = Rarity.UNCOMMON
     override val aspects: MutableList<SpellAspect> = mutableListOf(

@@ -9,7 +9,7 @@ import com.pipai.dragontiles.status.*
 import com.pipai.dragontiles.utils.getStackableAmount
 
 class SummonPhoenix : Sorcery() {
-    override val id = "base:sorceries:SummonPhoenix"
+    override val id = "base:spells:SummonPhoenix"
     override val requirement = Sequential(9)
     override val rarity = Rarity.RARE
     override val aspects: MutableList<SpellAspect> = mutableListOf(

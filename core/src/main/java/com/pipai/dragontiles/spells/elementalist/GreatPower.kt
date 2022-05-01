@@ -6,7 +6,7 @@ import com.pipai.dragontiles.status.Strength
 import com.pipai.dragontiles.utils.getStackableCopy
 
 class GreatPower : Sorcery() {
-    override val id = "base:sorceries:GreatPower"
+    override val id = "base:spells:GreatPower"
     override val requirement = Identical(3)
     override val rarity = Rarity.UNCOMMON
     override val aspects: MutableList<SpellAspect> = mutableListOf(
