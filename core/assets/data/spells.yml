@@ -196,7 +196,7 @@ base:spells:IceShard:
 base:spells:ChainLightning:
   en:
     name: Chain Lightning
-    description: Deal !d Lightning damage and inflict !s(1) @Electro to all enemies. @Shock a tile in your hand.
+    description: Deal !d @AOE Lightning damage. @Shock a tile in your hand.
 
 base:spells:ElementalRune:
   en:

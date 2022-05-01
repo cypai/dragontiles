@@ -795,7 +795,7 @@ class RainbowIdenticalSequence(private val sequenceSize: Int) : ComponentRequire
     override val type = SetType.SEQUENTIAL
     override var suitGroup: SuitGroup = SuitGroup.RAINBOW
     override val reqAmount = ReqAmount.Numeric(sequenceSize)
-    override val description = "Identical Sequences in all three Elemental Suits."
+    override val description = "Identical Sequences of Fire, Ice, and Lightning (all elements required)."
     override val componentSlots: MutableList<ComponentSlot> = mutableListOf()
     override val manualOnly = false
     override val showTooltip: Boolean = true
@@ -840,7 +840,7 @@ class RainbowIdentical(private val size: Int) : ComponentRequirement {
     override val type = SetType.IDENTICAL
     override var suitGroup: SuitGroup = SuitGroup.RAINBOW
     override val reqAmount = ReqAmount.Numeric(size)
-    override val description = "Identical Identicals in all three Elemental Suits."
+    override val description = "Identical tiles for Fire, Ice, and Lightning (all elements required)."
     override val componentSlots: MutableList<ComponentSlot> = mutableListOf()
     override val manualOnly = false
     override val showTooltip: Boolean = true
