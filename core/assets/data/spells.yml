@@ -408,7 +408,7 @@ base:spells:EnpowerElement:
 base:spells:Enpowerment:
   en:
     name: Enpowerment
-    description: Gain !s(1) Enpower for Fire, Ice, and Lightning at the end of your turn.
+    description: Gain !s(1) Enpowered for Fire, Ice, and Lightning at the end of your turn.
 
 base:spells:Typhoon:
   en:
@@ -549,3 +549,8 @@ base:spells:WindChill:
   en:
     name: Wind Chill
     description: Inflict !s(1) Weak to all enemies. @Freeze a tile in your hand.
+
+base:spells:UnlimitedPower:
+  en:
+    name: Unlimited Power
+    description: Double your Enpowered.

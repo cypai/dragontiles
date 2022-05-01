@@ -620,6 +620,11 @@ class CombatApi(
         }
     }
 
+    fun heroStatusAmount(id: String): Int {
+        val status = combat.heroStatus.find { it.id == id }
+        return status?.amount ?: 0
+    }
+
     fun <T : Status> heroStatusAmount(statusType: KClass<T>): Int {
         val status = combat.heroStatus.find { statusType.isInstance(it) }
         return status?.amount ?: 0

@@ -14,7 +14,7 @@ class Abnormality : PowerSpell() {
     override val requirement: ComponentRequirement = Identical(4)
     override val rarity: Rarity = Rarity.RARE
     override val aspects: MutableList<SpellAspect> = mutableListOf(
-        FluxGainAspect(2),
+        FluxGainAspect(6),
     )
 
     override suspend fun onCast(params: CastParams, api: CombatApi) {

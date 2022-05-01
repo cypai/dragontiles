@@ -11,7 +11,7 @@ class SorcerousPower : Sorcery() {
     override val requirement: ComponentRequirement = AnyCombo(3)
     override val rarity: Rarity = Rarity.UNCOMMON
     override val aspects: MutableList<SpellAspect> = mutableListOf(
-        StackableAspect(GenericStatus(3, "base:status:Enpower"), 1),
+        StackableAspect(GenericStatus(3, "base:status:Enpowered"), 1),
     )
 
     override suspend fun onCast(hand: FullCastHand, api: CombatApi) {

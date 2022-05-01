@@ -13,7 +13,7 @@ class EnpowerElement : StandardSpell() {
     override val targetType: TargetType = TargetType.NONE
     override val rarity: Rarity = Rarity.UNCOMMON
     override val aspects: MutableList<SpellAspect> = mutableListOf(
-        StackableAspect(GenericStatus(3, "base:status:Enpower"), 1),
+        StackableAspect(GenericStatus(3, "base:status:Enpowered"), 1),
         FluxGainAspect(2),
     )
 

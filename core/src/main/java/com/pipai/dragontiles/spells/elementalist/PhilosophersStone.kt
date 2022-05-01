@@ -14,7 +14,7 @@ class PhilosophersStone : StandardSpell() {
     )
     override val type: SpellType = SpellType.EFFECT
     override val targetType: TargetType = TargetType.NONE
-    override val rarity: Rarity = Rarity.RARE
+    override val rarity: Rarity = Rarity.UNCOMMON
     override val aspects: MutableList<SpellAspect> = mutableListOf(
         TransformAspect(),
         FluxGainAspect(7),

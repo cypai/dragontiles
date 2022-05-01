@@ -13,9 +13,9 @@ base:status:Strength:
     name: Strength
     description: Attacks and Sorceries deal 1 more damage per point.
 
-base:status:Enpower:
+base:status:Enpowered:
   en:
-    name: Enpower
+    name: Enpowered
     description: Increases Attack and Sorcery damage of the enpowered element by 1 per point. Decreases every turn.
 
 base:status:Break:

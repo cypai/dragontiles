@@ -15,7 +15,7 @@ class Enpowerment : PowerSpell() {
     override val requirement: ComponentRequirement = RainbowIdentical(2)
     override val rarity: Rarity = Rarity.RARE
     override val aspects: MutableList<SpellAspect> = mutableListOf(
-        StackableAspect(GenericStatus(2, "base:status:Enpower"), 1),
+        StackableAspect(GenericStatus(2, "base:status:Enpowered"), 1),
         FluxGainAspect(2),
     )
     override val scoreable: Boolean = true

@@ -17,7 +17,7 @@ class EnpoweringCounter : StandardSpell() {
     )
 
     override fun additionalLocalized(): List<String> {
-        return listOf("base:status:Enpower")
+        return listOf("base:status:Enpowered")
     }
 
     override suspend fun onCast(params: CastParams, api: CombatApi) {
