@@ -16,7 +16,7 @@ base:enemies:KillerRabbit:
 base:enemies:Bull:
   en:
     name: Bull
-    description: Pumps itself up.
+    description: Pumps itself up. When Overloaded, begins attacking.
 
 base:enemies:Rat:
   en:
@@ -41,22 +41,17 @@ base:enemies:Minotaur:
 base:enemies:FlameDragonHorse:
   en:
     name: Flame Dragon Horse
-    description: Hot.
+    description: Burns.
 
 base:enemies:RiverDragonHorse:
   en:
     name: River Dragon Horse
-    description: Cool.
+    description: Freezes.
 
 base:enemies:WhiteDragonHorse:
   en:
     name: White Dragon Horse
     description: Volatile.
-
-base:enemies:ShaWujin:
-  en:
-    name: Sha Wujin
-    description: ???
 
 base:enemies:AncientTurtle:
   en:
@@ -66,11 +61,11 @@ base:enemies:AncientTurtle:
 base:enemies:MoonRabbit:
   en:
     name: Moon Rabbit
-    description: A moon rabbit. Pounds the Elixir of Life.
+    description: A moon rabbit. Pounds the Elixir of Life in a few turns.
 
-base:enemies:VermillionBird:
+base:enemies:Bird:
   en:
-    name: Vermillion Bird
+    name: Bird
     description: An ordinary bird?
 
 base:enemies:Kitsune:
@@ -81,7 +76,7 @@ base:enemies:Kitsune:
 base:enemies:StarElemental:
   en:
     name: Star Elemental
-    description: A being composed of pure Star energy. Enjoys multiattacks when Volatile.
+    description: A being composed of pure Star energy. Attacks according to how Volatile your hand is.
 
 base:enemies:Nekomata:
   en:
@@ -98,10 +93,15 @@ base:enemies:Cornucopia:
     name: Cornucopia
     description: Generates unlimited amounts of food...
 
+base:enemies:ShaWujin:
+  en:
+    name: Sha Wujin
+    description: One of the disciples of Sanzang.
+
 base:enemies:ZhuBajie:
   en:
     name: Zhu Bajie
-    description: A very lazy, but powerful disciple.
+    description: A very lazy, but powerful disciple. Eats a lot of food.
 
 base:enemies:SunWukong:
   en:
@@ -131,4 +131,4 @@ base:enemies:ChangE:
 base:enemies:TamamoNoMae:
   en:
     name: Tamamo no Mae
-    description: A legendary kitsune. Themes all her attacks around the number 9.
+    description: A legendary kitsune.

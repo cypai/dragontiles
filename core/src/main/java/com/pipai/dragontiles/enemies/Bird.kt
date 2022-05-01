@@ -7,9 +7,9 @@ import com.pipai.dragontiles.combat.Intent
 import com.pipai.dragontiles.data.Element
 import com.pipai.dragontiles.status.Strength
 
-class VermillionBird : Enemy() {
+class Bird : Enemy() {
 
-    override val id: String = "base:enemies:VermillionBird"
+    override val id: String = "base:enemies:Bird"
     override val assetName: String = "vermillion_bird.png"
 
     override val hpMax: Int = 12

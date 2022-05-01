@@ -21,8 +21,8 @@ class MountainsDungeon {
                         "base:dungeons:Mountains:MoonRabbitBirds",
                         listOf(
                             Pair(MoonRabbit(), Vector2(0.5f, 4.5f)),
-                            Pair(VermillionBird(), Vector2(3f, 4.5f)),
-                            Pair(VermillionBird(), Vector2(5.5f, 4.5f)),
+                            Pair(Bird(), Vector2(3f, 4.5f)),
+                            Pair(Bird(), Vector2(5.5f, 4.5f)),
                         )
                     ),
                 ),
