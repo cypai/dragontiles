@@ -524,3 +524,8 @@ base:spells:VentToAttack:
   en:
     name: Vent to Attack
     description: Each time you cast an attack, lose 4 Flux.
+
+base:spells:Spray:
+  en:
+    name: Spray
+    description: Deal !d @Elemented damage to a random enemy 4 times.
