@@ -2,7 +2,7 @@ package com.pipai.dragontiles.spells.elementalist
 
 import com.pipai.dragontiles.combat.CombatApi
 import com.pipai.dragontiles.spells.*
-import com.pipai.dragontiles.status.EnpoweredStatus
+import com.pipai.dragontiles.status.Enpowered
 import com.pipai.dragontiles.status.GenericStatus
 import com.pipai.dragontiles.utils.getStackableAmount
 
@@ -16,6 +16,6 @@ class SorcerousPower : Sorcery() {
 
     override suspend fun onCast(hand: FullCastHand, api: CombatApi) {
         val amount = aspects.getStackableAmount(GenericStatus::class)
-        api.addStatusToHero(EnpoweredStatus(amount, elemental(components())))
+        api.addStatusToHero(Enpowered(amount, elemental(components())))
     }
 }

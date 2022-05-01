@@ -3,7 +3,7 @@ package com.pipai.dragontiles.spells.elementalist
 import com.pipai.dragontiles.combat.*
 import com.pipai.dragontiles.data.Element
 import com.pipai.dragontiles.spells.*
-import com.pipai.dragontiles.status.EnpoweredStatus
+import com.pipai.dragontiles.status.Enpowered
 import com.pipai.dragontiles.status.SimpleStatus
 
 class EnpoweringCounter : StandardSpell() {
@@ -48,14 +48,14 @@ class EnpoweringCounter : StandardSpell() {
         @CombatSubscribe
         suspend fun onAttackedFlux(ev: PlayerFluxDamageEvent, api: CombatApi) {
             if (CombatFlag.ATTACK in ev.flags) {
-                api.addStatusToHero(EnpoweredStatus(amount, element))
+                api.addStatusToHero(Enpowered(amount, element))
             }
         }
 
         @CombatSubscribe
         suspend fun onAttackedDamage(ev: PlayerDamageEvent, api: CombatApi) {
             if (CombatFlag.ATTACK in ev.flags) {
-                api.addStatusToHero(EnpoweredStatus(amount, element))
+                api.addStatusToHero(Enpowered(amount, element))
             }
         }
 

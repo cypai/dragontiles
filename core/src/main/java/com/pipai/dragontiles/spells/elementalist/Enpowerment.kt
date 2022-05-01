@@ -5,7 +5,7 @@ import com.pipai.dragontiles.combat.CombatSubscribe
 import com.pipai.dragontiles.combat.TurnEndEvent
 import com.pipai.dragontiles.data.Element
 import com.pipai.dragontiles.spells.*
-import com.pipai.dragontiles.status.EnpoweredStatus
+import com.pipai.dragontiles.status.Enpowered
 import com.pipai.dragontiles.status.GenericStatus
 import com.pipai.dragontiles.status.SimpleStatus
 import com.pipai.dragontiles.utils.getStackableAmount
@@ -27,9 +27,9 @@ class Enpowerment : PowerSpell() {
     class EnpowermentStatus(amount: Int) : SimpleStatus("base:status:Enpowerment", "enpowerment.png", true, amount) {
         @CombatSubscribe
         suspend fun onPlayerTurnEnd(ev: TurnEndEvent, api: CombatApi) {
-            api.addStatusToHero(EnpoweredStatus(amount, Element.FIRE))
-            api.addStatusToHero(EnpoweredStatus(amount, Element.ICE))
-            api.addStatusToHero(EnpoweredStatus(amount, Element.LIGHTNING))
+            api.addStatusToHero(Enpowered(amount, Element.FIRE))
+            api.addStatusToHero(Enpowered(amount, Element.ICE))
+            api.addStatusToHero(Enpowered(amount, Element.LIGHTNING))
         }
     }
 }

@@ -45,7 +45,7 @@ class Elementalist : HeroClass {
 //        ReactantFumes(),
 //        ReactantStrike(),
         ElementalBreathing(),
-        Enpower(),
+        EnpowerElement(),
         RapidMiniInvoke(),
 //        Concentrate(),
 //        FeedbackLoop(),

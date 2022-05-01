@@ -395,9 +395,9 @@ base:spells:Cyclone:
     name: Cyclone
     description: Deal !d @AOE @Elemented damage !x times.
 
-base:spells:Enpower:
+base:spells:EnpowerElement:
   en:
-    name: Enpower
+    name: Enpower Element
     description: Gain !s(1) @Elemented Enpower.
 
 base:spells:Enpowerment:

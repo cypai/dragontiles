@@ -3,7 +3,7 @@ package com.pipai.dragontiles.status
 import com.pipai.dragontiles.combat.*
 import com.pipai.dragontiles.data.Element
 
-class EnpoweredStatus(amount: Int, private val enpoweredElement: Element) :
+class Enpowered(amount: Int, private val enpoweredElement: Element) :
     SimpleStatus(
         when (enpoweredElement) {
             Element.FIRE -> "base:status:EnpoweredFire"
