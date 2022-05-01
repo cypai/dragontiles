@@ -17,7 +17,7 @@ class PhilosophersStone : StandardSpell() {
     override val rarity: Rarity = Rarity.RARE
     override val aspects: MutableList<SpellAspect> = mutableListOf(
         TransformAspect(),
-        FluxGainAspect(9),
+        FluxGainAspect(7),
     )
 
     override suspend fun onCast(params: CastParams, api: CombatApi) {
