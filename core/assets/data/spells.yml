@@ -223,6 +223,11 @@ base:spells:HasteRune:
     name: Haste Rune
     description: After casting a spell, draw 1 tile.
 
+base:spells:Battery:
+  en:
+    name: Battery
+    description: Gain !tmfg Max @Flux this combat.
+
 base:spells:FluxCapacitor:
   en:
     name: Flux Capacitor

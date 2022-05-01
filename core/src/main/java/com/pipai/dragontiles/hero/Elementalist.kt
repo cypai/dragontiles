@@ -38,6 +38,7 @@ class Elementalist : HeroClass {
 //        Superconduct(),
         CircularBreathing(),
         ElementalSight(),
+        Battery(),
         FluxCapacitor(),
 //        InflictReactant(),
 //        DenseReactants(),
