@@ -2,7 +2,7 @@ package com.pipai.dragontiles.spells.elementalist
 
 import com.pipai.dragontiles.combat.CombatApi
 import com.pipai.dragontiles.spells.*
-import com.pipai.dragontiles.status.EnpowerStatus
+import com.pipai.dragontiles.status.EnpoweredStatus
 import com.pipai.dragontiles.status.GenericStatus
 import com.pipai.dragontiles.utils.getStackableAmount
 
@@ -19,6 +19,6 @@ class Enpower : StandardSpell() {
 
     override suspend fun onCast(params: CastParams, api: CombatApi) {
         val amount = aspects.getStackableAmount(GenericStatus::class)
-        api.addStatusToHero(EnpowerStatus(amount, elemental(components())))
+        api.addStatusToHero(EnpoweredStatus(amount, elemental(components())))
     }
 }

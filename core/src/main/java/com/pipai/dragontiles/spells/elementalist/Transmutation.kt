@@ -3,10 +3,9 @@ package com.pipai.dragontiles.spells.elementalist
 import com.pipai.dragontiles.combat.CombatApi
 import com.pipai.dragontiles.combat.CombatSubscribe
 import com.pipai.dragontiles.combat.TurnStartEvent
+import com.pipai.dragontiles.data.Keywords
 import com.pipai.dragontiles.data.Tile
 import com.pipai.dragontiles.spells.*
-import com.pipai.dragontiles.status.Strength
-import com.pipai.dragontiles.utils.findAs
 
 class Transmutation : Rune() {
     override val id: String = "base:spells:Transmutation"
@@ -21,6 +20,10 @@ class Transmutation : Rune() {
         PreserveComponentOrder(),
         FluxGainAspect(9),
     )
+
+    override fun additionalKeywords(): List<String> {
+        return listOf(Keywords.COMPONENT)
+    }
 
     override suspend fun onDeactivate(api: CombatApi) {
         val componentList = components().toMutableList()

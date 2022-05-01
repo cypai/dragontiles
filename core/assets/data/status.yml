@@ -183,6 +183,11 @@ base:status:EnpoweredLightning:
     name: Enpowered Lightning
     description: The next Lightning attack does more damage.
 
+base:status:EnpoweredNonElemental:
+  en:
+    name: Enpowered Non-Elemental
+    description: The next Non-Elemental attack does more damage.
+
 base:status:Minion:
   en:
     name: Minion
@@ -192,3 +197,43 @@ base:status:Regen:
   en:
     name: Regen
     description: Heals HP at the start of its turn.
+
+base:status:FireResistance:
+  en:
+    name: Fire Resistance
+    description: Only takes 1 damage from Fire damage.
+
+base:status:IceResistance:
+  en:
+    name: Ice Resistance
+    description: Only takes 1 damage from Ice damage.
+
+base:status:LightningResistance:
+  en:
+    name: Lightning Resistance
+    description: Only takes 1 damage from Lightning damage.
+
+base:status:NonElementalResistance:
+  en:
+    name: Non-Elemental Resistance
+    description: Only takes 1 damage from Non-elemental damage.
+
+base:status:FireEnpoweringCounter:
+  en:
+    name: Fire Enpowering Counter
+    description: When attacked, gains Enpowered Fire.
+
+base:status:IceEnpoweringCounter:
+  en:
+    name: Ice Enpowering Counter
+    description: When attacked, gains Enpowered Ice.
+
+base:status:LightningEnpoweringCounter:
+  en:
+    name: Lightning Enpowering Counter
+    description: When attacked, gains Enpowered Lightning.
+
+base:status:NonElementalEnpoweringCounter:
+  en:
+    name: Non-Elemental Enpowering Counter
+    description: When attacked, gains Enpowered Non-Elemental.
