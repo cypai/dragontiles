@@ -9,7 +9,7 @@ import com.pipai.dragontiles.spells.*
 
 class Transmutation : Rune() {
     override val id: String = "base:spells:Transmutation"
-    override val rarity: Rarity = Rarity.UNCOMMON
+    override val rarity: Rarity = Rarity.RARE
     override val requirement: ComponentRequirement = ForbidTransformFreeze(
         this,
         AnyCombo(3, SuitGroup.ELEMENTAL),

@@ -272,3 +272,9 @@ base:status:StaticElectricity:
   en:
     name: Static Electricity
     description: When attacked, deal 4 Lightning damage to the attacker and @Shock a random tile in your hand.
+
+base:status:AnomalousSpeed:
+  en:
+    name: Anomalous Speed
+    description: Each time a tile gains @Burn, @Freeze, or @Shock during your turn, draw tiles.
+

@@ -280,7 +280,7 @@ base:spells:Riffle:
 
 base:spells:ReturnToSender:
   en:
-    name: Return To Sender
+    name: Return to Sender
     description: Unplayable. Lose !f @Flux when swapped.
 
 base:spells:Breakwave:
@@ -578,3 +578,13 @@ base:spells:RapidFire:
   en:
     name: Rapid Fire
     description: Consume all tiles in your hand of the Component's suit. Deal !d @Elemented damage for each tile consumed.
+
+base:spells:AnomalousSpeed:
+  en:
+    name: Anomalous Speed
+    description: Each time a tile gains @Burn, @Freeze, or @Shock during your turn, draw 1 tile.
+
+base:spells:WindUp:
+  en:
+    name: Wind Up
+    description: Unplayable. Gain 5 Non-elemental Enpowered when swapped.

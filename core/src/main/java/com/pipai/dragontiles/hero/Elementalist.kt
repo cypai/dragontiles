@@ -75,6 +75,8 @@ class Elementalist : HeroClass {
         Ventilation(),
         Riffle(),
         ReturnToSender(),
+        WindUp(),
+        AnomalousSpeed(),
         Chillsink(),
         Breakwave(),
         MassTransmute(),
