@@ -248,6 +248,11 @@ base:spells:Burn:
     name: Burn
     description: Deal !d @Piercing Fire damage. @Burn a random tile in your hand.
 
+base:spells:Flare:
+  en:
+    name: Flare
+    description: Deal !d Fire damage. @Burn a tile in the Open Pool.
+
 base:spells:ColdHands:
   en:
     name: Cold Hands
