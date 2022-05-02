@@ -544,3 +544,8 @@ base:spells:UnlimitedPower:
   en:
     name: Unlimited Power
     description: Double your Enpowered.
+
+base:spells:AnomalousBurst:
+  en:
+    name: Anomalous Burst
+    description: For each @Burn, @Freeze, or @Shock tile consumed, deal !d @Elemented damage.

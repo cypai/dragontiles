@@ -11,7 +11,7 @@ class XUpgrade : SpellUpgrade {
     override val assetName: String = "x.png"
 
     override fun canUpgrade(spell: Spell): Boolean {
-        return spell.aspects.any { it is XAspect }
+        return spell.aspects.any { it is XAspect && it.xUpgradable }
     }
 
     override fun onUpgrade(spell: Spell) {

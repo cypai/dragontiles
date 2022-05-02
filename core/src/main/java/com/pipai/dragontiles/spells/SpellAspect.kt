@@ -140,7 +140,7 @@ data class OpenDrawAspect(var amount: Int) : SpellAspect {
 
 data class StackableAspect(val status: Status, val dynamicId: Int) : SpellAspect
 
-data class XAspect(val multiplier: Int, var flatModifier: Int) : SpellAspect
+data class XAspect(val multiplier: Int, var flatModifier: Int, val xUpgradable: Boolean = true) : SpellAspect
 
 class TransformAspect : SpellAspect
 class NotManuallyDeactivateable : SpellAspect
