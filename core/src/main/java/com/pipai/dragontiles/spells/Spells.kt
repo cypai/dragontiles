@@ -101,6 +101,10 @@ abstract class Spell : Localized, DamageAdjustable {
         return 0
     }
 
+    open fun dynamicCustomWithApi(param: String?, api: CombatApi): Int {
+        return 0
+    }
+
     open fun dynamicValue(key: String, param: String?, api: CombatApi?, castParams: CastParams): Int {
         return when (key) {
             "!db" -> baseDamage()
@@ -137,6 +141,13 @@ abstract class Spell : Localized, DamageAdjustable {
                 }
             }
             "!c" -> dynamicCustom()
+            "!ca" -> {
+                return if (api == null) {
+                    0
+                } else {
+                    dynamicCustomWithApi(param, api)
+                }
+            }
             "!f" -> baseFluxLoss()
             "!tmfg" -> baseTempMaxFluxGain()
             "!s" -> {

@@ -574,3 +574,7 @@ base:spells:Slap:
     name: Slap
     description: Deal !d damage.
 
+base:spells:RapidFire:
+  en:
+    name: Rapid Fire
+    description: Consume all tiles in your hand of the Component's suit. Deal !d @Elemented damage for each tile consumed.

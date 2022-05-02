@@ -105,6 +105,7 @@ class Elementalist : HeroClass {
         StaticElectricity(),
         FlareBlitz(),
         Blizzard(),
+        RapidFire(),
     )
     override val hpMax: Int = 60
     override val fluxMax: Int = 40
