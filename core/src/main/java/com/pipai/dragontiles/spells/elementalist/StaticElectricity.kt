@@ -9,7 +9,7 @@ import com.pipai.dragontiles.status.SimpleStatus
 
 class StaticElectricity : StandardSpell() {
     override val id: String = "base:spells:StaticElectricity"
-    override val requirement: ComponentRequirement = AnyCombo(2, SuitGroup.LIGHTNING)
+    override val requirement: ComponentRequirement = Sequential(2, SuitGroup.LIGHTNING)
     override val type: SpellType = SpellType.EFFECT
     override val targetType: TargetType = TargetType.NONE
     override val rarity: Rarity = Rarity.UNCOMMON
