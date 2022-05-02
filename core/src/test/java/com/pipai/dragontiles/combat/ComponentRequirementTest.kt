@@ -39,7 +39,7 @@ class ComponentRequirementTest {
             TileInstance(Tile.ElementalTile(Suit.FIRE, 1), TileStatus.NONE, 0),
             TileInstance(Tile.StarTile(StarType.STAR), TileStatus.NONE, 1),
             TileInstance(Tile.StarTile(StarType.STAR), TileStatus.NONE, 2),
-            TileInstance(Tile.StarTile(StarType.STAR), TileStatus.NONE, 3)
+            TileInstance(Tile.StarTile(StarType.STAR), TileStatus.NONE, 3),
         )
         val sets = identical.find(hand)
         sets.forEach {
@@ -71,6 +71,28 @@ class ComponentRequirementTest {
 
         givenSets = identical.findGiven(hand, listOf(hand[1], hand[2], hand[3]))
         Assert.assertEquals(1, givenSets.size)
+    }
+
+    @Test
+    fun testIdentical3Extra() {
+        val identical = Identical(3)
+        val hand = mutableListOf(
+            TileInstance(Tile.ElementalTile(Suit.FIRE, 1), TileStatus.NONE, 0),
+            TileInstance(Tile.ElementalTile(Suit.FIRE, 1), TileStatus.NONE, 1),
+            TileInstance(Tile.ElementalTile(Suit.FIRE, 1), TileStatus.NONE, 2),
+            TileInstance(Tile.ElementalTile(Suit.FIRE, 1), TileStatus.NONE, 3),
+        )
+        val sets = identical.find(hand)
+        Assert.assertEquals(1, sets.size)
+        sets.forEach {
+            Assert.assertEquals(3, it.size)
+            Assert.assertTrue(it.first() in hand)
+        }
+
+        for (i in 0 until hand.size) {
+            val givenSets = identical.findGiven(hand, listOf(hand[i]))
+            Assert.assertEquals(1, givenSets.size)
+        }
     }
 
     @Test
