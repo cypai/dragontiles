@@ -1076,6 +1076,15 @@ class CombatUiSystem(
         queryTable.toFront()
     }
 
+    private fun allowSpellCardHoverMove() {
+        spells.forEach { (_, spellCard) ->
+            spellCard.data[ALLOW_HOVER_MOVE] = 1
+        }
+        sideboard.forEach { (_, spellCard) ->
+            spellCard.data[ALLOW_HOVER_MOVE] = 1
+        }
+    }
+
     private fun moveActiveSpellsFront() {
         spells.values.forEach {
             it.remove()
@@ -1332,6 +1341,7 @@ class CombatUiSystem(
         },
         QUERY_SWAP {
             override fun enter(uiSystem: CombatUiSystem) {
+                uiSystem.allowSpellCardHoverMove()
                 uiSystem.moveSpellsToAnchor()
                 uiSystem.spells.values.forEach {
                     val spell = it.getSpell()
