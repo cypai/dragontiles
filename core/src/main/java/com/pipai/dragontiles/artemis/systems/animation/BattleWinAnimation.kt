@@ -1,6 +1,7 @@
 package com.pipai.dragontiles.artemis.systems.animation
 
 import com.pipai.dragontiles.artemis.systems.combat.CombatControllerSystem
+import com.pipai.dragontiles.artemis.systems.combat.StatusSystem
 import com.pipai.dragontiles.artemis.systems.ui.*
 
 class BattleWinAnimation : Animation() {
@@ -10,6 +11,7 @@ class BattleWinAnimation : Animation() {
     private lateinit var sDeckUi: DeckDisplayUiSystem
     private lateinit var sMap: MapUiSystem
     private lateinit var sPause: PauseMenuSystem
+    private lateinit var sStatus: StatusSystem
     private lateinit var sAnimation: CombatAnimationSystem
 
     override fun startAnimation() {
@@ -19,6 +21,7 @@ class BattleWinAnimation : Animation() {
         sRewards.activateRewards()
         sMap.canAdvanceMap = true
         sPause.enable()
+        sStatus.clearHeroStatuses()
         sAnimation.isEnabled = false
         endAnimation()
     }

@@ -25,10 +25,20 @@ class StatusSystem(private val game: DragonTilesGame) : NoProcessingSystem() {
     private val heroStatuses: MutableList<EntityId> = mutableListOf()
     private val enemyStatuses: MutableMap<EntityId, MutableList<BackendId>> = mutableMapOf()
 
-    fun handleHeroStatus(statuses: List<Status>) {
-        val heroEntityId = world.fetch(allOf(HeroComponent::class)).first()
+    fun clearHeroStatuses() {
         heroStatuses.forEach { world.delete(it) }
         heroStatuses.clear()
+    }
+
+    private fun clearEnemyStatuses(enemyEntityId: EntityId) {
+        val list = enemyStatuses[enemyEntityId]!!
+        list.forEach { world.delete(it) }
+        list.clear()
+    }
+
+    fun handleHeroStatus(statuses: List<Status>) {
+        val heroEntityId = world.fetch(allOf(HeroComponent::class)).first()
+        clearHeroStatuses()
         statuses.forEachIndexed { index, s ->
             heroStatuses.add(createStatus(heroEntityId, index, s))
         }
@@ -40,11 +50,9 @@ class StatusSystem(private val game: DragonTilesGame) : NoProcessingSystem() {
                 if (enemyEntityId !in enemyStatuses) {
                     enemyStatuses[enemyEntityId] = mutableListOf()
                 }
-                val list = enemyStatuses[enemyEntityId]!!
-                list.forEach { world.delete(it) }
-                list.clear()
+                clearEnemyStatuses(enemyEntityId)
                 statuses.forEachIndexed { index, s ->
-                    list.add(createStatus(enemyEntityId, index, s))
+                    enemyStatuses[enemyEntityId]!!.add(createStatus(enemyEntityId, index, s))
                 }
             }
     }
