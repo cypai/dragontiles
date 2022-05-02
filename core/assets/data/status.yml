@@ -267,3 +267,8 @@ base:status:LightningChain:
   en:
     name: Lightning Chain
     description: When you cast a Lightning attack, deal the chained enemy 1 Lightning Attack damage.
+
+base:status:StaticElectricity:
+  en:
+    name: Static Electricity
+    description: When attacked, deal 4 Lightning damage to the attacker and @Shock a random tile in your hand.

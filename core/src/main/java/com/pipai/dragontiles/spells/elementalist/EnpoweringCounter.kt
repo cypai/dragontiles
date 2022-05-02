@@ -46,14 +46,7 @@ class EnpoweringCounter : StandardSpell() {
         ) {
 
         @CombatSubscribe
-        suspend fun onAttackedFlux(ev: PlayerFluxDamageEvent, api: CombatApi) {
-            if (CombatFlag.ATTACK in ev.flags) {
-                api.addStatusToHero(Enpowered(amount, element))
-            }
-        }
-
-        @CombatSubscribe
-        suspend fun onAttackedDamage(ev: PlayerDamageEvent, api: CombatApi) {
+        suspend fun onHit(ev: EnemyHitPlayerEvent, api: CombatApi) {
             if (CombatFlag.ATTACK in ev.flags) {
                 api.addStatusToHero(Enpowered(amount, element))
             }

@@ -549,3 +549,8 @@ base:spells:AnomalousBurst:
   en:
     name: Anomalous Burst
     description: For each @Burn, @Freeze, or @Shock tile consumed, deal !d @Elemented damage.
+
+base:spells:StaticElectricity:
+  en:
+    name: Static Electricity
+    description: Whenever you are attacked this turn, deal 4 Lightning damage to the attacker and @Shock a random tile in your hand.

@@ -358,6 +358,9 @@ class CombatApi(
             animate(NameTextAnimation(Combatant.EnemyCombatant(enemy), Dodge(-1)))
             addStatusToEnemy(enemy, Dodge(-1))
         } else {
+            if (asAttack) {
+                eventBus.dispatch(PlayerHitEnemyEvent(enemy, element, amount, flags))
+            }
             if (!flags.contains(CombatFlag.PIERCING) && enemy.flux < enemy.fluxMax) {
                 dealFluxDamageToEnemy(enemy, damage)
             } else {
@@ -482,10 +485,12 @@ class CombatApi(
         amount: Int,
         flags: List<CombatFlag>,
     ) {
+        eventBus.dispatch(EnemyAttackPlayerEvent(enemy, element, amount, flags))
         if (heroHasStatus(Dodge::class)) {
             animate(NameTextAnimation(Combatant.HeroCombatant, Dodge(-1)))
             addStatusToHero(Dodge(-1))
         } else {
+            eventBus.dispatch(EnemyHitPlayerEvent(enemy, element, amount, flags))
             val damage = calculateDamageOnHero(enemy, element, amount, flags)
             if (flags.none { it == CombatFlag.PIERCING } && runData.hero.flux < runData.hero.tempFluxMax) {
                 dealFluxDamageToHero(damage)
