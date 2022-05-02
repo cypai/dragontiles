@@ -33,13 +33,12 @@ class TownGenerator {
         }
         val scribe = Scribe(mutableListOf())
         val upgrades = gameData.allSpellUpgrades()
-            .filter { it !is ScoreUpgrade && it !is PowerUpgrade }
+            .filter { it !is ScoreUpgrade }
             .toMutableList()
-        repeat(6) {
+        repeat(7) {
             val upgrade = upgrades.removeRandom(rng)
             scribe.upgrades.add(pricedUpgrade(upgrade))
         }
-        scribe.upgrades.add(pricedUpgrade(PowerUpgrade()))
         scribe.upgrades.add(pricedUpgrade(ScoreUpgrade()))
         runData.town = Town(3, null, spellShop, itemShop, scribe)
     }
