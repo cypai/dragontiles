@@ -108,6 +108,7 @@ data class DebuffIntent(
         inflictTileStatuses.forEach { strategy ->
             api.inflictTileStatusOnHand(strategy)
         }
+        callback.invoke(api)
     }
 }
 
