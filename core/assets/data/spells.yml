@@ -561,3 +561,16 @@ base:spells:FlareBlitz:
     description: |
       Deal !db Fire damage. Deal 8 additional damage for each @Burn tile in your hand.
       (Total !d damage)
+
+base:spells:Blizzard:
+  en:
+    name: Blizzard
+    description: |
+      Deal !db Ice damage. Deal 6 additional damage for each @Freeze tile in your hand.
+      (Total !d damage)
+
+base:spells:Slap:
+  en:
+    name: Slap
+    description: Deal !d damage.
+

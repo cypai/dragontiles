@@ -384,7 +384,12 @@ class CombatUiSystem(
                 true
             }
             CombatUiState.TARGET_SELECTION -> {
-                stateMachine.changeState(CombatUiState.COMPONENT_SELECTION)
+                val spell = getSelectedSpell()
+                if (spell.requirement is Cantrip) {
+                    stateMachine.changeState(CombatUiState.ROOT)
+                } else {
+                    stateMachine.changeState(CombatUiState.COMPONENT_SELECTION)
+                }
                 givenComponents.clear()
                 readjustHand()
                 true
@@ -1285,6 +1290,9 @@ class CombatUiSystem(
                     } else {
                         spellCard.disable()
                     }
+                }
+                if (uiSystem.getSelectedSpell().requirement is Cantrip) {
+                    uiSystem.stateMachine.changeState(TARGET_SELECTION)
                 }
             }
 

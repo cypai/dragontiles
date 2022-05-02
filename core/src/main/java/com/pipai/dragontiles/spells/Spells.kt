@@ -435,6 +435,28 @@ sealed class ReqAmount {
     }
 }
 
+class Cantrip : ComponentRequirement {
+    override var suitGroup: SuitGroup = SuitGroup.ANY
+    override var type = SetType.MISC
+    override val reqAmount = ReqAmount.ImmutableNumeric(0)
+    override val description = "No tiles required"
+    override val componentSlots: MutableList<ComponentSlot> = mutableListOf()
+    override val manualOnly = false
+    override val showTooltip: Boolean = false
+
+    override fun find(hand: List<TileInstance>): List<List<TileInstance>> {
+        return listOf()
+    }
+
+    override fun findGiven(hand: List<TileInstance>, given: List<TileInstance>): List<List<TileInstance>> {
+        return listOf()
+    }
+
+    override fun satisfied(slots: List<TileInstance>): Boolean {
+        return true
+    }
+}
+
 open class Single(override var suitGroup: SuitGroup) : ComponentRequirement {
     constructor() : this(SuitGroup.ANY)
 
