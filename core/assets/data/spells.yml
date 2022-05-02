@@ -402,7 +402,7 @@ base:spells:EnpowerElement:
 base:spells:Enpowerment:
   en:
     name: Enpowerment
-    description: Gain !s(1) Enpowered for Fire, Ice, and Lightning at the end of your turn.
+    description: Gain !s(1) Enpowered for Fire, Ice, and Lightning at the start of your turn.
 
 base:spells:Typhoon:
   en:

@@ -35,7 +35,7 @@ class Enpowered(amount: Int, private val enpoweredElement: Element) :
     }
 
     @CombatSubscribe
-    suspend fun onEnemyTurnEnd(ev: EnemyTurnEndEvent, api: CombatApi) {
+    suspend fun onPlayerTurnEnd(ev: TurnEndEvent, api: CombatApi) {
         amount--
         api.notifyStatusUpdated()
     }

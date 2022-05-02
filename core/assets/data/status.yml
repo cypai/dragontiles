@@ -16,7 +16,7 @@ base:status:Strength:
 base:status:Enpowered:
   en:
     name: Enpowered
-    description: Increases Attack and Sorcery damage of the enpowered element by 1 per point. Decreases every turn.
+    description: Increases Attack and Sorcery damage of the enpowered element by 1 per point. Decreases by 1 at the end of your turn.
 
 base:status:Break:
   en:
@@ -171,22 +171,22 @@ base:status:LightningBreathing:
 base:status:EnpoweredFire:
   en:
     name: Enpowered Fire
-    description: Increases Attack and Sorcery Fire damage by 1 per point. Decreases every turn.
+    description: Increases Attack and Sorcery Fire damage by 1 per point. Decreases by 1 at the end of your turn.
 
 base:status:EnpoweredIce:
   en:
     name: Enpowered Ice
-    description: Increases Attack and Sorcery Ice damage by 1 per point. Decreases every turn.
+    description: Increases Attack and Sorcery Ice damage by 1 per point. Decreases by 1 at the end of your turn.
 
 base:status:EnpoweredLightning:
   en:
     name: Enpowered Lightning
-    description: Increases Attack and Sorcery Lightning damage by 1 per point. Decreases every turn.
+    description: Increases Attack and Sorcery Lightning damage by 1 per point. Decreases by 1 at the end of your turn.
 
 base:status:EnpoweredNonElemental:
   en:
     name: Enpowered Non-Elemental
-    description: Increases Attack and Sorcery Non-Elemental damage by 1 per point. Decreases every turn.
+    description: Increases Attack and Sorcery Non-Elemental damage by 1 per point. Decreases by 1 at the end of your turn.
 
 base:status:Minion:
   en:

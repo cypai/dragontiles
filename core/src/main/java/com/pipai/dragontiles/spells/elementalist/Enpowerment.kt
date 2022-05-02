@@ -2,7 +2,7 @@ package com.pipai.dragontiles.spells.elementalist
 
 import com.pipai.dragontiles.combat.CombatApi
 import com.pipai.dragontiles.combat.CombatSubscribe
-import com.pipai.dragontiles.combat.TurnEndEvent
+import com.pipai.dragontiles.combat.TurnStartEvent
 import com.pipai.dragontiles.data.Element
 import com.pipai.dragontiles.spells.*
 import com.pipai.dragontiles.status.Enpowered
@@ -26,7 +26,7 @@ class Enpowerment : PowerSpell() {
 
     class EnpowermentStatus(amount: Int) : SimpleStatus("base:status:Enpowerment", "enpowerment.png", true, amount) {
         @CombatSubscribe
-        suspend fun onPlayerTurnEnd(ev: TurnEndEvent, api: CombatApi) {
+        suspend fun onPlayerTurnStart(ev: TurnStartEvent, api: CombatApi) {
             api.addStatusToHero(Enpowered(amount, Element.FIRE))
             api.addStatusToHero(Enpowered(amount, Element.ICE))
             api.addStatusToHero(Enpowered(amount, Element.LIGHTNING))
