@@ -22,13 +22,17 @@ class MoonRabbit : Enemy() {
             if (api.getLiveEnemies().all { it is MoonRabbit }) {
                 AttackIntent(this, 10, 1, Element.NONE)
             } else {
-                BuffIntent(this, listOf(), null, {
-                    api.getLiveEnemies()
-                        .filter { it !is MoonRabbit }
-                        .forEach {
-                            api.addStatusToEnemy(it, Immortality(1))
-                        }
-                })
+                StrategicIntent(this,
+                    listOf(),
+                    listOf(),
+                    listOf(),
+                    {
+                        api.getLiveEnemies()
+                            .filter { it !is MoonRabbit }
+                            .forEach {
+                                api.addStatusToEnemy(it, Immortality(1))
+                            }
+                    })
             }
         }
     }
