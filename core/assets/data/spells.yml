@@ -554,3 +554,10 @@ base:spells:StaticElectricity:
   en:
     name: Static Electricity
     description: Whenever you are attacked this turn, deal 4 Lightning damage to the attacker and @Shock a random tile in your hand.
+
+base:spells:FlareBlitz:
+  en:
+    name: Flare Blitz
+    description: |
+      Deal !db Fire damage. Deal 8 additional damage for each @Burn tile in your hand.
+      (Total !d damage)

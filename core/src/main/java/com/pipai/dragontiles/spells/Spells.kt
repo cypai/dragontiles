@@ -103,6 +103,7 @@ abstract class Spell : Localized, DamageAdjustable {
 
     open fun dynamicValue(key: String, param: String?, api: CombatApi?, castParams: CastParams): Int {
         return when (key) {
+            "!db" -> baseDamage()
             "!d" -> {
                 return if (api == null) {
                     baseDamage()
