@@ -119,8 +119,9 @@ class CombatApi(
     }
 
     suspend fun setTileStatus(tiles: List<TileInstance>, tileStatus: TileStatus) {
-        tiles.forEach { it.tileStatus = tileStatus }
-        eventBus.dispatch(TileStatusChangeEvent(tiles, tileStatus))
+        val changeableTiles = tiles.filter { it.tileStatus != tileStatus }
+        changeableTiles.forEach { it.tileStatus = tileStatus }
+        eventBus.dispatch(TileStatusChangeEvent(changeableTiles, tileStatus))
     }
 
     suspend fun inflictTileStatusOnHand(strategy: TileStatusInflictStrategy) {
