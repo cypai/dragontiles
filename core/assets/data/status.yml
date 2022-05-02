@@ -171,22 +171,22 @@ base:status:LightningBreathing:
 base:status:EnpoweredFire:
   en:
     name: Enpowered Fire
-    description: The next Fire attack does more damage.
+    description: Increases Attack and Sorcery Fire damage by 1 per point. Decreases every turn.
 
 base:status:EnpoweredIce:
   en:
     name: Enpowered Ice
-    description: The next Ice attack does more damage.
+    description: Increases Attack and Sorcery Ice damage by 1 per point. Decreases every turn.
 
 base:status:EnpoweredLightning:
   en:
     name: Enpowered Lightning
-    description: The next Lightning attack does more damage.
+    description: Increases Attack and Sorcery Lightning damage by 1 per point. Decreases every turn.
 
 base:status:EnpoweredNonElemental:
   en:
     name: Enpowered Non-Elemental
-    description: The next Non-Elemental attack does more damage.
+    description: Increases Attack and Sorcery Non-Elemental damage by 1 per point. Decreases every turn.
 
 base:status:Minion:
   en:
