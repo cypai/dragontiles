@@ -12,7 +12,7 @@ class ThunderRune : Rune() {
     override val rarity: Rarity = Rarity.UNCOMMON
     override val requirement: ComponentRequirement = IdenticalX(SuitGroup.LIGHTNING)
     override val aspects: MutableList<SpellAspect> = mutableListOf(
-        XAspect(13, 0),
+        XAspect(10, 0),
     )
 
     @CombatSubscribe

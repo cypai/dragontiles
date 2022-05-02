@@ -151,7 +151,7 @@ base:spells:FrostRune:
 base:spells:ThunderRune:
   en:
     name: Thunder Rune
-    description: Deal !x @AOE Lightning damage for each @Shock tile consumed.
+    description: Deal !x @AOE Lightning damage each time a @Shock tile is consumed.
 
 base:spells:InflictReactant:
   en:
