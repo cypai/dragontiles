@@ -48,20 +48,10 @@ base:spells:ElementalSight:
     name: Elemental Sight
     description: ""
 
-base:spells:Chain:
+base:spells:ChainTarget:
   en:
-    name: Chain
-    description: Inflict 5 @Elemented @Chain.
-
-base:spells:ChainFractal:
-  en:
-    name: Chain Fractal
-    description: Inflict X @Elemented @Chain @AOE.
-
-base:spells:ChainRune:
-  en:
-    name: Chain Rune
-    description: After you cast an attack with the same element, inflict 1 @Elemented @Chain.
+    name: Chain Target
+    description: This turn, after attacking with the Components' Element, deal the chained enemy 1 Elemented Attack damage.
 
 base:spells:DualStrike:
   en:
@@ -533,7 +523,7 @@ base:spells:VentToAttack:
 base:spells:Spray:
   en:
     name: Spray
-    description: Deal !d @Elemented damage to a random enemy 4 times.
+    description: Deal !d @Elemented damage to a random enemy 3 times.
 
 base:spells:BirdCall:
   en:

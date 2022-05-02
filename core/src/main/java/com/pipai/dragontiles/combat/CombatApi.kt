@@ -351,7 +351,7 @@ class CombatApi(
         val damage = calculateDamageOnEnemy(enemy, element, amount, flags)
         val asAttack = flags.contains(CombatFlag.ATTACK)
         if (asAttack) {
-            eventBus.dispatch(PlayerAttackEnemyEvent(enemy, element, amount))
+            eventBus.dispatch(PlayerAttackEnemyEvent(enemy, element, amount, flags))
         }
         if (asAttack && enemyHasStatus(enemy, Dodge::class)) {
             animate(NameTextAnimation(Combatant.EnemyCombatant(enemy), Dodge(-1)))

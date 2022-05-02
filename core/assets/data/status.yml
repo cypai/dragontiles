@@ -252,3 +252,18 @@ base:status:VermilionBird:
   en:
     name: Vermilion Bird
     description: Doubles Fire damage.
+
+base:status:FireChain:
+  en:
+    name: Fire Chain
+    description: When you cast a Fire attack, deal the chained enemy 1 Fire Attack damage.
+
+base:status:IceChain:
+  en:
+    name: Ice Chain
+    description: When you cast a Ice attack, deal the chained enemy 1 Ice Attack damage.
+
+base:status:LightningChain:
+  en:
+    name: Lightning Chain
+    description: When you cast a Lightning attack, deal the chained enemy 1 Lightning Attack damage.

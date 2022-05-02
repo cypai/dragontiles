@@ -11,12 +11,12 @@ class Spray : StandardSpell() {
     override val targetType: TargetType = TargetType.AOE
     override val rarity: Rarity = Rarity.COMMON
     override val aspects: MutableList<SpellAspect> = mutableListOf(
-        AttackDamageAspect(3),
+        AttackDamageAspect(2),
         FluxGainAspect(6),
     )
 
     override suspend fun onCast(params: CastParams, api: CombatApi) {
-        repeat(4) {
+        repeat(3) {
             val target = api.getLiveEnemies().choose(api.runData.seed.miscRng())
             api.attack(target, elemental(components()), baseDamage(), flags())
         }

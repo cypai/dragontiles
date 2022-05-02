@@ -54,7 +54,7 @@ data class OpenDiscardEvent(val tiles: List<TileInstance>) : CombatEvent
 
 data class OpenPoolAdjustedEvent(val openPool: List<TileInstance>) : CombatEvent
 
-data class PlayerAttackEnemyEvent(val target: Enemy, val element: Element, val amount: Int) : CombatEvent
+data class PlayerAttackEnemyEvent(val target: Enemy, val element: Element, val amount: Int, val flags: List<CombatFlag>) : CombatEvent
 
 data class EnemyFluxDamageEvent(val enemy: Enemy, val amount: Int, val flags: List<CombatFlag>) : CombatEvent
 
