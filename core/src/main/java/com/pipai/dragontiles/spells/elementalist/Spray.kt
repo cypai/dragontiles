@@ -17,7 +17,7 @@ class Spray : StandardSpell() {
 
     override suspend fun onCast(params: CastParams, api: CombatApi) {
         repeat(3) {
-            val target = api.getLiveEnemies().choose(api.runData.seed.miscRng())
+            val target = api.getLiveEnemies().choose(api.rng)
             api.attack(target, elemental(components()), baseDamage(), flags())
         }
     }

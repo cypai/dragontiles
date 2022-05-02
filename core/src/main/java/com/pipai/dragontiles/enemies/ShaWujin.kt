@@ -6,6 +6,7 @@ import com.pipai.dragontiles.data.TileStatus
 import com.pipai.dragontiles.status.Overloaded
 import com.pipai.dragontiles.status.Sandstorm
 import com.pipai.dragontiles.status.Strength
+import com.pipai.dragontiles.utils.chooseAmount
 
 class ShaWujin : Enemy() {
 
@@ -28,13 +29,13 @@ class ShaWujin : Enemy() {
             1 -> DebuffIntent(
                 this, listOf(),
                 listOf(
-                    OrphanedTileStatusInflictStrategy(
-                        TileStatus.FREEZE,
-                        3,
-                        TileStatusInflictStrategy.NotEnoughStrategy.SKIP
-                    )
+                    OrphanedTileStatusInflictStrategy(TileStatus.FREEZE, 3)
                 ),
-                AttackIntent(this, 1, 3, Element.ICE)
+                AttackIntent(this, 1, 3, Element.ICE),
+                {
+                    val openFreeze = api.combat.openPool.chooseAmount(3, api.rng)
+                    api.setTileStatus(openFreeze, TileStatus.FREEZE)
+                }
             )
             2 -> VentIntent(this, 20, null)
             else -> AttackIntent(this, 30, 1, Element.ICE)

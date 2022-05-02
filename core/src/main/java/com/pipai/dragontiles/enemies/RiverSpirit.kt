@@ -18,7 +18,7 @@ class RiverSpirit : Enemy() {
     private var enraged = false
 
     override suspend fun init(api: CombatApi) {
-        flag = api.runData.seed.miscRng().nextBoolean()
+        flag = api.rng.nextBoolean()
         api.addStatusToEnemy(this, Ritual(1))
         api.addStatusToEnemy(this, VentilationStatus(3))
     }

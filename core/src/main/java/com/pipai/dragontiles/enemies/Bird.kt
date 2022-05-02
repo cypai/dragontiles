@@ -18,7 +18,7 @@ class Bird : Enemy() {
     private var turns: Int = 0
 
     override suspend fun init(api: CombatApi) {
-        turns = api.runData.seed.miscRng().nextInt(0, 3)
+        turns = api.rng.nextInt(0, 3)
     }
 
     override fun getIntent(api: CombatApi): Intent {

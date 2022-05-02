@@ -19,7 +19,7 @@ class Rat : Enemy() {
     private var flag = false
 
     override suspend fun init(api: CombatApi) {
-        flag = api.runData.seed.miscRng().nextBoolean()
+        flag = api.rng.nextBoolean()
     }
 
     override fun getIntent(api: CombatApi): Intent {

@@ -34,12 +34,10 @@ class Kitsune : Enemy() {
                     NonorphanedTileStatusInflictStrategy(
                         TileStatus.CURSE,
                         1,
-                        TileStatusInflictStrategy.NotEnoughStrategy.SKIP
                     ),
                     NonorphanedTileStatusInflictStrategy(
                         TileStatus.VOLATILE,
                         1,
-                        TileStatusInflictStrategy.NotEnoughStrategy.SKIP
                     ),
                 )
             )

@@ -9,6 +9,7 @@ import com.pipai.dragontiles.status.*
 import com.pipai.dragontiles.utils.*
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.selects.select
 import kotlin.coroutines.suspendCoroutine
 import kotlin.reflect.KClass
 
@@ -24,8 +25,8 @@ class CombatApi(
     }
 
     private val logger = getLogger()
-    private val rng = runData.seed.miscRng()
     private var nextId = 0
+    val rng = runData.seed.miscRng()
     val animationChannel = Channel<Animation>()
     val swapChannel = Channel<SwapData>()
 
@@ -125,15 +126,17 @@ class CombatApi(
     }
 
     suspend fun inflictTileStatusOnHand(strategy: TileStatusInflictStrategy) {
-        val selected = strategy.select(combat.hand, rng).toMutableList()
+        inflictTileStatusStrategy(strategy, combat.hand)
+    }
+
+    suspend fun inflictTileStatusStrategy(strategy: TileStatusInflictStrategy, tiles: List<TileInstance>) {
+        val selected = tiles.filter { strategy.predicate(it, tiles) }
+            .chooseAmount(strategy.amount, rng)
+            .toMutableList()
         if (selected.size < strategy.amount) {
-            when (strategy.notEnoughStrategy) {
-                TileStatusInflictStrategy.NotEnoughStrategy.RANDOM -> {
-                    selected.addAll(combat.hand.withoutAll(selected).chooseAmount(strategy.amount - selected.size, rng))
-                }
-                else -> {
-                }
-            }
+            tiles.withoutAll(selected)
+                .chooseAmount(strategy.amount - selected.size, rng)
+                .forEach { selected.add(it) }
         }
         setTileStatus(selected, strategy.tileStatus)
     }

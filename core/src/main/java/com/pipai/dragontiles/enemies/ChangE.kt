@@ -39,7 +39,6 @@ class ChangE : Enemy() {
                         NonorphanedTileStatusInflictStrategy(
                             TileStatus.VOLATILE,
                             4,
-                            TileStatusInflictStrategy.NotEnoughStrategy.RANDOM
                         )
                     ),
                     null
@@ -51,7 +50,6 @@ class ChangE : Enemy() {
                         NonorphanedTileStatusInflictStrategy(
                             TileStatus.VOLATILE,
                             5,
-                            TileStatusInflictStrategy.NotEnoughStrategy.RANDOM
                         )
                     ),
                     null

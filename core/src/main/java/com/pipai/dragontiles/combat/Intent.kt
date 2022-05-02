@@ -171,86 +171,40 @@ data class VentIntent(
 interface TileStatusInflictStrategy {
     val tileStatus: TileStatus
     val amount: Int
-    val notEnoughStrategy: NotEnoughStrategy
-    fun select(hand: List<TileInstance>, rng: Random): List<TileInstance>
 
-    enum class NotEnoughStrategy {
-        SKIP, RANDOM,
-    }
+    fun predicate(tile: TileInstance, hand: List<TileInstance>): Boolean
 }
 
 data class RandomTileStatusInflictStrategy(
     override val tileStatus: TileStatus,
-    override val amount: Int
+    override val amount: Int,
 ) : TileStatusInflictStrategy {
 
-    override val notEnoughStrategy: TileStatusInflictStrategy.NotEnoughStrategy =
-        TileStatusInflictStrategy.NotEnoughStrategy.SKIP
-
-    override fun select(hand: List<TileInstance>, rng: Random): List<TileInstance> {
-        return hand
-            .filter { it.tileStatus == TileStatus.NONE }
-            .chooseAmount(amount, rng)
-            .toMutableList()
+    override fun predicate(tile: TileInstance, hand: List<TileInstance>): Boolean {
+        return tile.tileStatus == TileStatus.NONE
     }
 }
 
 data class NonorphanedTileStatusInflictStrategy(
     override val tileStatus: TileStatus,
     override val amount: Int,
-    override val notEnoughStrategy: TileStatusInflictStrategy.NotEnoughStrategy
 ) : TileStatusInflictStrategy {
 
-    override fun select(hand: List<TileInstance>, rng: Random): List<TileInstance> {
-        val tiles = hand.filter { condition(it, hand) }
-            .chooseAmount(amount, rng)
-            .toMutableList()
-        if (tiles.size < amount) {
-            when (notEnoughStrategy) {
-                TileStatusInflictStrategy.NotEnoughStrategy.SKIP -> {}
-                TileStatusInflictStrategy.NotEnoughStrategy.RANDOM -> {
-                    tiles.addAll(hand
-                        .filter { it !in tiles && condition(it, hand) }
-                        .chooseAmount(amount - tiles.size, rng))
-                }
-            }
-        }
-        return tiles
-    }
-
-    private fun condition(t: TileInstance, hand: List<TileInstance>): Boolean {
-        return t.tileStatus == TileStatus.NONE
-                && t.tile !is Tile.FumbleTile
-                && !orphan(t.tile, hand.map { it.tile })
+    override fun predicate(tile: TileInstance, hand: List<TileInstance>): Boolean {
+        return tile.tileStatus == TileStatus.NONE
+                && tile.tile !is Tile.FumbleTile
+                && !orphan(tile.tile, hand.map { it.tile })
     }
 }
 
 data class OrphanedTileStatusInflictStrategy(
     override val tileStatus: TileStatus,
     override val amount: Int,
-    override val notEnoughStrategy: TileStatusInflictStrategy.NotEnoughStrategy
 ) : TileStatusInflictStrategy {
 
-    override fun select(hand: List<TileInstance>, rng: Random): List<TileInstance> {
-        val tiles = hand.filter { condition(it, hand) }
-            .chooseAmount(amount, rng)
-            .toMutableList()
-        if (tiles.size < amount) {
-            when (notEnoughStrategy) {
-                TileStatusInflictStrategy.NotEnoughStrategy.SKIP -> {}
-                TileStatusInflictStrategy.NotEnoughStrategy.RANDOM -> {
-                    tiles.addAll(hand
-                        .filter { it !in tiles && condition(it, hand) }
-                        .chooseAmount(amount - tiles.size, rng))
-                }
-            }
-        }
-        return tiles
-    }
-
-    private fun condition(t: TileInstance, hand: List<TileInstance>): Boolean {
-        return t.tileStatus == TileStatus.NONE
-                && t.tile !is Tile.FumbleTile
-                && orphan(t.tile, hand.map { it.tile })
+    override fun predicate(tile: TileInstance, hand: List<TileInstance>): Boolean {
+        return tile.tileStatus == TileStatus.NONE
+                && tile.tile !is Tile.FumbleTile
+                && orphan(tile.tile, hand.map { it.tile })
     }
 }

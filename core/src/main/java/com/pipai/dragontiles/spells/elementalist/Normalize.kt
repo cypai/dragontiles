@@ -33,7 +33,7 @@ class Normalize : StandardSpell() {
                 }
                 val number = when (val tile = it.tile) {
                     is Tile.ElementalTile -> tile.number
-                    else -> api.runData.seed.miscRng().nextInt(1, 10)
+                    else -> api.rng.nextInt(1, 10)
                 }
                 api.transformTile(it, Tile.ElementalTile(targetSuit, number), false)
             }

@@ -22,7 +22,6 @@ class StarElemental : Enemy() {
                     NonorphanedTileStatusInflictStrategy(
                         TileStatus.VOLATILE,
                         n,
-                        TileStatusInflictStrategy.NotEnoughStrategy.SKIP
                     ),
                 ),
                 null

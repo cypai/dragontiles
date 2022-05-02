@@ -36,7 +36,7 @@ class SunWukong : Enemy() {
     }
 
     private suspend fun summon(api: CombatApi) {
-        val rng = api.runData.seed.miscRng()
+        val rng = api.rng
         val availableMinions = listOf(Gnat(), Monkey(), WolfPup())
         if (leftMinion == null) {
             val right = rightMinion

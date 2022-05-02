@@ -66,7 +66,7 @@ class CombatController(
             combat.drawPile.add(TileInstance(Tile.LifeTile(LifeType.MIND), TileStatus.NONE, api.nextId()))
             combat.drawPile.add(TileInstance(Tile.LifeTile(LifeType.SOUL), TileStatus.NONE, api.nextId()))
         }
-        combat.drawPile.shuffle(runData.seed.miscRng())
+        combat.drawPile.shuffle(api.rng)
     }
 
     suspend fun runTurn() {
