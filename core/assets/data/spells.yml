@@ -362,8 +362,7 @@ base:spells:FluxBlast:
   en:
     name: Flux Blast
     description: |
-      Deal @AOE @Elemented damage equal to Max @Flux - Flux.
-      ( !d damage )
+      Deal @AOE @Elemented damage equal to Max @Flux - Flux. (Total !d damage)
 
 base:spells:Normalize:
   en:
@@ -533,7 +532,7 @@ base:spells:BirdCall:
 base:spells:Discharge:
   en:
     name: Discharge
-    description: Lose half your @Flux. Deal Lightning damage equal to the amount lost.
+    description: Lose half your @Flux. Deal Lightning damage equal to the amount lost. (Total !d damage)
 
 base:spells:WindChill:
   en:
@@ -558,16 +557,12 @@ base:spells:StaticElectricity:
 base:spells:FlareBlitz:
   en:
     name: Flare Blitz
-    description: |
-      Deal !db Fire damage. Deal 8 additional damage for each @Burn tile in your hand.
-      (Total !d damage)
+    description: Deal !db Fire damage. Deal 8 additional damage for each @Burn tile in your hand. (Total !d damage)
 
 base:spells:Blizzard:
   en:
     name: Blizzard
-    description: |
-      Deal !db Ice damage. Deal 6 additional damage for each @Freeze tile in your hand.
-      (Total !d damage)
+    description: Deal !db @AOE Ice damage. Deal 6 additional damage for each @Freeze tile in your hand. (Total !d damage)
 
 base:spells:Slap:
   en:
