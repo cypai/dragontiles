@@ -278,3 +278,8 @@ base:status:AnomalousSpeed:
     name: Anomalous Speed
     description: Each time a tile gains @Burn, @Freeze, or @Shock during your turn, draw tiles.
 
+base:status:VentToAttack:
+  en:
+    name: Vent to Attack
+    description: This turn, each time you cast an attack, lose Flux.
+

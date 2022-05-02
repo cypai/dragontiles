@@ -844,7 +844,6 @@ class CombatUiSystem(
             spellComponentList.width = spellComponentList.prefWidth
         }
         if (spell is StandardSpell
-            && spell.targetType != TargetType.NONE
             && spell.requirement.reqAmount !is ReqAmount.XAmount
             && spell.requirement.satisfied(givenComponents)
         ) {

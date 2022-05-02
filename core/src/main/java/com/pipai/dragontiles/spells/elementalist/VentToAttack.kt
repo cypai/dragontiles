@@ -17,7 +17,7 @@ class VentToAttack : StandardSpell() {
     override val aspects: MutableList<SpellAspect> = mutableListOf()
 
     override suspend fun onCast(params: CastParams, api: CombatApi) {
-        api.addStatusToHero(VentToAttackStatus(4))
+        api.addStatusToHero(VentToAttackStatus(3))
     }
 
     class VentToAttackStatus(amount: Int) : SimpleStatus("base:status:VentToAttack", "ventilation.png", true, amount) {

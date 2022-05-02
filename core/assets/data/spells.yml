@@ -522,7 +522,7 @@ base:spells:VermilionBird:
 base:spells:VentToAttack:
   en:
     name: Vent to Attack
-    description: This turn, each time you cast an attack, lose 4 Flux.
+    description: This turn, each time you cast an attack, lose 3 Flux.
 
 base:spells:Spray:
   en:
