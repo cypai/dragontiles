@@ -117,20 +117,24 @@ class EventUiSystem(
             val labelBox = Container(label)
                 .left()
             labelBox.touchable = Touchable.enabled
-            labelBox.background = skin.getDrawable("frameDrawable")
-            labelBox.addListener(object : ClickListener() {
-                override fun enter(event: InputEvent?, x: Float, y: Float, pointer: Int, fromActor: Actor?) {
-                    labelBox.background = skin.getDrawable("frameDrawableLight")
-                }
+            if (option.available(api)) {
+                labelBox.background = skin.getDrawable("frameDrawable")
+                labelBox.addListener(object : ClickListener() {
+                    override fun enter(event: InputEvent?, x: Float, y: Float, pointer: Int, fromActor: Actor?) {
+                        labelBox.background = skin.getDrawable("frameDrawableLight")
+                    }
 
-                override fun exit(event: InputEvent?, x: Float, y: Float, pointer: Int, toActor: Actor?) {
-                    labelBox.background = skin.getDrawable("frameDrawable")
-                }
+                    override fun exit(event: InputEvent?, x: Float, y: Float, pointer: Int, toActor: Actor?) {
+                        labelBox.background = skin.getDrawable("frameDrawable")
+                    }
 
-                override fun clicked(event: InputEvent?, x: Float, y: Float) {
-                    option.onSelect(api)
-                }
-            })
+                    override fun clicked(event: InputEvent?, x: Float, y: Float) {
+                        option.onSelect(api)
+                    }
+                })
+            } else {
+                labelBox.background = skin.getDrawable("frameDrawableDark")
+            }
             rootTable.add(labelBox)
                 .prefHeight(64f)
                 .prefWidth(game.gameConfig.resolution.width / 2f)
