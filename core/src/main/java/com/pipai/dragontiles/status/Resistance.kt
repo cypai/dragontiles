@@ -39,7 +39,7 @@ class Resistance(
         }
     }
 
-    override fun queryFlatAdjustment(
+    override fun queryPostScaleFlatAdjustment(
         origin: Combatant?,
         target: Combatant?,
         element: Element,

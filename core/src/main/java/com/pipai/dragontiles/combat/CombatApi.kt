@@ -287,19 +287,22 @@ class CombatApi(
     fun calculateBaseDamage(element: Element, amount: Int): Int {
         var flat = 0
         var scaling = 1f
+        var postFlat = 0
         val allQueryRespondents: List<DamageAdjustable> = combat.relics
             .withAll(combat.spells)
             .withAll(combat.heroStatus)
         allQueryRespondents.forEach {
             flat += it.queryFlatAdjustment(Combatant.HeroCombatant, null, element, listOf())
             scaling *= it.queryScaledAdjustment(Combatant.HeroCombatant, null, element, listOf())
+            postFlat += it.queryPostScaleFlatAdjustment(Combatant.HeroCombatant, null, element, listOf())
         }
-        return ((amount + flat) * scaling).toInt()
+        return ((amount + flat) * scaling + postFlat).toInt()
     }
 
     fun calculateDamageOnEnemy(enemy: Enemy, element: Element, amount: Int, flags: List<CombatFlag>): Int {
         var flat = 0
         var scaling = 1f
+        var postFlat = 0
         val allQueryRespondents: List<DamageAdjustable> = combat.relics
             .withAll(combat.spells)
             .withAll(combat.heroStatus)
@@ -323,13 +326,20 @@ class CombatApi(
                 element,
                 allFlags
             )
+            postFlat += it.queryPostScaleFlatAdjustment(
+                Combatant.HeroCombatant,
+                Combatant.EnemyCombatant(enemy),
+                element,
+                allFlags
+            )
         }
-        return ((amount + flat) * scaling).toInt()
+        return ((amount + flat) * scaling + postFlat).toInt()
     }
 
     fun calculateDamageOnHero(enemy: Enemy, element: Element, amount: Int, flags: List<CombatFlag>): Int {
         var flat = 0
         var scaling = 1f
+        var postFlat = 0
         val allQueryRespondents: List<DamageAdjustable> = combat.relics
             .withAll(combat.spells)
             .withAll(combat.heroStatus)
@@ -342,8 +352,14 @@ class CombatApi(
                 element,
                 flags,
             )
+            postFlat += it.queryPostScaleFlatAdjustment(
+                Combatant.EnemyCombatant(enemy),
+                Combatant.HeroCombatant,
+                element,
+                flags,
+            )
         }
-        return ((amount + flat) * scaling).toInt()
+        return ((amount + flat) * scaling + postFlat).toInt()
     }
 
     suspend fun attack(
