@@ -75,9 +75,9 @@ class TownGenerator {
 
     private fun pricedUpgrade(upgrade: SpellUpgrade): PricedItem {
         val price = when (upgrade.rarity) {
-            Rarity.COMMON -> 5
-            Rarity.UNCOMMON -> 7
-            Rarity.RARE -> 9
+            Rarity.COMMON -> 3
+            Rarity.UNCOMMON -> 5
+            Rarity.RARE -> 7
             else -> 4
         }
         return PricedItem(upgrade.id, price)

@@ -77,6 +77,7 @@ class GameDataInitializer {
         gameData.addSpellUpgrade(AntifreezeUpgrade())
         gameData.addSpellUpgrade(GroundwireUpgrade())
         gameData.addSpellUpgrade(StabilityUpgrade())
+        gameData.addSpellUpgrade(BlessUpgrade())
         gameData.addSpellUpgrade(RepeatUpgrade())
         gameData.addSpellUpgrade(EternalUpgrade())
         gameData.addSpellUpgrade(DoublestackUpgrade())
@@ -84,6 +85,7 @@ class GameDataInitializer {
         gameData.addSpellUpgrade(FetchUpgrade())
         gameData.addSpellUpgrade(SwapUpgrade())
         gameData.addSpellUpgrade(ScoreUpgrade())
+        gameData.addSpellUpgrade(VentUpgrade())
     }
 
     private fun initHeroSpells(gameData: GameData, heroClassId: String) {

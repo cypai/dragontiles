@@ -7,7 +7,7 @@ import com.pipai.dragontiles.utils.findAs
 
 class PowerUpgrade : SpellUpgrade {
     override val id: String = "base:upgrades:PowerUpgrade"
-    override val rarity: Rarity = Rarity.COMMON
+    override val rarity: Rarity = Rarity.UNCOMMON
     override val assetName: String = "power.png"
 
     override fun canUpgrade(spell: Spell): Boolean {

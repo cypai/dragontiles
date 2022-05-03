@@ -43,6 +43,11 @@ base:upgrades:StabilityUpgrade:
     name: Stability Upgrade
     description: Immunity to @Volatile.
 
+base:upgrades:BlessUpgrade:
+  en:
+    name: Bless Upgrade
+    description: Immunity to @Curse.
+
 base:upgrades:DoublestackUpgrade:
   en:
     name: Doublestack Upgrade
@@ -67,3 +72,8 @@ base:upgrades:ScoreUpgrade:
   en:
     name: Score Upgrade
     description: Adds a 17 @CountdownTile to gain Score.
+
+base:upgrades:VentUpgrade:
+  en:
+    name: Vent Upgrade
+    description: Increases Flux loss by 50%.

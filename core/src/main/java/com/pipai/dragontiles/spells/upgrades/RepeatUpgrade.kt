@@ -5,7 +5,7 @@ import com.pipai.dragontiles.utils.findAs
 
 class RepeatUpgrade : SpellUpgrade {
     override val id: String = "base:upgrades:RepeatUpgrade"
-    override val rarity: Rarity = Rarity.UNCOMMON
+    override val rarity: Rarity = Rarity.RARE
     override val assetName: String = "repeat.png"
 
     override fun canUpgrade(spell: Spell): Boolean {

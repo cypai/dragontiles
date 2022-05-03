@@ -5,7 +5,7 @@ import com.pipai.dragontiles.utils.findAs
 
 class SurgeUpgrade : SpellUpgrade {
     override val id: String = "base:upgrades:SurgeUpgrade"
-    override val rarity: Rarity = Rarity.COMMON
+    override val rarity: Rarity = Rarity.UNCOMMON
     override val assetName: String = "surge.png"
 
     override fun canUpgrade(spell: Spell): Boolean {
