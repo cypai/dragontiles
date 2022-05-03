@@ -7,12 +7,12 @@ import com.pipai.dragontiles.status.Resistance
 
 class Barrier : StandardSpell() {
     override val id: String = "base:spells:Barrier"
-    override val requirement: ComponentRequirement = Identical(3)
+    override val requirement: ComponentRequirement = Identical(2)
     override val type: SpellType = SpellType.EFFECT
     override val targetType: TargetType = TargetType.NONE
     override val rarity: Rarity = Rarity.RARE
     override val aspects: MutableList<SpellAspect> = mutableListOf(
-        FluxGainAspect(9),
+        FluxGainAspect(4),
         ExhaustAspect(),
     )
 

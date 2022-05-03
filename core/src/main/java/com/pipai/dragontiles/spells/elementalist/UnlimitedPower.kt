@@ -7,7 +7,7 @@ import com.pipai.dragontiles.status.Enpowered
 
 class UnlimitedPower : StandardSpell() {
     override val id: String = "base:spells:UnlimitedPower"
-    override val requirement: ComponentRequirement = Identical(3, SuitGroup.LIFE)
+    override val requirement: ComponentRequirement = Identical(2, SuitGroup.LIFE)
     override val type: SpellType = SpellType.EFFECT
     override val targetType: TargetType = TargetType.NONE
     override val rarity: Rarity = Rarity.RARE
