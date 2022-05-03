@@ -52,6 +52,7 @@ class Chain(amount: Int, private val enpoweredElement: Element) : SimpleStatus(
 
     @CombatSubscribe
     suspend fun onTurnEnd(ev: TurnEndEvent, api: CombatApi) {
-        api.removeHeroStatus(id)
+        val enemy = (combatant as Combatant.EnemyCombatant).enemy
+        api.removeEnemyStatus(enemy, id)
     }
 }

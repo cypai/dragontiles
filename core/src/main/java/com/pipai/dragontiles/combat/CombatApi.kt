@@ -696,6 +696,21 @@ class CombatApi(
         return combat.enemyStatus[enemy.enemyId]!!.any { statusType.isInstance(it) }
     }
 
+    suspend fun removeEnemyStatus(enemy: Enemy, id: String): Boolean {
+        val statusList = combat.enemyStatus[enemy.enemyId]!!
+        val item = statusList.find { it.id == id }
+        if (item != null) {
+            val previousAmount = item.amount
+            item.amount = 0
+            eventBus.dispatch(EnemyStatusChangeEvent(enemy, item, previousAmount))
+            statusList.remove(item)
+            eventBus.unregister(item)
+            notifyStatusUpdated()
+            return true
+        }
+        return false
+    }
+
     suspend fun <T : Status> removeEnemyStatus(enemy: Enemy, statusType: KClass<T>): Boolean {
         val statusList = combat.enemyStatus[enemy.enemyId]!!
         val item = statusList.find { statusType.isInstance(it) }
