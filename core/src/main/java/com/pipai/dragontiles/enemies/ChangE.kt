@@ -14,7 +14,7 @@ class ChangE : Enemy() {
     override val id: String = "base:enemies:ChangE"
     override val assetName: String = "chang_e.png"
 
-    override val hpMax: Int = 90
+    override val hpMax: Int = 120
     override val fluxMax: Int = 80
 
     private var turns: Int = 0
@@ -27,7 +27,9 @@ class ChangE : Enemy() {
         if (api.getLiveEnemies().none { api.enemyHasStatus(it, Minion::class) }) {
             return StrategicIntent(this, listOf(), listOf(), listOf(), {
                 turns = 0
-                api.summonEnemy(MoonRabbit(), Vector2(4f, 4.5f))
+                val moonRabbit = MoonRabbit()
+                api.summonEnemy(moonRabbit, Vector2(4f, 4.5f))
+                api.addStatusToEnemy(moonRabbit, Minion())
             })
         }
         if (api.getLiveEnemies().any { it is Yumi3 }) {
