@@ -36,7 +36,7 @@ base:upgrades:GroundwireUpgrade:
 base:upgrades:AntifreezeUpgrade:
   en:
     name: Antifreeze Upgrade
-    description: Allows transformation of Freeze Tiles.
+    description: Allows transformation of @Freeze Tiles.
 
 base:upgrades:StabilityUpgrade:
   en:

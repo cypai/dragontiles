@@ -41,6 +41,7 @@ class MainMenuUiSystem(
     private val spellDbLabel = Label("Spells Database", skin)
     private val relicDbLabel = Label("Relics Database", skin)
     private val potionDbLabel = Label("Potions Database", skin)
+    private val sealDbLabel = Label("Seals Database", skin)
 
     override fun initialize() {
         rootTable.setFillParent(true)
@@ -138,6 +139,11 @@ class MainMenuUiSystem(
                 game.screen = PotionDatabaseScreen(game)
             }
         })
+        sealDbLabel.addListener(object : ClickListener() {
+            override fun clicked(event: InputEvent?, x: Float, y: Float) {
+                game.screen = SealDatabaseScreen(game)
+            }
+        })
         stage.addActor(rootTable)
     }
 
@@ -181,6 +187,8 @@ class MainMenuUiSystem(
         rootTable.add(relicDbLabel)
         rootTable.row()
         rootTable.add(potionDbLabel)
+        rootTable.row()
+        rootTable.add(sealDbLabel)
         rootTable.row()
         val backLabel = Label("Back", game.skin)
         backLabel.addListener(object : ClickListener() {
