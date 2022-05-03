@@ -96,7 +96,7 @@ class Elementalist : HeroClass {
         Normalize(),
         FluxMastery(),
         Barrier(),
-        EnpoweringCounter(),
+        Masochism(),
         Abnormality(),
         SorcerousPower(),
         VermilionBird(),

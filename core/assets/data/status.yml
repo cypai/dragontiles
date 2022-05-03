@@ -218,24 +218,24 @@ base:status:NonElementalResistance:
     name: Non-Elemental Resistance
     description: Only takes 1 damage from Non-elemental damage.
 
-base:status:FireEnpoweringCounter:
+base:status:FireMasochism:
   en:
-    name: Fire Enpowering Counter
+    name: Fire Masochism
     description: When attacked, gains Enpowered Fire.
 
-base:status:IceEnpoweringCounter:
+base:status:IceMasochism:
   en:
-    name: Ice Enpowering Counter
+    name: Ice Masochism
     description: When attacked, gains Enpowered Ice.
 
-base:status:LightningEnpoweringCounter:
+base:status:LightningMasochism:
   en:
-    name: Lightning Enpowering Counter
+    name: Lightning Masochism
     description: When attacked, gains Enpowered Lightning.
 
-base:status:NonElementalEnpoweringCounter:
+base:status:NonElementalMasochism:
   en:
-    name: Non-Elemental Enpowering Counter
+    name: Non-Elemental Masochism
     description: When attacked, gains Enpowered Non-Elemental.
 
 base:status:Enpowerment:

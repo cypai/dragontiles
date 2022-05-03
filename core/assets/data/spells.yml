@@ -434,10 +434,10 @@ base:spells:Barrier:
     name: Barrier
     description: Only take 1 damage from damage of the Component's element this turn.
 
-base:spells:EnpoweringCounter:
+base:spells:Masochism:
   en:
-    name: Enpowering Counter
-    description: Whenever you are hit with an attack this turn, gain 1 @Elemented Enpower.
+    name: Masochism
+    description: Whenever you are hit with an attack this turn, gain !s(1) @Elemented Enpower.
 
 base:spells:Abnormality:
   en:

@@ -4,16 +4,19 @@ import com.pipai.dragontiles.combat.*
 import com.pipai.dragontiles.data.Element
 import com.pipai.dragontiles.spells.*
 import com.pipai.dragontiles.status.Enpowered
+import com.pipai.dragontiles.status.GenericStatus
 import com.pipai.dragontiles.status.SimpleStatus
+import com.pipai.dragontiles.utils.getStackableAmount
 
-class EnpoweringCounter : StandardSpell() {
-    override val id: String = "base:spells:EnpoweringCounter"
+class Masochism : StandardSpell() {
+    override val id: String = "base:spells:Masochism"
     override val requirement: ComponentRequirement = Identical(2)
     override val type: SpellType = SpellType.EFFECT
     override val targetType: TargetType = TargetType.NONE
     override val rarity: Rarity = Rarity.UNCOMMON
     override val aspects: MutableList<SpellAspect> = mutableListOf(
-        FluxGainAspect(5),
+        StackableAspect(GenericStatus(1), 1),
+        FluxGainAspect(1),
     )
 
     override fun additionalLocalized(): List<String> {
@@ -21,19 +24,20 @@ class EnpoweringCounter : StandardSpell() {
     }
 
     override suspend fun onCast(params: CastParams, api: CombatApi) {
-        api.addStatusToHero(EnpoweringCounterStatus(1, elemental(components())))
+        val amount = aspects.getStackableAmount(GenericStatus::class)
+        api.addStatusToHero(MasochismStatus(amount, elemental(components())))
     }
 
-    class EnpoweringCounterStatus(
+    class MasochismStatus(
         amount: Int,
         private val element: Element,
     ) :
         SimpleStatus(
             when (element) {
-                Element.FIRE -> "base:status:FireEnpoweringCounter"
-                Element.ICE -> "base:status:IceEnpoweringCounter"
-                Element.LIGHTNING -> "base:status:LightningEnpoweringCounter"
-                Element.NONE -> "base:status:NonElementalEnpoweringCounter"
+                Element.FIRE -> "base:status:FireMasochism"
+                Element.ICE -> "base:status:IceMasochism"
+                Element.LIGHTNING -> "base:status:LightningMasochism"
+                Element.NONE -> "base:status:NonElementalMasochism"
             },
             when (element) {
                 Element.FIRE -> "red.png"
