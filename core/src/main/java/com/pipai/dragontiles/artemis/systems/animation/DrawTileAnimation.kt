@@ -12,7 +12,7 @@ class DrawTileAnimation(private val tile: TileInstance,
     private lateinit var mHand: ComponentMapper<HandLocationComponent>
 
     override fun startAnimation() {
-        val entityId = createTile(tile, 0f, 0f)
+        val entityId = createTile(tile, layout.drawPosition.x, layout.drawPosition.y)
         val cHand = mHand.create(entityId)
         cHand.setByLocation(handLocation)
         moveTile(entityId, layout.handTilePosition(handLocation)) {

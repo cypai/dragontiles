@@ -182,7 +182,7 @@ class CombatApi(
         eventBus.dispatch(TilesAddedToHandEvent(addedTiles, originator))
         if (discardedTiles.isNotEmpty()) {
             animate(TalkAnimation(Combatant.HeroCombatant, StringLocalized("base:text:HandIsFull")))
-            eventBus.dispatch(TilesAddedDiscardedEvent(discardedTiles))
+            eventBus.dispatch(TilesAddedDiscardedEvent(discardedTiles, originator))
         }
         sortHand()
     }

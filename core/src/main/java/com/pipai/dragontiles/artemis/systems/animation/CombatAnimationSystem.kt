@@ -119,7 +119,7 @@ class CombatAnimationSystem(private val game: DragonTilesGame) : BaseSystem(), A
 
     @Subscribe
     fun handleOpenPooltoDiscard(ev: OpenPoolToDiscardEvent) {
-        queueAnimation(TileDestroyAnimation(ev.tiles))
+        queueAnimation(TileDiscardAnimation(ev.tiles, sUi.layout))
     }
 
     @Subscribe
@@ -130,6 +130,16 @@ class CombatAnimationSystem(private val game: DragonTilesGame) : BaseSystem(), A
     @Subscribe
     fun handleOpenDiscard(@Suppress("UNUSED_PARAMETER") ev: OpenDiscardEvent) {
         queueAnimation(AdjustOpenPoolAnimation(sCombat.combat.openPool, sUi.layout))
+    }
+
+    @Subscribe
+    fun handleTileDrawDiscard(ev: DrawDiscardedEvent) {
+        queueAnimation(TileCreateImmediateDiscardAnimation(ev.tiles, null, sUi.layout))
+    }
+
+    @Subscribe
+    fun handleTileAddedDiscard(ev: TilesAddedDiscardedEvent) {
+        queueAnimation(TileCreateImmediateDiscardAnimation(ev.tiles, ev.originator, sUi.layout))
     }
 
     @Subscribe

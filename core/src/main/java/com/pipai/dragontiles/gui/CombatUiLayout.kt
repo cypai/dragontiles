@@ -14,6 +14,8 @@ data class CombatUiLayout(val config: GameConfig, val tileSkin: TileSkin, val ma
 
     val handCenter = Vector2(DragonTilesGame.worldWidth() / 2f, 2.5f)
     val handBlCorner = Vector2(handCenter.x - tileWidth * maxHandSize / 2f, handCenter.y)
+    val drawPosition = Vector2(0f, 0f)
+    val discardPosition = Vector2(DragonTilesGame.worldWidth() + 1f, 0f)
 
     val openPoolCenter = Vector2(DragonTilesGame.worldWidth() / 2f, 3.5f)
     val openBlCorner = Vector2(openPoolCenter.x - tileWidth * openPoolSize / 2f, openPoolCenter.y)
