@@ -358,6 +358,7 @@ interface ComponentRequirement {
     val componentSlots: MutableList<ComponentSlot>
     val showTooltip: Boolean
 
+    fun examples(): List<List<Tile>> = listOf()
     fun find(hand: List<TileInstance>): List<List<TileInstance>>
     fun findGiven(hand: List<TileInstance>, given: List<TileInstance>): List<List<TileInstance>>
     fun satisfied(slots: List<TileInstance>): Boolean
@@ -408,18 +409,63 @@ enum class SetType {
     MISC, IDENTICAL, SEQUENTIAL
 }
 
-enum class SuitGroup(val allowedSuits: Set<Suit>, val isElemental: Boolean) {
-    FIRE(setOf(Suit.FIRE), true),
-    ICE(setOf(Suit.ICE), true),
-    LIGHTNING(setOf(Suit.LIGHTNING), true),
-    STAR(setOf(Suit.STAR), false),
-    LIFE(setOf(Suit.LIFE), false),
-    ELEMENTAL(elementalSet, true),
-    ICE_LIGHTNING(setOf(Suit.ICE, Suit.LIGHTNING), true),
-    ARCANE(arcaneSet, false),
-    ANY_NO_FUMBLE(anyNoFumbleSet, false),
-    ANY(anySet, false),
-    RAINBOW(elementalSet, true),
+enum class SuitGroup(val allowedSuits: Set<Suit>, val examples: List<Tile>) {
+    FIRE(setOf(Suit.FIRE), listOf(Tile.ElementalTile(Suit.FIRE, 1))),
+    ICE(setOf(Suit.ICE), listOf(Tile.ElementalTile(Suit.ICE, 1))),
+    LIGHTNING(setOf(Suit.LIGHTNING), listOf(Tile.ElementalTile(Suit.LIGHTNING, 1))),
+    STAR(setOf(Suit.STAR), listOf(Tile.StarTile(StarType.EARTH))),
+    LIFE(setOf(Suit.LIFE), listOf(Tile.LifeTile(LifeType.LIFE))),
+    ELEMENTAL(
+        elementalSet,
+        listOf(
+            Tile.ElementalTile(Suit.FIRE, 1),
+            Tile.ElementalTile(Suit.ICE, 1),
+            Tile.ElementalTile(Suit.LIGHTNING, 1),
+        )
+    ),
+    ICE_LIGHTNING(
+        setOf(Suit.ICE, Suit.LIGHTNING),
+        listOf(
+            Tile.ElementalTile(Suit.ICE, 1),
+            Tile.ElementalTile(Suit.LIGHTNING, 1),
+        )
+    ),
+    ARCANE(
+        arcaneSet,
+        listOf(
+            Tile.LifeTile(LifeType.LIFE),
+            Tile.StarTile(StarType.EARTH),
+        )
+    ),
+    ANY_NO_FUMBLE(
+        anyNoFumbleSet,
+        listOf(
+            Tile.ElementalTile(Suit.FIRE, 1),
+            Tile.ElementalTile(Suit.ICE, 1),
+            Tile.ElementalTile(Suit.LIGHTNING, 1),
+            Tile.LifeTile(LifeType.LIFE),
+            Tile.StarTile(StarType.EARTH),
+        )
+    ),
+    ANY(
+        anySet,
+        listOf(
+            Tile.ElementalTile(Suit.FIRE, 1),
+            Tile.ElementalTile(Suit.ICE, 1),
+            Tile.ElementalTile(Suit.LIGHTNING, 1),
+            Tile.LifeTile(LifeType.LIFE),
+            Tile.StarTile(StarType.EARTH),
+            Tile.FumbleTile(),
+        )
+    ),
+    RAINBOW(
+        elementalSet,
+        listOf(
+            Tile.ElementalTile(Suit.FIRE, 1),
+            Tile.ElementalTile(Suit.ICE, 1),
+            Tile.ElementalTile(Suit.LIGHTNING, 1),
+        )
+    ),
 }
 
 sealed class ReqAmount {
@@ -476,7 +522,11 @@ open class Single(override var suitGroup: SuitGroup) : ComponentRequirement {
     override val description = "A single tile"
     override val componentSlots: MutableList<ComponentSlot> = mutableListOf()
     override val manualOnly = false
-    override val showTooltip: Boolean = false
+    override val showTooltip: Boolean = true
+
+    override fun examples(): List<List<Tile>> {
+        return suitGroup.examples.map { listOf(it) }
+    }
 
     override fun find(hand: List<TileInstance>): List<List<TileInstance>> {
         return hand
@@ -503,6 +553,10 @@ class SinglePredicate(
     suitGroup: SuitGroup
 ) : Single(suitGroup) {
 
+    override fun examples(): List<List<Tile>> {
+        return suitGroup.examples.map { listOf(it) }
+    }
+
     override fun find(hand: List<TileInstance>): List<List<TileInstance>> {
         return super.find(hand)
             .filter { predicate.invoke(it[0]) }
@@ -528,7 +582,34 @@ class AnyCombo(
     override val type = SetType.MISC
     override val reqAmount = ReqAmount.Numeric(slotAmount)
     override val description = "Any $slotAmount tiles"
-    override val showTooltip: Boolean = false
+    override val showTooltip: Boolean = true
+
+    override fun examples(): List<List<Tile>> {
+        return when (suitGroup.examples.size) {
+            1 -> {
+                val example: MutableList<Tile> = mutableListOf()
+                repeat(reqAmount.amount) { i ->
+                    var tile = suitGroup.examples.first()
+                    repeat (i) {
+                        tile = successor(tile)
+                    }
+                    example.add(tile)
+                }
+                listOf(example)
+            }
+            else -> {
+                val example: MutableList<Tile> = mutableListOf()
+                suitGroup.examples.forEachIndexed { index, tile ->
+                    var t = tile
+                    repeat(index) {
+                        t = successor(t)
+                    }
+                    example.add(t)
+                }
+                listOf(example)
+            }
+        }
+    }
 
     override fun satisfied(slots: List<TileInstance>): Boolean {
         return slots.size == reqAmount.amount
@@ -544,7 +625,34 @@ class AnyX(
     override val type = SetType.MISC
     override val reqAmount = ReqAmount.XAmount()
     override val description = "Any number of tiles"
-    override val showTooltip: Boolean = false
+    override val showTooltip: Boolean = true
+
+    override fun examples(): List<List<Tile>> {
+        return when (suitGroup.examples.size) {
+            1 -> {
+                val ex: MutableList<List<Tile>> = mutableListOf()
+                for (j in 1..3) {
+                    val example: MutableList<Tile> = mutableListOf()
+                    repeat(j) { i ->
+                        var tile = suitGroup.examples.first()
+                        repeat(i) {
+                            tile = successor(tile)
+                        }
+                        example.add(tile)
+                    }
+                    ex.add(example)
+                }
+                ex
+            }
+            else -> {
+                val ex: MutableList<List<Tile>> = mutableListOf()
+                for (i in 1..suitGroup.examples.size) {
+                    ex.add(suitGroup.examples.subList(0, i))
+                }
+                ex
+            }
+        }
+    }
 
     override fun satisfied(slots: List<TileInstance>): Boolean {
         return slots.all { it.tile.suit in suitGroup.allowedSuits && predicate(it) }
@@ -563,7 +671,17 @@ class Identical(slotAmount: Int, override var suitGroup: SuitGroup) : ComponentR
     override val description = "A set of $slotAmount identical tiles"
     override val componentSlots: MutableList<ComponentSlot> = mutableListOf()
     override val manualOnly = false
-    override val showTooltip: Boolean = false
+    override val showTooltip: Boolean = true
+
+    override fun examples(): List<List<Tile>> {
+        return suitGroup.examples.map { tile ->
+            val group: MutableList<Tile> = mutableListOf()
+            repeat(reqAmount.amount) {
+                group.add(tile)
+            }
+            group
+        }
+    }
 
     override fun find(hand: List<TileInstance>): List<List<TileInstance>> {
         val count: MutableMap<Tile, MutableList<TileInstance>> = mutableMapOf()
@@ -626,7 +744,21 @@ class IdenticalX(override var suitGroup: SuitGroup) : ComponentRequirement {
     override val description = "A variable set of identical tiles"
     override val componentSlots: MutableList<ComponentSlot> = mutableListOf()
     override val manualOnly = false
-    override val showTooltip: Boolean = false
+    override val showTooltip: Boolean = true
+
+    override fun examples(): List<List<Tile>> {
+        val ex: MutableList<List<Tile>> = mutableListOf()
+        suitGroup.examples.forEach { tile ->
+            for (i in 1..3) {
+                val example: MutableList<Tile> = mutableListOf()
+                repeat(i) {
+                    example.add(tile)
+                }
+                ex.add(example)
+            }
+        }
+        return ex
+    }
 
     override fun find(hand: List<TileInstance>): List<List<TileInstance>> {
         val sets: MutableList<List<TileInstance>> = mutableListOf()
@@ -679,7 +811,21 @@ class Sequential(slotAmount: Int, override var suitGroup: SuitGroup) : Component
     override val description = "A set of $slotAmount sequential tiles"
     override val componentSlots: MutableList<ComponentSlot> = mutableListOf()
     override val manualOnly = false
-    override val showTooltip: Boolean = false
+    override val showTooltip: Boolean = true
+
+    override fun examples(): List<List<Tile>> {
+        return suitGroup.examples.map { tile ->
+            val group: MutableList<Tile> = mutableListOf()
+            repeat(reqAmount.amount) { i ->
+                var t = tile
+                repeat(i) {
+                    t = successor(t)
+                }
+                group.add(t)
+            }
+            group
+        }
+    }
 
     override fun find(hand: List<TileInstance>): List<List<TileInstance>> {
         val sequences: MutableMap<TileInstance, MutableList<TileInstance>> = hand
@@ -754,7 +900,25 @@ class SequentialX(override var suitGroup: SuitGroup) : ComponentRequirement {
     override val description = "A variable set of sequential tiles"
     override val componentSlots: MutableList<ComponentSlot> = mutableListOf()
     override val manualOnly = false
-    override val showTooltip: Boolean = false
+    override val showTooltip: Boolean = true
+
+    override fun examples(): List<List<Tile>> {
+        val ex: MutableList<List<Tile>> = mutableListOf()
+        suitGroup.examples.forEach { tile ->
+            for (i in 1..3) {
+                val example: MutableList<Tile> = mutableListOf()
+                repeat(i) { j ->
+                    var t = tile
+                    repeat (j) {
+                        t = successor(t)
+                    }
+                    example.add(t)
+                }
+                ex.add(example)
+            }
+        }
+        return ex
+    }
 
     override fun find(hand: List<TileInstance>): List<List<TileInstance>> {
         val sets: MutableList<List<TileInstance>> = mutableListOf()
@@ -814,6 +978,10 @@ class SequentialX(override var suitGroup: SuitGroup) : ComponentRequirement {
 class ForbidTransformFreeze(private val spell: Spell, private val compReq: ComponentRequirement) :
     ComponentRequirement by compReq {
 
+    override fun examples(): List<List<Tile>> {
+        return compReq.examples()
+    }
+
     override fun find(hand: List<TileInstance>): List<List<TileInstance>> {
         return if (spell.aspects.none { it is TransformAspect }) {
             compReq.find(hand)
@@ -848,6 +1016,20 @@ class RainbowIdenticalSequence(private val sequenceSize: Int) : ComponentRequire
     override val componentSlots: MutableList<ComponentSlot> = mutableListOf()
     override val manualOnly = false
     override val showTooltip: Boolean = true
+
+    override fun examples(): List<List<Tile>> {
+        val example: MutableList<Tile> = mutableListOf()
+        repeat(reqAmount.amount) { i ->
+            example.add(Tile.ElementalTile(Suit.FIRE, i))
+        }
+        repeat(reqAmount.amount) { i ->
+            example.add(Tile.ElementalTile(Suit.ICE, i))
+        }
+        repeat(reqAmount.amount) { i ->
+            example.add(Tile.ElementalTile(Suit.LIGHTNING, i))
+        }
+        return listOf(example)
+    }
 
     override fun find(hand: List<TileInstance>): List<List<TileInstance>> {
         val found = mutableListOf<List<TileInstance>>()
@@ -893,6 +1075,20 @@ class RainbowIdentical(private val size: Int) : ComponentRequirement {
     override val componentSlots: MutableList<ComponentSlot> = mutableListOf()
     override val manualOnly = false
     override val showTooltip: Boolean = true
+
+    override fun examples(): List<List<Tile>> {
+        val example: MutableList<Tile> = mutableListOf()
+        repeat(reqAmount.amount) {
+            example.add(Tile.ElementalTile(Suit.FIRE, 1))
+        }
+        repeat(reqAmount.amount) {
+            example.add(Tile.ElementalTile(Suit.ICE, 1))
+        }
+        repeat(reqAmount.amount) {
+            example.add(Tile.ElementalTile(Suit.LIGHTNING, 1))
+        }
+        return listOf(example)
+    }
 
     override fun find(hand: List<TileInstance>): List<List<TileInstance>> {
         val found = mutableListOf<List<TileInstance>>()

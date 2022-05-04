@@ -1,19 +1,21 @@
 package com.pipai.dragontiles.artemis.systems.ui
 
+import com.artemis.BaseSystem
 import com.badlogic.gdx.InputProcessor
 import com.badlogic.gdx.scenes.scene2d.Stage
+import com.badlogic.gdx.scenes.scene2d.ui.Image
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.utils.Align
 import com.pipai.dragontiles.DragonTilesGame
-import com.pipai.dragontiles.artemis.systems.NoProcessingSystem
 import com.pipai.dragontiles.data.Keywords
 import com.pipai.dragontiles.data.Localized
 import com.pipai.dragontiles.data.NameDescLocalization
+import com.pipai.dragontiles.data.Tile
 import com.pipai.dragontiles.spells.*
 import com.pipai.dragontiles.utils.su
 
-class TooltipSystem(private val game: DragonTilesGame, var stage: Stage) : NoProcessingSystem(), InputProcessor {
+class TooltipSystem(private val game: DragonTilesGame, var stage: Stage) : BaseSystem(), InputProcessor {
 
     private val config = game.gameConfig
     private val gameStrings = game.gameStrings
@@ -21,6 +23,11 @@ class TooltipSystem(private val game: DragonTilesGame, var stage: Stage) : NoPro
 
     private val table = Table()
 
+    private var req: ComponentRequirement? = null
+    private var reqExamples: List<List<Tile>> = listOf()
+    private var reqExampleIndex: Int = 0
+    private val reqExampleTable: Table = Table()
+    private var t: Float = 0f
     private val headerSet: MutableSet<String> = mutableSetOf()
     private val textPairs: MutableList<Pair<String, String>> = mutableListOf()
 
@@ -31,6 +38,20 @@ class TooltipSystem(private val game: DragonTilesGame, var stage: Stage) : NoPro
 
     companion object {
         val WIDTH = su(3f)
+    }
+
+    override fun processSystem() {
+        t += world.delta
+        if (t > 1f) {
+            t = 0f
+            if (reqExamples.isNotEmpty()) {
+                reqExampleIndex++
+                if (reqExampleIndex >= reqExamples.size) {
+                    reqExampleIndex = 0
+                }
+                rebuildReqExample()
+            }
+        }
     }
 
     fun addNameDescLocalization(nameDescLocalization: NameDescLocalization, allowBlank: Boolean = false) {
@@ -75,8 +96,10 @@ class TooltipSystem(private val game: DragonTilesGame, var stage: Stage) : NoPro
     }
 
     fun addSpell(spell: Spell) {
+        reqExampleIndex = 0
         if (spell.requirement.showTooltip) {
-            addText("Requirements", spell.requirement.description, false)
+            req = spell.requirement
+            reqExamples = spell.requirement.examples()
         }
         if (spell is StandardSpell && spell.shockTurns > 0) {
             addText("Shocked", "Cannot be played for ${spell.shockTurns} turns.", false)
@@ -104,10 +127,20 @@ class TooltipSystem(private val game: DragonTilesGame, var stage: Stage) : NoPro
     }
 
     fun hideTooltip() {
+        req = null
+        reqExamples = listOf()
+        reqExampleIndex = 0
         textPairs.clear()
         headerSet.clear()
         table.clearChildren()
         table.remove()
+    }
+
+    private fun rebuildReqExample() {
+        reqExampleTable.clearChildren()
+        reqExamples[reqExampleIndex].forEach { tile ->
+            reqExampleTable.add(Image(game.tileSkin.regionFor(tile)))
+        }
     }
 
     fun showTooltip(fixX: Float? = null, fixY: Float? = null) {
@@ -116,12 +149,29 @@ class TooltipSystem(private val game: DragonTilesGame, var stage: Stage) : NoPro
         if (fixX != null && fixX > game.gameConfig.resolution.width - WIDTH) {
             this.fixX = fixX - WIDTH * 2.5f
         }
-        if (textPairs.isEmpty()) {
+        if (reqExamples.isEmpty() && textPairs.isEmpty()) {
             return
         }
         table.clearChildren()
         table.remove()
         table.background = skin.getDrawable("frameDrawable")
+        val r = req
+        if (r != null && reqExamples.isNotEmpty()) {
+            val header = Label("Example", skin, "small")
+            table.add(header)
+                .width(WIDTH)
+                .padLeft(8f)
+                .padRight(8f)
+                .left()
+            table.row()
+            rebuildReqExample()
+            table.add(reqExampleTable)
+                .padLeft(8f)
+                .padRight(8f)
+                .padBottom(8f)
+                .left()
+            table.row()
+        }
         textPairs.forEach {
             val header = Label(it.first, skin, "small")
             header.setAlignment(Align.topLeft)
