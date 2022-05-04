@@ -536,6 +536,21 @@ class AnyCombo(
     }
 }
 
+class AnyX(
+    override var suitGroup: SuitGroup,
+    private val predicate: (TileInstance) -> Boolean = { true },
+) : ManualComponentRequirement() {
+
+    override val type = SetType.MISC
+    override val reqAmount = ReqAmount.XAmount()
+    override val description = "Any number of tiles"
+    override val showTooltip: Boolean = false
+
+    override fun satisfied(slots: List<TileInstance>): Boolean {
+        return slots.all { it.tile.suit in suitGroup.allowedSuits && predicate(it) }
+    }
+}
+
 abstract class CustomRequirement : ManualComponentRequirement() {
     override val reqAmount = ReqAmount.UnknownAmount()
 }
