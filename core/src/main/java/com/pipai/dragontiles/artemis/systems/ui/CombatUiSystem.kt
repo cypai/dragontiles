@@ -93,6 +93,7 @@ class CombatUiSystem(
     private val queryTable = Table()
     private val queryLabel = Label("", game.skin, "white")
     private val queryConfirmBtn = TextButton("  Confirm  ", game.skin)
+    private val endTurnBtn = TextButton("  End Turn  ", game.skin)
 
     val layout = CombatUiLayout(config, tileSkin, runData.hero.handSize)
 
@@ -186,6 +187,16 @@ class CombatUiSystem(
                 confirm()
             }
         })
+
+        endTurnBtn.addListener(object : ClickListener() {
+            override fun clicked(event: InputEvent?, x: Float, y: Float) {
+                endTurn()
+            }
+        })
+        endTurnBtn.x = su(DragonTilesGame.worldWidth() - 2f)
+        endTurnBtn.y = su(layout.handCenter.y)
+        endTurnBtn.width = su(1.5f)
+        endTurnBtn.height = su(0.5f)
     }
 
     override fun processSystem() {
@@ -402,6 +413,14 @@ class CombatUiSystem(
         }
     }
 
+    fun endTurn() {
+        stateMachine.changeState(CombatUiState.DISABLED)
+        sAnimation.pauseUiMode = true
+        scope.launch {
+            sCombat.controller.endTurn()
+        }
+    }
+
     override fun keyDown(keycode: Int): Boolean {
         if (stateMachine.currentState == CombatUiState.DISABLED) {
             return false
@@ -442,11 +461,7 @@ class CombatUiSystem(
             Keys.BACKSPACE -> {
                 when (stateMachine.currentState) {
                     CombatUiState.ROOT -> {
-                        stateMachine.changeState(CombatUiState.DISABLED)
-                        sAnimation.pauseUiMode = true
-                        scope.launch {
-                            sCombat.controller.endTurn()
-                        }
+                        endTurn()
                         return true
                     }
                     else -> {
@@ -1262,10 +1277,12 @@ class CombatUiSystem(
                 }
                 uiSystem.givenComponents.clear()
                 uiSystem.sPause.enable()
+                uiSystem.frontStage.addActor(uiSystem.endTurnBtn)
             }
 
             override fun exit(uiSystem: CombatUiSystem) {
                 uiSystem.sPause.disable()
+                uiSystem.endTurnBtn.remove()
             }
 
         },
