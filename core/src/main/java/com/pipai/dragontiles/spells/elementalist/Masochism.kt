@@ -15,8 +15,8 @@ class Masochism : StandardSpell() {
     override val targetType: TargetType = TargetType.NONE
     override val rarity: Rarity = Rarity.UNCOMMON
     override val aspects: MutableList<SpellAspect> = mutableListOf(
-        StackableAspect(GenericStatus(1), 1),
-        FluxGainAspect(1),
+        StackableAspect(GenericStatus(2), 1),
+        FluxGainAspect(2),
     )
 
     override fun additionalLocalized(): List<String> {
