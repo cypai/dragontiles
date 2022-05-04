@@ -142,7 +142,7 @@ base:events:TheBeggar:
         "Good sir, can you spare an old man a bit of coin?"
   offer1:
     en:
-      text: Offer 1 Gold. (Lose 1 Gold. Heal !s(1) HP.)
+      text: Offer 1 Gold. (Lose 1 Gold. Heal !n(0) HP.)
   offer1Main:
     en:
       text: |
@@ -279,7 +279,7 @@ base:events:StrangeLotus:
         "The trap was meant for the rabbit youkai nearby, so have this relic as compensation."
   poke:
     en:
-      text: Poke it with a stick. (Lose !n(0) HP. Receive a Power Upgrade.)
+      text: Poke it with a stick. (Lose !n(0) HP. Receive a !i(0).)
   pokeMain:
     en:
       text: |
@@ -347,12 +347,9 @@ base:events:CheapUpgrades:
         As you walk along the mountain path, you encounter a shady merchant.
 
         "Cheap spell seals! You'll regret it if you pass on it!"
-  buyHeatsink:
+  buy:
     en:
-      text: Buy a Heatsink Upgrade. (-2 Gold)
-  buyStability:
-    en:
-      text: Buy a Stability Upgrade. (-2 Gold)
+      text: Buy a !i(0). (-2 Gold)
   buyMain:
     en:
       text: |

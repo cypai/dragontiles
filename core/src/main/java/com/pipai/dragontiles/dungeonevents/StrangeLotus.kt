@@ -28,12 +28,12 @@ class StrangeLotus : DungeonEvent() {
     }
 
     private class Poke : EventOption {
-        override val id = "sit"
+        override val id = "poke"
 
         private fun hpLoss(api: EventApi): Int = (api.runData.hero.hpMax * 0.1f).toInt()
 
         override fun params(api: EventApi): EventParams {
-            return EventParams(listOf(hpLoss(api)), listOf())
+            return EventParams(listOf(hpLoss(api)), listOf(SurgeUpgrade()))
         }
 
         override fun tooltipItem(api: EventApi): Localized {
