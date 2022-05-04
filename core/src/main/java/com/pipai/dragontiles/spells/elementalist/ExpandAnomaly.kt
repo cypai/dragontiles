@@ -19,13 +19,13 @@ class ExpandAnomaly : StandardSpell() {
         val statuses = listOf(TileStatus.BURN, TileStatus.FREEZE, TileStatus.SHOCK)
         val tile = api.queryTiles(
             "Select a Burn, Freeze, or Shock tile",
-            api.combat.hand.filter { it.tileStatus in statuses },
+            api.getHandTiles().filter { it.tileStatus in statuses },
             0,
             1,
         ).firstOrNull()
         if (tile != null) {
             api.setTileStatus(
-                api.combat.hand.filter { it.tile.suit == tile.tile.suit }
+                api.getHandTiles().filter { it.tile.suit == tile.tile.suit }
                     .withAll(api.combat.openPool.filter { it.tile.suit == tile.tile.suit }),
                 tile.tileStatus
             )

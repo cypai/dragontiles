@@ -18,7 +18,7 @@ class FlareBlitz : StandardSpell() {
     )
 
     override fun dynamicBaseDamage(components: List<TileInstance>, api: CombatApi): Int {
-        val burns = api.combat.hand
+        val burns = api.getHandTiles()
             .withoutAll(components)
             .filter { it.tileStatus == TileStatus.BURN }
             .size

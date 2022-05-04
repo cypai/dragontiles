@@ -19,7 +19,7 @@ class Blizzard : StandardSpell() {
     )
 
     override fun dynamicBaseDamage(components: List<TileInstance>, api: CombatApi): Int {
-        val freezes = api.combat.hand
+        val freezes = api.getHandTiles()
             .withoutAll(components)
             .filter { it.tileStatus == TileStatus.FREEZE }
             .size

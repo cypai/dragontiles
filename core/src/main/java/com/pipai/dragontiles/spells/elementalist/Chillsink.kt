@@ -16,7 +16,7 @@ class Chillsink : StandardSpell() {
 
     override suspend fun onCast(params: CastParams, api: CombatApi) {
         val statuses =
-            api.combat.hand.filter { it.tileStatus in listOf(TileStatus.BURN, TileStatus.FREEZE, TileStatus.SHOCK) }
+            api.getHandTiles().filter { it.tileStatus in listOf(TileStatus.BURN, TileStatus.FREEZE, TileStatus.SHOCK) }
         api.setTileStatus(statuses, TileStatus.NONE)
         repeat(statuses.size) {
             api.heroLoseFlux(baseFluxLoss())

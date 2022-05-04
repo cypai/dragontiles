@@ -25,6 +25,7 @@ import com.pipai.dragontiles.artemis.components.*
 import com.pipai.dragontiles.artemis.events.*
 import com.pipai.dragontiles.artemis.systems.AnchorSystem
 import com.pipai.dragontiles.artemis.systems.PathInterpolationSystem
+import com.pipai.dragontiles.artemis.systems.animation.AdjustOpenPoolAnimation
 import com.pipai.dragontiles.artemis.systems.animation.CombatAnimationSystem
 import com.pipai.dragontiles.artemis.systems.animation.TalkAnimation
 import com.pipai.dragontiles.artemis.systems.combat.CombatControllerSystem
@@ -870,7 +871,7 @@ class CombatUiSystem(
 
     private fun readjustHand() {
         sAnimation.pauseUiMode = false
-        sEvent.dispatch(HandAdjustedEvent(sCombat.combat.hand, sCombat.combat.assigned))
+        sAnimation.adjustHand()
     }
 
     fun moveTile(entityId: Int, position: Vector2) {

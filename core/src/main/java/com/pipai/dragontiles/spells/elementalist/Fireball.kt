@@ -18,13 +18,12 @@ class Fireball : StandardSpell() {
     override suspend fun onCast(params: CastParams, api: CombatApi) {
         val target = api.getEnemy(params.targets.first())
         api.attack(target, elemental(components()), baseDamage(), flags())
-        if (api.combat.hand.isNotEmpty()) {
-            if (api.combat.hand.size > 1) {
-                val tile = api.queryTiles("Pick a tile to burn", api.combat.hand, 1, 1)
-                api.setTileStatus(tile, TileStatus.BURN)
-            } else {
-                api.setTileStatus(api.combat.hand, TileStatus.BURN)
-            }
+        val hand = api.getHandTiles()
+        if (hand.size > 1) {
+            val tile = api.queryTiles("Pick a tile to burn", hand, 1, 1)
+            api.setTileStatus(tile, TileStatus.BURN)
+        } else {
+            api.setTileStatus(hand, TileStatus.BURN)
         }
     }
 }

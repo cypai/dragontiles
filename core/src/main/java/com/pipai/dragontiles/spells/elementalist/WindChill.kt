@@ -19,13 +19,12 @@ class WindChill : StandardSpell() {
 
     override suspend fun onCast(params: CastParams, api: CombatApi) {
         api.addAoeStatus(Weak(aspects.getStackableAmount(Weak::class), false))
-        if (api.combat.hand.isNotEmpty()) {
-            if (api.combat.hand.size > 1) {
-                val tile = api.queryTiles("Pick a tile to freeze", api.combat.hand, 1, 1)
-                api.setTileStatus(tile, TileStatus.FREEZE)
-            } else {
-                api.setTileStatus(api.combat.hand, TileStatus.FREEZE)
-            }
+        val hand = api.getHandTiles()
+        if (hand.size > 1) {
+            val tile = api.queryTiles("Pick a tile to freeze", hand, 1, 1)
+            api.setTileStatus(tile, TileStatus.FREEZE)
+        } else {
+            api.setTileStatus(hand, TileStatus.FREEZE)
         }
     }
 }

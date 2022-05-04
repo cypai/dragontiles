@@ -50,15 +50,13 @@ class ElementalBreathing : PowerSpell() {
 
         @CombatSubscribe
         suspend fun onTurnStart(ev: TurnStartEvent, api: CombatApi) {
-            if (api.combat.hand.isNotEmpty()) {
-                if (api.combat.hand.size > 1) {
-                    api.inflictTileStatusOnHand(
-                        RandomTileStatusInflictStrategy(
-                            tileStatus,
-                            amount
-                        )
+            if (api.getHandTiles().isNotEmpty()) {
+                api.inflictTileStatusOnHand(
+                    RandomTileStatusInflictStrategy(
+                        tileStatus,
+                        amount
                     )
-                }
+                )
             }
         }
     }

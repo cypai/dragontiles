@@ -26,7 +26,7 @@ class Abnormality : PowerSpell() {
         suspend fun onTileStatus(ev: TileStatusChangeEvent, api: CombatApi) {
             if (ev.tileStatus != TileStatus.NONE) {
                 ev.tiles.forEach {
-                    if (it in api.combat.hand) {
+                    if (it in api.getHandTiles()) {
                         val target = api.getLiveEnemies().choose(api.rng)
                         api.attack(target, Element.NONE, amount, listOf())
                     }

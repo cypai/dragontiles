@@ -25,13 +25,12 @@ class SelfAffliction : StandardSpell() {
                 throw IllegalStateException("Unexpected element")
             }
         }
-        if (api.combat.hand.isNotEmpty()) {
-            if (api.combat.hand.size > 1) {
-                val tile = api.queryTiles("Pick a tile to ${tileStatus.toString().lowercase()}", api.combat.hand, 1, 1)
-                api.setTileStatus(tile, tileStatus)
-            } else {
-                api.setTileStatus(api.combat.hand, tileStatus)
-            }
+        val hand = api.getHandTiles()
+        if (hand.size > 1) {
+            val tile = api.queryTiles("Pick a tile to ${tileStatus.toString().lowercase()}", hand, 1, 1)
+            api.setTileStatus(tile, tileStatus)
+        } else {
+            api.setTileStatus(hand, tileStatus)
         }
     }
 }

@@ -17,13 +17,12 @@ class ChainLightning : StandardSpell() {
 
     override suspend fun onCast(params: CastParams, api: CombatApi) {
         api.aoeAttack(elemental(components()), baseDamage(), flags())
-        if (api.combat.hand.isNotEmpty()) {
-            if (api.combat.hand.size > 1) {
-                val tile = api.queryTiles("Pick a tile to shock", api.combat.hand, 1, 1)
-                api.setTileStatus(tile, TileStatus.SHOCK)
-            } else {
-                api.setTileStatus(api.combat.hand, TileStatus.SHOCK)
-            }
+        val hand = api.getHandTiles()
+        if (hand.size > 1) {
+            val tile = api.queryTiles("Pick a tile to shock", hand, 1, 1)
+            api.setTileStatus(tile, TileStatus.SHOCK)
+        } else {
+            api.setTileStatus(hand, TileStatus.SHOCK)
         }
     }
 }

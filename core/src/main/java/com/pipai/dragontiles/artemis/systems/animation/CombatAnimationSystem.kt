@@ -96,13 +96,16 @@ class CombatAnimationSystem(private val game: DragonTilesGame) : BaseSystem(), A
         adjustHand()
     }
 
-    private fun adjustHand() {
-        queueAnimation(AdjustHandAnimation(sCombat.combat.hand.mapIndexed { index, tileInstance ->
+    fun adjustHand() {
+        val batch = BatchAnimation()
+        batch.addToBatch(AdjustHandAnimation(sCombat.combat.hand.mapIndexed { index, tileInstance ->
             Pair(
                 tileInstance,
                 index
             )
         }, sCombat.combat.assigned, sUi.layout))
+        batch.addToBatch(AdjustOpenPoolAnimation(sCombat.combat.openPool, sUi.layout))
+        queueAnimation(batch)
     }
 
     @Subscribe

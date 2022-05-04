@@ -18,13 +18,12 @@ class IceShard : StandardSpell() {
     override suspend fun onCast(params: CastParams, api: CombatApi) {
         val target = api.getEnemy(params.targets.first())
         api.attack(target, elemental(components()), baseDamage(), flags())
-        if (api.combat.hand.isNotEmpty()) {
-            if (api.combat.hand.size > 1) {
-                val tile = api.queryTiles("Pick a tile to freeze", api.combat.hand, 1, 1)
-                api.setTileStatus(tile, TileStatus.FREEZE)
-            } else {
-                api.setTileStatus(api.combat.hand, TileStatus.FREEZE)
-            }
+        val hand = api.getHandTiles()
+        if (hand.size > 1) {
+            val tile = api.queryTiles("Pick a tile to freeze", hand, 1, 1)
+            api.setTileStatus(tile, TileStatus.FREEZE)
+        } else {
+            api.setTileStatus(hand, TileStatus.FREEZE)
         }
     }
 }

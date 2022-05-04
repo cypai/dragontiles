@@ -57,6 +57,10 @@ class CombatApi(
         eventBus.dispatch(SpellExhaustedEvent(spell))
     }
 
+    fun getHandTiles(): List<TileInstance> {
+        return combat.hand.withAll(combat.assigned.values.flatten())
+    }
+
     fun numTilesInHand(): Int {
         return combat.hand.size + combat.assigned.values.map { it.size }.sum()
     }
