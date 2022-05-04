@@ -118,6 +118,7 @@ class PlainsDungeon {
                     TheBeggar(),
                     StrangeLotus(),
                     StrangeScribe(),
+                    DragonInquiryEvent(),
                     WhatDoesPotOfGreedDo(),
                 ),
                 PlainsStartEvent(),

@@ -34,13 +34,13 @@ base:events:DragonInquiry:
         What do you want?
   power:
     en:
-      text: "Power! (Gain Dragon Rage)"
+      text: "Power! (Gain !i(0))"
   powerMain:
     en:
       text: Is strength alone enough for you to pass the trials ahead? We shall see!
   wisdom:
     en:
-      text: "Wisdom! (Gain Dragon Scale)"
+      text: "Wisdom! (Gain !i(0))"
   wisdomMain:
     en:
       text: Ah, a wise choice indeed.
@@ -66,7 +66,7 @@ base:events:ThornedBush:
         What do you do?
   dig:
     en:
-      text: Dig in there to receive a random spell and sorcery.
+      text: Dig in there. (Lose !n(0) HP. Gain a random spell and sorcery.)
   digMain:
     en:
       text: You scrape yourself a bit, but manage to recover some spells.
@@ -122,7 +122,7 @@ base:events:ShinyInAHole:
         A brief glimpse of something shining from a nearby hole grabs your attention.
   check:
     en:
-      text: Check.
+      text: Check. (Gain a random relic. Lose !n(0) HP.)
   checkResult:
     en:
       text: Ouch! A snake apparently made the hole its home, but at least you got something out of it.
@@ -142,7 +142,7 @@ base:events:TheBeggar:
         "Good sir, can you spare an old man a bit of coin?"
   offer1:
     en:
-      text: Offer 1 Gold.
+      text: Offer 1 Gold. (Lose 1 Gold. Heal !s(1) HP.)
   offer1Main:
     en:
       text: |
@@ -202,7 +202,7 @@ base:events:StrangeScribe:
       text: Ask him to rewrite a spell. (-1 Gold, transform a spell)
   buy:
     en:
-      text: Buy the spell he is advertising. (-1 Gold, receive Mulligan)
+      text: Buy the spell he is advertising. (-1 Gold, receive !i(0))
   afterMain:
     en:
       text: You look at the new spell you just received. Was it worth it?
@@ -267,7 +267,7 @@ base:events:StrangeLotus:
         You notice a lotus throne nearby.
   sit:
     en:
-      text: Sit on the lotus throne.
+      text: Sit on the lotus throne. (Lose !n(0) HP. Gain a random relic.)
   sitMain:
     en:
       text: |
@@ -279,7 +279,7 @@ base:events:StrangeLotus:
         "The trap was meant for the rabbit youkai nearby, so have this relic as compensation."
   poke:
     en:
-      text: Poke it with a stick. (Receive a Power Upgrade.)
+      text: Poke it with a stick. (Lose !n(0) HP. Receive a Power Upgrade.)
   pokeMain:
     en:
       text: |
@@ -313,14 +313,14 @@ base:events:WhatDoesPotOfGreedDo:
         How do you respond?
   noOption:
     en:
-      text: "No. (Gain Pot of Greed)"
+      text: "No. (Gain !i(0))"
   noMain:
     en:
       text: |
         It gives you gold, obviously! Take one and educate yourself properly.
   draw:
     en:
-      text: "It draws you a card. (Gain Fetch Upgrade)"
+      text: "It draws you a card. (Gain !i(0))"
   drawMain:
     en:
       text: |

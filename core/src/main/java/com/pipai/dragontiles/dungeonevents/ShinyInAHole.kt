@@ -13,8 +13,8 @@ class ShinyInAHole : DungeonEvent() {
 
         private fun hpLoss(api: EventApi): Int = (api.runData.hero.hpMax * 0.2f).toInt()
 
-        override fun additionalText(api: EventApi): String {
-            return "Gain a random relic. Lose ${hpLoss(api)} HP."
+        override fun params(api: EventApi): EventParams {
+            return EventParams(listOf(hpLoss(api)), listOf())
         }
 
         override fun onSelect(api: EventApi) {

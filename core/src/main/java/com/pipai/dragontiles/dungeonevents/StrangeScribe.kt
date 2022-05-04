@@ -1,5 +1,6 @@
 package com.pipai.dragontiles.dungeonevents
 
+import com.pipai.dragontiles.data.Localized
 import com.pipai.dragontiles.spells.colorless.Mulligan
 
 class StrangeScribe : DungeonEvent() {
@@ -27,6 +28,14 @@ class StrangeScribe : DungeonEvent() {
 
         override fun available(api: EventApi): Boolean {
             return api.runData.hero.gold > 0
+        }
+
+        override fun params(api: EventApi): EventParams {
+            return EventParams(listOf(), listOf(Mulligan()))
+        }
+
+        override fun tooltipItem(api: EventApi): Localized {
+            return Mulligan()
         }
 
         override fun onSelect(api: EventApi) {

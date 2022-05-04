@@ -14,8 +14,8 @@ class ThornedBush : DungeonEvent() {
 
         private fun hpLoss(api: EventApi): Int = (api.runData.hero.hpMax * 0.25f).toInt()
 
-        override fun additionalText(api: EventApi): String {
-            return "Lose ${hpLoss(api)} HP."
+        override fun params(api: EventApi): EventParams {
+            return EventParams(listOf(hpLoss(api)), listOf())
         }
 
         override fun onSelect(api: EventApi) {

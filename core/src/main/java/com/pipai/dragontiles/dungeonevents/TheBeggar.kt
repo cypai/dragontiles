@@ -15,8 +15,8 @@ class TheBeggar : DungeonEvent() {
 
         private fun hpGain(api: EventApi): Int = (api.runData.hero.hpMax * 0.25f).toInt()
 
-        override fun additionalText(api: EventApi): String {
-            return "Lose 1 Gold. Heal ${hpGain(api)} HP."
+        override fun params(api: EventApi): EventParams {
+            return EventParams(listOf(hpGain(api)), listOf())
         }
 
         override fun onSelect(api: EventApi) {
@@ -31,10 +31,6 @@ class TheBeggar : DungeonEvent() {
 
         override fun available(api: EventApi): Boolean {
             return api.runData.hero.gold > 2
-        }
-
-        override fun additionalText(api: EventApi): String {
-            return "Lose 3 Gold. Gain sideboard space."
         }
 
         override fun onSelect(api: EventApi) {

@@ -1,5 +1,6 @@
 package com.pipai.dragontiles.dungeonevents
 
+import com.pipai.dragontiles.data.Localized
 import com.pipai.dragontiles.spells.upgrades.SurgeUpgrade
 import com.pipai.dragontiles.utils.choose
 
@@ -14,8 +15,8 @@ class StrangeLotus : DungeonEvent() {
 
         private fun hpLoss(api: EventApi): Int = (api.runData.hero.hpMax * 0.2f).toInt()
 
-        override fun additionalText(api: EventApi): String {
-            return "Gain a random relic. Lose ${hpLoss(api)} HP."
+        override fun params(api: EventApi): EventParams {
+            return EventParams(listOf(hpLoss(api)), listOf())
         }
 
         override fun onSelect(api: EventApi) {
@@ -31,8 +32,12 @@ class StrangeLotus : DungeonEvent() {
 
         private fun hpLoss(api: EventApi): Int = (api.runData.hero.hpMax * 0.1f).toInt()
 
-        override fun additionalText(api: EventApi): String {
-            return "Receive a Surge Upgrade. Lose ${hpLoss(api)} HP."
+        override fun params(api: EventApi): EventParams {
+            return EventParams(listOf(hpLoss(api)), listOf())
+        }
+
+        override fun tooltipItem(api: EventApi): Localized {
+            return SurgeUpgrade()
         }
 
         override fun onSelect(api: EventApi) {

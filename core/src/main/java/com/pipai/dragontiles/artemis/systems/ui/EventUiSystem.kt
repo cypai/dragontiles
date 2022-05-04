@@ -25,6 +25,7 @@ import com.pipai.dragontiles.dungeonevents.DungeonEvent
 import com.pipai.dragontiles.dungeonevents.EventApi
 import com.pipai.dragontiles.dungeonevents.EventOption
 import com.pipai.dragontiles.gui.SpellCard
+import com.pipai.dragontiles.spells.Spell
 import com.pipai.dragontiles.utils.*
 import net.mostlyoriginal.api.event.common.EventSystem
 import net.mostlyoriginal.api.event.common.Subscribe
@@ -52,11 +53,15 @@ class EventUiSystem(
 
     private val sMap by system<MapUiSystem>()
     private val sEvent by system<EventSystem>()
+    private val sDeckUi by system<DeckDisplayUiSystem>()
+    private val sTooltip by system<TooltipSystem>()
 
     private lateinit var api: EventApi
 
+    private var spellTooltip: SpellCard? = null
+
     override fun initialize() {
-        api = EventApi(game, runData, sEvent, this, game.gameStrings.eventLocalization(event.id))
+        api = EventApi(game, runData, sEvent, this, sDeckUi, game.gameStrings.eventLocalization(event.id))
         rootTable.setFillParent(true)
         rootTable.background = game.skin.getDrawable("frameDrawable")
 
@@ -81,17 +86,7 @@ class EventUiSystem(
     }
 
     fun addOption(text: String, option: EventOption) {
-        val actualText = if (option.additionalText(api).isBlank()) {
-            text
-        } else {
-            "$text (${option.additionalText(api)})"
-        }
-        val label = Label(actualText, skin)
-        label.addListener(object : ClickListener() {
-            override fun clicked(event: InputEvent?, x: Float, y: Float) {
-                option.onSelect(api)
-            }
-        })
+        val label = Label(text, skin)
         optionLabels.add(Pair(option, label))
         rebuildTable()
     }
@@ -122,13 +117,33 @@ class EventUiSystem(
                 labelBox.addListener(object : ClickListener() {
                     override fun enter(event: InputEvent?, x: Float, y: Float, pointer: Int, fromActor: Actor?) {
                         labelBox.background = skin.getDrawable("frameDrawableLight")
+                        val tooltipItem = option.tooltipItem(api)
+                        if (tooltipItem != null) {
+                            if (tooltipItem is Spell) {
+                                if (spellTooltip != null) {
+                                    spellTooltip?.remove()
+                                }
+                                spellTooltip = SpellCard(game, tooltipItem, null, game.skin, null)
+                                spellTooltip!!.x = labelBox.x + game.gameConfig.resolution.width / 2f
+                                spellTooltip!!.y = labelBox.y
+                                stage.addActor(spellTooltip)
+                            } else {
+                                sTooltip.addLocalized(tooltipItem)
+                            }
+                            sTooltip.showTooltip()
+                        }
                     }
 
                     override fun exit(event: InputEvent?, x: Float, y: Float, pointer: Int, toActor: Actor?) {
                         labelBox.background = skin.getDrawable("frameDrawable")
+                        spellTooltip?.remove()
+                        spellTooltip = null
+                        sTooltip.hideTooltip()
                     }
 
                     override fun clicked(event: InputEvent?, x: Float, y: Float) {
+                        spellTooltip?.remove()
+                        spellTooltip = null
                         option.onSelect(api)
                     }
                 })
