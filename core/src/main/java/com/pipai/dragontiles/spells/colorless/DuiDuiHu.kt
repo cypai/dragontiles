@@ -2,8 +2,7 @@ package com.pipai.dragontiles.spells.colorless
 
 import com.pipai.dragontiles.combat.CombatApi
 import com.pipai.dragontiles.combat.CombatFlag
-import com.pipai.dragontiles.data.Element
-import com.pipai.dragontiles.data.TileInstance
+import com.pipai.dragontiles.data.*
 import com.pipai.dragontiles.spells.*
 
 class DuiDuiHu : Sorcery() {
@@ -14,6 +13,20 @@ class DuiDuiHu : Sorcery() {
         override var suitGroup: SuitGroup = SuitGroup.ANY_NO_FUMBLE
         override val description: String = "All melds are identical."
         override val showTooltip: Boolean = true
+
+        override fun examples(): List<List<Tile>> {
+            return listOf(listOf(
+                Tile.ElementalTile(Suit.FIRE, 1),
+                Tile.ElementalTile(Suit.FIRE, 1),
+                Tile.ElementalTile(Suit.FIRE, 1),
+                Tile.ElementalTile(Suit.ICE, 3),
+                Tile.ElementalTile(Suit.ICE, 3),
+                Tile.ElementalTile(Suit.ICE, 3),
+                Tile.StarTile(StarType.EARTH),
+                Tile.StarTile(StarType.EARTH),
+                Tile.StarTile(StarType.EARTH),
+            ))
+        }
 
         override fun satisfied(slots: List<TileInstance>): Boolean {
             throw NotImplementedError()

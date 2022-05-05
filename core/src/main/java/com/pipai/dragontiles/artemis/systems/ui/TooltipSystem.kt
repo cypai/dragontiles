@@ -157,11 +157,21 @@ class TooltipSystem(private val game: DragonTilesGame, var stage: Stage) : BaseS
         table.background = skin.getDrawable("frameDrawable")
         val r = req
         if (r != null && reqExamples.isNotEmpty()) {
-            val header = Label("Example", skin, "small")
+            val header = Label("Requirement", skin, "small")
             table.add(header)
                 .width(WIDTH)
                 .padLeft(8f)
                 .padRight(8f)
+                .left()
+            table.row()
+            val label = Label(r.description, skin, "tiny")
+            label.setAlignment(Align.topLeft)
+            label.wrap = true
+            table.add(label)
+                .width(WIDTH)
+                .padLeft(8f)
+                .padRight(8f)
+                .padBottom(8f)
                 .left()
             table.row()
             rebuildReqExample()

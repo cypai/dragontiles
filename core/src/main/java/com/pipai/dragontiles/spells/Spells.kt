@@ -590,7 +590,7 @@ class AnyCombo(
                 val example: MutableList<Tile> = mutableListOf()
                 repeat(reqAmount.amount) { i ->
                     var tile = suitGroup.examples.first()
-                    repeat(i) {
+                    repeat(2 * i) {
                         tile = successor(tile)
                     }
                     example.add(tile)
@@ -601,7 +601,7 @@ class AnyCombo(
                 val example: MutableList<Tile> = mutableListOf()
                 suitGroup.examples.forEachIndexed { index, tile ->
                     var t = tile
-                    repeat(index) {
+                    repeat(2 * index) {
                         t = successor(t)
                     }
                     example.add(t)

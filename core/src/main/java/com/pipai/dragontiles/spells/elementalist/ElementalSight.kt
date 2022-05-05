@@ -5,7 +5,7 @@ import com.pipai.dragontiles.spells.*
 
 class ElementalSight : StandardSpell() {
     override val id: String = "base:spells:ElementalSight"
-    override val requirement: ComponentRequirement = AnyCombo(1, SuitGroup.ARCANE)
+    override val requirement: ComponentRequirement = Single(SuitGroup.ARCANE)
     override val type: SpellType = SpellType.EFFECT
     override val targetType: TargetType = TargetType.NONE
     override val rarity: Rarity = Rarity.COMMON
