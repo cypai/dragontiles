@@ -102,7 +102,7 @@ class SpellCard(
         cdStack.add(scoreImage)
 
         frontTable.add(cdStack)
-            .expand()
+            .expandX()
             .top()
             .padTop(su(0.02f))
             .size(su(0.225f))
@@ -115,6 +115,24 @@ class SpellCard(
             .prefHeight(reqSize)
             .right()
             .top()
+
+        frontTable.row()
+        upgradeImages.forEach {
+            frontTable.add()
+                .colspan(2)
+            frontTable.add(it)
+                .prefWidth(su(0.3f))
+                .prefHeight(su(0.3f))
+                .padTop(su(0.1f))
+                .padRight(su(0.1f))
+                .top()
+                .right()
+            frontTable.row()
+        }
+        frontTable.add()
+            .colspan(3)
+            .expandY()
+        frontTable.row()
 
         cardTable.background = skin.getDrawable("frameDrawable")
         cardTable.add(nameLabel)
@@ -134,16 +152,8 @@ class SpellCard(
             .prefHeight(cardHeight - 48f)
             .padTop(su(0.05f))
             .padLeft(su(0.08f))
-            .padRight(su(0.1f))
+            .padRight(su(0.2f))
             .top()
-        cardTable.row()
-        val upgradeRow = Table()
-        upgradeImages.forEach {
-            upgradeRow.add(it)
-                .size(32f)
-                .pad(6f)
-        }
-        cardTable.add(upgradeRow)
         cardTable.row()
 
         width = cardWidth
