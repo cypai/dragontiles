@@ -12,7 +12,7 @@ class TamamoNoMae : Enemy() {
     override val id: String = "base:enemies:TamamoNoMae"
     override val assetName: String = "tamamo_no_mae.png"
 
-    override val hpMax: Int = 90
+    override val hpMax: Int = 120
     override val fluxMax: Int = 120
 
     private var turns: Int = 0
@@ -45,7 +45,7 @@ class TamamoNoMae : Enemy() {
             BuffIntent(
                 this,
                 listOf(Strength(3)),
-                AttackIntent(this, 3, 9, Element.NONE),
+                AttackIntent(this, 6, 9, Element.NONE),
             )
         }
     }

@@ -14,7 +14,7 @@ class ChangE : Enemy() {
     override val id: String = "base:enemies:ChangE"
     override val assetName: String = "chang_e.png"
 
-    override val hpMax: Int = 120
+    override val hpMax: Int = 140
     override val fluxMax: Int = 80
 
     private var turns: Int = 0

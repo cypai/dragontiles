@@ -18,7 +18,7 @@ class LightningRod : Relic() {
         flags: List<CombatFlag>
     ): Int {
         return if (origin is Combatant.HeroCombatant && element == Element.LIGHTNING && flags.any { it == CombatFlag.ATTACK }) {
-            3
+            2
         } else {
             0
         }
