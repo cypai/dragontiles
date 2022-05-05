@@ -13,7 +13,7 @@ class WindChill : StandardSpell() {
     override val targetType: TargetType = TargetType.AOE
     override val rarity: Rarity = Rarity.UNCOMMON
     override val aspects: MutableList<SpellAspect> = mutableListOf(
-        StackableAspect(Weak(1, false), 1),
+        StackableAspect(Weak(2, false), 1),
         FluxGainAspect(1),
     )
 
