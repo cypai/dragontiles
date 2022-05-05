@@ -52,7 +52,8 @@ class SpellCard(
     private val keyRegex = "(!\\w+)(\\((\\w+)\\))?(\\[.+])?".toRegex()
 
     var target: Enemy? = null
-    private var enabled = true
+    var enabled = true
+        private set
     var powered = false
         private set
     var shocked = false

@@ -517,7 +517,7 @@ class CombatUiSystem(
                 if (sCombat.controller.api.heroHasStatus(Overloaded::class)) {
                     return
                 }
-                if (!spellCard.powered && !spellCard.shocked && spells.values.contains(spellCard)) {
+                if (spellCard.enabled && !spellCard.powered && !spellCard.shocked && spells.values.contains(spellCard)) {
                     val spell = spellCard.getSpell()
                     when (event.button) {
                         Input.Buttons.LEFT -> {
