@@ -94,7 +94,7 @@ data class SpellCastedEvent(val spell: Spell) : CombatEvent
 
 data class RuneActivatedEvent(val rune: Rune) : CombatEvent
 
-data class RuneDeactivatedEvent(val rune: Rune) : CombatEvent
+data class RuneDeactivatedEvent(val rune: Rune, val components: List<TileInstance>) : CombatEvent
 
 data class SpellExhaustedEvent(val spell: StandardSpell) : CombatEvent
 

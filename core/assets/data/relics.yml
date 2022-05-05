@@ -61,22 +61,22 @@ base:relics:Elixir:
 base:relics:FireFlower:
   en:
     name: Fire Flower
-    description: Fire attacks deal +3 damage.
+    description: Fire attacks deal +2 damage.
 
 base:relics:PerfectFreeze:
   en:
     name: Perfect Freeze
-    description: Ice attacks deal +3 damage.
+    description: Ice attacks deal +2 damage.
 
 base:relics:LightningRod:
   en:
     name: Lightning Rod
-    description: Lightning attacks deal +3 damage.
+    description: Lightning attacks deal +2 damage.
 
 base:relics:StoneEgg:
   en:
     name: Stone Egg
-    description: Non-elemental attacks deal +3 damage.
+    description: Non-elemental attacks deal +2 damage.
 
 base:relics:YinYangOrb:
   en:
@@ -97,3 +97,83 @@ base:relics:StockOption:
   en:
     name: Stock Option
     description: Gain 2 Gold after combat. If you have 20 or more Gold, lose 15 Gold.
+
+base:relics:IChing:
+  en:
+    name: I Ching
+    description: Draw 1 tile from the Open Pool after the first spell played each turn.
+
+base:relics:WindFireWheels:
+  en:
+    name: Wind Fire Wheels
+    description: When defeating an enemy, draw 3 tiles.
+
+base:relics:BananaLeafFan:
+  en:
+    name: Banana Leaf Fan
+    description: Transforming a tile also cleanses it of status effects (like @Burn)
+
+base:relics:Shuriken:
+  en:
+    name: Shuriken
+    description: Deal 5 @AOE damage after casting 5 attacks in a turn.
+
+base:relics:Kunai:
+  en:
+    name: Kunai
+    description: Deal 5 @AOE damage after casting 5 effects in a turn.
+
+base:relics:Bagua:
+  en:
+    name: Bagua
+    description: Deal @AOE damage equal to twice the amount of tiles in runes at the end of your turn.
+
+base:relics:LotusFlower:
+  en:
+    name: Lotus Flower
+    description: When deactivating runes, lose Flux equal to twice the amount of tiles released.
+
+base:relics:IronRake:
+  en:
+    name: Iron Rake
+    description: Every 9th attack does double damage.
+
+base:relics:Firecracker:
+  en:
+    name: Firecracker
+    description: At the start of combat, apply 1 Vulnerable to all enemies.
+
+base:relics:Khakkara:
+  en:
+    name: Khakkara
+    description: At the start of combat, apply 1 Weak to all enemies.
+
+base:relics:YuanBao:
+  en:
+    name: Yuan Bao
+    description: Gain 9 Gold.
+
+base:relics:SomersaultCloud:
+  en:
+    name: Somersault Cloud
+    description: Draw your full hand when you have no tiles in hand.
+
+base:relics:Bi:
+  en:
+    name: Bi
+    description: At the end of your first turn, lose 7 Flux.
+
+base:relics:Cong:
+  en:
+    name: Cong
+    description: At the end of your second turn, lose 10 Flux.
+
+base:relics:Huang:
+  en:
+    name: Huang
+    description: At the end of your third turn, lose 13 Flux.
+
+base:relics:Incense:
+  en:
+    name: Incense
+    description: At the start of combat, gain 1 Immunized.

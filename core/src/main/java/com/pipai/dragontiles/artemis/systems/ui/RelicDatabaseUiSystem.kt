@@ -47,13 +47,13 @@ class RelicDatabaseUiSystem(
         addHeader("Starter Relics")
         addRelics(relics.filter { it.rarity == Rarity.STARTER })
         addHeader("Common Relics")
-        addRelics(relics.filter { it.rarity == Rarity.COMMON })
+        addRelics(relics.filter { it.rarity == Rarity.COMMON }.sortedBy { it.id })
         addHeader("Uncommon Relics")
-        addRelics(relics.filter { it.rarity == Rarity.UNCOMMON })
+        addRelics(relics.filter { it.rarity == Rarity.UNCOMMON }.sortedBy { it.id })
         addHeader("Rare Relics")
-        addRelics(relics.filter { it.rarity == Rarity.RARE })
+        addRelics(relics.filter { it.rarity == Rarity.RARE }.sortedBy { it.id })
         addHeader("Special Relics")
-        addRelics(relics.filter { it.rarity == Rarity.SPECIAL })
+        addRelics(relics.filter { it.rarity == Rarity.SPECIAL }.sortedBy { it.id })
     }
 
     private fun addHeader(text: String) {

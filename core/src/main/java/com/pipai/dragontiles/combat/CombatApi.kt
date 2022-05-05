@@ -92,7 +92,7 @@ class CombatApi(
         val runeIndex = combat.spells.indexOf(rune)
         val components = combat.assigned.remove(runeIndex)!!
         combat.hand.addAll(components)
-        eventBus.dispatch(RuneDeactivatedEvent(rune))
+        eventBus.dispatch(RuneDeactivatedEvent(rune, components))
         sortHand()
     }
 

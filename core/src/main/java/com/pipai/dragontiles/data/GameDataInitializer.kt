@@ -45,6 +45,22 @@ class GameDataInitializer {
         gameData.addRelic(StockOption())
         gameData.addRelic(Inkstone())
         gameData.addRelic(YinYangOrb())
+        gameData.addRelic(IChing())
+        gameData.addRelic(WindFireWheels())
+        gameData.addRelic(BananaLeafFan())
+        gameData.addRelic(Shuriken())
+        gameData.addRelic(Kunai())
+        gameData.addRelic(Bagua())
+        gameData.addRelic(LotusFlower())
+        gameData.addRelic(IronRake())
+        gameData.addRelic(Firecracker())
+        gameData.addRelic(Khakkara())
+        gameData.addRelic(SomersaultCloud())
+        gameData.addRelic(Bi())
+        gameData.addRelic(Cong())
+        gameData.addRelic(Huang())
+        gameData.addRelic(Incense())
+        gameData.addRelic(YuanBao())
     }
 
     private fun initSpells(gameData: GameData) {
