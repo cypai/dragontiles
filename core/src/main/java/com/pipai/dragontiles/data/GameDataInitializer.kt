@@ -80,8 +80,8 @@ class GameDataInitializer {
         gameData.addSpell(GameData.COLORLESS, DragonScale())
         gameData.addSpell(GameData.COLORLESS, PotOfGreed())
         gameData.addSpell(GameData.COLORLESS, Patience())
-        gameData.addSpell(GameData.COLORLESS, ElixirsToxicity())
-        gameData.addSpell(GameData.COLORLESS, HighLethality())
+        gameData.addSpell(GameData.COLORLESS, Lethality())
+        gameData.addSpell(GameData.COLORLESS, NumericLethality())
         gameData.addSpell(GameData.COLORLESS, Purify())
     }
 

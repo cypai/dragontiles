@@ -3,18 +3,17 @@ package com.pipai.dragontiles.spells.colorless
 import com.pipai.dragontiles.combat.CombatApi
 import com.pipai.dragontiles.spells.*
 
-class HighLethality : StandardSpell() {
-    override val id: String = "base:spells:HighLethality"
-    override val requirement: ComponentRequirement = Single(SuitGroup.ELEMENTAL)
+class Lethality : StandardSpell() {
+    override val id: String = "base:spells:Lethality"
+    override val requirement: ComponentRequirement = Single()
     override val type: SpellType = SpellType.EFFECT
     override val targetType: TargetType = TargetType.NONE
     override val rarity: Rarity = Rarity.RARE
     override val aspects: MutableList<SpellAspect> = mutableListOf(
-        FluxGainAspect(4),
-        CountdownAspect(44, CountdownType.NUMERIC_SCORE, this::cdCallback)
+        FluxGainAspect(3),
+        LimitedRepeatableAspect(2),
+        CountdownAspect(17, CountdownType.SCORE, this::cdCallback)
     )
-
-    override fun additionalKeywords(): List<String> = listOf("@Numeric")
 
     override suspend fun onCast(params: CastParams, api: CombatApi) {
     }
