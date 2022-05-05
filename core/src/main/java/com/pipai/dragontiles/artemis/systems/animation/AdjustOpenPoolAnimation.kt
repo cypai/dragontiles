@@ -12,9 +12,11 @@ class AdjustOpenPoolAnimation(private val openPool: List<TileInstance>,
     override fun startAnimation() {
         if (openPool.isNotEmpty()) {
             openPool.forEachIndexed { index, tile ->
-                val entityId = sTileId.getEntityId(tile.id)
-                moveTile(entityId, layout.openTilePosition(index)) {
-                    endAnimation()
+                val entityId = sTileId.getEntityIdSafe(tile.id)
+                if (entityId != null) {
+                    moveTile(entityId, layout.openTilePosition(index)) {
+                        endAnimation()
+                    }
                 }
             }
         } else {
