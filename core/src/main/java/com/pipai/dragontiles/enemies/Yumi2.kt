@@ -12,7 +12,7 @@ class Yumi2 : Enemy() {
     override val id: String = "base:enemies:Yumi"
     override val assetName: String = "rabbit_youkai.png"
 
-    override val hpMax: Int = 40
+    override val hpMax: Int = 60
     override val fluxMax: Int = 80
 
     override fun getIntent(api: CombatApi): Intent {

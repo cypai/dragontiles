@@ -20,7 +20,7 @@ class Nekomata : Enemy() {
     }
 
     override fun getIntent(api: CombatApi): Intent {
-        val attack = AttackIntent(this, 4, 2, Element.NONE)
+        val attack = AttackIntent(this, 4, 3, Element.NONE)
         if (api.heroHasStatus(Overloaded::class)) {
             return attack
         }

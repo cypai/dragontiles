@@ -24,7 +24,7 @@ class NineTailedVixen : Enemy() {
     override fun getIntent(api: CombatApi): Intent {
         return when (turns % 3) {
             0 -> AttackIntent(this, 18, 1, Element.NONE)
-            1 -> BuffIntent(this, listOf(Strength(3)), AttackIntent(this, 9, 1, Element.NONE))
+            1 -> BuffIntent(this, listOf(Strength(6)), AttackIntent(this, 9, 1, Element.NONE))
             else -> {
                 val fumbles: MutableList<Tile> = mutableListOf()
                 repeat(9) {

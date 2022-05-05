@@ -33,11 +33,11 @@ class Kitsune : Enemy() {
                 listOf(
                     NonorphanedTileStatusInflictStrategy(
                         TileStatus.CURSE,
-                        1,
+                        2,
                     ),
                     NonorphanedTileStatusInflictStrategy(
                         TileStatus.VOLATILE,
-                        1,
+                        2,
                     ),
                 )
             )
