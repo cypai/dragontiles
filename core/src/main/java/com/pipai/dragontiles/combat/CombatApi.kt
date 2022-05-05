@@ -368,6 +368,10 @@ class CombatApi(
         amount: Int,
         flags: List<CombatFlag>,
     ) {
+        if (enemy.hp <= 0) {
+            // multistrike attack kills end early
+            return
+        }
         val damage = calculateDamageOnEnemy(enemy, element, amount, flags)
         val asAttack = flags.contains(CombatFlag.ATTACK)
         if (asAttack) {
