@@ -791,19 +791,13 @@ class CombatApi(
         }
         combat.sorceries.forEach { sorcery ->
             when (val req = sorcery.requirement) {
-                is AnyCombo -> {
-                    when (req.reqAmount.amount) {
-                        3 -> {
-                            fullCastHand.melds
-                                .forEach { meld ->
-                                    sorcery.fill(meld.tiles)
-                                    sorcery.cast(fullCastHand, this)
-                                }
+                is AnyMeld -> {
+                    fullCastHand.melds
+                        .filter { req.satisfied(it.tiles) }
+                        .forEach { meld ->
+                            sorcery.fill(meld.tiles)
+                            sorcery.cast(fullCastHand, this)
                         }
-                        else -> {
-                            // Doesn't make sense in sorcery context
-                        }
-                    }
                 }
                 is Identical -> {
                     when (req.reqAmount.amount) {

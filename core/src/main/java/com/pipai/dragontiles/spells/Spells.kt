@@ -590,7 +590,7 @@ class AnyCombo(
                 val example: MutableList<Tile> = mutableListOf()
                 repeat(reqAmount.amount) { i ->
                     var tile = suitGroup.examples.first()
-                    repeat (i) {
+                    repeat(i) {
                         tile = successor(tile)
                     }
                     example.add(tile)
@@ -652,6 +652,49 @@ class AnyX(
                 ex
             }
         }
+    }
+
+    override fun satisfied(slots: List<TileInstance>): Boolean {
+        return slots.all { it.tile.suit in suitGroup.allowedSuits && predicate(it) }
+    }
+}
+
+/**
+ * For use in sorceries only
+ */
+class AnyMeld(
+    override var suitGroup: SuitGroup,
+    private val predicate: (TileInstance) -> Boolean = { true },
+) : ManualComponentRequirement() {
+    constructor() : this(SuitGroup.ANY_NO_FUMBLE)
+
+    override val type = SetType.MISC
+    override val reqAmount = ReqAmount.ImmutableNumeric(3)
+    override val description = "Any meld"
+    override val showTooltip: Boolean = true
+
+    override fun examples(): List<List<Tile>> {
+        return suitGroup.examples.map { tile ->
+            val group: MutableList<Tile> = mutableListOf()
+            repeat(reqAmount.amount) {
+                group.add(tile)
+            }
+            group
+        }.withAll(
+            suitGroup.examples
+                .filterIsInstance<Tile.ElementalTile>()
+                .map { tile ->
+                    val group: MutableList<Tile> = mutableListOf()
+                    repeat(reqAmount.amount) { i ->
+                        var t: Tile = tile
+                        repeat(i) {
+                            t = successor(t)
+                        }
+                        group.add(t)
+                    }
+                    group
+                }
+        )
     }
 
     override fun satisfied(slots: List<TileInstance>): Boolean {
@@ -909,7 +952,7 @@ class SequentialX(override var suitGroup: SuitGroup) : ComponentRequirement {
                 val example: MutableList<Tile> = mutableListOf()
                 repeat(i) { j ->
                     var t = tile
-                    repeat (j) {
+                    repeat(j) {
                         t = successor(t)
                     }
                     example.add(t)

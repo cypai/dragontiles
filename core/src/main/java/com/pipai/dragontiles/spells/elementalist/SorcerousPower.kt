@@ -8,7 +8,7 @@ import com.pipai.dragontiles.utils.getStackableAmount
 
 class SorcerousPower : Sorcery() {
     override val id: String = "base:spells:SorcerousPower"
-    override val requirement: ComponentRequirement = AnyCombo(3)
+    override val requirement: ComponentRequirement = AnyMeld()
     override val rarity: Rarity = Rarity.UNCOMMON
     override val aspects: MutableList<SpellAspect> = mutableListOf(
         StackableAspect(GenericStatus(3, "base:status:Enpowered"), 1),

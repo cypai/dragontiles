@@ -5,7 +5,7 @@ import com.pipai.dragontiles.spells.*
 
 class Expansion : Sorcery() {
     override val id: String = "base:spells:Expansion"
-    override val requirement: ComponentRequirement = AnyCombo(3)
+    override val requirement: ComponentRequirement = AnyMeld()
     override val rarity: Rarity = Rarity.UNCOMMON
     override val aspects: MutableList<SpellAspect> = mutableListOf(
         TempMaxFluxChangeAspect(5)
