@@ -27,6 +27,6 @@ class Blizzard : StandardSpell() {
     }
 
     override suspend fun onCast(params: CastParams, api: CombatApi) {
-        api.aoeAttack(Element.ICE, baseDamage(), flags())
+        api.aoeAttack(Element.ICE, dynamicBaseDamage(components(), api), flags())
     }
 }
