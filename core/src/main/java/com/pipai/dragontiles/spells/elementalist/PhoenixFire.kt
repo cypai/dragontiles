@@ -1,8 +1,11 @@
 package com.pipai.dragontiles.spells.elementalist
 
 import com.pipai.dragontiles.combat.CombatApi
+import com.pipai.dragontiles.data.Element
+import com.pipai.dragontiles.data.TileInstance
 import com.pipai.dragontiles.data.TileStatus
 import com.pipai.dragontiles.spells.*
+import com.pipai.dragontiles.utils.withoutAll
 
 class PhoenixFire : StandardSpell() {
     override val id: String = "base:spells:PhoenixFire"
@@ -15,14 +18,15 @@ class PhoenixFire : StandardSpell() {
         FluxGainAspect(9),
     )
 
+    override fun dynamicBaseDamage(components: List<TileInstance>, api: CombatApi): Int {
+        val burns = api.getHandTiles()
+            .withoutAll(components)
+            .filter { it.tileStatus == TileStatus.BURN }
+            .size
+        return baseDamage() + (6 * burns)
+    }
+
     override suspend fun onCast(params: CastParams, api: CombatApi) {
-        api.aoeAttack(elemental(components()), baseDamage(), flags())
-        val hand = api.getHandTiles()
-        if (hand.size > 1) {
-            val tile = api.queryTiles("Pick a tile to burn", hand, 1, 1)
-            api.setTileStatus(tile, TileStatus.BURN)
-        } else {
-            api.setTileStatus(hand, TileStatus.BURN)
-        }
+        api.aoeAttack(Element.FIRE, dynamicBaseDamage(components(), api), flags())
     }
 }

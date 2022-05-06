@@ -4,8 +4,8 @@ import com.pipai.dragontiles.combat.CombatApi
 import com.pipai.dragontiles.data.TileStatus
 import com.pipai.dragontiles.spells.*
 
-class AnomalousBurst : StandardSpell() {
-    override val id: String = "base:spells:AnomalousBurst"
+class AnomalousStrike : StandardSpell() {
+    override val id: String = "base:spells:AnomalousStrike"
     override val requirement: ComponentRequirement = SequentialX()
     override val type: SpellType = SpellType.ATTACK
     override val targetType: TargetType = TargetType.SINGLE

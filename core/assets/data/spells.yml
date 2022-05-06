@@ -328,11 +328,6 @@ base:spells:PhilosophersStone:
     name: Philosopher's Stone
     description: "@Transform the @Component into a Life or Star tile of your choice."
 
-base:spells:PhoenixFire:
-  en:
-    name: Phoenix Fire
-    description: Deal !d @AOE Fire damage. @Burn a tile in your hand.
-
 base:spells:PhoenixTears:
   en:
     name: Phoenix Tears
@@ -559,9 +554,9 @@ base:spells:UnlimitedPower:
     name: Unlimited Power
     description: Double your Enpowered.
 
-base:spells:AnomalousBurst:
+base:spells:AnomalousStrike:
   en:
-    name: Anomalous Burst
+    name: Anomalous Strike
     description: For each @Burn, @Freeze, or @Shock tile consumed, deal !d @Elemented damage.
 
 base:spells:StaticElectricity:
@@ -569,10 +564,10 @@ base:spells:StaticElectricity:
     name: Static Electricity
     description: Whenever you are attacked, deal 5 Lightning damage to the attacker for each @Shock tile in your hand.
 
-base:spells:FlareBlitz:
+base:spells:PhoenixFire:
   en:
-    name: Flare Blitz
-    description: Deal !db Fire damage. Deal 8 additional damage for each @Burn tile in your hand. (Total !d damage)
+    name: Phoenix Fire
+    description: Deal !db @AOE Fire damage. Deal 8 additional damage for each @Burn tile in your hand. (Total !d damage)
 
 base:spells:Blizzard:
   en:
