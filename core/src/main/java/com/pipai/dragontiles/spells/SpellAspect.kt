@@ -84,7 +84,7 @@ data class SwapAspect(var amount: Int) : SpellAspect {
     }
 }
 
-data class FetchAspect(var amount: Int?) : SpellAspect {
+data class FetchAspect(var amount: Int?, val autoDescription: Boolean = true) : SpellAspect {
     override suspend fun onCast(spell: Spell, api: CombatApi) {
         if (amount == null) {
             api.fetch()
@@ -94,32 +94,40 @@ data class FetchAspect(var amount: Int?) : SpellAspect {
     }
 
     override fun adjustDescription(description: String): String {
-        return if (amount == null) {
-            if (description.isEmpty()) {
-                "${Keywords.FETCH}."
+        return if (autoDescription) {
+            if (amount == null) {
+                if (description.isEmpty()) {
+                    "${Keywords.FETCH}."
+                } else {
+                    "$description ${Keywords.FETCH}."
+                }
             } else {
-                "$description ${Keywords.FETCH}."
+                if (description.isEmpty()) {
+                    "${Keywords.FETCH} !fetch."
+                } else {
+                    "$description ${Keywords.FETCH} !fetch."
+                }
             }
         } else {
-            if (description.isEmpty()) {
-                "${Keywords.FETCH} !fetch."
-            } else {
-                "$description ${Keywords.FETCH} !fetch."
-            }
+            description
         }
     }
 }
 
-data class DrawAspect(var amount: Int) : SpellAspect {
+data class DrawAspect(var amount: Int, val autoDescription: Boolean = true) : SpellAspect {
     override suspend fun onCast(spell: Spell, api: CombatApi) {
         api.draw(amount)
     }
 
     override fun adjustDescription(description: String): String {
-        return if (description.isEmpty()) {
-            "${Keywords.DRAW} !draw tile."
+        return if (autoDescription) {
+            if (description.isEmpty()) {
+                "${Keywords.DRAW} !draw tile."
+            } else {
+                "$description ${Keywords.DRAW} !draw tile."
+            }
         } else {
-            "$description ${Keywords.DRAW} !draw tile."
+            description
         }
     }
 }

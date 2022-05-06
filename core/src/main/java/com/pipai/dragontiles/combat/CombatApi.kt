@@ -147,9 +147,16 @@ class CombatApi(
 
     suspend fun transformTile(tileInstance: TileInstance, tile: Tile, sortHand: Boolean) {
         val newTile = TileInstance(tile, tileInstance.tileStatus, nextId())
-        val index = combat.hand.indexOf(tileInstance)
-        combat.hand.removeAt(index)
-        combat.hand.add(index, newTile)
+        if (tileInstance in combat.hand) {
+            val index = combat.hand.indexOf(tileInstance)
+            combat.hand.removeAt(index)
+            combat.hand.add(index, newTile)
+        }
+        if (tileInstance in combat.openPool) {
+            val index = combat.openPool.indexOf(tileInstance)
+            combat.openPool.removeAt(index)
+            combat.openPool.add(index, newTile)
+        }
         eventBus.dispatch(TileTransformedEvent(newTile, tileInstance))
         if (sortHand) {
             sortHand()

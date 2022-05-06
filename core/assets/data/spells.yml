@@ -33,6 +33,16 @@ base:spells:FetchingStrike:
     name: Fetching Strike
     description: Deal !d @Elemented damage.
 
+base:spells:TransmutingStrike:
+  en:
+    name: Transmuting Strike
+    description: Deal !d @Elemented damage. Draw !draw tiles. Transform them into the Components' Element.
+
+base:spells:TransmutingFetch:
+  en:
+    name: Transmuting Fetch
+    description: "@Fetch !fetch. Transform fetched Elemental tiles into the Components' Element."
+
 base:spells:ReactantStrike:
   en:
     name: Reactant Strike
