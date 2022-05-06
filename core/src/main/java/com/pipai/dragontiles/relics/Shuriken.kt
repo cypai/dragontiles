@@ -20,7 +20,7 @@ class Shuriken : Relic() {
     suspend fun onCast(ev: SpellCastedEvent, api: CombatApi) {
         if (ev.spell.type == SpellType.ATTACK) {
             counter ++
-            if (counter >= 5) {
+            if (counter >= 3) {
                 api.aoeAttack(Element.NONE, 5, listOf())
             }
         }

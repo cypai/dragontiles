@@ -116,12 +116,12 @@ base:relics:BananaLeafFan:
 base:relics:Shuriken:
   en:
     name: Shuriken
-    description: Deal 5 @AOE damage after casting 5 attacks in a turn.
+    description: Deal 5 @AOE damage after casting 3 attacks in a turn.
 
 base:relics:Kunai:
   en:
     name: Kunai
-    description: Deal 5 @AOE damage after casting 5 effects in a turn.
+    description: Deal 5 @AOE damage after casting 3 effects in a turn.
 
 base:relics:Bagua:
   en:
