@@ -44,7 +44,7 @@ class CombatController(
 
     fun initCombat() {
         initDrawPile()
-        runBlocking { api.drawToOpenPool(CombatApi.OPEN_POOL_SIZE) }
+        runBlocking { api.drawToOpenPool(CombatApi.OPEN_POOL_SIZE - 1) }
     }
 
     private fun initDrawPile() {
