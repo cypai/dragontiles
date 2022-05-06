@@ -9,6 +9,7 @@ import com.pipai.dragontiles.artemis.components.*
 import com.pipai.dragontiles.artemis.events.TileClickEvent
 import com.pipai.dragontiles.artemis.systems.ui.TooltipSystem
 import com.pipai.dragontiles.data.Suit
+import com.pipai.dragontiles.data.Tile
 import com.pipai.dragontiles.data.TileInstance
 import com.pipai.dragontiles.data.TileStatus
 import com.pipai.dragontiles.gui.CombatUiLayout
@@ -54,8 +55,18 @@ abstract class TileAnimation(protected val layout: CombatUiLayout) : Animation()
         val cHoverable = mHoverable.create(entityId)
         cHoverable.enterCallback = {
             cHoverable.recheck = true
-            if (tile.tile.suit == Suit.FUMBLE) {
-                sTooltip.addKeyword("@FumbleTile")
+            when (val t = tile.tile) {
+                is Tile.ElementalTile -> {
+                    when (t.suit) {
+                        Suit.FIRE -> sTooltip.addText("Fire Tile", t.number.toString(), false)
+                        Suit.ICE -> sTooltip.addText("Ice Tile", t.number.toString(), false)
+                        Suit.LIGHTNING -> sTooltip.addText("Lightning Tile", t.number.toString(), false)
+                        else -> {}
+                    }
+                }
+                is Tile.LifeTile -> sTooltip.addText("Life Tile", t.type.toString(), false)
+                is Tile.StarTile -> sTooltip.addText("Star Tile", t.type.toString(), false)
+                is Tile.FumbleTile -> sTooltip.addKeyword("@FumbleTile")
             }
             when (tile.tileStatus) {
                 TileStatus.BURN -> sTooltip.addKeyword("@Burn")
