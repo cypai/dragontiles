@@ -20,7 +20,17 @@ data class DeckDisplayUiEvent(val isNowShowing: Boolean) : Event
 
 data class SpellGainedEvent(val spell: Spell) : Event
 data class ReplaceSpellQueryEvent(val spell: Spell) : Event
-data class UpgradeSpellQueryEvent(val upgrade: SpellUpgrade) : Event
+data class UpgradeSpellQueryEvent(
+    val upgrade: SpellUpgrade,
+    val type: DeckQueryType,
+    val upgradeCallback: () -> Unit,
+    val skipCallback: () -> Unit
+) : Event
+
+enum class DeckQueryType {
+    SKIPPABLE, CANCELABLE
+}
+
 class TransformSpellQueryEvent : Event
 class TopRowUiUpdateEvent : Event
 data class PotionUseUiEvent(val potionSlotIndex: Int) : Event

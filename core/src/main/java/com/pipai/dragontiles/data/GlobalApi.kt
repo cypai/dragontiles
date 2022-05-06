@@ -76,7 +76,7 @@ open class GlobalApi(val gameData: GameData, val runData: RunData, private val s
     }
 
     fun queryUpgradeSpell(upgrade: SpellUpgrade) {
-        sEvent.dispatch(UpgradeSpellQueryEvent(upgrade))
+        sEvent.dispatch(UpgradeSpellQueryEvent(upgrade, DeckQueryType.SKIPPABLE, {}, {}))
     }
 
     fun queryTransformSpell() {

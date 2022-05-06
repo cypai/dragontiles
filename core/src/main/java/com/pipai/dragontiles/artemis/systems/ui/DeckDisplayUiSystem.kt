@@ -9,10 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.*
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop
 import com.pipai.dragontiles.DragonTilesGame
-import com.pipai.dragontiles.artemis.events.DeckDisplayUiEvent
-import com.pipai.dragontiles.artemis.events.ReplaceSpellQueryEvent
-import com.pipai.dragontiles.artemis.events.TransformSpellQueryEvent
-import com.pipai.dragontiles.artemis.events.UpgradeSpellQueryEvent
+import com.pipai.dragontiles.artemis.events.*
 import com.pipai.dragontiles.artemis.systems.NoProcessingSystem
 import com.pipai.dragontiles.artemis.systems.rendering.FullScreenColorSystem
 import com.pipai.dragontiles.data.GlobalApi
@@ -169,11 +166,17 @@ class DeckDisplayUiSystem(
     @Subscribe
     fun handleUpgradeQuery(ev: UpgradeSpellQueryEvent) {
         disableExit = true
-        queryUpgrade(true, ev.upgrade)
+        queryUpgrade(true, ev.upgrade, ev.type, ev.upgradeCallback, ev.skipCallback)
         activate()
     }
 
-    fun queryUpgrade(useFilter: Boolean, upgrade: SpellUpgrade) {
+    fun queryUpgrade(
+        useFilter: Boolean,
+        upgrade: SpellUpgrade,
+        type: DeckQueryType,
+        upgradeCallback: () -> Unit,
+        skipCallback: () -> Unit
+    ) {
         table.clearChildren()
         topLabel.setText("Choose a spell to upgrade:")
         table.add(topLabel).colspan(colspan)
@@ -186,7 +189,7 @@ class DeckDisplayUiSystem(
             queryFilterBtn.clearListeners()
             queryFilterBtn.addListener(object : ClickListener() {
                 override fun clicked(event: InputEvent?, x: Float, y: Float) {
-                    queryUpgrade(false, upgrade)
+                    queryUpgrade(false, upgrade, type, upgradeCallback, skipCallback)
                 }
             })
         } else {
@@ -194,7 +197,7 @@ class DeckDisplayUiSystem(
             queryFilterBtn.clearListeners()
             queryFilterBtn.addListener(object : ClickListener() {
                 override fun clicked(event: InputEvent?, x: Float, y: Float) {
-                    queryUpgrade(true, upgrade)
+                    queryUpgrade(true, upgrade, type, upgradeCallback, skipCallback)
                 }
             })
         }
@@ -207,11 +210,31 @@ class DeckDisplayUiSystem(
             } else {
                 { true }
             },
-            { clickedSpell, section, index -> onSpellUpgradeClick(upgrade, clickedSpell, index, section) },
+            { clickedSpell, section, index ->
+                onSpellUpgradeClick(
+                    upgrade,
+                    clickedSpell,
+                    index,
+                    section
+                ); upgradeCallback()
+            },
             false,
-            { clickedSpell, section, index -> onSpellUpgradeClick(upgrade, clickedSpell, index, section) },
+            { clickedSpell, section, index ->
+                onSpellUpgradeClick(
+                    upgrade,
+                    clickedSpell,
+                    index,
+                    section
+                ); upgradeCallback()
+            },
             false,
             { _, _, _ -> },
+        )
+        skipBtn.setText(
+            when (type) {
+                DeckQueryType.SKIPPABLE -> "  Skip  "
+                DeckQueryType.CANCELABLE -> "  Cancel  "
+            }
         )
         table.add(skipBtn)
             .colspan(colspan)

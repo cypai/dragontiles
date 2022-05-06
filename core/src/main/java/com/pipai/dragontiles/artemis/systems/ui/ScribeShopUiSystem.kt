@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.Sprite
 import com.pipai.dragontiles.DragonTilesGame
 import com.pipai.dragontiles.artemis.components.*
+import com.pipai.dragontiles.artemis.events.DeckQueryType
 import com.pipai.dragontiles.artemis.events.PricedItemClickEvent
 import com.pipai.dragontiles.artemis.events.UpgradeSpellQueryEvent
 import com.pipai.dragontiles.artemis.screens.TownScreen
@@ -53,7 +54,8 @@ class ScribeShopUiSystem(
         val entityId = world.create()
         mPrice.create(entityId).price = ps.price
         val cSprite = mSprite.create(entityId)
-        cSprite.sprite = Sprite(game.assets.get(upgradeAssetPath(game.data.getSpellUpgrade(ps.id).assetName), Texture::class.java))
+        cSprite.sprite =
+            Sprite(game.assets.get(upgradeAssetPath(game.data.getSpellUpgrade(ps.id).assetName), Texture::class.java))
         val cXy = mXy.create(entityId)
         cXy.setXy(x, y)
         val cText = mText.create(entityId)
@@ -78,15 +80,22 @@ class ScribeShopUiSystem(
     @Subscribe
     fun handleClick(ev: PricedItemClickEvent) {
         if (runData.hero.gold >= ev.pricedItem.price) {
-            town.scribe.upgrades.remove(ev.pricedItem)
-            api.gainGoldImmediate(-ev.pricedItem.price)
-            recalculatePriceColor()
-            sEvent.dispatch(UpgradeSpellQueryEvent(game.data.getSpellUpgrade(ev.pricedItem.id)))
-            world.delete(ev.entityId)
-            if (!town.boughtUpgrade) {
-                town.actions--
-            }
-            town.boughtUpgrade = true
+            sEvent.dispatch(UpgradeSpellQueryEvent(
+                game.data.getSpellUpgrade(ev.pricedItem.id),
+                DeckQueryType.CANCELABLE,
+                {
+                    town.scribe.upgrades.remove(ev.pricedItem)
+                    api.gainGoldImmediate(-ev.pricedItem.price)
+                    recalculatePriceColor()
+                    world.delete(ev.entityId)
+                    if (!town.boughtUpgrade) {
+                        town.actions--
+                    }
+                    town.boughtUpgrade = true
+                },
+                {
+                }
+            ))
         }
     }
 
