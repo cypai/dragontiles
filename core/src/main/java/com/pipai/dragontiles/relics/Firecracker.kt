@@ -12,6 +12,10 @@ class Firecracker : Relic() {
     override val rarity = Rarity.COMMON
     override val showCounter: Boolean = false
 
+    override fun additionalLocalized(): List<String> {
+        return listOf("base:status:Vulnerable")
+    }
+
     @CombatSubscribe
     suspend fun onTurnStart(ev: TurnStartEvent, api: CombatApi) {
         if (ev.turnNumber == 1) {

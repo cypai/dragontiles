@@ -14,6 +14,10 @@ class Incense : Relic() {
     override val rarity = Rarity.UNCOMMON
     override val showCounter: Boolean = false
 
+    override fun additionalLocalized(): List<String> {
+        return listOf("base:status:Immunized")
+    }
+
     @CombatSubscribe
     suspend fun onTurnStart(ev: TurnStartEvent, api: CombatApi) {
         if (ev.turnNumber == 1) {
