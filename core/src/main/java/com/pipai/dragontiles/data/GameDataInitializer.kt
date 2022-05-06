@@ -99,7 +99,7 @@ class GameDataInitializer {
         gameData.addSpellUpgrade(DoublestackUpgrade())
         gameData.addSpellUpgrade(XUpgrade())
         gameData.addSpellUpgrade(FetchUpgrade())
-        gameData.addSpellUpgrade(SwapUpgrade())
+//        gameData.addSpellUpgrade(SwapUpgrade())
         gameData.addSpellUpgrade(ScoreUpgrade())
         gameData.addSpellUpgrade(VentUpgrade())
     }

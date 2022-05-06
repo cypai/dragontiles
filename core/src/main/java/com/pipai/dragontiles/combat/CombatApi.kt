@@ -474,9 +474,9 @@ class CombatApi(
                     shockSpell(spell)
                 }
                 TileStatus.VOLATILE -> if (spell.aspects.none { it is Stable }) {
-                    dealFluxDamageToHero(spell.baseFluxGain())
+                    dealFluxDamageToHero(2)
                 }
-                TileStatus.CURSE -> changeTemporaryMaxFlux(-spell.baseFluxGain())
+                TileStatus.CURSE -> changeTemporaryMaxFlux(-2)
                 else -> {
                 }
             }

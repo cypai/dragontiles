@@ -9,7 +9,7 @@ import com.pipai.dragontiles.utils.choose
 
 class AnomalousSpeed : PowerSpell() {
     override val id: String = "base:spells:AnomalousSpeed"
-    override val requirement: ComponentRequirement = Identical(2, SuitGroup.LIFE)
+    override val requirement: ComponentRequirement = AnyCombo(2, SuitGroup.LIFE)
     override val rarity: Rarity = Rarity.UNCOMMON
     override val aspects: MutableList<SpellAspect> = mutableListOf(
         FluxGainAspect(4),

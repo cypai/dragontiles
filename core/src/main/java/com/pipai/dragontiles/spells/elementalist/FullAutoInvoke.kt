@@ -3,8 +3,8 @@ package com.pipai.dragontiles.spells.elementalist
 import com.pipai.dragontiles.combat.CombatApi
 import com.pipai.dragontiles.spells.*
 
-class RapidMiniInvoke : StandardSpell() {
-    override val id: String = "base:spells:RapidMiniInvoke"
+class FullAutoInvoke : StandardSpell() {
+    override val id: String = "base:spells:FullAutoInvoke"
     override val requirement: ComponentRequirement = Identical(2)
     override val type: SpellType = SpellType.ATTACK
     override val targetType: TargetType = TargetType.SINGLE

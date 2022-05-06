@@ -26,10 +26,10 @@ base:keywords:Volatile:
   en:
     key: "@Volatile"
     name: Volatile
-    description: "Take damage equal to the spell's @Flux cost if consumed as a @Component."
+    description: "Take 2 @Flux damage if consumed as a @Component."
 
 base:keywords:Curse:
   en:
     key: "@Curse"
     name: Curse
-    description: "Lose Max @Flux this combat equal to the spell's @Flux cost if consumed as a @Component."
+    description: "Lose 2 Max @Flux this combat if consumed as a @Component."
