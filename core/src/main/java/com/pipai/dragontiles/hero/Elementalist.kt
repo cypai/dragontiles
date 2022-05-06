@@ -107,7 +107,7 @@ class Elementalist : HeroClass {
         BirdCall(),
         ChainTarget(),
         AnomalousBurst(),
-//        StaticElectricity(),
+        StaticElectricity(),
         FlareBlitz(),
         Blizzard(),
         RapidFire(),

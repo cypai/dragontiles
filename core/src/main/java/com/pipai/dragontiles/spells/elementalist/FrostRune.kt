@@ -11,7 +11,7 @@ class FrostRune : Rune() {
     override val rarity: Rarity = Rarity.UNCOMMON
     override val requirement: ComponentRequirement = IdenticalX(SuitGroup.ICE)
     override val aspects: MutableList<SpellAspect> = mutableListOf(
-        XAspect(4,0),
+        XAspect(3,0),
     )
 
     @CombatSubscribe

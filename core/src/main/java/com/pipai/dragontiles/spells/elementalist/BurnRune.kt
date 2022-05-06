@@ -12,7 +12,7 @@ class BurnRune : Rune() {
     override val rarity: Rarity = Rarity.UNCOMMON
     override val requirement: ComponentRequirement = IdenticalX(SuitGroup.FIRE)
     override val aspects: MutableList<SpellAspect> = mutableListOf(
-        XAspect(5, 0),
+        XAspect(3, 0),
     )
 
     @CombatSubscribe

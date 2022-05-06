@@ -61,7 +61,7 @@ base:spells:ElementalSight:
 base:spells:ChainTarget:
   en:
     name: Chain Target
-    description: This turn, after attacking with the Components' Element, deal the chained enemy 1 Elemented Attack damage.
+    description: This turn, after attacking with the Components' Element, deal the target 1 Elemented Attack damage.
 
 base:spells:DualStrike:
   en:
@@ -567,7 +567,7 @@ base:spells:AnomalousBurst:
 base:spells:StaticElectricity:
   en:
     name: Static Electricity
-    description: Whenever you are attacked this turn, deal 4 Lightning damage to the attacker and @Shock a random tile in your hand.
+    description: Whenever you are attacked, deal 5 Lightning damage to the attacker for each @Shock tile in your hand.
 
 base:spells:FlareBlitz:
   en:
