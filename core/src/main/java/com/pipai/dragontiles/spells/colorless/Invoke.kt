@@ -12,7 +12,7 @@ class Invoke : StandardSpell() {
     override val targetType: TargetType = TargetType.SINGLE
     override val rarity: Rarity = Rarity.STARTER
     override val aspects: MutableList<SpellAspect> = mutableListOf(
-        AttackDamageAspect(2),
+        AttackDamageAspect(1),
         FluxGainAspect(1),
     )
 

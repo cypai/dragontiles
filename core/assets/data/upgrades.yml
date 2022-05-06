@@ -1,7 +1,7 @@
 base:upgrades:PowerUpgrade:
   en:
     name: Power Upgrade
-    description: Attack damage +3.
+    description: Attack damage +3. Increases flux cost by 1.
 
 base:upgrades:SurgeUpgrade:
   en:
