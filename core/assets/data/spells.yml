@@ -374,9 +374,9 @@ base:spells:FluxBlast:
     description: |
       Deal @AOE @Elemented damage equal to Max @Flux - Flux. (Total !d damage)
 
-base:spells:Normalize:
+base:spells:AntiNormalize:
   en:
-    name: Normalize
+    name: Anti-Normalize
     description: "@Transform @Burn, @Freeze, and @Shock @Components into Fire, Ice, and Lightning tiles respectively."
 
 base:spells:FluxMastery:

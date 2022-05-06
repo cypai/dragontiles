@@ -95,7 +95,7 @@ class Elementalist : HeroClass {
         Inflation(),
 //        Megaxplosion(),
 //        FluxBlast(),
-        Normalize(),
+        AntiNormalize(),
         FluxMastery(),
         Barrier(),
         Masochism(),

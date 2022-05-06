@@ -6,8 +6,8 @@ import com.pipai.dragontiles.data.Tile
 import com.pipai.dragontiles.data.TileStatus
 import com.pipai.dragontiles.spells.*
 
-class Normalize : StandardSpell() {
-    override val id: String = "base:spells:Normalize"
+class AntiNormalize : StandardSpell() {
+    override val id: String = "base:spells:AntiNormalize"
     override val type: SpellType = SpellType.EFFECT
     override val rarity: Rarity = Rarity.UNCOMMON
     override val targetType: TargetType = TargetType.NONE
@@ -15,7 +15,7 @@ class Normalize : StandardSpell() {
         it.tileStatus in listOf(TileStatus.BURN, TileStatus.FREEZE, TileStatus.SHOCK)
     }
     override val aspects: MutableList<SpellAspect> = mutableListOf(
-        FluxGainAspect(9),
+        FluxGainAspect(4),
         Antifreeze(),
     )
 
