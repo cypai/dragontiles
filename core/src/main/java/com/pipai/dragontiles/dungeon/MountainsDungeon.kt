@@ -68,8 +68,7 @@ class MountainsDungeon {
                         "base:dungeons:Mountains:Yumi2",
                         listOf(
                             Pair(MoonRabbit(), Vector2(0.5f, 4.5f)),
-                            Pair(MoonRabbit(), Vector2(3f, 4.5f)),
-                            Pair(Yumi2(), Vector2(5.5f, 4.5f)),
+                            Pair(Yumi2(), Vector2(4.5f, 4.5f)),
                         )
                     ),
                 ),
