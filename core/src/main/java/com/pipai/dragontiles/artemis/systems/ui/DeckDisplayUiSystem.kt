@@ -203,7 +203,7 @@ class DeckDisplayUiSystem(
         table.row()
         addStandardDisplay(
             if (useFilter) {
-                { upgrade.canUpgrade(it) && it.getUpgrades().size < 3 }
+                { upgrade.canUpgrade(it) && it.getUpgrades().size < 2 }
             } else {
                 { true }
             },
