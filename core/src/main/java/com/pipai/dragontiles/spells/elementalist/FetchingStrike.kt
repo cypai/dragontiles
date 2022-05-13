@@ -9,6 +9,7 @@ class FetchingStrike : StandardSpell() {
     override val type: SpellType = SpellType.ATTACK
     override val targetType: TargetType = TargetType.SINGLE
     override val rarity: Rarity = Rarity.COMMON
+    override val glowType: GlowType = GlowType.ELEMENTED
     override val aspects: MutableList<SpellAspect> = mutableListOf(
         AttackDamageAspect(9),
         FluxGainAspect(6),

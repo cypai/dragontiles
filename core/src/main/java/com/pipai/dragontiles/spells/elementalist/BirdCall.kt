@@ -10,6 +10,7 @@ class BirdCall : StandardSpell() {
     override val rarity: Rarity = Rarity.RARE
     override val targetType: TargetType = TargetType.AOE
     override val requirement: ComponentRequirement = Sequential(9)
+    override val glowType: GlowType = GlowType.FIRE
     override val aspects: MutableList<SpellAspect> = mutableListOf(
         FluxGainAspect(9),
         AttackDamageAspect(81),

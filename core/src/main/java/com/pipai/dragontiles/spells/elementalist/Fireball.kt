@@ -10,6 +10,7 @@ class Fireball : StandardSpell() {
     override val type: SpellType = SpellType.ATTACK
     override val targetType: TargetType = TargetType.SINGLE
     override val rarity: Rarity = Rarity.UNCOMMON
+    override val glowType: GlowType = GlowType.FIRE
     override val aspects: MutableList<SpellAspect> = mutableListOf(
         AttackDamageAspect(16),
         FluxGainAspect(8),

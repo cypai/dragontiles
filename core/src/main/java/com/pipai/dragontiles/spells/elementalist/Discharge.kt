@@ -11,6 +11,7 @@ class Discharge : StandardSpell() {
     override val type: SpellType = SpellType.ATTACK
     override val targetType: TargetType = TargetType.SINGLE
     override val rarity: Rarity = Rarity.UNCOMMON
+    override val glowType: GlowType = GlowType.LIGHTNING
     override val aspects: MutableList<SpellAspect> = mutableListOf()
 
     override fun dynamicBaseDamage(components: List<TileInstance>, api: CombatApi): Int {

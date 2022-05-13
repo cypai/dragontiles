@@ -11,6 +11,7 @@ class BreakingBlast : StandardSpell() {
     override val type: SpellType = SpellType.ATTACK
     override val targetType: TargetType = TargetType.AOE
     override val rarity: Rarity = Rarity.COMMON
+    override val glowType: GlowType = GlowType.ELEMENTED
     override val aspects: MutableList<SpellAspect> = mutableListOf(
         AttackDamageAspect(4),
         StackableAspect(BreakStatus(1, false), 1),

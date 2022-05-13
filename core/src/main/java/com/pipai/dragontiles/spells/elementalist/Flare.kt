@@ -11,6 +11,7 @@ class Flare : StandardSpell() {
     override val type: SpellType = SpellType.ATTACK
     override val targetType: TargetType = TargetType.SINGLE
     override val rarity: Rarity = Rarity.COMMON
+    override val glowType: GlowType = GlowType.FIRE
     override val aspects: MutableList<SpellAspect> = mutableListOf(
         AttackDamageAspect(2),
         FluxGainAspect(1),

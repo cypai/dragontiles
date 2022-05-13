@@ -12,6 +12,7 @@ class Typhoon : StandardSpell() {
     override val type: SpellType = SpellType.ATTACK
     override val targetType: TargetType = TargetType.AOE
     override val rarity: Rarity = Rarity.RARE
+    override val glowType: GlowType = GlowType.ELEMENTED
     override val aspects: MutableList<SpellAspect> = mutableListOf(
         AttackDamageAspect(10),
         FluxGainAspect(8),

@@ -14,6 +14,7 @@ class ColdHands : StandardSpell() {
     override val type: SpellType = SpellType.ATTACK
     override val targetType: TargetType = TargetType.SINGLE_ENEMY
     override val rarity: Rarity = Rarity.COMMON
+    override val glowType: GlowType = GlowType.ICE
     override val aspects: MutableList<SpellAspect> = mutableListOf(
         AttackDamageAspect(2),
         StackableAspect(Weak(3, false), 1),
