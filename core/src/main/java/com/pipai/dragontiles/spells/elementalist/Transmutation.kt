@@ -14,6 +14,7 @@ class Transmutation : Rune() {
         this,
         AnyCombo(3, SuitGroup.ELEMENTAL),
     )
+    override val glowType: GlowType = GlowType.ELEMENTED
     override val aspects: MutableList<SpellAspect> = mutableListOf(
         TransformAspect(),
         NotManuallyDeactivateable(),

@@ -12,6 +12,7 @@ class MassTransmute : StandardSpell() {
     override val rarity: Rarity = Rarity.RARE
     override val targetType: TargetType = TargetType.NONE
     override val requirement: ComponentRequirement = Single(SuitGroup.ELEMENTAL)
+    override val glowType: GlowType = GlowType.ELEMENTED
     override val aspects: MutableList<SpellAspect> = mutableListOf(
         ExhaustAspect(),
         FluxGainAspect(20),

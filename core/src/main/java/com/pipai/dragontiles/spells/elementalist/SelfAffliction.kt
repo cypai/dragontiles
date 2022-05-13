@@ -11,6 +11,7 @@ class SelfAffliction : StandardSpell() {
     override val type: SpellType = SpellType.EFFECT
     override val targetType: TargetType = TargetType.NONE
     override val rarity: Rarity = Rarity.UNCOMMON
+    override val glowType: GlowType = GlowType.ELEMENTED
     override val aspects: MutableList<SpellAspect> = mutableListOf(
         FluxGainAspect(3),
         LimitedRepeatableAspect(2),

@@ -12,6 +12,7 @@ class ElementalBreathing : PowerSpell() {
     override val id: String = "base:spells:ElementalBreathing"
     override val requirement: ComponentRequirement = Single(SuitGroup.ELEMENTAL)
     override val rarity: Rarity = Rarity.UNCOMMON
+    override val glowType: GlowType = GlowType.ELEMENTED
     override val aspects: MutableList<SpellAspect> = mutableListOf(
         StackableAspect(GenericStatus(1), 1),
         FluxGainAspect(3),

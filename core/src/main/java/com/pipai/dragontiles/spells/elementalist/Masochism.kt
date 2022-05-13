@@ -14,6 +14,7 @@ class Masochism : StandardSpell() {
     override val type: SpellType = SpellType.EFFECT
     override val targetType: TargetType = TargetType.NONE
     override val rarity: Rarity = Rarity.UNCOMMON
+    override val glowType: GlowType = GlowType.ELEMENTED
     override val aspects: MutableList<SpellAspect> = mutableListOf(
         StackableAspect(GenericStatus(2), 1),
         FluxGainAspect(2),

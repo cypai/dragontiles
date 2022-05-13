@@ -11,6 +11,7 @@ class Barrier : StandardSpell() {
     override val type: SpellType = SpellType.EFFECT
     override val targetType: TargetType = TargetType.NONE
     override val rarity: Rarity = Rarity.RARE
+    override val glowType: GlowType = GlowType.ELEMENTED
     override val aspects: MutableList<SpellAspect> = mutableListOf(
         FluxGainAspect(4),
         ExhaustAspect(),

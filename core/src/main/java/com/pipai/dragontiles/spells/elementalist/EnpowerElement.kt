@@ -12,6 +12,7 @@ class EnpowerElement : StandardSpell() {
     override val type: SpellType = SpellType.EFFECT
     override val targetType: TargetType = TargetType.NONE
     override val rarity: Rarity = Rarity.COMMON
+    override val glowType: GlowType = GlowType.ELEMENTED
     override val aspects: MutableList<SpellAspect> = mutableListOf(
         StackableAspect(GenericStatus(3, "base:status:Enpowered"), 1),
         FluxGainAspect(2),
