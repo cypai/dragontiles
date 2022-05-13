@@ -39,6 +39,7 @@ import com.pipai.dragontiles.potions.PotionTargetType
 import com.pipai.dragontiles.spells.*
 import com.pipai.dragontiles.status.Overloaded
 import com.pipai.dragontiles.utils.*
+import com.pipai.dragontiles.utils.withAll
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
@@ -624,6 +625,12 @@ class CombatUiSystem(
                 sCombat.controller.api.castSorceries(fullCastHand)
             }
         }
+    }
+
+    fun getSpellCard(spell: Spell): SpellCard? {
+        return spells.values.toList()
+            .withAll(sideboard.values.toList())
+            .firstOrNull { it.getSpell() == spell }
     }
 
     private fun glowSelectedSpellCard() {

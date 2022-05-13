@@ -9,6 +9,7 @@ class ElementalRune : Rune() {
     override val id: String = "base:spells:ElementalRune"
     override val rarity: Rarity = Rarity.STARTER
     override val requirement: ComponentRequirement = Identical(2, SuitGroup.ELEMENTAL)
+    override val glowType: GlowType = GlowType.ELEMENTED
     override val aspects: MutableList<SpellAspect> = mutableListOf()
 
     override fun queryFlatAdjustment(origin: Combatant?, target: Combatant?, element: Element, flags: List<CombatFlag>): Int {

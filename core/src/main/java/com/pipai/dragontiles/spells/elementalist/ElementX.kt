@@ -9,6 +9,7 @@ class ElementX : Rune() {
     override val id: String = "base:spells:ElementX"
     override val rarity: Rarity = Rarity.UNCOMMON
     override val requirement: ComponentRequirement = IdenticalX(SuitGroup.ELEMENTAL)
+    override val glowType: GlowType = GlowType.ELEMENTED
     override val aspects: MutableList<SpellAspect> = mutableListOf(
         XAspect(2, 0),
     )
