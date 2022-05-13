@@ -1,5 +1,6 @@
 package com.pipai.dragontiles.gui
 
+import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.scenes.scene2d.Touchable
 import com.badlogic.gdx.scenes.scene2d.ui.*
@@ -39,6 +40,8 @@ class SpellCard(
     private val spellTypeLabel = Label("", skin, "tiny")
     private val descriptionLabel = Label("", skin, "tiny")
     private val upgradeImages = listOf(Image(), Image(), Image())
+
+    private var glowColor: Color? = null
 
     private val reqSize = su(0.4f)
 
@@ -224,10 +227,25 @@ class SpellCard(
         }
     }
 
+    fun glow(color: Color) {
+        glowColor = color
+        update()
+    }
+
+    fun stopGlow() {
+        glowColor = null
+        update()
+    }
+
     fun update() {
         numberLabel.setText(number?.toString() ?: "")
 
         val spell = this.spell
+        if (glowColor != null) {
+            backTable.background = skin.newDrawable("glowFramePatch", glowColor)
+        } else {
+            backTable.background = null
+        }
         if (spell == null || (spell is StandardSpell && spell.exhausted) || (spell is PowerSpell && spell.powered)) {
             reqBorder.drawable = null
             reqImage.drawable = null

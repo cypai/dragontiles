@@ -24,10 +24,15 @@ data class SpellUpgradeInstance(
     override val id: String,
 ) : Localized
 
+enum class GlowType {
+    ELEMENTED, FIRE, ICE, LIGHTNING, WHITE
+}
+
 abstract class Spell : Localized, DamageAdjustable {
     abstract val requirement: ComponentRequirement
     abstract val type: SpellType
     abstract val rarity: Rarity
+    open val glowType: GlowType = GlowType.WHITE
     abstract val aspects: MutableList<SpellAspect>
     open val scoreable: Boolean = false
     private val upgrades: MutableList<SpellUpgrade> = mutableListOf()

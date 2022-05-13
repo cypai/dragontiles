@@ -25,17 +25,13 @@ import com.pipai.dragontiles.artemis.components.*
 import com.pipai.dragontiles.artemis.events.*
 import com.pipai.dragontiles.artemis.systems.AnchorSystem
 import com.pipai.dragontiles.artemis.systems.PathInterpolationSystem
-import com.pipai.dragontiles.artemis.systems.animation.AdjustOpenPoolAnimation
 import com.pipai.dragontiles.artemis.systems.animation.CombatAnimationSystem
 import com.pipai.dragontiles.artemis.systems.animation.TalkAnimation
 import com.pipai.dragontiles.artemis.systems.combat.CombatControllerSystem
 import com.pipai.dragontiles.artemis.systems.combat.TileIdSystem
 import com.pipai.dragontiles.artemis.systems.rendering.FullScreenColorSystem
 import com.pipai.dragontiles.combat.*
-import com.pipai.dragontiles.data.RunData
-import com.pipai.dragontiles.data.StringLocalized
-import com.pipai.dragontiles.data.Tile
-import com.pipai.dragontiles.data.TileInstance
+import com.pipai.dragontiles.data.*
 import com.pipai.dragontiles.gui.CombatUiLayout
 import com.pipai.dragontiles.gui.SpellCard
 import com.pipai.dragontiles.gui.SpellComponentList
@@ -630,9 +626,38 @@ class CombatUiSystem(
         }
     }
 
+    private fun glowSelectedSpellCard() {
+        val spellCard = getSelectedSpellCard()
+        if (spellCard != null) {
+            glowSpellCard(spellCard, givenComponents)
+        }
+    }
+
+    fun glowSpellCard(spellCard: SpellCard, components: List<TileInstance>) {
+        val spell = spellCard.getSpell()
+        if (spell == null || components.isEmpty() || !spell.requirement.satisfied(components)) {
+            spellCard.stopGlow()
+        } else {
+            val color = when (spell.glowType) {
+                GlowType.ELEMENTED -> when (elemental(components)) {
+                    Element.FIRE -> Color.RED
+                    Element.ICE -> Color.BLUE
+                    Element.LIGHTNING -> Color.YELLOW
+                    Element.NONE -> Color.WHITE
+                }
+                GlowType.FIRE -> Color.RED
+                GlowType.ICE -> Color.BLUE
+                GlowType.LIGHTNING -> Color.YELLOW
+                GlowType.WHITE -> Color.WHITE
+            }
+            spellCard.glow(color)
+        }
+    }
+
     private fun selectComponents(components: List<TileInstance>) {
         givenComponents.clear()
         givenComponents.addAll(components)
+        glowSelectedSpellCard()
         readjustHand()
         when (val spell = getSelectedSpell()) {
             is StandardSpell -> {
@@ -859,6 +884,7 @@ class CombatUiSystem(
             spellComponentList.refreshOptions()
             spellComponentList.width = spellComponentList.prefWidth
         }
+        glowSelectedSpellCard()
         if (spell is StandardSpell
             && spell.requirement.reqAmount !is ReqAmount.XAmount
             && spell.requirement.satisfied(givenComponents)
@@ -1192,6 +1218,11 @@ class CombatUiSystem(
         } else {
             spellCard.enable()
         }
+        if (spell is Rune && spell.active) {
+            glowSpellCard(spellCard, spell.components())
+        } else {
+            glowSpellCard(spellCard, listOf())
+        }
         spellCard.update()
     }
 
@@ -1312,6 +1343,8 @@ class CombatUiSystem(
                             Vector2(cHeroXy.x - SpellCard.cardWorldWidth, cHeroXy.y),
                         )
                         spellCard.enable()
+                        uiSystem.givenComponents.clear()
+                        uiSystem.glowSpellCard(spellCard, uiSystem.givenComponents)
                         uiSystem.displaySpellComponents(spellCard)
                     } else {
                         spellCard.disable()

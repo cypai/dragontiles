@@ -10,6 +10,7 @@ class Strike : StandardSpell() {
     override val type: SpellType = SpellType.ATTACK
     override val targetType: TargetType = TargetType.SINGLE
     override val rarity: Rarity = Rarity.STARTER
+    override val glowType: GlowType = GlowType.ELEMENTED
     override val aspects: MutableList<SpellAspect> = mutableListOf(
         AttackDamageAspect(7),
         FluxGainAspect(5)

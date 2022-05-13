@@ -371,6 +371,7 @@ class DragonTilesGame(val gameConfig: GameConfig) : Game() {
         val glowFrameTexture = Texture(Gdx.files.local("assets/binassets/graphics/textures/glow_frame.png"))
         val glowFramePatch = NinePatch(glowFrameTexture, 5, 5, 5, 5)
         skin.add("glowFrameTexture", glowFrameTexture)
+        skin.add("glowFramePatch", glowFramePatch)
 
         val transparencyBgTexture = Texture(Gdx.files.local("assets/binassets/graphics/textures/transparencyBg.png"))
         skin.add("transparencyBg", transparencyBgTexture)
