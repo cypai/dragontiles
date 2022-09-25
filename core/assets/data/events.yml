@@ -320,7 +320,7 @@ base:events:WhatDoesPotOfGreedDo:
         It gives you gold, obviously! Take one and educate yourself properly.
   draw:
     en:
-      text: "It draws you a card. (Gain !i(0))"
+      text: "It draws you 2 cards. (Gain !i(0))"
   drawMain:
     en:
       text: |
