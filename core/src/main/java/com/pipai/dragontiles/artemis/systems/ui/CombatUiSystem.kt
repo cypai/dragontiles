@@ -642,7 +642,7 @@ class CombatUiSystem(
 
     fun glowSpellCard(spellCard: SpellCard, components: List<TileInstance>) {
         val spell = spellCard.getSpell()
-        if (spell == null || components.isEmpty() || !spell.requirement.satisfied(components)) {
+        if (spell == null || !spell.requirement.satisfied(components)) {
             spellCard.stopGlow()
         } else {
             val color = when (spell.glowType) {
@@ -1228,7 +1228,7 @@ class CombatUiSystem(
         if (spell is Rune && spell.active) {
             glowSpellCard(spellCard, spell.components())
         } else {
-            glowSpellCard(spellCard, listOf())
+            spellCard.stopGlow()
         }
         spellCard.update()
     }
