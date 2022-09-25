@@ -59,7 +59,7 @@ class DeckDisplayUiSystem(
     override fun initialize() {
         scrollPane.width = game.gameConfig.resolution.width.toFloat()
         scrollPane.height = game.gameConfig.resolution.height.toFloat() - 40f
-        api = GlobalApi(game.data, runData, sEvent)
+        api = GlobalApi(game.data, game.assets, runData, sEvent)
 
         skipBtn.addListener(object : ClickListener() {
             override fun clicked(event: InputEvent?, x: Float, y: Float) {

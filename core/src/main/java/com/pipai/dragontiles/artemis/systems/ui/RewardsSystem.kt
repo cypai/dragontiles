@@ -52,7 +52,7 @@ class RewardsSystem(
     private var isOnSpellDraft = false
 
     override fun initialize() {
-        api = GlobalApi(game.data, runData, sEvent)
+        api = GlobalApi(game.data, game.assets, runData, sEvent)
         rootTable.setFillParent(true)
         stage.addActor(rootTable)
     }

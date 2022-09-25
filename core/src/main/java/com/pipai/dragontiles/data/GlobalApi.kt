@@ -1,5 +1,6 @@
 package com.pipai.dragontiles.data
 
+import com.badlogic.gdx.assets.AssetManager
 import com.pipai.dragontiles.artemis.events.*
 import com.pipai.dragontiles.combat.GameOverEvent
 import com.pipai.dragontiles.potions.Potion
@@ -11,7 +12,7 @@ import com.pipai.dragontiles.spells.SpellUpgradeInstance
 import com.pipai.dragontiles.spells.upgrades.SpellUpgrade
 import net.mostlyoriginal.api.event.common.EventSystem
 
-open class GlobalApi(val gameData: GameData, val runData: RunData, private val sEvent: EventSystem) {
+open class GlobalApi(val gameData: GameData, val assets: AssetManager, val runData: RunData, private val sEvent: EventSystem) {
     fun removeSpellAtIndex(index: Int) {
         runData.hero.spells.removeAt(index)
     }

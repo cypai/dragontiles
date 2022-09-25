@@ -1,5 +1,6 @@
 package com.pipai.dragontiles.combat
 
+import com.badlogic.gdx.assets.AssetManager
 import com.badlogic.gdx.math.Vector2
 import com.pipai.dragontiles.artemis.systems.animation.*
 import com.pipai.dragontiles.data.*
@@ -15,10 +16,11 @@ import kotlin.reflect.KClass
 
 class CombatApi(
     gameData: GameData,
+    assets: AssetManager,
     runData: RunData,
     val combat: Combat,
     private val eventBus: CombatEventBus,
-) : GlobalApi(gameData, runData, eventBus.sEvent) {
+) : GlobalApi(gameData, assets, runData, eventBus.sEvent) {
 
     companion object {
         const val OPEN_POOL_SIZE = 9

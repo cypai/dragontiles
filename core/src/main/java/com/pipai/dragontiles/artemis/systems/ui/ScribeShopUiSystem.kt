@@ -39,7 +39,7 @@ class ScribeShopUiSystem(
     private val sTooltip by system<TooltipSystem>()
 
     override fun initialize() {
-        api = GlobalApi(game.data, runData, sEvent)
+        api = GlobalApi(game.data, game.assets, runData, sEvent)
         val scribeShop = town.scribe
         scribeShop.upgrades.forEachIndexed { i, ps ->
             if (i < 4) {

@@ -43,7 +43,7 @@ class SpellShopUiSystem(
     private val sTooltip by system<TooltipSystem>()
 
     override fun initialize() {
-        api = GlobalApi(game.data, runData, sEvent)
+        api = GlobalApi(game.data, game.assets, runData, sEvent)
         val spellShop = town.spellShop
         sideboardSpace(1f, 2.5f)
         spellShop.classSpells.forEachIndexed { i, ps ->

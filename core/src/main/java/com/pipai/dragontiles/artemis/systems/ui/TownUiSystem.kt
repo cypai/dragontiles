@@ -70,7 +70,7 @@ class TownUiSystem(
         if (town.actions > 0 && runData.hero.gold > 1) {
             mClickable.create(innId).callback = {
                 town.actions--
-                val api = GlobalApi(game.data, runData, sEvent)
+                val api = GlobalApi(game.data, game.assets, runData, sEvent)
                 api.gainGoldImmediate(-2)
                 api.gainHpImmediate((runData.hero.hpMax * 0.25f).toInt())
                 recreateTown()
@@ -170,7 +170,7 @@ class TownUiSystem(
             solicitClick.callback = {
                 town.actions--
                 town.solicited = true
-                GlobalApi(game.data, runData, sEvent).gainGoldImmediate(1)
+                GlobalApi(game.data, game.assets, runData, sEvent).gainGoldImmediate(1)
                 recreateTown()
             }
             val solicitHover = mHoverable.create(solicitId)

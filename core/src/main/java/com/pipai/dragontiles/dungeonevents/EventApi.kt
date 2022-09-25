@@ -18,7 +18,7 @@ class EventApi(
     val sUi: EventUiSystem,
     private val sDeckUi: DeckDisplayUiSystem,
     val event: EventLocalization
-) : GlobalApi(game.data, runData, sEvent) {
+) : GlobalApi(game.data, game.assets, runData, sEvent) {
 
     private val keyRegex = "(!\\w+)\\((\\w+)\\)?".toRegex()
 

@@ -8,6 +8,7 @@ import com.badlogic.gdx.assets.loaders.ParticleEffectDescriptorLoader
 import com.badlogic.gdx.assets.loaders.SkeletonDataLoader
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver
 import com.badlogic.gdx.audio.Music
+import com.badlogic.gdx.audio.Sound
 import com.badlogic.gdx.files.FileHandle
 import com.badlogic.gdx.graphics.*
 import com.badlogic.gdx.graphics.Pixmap.Format
@@ -171,6 +172,8 @@ class DragonTilesGame(val gameConfig: GameConfig) : Game() {
         assets = AssetManager()
         File("assets/binassets/audio/bgm").listFiles()!!
             .forEach { assets.load(it.toString(), Music::class.java) }
+        File("assets/binassets/audio/fx").listFiles()!!
+            .forEach { assets.load(it.toString(), Sound::class.java) }
         File("assets/binassets/graphics/bgs").listFiles()!!
             .filter { it.toString().endsWith("png") }
             .forEach { assets.load(it.toString(), Texture::class.java) }

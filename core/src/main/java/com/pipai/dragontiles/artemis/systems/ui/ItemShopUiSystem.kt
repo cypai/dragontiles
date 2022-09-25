@@ -36,7 +36,7 @@ class ItemShopUiSystem(
     private val sTooltip by system<TooltipSystem>()
 
     override fun initialize() {
-        api = GlobalApi(game.data, runData, sEvent)
+        api = GlobalApi(game.data, game.assets, runData, sEvent)
         val itemShop = town.itemShop
         itemShop.relics.forEachIndexed { i, ps ->
             createRelic(ps, 3f + i * 1.5f * SpellCard.cardWorldWidth, 2f)

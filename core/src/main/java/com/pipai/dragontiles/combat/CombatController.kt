@@ -1,5 +1,6 @@
 package com.pipai.dragontiles.combat
 
+import com.pipai.dragontiles.DragonTilesGame
 import com.pipai.dragontiles.artemis.systems.animation.DelayAnimation
 import com.pipai.dragontiles.artemis.systems.animation.SpineAnimation
 import com.pipai.dragontiles.data.*
@@ -10,18 +11,18 @@ import kotlinx.coroutines.runBlocking
 import net.mostlyoriginal.api.event.common.EventSystem
 
 class CombatController(
-    private val gameData: GameData,
+    private val game: DragonTilesGame,
     private val runData: RunData,
     private val combat: Combat,
     eventSystem: EventSystem,
 ) {
 
     private val eventBus = CombatEventBus(eventSystem)
-    val api: CombatApi = CombatApi(gameData, runData, combat, eventBus)
+    val api: CombatApi = CombatApi(game.data, game.assets, runData, combat, eventBus)
 
     fun init() {
         eventBus.init(api)
-        combat.init(gameData, runData)
+        combat.init(game.data, runData)
         combat.enemies.toList().forEach {
             runBlocking { api.initEnemy(it) }
         }

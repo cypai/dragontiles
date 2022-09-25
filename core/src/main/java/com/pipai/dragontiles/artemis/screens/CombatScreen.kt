@@ -59,7 +59,7 @@ class CombatScreen(
                 TimerSystem(),
                 MutualDestroySystem(),
 
-                CombatControllerSystem(game.data, runData, combat),
+                CombatControllerSystem(game, runData, combat),
                 TileIdSystem(),
                 CombatantStateSystem(game, frontStage, runData, encounter),
                 StatusSystem(game),
