@@ -26,6 +26,7 @@ class CombatAnimationSystem(private val game: DragonTilesGame) : BaseSystem(), A
     private val animationQueue: MutableList<Animation> = mutableListOf()
     private var turnRunning = false
     private lateinit var animationChannel: Channel<Animation>
+    private var durationTimer = 0f
 
     private val sEvent by system<EventSystem>()
     private val sUi by system<CombatUiSystem>()
@@ -36,14 +37,27 @@ class CombatAnimationSystem(private val game: DragonTilesGame) : BaseSystem(), A
     }
 
     override fun processSystem() {
-        if (!animating && animationQueue.isNotEmpty()) {
-            animating = true
-            if (pauseUiMode) {
-                sUi.disable()
-            }
+        if (animating) {
             val animation = animationQueue.first()
-            logger.debug("Start animation: $animation")
-            animation.startAnimation()
+            if (animation.duration >= 0f) {
+                durationTimer += world.delta
+                if (durationTimer > animation.duration) {
+                    endAnimation(animation)
+                } else {
+                    animation.process()
+                }
+            }
+        } else {
+            if (animationQueue.isNotEmpty()) {
+                animating = true
+                durationTimer = 0f
+                if (pauseUiMode) {
+                    sUi.disable()
+                }
+                val animation = animationQueue.first()
+                logger.debug("Start animation: $animation")
+                animation.startAnimation()
+            }
         }
     }
 
@@ -56,12 +70,16 @@ class CombatAnimationSystem(private val game: DragonTilesGame) : BaseSystem(), A
 
     fun isEmpty(): Boolean = animationQueue.isEmpty()
 
-    override fun notify(animation: Animation) {
+    private fun endAnimation(animation: Animation) {
         animationQueue.remove(animation)
         animating = false
         if (animationQueue.isEmpty() && turnRunning && pauseUiMode) {
             sUi.enable()
         }
+    }
+
+    override fun notify(animation: Animation) {
+        endAnimation(animation)
     }
 
     @Subscribe

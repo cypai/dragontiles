@@ -6,7 +6,9 @@ import com.pipai.dragontiles.artemis.components.EndStrategy
 import com.pipai.dragontiles.artemis.components.TimerComponent
 import com.pipai.dragontiles.utils.getLogger
 
-abstract class Animation {
+abstract class Animation(val duration: Float) {
+    constructor() : this(-1f)
+
     private val logger = getLogger()
     protected lateinit var world: World
     protected lateinit var game: DragonTilesGame
@@ -36,6 +38,9 @@ abstract class Animation {
     }
 
     abstract fun startAnimation()
+
+    open fun process() {
+    }
 
     fun endAnimation() {
         endAnimation(1f / 60f)
