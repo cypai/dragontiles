@@ -78,7 +78,11 @@ class RenderingSystem(
                 effect.update(world.delta)
                 game.particleRenderer.render(effect)
                 if (effect.isComplete) {
-                    mParticle.remove(it)
+                    when (cParticle.endStrategy) {
+                        EndStrategy.REMOVE -> mParticle.remove(it)
+                        EndStrategy.DESTROY -> world.delete(it)
+                        else -> mParticle.remove(it)
+                    }
                 }
             }
         batch.end()

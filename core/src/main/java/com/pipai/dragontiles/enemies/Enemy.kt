@@ -16,6 +16,16 @@ abstract class Enemy : Localized {
     abstract val fluxMax: Int
     var flux: Int = 0
     var enemyId: Int = 0
+    var x: Float = 0f
+        private set
+    var y: Float = 0f
+        private set
+
+    fun at(x: Float, y: Float): Enemy {
+        this.x = x
+        this.y = y
+        return this
+    }
 
     fun preInit(id: Int) {
         hp = hpMax

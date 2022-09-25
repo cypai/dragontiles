@@ -163,6 +163,7 @@ class AlphaInterpolationComponent : Component() {
 
 class ParticleEffectComponent : Component() {
     lateinit var effect: ParticleEffectInstance
+    var endStrategy: EndStrategy = EndStrategy.REMOVE
 }
 
 class ClickableComponent : Component() {
