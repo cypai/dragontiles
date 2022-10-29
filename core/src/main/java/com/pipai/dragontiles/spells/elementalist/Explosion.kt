@@ -17,6 +17,8 @@ class Explosion : StandardSpell() {
         ExhaustAspect(),
     )
 
+    override fun additionalKeywords(): List<String> = listOf("@N")
+
     override fun dynamicBaseDamage(components: List<TileInstance>, api: CombatApi): Int {
         return 3 * numeric(components)
     }

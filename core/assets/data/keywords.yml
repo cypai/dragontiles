@@ -46,11 +46,11 @@ base:keywords:OpenDiscard:
     name: Open Discard
     description: Place the tile into the Open Discard pool.
 
-base:keywords:Numeric:
+base:keywords:N:
   en:
-    key: "@Numeric"
-    name: Numeric
-    description: Uses the highest numeric value of the @Components.
+    key: "@N"
+    name: N
+    description: The highest numeric value of the @Components.
 
 base:keywords:Successor:
   en:

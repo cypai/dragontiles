@@ -3,8 +3,8 @@ package com.pipai.dragontiles.spells.colorless
 import com.pipai.dragontiles.combat.CombatApi
 import com.pipai.dragontiles.spells.*
 
-class NumericLethality : StandardSpell() {
-    override val id: String = "base:spells:NumericLethality"
+class Finite : StandardSpell() {
+    override val id: String = "base:spells:Finite"
     override val requirement: ComponentRequirement = Single(SuitGroup.ELEMENTAL)
     override val type: SpellType = SpellType.EFFECT
     override val targetType: TargetType = TargetType.NONE
@@ -14,7 +14,7 @@ class NumericLethality : StandardSpell() {
         CountdownAspect(44, CountdownType.NUMERIC_SCORE, this::cdCallback)
     )
 
-    override fun additionalKeywords(): List<String> = listOf("@Numeric")
+    override fun additionalKeywords(): List<String> = listOf("@N")
 
     override suspend fun onCast(params: CastParams, api: CombatApi) {
     }

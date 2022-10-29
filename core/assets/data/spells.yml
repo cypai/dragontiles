@@ -21,7 +21,7 @@ base:spells:Blast:
 base:spells:Explosion:
   en:
     name: Explosion
-    description: Deal !d[3x@Numeric] !dp @AOE @Elemented damage.
+    description: Deal !d[3N] !dp @AOE @Elemented damage.
 
 base:spells:Strike:
   en:
@@ -389,9 +389,9 @@ base:spells:Lethality:
     name: Lethality
     description: ""
 
-base:spells:NumericLethality:
+base:spells:Finite:
   en:
-    name: Numeric Lethality
+    name: Finite
     description: ""
 
 base:spells:Cyclone:
