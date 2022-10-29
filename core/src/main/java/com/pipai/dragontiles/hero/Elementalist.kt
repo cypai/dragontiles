@@ -31,7 +31,8 @@ class Elementalist : HeroClass {
 //        XAttack(), // Keep for next character
 //        MultiInvoke(),
         Cyclone(),
-        Typhoon(),
+//        Typhoon(), // Keep for Dragonian?
+        SecondWind(),
         ElementX(),
         Enpowerment(),
 //        StrengthRune(),

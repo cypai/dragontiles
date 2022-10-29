@@ -593,3 +593,8 @@ base:spells:WindUp:
   en:
     name: Wind Up
     description: Unplayable. Gain 5 Non-elemental Enpowered when swapped.
+
+base:spells:SecondWind:
+  en:
+    name: Second Wind
+    description: Draw tiles until your hand is full.

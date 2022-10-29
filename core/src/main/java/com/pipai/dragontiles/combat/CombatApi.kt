@@ -99,7 +99,7 @@ class CombatApi(
     }
 
     suspend fun draw(amount: Int) {
-        if (heroHasStatus(NoDraw::class)) {
+        if (amount <= 0 || heroHasStatus(NoDraw::class)) {
             return
         }
         val drawnTiles: MutableList<Pair<TileInstance, Int>> = mutableListOf()
