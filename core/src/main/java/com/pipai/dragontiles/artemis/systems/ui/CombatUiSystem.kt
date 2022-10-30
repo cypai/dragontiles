@@ -882,6 +882,9 @@ class CombatUiSystem(
                 setSpellComponentOptions(options)
             }
         } else {
+            if (spell.requirement.satisfied(givenComponents)) {
+                spellComponentList.setTopOption(givenComponents)
+            }
             spellComponentList.filterOptions(givenComponents)
             if (spellComponentList.optionSize() == 0) {
                 spellComponentList.topText = "None Available"
