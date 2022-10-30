@@ -40,12 +40,6 @@ base:keywords:Repeatable:
     name: Repeatable
     description: Can be casted multiple times per turn or unlimited times if no number is provided.
 
-base:keywords:OpenDiscard:
-  en:
-    key: "@OpenDiscard"
-    name: Open Discard
-    description: Place the tile into the Open Discard pool.
-
 base:keywords:N:
   en:
     key: "@N"
@@ -104,13 +98,7 @@ base:keywords:Fetch:
   en:
     key: "@Fetch"
     name: Fetch
-    description: Draw tiles into the Open Pool. If no number, fills the Open Pool to maximum.
-
-base:keywords:OpenDraw:
-  en:
-    key: "@OpenDraw"
-    name: Open Draw
-    description: Draw tiles from the Open Pool.
+    description: Draw tiles into the Pool. If no number, fills the Pool to maximum.
 
 base:keywords:Reactant:
   en:

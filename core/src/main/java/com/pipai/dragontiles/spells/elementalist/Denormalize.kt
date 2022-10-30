@@ -6,8 +6,8 @@ import com.pipai.dragontiles.data.Tile
 import com.pipai.dragontiles.data.TileStatus
 import com.pipai.dragontiles.spells.*
 
-class AntiNormalize : StandardSpell() {
-    override val id: String = "base:spells:AntiNormalize"
+class Denormalize : StandardSpell() {
+    override val id: String = "base:spells:Denormalize"
     override val type: SpellType = SpellType.EFFECT
     override val rarity: Rarity = Rarity.UNCOMMON
     override val targetType: TargetType = TargetType.NONE

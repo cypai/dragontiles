@@ -102,10 +102,10 @@ class CombatAnimationSystem(private val game: DragonTilesGame) : BaseSystem(), A
     }
 
     @Subscribe
-    fun handleDrawFromOpenPoolEvent(ev: DrawFromOpenPoolEvent) {
+    fun handleDrawFromPoolEvent(ev: DrawFromPoolEvent) {
         val batch = BatchAnimation()
         batch.addToBatch(AdjustHandAnimation(ev.tiles, sCombat.combat.assigned, sUi.layout))
-        batch.addToBatch(AdjustOpenPoolAnimation(sCombat.combat.openPool, sUi.layout))
+        batch.addToBatch(AdjustPoolAnimation(sCombat.combat.pool, sUi.layout))
         queueAnimation(batch)
     }
 
@@ -122,32 +122,32 @@ class CombatAnimationSystem(private val game: DragonTilesGame) : BaseSystem(), A
                 index
             )
         }, sCombat.combat.assigned, sUi.layout))
-        batch.addToBatch(AdjustOpenPoolAnimation(sCombat.combat.openPool, sUi.layout))
+        batch.addToBatch(AdjustPoolAnimation(sCombat.combat.pool, sUi.layout))
         queueAnimation(batch)
     }
 
     @Subscribe
-    fun handleOpenDrawEvent(ev: AddToOpenPoolEvent) {
+    fun handleOpenDrawEvent(ev: AddToPoolEvent) {
         val batch = BatchAnimation()
         ev.tiles.forEach {
-            batch.addToBatch(DrawToOpenPoolAnimation(it.first, it.second, sUi.layout))
+            batch.addToBatch(DrawToPoolAnimation(it.first, it.second, sUi.layout))
         }
         queueAnimation(batch)
     }
 
     @Subscribe
-    fun handleOpenPooltoDiscard(ev: OpenPoolToDiscardEvent) {
+    fun handlePoolToDiscard(ev: PoolToDiscardEvent) {
         queueAnimation(TileDiscardAnimation(ev.tiles, sUi.layout))
     }
 
     @Subscribe
-    fun handleOpenPoolAdjustedEvent(ev: OpenPoolAdjustedEvent) {
-        queueAnimation(AdjustOpenPoolAnimation(ev.openPool, sUi.layout))
+    fun handlePoolAdjustedEvent(ev: PoolAdjustedEvent) {
+        queueAnimation(AdjustPoolAnimation(ev.pool, sUi.layout))
     }
 
     @Subscribe
     fun handleOpenDiscard(@Suppress("UNUSED_PARAMETER") ev: OpenDiscardEvent) {
-        queueAnimation(AdjustOpenPoolAnimation(sCombat.combat.openPool, sUi.layout))
+        queueAnimation(AdjustPoolAnimation(sCombat.combat.pool, sUi.layout))
     }
 
     @Subscribe

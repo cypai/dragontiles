@@ -101,7 +101,7 @@ base:relics:StockOption:
 base:relics:IChing:
   en:
     name: I Ching
-    description: Draw 1 tile from the Open Pool after the first spell played each turn.
+    description: Take 1 tile from the Pool after the first spell played each turn.
 
 base:relics:WindFireWheels:
   en:

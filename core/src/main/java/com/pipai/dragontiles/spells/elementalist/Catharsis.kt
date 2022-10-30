@@ -8,8 +8,8 @@ import com.pipai.dragontiles.spells.*
 import com.pipai.dragontiles.status.Resistance
 import com.pipai.dragontiles.status.SimpleStatus
 
-class VentToAttack : StandardSpell() {
-    override val id: String = "base:spells:VentToAttack"
+class Catharsis : StandardSpell() {
+    override val id: String = "base:spells:Catharsis"
     override val requirement: ComponentRequirement = Single(SuitGroup.ARCANE)
     override val type: SpellType = SpellType.EFFECT
     override val targetType: TargetType = TargetType.NONE

@@ -95,17 +95,19 @@ data class FetchAspect(var amount: Int?, val autoDescription: Boolean = true) : 
 
     override fun adjustDescription(description: String): String {
         return if (autoDescription) {
-            if (amount == null) {
+            val theAmount = amount
+            if (theAmount == null) {
                 if (description.isEmpty()) {
                     "${Keywords.FETCH}."
                 } else {
                     "$description ${Keywords.FETCH}."
                 }
             } else {
+                val tileStr = if (theAmount > 1) "tiles" else "tile"
                 if (description.isEmpty()) {
-                    "${Keywords.FETCH} !fetch."
+                    "${Keywords.FETCH} !fetch $tileStr."
                 } else {
-                    "$description ${Keywords.FETCH} !fetch."
+                    "$description ${Keywords.FETCH} !fetch $tileStr."
                 }
             }
         } else {
@@ -120,11 +122,12 @@ data class DrawAspect(var amount: Int, val autoDescription: Boolean = true) : Sp
     }
 
     override fun adjustDescription(description: String): String {
+        val tileStr = if (amount > 1) "tiles" else "tile"
         return if (autoDescription) {
             if (description.isEmpty()) {
-                "${Keywords.DRAW} !draw tile."
+                "${Keywords.DRAW} !draw $tileStr."
             } else {
-                "$description ${Keywords.DRAW} !draw tile."
+                "$description ${Keywords.DRAW} !draw $tileStr."
             }
         } else {
             description
@@ -132,16 +135,17 @@ data class DrawAspect(var amount: Int, val autoDescription: Boolean = true) : Sp
     }
 }
 
-data class OpenDrawAspect(var amount: Int) : SpellAspect {
+data class TakeFromPoolAspect(var amount: Int) : SpellAspect {
     override suspend fun onCast(spell: Spell, api: CombatApi) {
-        api.queryOpenPoolDraw(amount)
+        api.queryPoolDraw(amount)
     }
 
     override fun adjustDescription(description: String): String {
+        val tileStr = if (amount > 1) "tiles" else "tile"
         return if (description.isEmpty()) {
-            "${Keywords.OPEN_DRAW} !od tile."
+            "${Keywords.TAKE} !od $tileStr from the Pool."
         } else {
-            "$description ${Keywords.OPEN_DRAW} !od tile."
+            "$description ${Keywords.TAKE} !od $tileStr from the Pool."
         }
     }
 }

@@ -20,7 +20,7 @@ class Nunchaku : Relic() {
             if (counter >= 5) {
                 counter = 0
                 api.updateRelicCounter(this)
-                api.drawToOpenPool(1)
+                api.drawToPool(1)
             }
         }
     }

@@ -5,8 +5,6 @@ import com.pipai.dragontiles.combat.CombatSubscribe
 import com.pipai.dragontiles.combat.SpellCastedEvent
 import com.pipai.dragontiles.combat.TurnStartEvent
 import com.pipai.dragontiles.spells.Rarity
-import com.pipai.dragontiles.status.Strength
-import kotlinx.serialization.Serializable
 
 class IChing : Relic() {
     override val id = "base:relics:IChing"
@@ -24,7 +22,7 @@ class IChing : Relic() {
     @CombatSubscribe
     suspend fun onCast(ev: SpellCastedEvent, api: CombatApi) {
         if (!played) {
-            api.queryOpenPoolDraw(1)
+            api.queryPoolDraw(1)
             played = true
         }
     }

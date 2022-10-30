@@ -33,7 +33,7 @@ class ShaWujin : Enemy() {
                 ),
                 AttackIntent(this, 1, 3, Element.ICE),
                 {
-                    val openFreeze = api.combat.openPool.chooseAmount(3, api.rng)
+                    val openFreeze = api.combat.pool.chooseAmount(3, api.rng)
                     api.setTileStatus(openFreeze, TileStatus.FREEZE)
                 }
             )

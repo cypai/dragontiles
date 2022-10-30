@@ -6,8 +6,8 @@ import com.pipai.dragontiles.data.StarType
 import com.pipai.dragontiles.data.Tile
 import com.pipai.dragontiles.spells.*
 
-class PhilosophersStone : StandardSpell() {
-    override val id: String = "base:spells:PhilosophersStone"
+class Fusion : StandardSpell() {
+    override val id: String = "base:spells:Fusion"
     override val requirement: ComponentRequirement = ForbidTransformFreeze(
         this,
         Single(SuitGroup.ANY_NO_FUMBLE)

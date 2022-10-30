@@ -1,6 +1,5 @@
 package com.pipai.dragontiles.enemies
 
-import com.badlogic.gdx.math.MathUtils
 import com.pipai.dragontiles.combat.*
 import com.pipai.dragontiles.data.Element
 import com.pipai.dragontiles.data.Tile
@@ -31,7 +30,7 @@ class NineTailedVixen : Enemy() {
                     fumbles.add(Tile.FumbleTile())
                 }
                 StrategicIntent(this, listOf(), listOf(), listOf(), {
-                    api.addToOpenPool(api.createTiles(fumbles), Combatant.EnemyCombatant(this))
+                    api.addToPool(api.createTiles(fumbles), Combatant.EnemyCombatant(this))
                 })
             }
         }

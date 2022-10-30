@@ -10,7 +10,7 @@ class Keywords  {
         const val SWAP = "@Swap"
         const val FETCH = "@Fetch"
         const val DRAW = "Draw"
-        const val OPEN_DRAW = "@OpenDraw"
+        const val TAKE = "@Take"
         const val COUNTDOWN = "@CountdownTile"
         const val SCORE = "@Score"
         const val HEATSINK = "@Heatsink"

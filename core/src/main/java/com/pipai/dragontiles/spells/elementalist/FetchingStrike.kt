@@ -14,7 +14,7 @@ class FetchingStrike : StandardSpell() {
         AttackDamageAspect(9),
         FluxGainAspect(6),
         FetchAspect(2),
-        OpenDrawAspect(1),
+        TakeFromPoolAspect(1),
     )
 
     override suspend fun onCast(params: CastParams, api: CombatApi) {

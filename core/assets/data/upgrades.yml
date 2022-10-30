@@ -21,7 +21,7 @@ base:upgrades:RepeatUpgrade:
 base:upgrades:FetchUpgrade:
   en:
     name: Fetch Upgrade
-    description: Draw a tile into the Open Pool after cast.
+    description: Draw a tile into the Pool after cast.
 
 base:upgrades:HeatsinkUpgrade:
   en:

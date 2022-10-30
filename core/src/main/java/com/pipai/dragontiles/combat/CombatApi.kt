@@ -10,7 +10,6 @@ import com.pipai.dragontiles.status.*
 import com.pipai.dragontiles.utils.*
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.selects.select
 import kotlin.coroutines.suspendCoroutine
 import kotlin.reflect.KClass
 
@@ -23,7 +22,7 @@ class CombatApi(
 ) : GlobalApi(gameData, assets, runData, eventBus.sEvent) {
 
     companion object {
-        const val OPEN_POOL_SIZE = 9
+        const val POOL_SIZE = 9
     }
 
     private val logger = getLogger()
@@ -154,10 +153,10 @@ class CombatApi(
             combat.hand.removeAt(index)
             combat.hand.add(index, newTile)
         }
-        if (tileInstance in combat.openPool) {
-            val index = combat.openPool.indexOf(tileInstance)
-            combat.openPool.removeAt(index)
-            combat.openPool.add(index, newTile)
+        if (tileInstance in combat.pool) {
+            val index = combat.pool.indexOf(tileInstance)
+            combat.pool.removeAt(index)
+            combat.pool.add(index, newTile)
         }
         eventBus.dispatch(TileTransformedEvent(newTile, tileInstance))
         if (sortHand) {
@@ -198,28 +197,28 @@ class CombatApi(
 
     suspend fun openDiscard(tiles: List<TileInstance>) {
         combat.hand.removeAll(tiles)
-        combat.openPool.addAll(tiles)
+        combat.pool.addAll(tiles)
         eventBus.dispatch(OpenDiscardEvent(tiles))
-        if (combat.openPool.size > OPEN_POOL_SIZE) {
-            removeFromOpenPool(combat.openPool.slice(0 until combat.openPool.size - OPEN_POOL_SIZE))
+        if (combat.pool.size > POOL_SIZE) {
+            removeFromPool(combat.pool.slice(0 until combat.pool.size - POOL_SIZE))
         }
         sortHand()
     }
 
-    suspend fun removeFromOpenPool(tiles: List<TileInstance>) {
-        combat.openPool.removeAll(tiles)
-        eventBus.dispatch(OpenPoolToDiscardEvent(tiles))
-        eventBus.dispatch(OpenPoolAdjustedEvent(combat.openPool.toList()))
+    suspend fun removeFromPool(tiles: List<TileInstance>) {
+        combat.pool.removeAll(tiles)
+        eventBus.dispatch(PoolToDiscardEvent(tiles))
+        eventBus.dispatch(PoolAdjustedEvent(combat.pool.toList()))
     }
 
-    suspend fun drawFromOpenPool(tiles: List<TileInstance>) {
+    suspend fun drawFromPool(tiles: List<TileInstance>) {
         val drawnTiles: MutableList<Pair<TileInstance, Int>> = mutableListOf()
         tiles.forEach {
-            combat.openPool.remove(it)
+            combat.pool.remove(it)
             combat.hand.add(it)
             drawnTiles.add(Pair(it, combat.hand.size - 1))
         }
-        eventBus.dispatch(DrawFromOpenPoolEvent(drawnTiles))
+        eventBus.dispatch(DrawFromPoolEvent(drawnTiles))
     }
 
     suspend fun sortHand() {
@@ -228,32 +227,32 @@ class CombatApi(
     }
 
     suspend fun fetch() {
-        if (combat.openPool.size < OPEN_POOL_SIZE) {
-            drawToOpenPool(OPEN_POOL_SIZE - combat.openPool.size)
+        if (combat.pool.size < POOL_SIZE) {
+            drawToPool(POOL_SIZE - combat.pool.size)
         }
     }
 
     suspend fun fetch(amount: Int) {
-        drawToOpenPool(amount)
+        drawToPool(amount)
     }
 
-    suspend fun drawToOpenPool(amount: Int) {
+    suspend fun drawToPool(amount: Int) {
         val tiles: MutableList<TileInstance> = mutableListOf()
         repeat(amount) {
             tiles.add(combat.drawPile.removeAt(0))
         }
-        addToOpenPool(tiles, null)
+        addToPool(tiles, null)
     }
 
-    suspend fun addToOpenPool(tiles: List<TileInstance>, originator: Combatant?) {
+    suspend fun addToPool(tiles: List<TileInstance>, originator: Combatant?) {
         val drawnTiles: MutableList<Pair<TileInstance, Int>> = mutableListOf()
         tiles.forEach { tile ->
-            combat.openPool.add(tile)
-            drawnTiles.add(Pair(tile, combat.openPool.size - 1))
+            combat.pool.add(tile)
+            drawnTiles.add(Pair(tile, combat.pool.size - 1))
         }
-        eventBus.dispatch(AddToOpenPoolEvent(drawnTiles, originator))
-        if (combat.openPool.size > OPEN_POOL_SIZE) {
-            removeFromOpenPool(combat.openPool.slice(0 until combat.openPool.size - OPEN_POOL_SIZE))
+        eventBus.dispatch(AddToPoolEvent(drawnTiles, originator))
+        if (combat.pool.size > POOL_SIZE) {
+            removeFromPool(combat.pool.slice(0 until combat.pool.size - POOL_SIZE))
         }
     }
 
@@ -765,13 +764,13 @@ class CombatApi(
         return retval
     }
 
-    suspend fun queryOpenPoolDraw(amount: Int) {
+    suspend fun queryPoolDraw(amount: Int) {
         val tiles = queryTiles(
-            "Select up to $amount tile(s) to draw from the Open Pool",
-            combat.openPool, 0, amount
+            "Select up to $amount tile(s) to draw from the Pool",
+            combat.pool, 0, amount
         )
         if (tiles.isNotEmpty()) {
-            drawFromOpenPool(tiles)
+            drawFromPool(tiles)
         }
     }
 

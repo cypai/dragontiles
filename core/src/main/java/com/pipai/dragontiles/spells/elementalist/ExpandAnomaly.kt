@@ -26,7 +26,7 @@ class ExpandAnomaly : StandardSpell() {
         if (tile != null) {
             api.setTileStatus(
                 api.getHandTiles().filter { it.tile.suit == tile.tile.suit }
-                    .withAll(api.combat.openPool.filter { it.tile.suit == tile.tile.suit }),
+                    .withAll(api.combat.pool.filter { it.tile.suit == tile.tile.suit }),
                 tile.tileStatus
             )
             api.sortHand()

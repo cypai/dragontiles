@@ -1,6 +1,6 @@
 package com.pipai.dragontiles.spells.elementalist
 
-import com.pipai.dragontiles.combat.AddToOpenPoolEvent
+import com.pipai.dragontiles.combat.AddToPoolEvent
 import com.pipai.dragontiles.combat.CombatApi
 import com.pipai.dragontiles.combat.CombatSubscribe
 import com.pipai.dragontiles.data.Element
@@ -29,7 +29,7 @@ class TransmutingFetch : StandardSpell() {
     }
 
     @CombatSubscribe
-    suspend fun onFetch(ev: AddToOpenPoolEvent, api: CombatApi) {
+    suspend fun onFetch(ev: AddToPoolEvent, api: CombatApi) {
         if (justCasted) {
             justCasted = false
             ev.tiles.map { it.first }

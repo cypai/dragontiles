@@ -22,7 +22,7 @@ data class Combat(val enemies: MutableList<Enemy>) {
     val hand: MutableList<TileInstance> = mutableListOf()
     val drawPile: MutableList<TileInstance> = mutableListOf()
     val discardPile: MutableList<TileInstance> = mutableListOf()
-    val openPool: MutableList<TileInstance> = mutableListOf()
+    val pool: MutableList<TileInstance> = mutableListOf()
 
     /**
      * StandardSpell Index -> List<TileInstance> in CombatApi

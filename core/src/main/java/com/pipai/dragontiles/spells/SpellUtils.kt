@@ -70,7 +70,7 @@ fun Spell.baseDraw(): Int {
 }
 
 fun Spell.baseOpenDraw(): Int {
-    return aspects.findAs(OpenDrawAspect::class)?.amount ?: 0
+    return aspects.findAs(TakeFromPoolAspect::class)?.amount ?: 0
 }
 
 fun Spell.baseSwap(): Int {

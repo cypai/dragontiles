@@ -45,7 +45,7 @@ class CombatController(
 
     fun initCombat() {
         initDrawPile()
-        runBlocking { api.drawToOpenPool(CombatApi.OPEN_POOL_SIZE - 1) }
+        runBlocking { api.drawToPool(CombatApi.POOL_SIZE - 1) }
     }
 
     private fun initDrawPile() {
@@ -73,7 +73,7 @@ class CombatController(
     suspend fun runTurn() {
         combat.turnNumber += 1
         if (combat.turnNumber > 1) {
-            api.queryOpenPoolDraw(runData.hero.handSize - api.numTilesInHand())
+            api.queryPoolDraw(runData.hero.handSize - api.numTilesInHand())
         }
         if (combat.turnNumber == 1) {
             // Normally intents are changed after endTurn(), this inits the intents and avoids messing with Stunned
@@ -126,7 +126,7 @@ class CombatController(
             it.turnReset()
         }
         api.swapQuery(1)
-        api.drawToOpenPool(1)
+        api.drawToPool(1)
         runTurn()
     }
 

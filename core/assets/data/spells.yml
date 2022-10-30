@@ -91,7 +91,7 @@ base:spells:Spark:
 base:spells:Reserve:
   en:
     name: Reserve
-    description: "@OpenDiscard the @Component."
+    description: Put the @Component into the Pool.
 
 base:spells:Fetch:
   en:
@@ -101,7 +101,7 @@ base:spells:Fetch:
 base:spells:PreFetch:
   en:
     name: Pre-Fetch
-    description: At the start of your turn, draw a tile into the Open Pool.
+    description: At the start of your turn, draw a tile into the Pool.
 
 base:spells:Ground:
   en:
@@ -261,7 +261,7 @@ base:spells:Burn:
 base:spells:Flare:
   en:
     name: Flare
-    description: Deal !d Fire damage. @Burn a tile in the Open Pool.
+    description: Deal !d Fire damage. @Burn a tile in the Pool.
 
 base:spells:ColdHands:
   en:
@@ -323,9 +323,9 @@ base:spells:Splash:
     name: Splash
     description: Deal !d Ice damage.
 
-base:spells:PhilosophersStone:
+base:spells:Fusion:
   en:
-    name: Philosopher's Stone
+    name: Fusion
     description: "@Transform the @Component into a Life or Star tile of your choice."
 
 base:spells:PhoenixTears:
@@ -374,9 +374,9 @@ base:spells:FluxBlast:
     description: |
       Deal @AOE @Elemented damage equal to Max @Flux - Flux. (Total !d damage)
 
-base:spells:AntiNormalize:
+base:spells:Denormalize:
   en:
-    name: Anti-Normalize
+    name: Denormalize
     description: "@Transform @Burn, @Freeze, and @Shock @Components into Fire, Ice, and Lightning tiles respectively."
 
 base:spells:FluxMastery:
@@ -524,9 +524,9 @@ base:spells:VermilionBird:
     name: Vermilion Bird
     description: Deal !d @AOE @Piercing Fire damage.
 
-base:spells:VentToAttack:
+base:spells:Catharsis:
   en:
-    name: Vent to Attack
+    name: Catharsis
     description: This turn, each time you cast an attack, lose 3 Flux.
 
 base:spells:Spray:

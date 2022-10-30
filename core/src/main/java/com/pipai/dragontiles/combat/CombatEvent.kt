@@ -39,20 +39,20 @@ data class TilesAddedToHandEvent(val tiles: List<Pair<TileInstance, Int>>, val o
 
 data class TilesAddedDiscardedEvent(val tiles: List<TileInstance>, val originator: Enemy?) : CombatEvent
 
-data class DrawFromOpenPoolEvent(val tiles: List<Pair<TileInstance, Int>>) : CombatEvent
+data class DrawFromPoolEvent(val tiles: List<Pair<TileInstance, Int>>) : CombatEvent
 
 data class EnemyChangeIntentEvent(val enemy: Enemy, val intent: Intent?) : CombatEvent
 
 data class HandAdjustedEvent(val hand: List<TileInstance>, val assigned: MutableMap<Int, List<TileInstance>>) :
     CombatEvent
 
-data class AddToOpenPoolEvent(val tiles: List<Pair<TileInstance, Int>>, val originator: Combatant?) : CombatEvent
+data class AddToPoolEvent(val tiles: List<Pair<TileInstance, Int>>, val originator: Combatant?) : CombatEvent
 
-data class OpenPoolToDiscardEvent(val tiles: List<TileInstance>) : CombatEvent
+data class PoolToDiscardEvent(val tiles: List<TileInstance>) : CombatEvent
 
 data class OpenDiscardEvent(val tiles: List<TileInstance>) : CombatEvent
 
-data class OpenPoolAdjustedEvent(val openPool: List<TileInstance>) : CombatEvent
+data class PoolAdjustedEvent(val pool: List<TileInstance>) : CombatEvent
 
 data class PlayerAttackEnemyEvent(val target: Enemy, val element: Element, val amount: Int, val flags: List<CombatFlag>) : CombatEvent
 

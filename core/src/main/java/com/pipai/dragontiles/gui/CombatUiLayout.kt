@@ -7,7 +7,7 @@ import com.pipai.dragontiles.data.TileSkin
 
 data class CombatUiLayout(val config: GameConfig, val tileSkin: TileSkin, val maxHandSize: Int) {
 
-    val openPoolSize = 9
+    val poolSize = 9
 
     val tileWidth = 0.4f
     val tileHeight = 0.6f
@@ -17,8 +17,8 @@ data class CombatUiLayout(val config: GameConfig, val tileSkin: TileSkin, val ma
     val drawPosition = Vector2(0f, 0f)
     val discardPosition = Vector2(DragonTilesGame.worldWidth() + 1f, 0f)
 
-    val openPoolCenter = Vector2(DragonTilesGame.worldWidth() / 2f, 3.5f)
-    val openBlCorner = Vector2(openPoolCenter.x - tileWidth * openPoolSize / 2f, openPoolCenter.y)
+    val poolCenter = Vector2(DragonTilesGame.worldWidth() / 2f, 3.5f)
+    val openBlCorner = Vector2(poolCenter.x - tileWidth * poolSize / 2f, poolCenter.y)
 
     fun openTilePosition(number: Int) = Vector2(openBlCorner.x + 0.4f * number, openBlCorner.y)
     fun handTilePosition(number: Int) = Vector2(handBlCorner.x + 0.4f * number, handBlCorner.y)

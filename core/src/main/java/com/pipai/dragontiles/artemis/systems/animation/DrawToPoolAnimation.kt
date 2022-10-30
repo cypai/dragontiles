@@ -3,7 +3,7 @@ package com.pipai.dragontiles.artemis.systems.animation
 import com.pipai.dragontiles.data.TileInstance
 import com.pipai.dragontiles.gui.CombatUiLayout
 
-class DrawToOpenPoolAnimation(
+class DrawToPoolAnimation(
     private val tile: TileInstance,
     private val poolLocation: Int,
     layout: CombatUiLayout

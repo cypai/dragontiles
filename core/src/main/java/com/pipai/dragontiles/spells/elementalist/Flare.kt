@@ -20,12 +20,12 @@ class Flare : StandardSpell() {
     override suspend fun onCast(params: CastParams, api: CombatApi) {
         val target = api.getEnemy(params.targets.first())
         api.attack(target, Element.FIRE, baseDamage(), flags())
-        if (api.combat.openPool.isNotEmpty()) {
-            if (api.combat.openPool.size > 1) {
-                val tile = api.queryTiles("Choose a tile to burn", api.combat.openPool, 1, 1)
+        if (api.combat.pool.isNotEmpty()) {
+            if (api.combat.pool.size > 1) {
+                val tile = api.queryTiles("Choose a tile to burn", api.combat.pool, 1, 1)
                 api.setTileStatus(tile, TileStatus.BURN)
             } else {
-                api.setTileStatus(api.combat.openPool, TileStatus.BURN)
+                api.setTileStatus(api.combat.pool, TileStatus.BURN)
             }
         }
     }
