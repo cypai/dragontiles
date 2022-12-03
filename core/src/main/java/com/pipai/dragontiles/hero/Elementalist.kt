@@ -11,6 +11,7 @@ class Elementalist : HeroClass {
     override val id: String = "base:hero:Elementalist"
     override val assetName: String = "elementalist.png"
 
+    override val defaultName: String = "Lien"
     override val startingRelic: Relic = Transmuter()
     override val classRelics: List<Relic> = listOf()
     override val starterDeck: List<Spell> = listOf(
@@ -56,7 +57,7 @@ class Elementalist : HeroClass {
         FullAutoInvoke(),
 //        Concentrate(),
 //        FeedbackLoop(),
-//        Spark(),
+//        Spark(), // Keep for 4th character
         Splash(),
         Blast(),
         BigBang(),

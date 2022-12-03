@@ -12,8 +12,11 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.pipai.dragontiles.DragonTilesGame
 import com.pipai.dragontiles.artemis.screens.*
 import com.pipai.dragontiles.data.*
-import com.pipai.dragontiles.dungeon.*
+import com.pipai.dragontiles.dungeon.DungeonMap
+import com.pipai.dragontiles.dungeon.MapNodeType
+import com.pipai.dragontiles.hero.Apprentice
 import com.pipai.dragontiles.hero.Elementalist
+import com.pipai.dragontiles.hero.HeroClass
 import com.pipai.dragontiles.spells.Rarity
 import com.pipai.dragontiles.utils.choose
 
@@ -27,6 +30,7 @@ class MainMenuUiSystem(
 
     private val rootTable = Table()
 
+    private var heroMenu = false
     private var dbMenu = false
 
     private val newGameLabel = Label("Start Run", skin)
@@ -37,6 +41,9 @@ class MainMenuUiSystem(
     private val databaseLabel = Label("Database", skin)
     private val optionsLabel = Label("Options", skin)
     private val quitLabel = Label("Quit", skin)
+
+    private val elementalistLabel = Label("Elementalist", skin)
+    private val apprenticeLabel = Label("Apprentice", skin)
 
     private val spellDbLabel = Label("Spells Database", skin)
     private val relicDbLabel = Label("Relics Database", skin)
@@ -55,39 +62,7 @@ class MainMenuUiSystem(
 
         newGameLabel.addListener(object : ClickListener() {
             override fun clicked(event: InputEvent?, x: Float, y: Float) {
-                if (game.save.requireTutorial) {
-                    game.save.requireTutorial = false
-                    game.writeSave()
-                }
-                val seed = Seed()
-
-                game.music = game.assets.get("assets/binassets/audio/bgm/plains.mp3")
-                game.music!!.isLooping = true
-                game.music!!.volume = game.save.options.musicVolume
-                game.music!!.play()
-
-                val act1Id = "base:dungeons:Plains"
-                val act1Map = DungeonMap.generateMap(seed)
-                val act1Boss = game.data.getDungeon(act1Id).bossEncounters.choose(seed.dungeonRng())
-                val act2Id = "base:dungeons:Mountains"
-                val act2Map = DungeonMap.generateMap(seed)
-                val act2Boss = game.data.getDungeon(act2Id).bossEncounters.choose(seed.dungeonRng())
-                val runData = RunData(
-                    Elementalist().generateHero("Elementalist"),
-                    DungeonMap(act1Id, DungeonMap(act2Id, null, act2Map, act2Boss.id), act1Map, act1Boss.id),
-                    game.data.allRelics().filter { it.rarity != Rarity.SPECIAL && it.rarity != Rarity.STARTER }
-                        .map { it.id }.toMutableList(),
-                    null,
-                    0,
-                    GameData.BASE_POTION_CHANCE,
-                    false,
-                    mutableListOf(),
-                    RunHistory(VictoryStatus.IN_PROGRESS, 0, mutableListOf()),
-                    seed,
-                )
-                game.save.currentRun = runData
-                game.writeSave()
-                game.screen = EventScreen(game, runData, game.data.getDungeon(runData.dungeonMap.dungeonId).startEvent)
+                generateHeroTable()
             }
         })
         continueLabel.addListener(object : ClickListener() {
@@ -124,6 +99,17 @@ class MainMenuUiSystem(
             }
         })
 
+        elementalistLabel.addListener(object : ClickListener() {
+            override fun clicked(event: InputEvent?, x: Float, y: Float) {
+                startNewRun(Elementalist())
+            }
+        })
+        apprenticeLabel.addListener(object : ClickListener() {
+            override fun clicked(event: InputEvent?, x: Float, y: Float) {
+                startNewRun(Apprentice())
+            }
+        })
+
         spellDbLabel.addListener(object : ClickListener() {
             override fun clicked(event: InputEvent?, x: Float, y: Float) {
                 game.screen = CardDatabaseScreen(game)
@@ -148,6 +134,7 @@ class MainMenuUiSystem(
     }
 
     private fun regenerateTable(newGame: Boolean) {
+        heroMenu = false
         dbMenu = false
         rootTable.clearChildren()
         rootTable.add(Label("Dragontiles", skin))
@@ -176,6 +163,26 @@ class MainMenuUiSystem(
         rootTable.row()
     }
 
+    private fun generateHeroTable() {
+        heroMenu = true
+        rootTable.clearChildren()
+        rootTable.add(Label("Heros", skin))
+            .pad(32f)
+        rootTable.row()
+        rootTable.add(elementalistLabel)
+        rootTable.row()
+        rootTable.add(apprenticeLabel)
+        rootTable.row()
+        val backLabel = Label("Back", game.skin)
+        backLabel.addListener(object : ClickListener() {
+            override fun clicked(event: InputEvent?, x: Float, y: Float) {
+                regenerateTable(game.save.currentRun == null)
+            }
+        })
+        rootTable.add(backLabel)
+        rootTable.row()
+    }
+
     private fun generateDbTable() {
         dbMenu = true
         rootTable.clearChildren()
@@ -198,6 +205,42 @@ class MainMenuUiSystem(
         })
         rootTable.add(backLabel)
         rootTable.row()
+    }
+
+    private fun startNewRun(hero: HeroClass) {
+        if (game.save.requireTutorial) {
+            game.save.requireTutorial = false
+            game.writeSave()
+        }
+        val seed = Seed()
+
+        game.music = game.assets.get("assets/binassets/audio/bgm/plains.mp3")
+        game.music!!.isLooping = true
+        game.music!!.volume = game.save.options.musicVolume
+        game.music!!.play()
+
+        val act1Id = "base:dungeons:Plains"
+        val act1Map = DungeonMap.generateMap(seed)
+        val act1Boss = game.data.getDungeon(act1Id).bossEncounters.choose(seed.dungeonRng())
+        val act2Id = "base:dungeons:Mountains"
+        val act2Map = DungeonMap.generateMap(seed)
+        val act2Boss = game.data.getDungeon(act2Id).bossEncounters.choose(seed.dungeonRng())
+        val runData = RunData(
+            hero.generateHero(hero.defaultName),
+            DungeonMap(act1Id, DungeonMap(act2Id, null, act2Map, act2Boss.id), act1Map, act1Boss.id),
+            game.data.allRelics().filter { it.rarity != Rarity.SPECIAL && it.rarity != Rarity.STARTER }
+                .map { it.id }.toMutableList(),
+            null,
+            0,
+            GameData.BASE_POTION_CHANCE,
+            false,
+            mutableListOf(),
+            RunHistory(VictoryStatus.IN_PROGRESS, 0, mutableListOf()),
+            seed,
+        )
+        game.save.currentRun = runData
+        game.writeSave()
+        game.screen = EventScreen(game, runData, game.data.getDungeon(runData.dungeonMap.dungeonId).startEvent)
     }
 
     private fun loadRun() {

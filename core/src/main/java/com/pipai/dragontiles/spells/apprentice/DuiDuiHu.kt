@@ -1,4 +1,4 @@
-package com.pipai.dragontiles.spells.colorless
+package com.pipai.dragontiles.spells.apprentice
 
 import com.pipai.dragontiles.combat.CombatApi
 import com.pipai.dragontiles.combat.CombatFlag

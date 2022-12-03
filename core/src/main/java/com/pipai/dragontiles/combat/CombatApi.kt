@@ -205,6 +205,15 @@ class CombatApi(
         sortHand()
     }
 
+    suspend fun discard(tiles: List<TileInstance>) {
+        if (tiles.isNotEmpty()) {
+            combat.hand.removeAll(tiles)
+            combat.discardPile.addAll(tiles)
+            eventBus.dispatch(DiscardEvent(tiles))
+            sortHand()
+        }
+    }
+
     suspend fun removeFromPool(tiles: List<TileInstance>) {
         combat.pool.removeAll(tiles)
         eventBus.dispatch(PoolToDiscardEvent(tiles))

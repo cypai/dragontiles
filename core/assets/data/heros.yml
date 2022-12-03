@@ -2,6 +2,10 @@ base:hero:Elementalist:
   en:
     name: Elementalist
 
+base:hero:Apprentice:
+  en:
+    name: Apprentice
+
 base:hero:Colorless:
   en:
     name: Colorless

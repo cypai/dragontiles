@@ -50,6 +50,8 @@ data class AddToPoolEvent(val tiles: List<Pair<TileInstance, Int>>, val originat
 
 data class PoolToDiscardEvent(val tiles: List<TileInstance>) : CombatEvent
 
+data class DiscardEvent(val tiles: List<TileInstance>) : CombatEvent
+
 data class OpenDiscardEvent(val tiles: List<TileInstance>) : CombatEvent
 
 data class PoolAdjustedEvent(val pool: List<TileInstance>) : CombatEvent

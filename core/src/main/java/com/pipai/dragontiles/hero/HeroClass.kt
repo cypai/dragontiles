@@ -16,6 +16,7 @@ import com.pipai.dragontiles.utils.choose
 interface HeroClass : Localized {
     val assetName: String
 
+    val defaultName: String
     val startingRelic: Relic
     val classRelics: List<Relic>
     val starterDeck: List<Spell>

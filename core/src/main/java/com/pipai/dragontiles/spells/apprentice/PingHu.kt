@@ -1,4 +1,4 @@
-package com.pipai.dragontiles.spells.colorless
+package com.pipai.dragontiles.spells.apprentice
 
 import com.pipai.dragontiles.combat.CombatApi
 import com.pipai.dragontiles.combat.CombatFlag
@@ -7,7 +7,7 @@ import com.pipai.dragontiles.spells.*
 
 class PingHu : Sorcery() {
     override val id = "base:spells:PingHu"
-    override val rarity = Rarity.UNCOMMON
+    override val rarity = Rarity.STARTER
     override val requirement = object : CustomRequirement() {
         override val type: SetType = SetType.SEQUENTIAL
         override var suitGroup: SuitGroup = SuitGroup.ELEMENTAL

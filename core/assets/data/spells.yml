@@ -598,3 +598,14 @@ base:spells:SecondWind:
   en:
     name: Second Wind
     description: Draw tiles until your hand is full.
+
+base:spells:QiGong:
+  en:
+    name: Qi Gong
+    description: Lose !f Flux. Discard 1 tile.
+
+base:spells:Faan:
+  en:
+    name: Faan
+    description: Deal !d @AOE @Elemented damage.
+

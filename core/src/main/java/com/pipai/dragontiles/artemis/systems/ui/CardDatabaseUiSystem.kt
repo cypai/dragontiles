@@ -13,6 +13,7 @@ import com.pipai.dragontiles.artemis.screens.MainMenuScreen
 import com.pipai.dragontiles.artemis.systems.NoProcessingSystem
 import com.pipai.dragontiles.data.GameData
 import com.pipai.dragontiles.gui.SpellCard
+import com.pipai.dragontiles.hero.Apprentice
 import com.pipai.dragontiles.hero.Elementalist
 import com.pipai.dragontiles.spells.Spell
 import com.pipai.dragontiles.utils.system
@@ -28,6 +29,8 @@ class CardDatabaseUiSystem(
     private val scrollPane = ScrollPane(spellsTable)
     private val elementalistButton =
         TextButton("  ${game.gameStrings.nameLocalization(Elementalist())}  ", game.skin)
+    private val apprenticeButton =
+        TextButton("  ${game.gameStrings.nameLocalization(Apprentice())}  ", game.skin)
     private val colorlessButton = TextButton("  Colorless  ", game.skin)
     private val topLabel = Label("", game.skin, "white")
     private val colspan = 6
@@ -41,6 +44,11 @@ class CardDatabaseUiSystem(
         elementalistButton.addListener(object : ClickListener() {
             override fun clicked(event: InputEvent?, x: Float, y: Float) {
                 updateStandardDisplay(Elementalist().id)
+            }
+        })
+        apprenticeButton.addListener(object : ClickListener() {
+            override fun clicked(event: InputEvent?, x: Float, y: Float) {
+                updateStandardDisplay(Apprentice().id)
             }
         })
         colorlessButton.addListener(object : ClickListener() {
@@ -58,6 +66,12 @@ class CardDatabaseUiSystem(
             .padRight(64f)
             .padBottom(16f)
             .top()
+        topTable.add(apprenticeButton)
+            .padTop(16f)
+            .padLeft(64f)
+            .padRight(64f)
+            .padBottom(16f)
+            .top()
         topTable.add(colorlessButton)
             .padTop(16f)
             .padLeft(64f)
@@ -66,7 +80,7 @@ class CardDatabaseUiSystem(
             .top()
         topTable.row()
         topTable.add(scrollPane)
-            .colspan(2)
+            .colspan(3)
         stage.addActor(topTable)
 
         stage.scrollFocus = scrollPane

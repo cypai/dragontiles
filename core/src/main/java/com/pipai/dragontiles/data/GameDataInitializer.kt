@@ -2,11 +2,13 @@ package com.pipai.dragontiles.data
 
 import com.pipai.dragontiles.dungeon.MountainsDungeon
 import com.pipai.dragontiles.dungeon.PlainsDungeon
+import com.pipai.dragontiles.hero.Apprentice
 import com.pipai.dragontiles.hero.Elementalist
 import com.pipai.dragontiles.potions.*
 import com.pipai.dragontiles.relics.*
+import com.pipai.dragontiles.spells.apprentice.DuiDuiHu
+import com.pipai.dragontiles.spells.apprentice.PingHu
 import com.pipai.dragontiles.spells.colorless.*
-import com.pipai.dragontiles.spells.colorless.Split
 import com.pipai.dragontiles.spells.upgrades.*
 
 class GameDataInitializer {
@@ -23,6 +25,7 @@ class GameDataInitializer {
 
     private fun initHeroClasses(gameData: GameData) {
         gameData.addHeroClass(Elementalist())
+        gameData.addHeroClass(Apprentice())
     }
 
     private fun initRelics(gameData: GameData) {
