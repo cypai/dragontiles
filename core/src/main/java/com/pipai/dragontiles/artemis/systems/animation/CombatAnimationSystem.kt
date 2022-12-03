@@ -151,6 +151,11 @@ class CombatAnimationSystem(private val game: DragonTilesGame) : BaseSystem(), A
     }
 
     @Subscribe
+    fun handleDiscard(ev: DiscardEvent) {
+        queueAnimation(TileDiscardAnimation(ev.tiles, sUi.layout))
+    }
+
+    @Subscribe
     fun handleTileDrawDiscard(ev: DrawDiscardedEvent) {
         queueAnimation(TileCreateImmediateDiscardAnimation(ev.tiles, null, sUi.layout))
     }

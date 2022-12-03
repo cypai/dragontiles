@@ -4,8 +4,8 @@ import com.pipai.dragontiles.combat.CombatApi
 import com.pipai.dragontiles.data.Tile
 import com.pipai.dragontiles.spells.*
 
-class Spark : StandardSpell() {
-    override val id: String = "base:spells:Spark"
+class Flick : StandardSpell() {
+    override val id: String = "base:spells:Flick"
     override val requirement: ComponentRequirement = SinglePredicate(
         { it.tile.let { t -> t is Tile.ElementalTile && t.number == 1 } },
         SuitGroup.ELEMENTAL

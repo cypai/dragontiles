@@ -151,13 +151,14 @@ class TopRowUiSystem(
             val stack = Stack()
             stack.add(image)
             stack.add(counterLabel)
-            stack.addListener(object : ClickListener() {
+            stack.addListener(object : ClickListener(Input.Buttons.RIGHT) {
                 override fun clicked(event: InputEvent?, x: Float, y: Float) {
                     if (isCombat) {
                         sEvent.dispatch(RelicClickUiEvent(relicInstance))
                     }
                 }
-
+            })
+            stack.addListener(object : ClickListener() {
                 override fun enter(event: InputEvent?, x: Float, y: Float, pointer: Int, fromActor: Actor?) {
                     sTooltip.addNameDescLocalization(game.gameStrings.nameDescLocalization(relic.id))
                     sTooltip.showTooltip()

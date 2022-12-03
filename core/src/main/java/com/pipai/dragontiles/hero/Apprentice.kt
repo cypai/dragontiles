@@ -3,9 +3,7 @@ package com.pipai.dragontiles.hero
 import com.pipai.dragontiles.relics.Relic
 import com.pipai.dragontiles.relics.TigerBangle
 import com.pipai.dragontiles.spells.Spell
-import com.pipai.dragontiles.spells.apprentice.Faan
-import com.pipai.dragontiles.spells.apprentice.PingHu
-import com.pipai.dragontiles.spells.apprentice.QiGong
+import com.pipai.dragontiles.spells.apprentice.*
 import com.pipai.dragontiles.spells.colorless.Invoke
 import com.pipai.dragontiles.spells.colorless.Strike
 import com.pipai.dragontiles.spells.elementalist.*
@@ -20,19 +18,21 @@ class Apprentice : HeroClass {
     override val starterDeck: List<Spell> = listOf(
         Invoke(),
         Strike(),
-        Vent(),
         QiGong(),
+        QiRune(),
         Faan(),
         PingHu(),
     )
     override val spells: List<Spell> = listOf(
+        Flick(),
         Slap(),
-        XAttack(),
         RampStrike(),
+        XAttack(),
         Concentrate(),
         GreatPower(),
         ReturnToSender(),
         WindUp(),
+        DuiDuiHu(),
         Typhoon(),
         FluxBlast(),
     )

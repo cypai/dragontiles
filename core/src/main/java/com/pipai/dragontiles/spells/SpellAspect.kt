@@ -84,12 +84,15 @@ data class SwapAspect(var amount: Int) : SpellAspect {
     }
 }
 
-data class FetchAspect(var amount: Int?, val autoDescription: Boolean = true) : SpellAspect {
+data class FetchAspect(var amount: Int?, val autoDescription: Boolean = true, val autoCast: Boolean = true) :
+    SpellAspect {
     override suspend fun onCast(spell: Spell, api: CombatApi) {
-        if (amount == null) {
-            api.fetch()
-        } else {
-            api.fetch(amount!!)
+        if (autoCast) {
+            if (amount == null) {
+                api.fetch()
+            } else {
+                api.fetch(amount!!)
+            }
         }
     }
 

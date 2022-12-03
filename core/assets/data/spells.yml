@@ -83,9 +83,9 @@ base:spells:Mulligan:
     name: Mulligan
     description: ""
 
-base:spells:Spark:
+base:spells:Flick:
   en:
-    name: Spark
+    name: Flick
     description: "Component must be a 1. Deal !d @Elemented damage."
 
 base:spells:Reserve:
@@ -604,8 +604,13 @@ base:spells:QiGong:
     name: Qi Gong
     description: Lose !f Flux. Discard 1 tile.
 
+base:spells:QiRune:
+  en:
+    name: Qi Rune
+    description: At the end of your turn, @Fetch !fetch tile.
+
 base:spells:Faan:
   en:
     name: Faan
-    description: Deal !d @AOE @Elemented damage.
+    description: Deal !d @AOE @Piercing @Elemented damage.
 

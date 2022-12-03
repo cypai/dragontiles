@@ -2,15 +2,15 @@ package com.pipai.dragontiles.spells.apprentice
 
 import com.pipai.dragontiles.combat.CombatApi
 import com.pipai.dragontiles.spells.*
-import com.pipai.dragontiles.status.Strength
-import com.pipai.dragontiles.utils.findAsWhere
 
-class QiGong : PowerSpell() {
+class QiGong : StandardSpell() {
     override val id: String = "base:spells:QiGong"
-    override val requirement: ComponentRequirement = Identical(2, SuitGroup.ANY_NO_FUMBLE)
+    override val requirement: ComponentRequirement = Single()
+    override val type: SpellType = SpellType.EFFECT
+    override val targetType: TargetType = TargetType.NONE
     override val rarity: Rarity = Rarity.STARTER
     override val aspects: MutableList<SpellAspect> = mutableListOf(
-        FluxLossAspect(9)
+        FluxLossAspect(5)
     )
 
     override suspend fun onCast(params: CastParams, api: CombatApi) {

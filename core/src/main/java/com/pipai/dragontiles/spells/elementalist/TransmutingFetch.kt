@@ -17,7 +17,7 @@ class TransmutingFetch : StandardSpell() {
     override val glowType: GlowType = GlowType.ELEMENTED
     override val aspects: MutableList<SpellAspect> = mutableListOf(
         FluxGainAspect(3),
-        FetchAspect(2, false),
+        FetchAspect(2, autoDescription = false),
     )
 
     private var element: Element = Element.FIRE
