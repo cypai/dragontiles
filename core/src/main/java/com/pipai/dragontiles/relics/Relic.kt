@@ -1,5 +1,6 @@
 package com.pipai.dragontiles.relics
 
+import com.pipai.dragontiles.combat.CombatApi
 import com.pipai.dragontiles.combat.CombatFlag
 import com.pipai.dragontiles.combat.Combatant
 import com.pipai.dragontiles.combat.DamageAdjustable
@@ -29,6 +30,9 @@ abstract class Relic : Localized, DamageAdjustable {
     }
 
     open fun onPickup(api: GlobalApi) {
+    }
+
+    open suspend fun onTrigger(api: CombatApi) {
     }
 
     override fun queryFlatAdjustment(origin: Combatant?, target: Combatant?, element: Element, flags: List<CombatFlag>): Int = 0

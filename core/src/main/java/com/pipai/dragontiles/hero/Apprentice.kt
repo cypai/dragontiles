@@ -1,9 +1,8 @@
 package com.pipai.dragontiles.hero
 
 import com.pipai.dragontiles.relics.Relic
-import com.pipai.dragontiles.relics.Transmuter
+import com.pipai.dragontiles.relics.TigerBangle
 import com.pipai.dragontiles.spells.Spell
-import com.pipai.dragontiles.spells.apprentice.DuiDuiHu
 import com.pipai.dragontiles.spells.apprentice.Faan
 import com.pipai.dragontiles.spells.apprentice.PingHu
 import com.pipai.dragontiles.spells.apprentice.QiGong
@@ -16,7 +15,7 @@ class Apprentice : HeroClass {
     override val assetName: String = "elementalist.png"
 
     override val defaultName: String = "Mei"
-    override val startingRelic: Relic = Transmuter()
+    override val startingRelic: Relic = TigerBangle()
     override val classRelics: List<Relic> = listOf()
     override val starterDeck: List<Spell> = listOf(
         Invoke(),

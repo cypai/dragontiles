@@ -2,6 +2,7 @@ package com.pipai.dragontiles.artemis.events
 
 import com.pipai.dragontiles.artemis.components.EnemyComponent
 import com.pipai.dragontiles.data.PricedItem
+import com.pipai.dragontiles.relics.RelicInstance
 import com.pipai.dragontiles.spells.Spell
 import com.pipai.dragontiles.spells.upgrades.SpellUpgrade
 import net.mostlyoriginal.api.event.common.Event
@@ -34,3 +35,4 @@ enum class DeckQueryType {
 class TransformSpellQueryEvent : Event
 class TopRowUiUpdateEvent : Event
 data class PotionUseUiEvent(val potionSlotIndex: Int) : Event
+data class RelicClickUiEvent(val relicInstance: RelicInstance) : Event

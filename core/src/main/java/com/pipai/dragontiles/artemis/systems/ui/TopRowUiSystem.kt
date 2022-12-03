@@ -14,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.badlogic.gdx.utils.Align
 import com.pipai.dragontiles.DragonTilesGame
 import com.pipai.dragontiles.artemis.events.PotionUseUiEvent
+import com.pipai.dragontiles.artemis.events.RelicClickUiEvent
 import com.pipai.dragontiles.artemis.events.TopRowUiUpdateEvent
 import com.pipai.dragontiles.artemis.systems.NoProcessingSystem
 import com.pipai.dragontiles.data.GlobalApi
@@ -151,6 +152,12 @@ class TopRowUiSystem(
             stack.add(image)
             stack.add(counterLabel)
             stack.addListener(object : ClickListener() {
+                override fun clicked(event: InputEvent?, x: Float, y: Float) {
+                    if (isCombat) {
+                        sEvent.dispatch(RelicClickUiEvent(relicInstance))
+                    }
+                }
+
                 override fun enter(event: InputEvent?, x: Float, y: Float, pointer: Int, fromActor: Actor?) {
                     sTooltip.addNameDescLocalization(game.gameStrings.nameDescLocalization(relic.id))
                     sTooltip.showTooltip()

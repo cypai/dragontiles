@@ -29,6 +29,8 @@ class GameDataInitializer {
     }
 
     private fun initRelics(gameData: GameData) {
+        gameData.addRelic(Transmuter())
+        gameData.addRelic(TigerBangle())
         gameData.addRelic(Bamboo())
         gameData.addRelic(Cherry())
         gameData.addRelic(Coffee())
@@ -37,7 +39,6 @@ class GameDataInitializer {
         gameData.addRelic(Peach())
         gameData.addRelic(RabbitsFoot())
         gameData.addRelic(Tea())
-        gameData.addRelic(Transmuter())
         gameData.addRelic(Gourd())
         gameData.addRelic(MortarAndPestle())
         gameData.addRelic(FireFlower())

@@ -183,3 +183,9 @@ base:keywords:Blessed:
     key: "@Blessed"
     name: Blessed
     description: Immune to @Curse.
+
+base:keywords:Trigger:
+  en:
+    key: "@Trigger"
+    name: Trigger
+    description: Right click to use the effect.

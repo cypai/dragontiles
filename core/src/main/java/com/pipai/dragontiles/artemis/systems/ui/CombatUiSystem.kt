@@ -1237,6 +1237,18 @@ class CombatUiSystem(
     }
 
     @Subscribe
+    fun handleRelicClick(ev: RelicClickUiEvent) {
+        if (stateMachine.currentState == CombatUiState.ROOT) {
+            val relic = sCombat.combat.relics.find { it.id == ev.relicInstance.id }
+            if (relic != null) {
+                scope.launch {
+                    relic.onTrigger(sCombat.controller.api)
+                }
+            }
+        }
+    }
+
+    @Subscribe
     fun handlePotionUse(ev: PotionUseUiEvent) {
         if (stateMachine.currentState == CombatUiState.ROOT) {
             val potion = game.data.getPotion(runData.hero.potionSlots[ev.potionSlotIndex].potionId!!)

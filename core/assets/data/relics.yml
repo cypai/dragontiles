@@ -177,3 +177,8 @@ base:relics:Incense:
   en:
     name: Incense
     description: At the start of combat, gain 1 Immunized.
+
+base:relics:TigerBangle:
+  en:
+    name: Tiger Bangle
+    description: "@Trigger: Twice per combat, take a tile from the Pool."
