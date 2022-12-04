@@ -1,13 +1,13 @@
-package com.pipai.dragontiles.spells.elementalist
+package com.pipai.dragontiles.spells.apprentice
 
 import com.pipai.dragontiles.combat.CombatApi
 import com.pipai.dragontiles.spells.*
 import com.pipai.dragontiles.status.Strength
 import com.pipai.dragontiles.utils.findAsWhere
 
-class Concentrate : PowerSpell() {
-    override val id: String = "base:spells:Concentrate"
-    override val requirement: ComponentRequirement = Identical(2, SuitGroup.ARCANE)
+class ChannelStrength : PowerSpell() {
+    override val id: String = "base:spells:ChannelStrength"
+    override val requirement: ComponentRequirement = Identical(3, SuitGroup.ANY_NO_FUMBLE)
     override val rarity: Rarity = Rarity.UNCOMMON
     override val aspects: MutableList<SpellAspect> = mutableListOf(
         StackableAspect(Strength(2), 1),

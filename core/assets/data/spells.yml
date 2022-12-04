@@ -138,9 +138,9 @@ base:spells:BreakingBlast:
     name: Breaking Blast
     description: Deal !d @Elemented damage and inflict !s(1) @Break to all enemies.
 
-base:spells:Concentrate:
+base:spells:ChannelStrength:
   en:
-    name: Concentrate
+    name: Channel Strength
     description: Gain !s(1) Strength.
 
 base:spells:FeedbackLoop:
@@ -489,9 +489,9 @@ base:spells:PhoenixRebirth:
     name: Phoenix's Rebirth
     description: Vent all Flux. Deal !d Fire @Piercing damage. Heal HP equal to damage dealt.
 
-base:spells:GreatPower:
+base:spells:StrengthOfMountains:
   en:
-    name: Great Power
+    name: Strength Of Mountains
     description: Gain !s(1) Strength.
 
 base:spells:SummonPhoenix:
@@ -602,7 +602,7 @@ base:spells:SecondWind:
 base:spells:QiGong:
   en:
     name: Qi Gong
-    description: Lose !f Flux. Discard 1 tile.
+    description: Lose !f Flux.
 
 base:spells:QiRune:
   en:
@@ -614,3 +614,122 @@ base:spells:Faan:
     name: Faan
     description: Deal !d @AOE @Piercing @Elemented damage.
 
+base:spells:Rushdown:
+  en:
+    name: Rushdown
+    description: This turn, after playing an attack, take 1 tile from the Pool.
+
+base:spells:Aggression:
+  en:
+    name: Aggression
+    description: After playing an attack, @Fetch 1 tile.
+
+base:spells:DrunkenFist:
+  en:
+    name: Drunken Fist
+    description: Deal !d @Elemented damage and inflict !s(1) Weak to a random enemy.
+
+base:spells:SandAttack:
+  en:
+    name: Sand Attack
+    description: Deal !d @Elemented damage. Inflict !s(1) Weak.
+
+base:spells:FlareBlitz:
+  en:
+    name: Flare Blitz
+    description: Deal !d Fire damage.
+
+base:spells:IcicleCrash:
+  en:
+    name: Icicle Crash
+    description: Deal !d Ice damage.
+
+base:spells:VoltTackle:
+  en:
+    name: Volt Tackle
+    description: Deal !d Electric damage.
+
+base:spells:Meditate:
+  en:
+    name: Meditate
+    description: Lose !f @Flux.
+
+base:spells:Reversal:
+  en:
+    name: Reversal
+    description: Deal damage equal to the amount of @Flux you have.
+
+base:spells:Counter:
+  en:
+    name: Counter
+    description: This turn, if enemy attacks are fully blocked with Block, deal !d damage back.
+
+base:spells:Deflect:
+  en:
+    name: Deflect
+    description: Gain !s(1) @Block.
+
+base:spells:Expel:
+  en:
+    name: Expel
+    description: Lose !f @Flux.
+
+base:spells:Glare:
+  en:
+    name: Glare
+    description: Inflict !s(1) Weak.
+
+base:spells:QiStrike:
+  en:
+    name: Qi Strike
+    description: Deal !d @Elemented damage. Lose !f @Flux.
+
+base:spells:PressurePoints:
+  en:
+    name: Pressure Points
+    description: Deal !d @Elemented damage. Inflict !s(1) Weak.
+
+base:spells:SuckerPunch:
+  en:
+    name: Sucker Punch
+    description: Deal !d @Elemented damage. If the target is attacking, gain !s(1) Block.
+
+base:spells:Uppercut:
+  en:
+    name: Uppercut
+    description: Deal !d @Elemented damage. @Transform a tile in your hand into its @Successor.
+
+base:spells:PunchingDown:
+  en:
+    name: Punching Down
+    description: Deal !d @Elemented damage. @Transform a tile in your hand into its @Predecessor.
+
+base:spells:LowStance:
+  en:
+    name: Low Stance
+    description: Gain !s(1) @Defense.
+
+base:spells:HeavenAndEarth: # Heaven and earth have one form: 天地一色
+  en:
+    name: Heaven and Earth
+    description: Component must be a 1 or 9. Not deactivateable. Next turn, deactivate and transform all Components into the first.
+
+base:spells:Leap:
+  en:
+    name: Leap
+    description: Gain !s(1) @Block.
+
+base:spells:Inpatience:
+  en:
+    name: Inpatience
+    description: Draw 3 tiles. Prevent drawing tiles until the end of your next turn.
+
+base:spells:ClashOfTwoTigers:
+  en:
+    name: Clash of Two Tigers
+    description: Deal !d @AOE @Piercing damage.
+
+base:spells:CrouchingTiger:
+  en:
+    name: Crouching Tiger
+    description: Deal !d @AOE @Piercing damage.

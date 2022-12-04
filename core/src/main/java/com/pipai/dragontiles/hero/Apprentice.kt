@@ -18,7 +18,7 @@ class Apprentice : HeroClass {
     override val starterDeck: List<Spell> = listOf(
         Invoke(),
         Strike(),
-        QiGong(),
+        Meditate(),
         QiRune(),
         Faan(),
         PingHu(),
@@ -26,15 +26,16 @@ class Apprentice : HeroClass {
     override val spells: List<Spell> = listOf(
         Flick(),
         Slap(),
+        QiGong(),
         RampStrike(),
         XAttack(),
-        Concentrate(),
-        GreatPower(),
+        ChannelStrength(),
+        Rushdown(),
+        StrengthOfMountains(),
         ReturnToSender(),
         WindUp(),
         DuiDuiHu(),
         Typhoon(),
-        FluxBlast(),
     )
     override val hpMax: Int = 60
     override val fluxMax: Int = 40
