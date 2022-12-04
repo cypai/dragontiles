@@ -8,8 +8,8 @@ import com.pipai.dragontiles.data.Suit
 import com.pipai.dragontiles.data.Tile
 import com.pipai.dragontiles.spells.*
 
-class TransmutingFetch : StandardSpell() {
-    override val id: String = "base:spells:TransmutingFetch"
+class TransmutingScry : StandardSpell() {
+    override val id: String = "base:spells:TransmutingScry"
     override val requirement: ComponentRequirement = Single(SuitGroup.ELEMENTAL)
     override val type: SpellType = SpellType.EFFECT
     override val targetType: TargetType = TargetType.NONE
@@ -17,7 +17,7 @@ class TransmutingFetch : StandardSpell() {
     override val glowType: GlowType = GlowType.ELEMENTED
     override val aspects: MutableList<SpellAspect> = mutableListOf(
         FluxGainAspect(3),
-        FetchAspect(2, autoDescription = false),
+        ScryAspect(2, autoDescription = false),
     )
 
     private var element: Element = Element.FIRE
@@ -29,7 +29,7 @@ class TransmutingFetch : StandardSpell() {
     }
 
     @CombatSubscribe
-    suspend fun onFetch(ev: AddToPoolEvent, api: CombatApi) {
+    suspend fun onScry(ev: AddToPoolEvent, api: CombatApi) {
         if (justCasted) {
             justCasted = false
             ev.tiles.map { it.first }

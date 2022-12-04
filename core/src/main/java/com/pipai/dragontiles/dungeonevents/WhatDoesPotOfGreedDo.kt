@@ -2,7 +2,7 @@ package com.pipai.dragontiles.dungeonevents
 
 import com.pipai.dragontiles.data.Localized
 import com.pipai.dragontiles.spells.colorless.PotOfGreed
-import com.pipai.dragontiles.spells.upgrades.FetchUpgrade
+import com.pipai.dragontiles.spells.upgrades.ScryUpgrade
 import kotlin.math.E
 
 class WhatDoesPotOfGreedDo : DungeonEvent() {
@@ -32,15 +32,15 @@ class WhatDoesPotOfGreedDo : DungeonEvent() {
         override val id = "draw"
 
         override fun params(api: EventApi): EventParams {
-            return EventParams(listOf(), listOf(FetchUpgrade()))
+            return EventParams(listOf(), listOf(ScryUpgrade()))
         }
 
         override fun tooltipItem(api: EventApi): Localized {
-            return FetchUpgrade()
+            return ScryUpgrade()
         }
 
         override fun onSelect(api: EventApi) {
-            api.queryUpgradeSpell(FetchUpgrade())
+            api.queryUpgradeSpell(ScryUpgrade())
             api.changeToEventEnd("drawMain")
         }
     }

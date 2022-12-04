@@ -61,8 +61,8 @@ fun Spell.baseTempMaxFluxGain(): Int {
     return aspects.findAs(TempMaxFluxChangeAspect::class)?.amount ?: 0
 }
 
-fun Spell.baseFetch(): Int {
-    return aspects.findAs(FetchAspect::class)?.amount ?: 0
+fun Spell.baseScry(): Int {
+    return aspects.findAs(ScryAspect::class)?.amount ?: 0
 }
 
 fun Spell.baseDraw(): Int {
@@ -70,7 +70,7 @@ fun Spell.baseDraw(): Int {
 }
 
 fun Spell.baseOpenDraw(): Int {
-    return aspects.findAs(TakeFromPoolAspect::class)?.amount ?: 0
+    return aspects.findAs(TakeAspect::class)?.amount ?: 0
 }
 
 fun Spell.baseSwap(): Int {

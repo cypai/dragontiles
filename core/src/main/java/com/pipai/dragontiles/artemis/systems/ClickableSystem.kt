@@ -26,7 +26,7 @@ class ClickableSystem(private val game: DragonTilesGame) : NoProcessingSystem(),
 
     override fun touchDown(screenX: Int, screenY: Int, pointer: Int, button: Int): Boolean {
         val mouseXy = game.viewport.unproject(Vector2(screenX.toFloat(), screenY.toFloat()))
-        world.fetch(allOf(XYComponent::class, ClickableComponent::class, SpriteComponent::class))
+        world.scry(allOf(XYComponent::class, ClickableComponent::class, SpriteComponent::class))
             .forEach {
                 val cXy  = mXy.get(it)
                 val cSprite = mSprite.get(it)
@@ -39,7 +39,7 @@ class ClickableSystem(private val game: DragonTilesGame) : NoProcessingSystem(),
                     }
                 }
             }
-        world.fetch(allOf(ClickableComponent::class, SpineComponent::class))
+        world.scry(allOf(ClickableComponent::class, SpineComponent::class))
             .forEach {
                 val cSpine = mSpine.get(it)
                 if (cSpine.skeleton.boundingRectangle().contains(mouseXy)) {
@@ -50,7 +50,7 @@ class ClickableSystem(private val game: DragonTilesGame) : NoProcessingSystem(),
                     }
                 }
             }
-        world.fetch(allOf(ClickableComponent::class, ActorComponent::class))
+        world.scry(allOf(ClickableComponent::class, ActorComponent::class))
             .forEach {
                 val hover = mActor.get(it).actor.boundingRectangle().contains(mouseXy)
                 if (hover) {

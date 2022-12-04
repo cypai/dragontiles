@@ -235,13 +235,13 @@ class CombatApi(
         eventBus.dispatch(HandAdjustedEvent(combat.hand.toList(), combat.assigned))
     }
 
-    suspend fun fetch() {
+    suspend fun scry() {
         if (combat.pool.size < POOL_SIZE) {
             drawToPool(POOL_SIZE - combat.pool.size)
         }
     }
 
-    suspend fun fetch(amount: Int) {
+    suspend fun scry(amount: Int) {
         drawToPool(amount)
     }
 

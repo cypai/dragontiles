@@ -8,7 +8,7 @@ import com.pipai.dragontiles.artemis.components.*
 import com.pipai.dragontiles.combat.Combatant
 import com.pipai.dragontiles.status.Status
 import com.pipai.dragontiles.utils.allOf
-import com.pipai.dragontiles.utils.fetch
+import com.pipai.dragontiles.utils.scry
 import com.pipai.dragontiles.utils.statusAssetPath
 
 class StatusInflictedAnimation(private val status: Status) : Animation() {
@@ -20,10 +20,10 @@ class StatusInflictedAnimation(private val status: Status) : Animation() {
     override fun startAnimation() {
         val targetEntityId = when (val combatant = status.combatant!!) {
             is Combatant.HeroCombatant -> {
-                world.fetch(allOf(HeroComponent::class)).first()
+                world.scry(allOf(HeroComponent::class)).first()
             }
             is Combatant.EnemyCombatant -> {
-                world.fetch(allOf(EnemyComponent::class)).first { mEnemy.get(it).enemy == combatant.enemy }
+                world.scry(allOf(EnemyComponent::class)).first { mEnemy.get(it).enemy == combatant.enemy }
             }
         }
         val cTargetXy = mXy.get(targetEntityId)

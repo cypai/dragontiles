@@ -55,6 +55,6 @@ class AutoIncrementIdMap<T> : Iterable<Map.Entry<Int, T>>, ShallowCopyable<AutoI
     }
 }
 
-fun <T> Int?.fetch(idMap: AutoIncrementIdMap<T>): T? {
+fun <T> Int?.scry(idMap: AutoIncrementIdMap<T>): T? {
     return this?.let { idMap.get(it) }
 }

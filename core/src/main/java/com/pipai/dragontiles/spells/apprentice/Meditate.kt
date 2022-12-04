@@ -11,7 +11,7 @@ class Meditate : StandardSpell() {
     override val rarity: Rarity = Rarity.COMMON
     override val aspects: MutableList<SpellAspect> = mutableListOf(
         FluxLossAspect(8),
-        FetchAspect(1),
+        ScryAspect(1),
     )
 
     override suspend fun onCast(params: CastParams, api: CombatApi) {

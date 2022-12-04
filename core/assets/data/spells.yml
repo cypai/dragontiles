@@ -28,9 +28,9 @@ base:spells:Strike:
     name: Strike
     description: Deal !d @Elemented damage.
 
-base:spells:FetchingStrike:
+base:spells:ScryingStrike:
   en:
-    name: Fetching Strike
+    name: Scrying Strike
     description: Deal !d @Elemented damage.
 
 base:spells:TransmutingStrike:
@@ -38,10 +38,10 @@ base:spells:TransmutingStrike:
     name: Transmuting Strike
     description: Deal !d @Elemented damage. Draw !draw tiles. Transform them into the Components' Element.
 
-base:spells:TransmutingFetch:
+base:spells:TransmutingScry:
   en:
-    name: Transmuting Fetch
-    description: "@Fetch !fetch. Transform fetched Elemental tiles into the Components' Element."
+    name: Transmuting Scry
+    description: "@Scry !scry. Transform scryed Elemental tiles into the Components' Element."
 
 base:spells:ReactantStrike:
   en:
@@ -93,14 +93,14 @@ base:spells:Reserve:
     name: Reserve
     description: Put the @Component into the Pool.
 
-base:spells:Fetch:
+base:spells:Scry:
   en:
-    name: Fetch
+    name: Scry
     description: ""
 
-base:spells:PreFetch:
+base:spells:PreScry:
   en:
-    name: Pre-Fetch
+    name: Pre-Scry
     description: At the start of your turn, draw a tile into the Pool.
 
 base:spells:Ground:
@@ -236,7 +236,7 @@ base:spells:FluxCapacitor:
 base:spells:MeldPromotion:
   en:
     name: MeldPromotion
-    description: "@Component must be addable to an active @Rune. Add it, then fetch a tile from the discard pile."
+    description: "@Component must be addable to an active @Rune. Add it, then scry a tile from the discard pile."
 
 base:spells:AllForOne:
   en:
@@ -607,7 +607,7 @@ base:spells:QiGong:
 base:spells:QiRune:
   en:
     name: Qi Rune
-    description: At the end of your turn, @Fetch !fetch tile.
+    description: At the end of your turn, @Scry !scry tile.
 
 base:spells:Faan:
   en:
@@ -622,7 +622,7 @@ base:spells:Rushdown:
 base:spells:Aggression:
   en:
     name: Aggression
-    description: After playing an attack, @Fetch 1 tile.
+    description: After playing an attack, @Scry 1 tile.
 
 base:spells:DrunkenFist:
   en:

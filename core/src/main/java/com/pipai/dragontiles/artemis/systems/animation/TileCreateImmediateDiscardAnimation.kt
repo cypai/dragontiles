@@ -8,7 +8,7 @@ import com.pipai.dragontiles.data.TileInstance
 import com.pipai.dragontiles.enemies.Enemy
 import com.pipai.dragontiles.gui.CombatUiLayout
 import com.pipai.dragontiles.utils.allOf
-import com.pipai.dragontiles.utils.fetch
+import com.pipai.dragontiles.utils.scry
 
 class TileCreateImmediateDiscardAnimation(
     private val tiles: List<TileInstance>,
@@ -23,7 +23,7 @@ class TileCreateImmediateDiscardAnimation(
         val position = if (originator == null) {
             layout.drawPosition
         } else {
-            val entityId = world.fetch(allOf(EnemyComponent::class)).first { mEnemy.get(it).enemy == originator }
+            val entityId = world.scry(allOf(EnemyComponent::class)).first { mEnemy.get(it).enemy == originator }
             mXy.get(entityId).toVector2()
         }
         tiles.forEach { tile ->

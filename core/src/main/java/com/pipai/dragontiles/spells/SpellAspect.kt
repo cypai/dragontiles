@@ -84,14 +84,14 @@ data class SwapAspect(var amount: Int) : SpellAspect {
     }
 }
 
-data class FetchAspect(var amount: Int?, val autoDescription: Boolean = true, val autoCast: Boolean = true) :
+data class ScryAspect(var amount: Int?, val autoDescription: Boolean = true, val autoCast: Boolean = true) :
     SpellAspect {
     override suspend fun onCast(spell: Spell, api: CombatApi) {
         if (autoCast) {
             if (amount == null) {
-                api.fetch()
+                api.scry()
             } else {
-                api.fetch(amount!!)
+                api.scry(amount!!)
             }
         }
     }
@@ -101,16 +101,16 @@ data class FetchAspect(var amount: Int?, val autoDescription: Boolean = true, va
             val theAmount = amount
             if (theAmount == null) {
                 if (description.isEmpty()) {
-                    "${Keywords.FETCH}."
+                    "${Keywords.SCRY}."
                 } else {
-                    "$description ${Keywords.FETCH}."
+                    "$description ${Keywords.SCRY}."
                 }
             } else {
                 val tileStr = if (theAmount > 1) "tiles" else "tile"
                 if (description.isEmpty()) {
-                    "${Keywords.FETCH} !fetch $tileStr."
+                    "${Keywords.SCRY} !scry $tileStr."
                 } else {
-                    "$description ${Keywords.FETCH} !fetch $tileStr."
+                    "$description ${Keywords.SCRY} !scry $tileStr."
                 }
             }
         } else {
@@ -138,7 +138,7 @@ data class DrawAspect(var amount: Int, val autoDescription: Boolean = true) : Sp
     }
 }
 
-data class TakeFromPoolAspect(var amount: Int) : SpellAspect {
+data class TakeAspect(var amount: Int) : SpellAspect {
     override suspend fun onCast(spell: Spell, api: CombatApi) {
         api.queryPoolDraw(amount)
     }

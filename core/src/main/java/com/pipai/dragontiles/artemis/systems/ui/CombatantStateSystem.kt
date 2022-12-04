@@ -138,22 +138,22 @@ class CombatantStateSystem(
     }
 
     fun changeHeroHp(amount: Int) {
-        val cHero = mHero.get(world.fetch(allOf(HeroComponent::class)).first())
+        val cHero = mHero.get(world.scry(allOf(HeroComponent::class)).first())
         updateHero(cHero.hp + amount, cHero.hpMax, cHero.flux, cHero.fluxMax)
     }
 
     fun changeHeroFlux(amount: Int) {
-        val cHero = mHero.get(world.fetch(allOf(HeroComponent::class)).first())
+        val cHero = mHero.get(world.scry(allOf(HeroComponent::class)).first())
         updateHero(cHero.hp, cHero.hpMax, cHero.flux + amount, cHero.fluxMax)
     }
 
     fun changeHeroTempMaxFlux(amount: Int) {
-        val cHero = mHero.get(world.fetch(allOf(HeroComponent::class)).first())
+        val cHero = mHero.get(world.scry(allOf(HeroComponent::class)).first())
         updateHero(cHero.hp, cHero.hpMax, cHero.flux, cHero.fluxMax + amount)
     }
 
     fun updateHero(hp: Int, hpMax: Int, flux: Int, fluxMax: Int) {
-        val cHero = mHero.get(world.fetch(allOf(HeroComponent::class)).first())
+        val cHero = mHero.get(world.scry(allOf(HeroComponent::class)).first())
         cHero.hp = hp.coerceAtLeast(0).coerceAtMost(cHero.hpMax)
         cHero.hpMax = hpMax
         cHero.flux = flux.coerceAtLeast(0).coerceAtMost(cHero.fluxMax)
@@ -263,7 +263,7 @@ class CombatantStateSystem(
     }
 
     fun updateAllIntents() {
-        world.fetch(allOf(EnemyComponent::class))
+        world.scry(allOf(EnemyComponent::class))
             .map { mEnemy.get(it).enemy }
             .filter { it.hp > 0 }
             .forEach { updateIntent(it, sCombat.controller.api.getEnemyIntent(it)) }

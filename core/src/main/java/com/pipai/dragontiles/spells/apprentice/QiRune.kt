@@ -11,12 +11,12 @@ class QiRune : Rune() {
     override val rarity: Rarity = Rarity.STARTER
     override val requirement: ComponentRequirement = Identical(2, SuitGroup.ANY_NO_FUMBLE)
     override val aspects: MutableList<SpellAspect> = mutableListOf(
-        FetchAspect(1, autoDescription = false, autoCast = false)
+        ScryAspect(1, autoDescription = false, autoCast = false)
     )
 
     @CombatSubscribe
     suspend fun onEndTurn(ev: TurnEndEvent, api: CombatApi) {
-        api.fetch(aspects.findAs(FetchAspect::class)!!.amount!!)
+        api.scry(aspects.findAs(ScryAspect::class)!!.amount!!)
     }
 
 }

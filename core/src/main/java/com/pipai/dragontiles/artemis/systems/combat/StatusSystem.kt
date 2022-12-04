@@ -37,7 +37,7 @@ class StatusSystem(private val game: DragonTilesGame) : NoProcessingSystem() {
     }
 
     fun handleHeroStatus(statuses: List<Status>) {
-        val heroEntityId = world.fetch(allOf(HeroComponent::class)).first()
+        val heroEntityId = world.scry(allOf(HeroComponent::class)).first()
         clearHeroStatuses()
         statuses.forEachIndexed { index, s ->
             heroStatuses.add(createStatus(heroEntityId, index, s))
@@ -45,7 +45,7 @@ class StatusSystem(private val game: DragonTilesGame) : NoProcessingSystem() {
     }
 
     fun handleEnemyStatus(enemyId: BackendId, statuses: List<Status>) {
-        world.fetch(allOf(EnemyComponent::class)).find { mEnemy.get(it).enemy.enemyId == enemyId }
+        world.scry(allOf(EnemyComponent::class)).find { mEnemy.get(it).enemy.enemyId == enemyId }
             ?.let { enemyEntityId ->
                 if (enemyEntityId !in enemyStatuses) {
                     enemyStatuses[enemyEntityId] = mutableListOf()

@@ -159,7 +159,7 @@ abstract class Spell : Localized, DamageAdjustable {
                 aspects.filterIsInstance(StackableAspect::class.java)
                     .firstOrNull { it.dynamicId.toString() == param }?.status?.amount ?: 0
             }
-            "!fetch" -> baseFetch()
+            "!scry" -> baseScry()
             "!draw" -> baseDraw()
             "!od" -> baseOpenDraw()
             "!swap" -> baseSwap()

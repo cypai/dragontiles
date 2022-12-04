@@ -10,9 +10,9 @@ class ElementalSight : StandardSpell() {
     override val targetType: TargetType = TargetType.NONE
     override val rarity: Rarity = Rarity.COMMON
     override val aspects: MutableList<SpellAspect> = mutableListOf(
-        FetchAspect(4),
+        ScryAspect(4),
         FluxGainAspect(1),
-        TakeFromPoolAspect(1),
+        TakeAspect(1),
     )
 
     override suspend fun onCast(params: CastParams, api: CombatApi) {

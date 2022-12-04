@@ -3,14 +3,14 @@ package com.pipai.dragontiles.spells.colorless
 import com.pipai.dragontiles.combat.CombatApi
 import com.pipai.dragontiles.spells.*
 
-class Fetch : StandardSpell() {
-    override val id: String = "base:spells:Fetch"
+class Scry : StandardSpell() {
+    override val id: String = "base:spells:Scry"
     override val requirement: ComponentRequirement = Identical(2)
     override val type: SpellType = SpellType.EFFECT
     override val targetType: TargetType = TargetType.NONE
     override val rarity: Rarity = Rarity.UNCOMMON
     override val aspects: MutableList<SpellAspect> = mutableListOf(
-        FetchAspect(null),
+        ScryAspect(null),
         FluxGainAspect(1),
     )
 

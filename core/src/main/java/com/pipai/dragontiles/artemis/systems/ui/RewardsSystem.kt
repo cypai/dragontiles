@@ -61,10 +61,10 @@ class RewardsSystem(
         if (!startedBattleWon) {
             game.writeSave()
         }
-        world.fetch(allOf(XYComponent::class, TileComponent::class)).forEach {
+        world.scry(allOf(XYComponent::class, TileComponent::class)).forEach {
             sPath.moveToLocation(it, game.gameConfig.resolution.width / 2f, -100f)
         }
-        world.fetch(allOf(HeroComponent::class)).forEach {
+        world.scry(allOf(HeroComponent::class)).forEach {
             world.delete(it)
         }
         sUi.hideSpellCards()

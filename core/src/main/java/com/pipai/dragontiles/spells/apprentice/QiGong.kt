@@ -11,8 +11,8 @@ class QiGong : StandardSpell() {
     override val rarity: Rarity = Rarity.COMMON
     override val aspects: MutableList<SpellAspect> = mutableListOf(
         FluxLossAspect(12),
-        FetchAspect(2),
-        TakeFromPoolAspect(1),
+        ScryAspect(2),
+        TakeAspect(1),
     )
 
     override suspend fun onCast(params: CastParams, api: CombatApi) {

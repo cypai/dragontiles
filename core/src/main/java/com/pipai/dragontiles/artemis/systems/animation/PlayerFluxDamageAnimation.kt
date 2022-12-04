@@ -9,7 +9,7 @@ import com.pipai.dragontiles.artemis.systems.ui.CombatantStateSystem
 import com.pipai.dragontiles.artemis.systems.ui.TopRowUiSystem
 import com.pipai.dragontiles.combat.PlayerFluxDamageEvent
 import com.pipai.dragontiles.utils.allOf
-import com.pipai.dragontiles.utils.fetch
+import com.pipai.dragontiles.utils.scry
 import com.pipai.dragontiles.utils.particleAssetPath
 import com.talosvfx.talos.runtime.ParticleEffectDescriptor
 
@@ -22,7 +22,7 @@ class PlayerFluxDamageAnimation(private val data: PlayerFluxDamageEvent) : Anima
     private lateinit var sCombatantState: CombatantStateSystem
 
     override fun startAnimation() {
-        val entityId = world.fetch(allOf(HeroComponent::class)).first()
+        val entityId = world.scry(allOf(HeroComponent::class)).first()
         val cHero = mHero.get(entityId)
         sTop.setFluxRelative(data.amount)
         sCombatantState.changeHeroFlux(data.amount)

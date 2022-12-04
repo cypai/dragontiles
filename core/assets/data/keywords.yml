@@ -94,10 +94,10 @@ base:keywords:Swap:
     name: Swap
     description: Swap spells with your sideboard.
 
-base:keywords:Fetch:
+base:keywords:Scry:
   en:
-    key: "@Fetch"
-    name: Fetch
+    key: "@Scry"
+    name: Scry
     description: Draw tiles into the Pool. If no number, fills the Pool to maximum.
 
 base:keywords:Reactant:

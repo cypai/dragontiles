@@ -33,10 +33,10 @@ base:potions:SwapPotion:
     name: Swap Potion
     description: Swap 1.
 
-base:potions:FetchPotion:
+base:potions:ScryPotion:
   en:
-    name: Fetch Potion
-    description: "@Fetch."
+    name: Scry Potion
+    description: "@Scry."
 
 base:potions:WeakPotion:
   en:

@@ -18,9 +18,9 @@ base:upgrades:RepeatUpgrade:
     name: Repeat Upgrade
     description: Adds 1 Repeatable.
 
-base:upgrades:FetchUpgrade:
+base:upgrades:ScryUpgrade:
   en:
-    name: Fetch Upgrade
+    name: Scry Upgrade
     description: Draw a tile into the Pool after cast.
 
 base:upgrades:HeatsinkUpgrade:

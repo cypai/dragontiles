@@ -8,7 +8,7 @@ import com.pipai.dragontiles.artemis.systems.combat.StatusSystem
 import com.pipai.dragontiles.artemis.systems.ui.CombatantStateSystem
 import com.pipai.dragontiles.enemies.Enemy
 import com.pipai.dragontiles.utils.allOf
-import com.pipai.dragontiles.utils.fetch
+import com.pipai.dragontiles.utils.scry
 
 class EnemyDefeatAnimation(private val enemy: Enemy) : Animation() {
 
@@ -20,7 +20,7 @@ class EnemyDefeatAnimation(private val enemy: Enemy) : Animation() {
     private lateinit var sStatus: StatusSystem
 
     override fun startAnimation() {
-        world.fetch(allOf(EnemyComponent::class)).forEach {
+        world.scry(allOf(EnemyComponent::class)).forEach {
             if (enemy.enemyId == mEnemy.get(it).enemy.enemyId) {
                 sCombatantState.enemyDefeated(enemy)
                 sStatus.handleEnemyDefeat(it)

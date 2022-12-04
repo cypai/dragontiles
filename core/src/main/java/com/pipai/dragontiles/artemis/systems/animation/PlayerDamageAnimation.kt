@@ -6,7 +6,7 @@ import com.pipai.dragontiles.artemis.components.ParticleEffectComponent
 import com.pipai.dragontiles.artemis.systems.ui.CombatantStateSystem
 import com.pipai.dragontiles.artemis.systems.ui.TopRowUiSystem
 import com.pipai.dragontiles.utils.allOf
-import com.pipai.dragontiles.utils.fetch
+import com.pipai.dragontiles.utils.scry
 import com.pipai.dragontiles.utils.particleAssetPath
 import com.talosvfx.talos.runtime.ParticleEffectDescriptor
 
@@ -20,7 +20,7 @@ class PlayerDamageAnimation(private val damage: Int) : Animation() {
         sCombatantState.changeHeroHp(-damage)
         sTop.setHpRelative(-damage)
 
-        val entityId = world.fetch(allOf(HeroComponent::class)).first()
+        val entityId = world.scry(allOf(HeroComponent::class)).first()
         val cParticle = mParticle.create(entityId)
         cParticle.effect = game.assets.get(particleAssetPath("damage_red.p"), ParticleEffectDescriptor::class.java)
             .createEffectInstance()

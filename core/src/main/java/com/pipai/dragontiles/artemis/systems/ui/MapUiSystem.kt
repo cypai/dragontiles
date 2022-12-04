@@ -208,7 +208,7 @@ class MapUiSystem(
 
     fun hideMap() {
         sEvent.dispatch(MapDisplayUiEvent(false))
-        world.fetch(allOf(MapNodeComponent::class)).forEach { world.delete(it) }
+        world.scry(allOf(MapNodeComponent::class)).forEach { world.delete(it) }
         table.remove()
         showing = false
     }
