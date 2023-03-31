@@ -6,7 +6,7 @@ buildscript {
     }
 
     ext.appName = "dragontiles"
-    ext.kotlinVersion = '1.6.10'
+    ext.kotlinVersion = '1.8.10'
     ext.gdxVersion = '1.11.0'
     ext.commonsLangVersion = '3.0'
     ext.jacksonVersion = '2.13.0'

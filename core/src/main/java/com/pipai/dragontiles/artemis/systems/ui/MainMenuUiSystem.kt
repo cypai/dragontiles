@@ -250,7 +250,7 @@ class MainMenuUiSystem(
         game.music!!.isLooping = true
         game.music!!.volume = game.save.options.musicVolume
         game.music!!.play()
-        when (runData.dungeonMap.getCurrentNode().type) {
+        when (val nodeType = runData.dungeonMap.getCurrentNode().type) {
             MapNodeType.COMBAT -> {
                 val floorConfig = runData.runHistory.history.last() as FloorHistory.CombatFloorHistory
                 game.screen = CombatScreen(
@@ -296,6 +296,9 @@ class MainMenuUiSystem(
                     null,
                     false,
                 )
+            }
+            else -> {
+                throw IllegalStateException("Received unexpected $nodeType")
             }
         }
     }

@@ -18,6 +18,7 @@ class TimerSystem : IteratingSystem(allOf()) {
                 EndStrategy.REMOVE -> mTimer.remove(entityId)
                 EndStrategy.RESTART -> cTimer.t = 0f
                 EndStrategy.DESTROY -> world.delete(entityId)
+                EndStrategy.REVERSE_THEN_REMOVE -> mTimer.remove(entityId)
             }
         }
     }
