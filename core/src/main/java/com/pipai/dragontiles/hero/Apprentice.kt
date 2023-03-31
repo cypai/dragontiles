@@ -26,6 +26,7 @@ class Apprentice : HeroClass {
     override val spells: List<Spell> = listOf(
         Flick(),
         Slap(),
+        TigerBlade(),
         QiGong(),
         RampStrike(),
         XAttack(),

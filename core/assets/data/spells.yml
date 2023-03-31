@@ -624,6 +624,11 @@ base:spells:Aggression:
     name: Aggression
     description: After playing an attack, @Scry 1 tile.
 
+base:spells:TigerBlade:
+  en:
+    name: Tiger Blade
+    description: Deal !d @Elemented damage twice.
+
 base:spells:DrunkenFist:
   en:
     name: Drunken Fist
@@ -709,6 +714,16 @@ base:spells:LowStance:
     name: Low Stance
     description: Gain !s(1) @Defense.
 
+base:spells:Earthquake:
+  en:
+    name: Earthquake
+    description: Deal !d @AOE damage.
+
+base:spells:SolidityOfEarth:
+  en:
+    name: Solidity of Earth
+    description: Gain !s(1) @Defense.
+
 base:spells:HeavenAndEarth: # Heaven and earth have one form: 天地一色
   en:
     name: Heaven and Earth
@@ -724,7 +739,7 @@ base:spells:Inpatience:
     name: Inpatience
     description: Draw 3 tiles. Prevent drawing tiles until the end of your next turn.
 
-base:spells:ClashOfTwoTigers:
+base:spells:ClashOfTwoTigers: # 兩虎相爭
   en:
     name: Clash of Two Tigers
     description: Deal !d @AOE @Piercing damage.
