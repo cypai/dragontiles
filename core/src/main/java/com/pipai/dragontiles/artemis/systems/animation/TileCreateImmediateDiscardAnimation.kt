@@ -2,7 +2,6 @@ package com.pipai.dragontiles.artemis.systems.animation
 
 import com.artemis.ComponentMapper
 import com.pipai.dragontiles.artemis.components.EnemyComponent
-import com.pipai.dragontiles.artemis.components.HandLocationComponent
 import com.pipai.dragontiles.artemis.components.XYComponent
 import com.pipai.dragontiles.data.TileInstance
 import com.pipai.dragontiles.enemies.Enemy

@@ -32,6 +32,8 @@ class MapUiSystem(
 
     private val logger = getLogger()
 
+    private lateinit var api: GlobalApi
+
     private val mXy by mapper<XYComponent>()
     private val mSprite by mapper<SpriteComponent>()
     private val mClickable by mapper<ClickableComponent>()
@@ -48,6 +50,10 @@ class MapUiSystem(
     var canAdvanceMap = false
     var showing = false
         private set
+
+    override fun initialize() {
+        api = GlobalApi(game.data, game.assets, runData, sEvent)
+    }
 
     fun showMap() {
         showing = true
@@ -302,7 +308,7 @@ class MapUiSystem(
                     game.screen = EventScreen(game, runData, event)
                 }
                 MapNodeType.TOWN -> {
-                    TownGenerator().generate(game.data, runData)
+                    TownGenerator().generate(api)
                     val town = runData.town!!
                     runData.runHistory.history.add(
                         FloorHistory.TownFloorHistory(

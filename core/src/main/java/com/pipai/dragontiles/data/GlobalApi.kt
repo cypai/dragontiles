@@ -2,17 +2,25 @@ package com.pipai.dragontiles.data
 
 import com.badlogic.gdx.assets.AssetManager
 import com.pipai.dragontiles.artemis.events.*
+import com.pipai.dragontiles.combat.CombatRewardConfig
 import com.pipai.dragontiles.combat.GameOverEvent
+import com.pipai.dragontiles.combat.SpellRewardType
+import com.pipai.dragontiles.hero.HeroClass
 import com.pipai.dragontiles.potions.Potion
 import com.pipai.dragontiles.relics.Relic
 import com.pipai.dragontiles.relics.RelicInstance
-import com.pipai.dragontiles.spells.Sorcery
-import com.pipai.dragontiles.spells.Spell
-import com.pipai.dragontiles.spells.SpellUpgradeInstance
+import com.pipai.dragontiles.spells.*
 import com.pipai.dragontiles.spells.upgrades.SpellUpgrade
+import com.pipai.dragontiles.utils.choose
+import com.pipai.dragontiles.utils.withoutAll
 import net.mostlyoriginal.api.event.common.EventSystem
 
-open class GlobalApi(val gameData: GameData, val assets: AssetManager, val runData: RunData, private val sEvent: EventSystem) {
+open class GlobalApi(
+    val gameData: GameData,
+    val assets: AssetManager,
+    val runData: RunData,
+    private val sEvent: EventSystem
+) {
     fun removeSpellAtIndex(index: Int) {
         runData.hero.spells.removeAt(index)
     }
@@ -149,5 +157,109 @@ open class GlobalApi(val gameData: GameData, val assets: AssetManager, val runDa
 
     fun updateTopRow() {
         sEvent.dispatch(TopRowUiUpdateEvent())
+    }
+
+    fun generateCombatRewards(api: GlobalApi, rewardConfig: CombatRewardConfig): List<Reward> {
+        val gameData = api.gameData
+        val runData = api.runData
+        val actualRewards = mutableListOf<Reward>()
+        val heroClass = gameData.getHeroClass(runData.hero.heroClassId)
+        val rng = runData.seed.rewardRng()
+        if (rewardConfig.spellRewardType == SpellRewardType.BOSS) {
+            actualRewards.add(Reward.SideboardSpaceReward())
+        }
+        actualRewards.add(Reward.SpellDraftReward(generateCardRewards(heroClass, rewardConfig.spellRewardType, 3)))
+        actualRewards.add(Reward.GoldReward(rewardConfig.gold))
+        if (rng.nextFloat() < rewardConfig.potionChance) {
+            actualRewards.add(Reward.PotionReward(randomPotion().id))
+            runData.potionChance = GameData.BASE_POTION_CHANCE
+        } else {
+            runData.potionChance += 0.1f
+        }
+        if (rewardConfig.randomRelic) {
+            actualRewards.add(Reward.RelicReward(randomRelic().toInstance()))
+        }
+        if (rewardConfig.relic != null) {
+            actualRewards.add(Reward.RelicReward(rewardConfig.relic.toInstance()))
+        }
+        return actualRewards
+    }
+
+    fun generateCardRewards(
+        heroClass: HeroClass,
+        spellRewardType: SpellRewardType,
+        amount: Int
+    ): List<SpellInstance> {
+        val rewards: MutableList<SpellInstance> = mutableListOf()
+        repeat(amount) {
+            var rare = 0f
+            var uncommon = 0f
+            when (spellRewardType) {
+                SpellRewardType.STANDARD -> {
+                    rare = 0.05f
+                    uncommon = 0.4f
+                }
+
+                SpellRewardType.ELITE -> {
+                    rare = 0.1f
+                    uncommon = 0.5f
+                }
+
+                SpellRewardType.BOSS -> {
+                    rare = 1f
+                }
+
+                else -> return rewards
+            }
+            rewards.add(randomSpell(heroClass, rare, uncommon, rewards))
+        }
+        return rewards
+    }
+
+    fun randomSpell(
+        heroClass: HeroClass,
+        rareChance: Float,
+        uncommonChance: Float,
+        exclude: List<SpellInstance> = listOf()
+    ): SpellInstance {
+        val rng = runData.seed.rewardRng()
+        val n = rng.nextFloat()
+        val rarityRoll = when {
+            n < rareChance -> Rarity.RARE
+            n >= rareChance && n < uncommonChance -> Rarity.UNCOMMON
+            else -> Rarity.COMMON
+        }
+        return heroClass.spells
+            .filter { it.rarity == rarityRoll }
+            .map { it.toInstance() }
+            .withoutAll(exclude)
+            .choose(rng)
+    }
+
+    fun randomPotion(): Potion {
+        val rng = runData.seed.rewardRng()
+        val n = rng.nextFloat()
+        val rarityRoll = when {
+            n < 0.65f -> {
+                Rarity.COMMON
+            }
+
+            n in 0.65f..0.9f -> {
+                Rarity.UNCOMMON
+            }
+
+            else -> {
+                Rarity.RARE
+            }
+        }
+        return gameData.allPotions().filter { it.rarity == rarityRoll }.choose(rng)
+    }
+
+    fun randomRelic(): Relic {
+        return gameData.getRelic(runData.availableRelics.choose(runData.seed.relicRng()))
+    }
+
+    fun showRewards(rewards: List<Reward>) {
+        sEvent.dispatch(ShowRewardsEvent(rewards))
     }
 }

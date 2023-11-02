@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.pipai.dragontiles.DragonTilesGame
 import com.pipai.dragontiles.artemis.screens.*
+import com.pipai.dragontiles.combat.CombatRewardConfig
 import com.pipai.dragontiles.data.*
 import com.pipai.dragontiles.dungeon.DungeonMap
 import com.pipai.dragontiles.dungeon.MapNodeType
@@ -257,7 +258,7 @@ class MainMenuUiSystem(
                     game,
                     runData,
                     dungeon.getEncounter(floorConfig.encounterId)!!,
-                    null,
+                    CombatRewardConfig.standard(runData),
                     false,
                 )
             }
@@ -267,7 +268,7 @@ class MainMenuUiSystem(
                     game,
                     runData,
                     dungeon.getEncounter(floorConfig.encounterId)!!,
-                    null,
+                    CombatRewardConfig.elite(runData),
                     false,
                 )
             }
@@ -293,7 +294,7 @@ class MainMenuUiSystem(
                     game,
                     runData,
                     dungeon.getEncounter(runData.dungeonMap.bossId)!!,
-                    null,
+                    CombatRewardConfig.boss(runData),
                     false,
                 )
             }

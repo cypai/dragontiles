@@ -8,27 +8,27 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Screen
 import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.scenes.scene2d.Stage
-import com.badlogic.gdx.utils.viewport.ScreenViewport
 import com.pipai.dragontiles.DragonTilesGame
 import com.pipai.dragontiles.artemis.systems.*
 import com.pipai.dragontiles.artemis.systems.animation.CombatAnimationSystem
-import com.pipai.dragontiles.artemis.systems.combat.*
+import com.pipai.dragontiles.artemis.systems.combat.CombatControllerSystem
+import com.pipai.dragontiles.artemis.systems.combat.StatusSystem
+import com.pipai.dragontiles.artemis.systems.combat.TileIdSystem
 import com.pipai.dragontiles.artemis.systems.input.InputProcessingSystem
 import com.pipai.dragontiles.artemis.systems.rendering.FullScreenColorSystem
 import com.pipai.dragontiles.artemis.systems.rendering.RenderingSystem
 import com.pipai.dragontiles.artemis.systems.ui.*
 import com.pipai.dragontiles.combat.Combat
 import com.pipai.dragontiles.combat.CombatRewardConfig
-import com.pipai.dragontiles.data.RewardGenerator
 import com.pipai.dragontiles.data.RunData
 import com.pipai.dragontiles.dungeon.Encounter
 import net.mostlyoriginal.api.event.common.EventSystem
 
 class CombatScreen(
-    private val game: DragonTilesGame,
+    game: DragonTilesGame,
     runData: RunData,
     encounter: Encounter,
-    rewardConfig: CombatRewardConfig?,
+    rewardConfig: CombatRewardConfig,
     writeSave: Boolean,
 ) : Screen {
 
@@ -40,9 +40,6 @@ class CombatScreen(
     init {
         runData.dungeonMap.encounters.add(encounter.id)
         val combat = Combat(encounter.enemies.map { it.first }.toMutableList())
-        if (rewardConfig != null) {
-            RewardGenerator().generate(game.data, runData, rewardConfig)
-        }
         if (writeSave) {
             // False when loading a save or from a combat event
             game.writeSave()
@@ -68,7 +65,7 @@ class CombatScreen(
                 MouseXySystem(game),
                 TooltipSystem(game, frontStage),
                 FullScreenColorSystem(game),
-                RewardsSystem(game, runData, frontStage, runData.combatWon),
+                RewardsSystem(game, runData, frontStage, rewardConfig, runData.combatWon),
                 MapUiSystem(game, backStage, runData),
                 PauseMenuSystem(game, frontStage, runData, false),
                 ReqHelpSystem(game, frontStage),

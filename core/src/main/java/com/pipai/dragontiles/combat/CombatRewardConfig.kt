@@ -28,5 +28,5 @@ data class CombatRewardConfig(
 }
 
 enum class SpellRewardType {
-    STANDARD, ELITE, BOSS
+    NONE, STANDARD, ELITE, BOSS
 }

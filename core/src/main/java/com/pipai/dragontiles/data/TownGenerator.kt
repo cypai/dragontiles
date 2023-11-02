@@ -4,7 +4,6 @@ import com.pipai.dragontiles.potions.Potion
 import com.pipai.dragontiles.relics.Relic
 import com.pipai.dragontiles.spells.Rarity
 import com.pipai.dragontiles.spells.Spell
-import com.pipai.dragontiles.spells.upgrades.PowerUpgrade
 import com.pipai.dragontiles.spells.upgrades.ScoreUpgrade
 import com.pipai.dragontiles.spells.upgrades.SpellUpgrade
 import com.pipai.dragontiles.utils.choose
@@ -13,7 +12,9 @@ import com.pipai.dragontiles.utils.removeRandom
 
 class TownGenerator {
 
-    fun generate(gameData: GameData, runData: RunData) {
+    fun generate(api: GlobalApi) {
+        val runData = api.runData
+        val gameData = api.gameData
         val rng = runData.seed.rewardRng()
         val heroClass = gameData.getHeroClass(runData.hero.heroClassId)
         val spellShop = SpellShop(
@@ -28,7 +29,7 @@ class TownGenerator {
             itemShop.relics.add(pricedRelic(gameData.getRelic(relic)))
         }
         repeat(3) {
-            val potion = RewardGenerator().choosePotion(gameData, rng)
+            val potion = api.randomPotion()
             itemShop.potions.add(pricedPotion(potion))
         }
         val scribe = Scribe(mutableListOf())

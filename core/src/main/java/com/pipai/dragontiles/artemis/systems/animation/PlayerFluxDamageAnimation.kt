@@ -1,7 +1,6 @@
 package com.pipai.dragontiles.artemis.systems.animation
 
 import com.artemis.ComponentMapper
-import com.pipai.dragontiles.artemis.components.EnemyComponent
 import com.pipai.dragontiles.artemis.components.HeroComponent
 import com.pipai.dragontiles.artemis.components.ParticleEffectComponent
 import com.pipai.dragontiles.artemis.systems.ui.CombatUiSystem

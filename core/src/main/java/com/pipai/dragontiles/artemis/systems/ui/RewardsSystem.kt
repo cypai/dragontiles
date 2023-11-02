@@ -21,6 +21,7 @@ import com.pipai.dragontiles.artemis.events.DeckDisplayUiEvent
 import com.pipai.dragontiles.artemis.events.MapDisplayUiEvent
 import com.pipai.dragontiles.artemis.systems.NoProcessingSystem
 import com.pipai.dragontiles.artemis.systems.PathInterpolationSystem
+import com.pipai.dragontiles.combat.CombatRewardConfig
 import com.pipai.dragontiles.data.*
 import com.pipai.dragontiles.gui.SpellCard
 import com.pipai.dragontiles.relics.RelicInstance
@@ -32,6 +33,7 @@ class RewardsSystem(
     private val game: DragonTilesGame,
     private val runData: RunData,
     private val stage: Stage,
+    private val rewardConfig: CombatRewardConfig,
     private val startedBattleWon: Boolean,
 ) : NoProcessingSystem(), InputProcessor {
 
@@ -55,6 +57,7 @@ class RewardsSystem(
         api = GlobalApi(game.data, game.assets, runData, sEvent)
         rootTable.setFillParent(true)
         stage.addActor(rootTable)
+        api.generateCombatRewards(api, rewardConfig)
     }
 
     fun activateRewards() {
