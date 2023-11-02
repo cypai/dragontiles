@@ -588,7 +588,7 @@ class CombatUiSystem(
     }
 
     private fun displayFullCastHands() {
-        val heroEntityId = world.scry(allOf(HeroComponent::class)).first()
+        val heroEntityId = world.fetch(allOf(HeroComponent::class)).first()
         val fch = findFullCastHand(sCombat.combat.hand)
         if (fch.isEmpty()) {
             spellComponentList.topText = "None Available"
@@ -608,7 +608,7 @@ class CombatUiSystem(
     }
 
     private fun setSpellComponentOptions(options: List<List<TileInstance>>) {
-        val heroEntityId = world.scry(allOf(HeroComponent::class)).first()
+        val heroEntityId = world.fetch(allOf(HeroComponent::class)).first()
         spellComponentList.setOptions(options)
         spellComponentList.height = SpellCard.cardHeight
         spellComponentList.width = spellComponentList.prefWidth
@@ -746,13 +746,13 @@ class CombatUiSystem(
     }
 
     private fun removeHighlights() {
-        world.scry(allOf(TargetHighlightComponent::class)).forEach {
+        world.fetch(allOf(TargetHighlightComponent::class)).forEach {
             mTargetHighlight.remove(it)
         }
     }
 
     private fun highlightEnemies() {
-        world.scry(allOf(EnemyComponent::class, SpriteComponent::class)).forEach {
+        world.fetch(allOf(EnemyComponent::class, SpriteComponent::class)).forEach {
             val cSprite = mSprite.get(it)
             val cTargetHighlight = mTargetHighlight.create(it)
             cTargetHighlight.width = cSprite.sprite.width
@@ -979,7 +979,7 @@ class CombatUiSystem(
     }
 
     private fun setTileDepth(depth: Int, tiles: List<TileInstance>? = null) {
-        world.scry(allOf(TileComponent::class, DepthComponent::class, SpriteComponent::class)).forEach {
+        world.fetch(allOf(TileComponent::class, DepthComponent::class, SpriteComponent::class)).forEach {
             val cTile = mTile.get(it)
             if (tiles == null || cTile.tile in tiles) {
                 val cDepth = mDepth.get(it)
@@ -1041,7 +1041,7 @@ class CombatUiSystem(
         var updateTarget = false
         when (stateMachine.currentState) {
             CombatUiState.TARGET_SELECTION -> {
-                world.scry(allOf(EnemyComponent::class, XYComponent::class, SpriteComponent::class)).forEach {
+                world.fetch(allOf(EnemyComponent::class, XYComponent::class, SpriteComponent::class)).forEach {
                     val cSprite = mSprite.get(it)
                     if (cSprite.sprite.boundingRectangle.contains(
                             screenX.toFloat(),
@@ -1259,7 +1259,7 @@ class CombatUiSystem(
                     }
                 }
                 PotionTargetType.ENEMY -> {
-                    val heroEntityId = world.scry(allOf(HeroComponent::class)).first()
+                    val heroEntityId = world.fetch(allOf(HeroComponent::class)).first()
                     val cHeroXy = mXy.get(heroEntityId)
                     val cHeroSprite = mSprite.get(heroEntityId)
                     val position = cHeroXy.toVector2()
@@ -1358,7 +1358,7 @@ class CombatUiSystem(
             override fun enter(uiSystem: CombatUiSystem) {
                 uiSystem.spells.forEach { (number, spellCard) ->
                     if (number == uiSystem.selectedSpellNumber) {
-                        val heroEntityId = uiSystem.world.scry(allOf(HeroComponent::class)).first()
+                        val heroEntityId = uiSystem.world.fetch(allOf(HeroComponent::class)).first()
                         val cHeroXy = uiSystem.mXy.get(heroEntityId)
                         uiSystem.sPath.moveToLocation(
                             uiSystem.spellCardEntityId(number)!!,

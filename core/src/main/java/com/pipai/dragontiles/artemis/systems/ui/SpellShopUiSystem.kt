@@ -120,7 +120,7 @@ class SpellShopUiSystem(
     }
 
     private fun recalculatePriceColor() {
-        world.scry(allOf(PriceComponent::class, TextComponent::class))
+        world.fetch(allOf(PriceComponent::class, TextComponent::class))
             .forEach {
                 val cPrice = mPrice.get(it)
                 if (cPrice.price > runData.hero.gold) {

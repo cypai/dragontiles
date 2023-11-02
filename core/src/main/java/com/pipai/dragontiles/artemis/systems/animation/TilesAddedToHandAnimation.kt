@@ -8,7 +8,7 @@ import com.pipai.dragontiles.data.TileInstance
 import com.pipai.dragontiles.enemies.Enemy
 import com.pipai.dragontiles.gui.CombatUiLayout
 import com.pipai.dragontiles.utils.allOf
-import com.pipai.dragontiles.utils.scry
+import com.pipai.dragontiles.utils.fetch
 
 class TilesAddedToHandAnimation(
     private val tiles: List<Pair<TileInstance, Int>>,
@@ -25,7 +25,7 @@ class TilesAddedToHandAnimation(
             val position = if (originator == null) {
                 layout.handTilePosition(handIndex)
             } else {
-                val entityId = world.scry(allOf(EnemyComponent::class)).first { mEnemy.get(it).enemy == originator }
+                val entityId = world.fetch(allOf(EnemyComponent::class)).first { mEnemy.get(it).enemy == originator }
                 mXy.get(entityId).toVector2()
             }
             val entityId = createTile(tile, position.x, position.y)

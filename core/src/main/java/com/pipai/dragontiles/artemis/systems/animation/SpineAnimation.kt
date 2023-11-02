@@ -7,14 +7,14 @@ import com.pipai.dragontiles.artemis.components.EnemyComponent
 import com.pipai.dragontiles.artemis.components.SpineComponent
 import com.pipai.dragontiles.enemies.Enemy
 import com.pipai.dragontiles.utils.allOf
-import com.pipai.dragontiles.utils.scry
+import com.pipai.dragontiles.utils.fetch
 
 class SpineAnimation(val enemy: Enemy, val animation: String, val endEvent: String?) : Animation() {
     private lateinit var mEnemy: ComponentMapper<EnemyComponent>
     private lateinit var mSpine: ComponentMapper<SpineComponent>
 
     override fun startAnimation() {
-        val entityId = world.scry(allOf(EnemyComponent::class)).first { mEnemy.get(it).enemy == enemy }
+        val entityId = world.fetch(allOf(EnemyComponent::class)).first { mEnemy.get(it).enemy == enemy }
         val cSpine = mSpine.get(entityId)
         val trackEntry = cSpine.state.addAnimation(0, animation, false, 0f)
         cSpine.state.addAnimation(0, "Idle", true, 0f)

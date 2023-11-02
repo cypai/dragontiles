@@ -7,7 +7,7 @@ import com.pipai.dragontiles.artemis.components.*
 import com.pipai.dragontiles.combat.Combatant
 import com.pipai.dragontiles.data.Localized
 import com.pipai.dragontiles.utils.allOf
-import com.pipai.dragontiles.utils.scry
+import com.pipai.dragontiles.utils.fetch
 
 class NameTextAnimation(val combatant: Combatant, val localized: Localized) : Animation() {
     private lateinit var mEnemy: ComponentMapper<EnemyComponent>
@@ -18,10 +18,10 @@ class NameTextAnimation(val combatant: Combatant, val localized: Localized) : An
     override fun startAnimation() {
         val entityId = when (combatant) {
             is Combatant.HeroCombatant -> {
-                world.scry(allOf(HeroComponent::class)).first()
+                world.fetch(allOf(HeroComponent::class)).first()
             }
             is Combatant.EnemyCombatant -> {
-                world.scry(allOf(EnemyComponent::class)).first { mEnemy.get(it).enemy == combatant.enemy }
+                world.fetch(allOf(EnemyComponent::class)).first { mEnemy.get(it).enemy == combatant.enemy }
             }
         }
 

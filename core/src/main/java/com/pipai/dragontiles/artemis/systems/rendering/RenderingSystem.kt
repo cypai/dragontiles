@@ -7,7 +7,7 @@ import com.badlogic.gdx.math.Vector3
 import com.pipai.dragontiles.DragonTilesGame
 import com.pipai.dragontiles.artemis.components.*
 import com.pipai.dragontiles.utils.allOf
-import com.pipai.dragontiles.utils.scry
+import com.pipai.dragontiles.utils.fetch
 import com.pipai.dragontiles.utils.mapper
 
 class RenderingSystem(
@@ -30,7 +30,7 @@ class RenderingSystem(
         batch.color = Color.WHITE
         batch.projectionMatrix = game.camera.combined
         batch.begin()
-        world.scry(allOf(XYComponent::class, SpineComponent::class))
+        world.fetch(allOf(XYComponent::class, SpineComponent::class))
             .forEach {
                 val cXy = mXy.get(it)
                 val cSpine = mSpine.get(it)
@@ -44,7 +44,7 @@ class RenderingSystem(
         batch.end()
         batch.setBlendFunction(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA)
         batch.begin()
-        world.scry(
+        world.fetch(
             allOf(XYComponent::class).one(
                 ActorComponent::class.java,
                 SpriteComponent::class.java,
@@ -69,7 +69,7 @@ class RenderingSystem(
             }
         batch.color = Color.WHITE
 
-        world.scry(allOf(XYComponent::class, ParticleEffectComponent::class))
+        world.fetch(allOf(XYComponent::class, ParticleEffectComponent::class))
             .forEach {
                 val cXy = mXy.get(it)
                 val cParticle = mParticle.get(it)
@@ -91,7 +91,7 @@ class RenderingSystem(
         batch.color = Color.WHITE
         batch.projectionMatrix = game.uiCamera.combined
         batch.begin()
-        world.scry(allOf(XYComponent::class, TextComponent::class))
+        world.fetch(allOf(XYComponent::class, TextComponent::class))
             .forEach {
                 val cXy = mXy.get(it)
                 val cText = mText.get(it)
@@ -109,7 +109,7 @@ class RenderingSystem(
 
         game.shapeRenderer.projectionMatrix = game.camera.combined
         game.shapeRenderer.begin()
-        world.scry(allOf(AnchoredLineComponent::class))
+        world.fetch(allOf(AnchoredLineComponent::class))
             .forEach {
                 val cLine = mLine.get(it)
                 val xy1 = mXy.get(cLine.anchor1).toVector2().add(cLine.anchor1Offset)

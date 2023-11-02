@@ -32,7 +32,7 @@ class HoverableSystem(private val game: DragonTilesGame) : NoProcessingSystem(),
 
     override fun mouseMoved(screenX: Int, screenY: Int): Boolean {
         val mouseXy = game.viewport.unproject(Vector2(screenX.toFloat(), screenY.toFloat()))
-        world.scry(allOf(XYComponent::class, HoverableComponent::class, SpriteComponent::class))
+        world.fetch(allOf(XYComponent::class, HoverableComponent::class, SpriteComponent::class))
             .forEach {
                 val cXy = mXy.get(it)
                 val cHover = mHoverable.get(it)
@@ -40,7 +40,7 @@ class HoverableSystem(private val game: DragonTilesGame) : NoProcessingSystem(),
                 val hover = Rectangle(cXy.x, cXy.y, cSprite.width, cSprite.height).contains(mouseXy)
                 updateHover(cHover, hover)
             }
-        world.scry(allOf(XYComponent::class, HoverableComponent::class, SpineComponent::class))
+        world.fetch(allOf(XYComponent::class, HoverableComponent::class, SpineComponent::class))
             .forEach {
                 val cXy = mXy.get(it)
                 val cHover = mHoverable.get(it)
@@ -50,7 +50,7 @@ class HoverableSystem(private val game: DragonTilesGame) : NoProcessingSystem(),
                 val hover = Rectangle(cXy.x - width / 2f, cXy.y, width, height).contains(mouseXy)
                 updateHover(cHover, hover)
             }
-        world.scry(allOf(HoverableComponent::class, ActorComponent::class))
+        world.fetch(allOf(HoverableComponent::class, ActorComponent::class))
             .forEach {
                 val cHover = mHoverable.get(it)
                 val hover = mActor.get(it).actor.boundingRectangle().contains(mouseXy)
